@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-5459430-3");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-5459430-3");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+
+<meta http-equiv="Content-Type" content="text/html;charset=us-ascii" />
+<title>IYOCGwP, Appendix D</title>
+<link rel="stylesheet" href="inventbook.css" type="text/css" media="all" />
+</head>
+<body>
+
+<!-- Chapter Navigation Links -->
+
+
+<div style='height: 350px;'><img src='images/appendixd.png' /></div>
+
+
+<p>Error messages in Python can often be confusing. Here is a list of common error messages you may find, along with a plain English explanation. These error messages are the result of runtime errors. They will immediately crash your Here are the error messages explained (your error messages may be slightly different but mean the same thing):</p>
+
+<ul>
+<li>SyntaxError: invalid syntax</li>
+<li>ImportError: No module named raandom</li>
+<li>SyntaxError: EOL while scanning string literal</li>
+<li>AttributeError: 'str' object has no attribute 'lowerr'</li>
+<li>IndentationError: expected an indented block</li>
+<li>IndentationError: unexpected indent</li>
+<li>IndentationError: unindent does not match any outer indentation level</li>
+<li>TypeError: bad operand type for abs(): 'str'</li>
+<li>TypeError: abs() takes exactly one argument (2 given)</li>
+<li>IndexError: list index out of range</li>
+<li>KeyError: 'spam'</li>
+</ul>
+
+<h3>SyntaxError: invalid syntax</h3>
+
+<p>This is the most generic error message the Python interpreter will give you. It means that Python was expecting something that isn't there, or there is something there that it didn't expect. Maybe you forgot to include or inserted an extra character. Here are some examples:</p>
+
+
+<div class='sourceblurb'>if guess = 5:</div>
+<p>In the above case, the programmer used <span class='m'>=</span> (the assignment operator) instead of <span class='m'>==</span> (the equals comparator operator). Python never expects assignment statements where there should be a condition.</p>
+
+<div class='sourceblurb'>def foo(:</div>
+<p>In the above case, the programmer forgot to match the ending ) closing parenthesis.</p>
+
+<div class='sourceblurb'>def foo()</div>
+<p>In the above case, the programmer forgot to put the colon at the end of the <span class='m'>def</span> statement. This can also happen with <span class='m'>for</span>, <span class='m'>while</span>, <span class='m'>if</span>, <span class='m'>elif</span>, and <span class='m'>else</span> statements.</p>
+
+<h3>ImportError: No module named raandom</h3>
+<p>This error shows up when you try to import a module that does not exist. Most likely, you have a typo in the module name. For example, you may have typed <span class='m'>raandom</span> instead of <span class='m'>random</span>.</p>
+
+
+<h3>SyntaxError: EOL while scanning string literal</h3>
+<div class='sourceblurb'>print('Hello world!)<br />
+print("Hello world!')</div>
+
+<p>This error happens when you do not have two quote marks for a string, or you use different quote marks for the same string. Look at these two examples:</p>
+
+<h3>AttributeError: 'str' object has no attribute 'lowerr'</h3>
+<div class='sourceblurb'>'Hello'.lowerr()<br />
+'Hello'.append('x')</div>
+
+<p>This error appears when you call a method or access an attribute that does not exist. This is most likely because 1) you have a typo in the method or attribute name, or 2) you are calling the method or attribute on a value that is the wrong data type. For example, strings have a method named <span class='m'>lower()</span>, but not <span class='m'>lowerr()</span> (that is a typo). And the <span class='m'>append()</span> method is a list method, so calling it on a string value will cause this error.</p>
+
+<h3 class='pagebreaker'>IndentationError: expected an indented block</h3>
+<div class='sourceblurb'>def foo():<br />
+print('Hello world!')</div>
+
+<p>This error happens if you fail to indent your code for a block. In the above example the <span class='m'>print()</span> call is at the same level of indentation as the <span class='m'>def</span> statement, when it should have a larger indentation.</p>
+
+
+<h3>IndentationError: unexpected indent</h3>
+<div class='sourceblurb'>def foo():<br />
+&nbsp;&nbsp;&nbsp;&nbsp;print('Hello world!')<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print('Goodbye')</div>
+<p>An unexpected indent error happens when you add an indentation for no reason. You should only add indentation after a <span class='m'>def</span>, <span class='m'>if</span>, <span class='m'>else</span>, <span class='m'>elif</span>, <span class='m'>while</span>, or <span class='m'>for</span> statment (or any statement that ends with a colon.)</p>
+
+<h3>IndentationError: unindent does not match any outer indentation level</h3>
+<div class='sourceblurb'>def foo():<br />
+&nbsp;&nbsp;&nbsp;&nbsp;print('Hello world!')<br />
+&nbsp;&nbsp;&nbsp;print('Goodbye')</div>
+<p>This indentation error appears when you are decreasing the indentation, but not decreasing it to the same level as the previous indentation. The <span class='m'>print('Goodbye')</span> call should either be at the same indentation as the other <span class='m'>print()</span> call (and be inside the <span class='m'>if</span> block) or at the same indentation as the <span class='m'>if</span> statement (and be outside of the <span class='m'>if</span> block).</p>
+
+<h3 class='pagebreaker'>TypeError: bad operand type for abs(): 'str'</h3>
+<div class='sourceblurb'>abs('Hello')</div>
+<p>This error occurs when the value of an argument you pass to a function or method is of the wrong data type. In the above example, the <span class='m'>abs()</span> function takes an integer or floating point number. Passing a string for the argument results in an error.</p>
+
+
+<h3>TypeError: abs() takes exactly one argument (2 given)</h3>
+<div class='sourceblurb'>abs(42, 50)</div>
+<p>This error appears when you pass the wrong number of arguments to a function or method, either too many or too few. The <span class='m'>abs()</span> function takes exactly one (and only one) argument. In our example we pass two arguments, which results in this error.</p>
+
+
+<h3>IndexError: list index out of range</h3>
+<div class='sourceblurb'>myList = ['spam', 'fizz', 'eggs']<br />
+print(myList[3])</div>
+<p>The IndexError happens when the index you use is larger than or equal to the number of actual items in the list. In our above example, the <span class='m'>myList</span> list only has 3 items in it, so the only valid indexes to use are <span class='m'>0</span>, <span class='m'>1</span>, and <span class='m'>2</span>. The index <span class='m'>3</span> (or any other index larger than <span class='m'>2</span>) is larger than any of these indexes, so the code results in an IndexError.</p>
+
+<h3>KeyError: 'spam'</h3>
+<div class='sourceblurb'>myDict = {'fizz':42, 'eggs':100}<br />
+myDict['spam']</div>
+
+<p>The KeyError happens when you try to access a key in a dictionary object that does not exist. Either the key was never added to the dictionary, was deleted previously with the <span class='m'>del</span> operator, or the key you are using has a typo in it.</p>
+
+
+<!-- Chapter Navigation Links -->
+
+</body>
+</html>
