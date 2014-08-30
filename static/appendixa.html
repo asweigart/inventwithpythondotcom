@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-5459430-3");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+
+
+<meta http-equiv="Content-Type" content="text/html;charset=us-ascii" />
+<title>IYOCGwP, Appendix A</title>
+<link rel="stylesheet" href="inventbook.css" type="text/css" media="all" />
+</head>
+<body>
+
+<!-- Chapter Navigation Links -->
+
+
+<div style='height: 350px;'><img src='images/appendixa.png' /></div>
+
+<p>Most of the programs in this book make use of the newer version 3 of Python. The Pygame games make use of Python 2 because the Pygame library is not yet compatible with Python 3. Python 3 corrects many of the faults with version 2 of the language, however, these changes can also make it impossible to run Python 3 programs with the Python 2 interpreter, and vice versa.</p>
+
+<p>There are only a few changes between the two versions, and this appendix will go through the ones relevant to this book. Learning both Python 2 and 3 is fairly simple. All of the modules imported by the programs in this book (except for the pygame module) are part of the standard library and work with both Python 2 and Python 3.</p>
+
+<p>In short, use Python 3 unless you need to use a library that is not yet compatible with version 3. Learning both Python 2 and 3 is easy because there are only a few changes between them.</p>
+
+<h2>The <span class='m'>print()</span> Function and the <span class='m'>print</span> statement</h2>
+
+<p>In Python 3, <span class='m'>print()</span> is a function just like <span class='m'>input()</span> or <span class='m'>len()</span>. The function version requires parentheses just like any other function call (although you can add parentheses to the <span class='m'>print</span> statement optionally).</p>
+
+<p>The <span class='m'>print</span> statement in Python 2 will always print a newline character at the end of the string. To make it print a space instead, put a comma at the end of the print statement:</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; # Python 2<br />
+&gt;&gt;&gt; print "Hello",<br />
+</div>
+
+<p>To print something besides a newline at the end of the <span class='m'>print()</span> function in Python 3, use the keyword argument <span class='m'>end</span>:</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; # Python 3<br />
+&gt;&gt;&gt; print("Hello", end="")<br />
+</div>
+
+
+<h2>The <span class='m'>input()</span> and <span class='m'>raw_input()</span> Functions</h2>
+
+<p>In Python 2, the function to get input from the keyboard is <span class='m'>raw_input()</span>. In Python 3, the <span class='m'>input()</span> function does this. You can simply rename the function wherever it appears in your code.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; # Python 2<br />
+&gt;&gt;&gt; name = raw_input()<br />
+</div>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; # Python 3<br />
+&gt;&gt;&gt; name = input()<br />
+</div>
+
+<h2>The <span class='m'>range()</span> Function's Return Value</h2>
+
+<p>In Python 2, the <span class='m'>range()</span> function returns an actual list with the integers. In Python 3, the <span class='m'>range()</span> function returns a "range object". Both can be used exactly the same way in <span class='m'>for</span> loops:</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; for i in range(10):&nbsp;&nbsp;&nbsp;&nbsp;# Works in Python 2 and 3<br />
+...&nbsp;&nbsp;&nbsp;print(i)
+</div>
+
+<p>However, if you want to create an actual list of integers in Python 3, you must convert the "range object" into a list with the <span class='m'>list()</span> function:</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; # Python 2<br />
+&gt;&gt;&gt; listOfInts = range(10)<br />
+</div>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; # Python 3<br />
+&gt;&gt;&gt; listOfInts = list(range(10))<br />
+</div>
+
+<h2>Division with the <span class='m'>/</span> Operator</h2>
+
+<p>In Python 2, doing division with the <span class='m'>/</span> operator results in a floating point number (that is, a number with a decimal point) only if one of the numbers is a float itself:</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; # Python 2<br />
+&gt;&gt;&gt; 25.0 / 8<br />
+3.125<br />
+&gt;&gt;&gt; 25 / 8.0<br />
+3.125<br />
+</div>
+
+<p>However, in Python 2, if both of the numbers are integers, then the result of division is the rounded down integer. In Python 3, the result is a floating point number no matter what:</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; # Python 2<br />
+&gt;&gt;&gt; 25 / 8<br />
+3<br />
+</div>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; # Python 3<br />
+&gt;&gt;&gt; 25 / 8<br />
+3.125<br />
+</div>
+
+<h2>Formatting Strings with the <span class='m'>format()</span> Method and <span class='m'>%s</span></h2>
+
+<p>In both Python 2 and 3, you can include <span class='m'>%s</span> inside a string and follow it with a list of values for each <span class='m'>%s</span> such as:</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; # Python 2 and 3<br />
+&gt;&gt;&gt; 'My name is %s and I am from %s.' % ('Al', 'Houston')<br />
+'My name is Al and I am from Houston.'<br />
+</div>
+
+<p>However, Python 3 adds a new string method called <span class='m'>format()</span>. This string lets you provide a list of arguments as parameters to format(). Instead of %s, you use <span class='m'>{0}</span> and <span class='m'>{1}</span> and <span class='m'>{2}</span> and so on:</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; # Python 3<br />
+&gt;&gt;&gt; 'My name is {0} and I am from {1}.'.format('Al', 'Houston')<br />
+'My name is Al and I am from Houston.'<br />
+</div>
+
+<p>The numbers inside the curly braces are the index of the parameters to <span class='m'>format()</span>. So switching them around in the string will switch around where the parameters to <span class='m'>format()</span> are placed:</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; # Python 3<br />
+&gt;&gt;&gt; 'My name is {1} and I am from {0}.'.format('Al', 'Houston')<br />
+'My name is Houston and I am from Al.'<br />
+</div>
+
+<p>One nice feature is that you can use the same parameter to <span class='m'>format()</span> multiple times in the string without making extra parameters to <span class='m'>format(</span>):</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; # Python 3<br />
+&gt;&gt;&gt; 'My name is {0}, {0}, {0}, {0} and I am from {1}.'.format('Jimmy Four Times', 'Houston')<br />
+'My name is Jimmy Four Times, Jimmy Four Times, Jimmy Four Times, Jimmy Four Times and I am from Houston.'<br />
+</div>
+
+<p>Along with numeric indexes, you can also put text inside the curly braces. This text can match to keyword arguments passed to <span class='m'>format()</span>:</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; # Python 3<br />
+&gt;&gt;&gt; 'My name is {0} and I like {thing} and I am from {hometown}.'.format('Al', hometown='Houston', thing='cats')<br />
+'My name is Al and I like cats and I am from Houston.'<br />
+</div>
+
+
+<!-- Chapter Navigation Links -->
+
+</body>
+</html>

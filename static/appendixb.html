@@ -1,0 +1,870 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-5459430-3");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+
+<meta http-equiv="Content-Type" content="text/html;charset=us-ascii" />
+<title>IYOCGwP, Appendix B</title>
+<link rel="stylesheet" href="inventbook.css" type="text/css" media="all" />
+</head>
+<body>
+
+<!-- Chapter Navigation Links -->
+
+
+<div style='height: 350px;'><img src='images/appendixb.png' /></div>
+
+<p>Here is a collection of all the statements and functions in Python that this book covers, along with some examples of their use. The examples all take place in the interactive shell, so you can experiment with them yourself by following the examples in the interactive shell.</p>
+
+<p>If you would like to learn more functions and methods, the official Python documentation covers every function that comes with Python. It can be found at <a href='http://docs.python.org/'>http://docs.python.org/</a></p>
+
+<p>Doug Hellmann also has a blog called "Python Module of the Week" which covers the various modules that come with Python in good detail with plenty of examples. His blog can be found at <a href='http://www.doughellmann.com/PyMOTW/'>http://www.doughellmann.com/PyMOTW/</a></p>
+
+
+<h1>Statements</h1>
+
+<h3>Assignment Statements</h3>
+
+<p>The assignment statement is used to store a value inside a variable. The statement is a variable name, followed by the = operator, followed by a value or expression. The expression is evaluated to the value to be stored in the variable.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; spam = 42<br />
+&gt;&gt;&gt; spam<br />
+42<br />
+&gt;&gt;&gt; eggs = 10 + 5<br />
+&gt;&gt;&gt; eggs<br />
+15<br />
+&gt;&gt;&gt;<br />
+</div>
+
+
+<h3><span class='m'>break</span> Statements</h3>
+
+<p><span class='m'>break</span> statements will immediately make the execution jump out of the innermost loop that it is placed in. Notice in the following example that the <span class='m'>print()</span> function call is never executed because the <span class='m'>break</span> statement moves execution out of the <span class='m'>while</span> loop.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; while True:<br />
+...&nbsp;&nbsp;&nbsp;break<br />
+...&nbsp;&nbsp;&nbsp;print('Hello!')<br />
+...&nbsp;&nbsp;&nbsp;<br />
+&gt;&gt;&gt;<br />
+</div>
+
+<p>The <span class='m'>break</span> statement only breaks out of the innermost loop. Notice that the <span class='m'>print('Goodbye!')</span> call is never executed, and that even though <span class='m'>print('Hello!')</span> is in a for loop that should iterate three times, it is only called once.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; for i in range(3):<br />
+...&nbsp;&nbsp;&nbsp;print('Start of outer #%s' % (i))<br />
+...&nbsp;&nbsp;&nbsp;for j in range(3):<br />
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print('Hello!')<br />
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break<br />
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print('Goodbye!')<br />
+...&nbsp;&nbsp;&nbsp;print('End of outer #%s' % (i))<br />
+...&nbsp;&nbsp;&nbsp;<br />
+Start of outer loop #0<br />
+Hello!<br />
+End of outer loop #0<br />
+Start of outer loop #1<br />
+Hello!<br />
+End of outer loop #1<br />
+Start of outer loop #2<br />
+Hello!<br />
+End of outer loop #2<br />
+&gt;&gt;&gt;<br />
+</div>
+
+
+<h3><span class='m'>continue</span> Statements</h3>
+
+<p><span class='m'>continue</span> statements will immediately make the execution jump to the start of the innermost loop that it is placed in. Notice in the following example that the print('Hello!') call is executed by <span class='m'>print('Goodbye!')</span> is never executed because the <span class='m'>continue</span> statement moves execution back to the start of the loop for the next iteration.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; for i in range(3):<br />
+...&nbsp;&nbsp;&nbsp;print('Hello! #%s' % (i))<br />
+...&nbsp;&nbsp;&nbsp;continue<br />
+...&nbsp;&nbsp;&nbsp;print('Goodbye!')<br />
+...&nbsp;&nbsp;&nbsp;<br />
+Hello! 0<br />
+Hello! 1<br />
+Hello! 2<br />
+&gt;&gt;&gt;<br />
+</div>
+
+<p><span class='m'>continue</span> statements only work on the innermost loop. Notice in the following example that the <span class='m'>print('Goodbye!')</span> call is skipped by the continue, but the <span class='m'>continue</span> does not skip the <span class='m'>print('End of outer #%s' % (i))</span> call.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; for i in range(3):<br />
+...&nbsp;&nbsp;&nbsp;print('Start of outer #%s' % (i))<br />
+...&nbsp;&nbsp;&nbsp;for j in range(3):<br />
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print('Hello!')<br />
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;continue<br />
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print('Goodbye!')<br />
+...&nbsp;&nbsp;&nbsp;print('End of outer #%s' % (i))<br />
+...&nbsp;&nbsp;&nbsp;<br />
+Start of outer loop #0<br />
+Hello!<br />
+Hello!<br />
+Hello!<br />
+End of outer loop #0<br />
+Start of outer loop #1<br />
+Hello!<br />
+Hello!<br />
+Hello!<br />
+End of outer loop #1<br />
+Start of outer loop #2<br />
+Hello!<br />
+Hello!<br />
+Hello!<br />
+End of outer loop #2<br />
+&gt;&gt;&gt;<br />
+</div>
+
+
+
+<h3 class='pagebreaker'><span class='m'>def</span> Statements</h3>
+
+<p><span class='m'>def</span> statements are used to define a new function. The def statement is the def keyword, followed by the function name, the parentheses which contain any parameters, a colon, and a block that contains the function's code. A function cannot be called until after it has been defined.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; def foo(name):<br />
+...&nbsp;&nbsp;&nbsp;print('Your name must be %s.' % (name))<br />
+...&nbsp;&nbsp;&nbsp;<br />
+&gt;&gt;&gt; foo('Stan')<br />
+Your name must be Stan.<br />
+&gt;&gt;&gt;<br />
+</div>
+
+
+<h3><span class='m'>del</span> Statements</h3>
+
+<p><span class='m'>del</span> statements will delete, or undefine, a variable. This is useful for removing items in lists and dicts. The del statement is the <span class='m'>del</span> keyword followed by the variable or item to be deleted.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; spam = ['cats', 'dogs', 'mice']<br />
+&gt;&gt;&gt; spam<br />
+['cats', 'dogs', 'mice']<br />
+&gt;&gt;&gt; del spam[1]<br />
+&gt;&gt;&gt; spam<br />
+['cats', 'mice']<br />
+<br />
+</div>
+
+
+<h3><span class='m'>for</span> Loop Statements</h3>
+
+<p><span class='m'>for</span> loops set a variable to each value in a list or each key in a dict. A <span class='m'>for</span> loop can be exited early if it encounters a <span class='m'>break</span> statement. A <span class='m'>continue</span> statment will cause execution to immediately move to the next iteration at the start of the loop.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; spam = ['cats', 'dogs', 'mice']<br />
+&gt;&gt;&gt; for i in spam:<br />
+...&nbsp;&nbsp;&nbsp;print i<br />
+...&nbsp;&nbsp;&nbsp;<br />
+cats<br />
+dogs<br />
+mice<br />
+&gt;&gt;&gt; <br />
+</div>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; spam = {'animal':'cats', 'food':'pasta', 'color':'blue'}<br />
+&gt;&gt;&gt; for i in spam:<br />
+...&nbsp;&nbsp;&nbsp;print i<br />
+...&nbsp;&nbsp;&nbsp;<br />
+animal<br />
+food<br />
+color<br />
+&gt;&gt;&gt; <br />
+</div>
+
+
+<h3><span class='m'>import</span> Statements</h3>
+
+<p><span class='m'>import</span> statements allow you to use functions and variables located inside other Python scripts (called modules) in your program. There are many modules that come with Python already (such as <span class='m'>time</span>, <span class='m'>sys</span>, or <span class='m'>random</span>). The <span class='m'>import</span> statement is the <span class='m'>import</span> keyword, followed by the module name. To use a function in a module, put the module name and a period before the function call.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; import random<br />
+&gt;&gt;&gt; random.randint(0, 10)<br />
+6<br />
+&gt;&gt;&gt;<br />
+</div>
+
+
+<h3><span class='m'>if</span>, <span class='m'>elif</span>, <span class='m'>else</span> Statements</h3>
+
+<p>The <span class='m'>if</span>, <span class='m'>elif</span>, <span class='m'>else</span> statements can decide whether or not to execute a block of code. The <span class='m'>if</span> and <span class='m'>elif</span> statements start with the <span class='m'>if</span> or <span class='m'>elif</span> keyword, followed by a condition (that is, an expression that evaluates to a boolean value <span class='m'>True</span> or <span class='m'>False</span>), followed by a colon and a block of code.</p>
+
+<p>If the condition that follows the <span class='m'>if</span> statement is <span class='m'>True</span>, then the block of code that comes after the <span class='m'>if</span> statement is executed. If the condition that follows the <span class='m'>if</span> statement is <span class='m'>False</span> and the <span class='m'>elif</span>'s condition is <span class='m'>True</span>, then the block that follows the <span class='m'>elif</span> statement is executed. If all the <span class='m'>if</span> and <span class='m'>elif</span> statements are <span class='m'>False</span>, then the block that follows the <span class='m'>else</span> statement is executed.</p>
+
+<p>Only one of the blocks that follows an <span class='m'>if</span>, <span class='m'>elif</span>, or <span class='m'>else</span> statement will be executed.</p>
+
+<p>The <span class='m'>if</span> statement is always first. An <span class='m'>if</span> statement does not need to have an <span class='m'>elif</span> or <span class='m'>else</span> statement after it. If the <span class='m'>if</span> statement has both an <span class='m'>elif</span> and <span class='m'>else</span> statement, the <span class='m'>else</span> statement must come after all the <span class='m'>elif</span> statements. There can be any number of <span class='m'>elif</span> statements.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; myPet = 'cat'<br />
+&gt;&gt;&gt; if myPet == 'dog':<br />
+...&nbsp;&nbsp;&nbsp;print('Dogs are very friendly.')<br />
+... elif myPet == 'bird':<br />
+...&nbsp;&nbsp;&nbsp;print('Bird chirps are very loud.')<br />
+... elif myPet == 'cat':<br />
+...&nbsp;&nbsp;&nbsp;print('Cats make me sneeze.')<br />
+... else:<br />
+...&nbsp;&nbsp;&nbsp;print('I do not know what type of pet that is.')<br />
+...<br />
+Cats make me sneeze<br />
+&gt;&gt;&gt; <br />
+</div>
+
+
+<h3><span class='m'>return</span> Statements</h3>
+
+<p><span class='m'>return</span> statements immediately send execution out of a function and back to the line where the function was called. They can be followed by a value or expression to be used as the function's return value. <span class='m'>return</span> statements can only be used inside of functions (that is, inside a <span class='m'>def</span> statement's block).</p>
+
+<p>If the <span class='m'>return</span> keyword is by itself, then the function returns the <span class='m'>None</span> value.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; def foo():<br />
+...&nbsp;&nbsp;&nbsp;return 42<br />
+...&nbsp;&nbsp;&nbsp;<br />
+&gt;&gt;&gt; foo()<br />
+42<br />
+&gt;&gt;&gt;<br />
+</div>
+
+
+<h3><span class='m'>while</span> Loop Statements</h3>
+
+<p><span class='m'>while</span> loops will execute the block of code over and over until their condition (that is, an expression that evaluates to a boolean <span class='m'>True</span> or <span class='m'>False</span> value) is <span class='m'>False</span>. The condition is checked at the beginning of each iteration.</p>
+
+<p>A <span class='m'>while</span> loop can be exited early if it encounters a <span class='m'>break</span> statement. A <span class='m'>continue</span> statement will cause execution to go back to the start of the <span class='m'>while</span> loop and recheck the <span class='m'>while</span> loop's condition.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; i = 0<br />
+&gt;&gt;&gt; while i &lt; 3:<br />
+...&nbsp;&nbsp;&nbsp;print('Value of i is %s' % (i))<br />
+...&nbsp;&nbsp;&nbsp;i = i + 1<br />
+...&nbsp;&nbsp;&nbsp;<br />
+Value of i is 0<br />
+Value of i is 1<br />
+Value of i is 2<br />
+&gt;&gt;&gt; <br />
+</div>
+
+<h1>Functions</h1>
+
+<h3>The <span class='m'>abs()</span> Function</h3>
+
+<p>The <span class='m'>abs(n)</span> function returns the absolute value of <span class='m'>n</span>. The absolute value of a number is the positive form of the number.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; abs(-5)<br />
+5<br />
+&gt;&gt;&gt; abs(10)<br />
+10<br />
+&gt;&gt;&gt; <br />
+</div>
+
+<h3>The <span class='m'>bool()</span> Function</h3>
+
+<p>The <span class='m'>bool(x)</span> function returns the boolean value of <span class='m'>x</span>. If <span class='m'>x</span> is an empty list, string, dict, or the numeric values <span class='m'>0</span> or <span class='m'>0.0</span>, the <span class='m'>bool(x)</span> evaluates to <span class='m'>False</span>. Otherwise, <span class='m'>bool(x)</span> will return <span class='m'>True</span>.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; bool('')<br />
+False<br />
+&gt;&gt;&gt; bool([])<br />
+False<br />
+&gt;&gt;&gt; bool(42)<br />
+True<br />
+&gt;&gt;&gt; bool(0)<br />
+False<br />
+&gt;&gt;&gt; <br />
+</div>
+
+
+<h3>The <span class='m'>chr()</span> Function</h3>
+
+<p>The <span class='m'>chr(n)</span> function takes an integer ASCII value <span class='m'>n</span> and returns a string with that ASCII value's character. A table of all ASCII values can be found in Chapter 13, The Caesar Cipher.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; chr(65)<br />
+'A'<br />
+&gt;&gt;&gt; chr(66)<br />
+'B'<br />
+&gt;&gt;&gt; chr(53)<br />
+'5'<br />
+&gt;&gt;&gt; <br />
+</div>
+
+
+<h3>The <span class='m'>float()</span> Function</h3>
+
+<p>The <span class='m'>float(x)</span> function takes an integer or string <span class='m'>x</span> and returns the floating point version of <span class='m'>x</span>.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; float(42)<br />
+42.0<br />
+&gt;&gt;&gt; <br />
+</div>
+
+
+<h3>The <span class='m'>input()</span> Function</h3>
+
+<p>The <span class='m'>input()</span> function pauses the execution of the program and lets the user type in a string from the keyboard. When the user presses Enter, the keystrokes (except for the Enter) are returned as a string.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; spam = input()<br />
+Albert<br />
+&gt;&gt;&gt; spam<br />
+Albert<br />
+&gt;&gt;&gt; <br />
+</div>
+
+
+<h3>The <span class='m'>int()</span> Function</h3>
+
+<p>The <span class='m'>int(x)</span> function takes a floating point number or string <span class='m'>x</span> and returns the integer version of <span class='m'>x</span>. If <span class='m'>x</span> is a floating point number, then the integer returned is <span class='m'>x</span> rounded down.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; int(42.0)<br />
+42<br />
+&gt;&gt;&gt; int('99')<br />
+99<br />
+</div>
+
+
+<h3>The <span class='m'>list()</span> Function</h3>
+
+<p>The <span class='m'>list(x)</span> function returns the list form of <span class='m'>x</span>. Usually, the "range object" returned by the <span class='m'>range()</span> function is passed to <span class='m'>list()</span> in order to get a list object of the range object's values.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; spam = list(range(10))<br />
+&gt;&gt;&gt; spam<br />
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]<br />
+&gt;&gt;&gt; <br />
+</div>
+
+
+<h3>The <span class='m'>ord()</span> Function</h3>
+
+<p>The <span class='m'>ord(c)</span> function takes a single character string <span class='m'>c</span> and returns the integer ASCII value of <span class='m'>c</span>. A table with all the ASCII values can be found in Chapter 14, The Caesar Cipher.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; ord('A')<br />
+65<br />
+&gt;&gt;&gt; ord('B')<br />
+66<br />
+&gt;&gt;&gt; ord('5')<br />
+53<br />
+&gt;&gt;&gt; <br />
+</div>
+
+
+<h3>The <span class='m'>print()</span> Function</h3>
+
+<p>The <span class='m'>print(x)</span> function takes a value <span class='m'>x</span> and displays it on the screen with a newline automatically added to the end. The <span class='m'>print()</span> function can take any number of multiple arguments and will display them with a single space placed in between the arguments. A <span class='m'>print()</span> function call with no arguments will display just a newline on the screen.</p>
+
+<p>The <span class='m'>print()</span> function has two optional keyword arguments. The <span class='m'>end</span> keyword argument can change the newline automatically added to the  end of the string to any other string. The <span class='m'>sep</span> keyword argument can change the single space autoamtically inserted in between multiple arguments to any other string.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; print('Hello')<br />
+Hello<br />
+&gt;&gt;&gt; print()<br />
+<br />
+&gt;&gt;&gt; print(2, 4, 6)<br />
+2 4 6<br />
+&gt;&gt;&gt; print(2, 4, 6, sep='XXX')<br />
+2XXX4XXX6<br />
+&gt;&gt;&gt; print('Hello', end='ZZZ\n'<br />
+HelloZZZ<br />
+&gt;&gt;&gt; <br />
+</div>
+
+
+<h3>The <span class='m'>range()</span> Function</h3>
+
+<p>The <span class='m'>range(n)</span> function returns a range object with the values <span class='m'>0</span> to <span class='m'>n-1</span>. This range object can be used in for loops to iterate over the integer values 0 to n-1. If you want an actual list value with these integer values, pass the range object to the list() function.</p>
+
+<p>The <span class='m'>range(start, stop)</span> form can provide a different start value other than <span class='m'>0</span>. The <span class='m'>range(start, stop, step)</span> form can provide a different start value than <span class='m'>0</span> and also increment a different value than <span class='m'>1</span>.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; for i in range(4):<br />
+...&nbsp;&nbsp;&nbsp;print i<br />
+...&nbsp;&nbsp;&nbsp;<br />
+0<br />
+1<br />
+2<br />
+3<br />
+&gt;&gt;&gt; for i in range(2, 4):<br />
+...&nbsp;&nbsp;&nbsp;print i<br />
+...&nbsp;&nbsp;&nbsp;<br />
+2<br />
+3<br />
+&gt;&gt;&gt; for i in range(2, 10, 2):<br />
+...&nbsp;&nbsp;&nbsp;print i<br />
+...&nbsp;&nbsp;&nbsp;<br />
+2<br />
+4<br />
+6<br />
+8<br />
+&gt;&gt;&gt; <br />
+</div>
+
+
+<h3>The <span class='m'>round()</span> Function</h3>
+
+<p>The <span class='m'>round(f)</span> function will round a floating point number argument either up or down (depending on which is closer), and return the result as an integer value.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; round(2.9)<br />
+3<br />
+&gt;&gt;&gt; round(2.1)<br />
+2<br />
+&gt;&gt;&gt; round(2.5)<br />
+3<br />
+&gt;&gt;&gt; <br />
+</div>
+
+
+<h3>The <span class='m'>str()</span> Function</h3>
+
+<p>The <span class='m'>str(x)</span> function will take a value (commonly an integer or float) and return the string form of <span class='m'>x</span>.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; str(42)<br />
+'42'<br />
+&gt;&gt;&gt; str(5.0)<br />
+'5.0'<br />
+&gt;&gt;&gt; <br />
+</div>
+
+<h3>The <span class='m'>type()</span> Function</h3>
+
+<p>The <span class='m'>type(x)</span> function takes a value <span class='m'>x</span> of any data type and returns what data type the value is. The return value itself is of a data type called type.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; type(5)<br />
+&lt;class 'int'&gt;<br />
+&gt;&gt;&gt; type(5.0)<br />
+&lt;class 'float'&gt;<br />
+&gt;&gt;&gt; type('Hello')<br />
+&lt;class 'str'&gt;<br />
+&gt;&gt;&gt; type([1, 2, 3])<br />
+&lt;class 'list'&gt;<br />
+&gt;&gt;&gt; type({'a':42})<br />
+&lt;class 'dict'&gt;<br />
+&gt;&gt;&gt; type(type('Hello'))<br />
+&lt;class 'type'&gt;<br />
+&gt;&gt;&gt; str(type(5)) == "&lt;class 'int'&gt;"<br />
+True<br />
+&gt;&gt;&gt; <br />
+<br />
+</div>
+
+
+<div class='createspace'><br /><br /><br /><br /></div>
+
+<h3>Functions in the <span class='m'>random</span> Module</h3>
+
+<h3>The <span class='m'>random.choice()</span> Function</h3>
+
+<p>The <span class='m'>random.choice(li)</span> function returns a random item from the list <span class='m'>li</span>. It is equivalent to <span class='m'>li[random.randint(0, len(li)-1)]</span>.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; import random<br />
+&gt;&gt;&gt; random.choice(['cat', 'dog', 'mouse'])<br />
+dog<br />
+&gt;&gt;&gt; random.choice(['cat', 'dog', 'mouse'])<br />
+cat<br />
+&gt;&gt;&gt; random.choice(['cat', 'dog', 'mouse'])<br />
+dog<br />
+</div>
+
+
+<h3>The <span class='m'>random.randint()</span> Function</h3>
+
+<p>The <span class='m'>random.randint(a, b)</span> function returns a random integer between (and including) the arguments <span class='m'>a</span> and <span class='m'>b</span>.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; import random<br />
+&gt;&gt;&gt; random.randint(0, 10)<br />
+6<br />
+&gt;&gt;&gt; random.randint(0, 10)<br />
+7<br />
+&gt;&gt;&gt; random.randint(20, 40)<br />
+24<br />
+</div>
+
+
+<h3>The <span class='m'>random.shuffle()</span> Function</h3>
+
+<p>The <span class='m'>random.shuffle(li)</span> function will shuffle the order the items in the list <span class='m'>li</span>. Note that this function does not return anything: it shuffles the items in the list in place.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; import random<br />
+&gt;&gt;&gt; spam = ['cat', 'dog', 'frog', 'fly', 'egg']<br />
+&gt;&gt;&gt; random.shuffle(spam)<br />
+&gt;&gt;&gt; spam<br />
+['cat', 'egg', 'frog', 'dog', 'fly']<br />
+&gt;&gt;&gt; random.shuffle(spam)<br />
+&gt;&gt;&gt; spam<br />
+['cat', 'frog', 'egg', 'fly', 'dog']<br />
+&gt;&gt;&gt; random.shuffle(spam)<br />
+&gt;&gt;&gt; spam<br />
+['fly', 'egg', 'frog', 'dog', 'cat']<br />
+</div>
+
+
+
+<h3>Functions in the <span class='m'>sys</span> Module</h3>
+
+<h3>The <span class='m'>sys.exit()</span> Function</h3>
+
+<p>The <span class='m'>sys.exit()</span> function causes your Python program to terminate and stop executing instructions.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; import sys<br />
+&gt;&gt;&gt; sys.exit()<br />
+<i>(The Python interactive shell or your Python program will terminate.</i><br />
+</div>
+
+
+
+<h3>Functions in the <span class='m'>time</span> Module</h3>
+
+<h3>The <span class='m'>time.sleep()</span> Function</h3>
+
+<p>The <span class='m'>time.sleep(n)</span> function causes the Python program to pause execution for <span class='m'>n</span> seconds. The argument <span class='m'>n</span> can either be an integer or a floating point value.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; import time<br />
+&gt;&gt;&gt; time.sleep(5)<br />
+<i>(There is a 5 second pause here while nothing happens.)</i><br />
+&gt;&gt;&gt; <br />
+</div>
+
+
+
+<h1>Methods</h1>
+
+<h3>Dict Methods</h3>
+
+<h3>The <span class='m'>keys()</span> Dict Method</h3>
+
+<p>The <span class='m'>keys()</span> dict method returns a list where each item is a key in the dictionary. Because dictionaries are not sorted, the items in the returned list will be in an uncertain order.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; spam = {'a':'spam', 'b':'eggs', 42:'ham'}<br />
+&gt;&gt;&gt; spam.keys()<br />
+['a', 42, 'b']<br />
+&gt;&gt;&gt; <br />
+</div>
+
+<h3>The <span class='m'>values()</span> Dict Method</h3>
+
+<p>The <span class='m'>values()</span> dict method returns a list where each item is a value in the dictionary. Because dictionaries are not sorted, the items in the returned list will be in an uncertain order.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; spam = {'a':'spam', 'b':'eggs', 42:'ham'}<br />
+&gt;&gt;&gt; spam.values()<br />
+['spam', 'ham', 'eggs']<br />
+&gt;&gt;&gt; <br />
+</div>
+
+
+
+<h3>List Methods</h3>
+
+<h3>The <span class='m'>append()</span> List Method</h3>
+
+<p>The <span class='m'>append(x)</span> list method adds the value <span class='m'>x</span> to the end of the items in the list.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; spam = ['cat', 'dog', 'mice']<br />
+&gt;&gt;&gt; spam.append('horse')<br />
+&gt;&gt;&gt; spam<br />
+['cat', 'dog', 'mice', 'horse']<br />
+&gt;&gt;&gt; <br />
+</div>
+
+
+
+<h3>The <span class='m'>reverse()</span> List Method</h3>
+
+<p>The <span class='m'>reverse()</span> list method reverse the order of the items in the list in place. Note that because the items are reversed in place, this method does not return anything.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; spam = [1, 2, 3, 4]<br />
+&gt;&gt;&gt; spam.reverse()<br />
+&gt;&gt;&gt; spam<br />
+[4, 3, 2, 1]<br />
+&gt;&gt;&gt; <br />
+</div>
+
+
+
+<h3>The <span class='m'>sort()</span> List Method</h3>
+
+<p>The <span class='m'>sort()</span> list method puts all the items in the list in sorted order. This is done in place, so the <span class='m'>sort()</span> method does not return anything. The sort is alphanumeric, which means that numbers come before letters.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; spam = ['Alice', 'Bob', '42', '50', '4 Stars']<br />
+&gt;&gt;&gt; spam.sort()<br />
+&gt;&gt;&gt; spam<br />
+['4 Stars', '42', '50', 'Alice', 'Bob']<br />
+&gt;&gt;&gt; <br />
+</div>
+
+
+
+<h3>String Methods</h3>
+
+<h3>The <span class='m'>endswith()</span> String Method</h3>
+
+<p>The <span class='m'>endswith(s)</span> string method returns <span class='m'>True</span> if the string ends with the string <span class='m'>s</span>, otherwise it returns <span class='m'>False</span>.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; 'Hello'.endswith('o')<br />
+True<br />
+&gt;&gt;&gt; 'Hello'.endswith('O')<br />
+False<br />
+&gt;&gt;&gt; 'Hello'.endswith('llo')<br />
+True<br />
+&gt;&gt;&gt; <br />
+</div>
+
+
+
+<h3>The <span class='m'>isalpha()</span> String Method</h3>
+
+<p>The <span class='m'>isalpha()</span> string method returns <span class='m'>True</span> if the string is not blank and only contains letters. If the string has numbers, spaces, or any other non-letter characters, the method returns <span class='m'>False</span>.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; 'Hello'.isalpha()<br />
+True<br />
+&gt;&gt;&gt; 'Hello there!'.isalpha()<br />
+False<br />
+&gt;&gt;&gt; ''.isalpha()<br />
+False<br />
+&gt;&gt;&gt; <br />
+</div>
+
+
+
+<h3>The <span class='m'>isdigit()</span> String Method</h3>
+
+<p>The <span class='m'>isdigit()</span> string method returns <span class='m'>True</span> if the string is not blank and only contains numbers. If the string has letters, spaces, or any other non-number characters, the method returns <span class='m'>False</span>. Note that periods will also make the method return <span class='m'>False</span>.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; '42'.isdigit()<br />
+True<br />
+&gt;&gt;&gt; '10 15 20'.isdigit()<br />
+False<br />
+&gt;&gt;&gt; '3.5'.isdigit()<br />
+False<br />
+&gt;&gt;&gt; ''.isdigit()<br />
+False<br />
+&gt;&gt;&gt; <br />
+</div>
+
+
+
+<h3>The <span class='m'>islower()</span> string Method</h3>
+
+<p>The <span class='m'>islower()</span> string method will return <span class='m'>True</span> if the all the letters in it are lowercase and the string has at least one lowercase letter.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; 'albert'.islower()<br />
+True<br />
+&gt;&gt;&gt; 'hello world!'.islower()<br />
+True<br />
+&gt;&gt;&gt; 'hello World!'.islower()<br />
+False<br />
+&gt;&gt;&gt; ''.islower()<br />
+False<br />
+</div>
+
+
+
+<h3>The <span class='m'>isupper()</span> String Method</h3>
+
+<p>The <span class='m'>isupper()</span> string method will return <span class='m'>True</span> if the all the letters in it are uppercase and the string has at least one uppercase letter.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; 'ALBERT'.isupper()<br />
+True<br />
+&gt;&gt;&gt; 'HELLO WORLD!'.isupper()<br />
+True<br />
+&gt;&gt;&gt; 'hELLO wORLD!'.isupper()<br />
+False<br />
+&gt;&gt;&gt; ''.isupper()<br />
+False<br />
+</div>
+
+
+
+<h3>The <span class='m'>join()</span> String Method</h3>
+
+<p>The <span class='m'>join(li)</span> string method returns a string that contains all of the string items in the list <span class='m'>li</span>, with the string in between each of the items. This is most commonly used on a single space string to combine several word strings in a list together into one string.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; spam = ['cat', 'dog', 'mouse']<br />
+&gt;&gt;&gt; ' '.join(spam)<br />
+'cat dog mouse'<br />
+&gt;&gt;&gt; 'XXX'.join(spam)<br />
+'catXXXdogXXXmouse'<br />
+&gt;&gt;&gt; 'XXX'.join([])<br />
+''<br />
+</div>
+
+
+
+<h3>The <span class='m'>lower()</span> String Method</h3>
+
+<p>The <span class='m'>lower()</span> string method returns a lowercase string version of the string.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; spam = 'Hello World!'<br />
+&gt;&gt;&gt; spam.lower()<br />
+'hello world!'<br />
+&gt;&gt;&gt; My name is Al.lower()<br />
+'my name is al.'<br />
+&gt;&gt;&gt; <br />
+</div>
+
+
+
+<h3>The <span class='m'>split()</span> String Method</h3>
+
+<p>The <span class='m'>split()</span> string method returns a list of strings, where each string in the list is from splitting the string by whitespace. Whitespace characters include spaces, tabs, and newlines. The whitespace is not included in the strings in the returned list.</p>
+
+<p>The <span class='m'>split(s)</span> version can specify a string <span class='m'>s</span> to split the string on.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; spam = 'Hello there, young lady.'<br />
+&gt;&gt;&gt; spam.split()<br />
+['Hello', 'there,', 'young', 'lady.']<br />
+&gt;&gt;&gt; 'Man is a wolf to man.     - Roman proverb'.split()<br />
+['Man', 'is', 'a', 'wolf', 'to', 'man.', '-', 'Roman', 'proverb']<br />
+&gt;&gt;&gt; 'Cats and cats and dogs and cats and a mouse.'.split('cats')<br />
+['Cats and ', ' and dogs and ', ' and a mouse.']<br />
+&gt;&gt;&gt; <br />
+</div>
+
+
+
+<h3>The <span class='m'>startswith()</span> String Method</h3>
+
+<p>The <span class='m'>startswith()</span> string method returns <span class='m'>True</span> if the string ends with the string <span class='m'>s</span>, otherwise it returns <span class='m'>False</span>.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; 'Hello'.startswith('H')<br />
+True<br />
+&gt;&gt;&gt; 'Hello'.startswith('h')<br />
+False<br />
+&gt;&gt;&gt; 'Hello'.startswith('Hel')<br />
+True<br />
+&gt;&gt;&gt; <br />
+</div>
+
+
+
+<h3>The <span class='m'>upper()</span> String Method</h3>
+
+<p>The <span class='m'>upper()</span> string method returns an uppercase string version of the string.</p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; spam = 'Hello world!'<br />
+&gt;&gt;&gt; spam.upper()<br />
+'HELLO WORLD!'<br />
+&gt;&gt;&gt; 'My name is Al.'<br />
+'MY NAME IS AL.'<br />
+&gt;&gt;&gt; <br />
+</div>
+
+
+<!--
+<h1>Pygame Modules and Functions</h1>
+-->
+
+
+<!--
+<h3>The <span class='m'>FOOBAR()</span> Function</h3>
+
+<p>The <span class='m'>FOOBAR()</span> function </p>
+
+<div class='sourceblurb'>
+&gt;&gt;&gt; <br />
+&gt;&gt;&gt; <br />
+<br />
+</div>
+
+
+-->
+
+<!--
+TODO, remaining:
+
+print
+input
+str
+int
+range
+list
+float
+chr
+ord
+bool
+abs
+round
+type
+
+RANDOM
+randint
+shuffle
+choice
+
+TIME
+sleep
+
+SYS
+exit
+
+
+
+LIST
+append
+reverse
+sort
+
+
+STRING
+['endswith', 'isalpha', 'isdigit', 'islower', 'isupper', 'join', 'lower', 'split', 'startswith', 'upper']
+
+DICT
+keys
+values
+
+
+PYGAME
+pygame.font.Font
+pygame.Surface
+pygame.Rect
+pygame.PixelArray
+
+PYGAME SURFACE
+blit
+-->
+
+<!-- Chapter Navigation Links -->
+
+</body>
+</html>
