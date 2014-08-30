@@ -1,0 +1,42 @@
+<html>
+<body>
+<h2>Program Design of Choose Your Own Adventure: Dragon Realm</h2>
+
+<p>dragon2.py is mostly a simple collection of functions which use print() to display text, and then call other functions depending on what the user chooses.</p>
+
+<p>It is important to note that when you create your own Choose Your Own Adventure games, you should really sketch out what happens with paper and pencil first. It is much easier to code a game when you know everything up front.</p>
+
+<p>The pause() function pauses the game until the user presses Enter. This is useful for adding dramatic pauses to the game. The choosePath(numberOfPaths) function is used to make sure the user enters a valid choice.</p>
+
+<p>There are a few global variables that are used to alter the story by being randomly set at the start of the game: dragonLocation, skulls, and bones. The rock variable keeps track of whether or not the rock is on the shore, has been picked up, is in the floating boat, or is in the sunken boat. Whenever we change the value of the rock variable in a function, we add "global rock" to the start of the function to make sure we modify the global variable named rock, and not create a local variable named rock. (You do not need to use a "global" statement when you simply read the variable's value, just when you want to change it.)</p>
+
+<p>The functions keep calling each other until you reach on of the endings, in which case it just returns. At this point, all the functions return until you get back to the while loop at line 347.</p>
+
+<p>You can read the spoiler (in the next section) if you've already played through the game a few times. Look at the functions and see how all the possible game plays are implemented with the functions.</p>
+
+<p>This is just a short explanation. If you have any questions about the game or the code, just email me at <a href='mailto://al@inventwithpython.com'>al@inventwithpython.com</a></p>
+
+<h2>Spoilers for Choose Your Own Adventure: Dragon Realm</h2>
+
+<p>(Don't read this if you haven't played the game a few times yet. It will ruin the endings for you.)</p>
+
+<p>There are a few variables that are randomly set up so that the game plays out differently each time you play.</p>
+
+<p>You start in front of the cave. Notice if there are skulls and bones lying around the front of the cave.</p>
+
+<p>If you go on top of the cave, notice if there is smoke coming from the chimney or not. If so, then the dragon is in the upper chamber (and climbing down the chimney will kill you.) If not, the dragon is in the lower chamber.</p>
+
+<p>Going inside the cave, you can either go to the upper chamber or the lower chamber.</p>
+
+<p>If the dragon is not in the upper chamber, then the upper chamber has nothing special in it.</p>
+
+<p>In the lower chamber, there is a boat, a large rock, and an island across the underground lake. The boat either floats or sinks. You can find out which one by picking up the rock and putting it in the boat. If the boat floats with the rock in it, it is safe to take it to the island.</p>
+
+<p>Swimming to the island always works, unless you have picked up the rock and have not put it in the boat. In that case, the weight of the rock causes you to drown.</p>
+
+<p>Once you get to the island, if the dragon is in the upper chamber you simply find the treasure and win. If the dragon is in the lower chamber, then you encounter him on the island.</p>
+
+<p>Whether you encounter the dragon in the upper chamber or lower chamber, you are faced with the choice of attacking him or taking his deal. If there were skulls outside the cave, the dragon is dangerous and dealing with him will kill you. If there were no skulls, then the dragon is friendly but if you attack he kill kill you. If you choose correctly, you get the treasure and win the game.</p>
+
+</body>
+</html>
