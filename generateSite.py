@@ -9,6 +9,7 @@ import distutils.dir_util
 import jinja2
 
 GENERATE_ALL = False # If True, all templates are generated regardless if timestamp says they are up to date
+BASE_HREF = 'http://localhost:8000/'
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 logging.debug('Started.')
@@ -40,7 +41,7 @@ for dirpath, dirnames, filenames in os.walk('content'):
 
         # Write the template to the output folder
         outputFo = open(outputFilename, 'w')
-        outputFo.write(t.render(base_href='http://localhost/'))
+        outputFo.write(t.render(base_href=BASE_HREF))
         outputFo.close()
 
         renderCount += 1

@@ -1,0 +1,44 @@
+{% extends "basePygame.html" %}
+{% set title = 'Making Games with Python & Pygame - Chapter 10' %}
+{% block content %}
+
+<script type="text/javascript" src="sourceCodesPygame.js"></script>
+<script>
+function loadTextAreas() {
+    document.getElementById('src1').value=sourceCodesPygame['flippy'];
+    document.getElementById('src2').value=sourceCodesPygame['inkspill'];
+    document.getElementById('src3').value=sourceCodesPygame['fourinarow'];
+    document.getElementById('src4').value=sourceCodesPygame['gemgem'];
+}
+
+dojo.addOnLoad(loadTextAreas);
+</script>
+
+<p><span class="bigfont">Read online:</span> <a href="chapter10.html">Chapter 10 - Four Extra Games</a></p>
+
+<p><span class="bigfont">Download source:</span>
+<ul>
+<li><a href="flippy.py">flippy.py</a> <a href="flippy.zip">[graphics files]</a></li>
+<li><a href="inkspill.py">inkspill.py</a> <a href="inkspill.zip">[graphics files]</a></li>
+<li><a href="fourinarow.py">fourinarow.py</a> <a href="fourinarow.zip">[graphics files]</a></li>
+<li><a href="gemgem.py">gemgem.py</a> <a href="gemgem.zip">[graphics files]</a></li>
+</ul>
+</p>
+
+<p><span class="bigfont">Copy source to clipboard:</span><br />
+<textarea style="width: 100%; height:200px" id='src1'></textarea><br />
+<textarea style="width: 100%; height:200px" id='src2'></textarea><br />
+<textarea style="width: 100%; height:200px" id='src3'></textarea><br />
+<textarea style="width: 100%; height:200px" id='src4'></textarea><br />
+</p>
+
+<p><span class="bigfont">Online Diff Tool:</span><br />
+If you've typed in the source code, but are seeing errors, you can compare your code to the book's code with the online diff tool:
+<ul>
+<li><a href="diff/index.html?p=flippy">flippy.py</a></li>
+<li><a href="diff/index.html?p=inkspill">inkspill.py</a></li>
+<li><a href="diff/index.html?p=fourinarow">fourinarow.py</a></li>
+<li><a href="diff/index.html?p=gemgem">gemgem.py</a></p></li>
+</ul>
+
+{% endblock %}

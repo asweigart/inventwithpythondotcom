@@ -1,0 +1,694 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>Pygcurse Tutorial</title>
+
+<style type="text/css">
+blockquote {
+background-color: #DDDDFF;
+margin: 16px;
+}
+</style>
+<script type="text/javascript"> var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script> <script type="text/javascript"> try {
+var pageTracker = _gat._getTracker("UA-5459430-3");
+pageTracker._trackPageview();
+} catch(err) {}</script> </head>
+<body>
+<p><img style="width: 443px; height: 210px;" alt="" src="../images/pygcurse_logo.png"><br>
+</p>
+<h1>The Pygcurse Tutorial</h1>
+<p>Pygcurse requires Pygame to be installed. Pygame can be
+downloaded from <a href="http://pygame.org">http://pygame.org</a></p>
+<blockquote>This tutorial is designed for Python 3. If you have
+Python 2
+installed, the differences will be noted in blue boxes like these. The
+same pygcurse.py file can be used with either version.</blockquote>
+It
+should be noted that Pygcurse handles unicode as well as
+Pygame&nbsp;and your selected font handles unicode. If it cannot
+display a character, it shows a rectangle box. (I've run into some
+issues with the extended characters, but these seem to by Pygame
+issues.)
+<h2><span style="font-weight: bold;"></span>Let's
+Make a "Hello World" Program with Pygcurse</h2>
+<p>Using the Pygcurse module is super easy. Here's a simple
+"Hello World" program.</p>
+<pre>import pygcurse<br>win = pygcurse.PygcurseWindow(40, 25, 'Hello World Program')<br>win.pygprint('Hello world!')<br>pygcurse.waitforkeypress()</pre>
+<p>The
+first line imports the Pygcurse module. The second line creates a
+PygcurseWindow object that has 40 columns and 25 rows, (resulting in 40
+x 25 = 1000 character positions, which are called "cells") and "Hello
+World
+Program" as the window's caption in the title bar. The third line
+prints out the text "Hello world!" and then the fourth line waits for
+the user to press a key before terminating the program. (Without this
+last line, the program would immediately quit right after printing the
+"Hello world!" string and you wouldn't have time to see it.</p>
+<p>The reason the method is named pygprint() instead of print()
+is that print is a keyword in Python 2. To make your code compatible
+with both Python 2 and 3, Pygcurse could not make the method named
+print().</p>
+<h2>The input() Method</h2>
+<p>Let's do another simple program that mimics basic Python text
+programs:</p>
+<pre>import pygcurse<br>win = pygcurse.PygcurseWindow(40, 25)<br>win.pygprint('What is your name?')<br>name = win.input()<br>win.write('Hello, ')<br>win.fgcolor = 'red'<br>win.write(name + '!\n')<br>win.colors = ('red', 'green')<br>win.pygprint('It is good to meet you!')<br>pygcurse.waitforkeypress()<br></pre>
+<p><img style="width: 536px; height: 363px;" alt="" src="pygtut_color.png"></p>
+<p>Notice that the PygcurseWindow object also has an input()
+method, which works similar to Python's input() function.</p>
+<p>Pygcurse for Python 2 and 3 have a method called raw_input()
+that is the exact same as the input() method, if you prefer using that
+name,</p>
+<p>There is also a write() method, which behaves similar to the
+sys.stdout.write() function.
+(That is, it prints without the newline character at the end.) Notice
+how you can change the foreground color by setting the fgcolor
+attribute to the string 'red'. The bgcolor attribute works the same way
+for the background color. If you want to set both in one line, set the
+colors attribute to a tuple (the foreground color first, then the
+background color)</p>
+<h2>Color Values in Pygcurse</h2>
+<p>Along with the
+fgcolor, bgcolor, and colors attributes, several of the PygcurseWindow
+methods take fgcolor and bgcolor keyword arguments. For example, you
+can call win.write('Hello world', fgcolor='blue', bgcolor='green') to
+print the string with blue text on a green background. This doesn't
+change the colors that the PygcurseWindow is set to like setting the
+fgcolor and bgcolor attributes. It only applies for the one function
+call.</p>
+<p>The full list of color strings is found in the
+pygcurse.colornames dict, which has keys of strings and values of
+pygame.Color objects. They are:</p>
+<pre>'white'<br>'yellow'<br>'fuchsia'<br>'red'<br>'silver'<br>'gray'<br>'olive'<br>'purple'<br>'maroon'<br>'aqua'<br>'lime'<br>'teal'<br>'green'<br>'blue'<br>'navy'<br>'black'</pre>
+<p>If you wish to use other color strings, you can add them to
+the pygcurse.colornames dictionary.</p>
+<p>Also, you can use pygame.Color objects directly, such as
+win.write('Hello world', fgcolor=pygame.Color(255, 0, 0))</p>
+<p>Finally,
+you can also simply pass a tuple of three (or four, if you want to
+specify an alpha value) integers of 0 to 255 to specify the color:
+win.write('Hello world', fgcolor=(255, 0, 0))</p>
+<p>Any of these three
+formats can be used. (They are all converted to pygame.Color objects by
+the pygcurse.getPygameColor() function.)</p>
+<p>Take a look at this sample program and its output:</p>
+<pre>import pygcurse<br>win = pygcurse.PygcurseWindow(40, 25)<br>for k in pygcurse.colornames:<br>&nbsp;&nbsp;&nbsp; win.write('This is the color %s\n' % (k), fgcolor=k)<br>pygcurse.waitforkeypress()</pre>
+<p><img style="width: 536px; height: 363px;" alt="" src="pygtut_allcolors.png"></p>
+<h2>Moving the Cursor</h2>
+<p>Whenever
+you call the pygprint() or write() methods, the text appears where the
+screen cursor is. The cursor starts at cell 0, 0 (in the top left
+corner of the screen) and is set to the first cell after the printed
+text. However, you can also set the cursor position directly:</p>
+<pre>import pygcurse<br>win = pygcurse.PygcurseWindow(40, 25)<br>win.cursor = (20, 10)<br>win.write('Hello world!')<br>win.cursory = 11<br>win.write('Howdy!')<br>win.write('Ohiyo gozaimasu!', x=20, y=12)<br>pygcurse.waitforkeypress()<br></pre>
+<p><img style="width: 536px; height: 363px;" alt="" src="pygtut_cursor.png"></p>
+<p>By moving the cursor, you can tell
+Pygcurse where to output your text. The pygprint(), write() and
+putchars()
+methods also all have x and y keyword arguments that can dictate where
+the text for those calls should start.</p>
+<p>Occasionally you might want to save the current position of
+the cursor and restore it later. You can call the pushcursor() and
+popcursor() methods to save and restore the current cursor position
+respectively.</p>
+<h2>pygprint() vs. write() vs putchars()</h2>
+<p>There are a few different PygcurseWindow methods for
+displaying text. The differences between them are:</p>
+<ul>
+<li>Arguments
+- pygprint() (in Python 3) has a sep and end keyword argument (this
+does not exist when Pygcurse is run on Python 2). The pygprint() method
+can also take
+multiple strings to print (just like print statement in Python 2 and
+the print() function in Python 3), while
+write() and putchars() can only take one string (and it must be a
+string value, no type casting is done)</li>
+<li>Modifies Cursor - The
+pyprint() and write() methods set the cursor to the position after the
+last character they display. The putchars() method does not affect the
+screen cursor.</li>
+<li>Colors - The pygprint() and write() methods, if no
+fgcolor or bgcolor argument is specified, will change the cells that
+they print text to to the PygcurseWindow object's current foreground
+and background colors. However, the putchars() method, if no fgcolor or
+bgcolor argument is specified, will reuse whatever the cell's current
+foreground and background colors are. (In other words, putchars() only
+prints text to the screen, it does not print the foreground/background
+color.)</li>
+<li>Purpose
+- The pygprint() method is there to provide an analog to Python 3's
+normal
+print() function (and Python 2's print statement). The write() method
+is there so that the
+PygcurseWindow object can be treated like as a file-like object. The
+putchars() method is there so that text can be displayed without
+modifying the cursor.</li>
+<li>Indentation - The putchars() method wraps
+text to the column it started printing, rather than to the beginning of
+the row. This can be disabled by setting the "indent" keyword argument
+to False. Consider the following short program:</li>
+</ul>
+<pre>import pygcurse<br>win = pygcurse.PygcurseWindow(20, 10)<br>win.putchars('Hello world!', x=16, y=2, indent=True)<br>win.putchars('Hello world!', x=16, y=6)<br>pygcurse.waitforkeypress()</pre>
+<img style="width: 276px; height: 168px;" alt="" src="pygtut_indent.png">
+<h2>region Keyword Arguments in Pygcurse</h2>
+<p>Several of the methods in Pygcurse affect an area of the
+screen. For example, the fill() method fills up every cell of the
+PygcurseWindow object with a certain character, foreground color, and
+background color:</p>
+<pre>import pygcurse<br>win = pygcurse.PygcurseWindow(20, 10)<br>win.fill('$', fgcolor='yellow', bgcolor='blue')<br>pygcurse.waitforkeypress()</pre>
+<img style="width: 276px; height: 168px;" alt="" src="pygtut_fill.png">
+<p>However,
+you may not want to fill the entire screen up like this. You might only
+want to fill a portion of the screen. The fill() method (and several
+other methods in Pygcurse) has a "region" keyword arguments that let
+you do
+this. By default, region is set to None unless you specify otherwise.
+Here is how it is
+interpretted:</p>
+<ol>
+<li>If the region is None, then the entire surface is selected.</li>
+<li>If region is set to a tuple of four integers, then the
+integers are interpretted as (x, y, width, height).</li>
+<li>If region is a four-integer tuple, if width or height are
+set to
+None, then the width/height are set to be long enough to reach the
+right/bottom edge of the surface.</li>
+<li>Region can also be set to a pygame.Rect object.</li>
+</ol>
+<h2>The None Value in Pygcurse</h2>
+Whenever
+a method has None passed for a Pygcurse method's arguments, this
+usually means "use whatever default value is already there." For
+example, passing None for an fgcolor or bgcolor parameter will result
+in no color changes. The color used will just be whatever color that
+cell is currently set to.
+<h2>Tint, Light, and Shadow</h2>
+<p>Each cell
+has a set foreground and background color. However, in addition it can
+also have a tint. A tint is a three-tuple of integers from -255 to 255
+which is added to the existing RGB color of the foreground and
+background colors. A tint of (0, 0, 0) is completely clear and does not
+affect the cell's color (this is the default tint of every cell to
+begin with). A tint of (50, 0, 0) adds 50 to the Red value of the
+cell's displayed foreground and background color (the actual foreground
+and background color setting of the cell is not changed.)</p>
+<p>Shadow
+and lighting effects can be made by using the same value for each of
+the three values (red, green, and blue). For example, a tint of (-50,
+-50, -50) will darken the color, making it look like it is shaded. Look
+at this program for an example:</p>
+<pre>import pygcurse<br>win = pygcurse.PygcurseWindow(20, 10)<br>win.colors = ('lime', 'gray')<br>win.write('Hello world!' * 30)<br>win.settint(50, 0, 0, (1, 1, 2, 2))<br>win.settint(255, 0, 0, (3, 1, 2, 2))<br>win.settint(-100, -100, -100, (10, 5, 5, 5))<br>win.settint(-255, -255, -255, (1, 4, 3, 3))<br>win.settint(255, 255, 255, (5, 4, 3, 3))<br>win.update()<br>pygcurse.waitforkeypress()<br></pre>
+<p><img style="width: 276px; height: 168px;" alt="" src="pygtut_tint.png"></p>
+<p>Remember, the tint does not affect the fgcolor or bgcolor
+value of a particular cell. It only affects the displayed color.</p>
+There
+are several methods that are used to change the tint. They all take
+XYWHR arguments to specify the area of cells that they affect.
+<ul>
+<li>settint(r, g, b) - This directly sets the red, green, and
+blue tint to a value between -255 and 255.</li>
+<li>tint(r, g, b) - This modifies the existing tint by adding
+the r, g, and b parameters to the existing tint value.</li>
+<li>darken(amount) - This uniformly darkens the cells. The
+amount argument is between 0 (no darkening) and 255 (completely black).</li>
+<li>lighten(amount) - This uniformly lightens the cells. The
+amount argument is between 0 (no lightening) and 255 (completely white).</li>
+<li>setbrightness(amount)
+- This does the same thing as settint(), except that all three of the
+RGB tints are set to the amount argument.</li>
+<li>addshadow(amount, offset, direction, xoffset, yoffset) -
+Explained below.</li>
+</ul>
+The addshadow() method creates a shadow by darkening the cells around a
+rectangular region. For example, look at this program:
+<pre>import pygcurse<br>win = pygcurse.PygcurseWindow(20, 10)<br>win.colors = ('aqua', 'gray')<br>win.fill('x')<br>win.fgcolor = 'lime'<br>win.fill('#', region=(4, 2, 5, 5))<br>win.addshadow(region=(4, 2, 5, 5))<br>win.update()<br>pygcurse.waitforkeypress()<br></pre>
+<p><img style="width: 276px; height: 168px;" alt="" src="pygtut_shadow1.png"></p>
+<p>The addshadow() method has several keyword arguments for
+customizing the shadow. For example, the amount keyword argument can be
+set to an integer from -255 to 255. (This is identical to the amount
+keyword argument for the darken() method.)
+The offset keyword argument can change how far away the shadow is. For
+example, if we changed the&nbsp;addshadow() call in the previousto
+this: </p>
+<pre>win.addshadow(amount=200, offset=2, region=(4, 2, 5, 5))</pre>
+<p>Then this is what it would look like:</p>
+<img style="width: 276px; height: 168px;" alt="" src="pygtut_shadow2.png">
+<p>The
+direction keyword argument changes where the shadow is cast. By default
+it is set to pygcurse.SOUTHEAST. The pygcurse module has constant
+variables for all eight directions:NORTH, NORTHWEST, NORTHEAST, WEST,
+EAST, SOUTH, SOUTHWEST, SOUTHEAST. </p>
+<p>Normally the amount the shadow is offset is equal in the x and
+y directions. However,&nbsp;the xoffset and yoffset&nbsp;will
+override the direction and offset keyword arguments. Remember that a
+positive offset moves to the right and down, while a negative offset
+moves to the left and up.</p>
+<h2>Cell Coordinates and Pixel Coordinates</h2>
+<p>There
+are two Cartesian coordinate systems for Pygcurse programs: the cell
+coordinates (used for text characters) and the pixel coordinates (used
+for pixels). They both have their 0, 0 origin start in the upper left
+corner of the window, and have their X axis increase going right and Y
+axis increase going down. In Pygcurse, coordinates/width/height refers
+to the cell coordinates. If they refer to pixel coordinates, they are
+called "pixelwidth" or "pixelx", etc. Here are the PygcurseWindow
+attributes that track different measurements:</p>
+<table style="text-align: left; width: 556px; height: 116px;" border="1" cellpadding="2" cellspacing="2">
+<tbody>
+<tr>
+<td style="font-weight: bold;">PygcurseWindow
+Attribute</td>
+<td style="font-weight: bold;">Description</td>
+</tr>
+<tr>
+<td>width &amp; height</td>
+<td>The number of cells wide and tall the window is.</td>
+</tr>
+<tr>
+<td>size</td>
+<td>Tuple of two integers: (width, height)</td>
+</tr>
+<tr>
+<td>pixelwidth &amp; pixelheight</td>
+<td>The number of pixels wide and tall the window is.</td>
+</tr>
+<tr>
+<td>pixelsize</td>
+<td>Tuple of two integers: (pixelwidth, pixelheight)</td>
+</tr>
+<tr>
+<td>cellwidth &amp; cellheight</td>
+<td>The number of pixels wide and tall each cell is.</td>
+</tr>
+<tr>
+<td>cellsize</td>
+<td>Tuple of two integers: (cellwidth, cellheight)</td>
+</tr>
+</tbody>
+</table>
+<p>(Currently the cellwidth. cellheight, and cellsize attributes
+are read-only.)</p>
+<p>The obvious equation to convert between the two systems is
+cellx = int(pixelx / cellwidth)
+and pixelx = cellx * cellwidth. But to make it easy, there are also
+PygcurseWindow methods to do these conversions and a few other helpful
+things:</p>
+<table style="text-align: left; width: 928px; height: 116px;" border="1" cellpadding="2" cellspacing="2">
+<tbody>
+<tr>
+<td style="font-weight: bold;">PygcurseWindow Method</td>
+<td style="font-weight: bold;">Description</td>
+</tr>
+<tr>
+<td>gettopleftpixel(cellx, celly, withinBoundaries=True)</td>
+<td>Returns a tuple (x, y) of the pixel coordinates for the
+cell's top left pixel.</td>
+</tr>
+<tr>
+<td>gettoppixel(celly, withinBoundaries=True)</td>
+<td>Returns the Y pixel coordinate of the cell's top left
+pixel.</td>
+</tr>
+<tr>
+<td>getleftpixel(cellx, withinBoundaries=True)</td>
+<td>Returns the X pixel coordinate of the cell's top left
+pixel.</td>
+</tr>
+<tr>
+<td>getcoordinatesatpixel(pixelx, pixely,
+withinBoundaries=True)</td>
+<td>Returns a tuple (x, y) of the cell coordinates that the
+pixel is in.</td>
+</tr>
+<tr>
+<td>getcharatpixel(pixelx, pixely, withinBoundaries=True)</td>
+<td>Returns the character in the cell that the pixel is in.</td>
+</tr>
+</tbody>
+</table>
+<p>NOTE:
+The withinBounaries parameter, when set to True, will return (None,
+None) or None if the parameters fall outside the window (that is, less
+than 0 or greater than the width/height).</p>
+<p>ANOTHER NOTE: Instead
+of passing two separate values for the cellx &amp; celly (or pixelx
+&amp; pixely) parameters, you can just pass a two-integer tuple for
+the
+cellx/pixelx parameter, and the method will understand that the
+coordinates are both in that parameter.</p>
+<p>There are also read-only attributes for getting the cell
+coordinates of the various edges and midpoints, just like there are for
+pygame.Rect objects:</p>
+<table style="text-align: left; width: 757px; height: 284px;" border="1" cellpadding="2" cellspacing="2">
+<tbody>
+<tr>
+<td style="font-weight: bold;">PygcurseWindow
+Attribute</td>
+<td style="font-weight: bold;">Description</td>
+</tr>
+<tr>
+<td>left, top</td>
+<td>Always set to 0.</td>
+</tr>
+<tr>
+<td>right, bottom</td>
+<td>Always set to width - 1 and height - 1</td>
+</tr>
+<tr>
+<td>centerx, centery</td>
+<td>The center row/column</td>
+</tr>
+<tr>
+<td>center</td>
+<td>Tuple of two integers: (centerx, centery)</td>
+</tr>
+<tr>
+<td>topleft, topright, bottomleft, bottomright</td>
+<td>Tuple of two integers</td>
+</tr>
+<tr>
+<td>midleft, midright</td>
+<td>Tuple of two integers: (left, centery) and (right,
+centery)</td>
+</tr>
+<tr>
+<td>midtop, midbottom</td>
+<td>Tuple of two integers: (centerx, top) and (centerx,
+bottom)</td>
+</tr>
+<tr>
+<td>rect</td>
+<td>A pygame.Rect object set to the cell coordinates of the
+entire window.</td>
+</tr>
+<tr>
+<td>pixelrect</td>
+<td>A pygame.Rect object set to the pixel coordinates of
+the entire window.</td>
+</tr>
+</tbody>
+</table>
+<p>So
+if you want to display a string of text in the center row of the
+window, you can use this code: win.pygprint('Hello world!',
+y=win.centery)</p>
+<h2>Using the Mouse</h2>
+<p>Pygcurse
+doesn't have any code that deals with the mouse. You simply check for
+MOUSEMOTION events from pygame.event.get() as you would in any normal
+Pygame program. The&nbsp;getcoordinatesatpixel() PygcurseWindow
+method
+will be helpful for converting from the mouse event's pixel coordinates
+to the PygcurseWindow object's cell coordinates. This program displays
+a red "@" character where the mouse is:</p>
+<pre>import pygcurse, pygame, sys<br>from pygame.locals import *<br>win = pygcurse.PygcurseWindow(20, 10)<br>win.colors = ('red', 'gray')<br>cellx = 0<br>celly = 0<br>while True:<br>&nbsp;&nbsp;&nbsp; win.setscreencolors(None, 'gray', clear=True)<br>&nbsp;&nbsp;&nbsp; for event in pygame.event.get():<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; pygame.quit()<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sys.exit()<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if event.type == MOUSEMOTION:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cellx, celly = win.getcoordinatesatpixel(event.pos)<br>&nbsp;&nbsp;&nbsp; win.putchar('@', x=cellx, y=celly)<br></pre>
+<p><img alt="" src="C:%5CUsers%5Casweigart%5CDesktop%5Cpygtut%5Cpygtut_mouse.png"><img alt="" src="C:%5CUsers%5Casweigart%5CDesktop%5Cpygtut%5Cpygtut_mouse.png"></p>
+<pre><img style="width: 276px; height: 168px;" alt="" src="pygtut_mouse.png"></pre>
+<h2>Controlling Flicker and autoupdate</h2>
+<p>You may have noticed that the mouse program flickers
+considerable. This is caused because by default PygcurseWindow objects
+try to handle updating the screen automatically whenever you call a
+method that changes the screen. However, you may want to update the
+screen several times, and then have the PygcurseWindow update itself on
+the screen. In the previous mouse program, the setscreencolors() method
+call grays out the entire screen (erasing any previous drawn @
+character). Then the putchar() method call draws the @ character.
+Because the entire window is constantly being grayed out, it looks like
+the @ character is flickering.</p>
+<p>We can fix this by disabling the autoupdate attribute of the
+PygcurseWindow object (which is set to True by default.) Of course,
+this means that we will have to call the PygcurseWindow.update() method
+ourselves when our code is ready to draw the Pygcurse window to the
+screen. Here's a non-flicker version of the mouse program (with two new
+lines):</p>
+<pre>import pygcurse, pygame, sys<br>from pygame.locals import *<br>win = pygcurse.PygcurseWindow(20, 10)<br>win.colors = ('red', 'gray')<br>cellx = 0<br>celly = 0<br>win.autoupdate = False # THIS DISABLES THE AUTOUPDATE FEATURE<br>while True:<br>&nbsp;&nbsp;&nbsp; win.setscreencolors(None, 'gray', clear=True)<br>&nbsp;&nbsp;&nbsp; for event in pygame.event.get():<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; pygame.quit()<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sys.exit()<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if event.type == MOUSEMOTION:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cellx, celly = win.getcoordinatesatpixel(event.pos)<br>&nbsp;&nbsp;&nbsp; win.putchar('@', x=cellx, y=celly)<br>&nbsp;&nbsp;&nbsp; win.update() # THIS IS THE NEW CALL TO THE UPDATE() METHOD</pre>
+<p>Having the autoupdate feature enabled can be handy because
+otherwise you'd have to call the update() method each time you called a
+pygprint() or putchars() or fill() method (or any other method that
+changes the content of the window). But if your program is constantly
+redrawing the entire window like our mouse program, then it makes sense
+to disable autoupdate.</p>
+<h2>Copying PygcurseWindow Regions with the paste() Method</h2>
+<p>Pygcurse lets you copy the characters, foreground color,
+background color, and tint properties of a rectangular region of cells
+and then paste it to other parts of the PygcurseWindow. The copy()
+method returns a new PygcurseSurface object (which is the parent class
+of PygcurseWindow and has almost all of the same methods) which can
+then be pasted to another part of the PygcurseWindow. Note that any of
+the properties can be copied (and the others will be left as None.) For
+example, look at the code below:</p>
+<pre>import pygcurse<br><br>win = pygcurse.PygcurseWindow(40, 25)<br>for k in pygcurse.colornames:<br> win.write('This is the color %s\n' % (k), fgcolor=k)<br>win.tint(100, 0, 0, region=(0, 0, 3, 3))<br>win.tint(0, 100, 0, region=(3, 0, 3, 3))<br>win.tint(0, 0, 100, region=(6, 0, 3, 3))<br><br>win.paste((0, 0, 9, 3), win, (5, 20, None, None))<br>win.paste((0, 0, 9, 3), win, (35, 15, None, None))<br>win.paste((0, 0, 9, 3), win, (33, -1, None, None))<br>win.pastechars((0, 0, 9, 3), win, (20, 8, None, None))<br>win.pastetint((0, 0, 9, 3), win, (-2, 7, None, None))<br>win.pastecolor((0, 0, 9, 3), win, (0, 13, None, None))<br><br>pygcurse.waitforkeypress()<br></pre>
+<p><img style="width: 536px; height: 363px;" alt="" src="pygtut_copypaste.png"></p>
+<p>This program adds a red, green, and blue tint to some of the
+areas in the upper left corner of the window, and then copies that
+area. It then pastes it around to other XY coordinates on the window.
+Notice that the pastechars() method call only pastes the characters,
+and the foreground/background/tint color is the same as it was in the
+cells before it was pasted. The same goes for the pastetint() method
+call: only the tint was pasted, but not the text, foreground color, or
+background color.</p>
+<p>Here's a list of the various copy and paste methods for
+copying the various properties of a rectangular region of cells. Note
+that the first five parameters of the copy methods are the XYWHR
+parameters, and have been omitted for brevity.</p>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+<tbody>
+<tr>
+<td style="font-weight: bold;">Copy / Paste Method</td>
+<td style="font-weight: bold;">Description</td>
+</tr>
+<tr>
+<td>paste(self, dstsurf, dstregion, srcregion=None,
+pastechars=True,
+pastefgcolor=True, pastebgcolor=True, pasteredtint=True,
+pastegreentint=True, pastebluetint=True)</td>
+<td>Paste the every property of the contents of the
+PygcurseWindow to the PygcurseWindow in dstsurf with the top left
+corner at 0, 0 or specify which ones are pasted or not.</td>
+</tr>
+<tr>
+<td>pastechars(self, dstsurf,&nbsp;dstregion,
+srcregion=None)</td>
+<td>Paste only the characters.</td>
+</tr>
+<tr>
+<td>pastecolor(self, dstsurf,&nbsp;dstregion,
+srcregion=None, pastefgcolor=True,
+pastebgcolor=True)</td>
+<td>Paste only the foreground and/or background colors.</td>
+</tr>
+<tr>
+<td>pastetint(self, dstsurf,&nbsp;dstregion,
+srcregion=None, pasteredtint=True,
+pastegreentint=True, pastebluetint=True)</td>
+<td>Paste only the tints.</td>
+</tr>
+</tbody>
+</table>
+<h2>Converting stdio Programs into Pygcurse Programs</h2>
+It is easy to turn any normal Python program (called stdio or "standard
+i/o" programs) that uses Python's print()
+and input() functions into one that uses the Pygcurse library. The
+benefit of doing this is that you can put the text in color, and also
+add graphics by using Pygame's drawing functions on the PygcurseWindow
+surface. (See the section about this below.)
+<p>To convert a stdio Python program into a Pygcurse program,
+just add the following lines to the beginning. Note that this only
+works for Python 3.</p>
+<pre>import pygcurse<br>win = pygcurse.PygcurseWindow(40, 25, 'Your window caption here.')<br>print = win.pygprint<br>input = win.input<br>win.setscreencolors('lime', 'blue', clear=True)<br></pre>
+<p>It is important that you specify clear=True for the
+setscreencolors() call, otherwise you might get weird trails of text
+when the screen scrolls. You can see an example of this with the
+demo_tictactoe.py and
+demo_reversi.py programs that come with Pygcurse.</p>
+<blockquote>For Python 2, the situation is a bit different since
+print is
+not a function and the name of input() is raw_input(). In that case,
+just use these six lines:<br>
+<pre>import sys<br>import pygcurse<br>win = pygcurse.PygcurseWindow(40, 25, 'Your window caption here.')<br>sys.stdout = win<br>raw_input = win.raw_input<br>win.setscreencolors('lime', 'blue', clear=True)</pre>
+</blockquote>
+<h2>Drawing Functions</h2>
+<p>Pygcurse
+comes with some limited drawing functions. Currently there are only
+functions for drawing "lines" of text characters. They are both methods
+of PygcurseWindows</p>
+<p>drawline(self, start_pos, end_pos, char=' ',
+fgcolor=None, bgcolor=None) - Where start_pos and end_pos are
+two-integer tuples that give XY cell coordinates.</p>
+<p>drawlines(self,
+pointlist, closed=False, char=' ', fgcolor=None, bgcolor=None) - Where
+pointlist is a list/tuple of two-integer tuples that give XY cell
+coordinates. If closed is True, then there will be a line drawn from
+the last point to the first point.</p>
+<p>fill(self, char=' ',
+fgcolor=None, bgcolor=None, region=None) - Not so much a drawing
+function, but if you need to draw a filled in rectangular space, then
+the fill() method can do this.</p>
+<p>Currently there is no circle or polygon functions, or
+anti-aliased versions of these functions.</p>
+<h2>Reversing and Inverting the Foreground or Background Colors</h2>
+<p>"Reversing" the foreground and background color means setting
+the
+foreground color to be the background color and the background color to
+be the foreground color. "Inverting" a color means to set the color to
+it's inverse color (the color red has RGB values 255, 0, 0 while it's
+inverse has RGB values of 0, 255, 255, which is aqua). These can be
+done with the following PygcurseWindow methods:</p>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+<tbody>
+<tr>
+<td style="font-weight: bold;">Inverse/Reverse Method</td>
+<td style="font-weight: bold;">Description</td>
+</tr>
+<tr>
+<td>invertcolors(self, region=None)</td>
+<td>Invert the foreground and background colors of the
+specified cells.</td>
+</tr>
+<tr>
+<td>invertfgcolor(self, region=None)</td>
+<td>Invert only the foreground color.</td>
+</tr>
+<tr>
+<td>invertbgcolor(self, region=None)</td>
+<td>Invert only the background color.</td>
+</tr>
+<tr>
+<td>reversecolors(self, region=None)</td>
+<td>Reverse the foreground and background colors.</td>
+</tr>
+</tbody>
+</table>
+<p>Note
+that these functions do not change the PygcurseWindow's set foreground
+or background color. They only modify the foreground and/or background
+color of the cells specified in the region parameter. Here is a short
+example program that demonstrates reversion and inversion (comment the
+reversecolors() call and uncomment the invertcolors() call to see the
+effects of inversion):</p>
+<pre>import pygcurse<br>win = pygcurse.PygcurseWindow(20, 10)<br>win.colors = ('red', 'green')<br>win.write('The Ojibway aboriginal people in North America used cowry shells which they called sacred Miigis Shells.')<br><br>while True:<br>&nbsp;&nbsp;&nbsp; pygcurse.waitforkeypress()<br>&nbsp;&nbsp;&nbsp; win.reversecolors()<br> #win.invertcolors()</pre>
+<h2>The PygcurseTextbox Class</h2>
+<p>If you need to display text in a rectangular area, the
+PygcurseTextbox class can help you easily manage this. It has options
+for setting up a border, doing word-wrapping, and it handles displaying
+the textbox even if it is partially off the screen. Here is the
+constructor function (note that most of the parameters have default
+values and are optional, only&nbsp;the pygsurf parameter is
+required):</p>
+PygcurseTextbox(pygsurf,
+region=None, fgcolor=None, bgcolor=None, text='', wrap=True,
+border='basic', caption='', margin=None, marginleft=0, marginright=0,
+margintop=0, marginbottom=0, shadow=None, shadowamount=51)
+<p>Here's an explanation of each of these parameters:</p>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
+<tbody>
+<tr>
+<td>PygcurseTextbox Constructor Parameter</td>
+<td>Description</td>
+</tr>
+<tr>
+<td>pygsurf</td>
+<td>Required.
+This is the PygcurseWindow or PygcurseSurface object that this textbox
+will appear on. This can be changed later by assigning a new one to the
+pygsurf attribute.</td>
+</tr>
+<tr>
+<td>region</td>
+<td>The total size and position of the textbox, including
+the border and margins.</td>
+</tr>
+<tr>
+<td>fgcolor, bgcolor</td>
+<td>The
+foreground and background colors of the textbox. The foreground color
+is also used for the border characters (if there is one). Currently
+PygcurseTextbox doesn't support multiple foreground/background colors.</td>
+</tr>
+<tr>
+<td>text</td>
+<td>The text you want to appear in the textbox.</td>
+</tr>
+<tr>
+<td>wrap</td>
+<td>If True, then word wrapping is enabled. Otherwise the
+words will be broken across new lines.</td>
+</tr>
+<tr>
+<td>border</td>
+<td>Can be set to None, 'basic', 'rounded', or a
+single-character string. None disables the border. The 'basic' style
+uses - and | characters for the sides and + for the corners. The
+'rounded' style uses / and \ characters for the corners. The
+single-character string style will use that character for the border.</td>
+</tr>
+<tr>
+<td>caption</td>
+<td>The
+caption is a bit of text that will appear on the top row of the text
+box. If the textbox has a border, then the caption will appear embedded
+inside the border.</td>
+</tr>
+<tr>
+<td>margin, marginleft, marginright, margintop, marginbottom</td>
+<td>The
+margin parameter is an integer that sets how much space should be
+between the border and the text in the textbox. The marginleft,
+marginright, margintop, and marginbottomcan optionally be specified to
+override the margin parameter. </td>
+</tr>
+<tr>
+<td>shadow, shadowamount</td>
+<td>The
+shadow parameter (if not set to None) makes a shadow displayed for the
+textbox. The shadow parameter is set to one of Pygcurse's directional
+constants (i.e. pygcurse.NORTHWEST, pygcurse.EAST, or
+pygcurse.SOUTHEAST, etc.). The shadowamount is how dark you want the
+shadow to be. 255 is maximum blackness, while -255 is maximum whiteness.</td>
+</tr>
+</tbody>
+</table>
+<p>The
+textbox is drawn to its associated PygcurseWindow object by calling its
+update() method. The parameter names are also used for attribute names,
+which can be set to change the PygcurseTextbox object after it has been
+created. See the demo_textboxtest.py program for example code:</p>
+<p><img style="width: 536px; height: 363px;" alt="" src="pygtut_textbox.png"></p>
+<h2>Drawing on the Pygcurse Window with Pygame Drawing Functions</h2>
+<p>Because Pygcurse is built on top of Pygame, you can use all of
+Pygame's drawing functions on the PygcurseWindow object. This means
+that your programs are not limited to only ascii characters.</p>
+<h2>Resizing the Windows</h2>
+At
+this time resizing the PygcurseWindow and PygcurseSurface objects isn't
+completely tested, but it is still possible. The resize() method allows
+you to specify a new width and height. If you are increasing the size
+of the Pygcurse surface, then you can also specify an fgcolor and
+bgcolor parameter to set the new cells to these colors. (Otherwise the
+current fgcolor and bgcolor will be used.) Calling resize() will reset
+the cursor to 0, 0. If None is passed for the width or height, then the
+width or height will not be changed, respectively. The exact parameters
+are as follows:
+<pre>resize(self, newwidth=None, newheight=None, fgcolor=None, bgcolor=None)</pre>
+<h2>Using Other Fonts</h2>
+<p>A PygcurseWindow or PygcurseSurface object can only display
+one font
+and size at a time, but you can change the font and size by assigning a
+new pygame.font.Font object to the font. The following program displays
+the default system fontCont&nbsp; at various sizes:</p>
+<pre>import pygcurse, pygame<br>win = pygcurse.PygcurseWindow(20, 10)<br>win.write('The Ojibway aboriginal people in North America used cowry shells which they called sacred Miigis Shells.')<br>pygcurse.waitforkeypress()<br>win.font = pygame.font.Font(None, 42)<br>pygcurse.waitforkeypress()<br>win.font = pygame.font.Font(None, 8)<br>pygcurse.waitforkeypress()</pre>
+<h2>The Debug Methods</h2>
+<p>Pygcurse has some functions for debugging. &nbsp;They each
+have a
+returnStr parameter which is False by default. If True, then the debug
+method will return a multiline string with the debug info. If False,
+then it will write it to sys.stdout. The debug messages just create
+strings that mimic the current layout of the PygcurseWindow's various
+properties. They are: _debugchars, _debugfg, _debugbg, _debugdirty.</p>
+<h2>Misc Functions:
+interpretkeyevent,&nbsp;splitintogroupsof,
+getwithinrange,&nbsp;getpygamecolor, waitforkeypress</h2>
+<p>TODO - Will be filled in later. These are just extra functions
+that exist in the pygcurse module, not as PygcurseWindow methods.</p>
+<p></p>
+</body></html>

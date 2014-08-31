@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Pygcurse - Curses Emulator for Pygame</title>
+
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<script type="text/javascript"> var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript"> try {
+var pageTracker = _gat._getTracker("UA-5459430-3");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+<link href="style.css" rel="stylesheet" type="text/css" media="screen" /></head>
+<body>
+<div id="container">
+<div id="layoutMenu">
+<ul>
+<li><a href="pygcurse_src.zip">Download</a></li>
+<li><a href="tutorial/">Tutorial</a></li>
+<li><a href="#screenshots">Screenshots</a></li>
+<li><a href="https://github.com/asweigart/pygcurse">Github
+Page</a></li>
+<li><a href="https://github.com/asweigart/pygcurse/wiki">Pygcurse
+Wiki</a></li>
+<li><a href="https://github.com/asweigart/pygcurse/issues">Report
+Bugs</a></li>
+</ul>
+</div>
+<div id="layoutHeader"><br />
+</div>
+<div id="layoutBodyContent">
+<p>Pygcurse
+(pronounced "pig curse") is a <a href="http://en.wikipedia.org/wiki/Curses_%28programming_library%29">curses
+library</a> emulator that runs on top
+of the <a href="http://pygame.org">Pygame framework</a>.
+It provides an easy way to create text
+adventures, <a href="http://en.wikipedia.org/wiki/Roguelike">roguelikes</a>,
+and console-style applications. The
+mascot
+of Pygcurse is a blue pig with a skull tattoo on its butt.<br />
+</p>
+<h1>"We already have a curses module for Python."</h1>
+<p>Yes.
+But unfortunately,
+the <a href="http://docs.python.org/library/curses.html">curses
+module that comes with the Python standard library</a> does not
+work on Windows. The excellent <a href="http://effbot.org/zone/console-handbook.htm">Console
+module</a> from effbot provides
+curses-like features, but it only runs on Windows and not Mac/Linux. By
+using Pygame, Pygcurse is able to run on all platforms. Also, since
+this curses-like module is built on top of Pygame, your programs are
+not strictly limited strictly to text characters. You can use all the
+normal Pygame drawing and graphics functions, as well as any libraries
+made for Pygame.</p>
+<p>Pygcurse provides several benefits over normal text-based
+stdio programs:</p>
+<ol>
+<li>Color text and background.</li>
+<li>The ability to move the cursor and print text anywhere in
+the console window.</li>
+<li>The ability to make console apps that make use of the mouse.</li>
+<li>The
+ability to have programs respond to individual key presses, instead of
+waiting for the user to type an entire string and press enter (as is
+the case with
+input()/raw_input()).</li>
+<li>The ability to use any font and any character in those
+fonts.</li>
+<li>Since the console window that Pygcurse
+uses is just a Pygame surface object, additional drawing and
+transformations can be applied to it. Multiple surfaces can also be
+used in the same program.</li>
+</ol>
+<p>Pygcurse also provides some additional features that curses
+normally
+doesn't, such as tinting, shadows, textboxes, and line drawing
+functions. </p>
+<p>Pygcurse requires Pygame to be installed. Pygame can be
+downloaded from <a href="http://pygame.org/">http://pygame.org</a>.
+Pygcurse can be used with either Python 2 or Python 3.</p><p>If you make your own games with Pygcurse, then send them to <a href="http://twitter.com/#%21/Pygcurse">@Pygcurse</a> to be publicized!</p>
+<h1>Download</h1>
+<a href="pygcurse_src.zip">pygcurse_src.zip</a>,
+38
+KB (Requires Python 2 or 3 and Pygame to be installed.)<br />
+<p><a href="http://inventwithpython.com/pygcurse/tutorial/">To
+learn how to write programs with Pygcurse, READ THE TUTORIAL.</a></p>
+<p>Simply download the pygcurse.py file and import pygcurse to
+make use of it. The download comes with several demo programs.</p>
+<p>You can also pull the files off of github: <a href="https://github.com/asweigart/pygcurse">https://github.com/asweigart/pygcurse</a></p>
+<br />
+Pygcurse is available under a Simplified BSD License.&nbsp;
+<h1>Tutorial</h1>
+<p>There is a <a href="tutorial/">tutorial
+for Pygcurse</a> where you can learn how to use it.</p>
+<table style="text-align: left; width: 100%;" border="0" cellpadding="0" cellspacing="0">
+<tbody>
+<tr>
+<td>
+<p><a href="http://inventwithpython.com"><img style="border: 0px solid ; width: 120px; height: 150px; float: right;" alt="" src="http://inventwithpython.com/images/cover_thumb2.jpg" /></a>If
+you don't know how to use Pygame (or Python or programming
+in general), there is a <a href="http://inventwithpython.com/chapter17.html">Pygame
+tutorial</a> in the free book <a href="http://inventwithpython.com/chapters">"Invent Your Own
+Computer Games with Python"</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<h1 id="screenshots">Screenshots of the Included Demo
+Programs</h1>
+<table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
+<tbody>
+<tr>
+<td style="text-align: center; vertical-align: top;">Dodger
+Game (<a href="demo_dodger.py">source</a>, <a href="pygcursedemo_dodger_win32.zip">Windows exe</a>)<br />
+<a href="images/dodger.png"><img style="border: 0px solid ; width: 250px; height: 321px;" alt="" src="images/dodger.png" /></a><br />
+</td>
+<td style="text-align: center; vertical-align: top;">Maze
+Game (<a href="demo_maze.py">source</a>, <a href="pygcursedemo_maze_win32.zip">Windows exe</a>)<br />
+<a href="images/maze.png"><img style="border: 0px solid ; width: 250px; height: 260px;" alt="" src="images/maze.png" /></a><br />
+</td>
+</tr>
+<tr>
+<td style="text-align: center; vertical-align: top;">Textris
+Game (<a href="demo_textris.py">source</a>, <a href="tetrisb.mid">tetrisb.mid</a>, <a href="pygcursedemo_textris_win32.zip">tetrisc.mid</a>, <a href="pygcursedemo_textris_win32.zip">Windows exe</a>)<br />
+<a href="images/textris.png"><img style="border: 0px solid ; width: 250px; height: 288px;" alt="" src="images/textris.png" /></a><br />
+</td>
+<td style="text-align: center; vertical-align: top;">Textbox
+Test (<a href="demo_textboxtest.py">source</a>)<br />
+<a href="images/textbox.png"><img style="border: 0px solid ; width: 250px; height: 169px;" alt="" src="images/textbox.png" /></a><br />
+</td>
+</tr>
+<tr>
+<td style="text-align: center; vertical-align: top;">Shadow
+Test (<a href="demo_shadowtest.py">source</a>)<br />
+<a href="images/shadowandline.png"><img style="border: 0px solid ; width: 250px; height: 169px;" alt="" src="images/shadowandline.png" /></a><br />
+</td>
+<td style="text-align: center; vertical-align: top;">Tic
+Tac Toe Game (<a href="demo_tictactoe.py">source</a>)<br />
+<a href="images/tictactoe.png"><img style="border: 0px solid ; width: 250px; height: 169px;" alt="" src="images/tictactoe.png" /></a><br />
+</td>
+</tr>
+<tr>
+<td style="text-align: center; vertical-align: top;">Reversi
+Game (<a href="demo_reversi.py">source</a>)<br />
+<a href="images/reversi.png"><img style="border: 0px solid ; width: 250px; height: 136px;" alt="" src="images/reversi.png" /></a><br />
+</td>
+<td style="text-align: center; vertical-align: top;"></td>
+</tr>
+</tbody>
+</table>
+<h1>Contributing</h1>
+If you know Python and want to contribute
+to this open source project, there are plenty of ways to help out. The
+main way would be to create your own demo programs with the Pygcurses
+library, or suggest and develop new features (especially drawing
+functions and UI controls.) Contact Al at <a href="mailto:al@inventwithpython.com">al@inventwithpython.com</a>
+if you are interested.
+</div>
+</div>
+<div class="clearer"></div>
+<!-- // // From Flash-Templates-Today.com team: // We request you retain the full copyright notice below including the link to www.flash-templates-today.com. This not only gives respect to the large amount of time given freely by the developers but also helps build interest, traffic and use of our free and paid designs. If you cannot (for good reason) retain the full copyright we request you at least leave in place the Website Templates line, with Website Templates linked to www.flash-templates-today.com. If you refuse to include even this then support may be affected. You are allowed to use this design only if you agree to the following conditions: - You cannot remove copyright notice from this design without our permission. - You cannot use images from this design anywhere else without permission. - If you modify this design it still should contain copyright because it is based on our work. For support visit http://www.flash-templates-today.com/contact.php The Flash-Templates-Today.com design : 2008 // -->
+<div id="layoutFooter">
+<p>Copyright © 2011. Designed by <a href="http://www.flash-templates-today.com" title="Free Flash Templates">Free Flash Templates</a><br />
+Pygcurse is released under a Simplified BSD license.</p>
+</div>
+</body></html>

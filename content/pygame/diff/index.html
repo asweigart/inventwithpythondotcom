@@ -1,0 +1,132 @@
+{% extends "basePygame.html" %}
+{% set title = 'Making Games with Python & Pygame - Diff Tool' %}
+{% block content %}
+
+<script type="text/javascript" src="dojo.js"></script>
+<script type="text/javascript" src="sourceCodesPygame.js"></script>
+<script type="text/javascript" src="diff/diffview.js"></script>
+<link rel="stylesheet" type="text/css" href="diff/diffview.css" />
+<script type="text/javascript" src="diff/difflib.js"></script>
+
+<script type="text/javascript">
+var $ = dojo.byId;
+dojo.require("dojo.io");
+var url = window.location.toString().split("#")[0];
+
+// Array.indexOf method
+if (!Array.prototype.indexOf)
+{
+  Array.prototype.indexOf = function(elt /*, from*/)
+  {
+    var len = this.length >>> 0;
+
+    var from = Number(arguments[1]) || 0;
+    from = (from < 0)
+         ? Math.ceil(from)
+         : Math.floor(from);
+    if (from < 0)
+      from += len;
+
+    for (; from < len; from++)
+    {
+      if (from in this &&
+          this[from] === elt)
+        return from;
+    }
+    return -1;
+  };
+}
+
+
+// Read a page's GET URL variables and return them as an associative array.
+function getUrlVars() {
+	var vars = [], hash;
+	var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+
+	for(var i = 0; i < hashes.length; i++) {
+		hash = hashes[i].split('=');
+		vars.push(hash[0]);
+		vars[hash[0]] = hash[1];
+	}
+	return vars;
+}
+
+function diffUsingJS() {
+	//var base = difflib.stringAsLines($("baseText").value);
+	var base = difflib.stringAsLines(sourceCodesPygame[$('programSelect').value]);
+	var newtxt = difflib.stringAsLines($("newText").value);
+	var sm = new difflib.SequenceMatcher(base, newtxt);
+	var opcodes = sm.get_opcodes();
+	var diffoutputdiv = $("diffoutput");
+	while (diffoutputdiv.firstChild) diffoutputdiv.removeChild(diffoutputdiv.firstChild);
+	//var contextSize = $("contextSize").value;
+	//contextSize = contextSize ? contextSize : null;
+	diffoutputdiv.appendChild(diffview.buildView({ baseTextLines:base,
+												   newTextLines:newtxt,
+												   opcodes:opcodes,
+												   baseTextName:"The Book's Program",
+												   newTextName:"Your Program",
+												   contextSize:null, // I've removed the contextSize field from the form.
+												   viewType: $("inline").checked ? 1 : 0 }));
+	window.location = url + "#diff";
+}
+
+function onPageLoad() {
+	// the optional "p" GET parameter can set the default program selected.
+	var getVars = getUrlVars();
+	var allPrograms = ['blankpygame', 'drawing', 'catanimation', 'memorypuzzle', 'slidepuzzle', 'simulate', 'wormy', 'tetromino', 'squirrel', 'starpusher', 'flippy', 'inkspill', 'fourinarow', 'gemgem'];
+
+	if ((getVars['p']) && (allPrograms.indexOf(getVars['p']) != -1)) {
+		$('programSelect').value = getVars['p'];
+	}
+}
+
+dojo.addOnLoad(onPageLoad);
+</script>
+
+
+<h1>Diff Tool</h1>
+
+<p>Have a problem after typing in the source code from the book, but can't understand the error message? <!--Just select which program you were typing from the dropdown list and copy and paste your code into the text field.--> Use this online diff tool to see the differences between the book's code and your code!</p>
+
+<!--<p>Click "Compare" to see a comparison of the source code as it is in the book and your program, and any differences between them will be highlighted.</p>-->
+
+<h2>Step 1</h2>
+<p>Select the program you were typing in from this dropdown menu:</p>
+
+Program: <select name='programSelect' id='programSelect' size="8" style="vertical-align: text-top">
+<option value='blankpygame'>blankpygame.py</option>
+<option value='drawing'>drawing.py</option>
+<option value='catanimation'>catanimation.py</option>
+<option value='memorypuzzle'>memorypuzzle.py</option>
+<option value='slidepuzzle'>slidepuzzle.py</option>
+<option value='simulate'>simulate.py</option>
+<option value='wormy'>wormy.py</option>
+<option value='tetromino'>tetromino.py</option>
+<option value='squirrel'>squirrel.py</option>
+<option value='starpusher'>starpusher.py</option>
+<option value='flippy'>flippy.py</option>
+<option value='inkspill'>inkspill.py</option>
+<option value='fourinarow'>fourinarow.py</option>
+<option value='gemgem'>gemgem.py</option>
+</select>
+
+<input type="radio" name="_viewtype" checked="checked" id="sidebyside" /> Side by Side
+&#160;&#160;
+<input type="radio" name="_viewtype" id="inline" /> Inline<br />
+<br />
+
+<h2>Step 2</h2>
+
+<p>Copy and paste your code here to see how it is different from the code in the book:</p>
+<textarea id="newText" style="width:100%;height:300px"></textarea><br />
+
+<h2>Step 3</h2>
+<p>Click the "Compare" button:</p>
+<input type="button" value="Compare" onclick="javascript:diffUsingJS();" /><br />
+
+<a name="diff"> </a>
+<div id="diffoutput" style="width:100%"> </div>
+
+
+{% endblock %}
