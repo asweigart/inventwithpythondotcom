@@ -1,0 +1,253 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<script type="text/javascript"> var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript"> try {
+var pageTracker = _gat._getTracker("UA-5459430-3");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+<meta name="author" content="Al Sweigart" />
+<meta http-equiv="content-type" content="text/html;charset=iso-8859-1" />
+<link rel="stylesheet" href="style.css" type="text/css" />
+<title>Pyganim Tutorial</title>
+</head>
+<body>
+<div id="container">
+<div id="header">
+<h1><a href="index.html"><img src="images/pyganim_logo.jpg"></a></h1>
+</div>
+<div id="subheader">
+<a href="index.html#about">About</a> |
+<a href="index.html#download">Download</a> |
+<a href="reference.html">Reference</a> |
+<a href="tutorial.html">Tutorial</a> |
+<a href="mailto://al@inventwithpython.com">Email the Creator</a>
+</div>
+
+
+<div id="blog">
+
+<h1>PygAnimation Class</h1>
+
+<h2 class="headings">Constructor</h2>
+
+<p><code class="codeheader">pyganim.PygAnimation(frames, loop=True)</code></p>
+
+<p class="indent">The frames parameter is a list of tuples. Each tuple is either of the format (str_image_filename, float/int_duration) or (pygame.Surface, float/int_duration).</p>
+
+<p class="indent">The new PygAnimation object is created in a stopped state.</p>
+
+<h2 class="headings">Attributes</h2>
+
+<p><code class="codeheader">state</code></p>
+<p class="indent">The state attribute can be set to one of pyganim.PLAYING, pyganim.PAUSED, or pyganim.STOPPED. Assigning these values to the state attribute has the same effect as calling the play(), pause(), and stop() methods respectively.</p>
+
+
+<p class="defheader"><code class="codeheader">loop</code></p>
+<p class="indent">A boolean value. If True, the animation continues back to the beginning after playing through the last frame. If False, then after playing the last frame the state switches to pyganim.STOPPED.</p>
+
+
+<p class="defheader"><code class="codeheader">rate</code></p>
+<p class="indent">A floating point number that shows how fast the animatio plays. At 1.0, the animation plays at normal speed (i.e. the durations originally passed to the constructor). If set to, for example, 2.0 then the animation plays twice as fast. If set to 0.25 then the animation plays at one quarter speed.</p>
+
+
+<p class="defheader"><code class="codeheader">visibility</code></p>
+<p class="indent">A boolean value. If True, the frame is drawn when the blit methods are called. If False, then the frames are not drawn when the blit methods are called.</p>
+
+
+<p class="defheader"><code class="codeheader">elapsed</code></p>
+<p class="indent">A floating point number that shows how far the animation has played. If this attribute is read as 4.0, then the animation is currently four seconds in. If this attribute is set to 6.5, then the animation is set to six and half seconds in.</p>
+
+
+
+
+<h2 class="headings">Methods</h2>
+
+<p><code class="codeheader">anchor(anchorpoint=NORTHWEST)</code></p>
+<p class="indent">If the images provided are not the same size, then the anchor() method can set them to be the same size. The new width and height will be the maximum width and height of all the frames in the PygAnimation object. The anchorpoint parameter dictates where the extra space should be added to each image. It can be one of the following constants in pyganim.py: NORTHWEST, NORTH, NORTHEAST, WEST, CENTER, EAST, SOUTHWEST, SOUTH, SOUTHEAST.</p>
+
+<p>For example, say an animation had three frames with the following sizes:</p>
+
+<p><img src="images/anchor1.png" /></p>
+
+<p>If anchor() is called with the pyganim.NORTHWEST argument passed, the new width will be set to the width of the green frame (since it is the widest) and the height of the red frame (since it is the tallest). The NORTHWEST anchor point shoves the images as far left and up as they can go. The black represents the transparent excess space of the new frames:</p>
+
+<p><img src="images/anchor_northwest.png" /></p>
+
+<p>If anchor() is called with the pyganim.EAST argument passed, then the images will be shoved as far right as they can (and vertically centered):</p>
+
+<p><img src="images/anchor_east.png" /></p>
+
+
+<p class="defheader"><code class="codeheader">areFramesSameSize()</code></p>
+<p class="indent">Return True if all the frames in this PygAnimation object have the same width and height. Otherwise, returns False.</p>
+
+<p class="defheader"><code class="codeheader">blit(destSurface, dest)</code></p>
+<p class="indent">This method is similar to the pygame.Surface.blit() method. It draws the current frame of the PygAnimation object to the pygame.Surface object passed for destSurface and with the top left corner at position dest.</p>
+
+<p class="defheader"><code class="codeheader">blitFrameAtTime(elapsed, destSurface, dest)</code></p>
+<p class="indent">Unlike the blit() method, blitFrameAtTime() will draw the frame that is current at "elapsed" seconds into the animation (instead of the "current" frame).</p>
+
+<p class="defheader"><code class="codeheader">blitFrameNum(frameNum, destSurface, dest)</code></p>
+<p class="indent">Unlike the blit() method, blitFrameNum() draws the specified frame passed (instead of the "current" frame).</p>
+
+<p class="defheader"><code class="codeheader">convert()</code> (pygame.Surface wrapper)</p>
+<p class="indent">Calls the convert() on all the Surface objects in this animation.</p>
+
+<p class="defheader"><code class="codeheader">convert_alpha()</code> (pygame.Surface wrapper)</p>
+<p class="indent">Calls the convert_alpha() on all the Surface objects in this animation.</p>
+
+<p class="defheader"><code class="codeheader">clearTransforms()</code></p>
+<p class="indent">All the transformations done with the PygAnimation methods (such as scale() or rotate()) can be undone by calling clearTransforms(). This will revert the frames back to ones that were originally passed to the constructor function.</p>
+
+<p class="defheader"><code class="codeheader">fastForward(seconds=None)</code></p>
+<p class="indent">This method moves the elapsed time ahead by the seconds passed. If no argument is past, the elapsed time is fast forwarded to the very end of the animation.</p>
+
+<p class="defheader"><code class="codeheader">flip(boolx, booly)</code> (pygame.Surface wrapper)</p>
+<p class="indent">Calls the flip() on all the Surface objects in this animation.</p>
+
+<p class="defheader"><code class="codeheader">getCopies(numCopies=1)</code></p>
+<p class="indent">Returns a list of PygAnimation objects with the same frames and durations as this PygAnimation object. These copies can have play(), pause() and other methods called on them independently since they track their own elapsed times. The numCopies parameter specifies how many PygAnimation objects to return in the list.</p>
+
+<p class="defheader"><code class="codeheader">getCopy()</code></p>
+<p class="indent">Returns a single PygAnimation object with the same frames and durations as this PygAnimation object.</p>
+
+<p class="defheader"><code class="codeheader">getCurrentFrame()</code></p>
+<p class="indent">Returns a pygame.Surface object of the frame that would be drawn at the current elapsed time. If the current state is pyganim.STOPPED, then the first frame's pygame.Surface object is returned.</p>
+
+<p class="defheader"><code class="codeheader">getFrame(frameNum)</code></p>
+<p class="indent">Returns a specific pygame.Surface object of the frame at index frameNum.</p>
+
+<p class="defheader"><code class="codeheader">getMaxSize()</code></p>
+<p class="indent">Returns a tuple of integers formatted as (width, height) of the largest width and largest height across all frames in this PygAnimation object.</p>
+
+<p class="defheader"><code class="codeheader">getRect()</code></p>
+<p class="indent">Returns a pygame.Rect object with width and height of the largest width and largest height across all frames in this PygAnimation object. The top and left attributes of the Rect object are set to 0, 0.</p>
+
+<p class="defheader"><code class="codeheader">isFinished()</code></p>
+<p class="indent">Returns True if the elapsed time is passed the end of the entire animation. If the loop attribute is set to True, then this method will always return False.</p>
+
+<p class="defheader"><code class="codeheader">lock()</code> (pygame.Surface wrapper)</p>
+<p class="indent">Calls the lock() on all the Surface objects in this animation.</p>
+
+<p class="defheader"><code class="codeheader">makeTransformsPermanent()</code></p>
+<p class="indent">All of the transformation methods (such as scale() and rotate()) can have their effects undone by calling the clearTransforms() method. However, if makeTransformsPermanent() is called, then calling clearTransforms() method will revert the frames to the state that they were when makeTransformsPermanent() was last called.</p>
+
+<p class="defheader"><code class="codeheader">nextFrame(jump=1)</code></p>
+<p class="indent">Calls the nextFrame() on all the Surface objects in this animation.</p>
+
+<p class="defheader"><code class="codeheader">pause(startTime=None)</code></p>
+<p class="indent">Pauses the animation so that the elapsed time does not progress. If an argument is passed for startTime, then the PygAnimation object will be set as though pause() had been called at that time. The startTime argument should be the number of seconds since the UNIX epoch (like time.time() returns).</p>
+
+<p class="defheader"><code class="codeheader">prevFrame(jump=1)</code></p>
+<p class="indent">Calls the prevFrame() on all the Surface objects in this animation.</p>
+
+<p class="defheader"><code class="codeheader">play(startTime=None)</code></p>
+<p class="indent">Begins playing the animation. If an argument is passed for startTime, then the PygAnimation object will be set as though play() had been called at that time. The startTime argument should be the number of seconds since the UNIX epoch (like time.time() returns).</p>
+
+<p class="defheader"><code class="codeheader">reverse()</code></p>
+<p class="indent">Reverses the order of the frames, while keeping their durations the same.</p>
+
+<p class="defheader"><code class="codeheader">rewind(seconds=None)</code></p>
+<p class="indent">Calls the rewind() on all the Surface objects in this animation.</p>
+
+<p class="defheader"><code class="codeheader">rotate(angle)</code> (pygame.Surface wrapper)</p>
+<p class="indent">Calls the rotate() on all the Surface objects in this animation.</p>
+
+<p class="defheader"><code class="codeheader">rotozoom(angle, scale)</code> (pygame.Surface wrapper)</p>
+<p class="indent">Calls the rotozoom() on all the Surface objects in this animation.</p>
+
+<p class="defheader"><code class="codeheader">scroll(dx=0, dy=0)</code> (pygame.Surface wrapper)</p>
+<p class="indent">Calls the scroll() on all the Surface objects in this animation.</p>
+
+<p class="defheader"><code class="codeheader">set_alpha(value=None, flags=0)</code> (pygame.Surface wrapper)</p>
+<p class="indent">Calls the set_alpha() on all the Surface objects in this animation.</p>
+
+<p class="defheader"><code class="codeheader">set_clip(rect=None)</code> (pygame.Surface wrapper)</p>
+<p class="indent">Calls the set_clip() on all the Surface objects in this animation.</p>
+
+<p class="defheader"><code class="codeheader">set_colorkey(Color=None, flags=0)</code> (pygame.Surface wrapper)</p>
+<p class="indent">Calls the set_colorkey() on all the Surface objects in this animation.</p>
+
+<p class="defheader"><code class="codeheader">scale(width_height)</code> (pygame.Surface wrapper)</p>
+<p class="indent">Calls the scale() on all the Surface objects in this animation.</p>
+
+<p class="defheader"><code class="codeheader">scale2x()</code> (pygame.Surface wrapper)</p>
+<p class="indent">Calls the scale2x() on all the Surface objects in this animation.</p>
+
+<p class="defheader"><code class="codeheader">smoothscale(width_height)</code> (pygame.Surface wrapper)</p>
+<p class="indent">Calls the smoothscale() on all the Surface objects in this animation.</p>
+
+<p class="defheader"><code class="codeheader">stop()</code></p>
+<p class="indent"></p>
+
+<p class="defheader"><code class="codeheader">togglePause()</code></p>
+<p class="indent">If the current state is pyganim.PLAYING, then togglePause() has the same effect as calling pause(). If the state is pyganim.PAUSED or pyganim.STOPPED, then togglePause() has the same effect as calling play(). The togglePause() method does not have a startTime keyword parameter.</p>
+
+<p class="defheader"><code class="codeheader">unlock()</code> (pygame.Surface wrapper)</p>
+<p class="indent">Calls the unlock() on all the Surface objects in this animation.</p>
+
+
+
+
+
+
+<h1>PygConductor Class</h1>
+
+<h2 class="headings">Constructor</h2>
+<p class="definitionheader"><code class="codeheader">pyganim.PygConductor(*animations)</code></p>
+<p class="indent">The PygConductor constructor gets passed a list, tuple, or dict of PygAnimation objects. It can also be passed several PygAnimation arguments as well. Although internally PygConductor stores these in a list, the ordering doesn't matter.</p>
+
+<h2 class="headings">Attributes</h2>
+
+<p class="definitionheader"><code class="codeheader">animations</code></p>
+<p class="indent">The animations attribute is a list of all the PygAnimation objects that this conductor controls. To add or remove PygAnimation objects, modify the items in this list.</p>
+
+<h2 class="headings">Methods</h2>
+<p>The rest of the methods are the same as the ones in the PygAnimation class. Calling these methods on a PygConductor will call them on all the PygAnimations controlled by the conductor:</p>
+<p><ul>
+<li>clearTransforms()</li>
+<li>convert()</li>
+<li>convert_alpha()</li>
+<li>fastForward()</li>
+<li>flip(xbool, ybool)</li>
+<li>lock()</li>
+<li>makeTransformsPermanent()</li>
+<li>nextFrame(jump=1)</li>
+<li>play(startTime=None)</li>
+<li>pause(startTime=None)</li>
+<li>prevFrame(jump=1)</li>
+<li>reverse()</li>
+<li>rewind(seconds=None)</li>
+<li>rotate(angle)</li>
+<li>rotozoom(angle, scale)</li>
+<li>scale(width_height)</li>
+<li>scale2x()</li>
+<li>scroll(dx=0, dy=0)</li>
+<li>set_alpha(value=None, flags=0)</li>
+<li>set_clip(rect=None)</li>
+<li>set_colorkey(Color=None, flags=0)</li>
+<li>smoothscale(width_height)</li>
+<li>stop()</li>
+<li>togglePause()</li>
+<li>unlock()</li>
+</ul></p>
+
+
+
+</div>
+
+
+<div id="footer">
+<div id="right">
+<p>&copy; 2011 Copyright Al Sweigart</p>
+</div>
+<p></p>
+<p></p>
+</div>
+</div>
+</body>
+</html>

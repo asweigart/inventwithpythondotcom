@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% set title = 'Hacking Secret Ciphers - Errata' %}
+{% block content %}
+
+
+<p>If you find any typos, please email them to <a href="mailto://al@inventwithpython.com">al@inventwithpython.com</a>. (Apologies in advance if I haven't posted your errata submission yet or failed to give credit. Please email me to correct this.)</p>
+
+<h2>Chapter 9 - Decrypting with the Transposition Cipher</h2>
+
+<p><strong>Table 6-2</strong> is the truth table for the <code>or</code> operator, but it actually shows the <code>and</code> operator's truth table. <em>(Thanks to Agavriloaie Constantin)</em></p>
+
+<h2>Chapter 15 - The Affine Cipher</h2>
+
+<p><strong>Line 75 of affineCipher.py</strong> has the code <code>if cryptomath.gcd(keyA, len(SYMBOLS)) != 1:</code> which should be <code>if cryptomath.gcd(keyA, len(SYMBOLS)) == 1:</code> <em>(Thanks to Patrick Dwyer)</em>)</p>
+
+<h2>Chapter 17 - The Simple Substitution Cipher</h2>
+
+<p>One of the "Topics Covered In This Chapter" is "The Set data type and set() function". It is actually covered in Chapter 21, "Hacking the Vigenere Cipher". <em>(Thanks to Dave Briccetti)</em> </p>
+
+<h2>Chapter 23 - Finding Prime Numbers</h2>
+
+<p><strong>Line 13 of rabinMiller.py</strong> is <code># keep halving s until it is even (and use t</code> when it should be <code># keep halving s <span class="typoCorrection">while</span> it is even (and use t</code> <em>(Thanks to Lianxiang Yang.)</em> </p>
+
+<h2>Chapter 24 - Public Key Cryptography and the RSA Cipher</h2>
+
+<p><strong>Line 111 of rsaCipher.py</strong> is <code>sys.exit('ERROR: Block size is %s bits and key size is %s bits. The RSA cipher requires the block size to be equal to or greater than the key size. Either decrease the block size or use different keys.' % (blockSize * 8, keySize))</code> when it should be <code>sys.exit('ERROR: Block size is %s bits and key size is %s bits. The RSA cipher requires the block size to be equal to or <span class="typoCorrection">less</span> than the key size. Either <span class="typoCorrection">increase</span> the block size or use different keys.' % (blockSize * 8, keySize))</code> <em>(Thanks to Lianxiang Yang.)</em> </p>
+
+<p><strong>Line 146 of rsaCipher.py</strong> is <code>sys.exit('ERROR: Block size is %s bits and key size is %s bits. The RSA cipher requires the block size to be equal to or greater than the key size. Did you specify the correct key file and encrypted file?' % (blockSize * 8, keySize))</code> <em>(Thanks to Lianxiang Yang.)</em> </p>
+
+<p>The text on line 411 is "The readFromFileAndDecrypt() function also has a check that the block size is equal to or greater than the key size." when it should read "The readFromFileAndDecrypt() function also has a check that the block size is equal to or <span class="typoCorrection">less</span> than the key size." <em>(Thanks to Lianxiang Yang.)</em> </p>
+
+<p><strong>The link on page 415</strong> is incorrect. It should me <a href="http://invpy.com/morehacking">http://invpy.com/morehacking</a> instead of http://invp.com/morehacking. <em>(Thanks to Bilal Khan.)</em> </p>
+
+{% endblock %}

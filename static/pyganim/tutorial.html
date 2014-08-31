@@ -1,0 +1,178 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<script type="text/javascript"> var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript"> try {
+var pageTracker = _gat._getTracker("UA-5459430-3");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+<meta name="author" content="Al Sweigart" />
+<meta http-equiv="content-type" content="text/html;charset=iso-8859-1" />
+<link rel="stylesheet" href="style.css" type="text/css" />
+<title>Pyganim Tutorial</title>
+</head>
+<body>
+<div id="container">
+<div id="header">
+<h1><a href="index.html"><img src="images/pyganim_logo.jpg"></a></h1>
+</div>
+<div id="subheader">
+<a href="index.html#about">About</a> |
+<a href="index.html#download">Download</a> |
+<a href="reference.html">Reference</a> |
+<a href="tutorial.html">Tutorial</a> |
+<a href="mailto://al@inventwithpython.com">Email the Creator</a>
+</div>
+
+
+
+<div id="subheader">
+<h2 class="headings">Basics</h2>
+
+<p>All of the methods and attributes described in this tutorial are listed on the <a href="reference.html">reference page</a>.</p>
+
+<p>After downloading <a href="pyganim.py">pyganim.py</a>, have your program import it:</p>
+
+<blockquote><code>import pyganim</code></blockquote>
+
+<p>Then create a PygAnimation object by calling the PygAnimation constructor function. The argument you pass to it is a list of tuples. Each tuple has a string of an image's filename and an int or float for how many seconds that image should be visible before the next image is displayed. You can also supply a pygame.Surface object instead of the image filename string. All PygAnimation objects must have at least one image (called a frame in this context), and every frame must have a duration larger than 0.0 seconds.</p>
+
+<blockquote><code>animObj = pyganim.PygAnimation([('foo1.png', 0.2), ('foo2.png', 0.2), ('foo3.png', 1.0)])</code></blockquote>
+
+<p>The above example creates an animation with three frames from three image files. The first two will be displayed for one-fifth of a second, and the third will be displayed for a full second. By default, the PygAnimation objects will loop forever. You can specify the loop keyword argument to False to let the animation only play once:</p>
+
+<blockquote><code>animObj = pyganim.PygAnimation([('foo1.png', 0.2), ('foo2.png', 0.2), ('foo3.png', 1.0)], <b>loop=False</b>)</code></blockquote>
+
+<p>When the PygAnimation objects are first created, they are in the pyganim.STOPPED state. This means that even if you try to draw the PygAnimation object to a surface, nothing will be drawn. You must first call the play() method. This puts the PygAnimation object in to the pyganim.PLAYING state:</p>
+
+<blockquote><code>animObj.play()</code></blockquote>
+
+<p>Then you can call the blit() method to draw the PygAnimation object to a pygame.Surface object. The first parameter is the Surface object to draw the animation frame on, and the second is the top-left position on that Surface to draw:</p>
+
+<blockquote><code>animObj.blit(windowSurface, (0, 0))</code></blockquote>
+
+<p>The "current" frame that is drawn when blit() is called depends on how much time has passed between play() and blit() being called. This is called the <b>elapsed</b> time.</p>
+
+<p><strong>The PygAnimation object is nothing but a series of pygame.Surface objects that each have a duration. The blit() method draws the "current" pygame.Surface object based on the real-time that the animation started playing.</strong></p>
+
+<p>Here is a short program you can copy and paste into your IDE or editor and run. It does not require any image files because the PygAnimation object uses Surface objects that the program creates.</p>
+
+<blockquote><code>import pygame<br />
+from pygame.locals import *<br />
+import pyganim<br />
+pygame.init()<br />
+windowSurface = pygame.display.set_mode((320, 240), 0, 32)<br />
+<br />
+# make some Surface objects for the animation frames:<br />
+surf1 = pygame.Surface((100, 100))<br />
+pygame.draw.rect(surf1, (255, 0, 0), (0, 0, 20, 20))<br />
+<br />
+surf2 = pygame.Surface((100, 100))<br />
+pygame.draw.rect(surf2, (255, 0, 0), (80, 80, 20, 20))<br />
+<br />
+surf3 = pygame.Surface((100, 100))<br />
+pygame.draw.circle(surf3, (0, 0, 255), (50, 50), 20)<br />
+<br />
+# create the PygAnimation object<br />
+animObj = pyganim.PygAnimation([(surf1, 0.2), (surf2, 0.2), (surf3, 0.2)])<br />
+animObj.play()<br />
+<br />
+while True: # main loop<br />
+&nbsp;&nbsp;&nbsp;&nbsp;for event in pygame.event.get():<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if event.type == QUIT:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pygame.quit()<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys.exit()<br />
+&nbsp;&nbsp;&nbsp;&nbsp;animObj.blit(windowSurface, (0, 0))<br />
+&nbsp;&nbsp;&nbsp;&nbsp;pygame.display.update()</code></blockquote>
+
+<p>Pyganim knows which frame to draw when blit() is called based on the time that the blit() method is called and when the play() method was called. If looping is disabled, then after the frames of the PygAnimation object have passed, the PygAnimation object goes from the pyganim.PLAYING state back to the pyganim.STOPPED state.</p>
+
+
+<h2 class="headings">Pausing, Stopping, and Controlling</h2>
+
+<p>Normally just playing the animation and calling blit() on each iteration through the main loop is fine. But Pyganim also provides finer levels of control over the animation. You can call the pause() method which means that the animation will stay frozen at the current frame (that is, the frame at the time pause() was called) until play() is called again.</p>
+
+<p>The stop() method will set the PygAnimation object's state to pyganim.STOPPED. Calling blit() on a stopped PygAnimation object will not draw anything. You must call play() to restart the animation. (You can also call pause() when the PygAnimation object is stopped. This will cause the animation to be paused at the first frame of the animation, but the frame will show up when you call blit().)</p>
+
+<p>If you call the togglePause() method, then this will cause the animation to pause if it was playing and to play if it was paused (and also play if it was stopped). Playing, paused, and stopped are the only three states that a PygAnimation object can be in.</p>
+
+<p>You can also manually control the elapsed time of a PygAnimation object by calling the setElapsed() method and passing an int or float argument. This argument shows how far into the animation the PygAnimation object should be set to. For example, if you call animObj.setElapsed(5.0), then the PygAnimation object will be set the same way as though the play() or paused() had been called 5.0 seconds ago.</p>
+
+<p>The setFrameNum() method has an integer argument passed to set the animation to a specific frame (no matter what the durations of the different frames are.) So calling animObj.setFrameNum(3) and then play() will cause the PygAnimation object to start playing from the 4th frame of the animation. (Note that the first frame is 0, not 1.)</p>
+
+<p>The nextFrame() and prevFrame() methods will set the animation to the start of the next or previous frame relative to the current frame. These are most often called while the PygAnimation object is paused. You can also pass an integer to nextFrame() and prevFrame() to have it skip multiple frames. For example, calling nextFrame(3) will have the animation skip ahead 3 frames instead of just 1 frame ahead. Passing a negative integer will have the animation move in the opposite direction (nextFrame(-1) is the same as prevFrame(), prevFrame(-1) is the same as nextFrame()).</p>
+
+<p>Instead of skipping by frame, you can also skip the elapsed time of an animation forwards or backwards by calling the fastForward() or rewind() methods. These take a single float or int argument to determine how many seconds ahead or back to set the elapsed time relative to the current elapsed time. Calling fastForward() without passing any arguments will set it to the very end of the animation. Calling rewind() without passing any arguments will set it to the very beginning of the animation.</p>
+
+<p>(Calling setElapsed(), setFrameNum(), nextFrame(), or prevFrame() on a PygAnimation object that is stopped will change its state to paused.)</p>
+
+<p>You can at any time set the loop attribute to True or False. Just run animObj.loop = True or animObj.loop = False. If the animation is currently playing when you set loop to False, it will finish playing the animation and then go into a stopped state.</p>
+
+<p>There is also a reverse() method which will cause the animation to be played backwards. Calling reverse() again will cause the animation to play forwards.</p>
+
+<p>Finally, there is a rate attribute that can be set to a float or int to determine how fast or slow to play the animation. Setting animObj.rate = 1 will make the animation play at normal speeds. Setting animObj.rate = 2.0 will make it play twice as fast, and animObj.rate = 0.5 will make it play at half speed.</p>
+
+
+
+<h2 class="headings">Getting the Surface Objects from the PygAnimation Object</h2>
+
+<p>Frames cannot added or removed from the PygAnimation object once it has been created. Neither can the durations of each frame be changed individually (you can only change the rate attribute). However, you can retrieve the Surface objects used by the PygAnimation object.</p>
+
+<p>The getFrameNum() has an int parameter to return a specific pygame.Surface object for a frame. For example, calling animObj.getFrameNum(2) will return the pygame.Surface object of the third frame (the first frame is at 0, not 1). The getCurrentFrameNum() returns the pygame.Surface object for the frame that would be drawn if blit() were called at that same moment.</p>
+
+
+
+<h2 class="headings">Making Copies of PygAnimation Objects</h2>
+
+<p>The PygAnimation object that is created stores a pygame.Surface object for each frame of the animation. If you wanted to show multiple instances of this animation of the screen at different points in the animation, it would waste memory to create new PygAnimation objects with a new set of pygame.Surface objects. Instead you can just call the getCopy() method to return a new PygAnimation object. This new PygAnimation object will reuse the same pygame.Surface objects as the original so that memory is wasted storing duplicate Surface objects.</p>
+
+<p>With two PygAnimation objects, you can call play(), pause(), stop(), or any of the other methods individually without affecting the other copies.</p>
+
+<p>To create multiple copies at the same time, call the getCopies() method and pass an integer for the number of PygAnimate object copies you want made. These copies are returned in a list from getCopies().</p>
+
+<blockquote><code>animCopyObj = animObj.getCopy()<br />
+animCopies = animObj.getCopies(10)</code></blockquote>
+
+<h2 class="headings">Transformations and the pygame.Surface Wrapper Methods</h2>
+
+<p>The pygame.transform module contains several functions for manipulating the images on pygame.Surface objects. PygAnimation provides wrappers of these functions with the same names and parameters as a convenience to have these functions called on all the frames in the PygAnimation objects at once.</p>
+
+<p>For example, calling animObj.scale((200, 300)) will call the pygame.transform.scale() function with each of the frames in the PygAnimation object, passing the argument (200, 300) to scale().</p>
+
+<p>The PygConductor object also has these same transform methods, so that with one call to the PygConductor's transform method, these transform methods will be called on each of the PygAnimation objects the conductor controls.</p>
+
+<h2 class="headings">Controlling Multiple PygAnimation Objects with PygConductor</h2>
+
+<p>use if you need to play, pause, stop, etc. several animations at the same time. You pass a list of PygAnimation objects to the constructor of the PygConductor object. The PygConductor object has almost all of the methods as the PygAnimation objects. PygAnimation objects can belong to multiple conductors. And just like the transformation wrapper methods call these functions of every frame at once, the PygConductor object has these same methods (with the same names and parameters) and can call them on multiple PygAnimation objects.</p>
+
+<p>In the test4_pyganim.py example program, there are walking animation objects for each of the four directions the player can face. When the player starts moving the PygConductor object will call play() on all of the PygAnimation walking animations at the same time. This way, when the player changes direction, the walking animation of the new direction will not always start at the very beginning, but rather in mid-walk wherever the previous direction's animation was.</p>
+
+<h2 class="headings">PygConductor Objects</h2>
+
+<p>The PygConductor object is good to use if you need to play, pause, stop, etc. several animations at the same time. You pass a list of PygAnimation objects to the constructor of the PygConductor object:</p>
+
+<p><code>conductor = pyganim.PygConductor([animObj1, animObj2, animObj3])<br />
+conductor.play() # starts all three animations at the same time.</code></p>
+
+<p>The PygConductor object has almost all of the methods as the PygAnimation objects. PygAnimation objects can belong to multiple conductors.</p>
+
+<h2 class="headings">TODO</h2>
+
+<p><strong style="background: yellow;">12/9/2011 - I'll finish this tutorial this weekend.</strong> There's not really much else. It's pretty straightforward, just look at the <a href="pyganim_examples.zip">example programs</a>.</p>
+
+</div>
+
+
+<div id="footer">
+<div id="right">
+<p>&copy; 2011 Copyright Al Sweigart</p>
+</div>
+<p></p>
+<p></p>
+</div>
+</div>
+</body>
+</html>

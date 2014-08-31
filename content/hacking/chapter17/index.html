@@ -1,0 +1,39 @@
+{% extends "baseHacking.html" %}
+{% set title = 'Hacking Secret Ciphers - Chapter 17' %}
+{% block content %}
+
+<script type="text/javascript" src="sourceCodesHacking.js"></script>
+<script>
+function loadTextAreas() {
+    document.getElementById('src1').value=sourceCodesHacking['simpleSubCipher'];
+
+}
+</script>
+<!--HEADEND_HACKING-->
+<body onload="loadTextAreas()">
+<!--HEADER_HACKING-->
+
+
+  <div id='mainarea'>
+<!--SIDEBAR_HACKING-->
+    <div id='contentarea'>
+
+<p><span class="bigfont">Read online:</span> <a href="chapter17.html">Chapter 17 - The Simple Substitution Cipher</a></p>
+
+<p><span class="bigfont">Download source:</span>
+<ul>
+<li><a href="simpleSubCipher.py">simpleSubCipher.py</a></li>
+</ul>
+</p>
+
+<p><span class="bigfont">Copy source to clipboard:</span><br />
+<textarea style="width: 100%; height:100px" id='src1'></textarea><br />
+</p>
+
+<p><span class="bigfont">Online Diff Tool:</span><br />
+If you've typed in the source code, but are seeing errors, you can compare your code to the book's code with the online diff tool:
+<ul>
+<li><a href="diff/index.html?p=simpleSubCipher">simpleSubCipher.py</a></li>
+</ul>
+
+{% endblock %}

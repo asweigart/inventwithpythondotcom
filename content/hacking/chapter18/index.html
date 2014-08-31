@@ -1,0 +1,46 @@
+{% extends "baseHacking.html" %}
+{% set title = 'Hacking Secret Ciphers - Chapter 18' %}
+{% block content %}
+
+<script type="text/javascript" src="sourceCodesHacking.js"></script>
+<script>
+function loadTextAreas() {
+    document.getElementById('src1').value=sourceCodesHacking['makeWordPatterns'];
+    document.getElementById('src2').value=sourceCodesHacking['wordPatterns'];
+    document.getElementById('src3').value=sourceCodesHacking['simpleSubHacker'];
+}
+</script>
+<!--HEADEND_HACKING-->
+<body onload="loadTextAreas()">
+<!--HEADER_HACKING-->
+
+
+  <div id='mainarea'>
+<!--SIDEBAR_HACKING-->
+    <div id='contentarea'>
+
+<p><span class="bigfont">Read online:</span> <a href="chapter18.html">Chapter 18 - Hacking the Simple Substitution Cipher</a></p>
+
+<p><span class="bigfont">Download source:</span>
+<ul>
+<li><a href="makeWordPatterns.py">makeWordPatterns.py</a></li>
+<li><a href="wordPatterns.py">wordPatterns.py</a></li>
+<li><a href="simpleSubHacker.py">simpleSubHacker.py</a></li>
+</ul>
+</p>
+
+<p><span class="bigfont">Copy source to clipboard:</span><br />
+<textarea style="width: 100%; height:100px" id='src1'></textarea><br />
+<textarea style="width: 100%; height:100px" id='src2'></textarea><br />
+<textarea style="width: 100%; height:100px" id='src3'></textarea><br />
+</p>
+
+<p><span class="bigfont">Online Diff Tool:</span><br />
+If you've typed in the source code, but are seeing errors, you can compare your code to the book's code with the online diff tool:
+<ul>
+<li><a href="diff/index.html?p=makeWordPatterns">makeWordPatterns.py</a></li>
+<li><a href="diff/index.html?p=wordPatterns">wordPatterns.py</a></li>
+<li><a href="diff/index.html?p=simpleSubHacker">simpleSubHacker.py</a></li>
+</ul>
+
+{% endblock %}
