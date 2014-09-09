@@ -14,6 +14,11 @@ BASE_HREF = 'http://localhost:8000/'
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 logging.debug('Started.')
 
+# if the output folder has been deleted, completely delete the old shelf folder so that everything is generated.
+if not os.path.exists('output'):
+    for shelfFile in [f for f in os.listdir('.') if f.startswith('.templateTimestamps')]:
+        os.unlink(shelfFile)
+
 timestampsShelf = shelve.open('.templateTimestamps')
 
 env = jinja2.Environment(loader=jinja2.FileSystemLoader(['templates', 'content']))
@@ -21,6 +26,7 @@ env = jinja2.Environment(loader=jinja2.FileSystemLoader(['templates', 'content']
 renderCount = 0
 
 # Render all the templates and place them in the output folder
+os.makedirs('output', exist_ok=True)
 for dirpath, dirnames, filenames in os.walk('content'):
     for filename in filenames:
         if not filename.endswith('.html'):
@@ -33,7 +39,9 @@ for dirpath, dirnames, filenames in os.walk('content'):
 
         timestampsShelf[templateFilename] = os.path.getmtime(templateFilename)
 
-        outputFilename = os.path.join('output', dirpath[len('content'):], filename)
+        outputFolder = os.path.join('output', dirpath[len('content' + os.path.sep):])
+        os.makedirs(outputFolder, exist_ok=True)
+        outputFilename = os.path.join('output', dirpath[len('content' + os.path.sep):], filename)
         logging.debug('Rendering and writing %s...' % (outputFilename))
 
         # Render the template
