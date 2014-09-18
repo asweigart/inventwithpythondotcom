@@ -131,7 +131,7 @@ bookTitle = {'': 'Invent Your Own Computer Games with Python',
              'hacking': 'Hacking Secret Ciphers with Python',}
 
 for book in bookData.keys():
-      fp = open(os.path.join('..', 'content', book, 'chapters'))
+      fp = open(os.path.join('content', book, 'chapters', 'index.html'), 'w')
       fp.write("""{%% extends "base.html" %%}
 {%% set title = '%s' %%}
 {%% block content %%}
@@ -156,7 +156,7 @@ TODO - DOWNLOAD PDF LINK
                         fp.write("""<p><span>Download source:</span>  <a href="%s">%s</a></p>
 
 <p><span>Copy source to clipboard:</span><br />
-<textarea style="width: 100%; height:200px" id='src_%s'></textarea>
+<textarea style="width: 100%%; height:200px" id='src_%s'></textarea>
 </p>
 
 <p><a href="diff/index.html?p=%s">Use the online diff tool to find typos in your code.</a></p>""" % (program, program, program[:-3], program[:-3]))
