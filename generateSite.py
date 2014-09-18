@@ -8,7 +8,7 @@ import shelve
 import distutils.dir_util
 import jinja2
 
-GENERATE_ALL = True # If True, all templates are generated regardless if timestamp says they are up to date
+GENERATE_ALL = False # If True, all templates are generated regardless if timestamp says they are up to date
 BASE_HREF = 'http://localhost:8000/'
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')

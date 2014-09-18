@@ -2,6 +2,8 @@
 
 # Generates the /chapters, /pygame/chapters, and /hacking/chapters pages from source data.
 
+import os
+
 
 inventData = [{'name': 'Installing Python',
                'videos': [{'name': 'Installing Python on Windows', 'url': 'http://www.youtube-nocookie.com/embed/4Mf0h3HphEA'},
@@ -119,3 +121,52 @@ hackingData = [{'name': 'Making Paper Cryptography Tools',
             {'name': 'Public Key Cryptography and the RSA Cipher',
              'programs': ['makeRsaKeys.py', 'rsaCipher.py']}
             ]
+
+
+bookData = {'': inventData,
+            'pygame': pygameData,
+            'hacking': hackingData}
+bookTitle = {'': 'Invent Your Own Computer Games with Python',
+             'pygame': 'Making Games with Python & Pygame',
+             'hacking': 'Hacking Secret Ciphers with Python',}
+
+for book in bookData.keys():
+      fp = open(os.path.join('..', 'content', book, 'chapters'))
+      fp.write("""{%% extends "base.html" %%}
+{%% set title = '%s' %%}
+{%% block content %%}
+
+<h1>Chapters</h1>
+
+TODO - DOWNLOAD PDF LINK
+
+""" % (bookTitle[book]))
+
+      for chapterIndex in range(len(bookData[book])):
+            fp.write('<div><a href="chapter%s.html" class="chapterlink">Chapter %s - %s</a><a href="#chapter%s" class="relatedcontentlink">[related content]</a></div>\n' % (chapterIndex+1, chapterIndex+1, bookData[book][chapterIndex]['name'], chapterIndex+1))
+
+      fp.write('\n\n')
+
+      for chapterIndex in range(len(bookData[book])):
+            fp.write('<a name="chapter%s"><h2>Chapter %s</h2></a>\n' % (chapterIndex+1, chapterIndex+1))
+            fp.write('<p><span>Read online:</span> <a href="chapter%s.html">Chapter %s - %s</a></p>\n' % (chapterIndex+1, bookData[book][chapterIndex]['name'], chapterIndex+1))
+
+            if 'programs' in bookData[book][chapterIndex]:
+                  for program in bookData[book][chapterIndex]['programs']:
+                        fp.write("""<p><span>Download source:</span>  <a href="%s">%s</a></p>
+
+<p><span>Copy source to clipboard:</span><br />
+<textarea style="width: 100%; height:200px" id='src_%s'></textarea>
+</p>
+
+<p><a href="diff/index.html?p=%s">Use the online diff tool to find typos in your code.</a></p>""" % (program, program, program[:-3], program[:-3]))
+
+            if 'downloads' in bookData[book][chapterIndex]:
+                  pass
+
+            if 'videos' in bookData[book][chapterIndex]:
+                  pass
+
+            if 'links' in bookData[book][chapterIndex]:
+                  pass
+
