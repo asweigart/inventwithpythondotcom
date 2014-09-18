@@ -8,11 +8,13 @@ import shelve
 import distutils.dir_util
 import jinja2
 
-GENERATE_ALL = False # If True, all templates are generated regardless if timestamp says they are up to date
+GENERATE_ALL = True # If True, all templates are generated regardless if timestamp says they are up to date
 BASE_HREF = 'http://localhost:8000/'
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 logging.debug('Started.')
+
+#logging.disable(logging.CRITICAL)
 
 # if the output folder has been deleted, completely delete the old shelf folder so that everything is generated.
 if not os.path.exists('output'):
@@ -21,7 +23,7 @@ if not os.path.exists('output'):
 
 timestampsShelf = shelve.open('.templateTimestamps')
 
-env = jinja2.Environment(loader=jinja2.FileSystemLoader(['templates', 'content']))
+env = jinja2.Environment(loader=jinja2.FileSystemLoader(['templates', os.path.dirname(__file__)]))
 
 renderCount = 0
 
@@ -32,7 +34,7 @@ for dirpath, dirnames, filenames in os.walk('content'):
         if not filename.endswith('.html'):
             continue # skip non-template files
 
-        templateFilename = os.path.join(dirpath, filename)
+        templateFilename = os.path.join(dirpath, filename).replace('\\', '/') # Jinja REQUIRES unix-style separators :P
         if not GENERATE_ALL and (templateFilename in timestampsShelf and timestampsShelf[templateFilename] >= os.path.getmtime(templateFilename)):
             logging.debug('%s is up to date. Skipping.' % (templateFilename))
             continue # not new. skip it
@@ -45,7 +47,8 @@ for dirpath, dirnames, filenames in os.walk('content'):
         logging.debug('Rendering and writing %s...' % (outputFilename))
 
         # Render the template
-        t = env.get_template(filename)
+        print(templateFilename)
+        t = env.get_template(templateFilename)
 
         # Write the template to the output folder
         outputFo = open(outputFilename, 'w')
