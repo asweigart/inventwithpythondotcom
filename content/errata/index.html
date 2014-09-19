@@ -2,52 +2,47 @@
 {% set title = 'Invent with Python - Errata' %}
 {% block content %}
 
+  <p>If you find any typos, please email them to <a href="mailto://al@inventwithpython.com">al@inventwithpython.com</a>. (Apologies in advance if I haven't posted your errata submission yet or failed to give credit. Please email me to correct this.)</p>
 
-<p>If you find any typos, please email them to <a href="mailto://al@inventwithpython.com">al@inventwithpython.com</a>. (Apologies in advance if I haven't posted your errata submission yet or failed to give credit. Please email me to correct this.)</p>
+  <h2>Chapter 4 - Guess the Number</h2>
 
-
-<h2>Chapter 4 - Guess the Number</h2>
-
-<p><strong>The "Converting Strings to Integers with the int() Function" section</strong> has an example of the <code>int()</code> function which reads:</p>
-
-<pre>Traceback (most recent call last):
-File "<pyshell#4>", line 1, in <module>
+  <p><strong>The "Converting Strings to Integers with the int() Function" section</strong> has an example of the <code>int()</code> function which reads:</p>
+  <pre>
+Traceback (most recent call last):
+File "&lt;pyshell#4&gt;", line 1, in &lt;module&gt;
 int('forty-two')
-ValueError: invalid literal for int() with base</pre>
+ValueError: invalid literal for int() with base
+</pre>...when it should read <code>int('<span class="typoCorrection">hello</span>')</code> <em>(Thanks to David Dantowitz)</em>
 
-...when it should read <code>int('<span class="typoCorrection">hello</span>')</code> <em>(Thanks to David Dantowitz)</em>
+  <h2>Chapter 10 - Tic Tac Toe</h2>
 
-<h2>Chapter 10 - Tic Tac Toe</h2>
+  <p><strong>The "The First if Statement (Cats and Dogs)" section</strong> has the line "on line 9 in our small program will first evaluate TrueFizz()", when it should be "on line 9 in our small program will first evaluate <code><span class="typoCorrection">False</span>Fizz()</code>". <em>(Thanks to Ben White)</em></p>
 
-<p><strong>The "The First if Statement (Cats and Dogs)" section</strong> has the line "on line 9 in our small program will first evaluate TrueFizz()", when it should be "on line 9 in our small program will first evaluate <code><span class="typoCorrection">False</span>Fizz()</code>". <em>(Thanks to Ben White)</em>
+  <p><strong>Short-Circuit Evaluation section</strong> has the line "The only times <code>move not in '1 2 3 4 5 6 7 8 9'.split()</code> evaluates to <code>False</code> are when move is not a single-digit string.". The second "not" should be removed to read: "The only times <code>move not in '1 2 3 4 5 6 7 8 9'.split()</code> evaluates to <code>False</code> are when move is a single-digit string." <em>(Thanks to Sebastian Simon.)</em></p>
 
-<p><strong>Short-Circuit Evaluation section</strong> has the line "The only times <code>move not in '1 2 3 4 5 6 7 8 9'.split()</code> evaluates to <code>False</code> are when move is not a single-digit string.". The second "not" should be removed to read: "The only times <code>move not in '1 2 3 4 5 6 7 8 9'.split()</code> evaluates to <code>False</code> are when move is a single-digit string." <em>(Thanks to Sebastian Simon.)</em></p>
+  <h2>Chapter 11 - Bagels</h2>
 
-<h2>Chapter 11 - Bagels</h2>
+  <p><strong>The "The sort() List Method" section</strong> has this example:</p>
+  <pre>
+&gt;&gt;&gt; spam = [5, 'bat', 3, 1, 4, 'cat', 2, 'ape']
+&gt;&gt;&gt; spam.sort()
+&gt;&gt;&gt; spam
+[1, 2, 3, 4, 5, 'ape', 'bat', 'cat']
+</pre>While this code works in Python 2, it won't work in Python 3 because it gives this error:
+  <pre>
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+TypeError: unorderable types: str() &lt; int()
+</pre>The reason is because in Python 3 the integer and string values are not automatically comparable to each other. You would need to run this line of code: <code>spam.sort(key=str)</code> which would pass all the values (such as the <code>5</code>, <code>3</code>, <code>1</code>, <code>4</code>, and <code>2</code> integer values) to the <code>str()</code> function first and then use the return value for sorting comparison.
 
-<p><strong>The "The sort() List Method" section</strong> has this example:
+  <p>This code was left over from the first edition of the book that used Python 2. <em>(Thanks to "Team Liquid")</em></p>
 
-<pre>>>> spam = [5, 'bat', 3, 1, 4, 'cat', 2, 'ape']
->>> spam.sort()
->>> spam
-[1, 2, 3, 4, 5, 'ape', 'bat', 'cat']</pre>
+  <h2>Chapter 13 - Sonar</h2>
 
-While this code works in Python 2, it won't work in Python 3 because it gives this error:
+  <p><strong>Line 148 of the source code</strong> says <code>The point where the device was dropped will be marked with a d.</code> when it should say <code>The point where the device was dropped will be marked with a <span class="typoCorrection">2</span>.</code> <em>(Thanks to Sia Kia)</em></p>
 
-<pre>Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-TypeError: unorderable types: str() < int()</pre>
+  <h2>Chapter 17 - Graphics and Animation</h2>
 
-The reason is because in Python 3 the integer and string values are not automatically comparable to each other. You would need to run this line of code: <code>spam.sort(key=str)</code> which would pass all the values (such as the <code>5</code>, <code>3</code>, <code>1</code>, <code>4</code>, and <code>2</code> integer values) to the <code>str()</code> function first and then use the return value for sorting comparison.</p>
-
-<p>This code was left over from the first edition of the book that used Python 2. <em>(Thanks to "Team Liquid")</em></p>
-
-<h2>Chapter 13 - Sonar</h2>
-
-<p><strong>Line 148 of the source code</strong> says <code>The point where the device was dropped will be marked with a d.</code> when it should say <code>The point where the device was dropped will be marked with a <span class="typoCorrection">2</span>.</code> <em>(Thanks to Sia Kia)</em></p>
-
-<h2>Chapter 17 - Graphics and Animation</h2>
-
-<p><strong>On page 336</strong>, there is the text "If you forget to delete the Surface object" which should be "If you forget to delete the <span class="typoCorrection">PixelArray</span> object". <em>(Thanks to Jerry Zhao)</em></p>
+  <p><strong>On page 336</strong>, there is the text "If you forget to delete the Surface object" which should be "If you forget to delete the <span class="typoCorrection">PixelArray</span> object". <em>(Thanks to Jerry Zhao)</em></p>
 
 {% endblock %}
