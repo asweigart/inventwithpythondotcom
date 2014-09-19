@@ -122,7 +122,7 @@ hackingData = [{'name': 'Making Paper Cryptography Tools',
              'programs': ['makeRsaKeys.py', 'rsaCipher.py']}
             ]
 
-
+baseName = {'': 'Invent', 'pygame': 'Pygame', 'hacking': 'Hacking'}
 bookData = {'': inventData,
             'pygame': pygameData,
             'hacking': hackingData}
@@ -132,7 +132,7 @@ bookTitle = {'': 'Invent Your Own Computer Games with Python',
 
 for book in bookData.keys():
       fp = open(os.path.join('content', book, 'chapters', 'index.html'), 'w', encoding='utf-8')
-      fp.write("""{%% extends "base.html" %%}
+      fp.write("""{%% extends "base%s.html" %%}
 {%% set title = '%s' %%}
 {%% block content %%}
 
@@ -140,7 +140,7 @@ for book in bookData.keys():
 
 TODO - DOWNLOAD PDF LINK
 
-""" % (bookTitle[book]))
+""" % (baseName[book], bookTitle[book]))
 
       for chapterIndex in range(len(bookData[book])):
             fp.write('<div><a href="chapter%s.html" class="chapterlink">Chapter %s - %s</a><a href="index.html#chapter%s" class="relatedcontentlink"> [related content]</a></div>\n' % (chapterIndex+1, chapterIndex+1, bookData[book][chapterIndex]['name'], chapterIndex+1))
