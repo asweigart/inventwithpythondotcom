@@ -143,28 +143,28 @@ TODO - DOWNLOAD PDF LINK
 """ % (baseName[book], bookTitle[book]))
 
       for chapterIndex in range(len(bookData[book])):
-            fp.write('<div><a href="chapter%s.html" class="chapterlink">Chapter %s - %s</a><a href="index.html#chapter%s" class="relatedcontentlink"> [related content]</a></div>\n' % (chapterIndex+1, chapterIndex+1, bookData[book][chapterIndex]['name'], chapterIndex+1))
+            fp.write('<div><a href="/%s" class="chapterlink">Chapter %s - %s</a><a href="index.html#chapter%s" class="relatedcontentlink"> [related content]</a></div>\n' % ('/'.join([book, 'chapter' + str(chapterIndex+1) + '.html']), chapterIndex+1, bookData[book][chapterIndex]['name'], chapterIndex+1))
 
       fp.write('\n\n')
 
       for chapterIndex in range(len(bookData[book])):
             fp.write('<a name="chapter%s"><h2>Chapter %s</h2></a>\n' % (chapterIndex+1, chapterIndex+1))
-            fp.write('<p><span>Read online:</span> <a href="chapter%s.html">Chapter %s - %s</a></p>\n' % (chapterIndex+1, chapterIndex+1, bookData[book][chapterIndex]['name']))
+            fp.write('<p><span>Read online:</span> <a href="/%s">Chapter %s - %s</a></p>\n' % ('/'.join([book, 'chapter' + str(chapterIndex+1) + '.html']), chapterIndex+1, bookData[book][chapterIndex]['name']))
 
             if 'programs' in bookData[book][chapterIndex]:
                   for program in bookData[book][chapterIndex]['programs']:
-                        fp.write("""<p><span>Download source:</span>  <a href="../source/%s">%s</a></p>
+                        fp.write("""<p><span>Download source:</span>  <a href="/%s">%s</a></p>
 
 <p><span>Copy source to clipboard:</span><br />
 <textarea style="width: 100%%; height:200px" id='src_%s'></textarea>
 </p>
 
-<p>Use the online diff tool to find typos in your code: <a href="diff/index.html?p=%s">%s</a></p>""" % (program, program, program[:-3], program[:-3], program))
+<p>Use the online diff tool to find typos in your code: <a href="/%s/index.html?p=%s">%s</a></p>""" % ('/'.join([book, 'source', program]), program, program[:-3], '/'.join([book, 'diff']), program[:-3], program))
 
             if 'downloads' in bookData[book][chapterIndex]:
                   fp.write('<p>Downloads:<br /><ul>\n')
                   for download in range(len(bookData[book][chapterIndex]['downloads'])):
-                        fp.write('<li><a href="../resources/%s">%s</a></li>\n' % (bookData[book][chapterIndex]['downloads'][download], bookData[book][chapterIndex]['downloads'][download]))
+                        fp.write('<li><a href="/%s/%s">%s</a></li>\n' % ('/'.join([book, 'resources']), bookData[book][chapterIndex]['downloads'][download], bookData[book][chapterIndex]['downloads'][download]))
                   fp.write('</ul></p>\n\n')
 
             if 'videos' in bookData[book][chapterIndex]:
