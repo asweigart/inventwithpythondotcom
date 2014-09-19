@@ -36,7 +36,7 @@ for dirpath, dirnames, filenames in os.walk('content'):
 
         templateFilename = os.path.join(dirpath, filename).replace('\\', '/') # Jinja REQUIRES unix-style separators :P
         if not GENERATE_ALL and (templateFilename in timestampsShelf and timestampsShelf[templateFilename] >= os.path.getmtime(templateFilename)):
-            logging.debug('%s is up to date. Skipping.' % (templateFilename))
+            #logging.debug('%s is up to date. Skipping.' % (templateFilename))
             continue # not new. skip it
 
         timestampsShelf[templateFilename] = os.path.getmtime(templateFilename)
