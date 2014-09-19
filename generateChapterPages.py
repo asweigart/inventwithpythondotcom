@@ -73,11 +73,11 @@ pygameData = [{'name': 'Installing Python'},
              'downloads': ['flippy.zip', 'inkspill.zip', 'fourinarow.zip', 'gemgem.zip']}]
 
 hackingData = [{'name': 'Making Paper Cryptography Tools',
-                'links': [{'PDF of the Caesar Cipher Wheel': 'http://inventwithpython.com/cipherwheel/cipherdisk_cutout_page.pdf'},
-                          {'Interactive Virtual Cipher Wheel': 'http://inventwithpython.com/cipherwheel'}]},
+                'links': [{'name':'PDF of the Caesar Cipher Wheel', 'url':'http://inventwithpython.com/cipherwheel/cipherdisk_cutout_page.pdf'},
+                          {'name':'Interactive Virtual Cipher Wheel', 'url':'http://inventwithpython.com/cipherwheel'}]},
             {'name': 'Downloading and Installing Python',
-             'links': [{'Download Python 3': 'http://www.python.org/getit/'},
-                       {'Download pyperclip.py': 'http://inventwithpython.com/pyperclip.py'}]},
+             'links': [{'name':'Download Python 3', 'url':'http://www.python.org/getit/'},
+                       {'name':'Download pyperclip.py', 'url':'http://inventwithpython.com/pyperclip.py'}]},
             {'name': 'The Interactive Shell'},
             {'name': 'String and Writing Programs',
              'programs': ['hello.py']},
@@ -131,7 +131,7 @@ bookTitle = {'': 'Invent Your Own Computer Games with Python',
              'hacking': 'Hacking Secret Ciphers with Python',}
 
 for book in bookData.keys():
-      fp = open(os.path.join('content', book, 'chapters', 'index.html'), 'w')
+      fp = open(os.path.join('content', book, 'chapters', 'index.html'), 'w', encoding='utf-8')
       fp.write("""{%% extends "base.html" %%}
 {%% set title = '%s' %%}
 {%% block content %%}
@@ -143,30 +143,40 @@ TODO - DOWNLOAD PDF LINK
 """ % (bookTitle[book]))
 
       for chapterIndex in range(len(bookData[book])):
-            fp.write('<div><a href="chapter%s.html" class="chapterlink">Chapter %s - %s</a><a href="#chapter%s" class="relatedcontentlink">[related content]</a></div>\n' % (chapterIndex+1, chapterIndex+1, bookData[book][chapterIndex]['name'], chapterIndex+1))
+            fp.write('<div><a href="chapter%s.html" class="chapterlink">Chapter %s - %s</a><a href="index.html#chapter%s" class="relatedcontentlink"> [related content]</a></div>\n' % (chapterIndex+1, chapterIndex+1, bookData[book][chapterIndex]['name'], chapterIndex+1))
 
       fp.write('\n\n')
 
       for chapterIndex in range(len(bookData[book])):
             fp.write('<a name="chapter%s"><h2>Chapter %s</h2></a>\n' % (chapterIndex+1, chapterIndex+1))
-            fp.write('<p><span>Read online:</span> <a href="chapter%s.html">Chapter %s - %s</a></p>\n' % (chapterIndex+1, bookData[book][chapterIndex]['name'], chapterIndex+1))
+            fp.write('<p><span>Read online:</span> <a href="chapter%s.html">Chapter %s - %s</a></p>\n' % (chapterIndex+1, chapterIndex+1, bookData[book][chapterIndex]['name']))
 
             if 'programs' in bookData[book][chapterIndex]:
                   for program in bookData[book][chapterIndex]['programs']:
-                        fp.write("""<p><span>Download source:</span>  <a href="%s">%s</a></p>
+                        fp.write("""<p><span>Download source:</span>  <a href="../source/%s">%s</a></p>
 
 <p><span>Copy source to clipboard:</span><br />
 <textarea style="width: 100%%; height:200px" id='src_%s'></textarea>
 </p>
 
-<p><a href="diff/index.html?p=%s">Use the online diff tool to find typos in your code.</a></p>""" % (program, program, program[:-3], program[:-3]))
+<p>Use the online diff tool to find typos in your code: <a href="diff/index.html?p=%s">%s</a></p>""" % (program, program, program[:-3], program[:-3], program))
 
             if 'downloads' in bookData[book][chapterIndex]:
-                  pass
+                  fp.write('<p>Downloads:<br /><ul>\n')
+                  for download in range(len(bookData[book][chapterIndex]['downloads'])):
+                        fp.write('<li><a href="../resources/%s">%s</a></li>\n' % (bookData[book][chapterIndex]['downloads'][download], bookData[book][chapterIndex]['downloads'][download]))
+                  fp.write('</ul></p>\n\n')
 
             if 'videos' in bookData[book][chapterIndex]:
-                  pass
+                  fp.write('<p>Videos:<br /><ul>\n')
+                  for video in range(len(bookData[book][chapterIndex]['videos'])):
+                        fp.write('<li><a href="%s">%s</a></li>\n' % (bookData[book][chapterIndex]['videos'][video]['url'], bookData[book][chapterIndex]['videos'][video]['name']))
+                  fp.write('</ul></p>\n\n')
 
             if 'links' in bookData[book][chapterIndex]:
-                  pass
+                  for link in range(len(bookData[book][chapterIndex]['links'])):
+                        fp.write('<li><a href="%s">%s</a></li>\n' % (bookData[book][chapterIndex]['links'][link]['url'], bookData[book][chapterIndex]['links'][video]['name']))
+                  fp.write('</ul></p>\n\n')
 
+      fp.write("""\n\n{% endblock %}""")
+      fp.close()
