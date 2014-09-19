@@ -2,20 +2,19 @@
 {% set title = 'Hacking Secret Ciphers - Diff' %}
 {% block content %}
 
-<script type="text/javascript" src="dojo.js"></script>
-<script type="text/javascript" src="sourceCodesHacking.js"></script>
-<script type="text/javascript" src="diff/diffview.js"></script>
-<link rel="stylesheet" type="text/css" href="diff/diffview.css" />
-<script type="text/javascript" src="diff/difflib.js"></script>
+<script type="text/javascript" src="/dojo.js">
+</script><script type="text/javascript" src="/sourceCodesHacking.js">
+</script><script type="text/javascript" src="/diff/diffview.js">
+</script><script type="text/javascript" src="/diff/difflib.js">
+</script><script type="text/javascript">
+//<![CDATA[
+  var $ = dojo.byId;
+  dojo.require("dojo.io");
+  var url = window.location.toString().split("#")[0];
 
-<script type="text/javascript">
-var $ = dojo.byId;
-dojo.require("dojo.io");
-var url = window.location.toString().split("#")[0];
-
-// Array.indexOf method
-if (!Array.prototype.indexOf)
-{
+  // Array.indexOf method
+  if (!Array.prototype.indexOf)
+  {
   Array.prototype.indexOf = function(elt /*, from*/)
   {
     var len = this.length >>> 0;
@@ -35,128 +34,210 @@ if (!Array.prototype.indexOf)
     }
     return -1;
   };
-}
+  }
 
 
-// Read a page's GET URL variables and return them as an associative array.
-function getUrlVars() {
-	var vars = [], hash;
-	var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+  // Read a page's GET URL variables and return them as an associative array.
+  function getUrlVars() {
+        var vars = [], hash;
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
 
-	for(var i = 0; i < hashes.length; i++) {
-		hash = hashes[i].split('=');
-		vars.push(hash[0]);
-		vars[hash[0]] = hash[1];
-	}
-	return vars;
-}
+        for(var i = 0; i < hashes.length; i++) {
+                hash = hashes[i].split('=');
+                vars.push(hash[0]);
+                vars[hash[0]] = hash[1];
+        }
+        return vars;
+  }
 
-function diffUsingJS() {
-	//var base = difflib.stringAsLines($("baseText").value);
-	var base = difflib.stringAsLines(sourceCodesHacking[$('programSelect').value]);
-	var newtxt = difflib.stringAsLines($("newText").value);
-	var sm = new difflib.SequenceMatcher(base, newtxt);
-	var opcodes = sm.get_opcodes();
-	var diffoutputdiv = $("diffoutput");
-	while (diffoutputdiv.firstChild) diffoutputdiv.removeChild(diffoutputdiv.firstChild);
-	//var contextSize = $("contextSize").value;
-	//contextSize = contextSize ? contextSize : null;
-	diffoutputdiv.appendChild(diffview.buildView({ baseTextLines:base,
-												   newTextLines:newtxt,
-												   opcodes:opcodes,
-												   baseTextName:"The Book's Program",
-												   newTextName:"Your Program",
-												   contextSize:null, // I've removed the contextSize field from the form.
-												   viewType: $("inline").checked ? 1 : 0 }));
-	window.location = url + "#diff";
-}
+  function diffUsingJS() {
+        //var base = difflib.stringAsLines($("baseText").value);
+        var base = difflib.stringAsLines(sourceCodesHacking[$('programSelect').value]);
+        var newtxt = difflib.stringAsLines($("newText").value);
+        var sm = new difflib.SequenceMatcher(base, newtxt);
+        var opcodes = sm.get_opcodes();
+        var diffoutputdiv = $("diffoutput");
+        while (diffoutputdiv.firstChild) diffoutputdiv.removeChild(diffoutputdiv.firstChild);
+        //var contextSize = $("contextSize").value;
+        //contextSize = contextSize ? contextSize : null;
+        diffoutputdiv.appendChild(diffview.buildView({ baseTextLines:base,
+                                                   newTextLines:newtxt,
+                                                   opcodes:opcodes,
+                                                   baseTextName:"The Book's Program",
+                                                   newTextName:"Your Program",
+                                                   contextSize:null, // I've removed the contextSize field from the form.
+                                                   viewType: $("inline").checked ? 1 : 0 }));
+        window.location = url + "#diff";
+  }
 
-function onPageLoad() {
-	// the optional "p" GET parameter can set the default program selected.
-	var getVars = getUrlVars();
-	var allPrograms = ["vigenereHacker", "vigenereDictionaryHacker", "vigenereCipher", "transpositionTest", "transpositionHacker", "transpositionFileHacker", "transpositionFileCipher", "transpositionEncrypt", "transpositionDecrypt", "simpleSubKeyword", "simpleSubHacker", "simpleSubDictionaryHacker", "simpleSubCipher", "rsaCipher", "reverseCipher", "rabinMiller", "primeSieve", "makeWordPatterns", "makeRsaKeys", "freqAnalysis", "detectEnglish", "cryptomath", "caesarHacker", "caesarCipher", "caesarCipher2", "affineKeyTest", "affineHacker", "affineCipher", "hello"];
+  function onPageLoad() {
+        // the optional "p" GET parameter can set the default program selected.
+        var getVars = getUrlVars();
+        var allPrograms = ["vigenereHacker", "vigenereDictionaryHacker", "vigenereCipher", "transpositionTest", "transpositionHacker", "transpositionFileHacker", "transpositionFileCipher", "transpositionEncrypt", "transpositionDecrypt", "simpleSubKeyword", "simpleSubHacker", "simpleSubDictionaryHacker", "simpleSubCipher", "rsaCipher", "reverseCipher", "rabinMiller", "primeSieve", "makeWordPatterns", "makeRsaKeys", "freqAnalysis", "detectEnglish", "cryptomath", "caesarHacker", "caesarCipher", "caesarCipher2", "affineKeyTest", "affineHacker", "affineCipher", "hello"];
 
-	if ((getVars['p']) && (allPrograms.indexOf(getVars['p']) != -1)) {
-		$('programSelect').value = getVars['p'];
-	}
-}
-</script>
+        if ((getVars['p']) && (allPrograms.indexOf(getVars['p']) != -1)) {
+                $('programSelect').value = getVars['p'];
+        }
+  }
+  //]]>
+  </script>
 
-<!--HEADEND_HACKING-->
-<body onload='onPageLoad()'>
-<!--HEADER_HACKING-->
+  <h1>Diff Tool</h1>
 
+  <p>Have a problem after typing in the source code from the book, but can't understand the error message? Use this online diff tool to see the differences between the book's code and your code!</p>
 
-  <div id='mainarea'>
-<!--SIDEBAR_HACKING-->
-    <div id='contentarea'>
+  <h2>Step 1</h2>
 
+  <p>Select the program you were typing in from this dropdown menu:</p>Program: <select name='programSelect' id='programSelect' size="8" style="vertical-align: text-top">
+    <option value='hello'>
+      hello.py
+    </option>
 
-<h1>Diff Tool</h1>
+    <option value='reverseCipher'>
+      reverseCipher.py
+    </option>
 
-<p>Have a problem after typing in the source code from the book, but can't understand the error message? <!--Just select which program you were typing from the dropdown list and copy and paste your code into the text field.--> Use this online diff tool to see the differences between the book's code and your code!</p>
+    <option value='caesarCipher'>
+      caesarCipher.py
+    </option>
 
-<!--<p>Click "Compare" to see a comparison of the source code as it is in the book and your program, and any differences between them will be highlighted.</p>-->
+    <option value='password'>
+      password.py
+    </option>
 
-<h2>Step 1</h2>
-<p>Select the program you were typing in from this dropdown menu:</p>
+    <option value='password2'>
+      password2.py
+    </option>
 
-Program: <select name='programSelect' id='programSelect' size="8" style="vertical-align: text-top">
-<option value='hello'>hello.py</option>
-<option value='reverseCipher'>reverseCipher.py</option>
-<option value='caesarCipher'>caesarCipher.py</option>
-<option value='password'>password.py</option>
-<option value='password2'>password2.py</option>
-<option value='elifeggs'>elifeggs.py</option>
-<option value='caesarCipher2'>caesarCipher2.py</option>
-<option value='caesarHacker'>caesarHacker.py</option>
-<option value='transpositionEncrypt'>transpositionEncrypt.py</option>
-<option value='helloFunction'>helloFunction.py</option>
-<option value='nameCount'>nameCount.py</option>
-<option value='scope'>scope.py</option>
-<option value='addNumbers'>addNumbers.py</option>
-<option value='transpositionDecrypt'>transpositionDecrypt.py</option>
-<option value='transpositionTest'>transpositionTest.py</option>
-<option value='transpositionFileCipher'>transpositionFileCipher.py</option>
-<option value='detectEnglish'>detectEnglish.py</option>
-<option value='transpositionHacker'>transpositionHacker.py</option>
-<option value='cryptomath'>cryptomath.py</option>
-<option value='affineCipher'>affineCipher.py</option>
-<option value='affineKeyTest'>affineKeyTest.py</option>
-<option value='simpleSubCipher'>simpleSubCipher.py</option>
-<option value='makeWordPatterns'>makeWordPatterns.py</option>
-<option value='simpleSubHacker'>simpleSubHacker.py</option>
-<option value='vigenereCipher'>vigenereCipher.py</option>
-<option value='freqAnalysis'>freqAnalysis.py</option>
-<option value='vigenereDictionaryHacker'>vigenereDictionaryHacker.py</option>
-<option value='vigenereHacker'>vigenereHacker.py</option>
-<option value='primeSieve'>primeSieve.py</option>
-<option value='rabinMiller'>rabinMiller.py</option>
-<option value='makeRsaKeys'>makeRsaKeys.py</option>
-<option value='rsaCipher'>rsaCipher.py</option>
-</select>
+    <option value='elifeggs'>
+      elifeggs.py
+    </option>
 
-<input type="radio" name="_viewtype" checked="checked" id="sidebyside" /> Side by Side
-&#160;&#160;
-<input type="radio" name="_viewtype" id="inline" /> Inline<br />
-<br />
+    <option value='caesarCipher2'>
+      caesarCipher2.py
+    </option>
 
-<h2>Step 2</h2>
+    <option value='caesarHacker'>
+      caesarHacker.py
+    </option>
 
-<p>Copy and paste your code here to see how it is different from the code in the book:</p>
-<textarea id="newText" style="width:100%;height:100px"></textarea><br />
+    <option value='transpositionEncrypt'>
+      transpositionEncrypt.py
+    </option>
 
-<h2>Step 3</h2>
-<p>Click the "Compare" button:</p>
-<input type="button" value="Compare" onclick="javascript:diffUsingJS();" /><br />
+    <option value='helloFunction'>
+      helloFunction.py
+    </option>
 
-<a name="diff"> </a>
-<div id="diffoutput" style="width:100%"> </div>
+    <option value='nameCount'>
+      nameCount.py
+    </option>
 
+    <option value='scope'>
+      scope.py
+    </option>
 
+    <option value='addNumbers'>
+      addNumbers.py
+    </option>
 
+    <option value='transpositionDecrypt'>
+      transpositionDecrypt.py
+    </option>
 
+    <option value='transpositionTest'>
+      transpositionTest.py
+    </option>
 
+    <option value='transpositionFileCipher'>
+      transpositionFileCipher.py
+    </option>
 
+    <option value='detectEnglish'>
+      detectEnglish.py
+    </option>
+
+    <option value='transpositionHacker'>
+      transpositionHacker.py
+    </option>
+
+    <option value='cryptomath'>
+      cryptomath.py
+    </option>
+
+    <option value='affineCipher'>
+      affineCipher.py
+    </option>
+
+    <option value='affineKeyTest'>
+      affineKeyTest.py
+    </option>
+
+    <option value='simpleSubCipher'>
+      simpleSubCipher.py
+    </option>
+
+    <option value='makeWordPatterns'>
+      makeWordPatterns.py
+    </option>
+
+    <option value='simpleSubHacker'>
+      simpleSubHacker.py
+    </option>
+
+    <option value='vigenereCipher'>
+      vigenereCipher.py
+    </option>
+
+    <option value='freqAnalysis'>
+      freqAnalysis.py
+    </option>
+
+    <option value='vigenereDictionaryHacker'>
+      vigenereDictionaryHacker.py
+    </option>
+
+    <option value='vigenereHacker'>
+      vigenereHacker.py
+    </option>
+
+    <option value='primeSieve'>
+      primeSieve.py
+    </option>
+
+    <option value='rabinMiller'>
+      rabinMiller.py
+    </option>
+
+    <option value='makeRsaKeys'>
+      makeRsaKeys.py
+    </option>
+
+    <option value='rsaCipher'>
+      rsaCipher.py
+    </option>
+  </select>
+
+  <form>
+    <input type="radio" name="_viewtype" checked="checked" id="sidebyside" /> Side by Side &nbsp;&nbsp; <input type="radio" name="_viewtype" id="inline" /> Inline<br />
+    <br />
+  </form>
+
+  <h2>Step 2</h2>
+
+  <p>Copy and paste your code here to see how it is different from the code in the book:</p>
+  <textarea id="newText" style="width:100%;height:100px">
+</textarea><br />
+
+  <h2>Step 3</h2>
+
+  <p>Click the "Compare" button:</p>
+
+  <form>
+    <input type="button" value="Compare" onclick="javascript:diffUsingJS();" /><br />
+    <a name="diff" id="diff"></a>
+  </form>
+
+  <div id="diffoutput" style="width:100%"></div>
 
 {% endblock %}
