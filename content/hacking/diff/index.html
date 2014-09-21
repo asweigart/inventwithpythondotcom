@@ -2,11 +2,13 @@
 {% set title = 'Hacking Secret Ciphers - Diff' %}
 {% block content %}
 
-<script type="text/javascript" src="/dojo.js">
-</script><script type="text/javascript" src="/sourceCodesHacking.js">
-</script><script type="text/javascript" src="/diff/diffview.js">
-</script><script type="text/javascript" src="/diff/difflib.js">
-</script><script type="text/javascript">
+<script type="text/javascript" src="/dojo.js"></script>
+<script type="text/javascript" src="/sourceCodesHacking.js"></script>
+<script type="text/javascript" src="/diff/diffview.js"></script>
+<link rel="stylesheet" type="text/css" href="/diff/diffview.css"/>
+<script type="text/javascript" src="/diff/difflib.js"></script>
+
+<script type="text/javascript">
 //<![CDATA[
   var $ = dojo.byId;
   dojo.require("dojo.io");
@@ -66,7 +68,7 @@
                                                    baseTextName:"The Book's Program",
                                                    newTextName:"Your Program",
                                                    contextSize:null, // I've removed the contextSize field from the form.
-                                                   viewType: $("inline").checked ? 1 : 0 }));
+                                                   viewType: 0 }));
         window.location = url + "#diff";
   }
 
@@ -82,162 +84,64 @@
   //]]>
   </script>
 
-  <h1>Diff Tool</h1>
+<h1>Diff Tool</h1>
 
-  <p>The diff tool can help you find typos in your code by showing you the differences between your program and the programs in the book.</p>
+<p>The diff tool can help you find typos in your code by showing you the differences between your program and the programs in the book.</p>
 
-  <h2>Step 1</h2>
+<table border="0">
+    <tr>
+        <td valign="top">
+            <p>Select program:</p>
 
-  <p>Select the program you were typing in from this dropdown menu:</p>Program: <select name='programSelect' id='programSelect' size="8" style="vertical-align: text-top">
-    <option value='hello'>
-      hello.py
-    </option>
+            <select name='programSelect' id='programSelect' size="16" style="vertical-align: text-top">
+              <option value='hello'>hello.py</option>
+              <option value='reverseCipher'>reverseCipher.py</option>
+              <option value='caesarCipher'>caesarCipher.py</option>
+              <option value='password'>password.py</option>
+              <option value='password2'>password2.py</option>
+              <option value='elifeggs'>elifeggs.py</option>
+              <option value='caesarCipher2'>caesarCipher2.py</option>
+              <option value='caesarHacker'>caesarHacker.py</option>
+              <option value='transpositionEncrypt'>transpositionEncrypt.py</option>
+              <option value='helloFunction'>helloFunction.py</option>
+              <option value='nameCount'>nameCount.py</option>
+              <option value='scope'>scope.py</option>
+              <option value='addNumbers'>addNumbers.py</option>
+              <option value='transpositionDecrypt'>transpositionDecrypt.py</option>
+              <option value='transpositionTest'>transpositionTest.py</option>
+              <option value='transpositionFileCipher'>transpositionFileCipher.py</option>
+              <option value='detectEnglish'>detectEnglish.py</option>
+              <option value='transpositionHacker'>transpositionHacker.py</option>
+              <option value='cryptomath'>cryptomath.py</option>
+              <option value='affineCipher'>affineCipher.py</option>
+              <option value='affineKeyTest'>affineKeyTest.py</option>
+              <option value='simpleSubCipher'>simpleSubCipher.py</option>
+              <option value='makeWordPatterns'>makeWordPatterns.py</option>
+              <option value='simpleSubHacker'>simpleSubHacker.py</option>
+              <option value='vigenereCipher'>vigenereCipher.py</option>
+              <option value='freqAnalysis'>freqAnalysis.py</option>
+              <option value='vigenereDictionaryHacker'>vigenereDictionaryHacker.py</option>
+              <option value='vigenereHacker'>vigenereHacker.py</option>
+              <option value='primeSieve'>primeSieve.py</option>
+              <option value='rabinMiller'>rabinMiller.py</option>
+              <option value='makeRsaKeys'>makeRsaKeys.py</option>
+              <option value='rsaCipher'>rsaCipher.py</option>
+            </select>
+        </td>
+        <td width="700">
+            <p>Copy and paste your code here:</p>
+            <textarea id="newText" style="width:100%;height:300px"></textarea><br />
+        </td>
+    </tr>
+    <tr>
+        <td align="right" colspan="2">
+            <input type="button" value="Compare" onclick="javascript:diffUsingJS();"/>
+        </td>
+    </tr>
+</table>
 
-    <option value='reverseCipher'>
-      reverseCipher.py
-    </option>
 
-    <option value='caesarCipher'>
-      caesarCipher.py
-    </option>
-
-    <option value='password'>
-      password.py
-    </option>
-
-    <option value='password2'>
-      password2.py
-    </option>
-
-    <option value='elifeggs'>
-      elifeggs.py
-    </option>
-
-    <option value='caesarCipher2'>
-      caesarCipher2.py
-    </option>
-
-    <option value='caesarHacker'>
-      caesarHacker.py
-    </option>
-
-    <option value='transpositionEncrypt'>
-      transpositionEncrypt.py
-    </option>
-
-    <option value='helloFunction'>
-      helloFunction.py
-    </option>
-
-    <option value='nameCount'>
-      nameCount.py
-    </option>
-
-    <option value='scope'>
-      scope.py
-    </option>
-
-    <option value='addNumbers'>
-      addNumbers.py
-    </option>
-
-    <option value='transpositionDecrypt'>
-      transpositionDecrypt.py
-    </option>
-
-    <option value='transpositionTest'>
-      transpositionTest.py
-    </option>
-
-    <option value='transpositionFileCipher'>
-      transpositionFileCipher.py
-    </option>
-
-    <option value='detectEnglish'>
-      detectEnglish.py
-    </option>
-
-    <option value='transpositionHacker'>
-      transpositionHacker.py
-    </option>
-
-    <option value='cryptomath'>
-      cryptomath.py
-    </option>
-
-    <option value='affineCipher'>
-      affineCipher.py
-    </option>
-
-    <option value='affineKeyTest'>
-      affineKeyTest.py
-    </option>
-
-    <option value='simpleSubCipher'>
-      simpleSubCipher.py
-    </option>
-
-    <option value='makeWordPatterns'>
-      makeWordPatterns.py
-    </option>
-
-    <option value='simpleSubHacker'>
-      simpleSubHacker.py
-    </option>
-
-    <option value='vigenereCipher'>
-      vigenereCipher.py
-    </option>
-
-    <option value='freqAnalysis'>
-      freqAnalysis.py
-    </option>
-
-    <option value='vigenereDictionaryHacker'>
-      vigenereDictionaryHacker.py
-    </option>
-
-    <option value='vigenereHacker'>
-      vigenereHacker.py
-    </option>
-
-    <option value='primeSieve'>
-      primeSieve.py
-    </option>
-
-    <option value='rabinMiller'>
-      rabinMiller.py
-    </option>
-
-    <option value='makeRsaKeys'>
-      makeRsaKeys.py
-    </option>
-
-    <option value='rsaCipher'>
-      rsaCipher.py
-    </option>
-  </select>
-
-  <form>
-    <input type="radio" name="_viewtype" checked="checked" id="sidebyside" /> Side by Side &nbsp;&nbsp; <input type="radio" name="_viewtype" id="inline" /> Inline<br />
-    <br />
-  </form>
-
-  <h2>Step 2</h2>
-
-  <p>Copy and paste your code here to see how it is different from the code in the book:</p>
-  <textarea id="newText" style="width:100%;height:100px">
-</textarea><br />
-
-  <h2>Step 3</h2>
-
-  <p>Click the "Compare" button:</p>
-
-  <form>
-    <input type="button" value="Compare" onclick="javascript:diffUsingJS();" /><br />
     <a name="diff" id="diff"></a>
-  </form>
-
   <div id="diffoutput" style="width:100%"></div>
 
 {% endblock %}
