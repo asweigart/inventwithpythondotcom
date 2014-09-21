@@ -5,10 +5,14 @@
 import os
 import logging
 import shelve
+import sys
 import distutils.dir_util
 import jinja2
 
-GENERATE_ALL = True # If True, all templates are generated regardless if timestamp says they are up to date
+GENERATE_ALL = False # If True, all templates are generated regardless if timestamp says they are up to date
+if len(sys.argv) > 1:
+    GENERATE_ALL = sys.argv[1] == 'all'
+
 BASE_HREF = 'http://localhost:8000/'
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
