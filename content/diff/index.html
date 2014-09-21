@@ -67,7 +67,7 @@ function diffUsingJS() {
 												   baseTextName:"The Book's Program",
 												   newTextName:"Your Program",
 												   contextSize:null, // I've removed the contextSize field from the form.
-												   viewType: $("inline").checked ? 1 : 0 }));
+												   viewType: 0 }));
 	window.location = url + "#diff";
 }
 
@@ -89,45 +89,47 @@ dojo.addOnLoad(onPageLoad);
 
 <p>The diff tool can help you find typos in your code by showing you the differences between your program and the programs in the book.</p>
 
-<h2>Step 1</h2>
-<p>Select the program you were typing in from this dropdown menu:</p>
+<table border="0">
+    <tr>
+        <td valign="top">
+            <p>Select program:</p>
 
-Program: <select name='programSelect' id='programSelect' size="8" style="vertical-align: text-top">
-<option value='AISim1'>AISim1.py</option>
-<option value='AISim2'>AISim2.py</option>
-<option value='AISim3'>AISim3.py</option>
-<option value='animation'>animation.py</option>
-<option value='bagels'>bagels.py</option>
-<option value='cipher'>cipher.py</option>
-<option value='collisionDetection'>collisionDetection.py</option>
-<option value='dodger'>dodger.py</option>
-<option value='dragon'>dragon.py</option>
-<option value='favorite'>favorite.py</option>
-<option value='guess'>guess.py</option>
-<option value='hangman'>hangman.py</option>
-<option value='hello'>hello.py</option>
-<option value='jokes'>jokes.py</option>
-<option value='pygameHelloWorld'>pygameHelloWorld.py</option>
-<option value='pygameInput'>pygameInput.py</option>
-<option value='reversi'>reversi.py</option>
-<option value='sonar'>sonar.py</option>
-<option value='spritesAndSounds'>spritesAndSounds.py</option>
-<option value='tictactoe'>tictactoe.py</option>
-</select>
+            <select name='programSelect' id='programSelect' size="16" style="vertical-align: text-top">
+                <option value='AISim1'>AISim1.py</option>
+                <option value='AISim2'>AISim2.py</option>
+                <option value='AISim3'>AISim3.py</option>
+                <option value='animation'>animation.py</option>
+                <option value='bagels'>bagels.py</option>
+                <option value='cipher'>cipher.py</option>
+                <option value='collisionDetection'>collisionDetection.py</option>
+                <option value='dodger'>dodger.py</option>
+                <option value='dragon'>dragon.py</option>
+                <option value='favorite'>favorite.py</option>
+                <option value='guess'>guess.py</option>
+                <option value='hangman'>hangman.py</option>
+                <option value='hello'>hello.py</option>
+                <option value='jokes'>jokes.py</option>
+                <option value='pygameHelloWorld'>pygameHelloWorld.py</option>
+                <option value='pygameInput'>pygameInput.py</option>
+                <option value='reversi'>reversi.py</option>
+                <option value='sonar'>sonar.py</option>
+                <option value='spritesAndSounds'>spritesAndSounds.py</option>
+                <option value='tictactoe'>tictactoe.py</option>
+            </select>
+        </td>
+        <td width="700">
+            <p>Copy and paste your code here:</p>
+            <textarea id="newText" style="width:100%;height:300px"></textarea><br />
+        </td>
+    </tr>
+    <tr>
+        <td align="right" colspan="2">
+            <input type="button" value="Compare" onclick="javascript:diffUsingJS();"/>
+        </td>
+    </tr>
+</table>
 
-<input type="radio" name="_viewtype" checked="checked" id="sidebyside"/> Side by Side
-&#160;&#160;
-<input type="radio" name="_viewtype" id="inline"/> Inline<br />
-<br />
 
-<h2>Step 2</h2>
-
-<p>Copy and paste your code here to see how it is different from the code in the book:</p>
-<textarea id="newText" style="width:100%;height:300px"></textarea><br />
-
-<h2>Step 3</h2>
-<p>Click the "Compare" button:</p>
-<input type="button" value="Compare" onclick="javascript:diffUsingJS();"/><br />
 
 <a name="diff"> </a>
 <div id="diffoutput" style="width:100%"> </div>
