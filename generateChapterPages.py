@@ -147,14 +147,20 @@ for book in bookData.keys():
 
       for chapterIndex in range(len(bookData[book])):
             chapterData = bookData[book][chapterIndex]
-            fp.write('<div><a href="/%s" class="chapterlink">Chapter %s - %s</a><a href="index.html#chapter%s" class="relatedcontentlink"> [related content]</a></div>\n' % ('/'.join([book, 'chapter' + str(chapterIndex+1) + '.html']), chapterIndex+1, chapterData['name'], chapterIndex+1))
+            chapterLink = '/'.join([book, 'chapter' + str(chapterIndex+1) + '.html'])
+            if book != '':
+                  chapterLink = '/' + chapterLink
+            fp.write('<div><a href="%s" class="chapterlink">Chapter %s - %s</a><a href="index.html#chapter%s" class="relatedcontentlink"> [related content]</a></div>\n' % (chapterLink, chapterIndex+1, chapterData['name'], chapterIndex+1))
 
       fp.write('\n\n')
 
       for chapterIndex in range(len(bookData[book])):
             chapterData = bookData[book][chapterIndex]
             fp.write('<a name="chapter%s"><h2>Chapter %s</h2></a>\n' % (chapterIndex+1, chapterIndex+1))
-            fp.write('<p><span>Read online:</span> <a href="/%s">Chapter %s - %s</a></p>\n' % ('/'.join([book, 'chapter' + str(chapterIndex+1) + '.html']), chapterIndex+1, chapterData['name']))
+            chapterLink = '/'.join([book, 'chapter' + str(chapterIndex+1) + '.html'])
+            if book != '':
+                  chapterLink = '/' + chapterLink
+            fp.write('<p><span>Read online:</span> <a href="%s">Chapter %s - %s</a></p>\n' % (chapterLink, chapterIndex+1, chapterData['name']))
 
             # LIST PROGRAMS
             if 'programs' in chapterData:
