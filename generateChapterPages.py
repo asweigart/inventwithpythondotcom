@@ -147,20 +147,23 @@ for book in bookData.keys():
 
       for chapterIndex in range(len(bookData[book])):
             chapterData = bookData[book][chapterIndex]
-            chapterLink = '/'.join([book, 'chapter' + str(chapterIndex+1) + '.html'])
             if book != '':
-                  chapterLink = '/' + chapterLink
-            fp.write('<div><a href="%s" class="chapterlink">Chapter %s - %s</a><a href="index.html#chapter%s" class="relatedcontentlink"> [related content]</a></div>\n' % (chapterLink, chapterIndex+1, chapterData['name'], chapterIndex+1))
+                  chapterStart = '/' + book
+            else:
+                  chapterStart = ''
+
+            fp.write('<div><a href="%s/chapter%s.html" class="chapterlink">Chapter %s - %s</a><a href="index.html#chapter%s" class="relatedcontentlink"> [related content]</a></div>\n' % (chapterStart, chapterIndex+1, chapterIndex+1, chapterData['name'], chapterIndex+1))
 
       fp.write('\n\n')
 
       for chapterIndex in range(len(bookData[book])):
             chapterData = bookData[book][chapterIndex]
             fp.write('<a name="chapter%s"><h2>Chapter %s</h2></a>\n' % (chapterIndex+1, chapterIndex+1))
-            chapterLink = '/'.join([book, 'chapter' + str(chapterIndex+1) + '.html'])
             if book != '':
-                  chapterLink = '/' + chapterLink
-            fp.write('<p><span>Read online:</span> <a href="%s">Chapter %s - %s</a></p>\n' % (chapterLink, chapterIndex+1, chapterData['name']))
+                  chapterStart = '/' + book
+            else:
+                  chapterStart = ''
+            fp.write('<p><span>Read online:</span> <a href="%s/chapter%s.html">Chapter %s - %s</a></p>\n' % (chapterStart, chapterIndex+1, chapterIndex+1, chapterData['name']))
 
             # LIST PROGRAMS
             if 'programs' in chapterData:
@@ -171,7 +174,7 @@ for book in bookData.keys():
 <textarea style="width: 100%%; height:200px" id='src_%s'></textarea>
 </p>
 
-<p>Use the online diff tool to find typos in your code: <a href="/%s/index.html?p=%s">%s</a></p>""" % (program, program, program[:-3], '/'.join([book, 'diff']), program[:-3], program))
+<p>Use the online diff tool to find typos in your code: <a href="%s/diff/index.html?p=%s">%s</a></p>""" % (program, program, program[:-3], chapterStart, program[:-3], program))
 
             # LIST DOWNLOADS
             if 'downloads' in chapterData:
