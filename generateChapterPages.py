@@ -2,8 +2,10 @@
 
 # Generates the /chapters, /pygame/chapters, and /hacking/chapters pages from source data.
 
-import os
+import os, sys
 
+if len(sys.argv) < 2 or sys.argv[1] != 'confirm':
+      sys.exit('Run again with "confirm" as first command-line argument.')
 
 inventData = [{'name': 'Installing Python',
                'videos': [{'name': 'Installing Python on Windows', 'url': 'http://www.youtube-nocookie.com/embed/4Mf0h3HphEA'},
