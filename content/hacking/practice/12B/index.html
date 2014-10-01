@@ -1,0 +1,43 @@
+{% extends "baseInvent.html" %}
+{% set title = 'Hacking Secret Ciphers' %}
+{% block content %}
+
+
+
+<h1>Practice Exercises 12B</h1>
+
+<div class="asideText"><a href="hacking/practice">View all practice exercises in "Hacking Secret Ciphers with Python".</a></div>
+
+<p>We have the following dictionary: <code>cheese = {'foo': 42, 'fizz': 'hello', 'spam': 'foo'}</code></p>
+
+<p>What do the following expressions evaluate to?</p>
+
+<ol>
+<li>cheese['foo']</li>
+<li>10 + cheese['foo']</li>
+<li>cheese['fizz'] + cheese['fizz']</li>
+<li>cheese</li>
+<li>cheese[cheese['spam']]</li>
+</ol>
+
+
+<br /><br /><br />
+<input type="button" value="Show Answers" onclick="document.getElementById('answers').style.display = 'block'" />
+
+<fieldset><legend>Answers:</legend>
+<div style="display: none;" id="answers">
+<ol>
+<li>42</li>
+<li>52</li>
+<li>'hellohello'</li>
+<li>{'foo': 42, 'fizz': 'hello', 'spam': 'foo'}</li>
+<li>42</li>
+
+</ol>
+</div>
+</fieldset>
+
+<p>If you have ideas for practice questions, send them to <a href="mailto:al@inventwithpython.com">al@inventwithpython.com</a>.</p>
+
+    
+{% endblock %}
