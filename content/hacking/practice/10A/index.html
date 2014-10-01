@@ -1,0 +1,52 @@
+{% extends "baseInvent.html" %}
+{% set title = 'Hacking Secret Ciphers' %}
+{% block content %}
+
+
+
+<h1>Practice Exercises 10A</h1>
+
+<div class="asideText"><a href="hacking/practice">View all practice exercises in "Hacking Secret Ciphers with Python".</a></div>
+
+<ol>
+<li>If you ran this program and it printed the number 7, what would it print the next time you run it?<br />
+<pre>import random
+random.seed(9)
+print(random.randint(1, 10))</pre></li>
+
+<li>What does this program print out?<br />
+<pre>spam = [1, 2, 3]
+eggs = spam
+ham = eggs
+ham[0] = 99
+print(ham == spam)</pre></li>
+
+<li>What module contains the <code>deepcopy()</copy> function?</li>
+
+<li>What does this program print out?<br />
+<pre>import copy
+spam = [1, 2, 3]
+eggs = copy.deepcopy(spam)
+ham = copy.deepcopy(eggs)
+ham[0] = 99
+print(ham == spam)</pre></li>
+</ol>
+
+<br /><br /><br />
+<input type="button" value="Show Answers" onclick="document.getElementById('answers').style.display = 'block'" />
+
+<fieldset><legend>Answers:</legend>
+<div style="display: none;" id="answers">
+<ol>
+<li><code>7</code></li>
+<li><code>True</code></li>
+<li>The <code>copy</code> module.</li>
+<li><code>False</code></li>
+</ol>
+</div>
+</fieldset>
+
+<p>If you have ideas for practice questions, send them to <a href="mailto:al@inventwithpython.com">al@inventwithpython.com</a>.</p>
+
+    
+{% endblock %}

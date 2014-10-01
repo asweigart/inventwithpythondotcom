@@ -1,0 +1,71 @@
+{% extends "baseInvent.html" %}
+{% set title = 'Hacking Secret Ciphers' %}
+{% block content %}
+
+
+
+<h1>Practice Exercises 6B</h1>
+
+<div class="asideText"><a href="hacking/practice">View all practice exercises in "Hacking Secret Ciphers with Python".</a></div>
+
+<ol>
+
+<li>What Python instruction would import a module named <code>watermelon.py</code>?</li>
+
+<li>The variable <code>SPAM</code> is a constant. Will this code cause an error?: <code>SPAM = 'hello'</code></li>
+
+</ol>
+
+<p>What do the following pieces of code display on the screen?</p>
+
+<ol start="3">
+<li><pre>for i in 'hello':
+    print(i)</pre></li>
+
+<li><pre>print('Hello'.lower())</pre></li>
+
+<li><pre>print('Hello'.upper())</pre></li>
+
+<li><pre>print('Hello'.upper().lower().upper().lower())</pre></li>
+
+</ol>
+
+<p>BONUS: What does this program display on the screen? (Guess, and then type it in and run it to find out.)</p>
+
+<pre>spam = 'foo'
+for i in spam:
+    spam += i
+print(spam)</pre>
+
+
+
+<br /><br /><br />
+<input type="button" value="Show Answers" onclick="document.getElementById('answers').style.display = 'block'" />
+
+<fieldset><legend>Answers:</legend>
+<div style="display: none;" id="answers">
+<ol>
+<li><code>import watermelon</code> (Note that there is no .py)</li>
+<li>No, it will not cause an error. Constants are just regular variables and can have their values changed. But it is a generally accepted convention to not change the values in constants.</li>
+<li><pre>h
+e
+l
+l
+o</pre></li>
+<li><code>hello</code></li>
+<li><code>HELLO</code></li>
+<li><code>hello</code></li>
+
+
+</ol>
+
+<p>BONUS: <code>foofoo</code> Even though the <code>spam</code> variable is having strings added to it, only the value of <code>spam</code> <em>when the <code>for</code> loop first started</em> is iterated over.</p>
+
+
+</div>
+</fieldset>
+
+<p>If you have ideas for practice questions, send them to <a href="mailto:al@inventwithpython.com">al@inventwithpython.com</a>.</p>
+
+    
+{% endblock %}
