@@ -1,0 +1,24 @@
+<script>
+mechanics = ["Avoiding Unkillable Objects", "Instant Death", "Game Repeats Until You Die", "Remember an Increasing Number of Things", "Repeat Pattern", "Forced Constant Movement", "Block Puzzles", "Game Keeps Gets Harder Until You Die", "Uncountable Number of Possible Paths", "Big Gains for You Can Be Big Gains for Enemy", "Block Path", "Information Overload", "Disinformation", "Switch Modes", "Push Mole Down, Mole Pops Up", "Cut Off One Head, Two Grow Back", "Bouncing Object", "Gravity", "Mouse Dexterity", "Spinning Plates", "Teleports", "Squad", "Scarce Resource", "Jumping", "Hidden Image / Where's Waldo?", "Timed", "Protect a Target", "Undirected Exploration", "Bullet Hell", "Buy Low, Sell High", "Brawling", "Dialogue Tree", "Building", "Race"];
+
+function getMechanics() {
+    var mechs = '<center>';
+    var indexes = [];
+    while (indexes.length < 3) {
+        randomIndex = Math.floor(Math.random() * mechanics.length);
+        if (indexes.indexOf(randomIndex) == -1) {
+            indexes.push(randomIndex);
+            mechs += mechanics[randomIndex] + '<br /><br />';
+        }
+    }
+    mechs += '</center>';
+
+    document.getElementById('randomMechanics').innerHTML = mechs;
+}
+
+
+
+</script>
+
+<p><center><input type="button" value="Get Random Mechanics!" onclick="getMechanics()" /></center></p>
+<div style="font-family: sans-serif;" id="randomMechanics"></div>
