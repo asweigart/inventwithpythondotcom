@@ -19,7 +19,7 @@ def drawBoard(board):
     print('   |   |')
 
 def inputPlayerLetter():
-    # Let's the player type which letter they want to be.
+    # Lets the player type which letter they want to be.
     # Returns a list with the player's letter as the first item, and the computer's letter as the second.
     letter = ''
     while not (letter == 'X' or letter == 'O'):
