@@ -14,6 +14,9 @@ ExpiresByType application/javascript "access plus 1 week"
 </IfModule>
 
 RewriteEngine on
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
 RewriteRule ^chapter1$ http://inventwithpython.com/hacking/chapters/index.html#chapter1 [NE,R,L]
 RewriteRule ^chapter1/index.html$ http://inventwithpython.com/hacking/chapters/index.html#chapter1 [NE,R,L]
 RewriteRule ^chapter2$ http://inventwithpython.com/hacking/chapters/index.html#chapter2 [NE,R,L]
