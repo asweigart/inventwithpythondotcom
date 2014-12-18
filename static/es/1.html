@@ -1,0 +1,1007 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=UTF-8">
+<meta name=Generator content="Microsoft Word 14 (filtered)">
+<title>Invent Your Own Computer Games with Python</title>
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;}
+@font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;}
+@font-face
+	{font-family:Cambria;
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:Tahoma;
+	panose-1:2 11 6 4 3 5 4 4 2 4;}
+@font-face
+	{font-family:"Franklin Gothic Demi";
+	panose-1:2 11 7 3 2 1 2 2 2 4;}
+@font-face
+	{font-family:"Lucida Sans Typewriter";
+	panose-1:2 11 5 9 3 5 4 3 2 4;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+h1
+	{mso-style-link:"Heading 1 Char";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:24.0pt;
+	margin-left:0in;
+	line-height:115%;
+	page-break-after:avoid;
+	font-size:36.0pt;
+	font-family:"Franklin Gothic Demi","sans-serif";
+	font-variant:small-caps;
+	font-weight:bold;}
+h2
+	{mso-style-link:"Heading 2 Char";
+	margin-top:10.0pt;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:0in;
+	line-height:115%;
+	page-break-after:avoid;
+	font-size:16.0pt;
+	font-family:"Calibri","sans-serif";
+	color:#1F497D;
+	font-weight:bold;}
+h3
+	{mso-style-link:"Heading 3 Char";
+	margin-top:10.0pt;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:0in;
+	line-height:115%;
+	page-break-after:avoid;
+	font-size:14.0pt;
+	font-family:"Calibri","sans-serif";
+	color:#1F497D;
+	font-weight:bold;
+	font-style:italic;}
+p.MsoToc1, li.MsoToc1, div.MsoToc1
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:5.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoToc2, li.MsoToc2, div.MsoToc2
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:5.0pt;
+	margin-left:11.0pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoToc3, li.MsoToc3, div.MsoToc3
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:5.0pt;
+	margin-left:22.0pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoToc4, li.MsoToc4, div.MsoToc4
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:5.0pt;
+	margin-left:33.0pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.MsoToc5, li.MsoToc5, div.MsoToc5
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:5.0pt;
+	margin-left:44.0pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.MsoToc6, li.MsoToc6, div.MsoToc6
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:5.0pt;
+	margin-left:55.0pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.MsoToc7, li.MsoToc7, div.MsoToc7
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:5.0pt;
+	margin-left:66.0pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.MsoToc8, li.MsoToc8, div.MsoToc8
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:5.0pt;
+	margin-left:77.0pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.MsoToc9, li.MsoToc9, div.MsoToc9
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:5.0pt;
+	margin-left:88.0pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.MsoHeader, li.MsoHeader, div.MsoHeader
+	{mso-style-link:"Header Char";
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoFooter, li.MsoFooter, div.MsoFooter
+	{mso-style-link:"Footer Char";
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoCaption, li.MsoCaption, div.MsoCaption
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:0in;
+	text-align:center;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.MsoTitle, li.MsoTitle, div.MsoTitle
+	{mso-style-link:"Title Char";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:15.0pt;
+	margin-left:0in;
+	border:none;
+	padding:0in;
+	font-size:48.0pt;
+	font-family:"Franklin Gothic Demi","sans-serif";
+	letter-spacing:.25pt;}
+p.MsoTitleCxSpFirst, li.MsoTitleCxSpFirst, div.MsoTitleCxSpFirst
+	{mso-style-link:"Title Char";
+	margin:0in;
+	margin-bottom:.0001pt;
+	border:none;
+	padding:0in;
+	font-size:48.0pt;
+	font-family:"Franklin Gothic Demi","sans-serif";
+	letter-spacing:.25pt;}
+p.MsoTitleCxSpMiddle, li.MsoTitleCxSpMiddle, div.MsoTitleCxSpMiddle
+	{mso-style-link:"Title Char";
+	margin:0in;
+	margin-bottom:.0001pt;
+	border:none;
+	padding:0in;
+	font-size:48.0pt;
+	font-family:"Franklin Gothic Demi","sans-serif";
+	letter-spacing:.25pt;}
+p.MsoTitleCxSpLast, li.MsoTitleCxSpLast, div.MsoTitleCxSpLast
+	{mso-style-link:"Title Char";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:15.0pt;
+	margin-left:0in;
+	border:none;
+	padding:0in;
+	font-size:48.0pt;
+	font-family:"Franklin Gothic Demi","sans-serif";
+	letter-spacing:.25pt;}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:purple;
+	text-decoration:underline;}
+p
+	{margin-right:0in;
+	margin-left:0in;
+	font-size:12.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoAcetate, li.MsoAcetate, div.MsoAcetate
+	{mso-style-link:"Balloon Text Char";
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:8.0pt;
+	font-family:"Tahoma","sans-serif";}
+p.MsoNoSpacing, li.MsoNoSpacing, div.MsoNoSpacing
+	{mso-style-link:"No Spacing Char";
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoListParagraph, li.MsoListParagraph, div.MsoListParagraph
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:.5in;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoListParagraphCxSpFirst, li.MsoListParagraphCxSpFirst, div.MsoListParagraphCxSpFirst
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoListParagraphCxSpMiddle, li.MsoListParagraphCxSpMiddle, div.MsoListParagraphCxSpMiddle
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoListParagraphCxSpLast, li.MsoListParagraphCxSpLast, div.MsoListParagraphCxSpLast
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:.5in;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoTocHeading, li.MsoTocHeading, div.MsoTocHeading
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:24.0pt;
+	margin-left:0in;
+	line-height:115%;
+	page-break-after:avoid;
+	font-size:36.0pt;
+	font-family:"Franklin Gothic Demi","sans-serif";
+	font-variant:small-caps;
+	font-weight:bold;}
+span.Heading1Char
+	{mso-style-name:"Heading 1 Char";
+	mso-style-link:"Heading 1";
+	font-family:"Franklin Gothic Demi","sans-serif";
+	font-variant:small-caps;
+	font-weight:bold;}
+span.Heading2Char
+	{mso-style-name:"Heading 2 Char";
+	mso-style-link:"Heading 2";
+	font-family:"Times New Roman","serif";
+	color:#1F497D;
+	font-weight:bold;}
+span.Heading3Char
+	{mso-style-name:"Heading 3 Char";
+	mso-style-link:"Heading 3";
+	font-family:"Times New Roman","serif";
+	color:#1F497D;
+	font-weight:bold;
+	font-style:italic;}
+span.BalloonTextChar
+	{mso-style-name:"Balloon Text Char";
+	mso-style-link:"Balloon Text";
+	font-family:"Tahoma","sans-serif";}
+span.Definition
+	{mso-style-name:Definition;
+	font-family:"Calibri","sans-serif";
+	font-weight:bold;}
+span.NoSpacingChar
+	{mso-style-name:"No Spacing Char";
+	mso-style-link:"No Spacing";
+	font-family:"Times New Roman","serif";}
+span.URL
+	{mso-style-name:URL;
+	text-decoration:underline;}
+span.Literal
+	{mso-style-name:Literal;
+	font-family:"Lucida Sans Typewriter";}
+p.TopicsCoveredbox, li.TopicsCoveredbox, div.TopicsCoveredbox
+	{mso-style-name:"Topics Covered box";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:0in;
+	background:#DBE5F1;
+	border:none;
+	padding:0in;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.TopicsCoveredboxCxSpFirst, li.TopicsCoveredboxCxSpFirst, div.TopicsCoveredboxCxSpFirst
+	{mso-style-name:"Topics Covered boxCxSpFirst";
+	margin:0in;
+	margin-bottom:.0001pt;
+	background:#DBE5F1;
+	border:none;
+	padding:0in;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.TopicsCoveredboxCxSpMiddle, li.TopicsCoveredboxCxSpMiddle, div.TopicsCoveredboxCxSpMiddle
+	{mso-style-name:"Topics Covered boxCxSpMiddle";
+	margin:0in;
+	margin-bottom:.0001pt;
+	background:#DBE5F1;
+	border:none;
+	padding:0in;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.TopicsCoveredboxCxSpLast, li.TopicsCoveredboxCxSpLast, div.TopicsCoveredboxCxSpLast
+	{mso-style-name:"Topics Covered boxCxSpLast";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:0in;
+	background:#DBE5F1;
+	border:none;
+	padding:0in;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.CodeExample, li.CodeExample, div.CodeExample
+	{mso-style-name:"Code Example";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:12.0pt;
+	margin-left:0in;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:9.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.CodeExampleCxSpFirst, li.CodeExampleCxSpFirst, div.CodeExampleCxSpFirst
+	{mso-style-name:"Code ExampleCxSpFirst";
+	margin:0in;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:9.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.CodeExampleCxSpMiddle, li.CodeExampleCxSpMiddle, div.CodeExampleCxSpMiddle
+	{mso-style-name:"Code ExampleCxSpMiddle";
+	margin:0in;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:9.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.CodeExampleCxSpLast, li.CodeExampleCxSpLast, div.CodeExampleCxSpLast
+	{mso-style-name:"Code ExampleCxSpLast";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:12.0pt;
+	margin-left:0in;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:9.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.SourceCode, li.SourceCode, div.SourceCode
+	{mso-style-name:"Source Code";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:12.0pt;
+	margin-left:0in;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:9.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.SourceCodeCxSpFirst, li.SourceCodeCxSpFirst, div.SourceCodeCxSpFirst
+	{mso-style-name:"Source CodeCxSpFirst";
+	margin:0in;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:9.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.SourceCodeCxSpMiddle, li.SourceCodeCxSpMiddle, div.SourceCodeCxSpMiddle
+	{mso-style-name:"Source CodeCxSpMiddle";
+	margin:0in;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:9.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.SourceCodeCxSpLast, li.SourceCodeCxSpLast, div.SourceCodeCxSpLast
+	{mso-style-name:"Source CodeCxSpLast";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:12.0pt;
+	margin-left:0in;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:9.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.SampleRun, li.SampleRun, div.SampleRun
+	{mso-style-name:"Sample Run";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:12.0pt;
+	margin-left:0in;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:9.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.SampleRunCxSpFirst, li.SampleRunCxSpFirst, div.SampleRunCxSpFirst
+	{mso-style-name:"Sample RunCxSpFirst";
+	margin:0in;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:9.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.SampleRunCxSpMiddle, li.SampleRunCxSpMiddle, div.SampleRunCxSpMiddle
+	{mso-style-name:"Sample RunCxSpMiddle";
+	margin:0in;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:9.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.SampleRunCxSpLast, li.SampleRunCxSpLast, div.SampleRunCxSpLast
+	{mso-style-name:"Sample RunCxSpLast";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:12.0pt;
+	margin-left:0in;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:9.0pt;
+	font-family:"Lucida Sans Typewriter";}
+span.SampleRunResponse
+	{mso-style-name:"Sample Run Response";
+	color:#1F497D;
+	font-weight:bold;}
+span.SourceLineNumber
+	{mso-style-name:"Source Line Number";
+	color:#7F7F7F;}
+span.SourceCodeComment
+	{mso-style-name:"Source Code Comment";
+	color:#7F7F7F;}
+span.HeaderChar
+	{mso-style-name:"Header Char";
+	mso-style-link:Header;
+	font-family:"Times New Roman","serif";}
+span.FooterChar
+	{mso-style-name:"Footer Char";
+	mso-style-link:Footer;
+	font-family:"Times New Roman","serif";}
+p.TableHeading, li.TableHeading, div.TableHeading
+	{mso-style-name:"Table Heading";
+	margin:0in;
+	margin-bottom:.0001pt;
+	text-align:center;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";
+	font-weight:bold;}
+p.TableListing, li.TableListing, div.TableListing
+	{mso-style-name:"Table Listing";
+	margin:0in;
+	margin-bottom:.0001pt;
+	text-align:center;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.ImportantNote, li.ImportantNote, div.ImportantNote
+	{mso-style-name:"Important Note";
+	margin-top:0in;
+	margin-right:.5in;
+	margin-bottom:8.0pt;
+	margin-left:.5in;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+span.StrongBoxed
+	{mso-style-name:"Strong & Boxed";
+	border:solid windowtext 1.0pt;
+	padding:0in;
+	font-weight:bold;}
+span.TitleChar
+	{mso-style-name:"Title Char";
+	mso-style-link:Title;
+	font-family:"Franklin Gothic Demi","sans-serif";
+	letter-spacing:.25pt;}
+p.ChapterNumber, li.ChapterNumber, div.ChapterNumber
+	{mso-style-name:"Chapter Number";
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:26.0pt;
+	font-family:"Franklin Gothic Demi","sans-serif";}
+p.Body, li.Body, div.Body
+	{mso-style-name:Body;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:8.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.BodyFirst, li.BodyFirst, div.BodyFirst
+	{mso-style-name:"Body First";
+	margin:0in;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+span.Keycap
+	{mso-style-name:Keycap;
+	font-variant:small-caps;
+	color:blue;}
+span.FigureImageBorder
+	{mso-style-name:"Figure Image Border";
+	border:solid windowtext 1.0pt;
+	padding:0in;}
+p.SourceCodeFilename, li.SourceCodeFilename, div.SourceCodeFilename
+	{mso-style-name:"Source Code Filename";
+	margin:0in;
+	margin-bottom:.0001pt;
+	text-align:right;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:12.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.SourceCodeFilenameCxSpFirst, li.SourceCodeFilenameCxSpFirst, div.SourceCodeFilenameCxSpFirst
+	{mso-style-name:"Source Code FilenameCxSpFirst";
+	margin:0in;
+	margin-bottom:.0001pt;
+	text-align:right;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:12.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.SourceCodeFilenameCxSpMiddle, li.SourceCodeFilenameCxSpMiddle, div.SourceCodeFilenameCxSpMiddle
+	{mso-style-name:"Source Code FilenameCxSpMiddle";
+	margin:0in;
+	margin-bottom:.0001pt;
+	text-align:right;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:12.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.SourceCodeFilenameCxSpLast, li.SourceCodeFilenameCxSpLast, div.SourceCodeFilenameCxSpLast
+	{mso-style-name:"Source Code FilenameCxSpLast";
+	margin:0in;
+	margin-bottom:.0001pt;
+	text-align:right;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:12.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.Non-TOCHeading3, li.Non-TOCHeading3, div.Non-TOCHeading3
+	{mso-style-name:"Non-TOC Heading 3";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:14.0pt;
+	font-family:"Calibri","sans-serif";
+	color:#1F497D;
+	font-weight:bold;
+	font-style:italic;}
+.MsoChpDefault
+	{font-family:"Calibri","sans-serif";}
+.MsoPapDefault
+	{margin-bottom:10.0pt;
+	line-height:115%;}
+ /* Page Definitions */
+ @page WordSection1
+	{size:8.0in 10.0in;
+	margin:1.0in 1.0in 1.0in 1.0in;}
+div.WordSection1
+	{page:WordSection1;}
+ /* List Definitions */
+ ol
+	{margin-bottom:0in;}
+ul
+	{margin-bottom:0in;}
+-->
+</style>
+
+</head>
+
+<body lang=EN-US link=blue vlink=purple>
+
+<div class=WordSection1>
+
+<table class=MsoTableGrid border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse;border:none'>
+ <tr>
+  <td width=101 rowspan=2 valign=top style='width:60.85pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=ChapterNumber><img width=84 height=96 id="Picture 137"
+  src="1_files/image001.jpg"></p>
+  </td>
+  <td width=637 valign=top style='width:381.95pt;border:none;border-bottom:
+  solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=ChapterNumber>Capítulo 1</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=637 valign=top style='width:381.95pt;border:none;padding:0in 5.4pt 0in 5.4pt'>
+  <h1 style='line-height:normal'><a name="_Toc405145034"><span
+  style='font-variant:normal !important;text-transform:uppercase'>Instalando
+  Python</span></a></h1>
+  </td>
+ </tr>
+</table>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt;
+background:#DBE5F1'>
+
+<p class=TopicsCoveredboxCxSpFirst style='background:#DBE5F1;border:none;
+padding:0in'>Temas Tratados En Este Capítulo:</p>
+
+<p class=TopicsCoveredboxCxSpMiddle style='margin-left:.25in;text-indent:-.25in;
+background:#DBE5F1;border:none;padding:0in'><span style='font-family:Symbol'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span>Descargar e instalar el intérprete de Python</p>
+
+<p class=TopicsCoveredboxCxSpMiddle style='margin-left:.25in;text-indent:-.25in;
+background:#DBE5F1;border:none;padding:0in'><span style='font-family:Symbol'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span>Cómo usar este libro</p>
+
+<p class=TopicsCoveredboxCxSpLast style='margin-left:.25in;text-indent:-.25in;
+background:#DBE5F1;border:none;padding:0in'><span style='font-family:Symbol'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span>La página web de este libro en <span class=URL><u>http://inventwithpython.com/es</u></span></p>
+
+</div>
+
+<p class=Body>¡Hola! Este libro te enseñará a programar creando videojuegos.
+Una vez que aprendas cómo funcionan los juegos en este libro, serás capaz de
+crear tus propios juegos. Todo lo que necesitas es una computadora, un software
+llamado el intérprete de Python, y este libro. El intérprete de Python es libre
+para descargar de Internet.</p>
+
+<p class=Body>Cuando era niño, un libro como este me enseñó cómo escribir mis
+primeros programas y juegos. Era divertido y fácil. Ahora, siendo un adulto,
+sigo divirtiéndome programando y me pagan por hacerlo. Pero incluso si no te
+conviertes en un programador cuando crezcas, programar es una habilidad
+divertida y útil para tener.</p>
+
+<p class=Body>Las computadoras son máquinas increíbles, y aprender a
+programarlas no es tan difícil como la gente cree. Si puedes leer este libro,
+puedes programar una computadora. Un <span class=Definition>programa de
+computadora</span> es un conjunto de instrucciones que la computadora puede
+entender, igual que un libro de cuentos es un conjunto de oraciones que el
+lector entiende. Ya que los videojuegos no son más que programas de
+computadora, también están compuestos por instrucciones.<a name="_Toc405145035"></a></p>
+
+<p class=Body>Para dar instrucciones a una computadora, escribes un programa en
+un lenguaje que la computadora comprende. Este libro enseña un lenguaje de
+programación llamado Python. Hay muchos otros lenguajes de programación,
+incluyendo BASIC, Java, JavaScript, PHP y C++.</p>
+
+<p class=Body>Cuando era niño, era común aprender BASIC como un primer
+lenguaje. Sin embargo, nuevos lenguajes de programación tales como Python han
+sido inventados desde entonces. ¡Python es aún más fácil de aprender que BASIC!
+Pero sigue siendo un lenguaje de programación muy útil utilizado por
+programadores profesionales. Muchos adultos usan Python en su trabajo y cuando
+programan por diversión.</p>
+
+<p class=Body>Los juegos que crearás a partir de este libro parecen simples
+comparados con los juegos para Xbox, PlayStation, o Nintendo. Estos juegos no
+tienen gráficos sofisticados porque están pensados para enseñar conceptos
+básicos de programación. Son deliberadamente sencillos de modo que puedas
+enfocarte en aprender a programar. Los juegos no precisan ser complicados para
+ser divertidos.</p>
+
+<h2>Descargar e Instalar Python</h2>
+
+<p class=Body>Necesitarás instalar un software llamado el intérprete de Python.
+<span class=Definition>El programa intérprete</span> entiende las instrucciones
+que escribirás en lenguaje Python. De ahora en adelante me referiré al
+&quot;software intérprete de Python&quot; simplemente como &quot;Python&quot;.</p>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt;
+margin-left:.5in;margin-right:.5in'>
+
+<p class=ImportantNote style='margin-top:0in;margin-right:0in;margin-bottom:
+8.0pt;margin-left:0in'><strong>¡Nota importante!</strong> Asegúrate de instalar
+Python 3, y no Python 2. Los programas en este libro usan Python 3, y obtendrás
+errores si intentas ejecutarlos con Python 2. Esto es tan importante que he
+agregado la caricatura de un pingüino en la Figura 1-1 para decirte que
+instales Python 3 así no te pierdes este mensaje.</p>
+
+</div>
+
+<p class=MsoNormal align=center style='text-align:center'><img width=327
+height=292 id="Picture 23" src="1_files/image002.png"></p>
+
+<p class=MsoCaption>Figura 1-1: Un pingüino extravagante te dice que instales Python
+3.</p>
+
+<p class=Body>Si usas Windows, descarga el instalador de Python (el archivo
+tendrá la extensión .msi) y haz doble clic sobre él. Sigue las instrucciones
+que el instalador muestra en pantalla:</p>
+
+<p class=Body style='margin-left:.5in;text-indent:-.25in'>1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Selecciona
+Instalar para Todos los Usuarios y haz clic en <strong>Next</strong> (Siguiente).</p>
+
+<p class=Body style='margin-left:.5in;text-indent:-.25in'>2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Elige
+<em>C:\Python34</em> como carpeta de instalación haciendo clic en <strong>Next</strong>
+(Siguiente).</p>
+
+<p class=Body style='margin-left:.5in;text-indent:-.25in'>3.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Haz
+clic en <strong>Next</strong> (Siguiente) para omitir la sección de
+configuración de Python.</p>
+
+<p class=Body>Si usas Mac OS X, descarga el archivo <em>.dmg</em> indicado para
+tu versión de OS X del sitio web y haz doble clic sobre él. Sigue las
+instrucciones que el instalador muestra en pantalla:</p>
+
+<p class=Body style='margin-left:.5in;text-indent:-.25in'>1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Cuando
+el paquete DMG se abra en una nueva ventana, haz doble clic sobre el archivo <em>Python.mpkg</em>.
+Es posible que necesites ingresar la clave de administrador.</p>
+
+<p class=Body style='margin-left:.5in;text-indent:-.25in'>2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Haz
+clic en <strong>Continue</strong> (Continuar) para pasar la sección Bienvenido
+y en <strong>Agree</strong> (Aceptar) para aceptar la licencia.</p>
+
+<p class=Body style='margin-left:.5in;text-indent:-.25in'>3.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Selecciona
+HD Macintosh (o como sea que se llame tu disco rígido) y haz clic en <strong>Install</strong>
+(Instalar).</p>
+
+<p class=Body>Si usas Ubuntu, puedes instalar Python del Centro de Software de
+Ubuntu siguiendo estos pasos:</p>
+
+<p class=Body style='margin-left:.5in;text-indent:-.25in'>1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Abre
+el Centro de Software de Ubuntu.</p>
+
+<p class=Body style='margin-left:.5in;text-indent:-.25in'>2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Escribe
+<em>Python</em> en el cuadro de búsqueda en la esquina superior derecha de la
+ventana.</p>
+
+<p class=Body style='margin-left:.5in;text-indent:-.25in'>3.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Elige
+<strong>IDLE (using Python 3.4)</strong>, o la que sea la última versión en
+este momento.</p>
+
+<p class=Body style='margin-left:.5in;text-indent:-.25in'>4.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Haz
+clic en <strong>Install</strong> (Instalar). Tal vez necesites la clave de
+administrador para completar la instalación.</p>
+
+<h2>Iniciando IDLE</h2>
+
+<p class=Body>La sigla IDLE (<strong>I</strong>nteractive <strong>D</strong>eve<strong>L</strong>opment
+<strong>E</strong>nvironment en inglés) significa Entorno Interactivo de Desarrollo.
+El entorno de desarrollo es como un software procesador de palabras para
+escribir programas de Python. Iniciar IDLE es diferente para cada sistema
+operativo.</p>
+
+<p class=Body>Sobre Windows, haz clic en el botón Inicio en la esquina inferior
+izquierda, teclea “IDLE” y selecciona <strong>IDLE (Python GUI)</strong>.</p>
+
+<p class=Body>Sobre Mac OS X, abre la ventana de Finder y haz clic en <strong>Applications</strong>.
+Luego haz clic en <strong>Python 3.4</strong>. Luego clic sobre el ícono de
+IDLE.</p>
+
+<p class=Body>Sobre Ubuntu o Linux, abre una terminal y teclea “idle3”. También
+puede ser posible hacer clic en <strong>Applications</strong> en el borde
+superior de la pantalla. Luego haz clic sobre <strong>Programming</strong> y
+después <strong>IDLE 3</strong>.</p>
+
+<p class=Body>La ventana que aparece la primera vez que ejecutas IDLE es <span
+class=Definition>la consola interactiva</span>, como se muestra en la Figura
+1-2. Puedes ingresar instrucciones de Python en la consola interactiva a a la
+derecha del prompt <span class=Literal><span style='font-size:9.0pt;line-height:
+115%'>&gt;&gt;&gt;</span></span> y Python las ejecutará. Luego de mostrar los
+resultados de la instrucción, un nuevo prompt <span class=Literal><span
+style='font-size:9.0pt;line-height:115%'>&gt;&gt;&gt;</span></span> estará
+esperando por tu próxima instrucción.</p>
+
+<p class=MsoNormal align=center style='text-align:center'><img width=184
+height=180 id="Picture 1" src="1_files/image003.jpg">  <img width=241
+height=181 id="Picture 2" src="1_files/image004.jpg">  <img width=240
+height=179 id="Picture 3" src="1_files/image005.jpg"></p>
+
+<p class=MsoCaption>Figure 1-2: La consola interactiva del programa IDLE en
+Windows, OS X, y Ubuntu Linux.</p>
+
+<h2>Cómo Usar este Libro</h2>
+
+<p class=Body>La mayoría de los capítulos en este libro comenzará con una
+muestra de ejecución del programa presentado en el capítulo en cuestión. Esta
+demostración revela cómo se ve el programa cuando lo ejecutas. El texto
+introducido por el usuario se <strong>muestra en negrita</strong>.</p>
+
+<p class=Non-TOCHeading3><span style='font-size:11.0pt;line-height:115%;
+font-family:"Times New Roman","serif";color:windowtext;font-weight:normal;
+font-style:normal'>Teclea tú mismo el código del programa en el editor de
+archivos de IDLE, en lugar de descargarlo o copiarlo y pegarlo. Recordarás
+mejor cómo programar si te tomas el tiempo para escribir tú mismo el código.</span></p>
+
+<p class=Non-TOCHeading3>Números de Línea y Espacios</p>
+
+<p class=Body>Al teclear el código de este libro, <strong>no escribas</strong>
+los números de línea que aparecen al principio de cada línea. Por ejemplo, si
+ves esto en el libro:</p>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=CodeExample style='border:none;padding:0in'>9. número =
+random.randint(1, 20)</p>
+
+</div>
+
+<p class=Body>o necesitas teclear el “9.” a la izquierda, o el espacio a
+continuación. Sólo tecléalo así:</p>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=CodeExample style='border:none;padding:0in'>número = random.randint(1,
+20)</p>
+
+</div>
+
+<p class=Body>Esos números están ahí sólo para que este libro pueda referir a
+líneas específicas del programa. No son parte del código fuente de un programa
+real.</p>
+
+<p class=Body>Aparte de los números de línea, escribe el código exactamente
+como aparece. Ten en cuenta que algunas de las líneas de código están
+indentadas por cuatro u ocho espacios. Cada caracter en IDLE ocupa el mismo
+ancho, de modo que puedes contar el número de espacios contando el número de
+caracteres en las líneas arriba o abajo.</p>
+
+<p class=Body>Por ejemplo, los espacios indentados aquí están marcados con un
+&#9642; cuadrado negro para que puedas verlos:</p>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=CodeExampleCxSpFirst style='border:none;padding:0in'>while intentos &lt;
+10:</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+style='font-family:"Courier New"'>&#9642;&#9642;&#9642;&#9642;</span>if número ==
+42:</p>
+
+<p class=CodeExampleCxSpLast style='border:none;padding:0in'><span
+style='font-family:"Courier New"'>&#9642;&#9642;&#9642;&#9642;&#9642;&#9642;&#9642;&#9642;</span>print('Hola')</p>
+
+</div>
+
+<p class=Non-TOCHeading3>Ajuste de Texto en Este Libro</p>
+
+<p class=Body>Algunas instrucciones son demasiado largas para caber en una línea
+de la página por lo que continuarán en la línea siguiente. Al tipear este
+código, escríbelo todo en una línea sin pulsar Intro. Puedes darte cuenta
+cuándo comienza una nueva instrucción mirando los números de línea a la
+izquierda del código. El ejemplo mostrado a continuación contiene sólo dos
+líneas:</p>
+
+<div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
+
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>1.</span> print(¡Esta
+es la primera instrucción! xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</p>
+
+<p class=SourceCodeCxSpMiddle>xxxxxxxxxxxx')</p>
+
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>2.</span> print('Esta
+es la segunda instrucción, no la tercera.')</p>
+
+</div>
+
+<p class=Body>La primera instrucción continúa en el siguiente renglón y da el
+aspecto de que hubiera tres instrucciones en total. Esto es sólo porque las
+páginas de este libro no son lo suficientemente anchas para contener la primera
+instrucción en una sola línea de texto.</p>
+
+<h2>Buscando Ayuda Online</h2>
+
+<p class=MsoNormal>El sitio web de este libro es <span class=URL><u>http://inventwithpython.com/es</u></span>.
+Puedes encontrar varios recursos relacionados con este libro allí. Varios
+enlaces de este libro utilizan el dominio <span class=URL><u>invpy.com</u></span>
+para direcciones URL acortadas.</p>
+
+<p class=MsoNormal>El sitio web en <span class=URL><u>http://reddit.com/r/inventwithpython</u></span>
+es un lugar estupendo para para hacer preguntas de programación relacionadas
+con este libro. Publica preguntas generales sobre Python en los sitios web
+LearnProgramming y LearnPython en <span class=URL><u>http://reddit.com/r/learnprogramming</u></span>
+y <span class=URL><u>http://reddit.com/r/learnpython</u></span> respectivamente.
+<span class=URL><u>http://translate.google.com</u></span> puede realizar la
+traducción de Inglés para usted.</p>
+
+<p class=MsoNormal>Asimismo, envíame por correo electrónico tus preguntas de
+programación a <em>al@inventwithpython.com</em>.</p>
+
+<p class=MsoNormal>Ten presente que hay formas inteligentes para hacer
+preguntas de programación que ayudan otros a ayudarte. Asegúrate de leer las
+secciones de Preguntas Frecuentes que estos sitios web tienen acerca de la
+forma correcta de publicar preguntas. Cuando hagas preguntas de programación,
+haz lo siguiente:</p>
+
+<p class=MsoListParagraphCxSpFirst style='text-indent:-.25in'><span
+style='font-family:Symbol'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span>Si estás escribiendo a mano los programas de este libro y
+obtienes un error, primero busca errores tipográficos con la herramienta diff
+en <span class=URL><u>http://invpy.com/es/diff</u></span>. Copia y pega tu
+código en la herramienta diff para encontrar las diferencias entre el código
+del libro y tu programa.</p>
+
+<p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in'><span
+style='font-family:Symbol'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span>Explica lo que estás intentando hacer cuando expliques el error.
+Esto permitirá a quien te ayuda saber si estás equivocándote por completo.</p>
+
+<p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in'><span
+style='font-family:Symbol'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span>Copia y pega el mensaje de error completo y tu código.</p>
+
+<p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in'><span
+style='font-family:Symbol'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span>Busca en la web para ver si alguien ya ha formulado (y
+respondido) tu pregunta.</p>
+
+<p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in'><span
+style='font-family:Symbol'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span>Explica lo que ya has intentado hacer para resolver tu problema.
+Esto muestra a la gente que ya has hecho algo de trabajo para tratar de
+entender las cosas por tí mismo.</p>
+
+<p class=MsoListParagraphCxSpLast style='text-indent:-.25in'><span
+style='font-family:Symbol'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span>Sé amable. No exijas ayuda o presiones a quienes te ayudan para
+que respondan rápido.</p>
+
+<p class=Body>Preguntar a alguien, “¿Por qué no está funcionando mi programa?”
+no le brinda ninguna información. Comunica a la persona qué es lo que estás
+intentando hacer, exactamente qué mensaje de error obtienes y qué versión de
+sistema operativo estás usando.</p>
+
+<h2>Resumen</h2>
+
+<p class=Body>Este capítulo te ha ayudado a comenzar con el software Python
+mostrándote el sitio web <span class=URL><u>http://python.org</u></span>, de
+donde puedes descargarlo gratis. Luego de instalar y lanzar el software Python
+IDLE, estarás listo para aprender a programar a comenzando en el próximo
+capítulo.</p>
+
+<p class=Body>El sitio web de este libro en <span class=URL><u>http://inventwithpython.com/es</u></span>
+contiene más información sobre cada uno de los capítulos, incluyendo un sitio
+web de trazado en línea y una herramienta diff que puede ayudarte a entender
+los programas de este libro.</p>
+
+</div>
+
+</body>
+
+</html>
