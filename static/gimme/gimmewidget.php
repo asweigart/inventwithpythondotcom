@@ -2,7 +2,7 @@
 
 include "config.php";
 
-@mysql_connect($sql_host, $sql_user, $sql_pass); 
+@mysql_connect($sql_host, $sql_user, $sql_pass);
 @mysql_select_db($sql_name);
 
 $sql = mysql_query("SELECT * FROM {$GLOBALS['PURCHASE_TABLE']} ORDER BY id DESC LIMIT {$GLOBALS['WIDGET_ITEMS']}") or die(mysql_error());
@@ -25,7 +25,7 @@ $info[comment] = addslashes($info[comment]);
 
 
 print <<<HTML
-	document.write("<img id=\"{$info[itemid]}\" style=\"\" onmouseover=\"document.getElementById('gimme-message').innerHTML = '{$info['comment']}';\" onmouseout=\"document.getElementById('gimme-message').innerHTML = '{$defaultText}';\" src=\"{$GLOBALS['ROOT']}/images/icon{$info[itemid]}-small.png\" />");
+	document.write("<img id=\"{$info[itemid]}\" style=\"\" onmouseover=\"document.getElementById('gimme-message').innerHTML = '{$info['comment']}';\" onmouseout=\"document.getElementById('gimme-message').innerHTML = '{$defaultText}';\" src=\"/gimmie/images/icon{$info[itemid]}-small.png\" />");
 HTML;
 
 $info = mysql_fetch_array($sql);
