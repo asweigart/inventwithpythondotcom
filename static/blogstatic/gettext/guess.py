@@ -3,9 +3,6 @@ import random
 import gettext
 es = gettext.translation('guess', localedir='locale', languages=['es'])
 es.install()
-#en = gettext.translation()
-#en.install()
-
 
 guessesTaken = 0
 
