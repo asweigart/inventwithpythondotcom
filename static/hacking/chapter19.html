@@ -1,7 +1,7 @@
 <html>
 
 <head>
-<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta http-equiv=Content-Type content="text/html; charset=UTF-8">
 <meta name=Generator content="Microsoft Word 14 (filtered)">
 <style>
 <!--
@@ -829,12 +829,12 @@ ul
 <div class=WordSection1>
 
 <p class=MsoNormal align=center style='text-align:center'><img width=327
-height=180 id="Picture 57" src="chapter19_files/image001.jpg"> </p>
+height=180 id="Picture 57" src="chapter19_files/image001.jpg">Â </p>
 
 <div style='border:none;border-bottom:solid #4F81BD 1.0pt;padding:0in 0in 1.0pt 0in'>
 
 <h1><a name="_Toc353630879"><span style='font-variant:normal !important;
-text-transform:uppercase'>The Vigenère Cipher</span></a></h1>
+text-transform:uppercase'>The VigenÃ¨re Cipher</span></a></h1>
 
 </div>
 
@@ -845,19 +845,19 @@ background:#DBE5F1'>
 padding:0in'>Topics Covered In This Chapter:</p>
 
 <p class=TopicsCoveredboxCxSpLast style='margin-left:.25in;text-indent:-.25in;
-background:#DBE5F1;border:none;padding:0in'><span style='font-family:Symbol'>·<span
+background:#DBE5F1;border:none;padding:0in'><span style='font-family:Symbol'>Â·<span
 style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 </span></span>Subkeys</p>
 
 </div>
 
-<p class=ChapterQuotesCxSpFirst>“I believed then, and continue to believe now,
+<p class=ChapterQuotesCxSpFirst>â€œI believed then, and continue to believe now,
 that the benefits to our security and freedom of widely available cryptography
 far, far outweigh the inevitable damage that comes from its use by criminals
 and terrorists... I believed, and continue to believe, that the arguments
 against widely available cryptography, while certainly advanced by people of
 good will, did not hold up against the cold light of reason and were
-inconsistent with the most basic American values.”</p>
+inconsistent with the most basic American values.â€</p>
 
 <p class=ChapterQuotesCxSpMiddle>&nbsp;</p>
 
@@ -865,17 +865,17 @@ inconsistent with the most basic American values.”</p>
 style='font-size:11.0pt;line-height:115%'>Matt Blaze, AT&amp;T Labs, September
 2001</span></p>
 
-<h2><a name="_Toc353630880">Le Chiffre Indéchiffrable</a></h2>
+<h2><a name="_Toc353630880">Le Chiffre IndÃ©chiffrable</a></h2>
 
-<p class=MsoNormal>The Vigenère cipher is a stronger cipher than the ones we’ve
+<p class=MsoNormal>The VigenÃ¨re cipher is a stronger cipher than the ones weâ€™ve
 seen before. There are too many possible keys to brute-force, even with English
 detection. It cannot be broken with the word pattern attack that worked on the
 simple substitution cipher. It was possibly first described in 1553 by Italian
 cryptographer Giovan Battista Bellaso (though it has been reinvented many
-times, including by Blaise de Vigenère). It is thought to have remained
+times, including by Blaise de VigenÃ¨re). It is thought to have remained
 unbroken until Charles Babbage, considered to be the father of computers, broke
-it in the 19<sup>th</sup> century. It was called “le chiffre indéchiffrable”,
-French for “the indecipherable cipher”.</p>
+it in the 19<sup>th</sup> century. It was called â€œle chiffre indÃ©chiffrableâ€,
+French for â€œthe indecipherable cipherâ€.</p>
 
 <table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
  style='border-collapse:collapse'>
@@ -894,7 +894,7 @@ French for “the indecipherable cipher”.</p>
  <tr style='height:32.45pt'>
   <td width=344 valign=top style='width:257.7pt;padding:0in 5.4pt 0in 5.4pt;
   height:32.45pt'>
-  <p class=FigureCaptionCxSpFirst>Figure 19-1. Blaise de Vigenère</p>
+  <p class=FigureCaptionCxSpFirst>Figure 19-1. Blaise de VigenÃ¨re</p>
   <p class=FigureCaptionCxSpMiddle>April 5, 1523 - 1596</p>
   </td>
   <td width=247 valign=top style='width:185.1pt;padding:0in 5.4pt 0in 5.4pt;
@@ -905,13 +905,13 @@ French for “the indecipherable cipher”.</p>
  </tr>
 </table>
 
-<h2><a name="_Toc353630881">Multiple “Keys” in the Vigenère Key</a></h2>
+<h2><a name="_Toc353630881">Multiple â€œKeysâ€ in the VigenÃ¨re Key</a></h2>
 
-<p class=MsoNormal>The Vigenère cipher is similar to the Caesar cipher, except
+<p class=MsoNormal>The VigenÃ¨re cipher is similar to the Caesar cipher, except
 with multiple keys. Because it uses more than one set of substitutions, it is
 also called a <span class=Definition><span style='font-size:12.0pt;line-height:
 115%'>polyalphabetic substitution cipher</span></span>. Remember that the Caesar
-cipher had a key from 0 to 25. For the Vigenère cipher, instead of using a
+cipher had a key from 0 to 25. For the VigenÃ¨re cipher, instead of using a
 numeric key, we will use a letter key. The letter A will be used for key 0. The
 letter B will be used for key 1, and so on up to Z for the key 25.</p>
 
@@ -1175,27 +1175,27 @@ letter B will be used for key 1, and so on up to Z for the key 25.</p>
 
 <p class=MsoNormal>&nbsp;</p>
 
-<p class=MsoNormal>The key in a Vigenère cipher is a series of letters, such as
+<p class=MsoNormal>The key in a VigenÃ¨re cipher is a series of letters, such as
 a single English word. <strong>This single word key will be split into multiple
-subkeys.</strong> If we use a Vigenère key of “PIZZA”, then the first subkey is
+subkeys.</strong> If we use a VigenÃ¨re key of â€œPIZZAâ€, then the first subkey is
 P, the second subkey is I, the third and fourth subkeys are both Z and the
 fifth subkey is A. We will use the first subkey to encrypt the first letter of
 the plaintext, and the second subkey to encrypt the second letter, and so on.
 When we get to the sixth letter of the plaintext, we will go back to using the <em>first</em>
 subkey.</p>
 
-<p class=MsoNormal><strong>The Vigenère cipher is the same as using multiple
+<p class=MsoNormal><strong>The VigenÃ¨re cipher is the same as using multiple
 Caesar ciphers in the same message.</strong></p>
 
 <p class=FigureCaption>Figure 19-3. Multiple Caesar ciphers combine to make the
-Vigenère cipher</p>
+VigenÃ¨re cipher</p>
 
 <p class=MsoNormal align=center style='text-align:center'><img width=523
 height=125 id="Picture 14" src="chapter19_files/image004.jpg"></p>
 
 <p class=MsoNormal>The following shows which subkey will encrypt which letters
-in the message, “Common sense is not so common.” with the Vigenère key,
-“PIZZA”.</p>
+in the message, â€œCommon sense is not so common.â€ with the VigenÃ¨re key,
+â€œPIZZAâ€.</p>
 
 <div style='border:solid #404040 1.0pt;padding:6.0pt 4.0pt 6.0pt 4.0pt'>
 
@@ -1585,26 +1585,26 @@ encryption.</p>
 
 <p class=MsoNormal>&nbsp;</p>
 
-<p class=MsoNormal>So using the Vigenère cipher with the key “PIZZA” (which is
-made up of the subkeys 15, 8, 25, 25, 0) the plaintext “Common sense is not so
-common.” becomes the ciphertext “Rwlloc admst qr moi an bobunm.”</p>
+<p class=MsoNormal>So using the VigenÃ¨re cipher with the key â€œPIZZAâ€ (which is
+made up of the subkeys 15, 8, 25, 25, 0) the plaintext â€œCommon sense is not so
+common.â€ becomes the ciphertext â€œRwlloc admst qr moi an bobunm.â€</p>
 
-<p class=MsoNormal>The more letters in the Vigenère key, the stronger the
-encrypted message will be against a brute-force attack. The choice of “PIZZA”
-is a poor one for a Vigenère key, because it only has five letters. A key with
-only five letters has 11,881,376 possible combinations. (26 ^ 5 = 26 × 26 × 26 ×
-26 × 26 = 11,881,376) Eleven million keys is far too many for a human to try
+<p class=MsoNormal>The more letters in the VigenÃ¨re key, the stronger the
+encrypted message will be against a brute-force attack. The choice of â€œPIZZAâ€
+is a poor one for a VigenÃ¨re key, because it only has five letters. A key with
+only five letters has 11,881,376 possible combinations. (26 ^ 5 = 26 Ã— 26 Ã— 26 Ã—
+26 Ã— 26 = 11,881,376) Eleven million keys is far too many for a human to try
 out, but a computer could try them all in a few hours. It would first try to
-decrypt the message with the key “AAAAA” and check if the resulting decryption
-was in English. Then it could try “AAAAB”, then “AAAAC”, until it got to
-“PIZZA”.</p>
+decrypt the message with the key â€œAAAAAâ€ and check if the resulting decryption
+was in English. Then it could try â€œAAAABâ€, then â€œAAAACâ€, until it got to
+â€œPIZZAâ€.</p>
 
 <p class=MsoNormal>The good news is that for every additional letter the key
 has, the number of possible keys multiplies by 26. Once there are quadrillions
 of possible keys, it would take a computer years to break. Table 19-2 shows how
 many possible keys there are for each length:</p>
 
-<p class=TableCaption>Table 19-2. Number of possible keys based on Vigenère key
+<p class=TableCaption>Table 19-2. Number of possible keys based on VigenÃ¨re key
 length.</p>
 
 <table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
@@ -1642,7 +1642,7 @@ length.</p>
   <p class=TableListing>2</p>
   </td>
   <td width=222 valign=top style='width:166.5pt;padding:0in 5.4pt 0in 5.4pt'>
-  <p class=TableListing align=left style='text-align:left'>26 × 26</p>
+  <p class=TableListing align=left style='text-align:left'>26 Ã— 26</p>
   </td>
   <td width=271 valign=top style='width:203.4pt;padding:0in 5.4pt 0in 5.4pt'>
   <p class=TableListing align=left style='text-align:left'>= 676</p>
@@ -1653,7 +1653,7 @@ length.</p>
   <p class=TableListing>3</p>
   </td>
   <td width=222 valign=top style='width:166.5pt;padding:0in 5.4pt 0in 5.4pt'>
-  <p class=TableListing align=left style='text-align:left'>676 × 26</p>
+  <p class=TableListing align=left style='text-align:left'>676 Ã— 26</p>
   </td>
   <td width=271 valign=top style='width:203.4pt;padding:0in 5.4pt 0in 5.4pt'>
   <p class=TableListing align=left style='text-align:left'>= 17,576</p>
@@ -1664,7 +1664,7 @@ length.</p>
   <p class=TableListing>4</p>
   </td>
   <td width=222 valign=top style='width:166.5pt;padding:0in 5.4pt 0in 5.4pt'>
-  <p class=TableListing align=left style='text-align:left'>17,576 × 26</p>
+  <p class=TableListing align=left style='text-align:left'>17,576 Ã— 26</p>
   </td>
   <td width=271 valign=top style='width:203.4pt;padding:0in 5.4pt 0in 5.4pt'>
   <p class=TableListing align=left style='text-align:left'>= 456,976</p>
@@ -1675,7 +1675,7 @@ length.</p>
   <p class=TableListing>5</p>
   </td>
   <td width=222 valign=top style='width:166.5pt;padding:0in 5.4pt 0in 5.4pt'>
-  <p class=TableListing align=left style='text-align:left'>456,976 × 26</p>
+  <p class=TableListing align=left style='text-align:left'>456,976 Ã— 26</p>
   </td>
   <td width=271 valign=top style='width:203.4pt;padding:0in 5.4pt 0in 5.4pt'>
   <p class=TableListing align=left style='text-align:left'>= 11,881,376</p>
@@ -1686,7 +1686,7 @@ length.</p>
   <p class=TableListing>6</p>
   </td>
   <td width=222 valign=top style='width:166.5pt;padding:0in 5.4pt 0in 5.4pt'>
-  <p class=TableListing align=left style='text-align:left'>11,881,376 × 26</p>
+  <p class=TableListing align=left style='text-align:left'>11,881,376 Ã— 26</p>
   </td>
   <td width=271 valign=top style='width:203.4pt;padding:0in 5.4pt 0in 5.4pt'>
   <p class=TableListing align=left style='text-align:left'>= 308,915,776</p>
@@ -1697,7 +1697,7 @@ length.</p>
   <p class=TableListing>7</p>
   </td>
   <td width=222 valign=top style='width:166.5pt;padding:0in 5.4pt 0in 5.4pt'>
-  <p class=TableListing align=left style='text-align:left'>308,915,776 × 26</p>
+  <p class=TableListing align=left style='text-align:left'>308,915,776 Ã— 26</p>
   </td>
   <td width=271 valign=top style='width:203.4pt;padding:0in 5.4pt 0in 5.4pt'>
   <p class=TableListing align=left style='text-align:left'>= 8,031,810,176</p>
@@ -1708,7 +1708,7 @@ length.</p>
   <p class=TableListing>8</p>
   </td>
   <td width=222 valign=top style='width:166.5pt;padding:0in 5.4pt 0in 5.4pt'>
-  <p class=TableListing align=left style='text-align:left'>8,031,810,176 × 26</p>
+  <p class=TableListing align=left style='text-align:left'>8,031,810,176 Ã— 26</p>
   </td>
   <td width=271 valign=top style='width:203.4pt;padding:0in 5.4pt 0in 5.4pt'>
   <p class=TableListing align=left style='text-align:left'>= 208,827,064,576</p>
@@ -1719,7 +1719,7 @@ length.</p>
   <p class=TableListing>9</p>
   </td>
   <td width=222 valign=top style='width:166.5pt;padding:0in 5.4pt 0in 5.4pt'>
-  <p class=TableListing align=left style='text-align:left'>208,827,064,576 × 26</p>
+  <p class=TableListing align=left style='text-align:left'>208,827,064,576 Ã— 26</p>
   </td>
   <td width=271 valign=top style='width:203.4pt;padding:0in 5.4pt 0in 5.4pt'>
   <p class=TableListing align=left style='text-align:left'>= 5,429,503,678,976</p>
@@ -1730,7 +1730,7 @@ length.</p>
   <p class=TableListing>10</p>
   </td>
   <td width=222 valign=top style='width:166.5pt;padding:0in 5.4pt 0in 5.4pt'>
-  <p class=TableListing align=left style='text-align:left'>5,429,503,678,976 ×
+  <p class=TableListing align=left style='text-align:left'>5,429,503,678,976 Ã—
   26</p>
   </td>
   <td width=271 valign=top style='width:203.4pt;padding:0in 5.4pt 0in 5.4pt'>
@@ -1742,7 +1742,7 @@ length.</p>
   <p class=TableListing>11</p>
   </td>
   <td width=222 valign=top style='width:166.5pt;padding:0in 5.4pt 0in 5.4pt'>
-  <p class=TableListing align=left style='text-align:left'>141,167,095,653,376 ×
+  <p class=TableListing align=left style='text-align:left'>141,167,095,653,376 Ã—
   26</p>
   </td>
   <td width=271 valign=top style='width:203.4pt;padding:0in 5.4pt 0in 5.4pt'>
@@ -1755,7 +1755,7 @@ length.</p>
   </td>
   <td width=222 valign=top style='width:166.5pt;padding:0in 5.4pt 0in 5.4pt'>
   <p class=TableListing align=left style='text-align:left'>3,670,344,486,987,776
-  × 26</p>
+  Ã— 26</p>
   </td>
   <td width=271 valign=top style='width:203.4pt;padding:0in 5.4pt 0in 5.4pt'>
   <p class=TableListing align=left style='text-align:left'>= 95,428,956,661,682,176</p>
@@ -1767,7 +1767,7 @@ length.</p>
   </td>
   <td width=222 valign=top style='width:166.5pt;padding:0in 5.4pt 0in 5.4pt'>
   <p class=TableListing align=left style='text-align:left'>95,428,956,661,682,176
-  × 26</p>
+  Ã— 26</p>
   </td>
   <td width=271 valign=top style='width:203.4pt;padding:0in 5.4pt 0in 5.4pt'>
   <p class=TableListing align=left style='text-align:left'>= 2,481,152,873,203,736,576</p>
@@ -1781,7 +1781,7 @@ length.</p>
   <td width=222 valign=top style='width:166.5pt;border:none;border-bottom:double windowtext 1.5pt;
   padding:0in 5.4pt 0in 5.4pt'>
   <p class=TableListing align=left style='text-align:left'>2,481,152,873,203,736,576
-  × 26</p>
+  Ã— 26</p>
   </td>
   <td width=271 valign=top style='width:203.4pt;border:none;border-bottom:double windowtext 1.5pt;
   padding:0in 5.4pt 0in 5.4pt'>
@@ -1794,22 +1794,22 @@ length.</p>
 then it becomes impossible for most consumer laptops to crack in a reasonable
 amount of time.</p>
 
-<p class=MsoNormal>A Vigenère key does not have to be a word like “PIZZA”. It
-can be any combination of letters, such as “DURIWKNMFICK”. In fact, it is much
-better not to use a word that can be found in the dictionary. The word “RADIOLOGISTS”
-is a 12-letter key that is easier to remember than “DURIWKNMFICK” even though
+<p class=MsoNormal>A VigenÃ¨re key does not have to be a word like â€œPIZZAâ€. It
+can be any combination of letters, such as â€œDURIWKNMFICKâ€. In fact, it is much
+better not to use a word that can be found in the dictionary. The word â€œRADIOLOGISTSâ€
+is a 12-letter key that is easier to remember than â€œDURIWKNMFICKâ€ even though
 they have the same number of letters. But a cryptanalyst might anticipate that
-the cryptographer is being lazy by using an English word for the Vigenère key.
+the cryptographer is being lazy by using an English word for the VigenÃ¨re key.
 There are 95,428,956,661,682,176 possible 12-letter keys, but there are only
 about 1,800 12-letter words in our dictionary file. If you are using a
 12-letter English word, it would be easier to brute-force that ciphertext than
 it would be to brute-force the ciphertext from a 3-letter random key.</p>
 
 <p class=MsoNormal>Of course, the cryptographer is helped by the fact that the
-cryptanalyst does not know how many letters long the Vigenère key is. But the
+cryptanalyst does not know how many letters long the VigenÃ¨re key is. But the
 cryptanalyst could try all 1-letter keys, then all 2-letter keys, and so on.</p>
 
-<h2><a name="_Toc353630882">Source Code of Vigenère Cipher Program</a></h2>
+<h2><a name="_Toc353630882">Source Code of VigenÃ¨re Cipher Program</a></h2>
 
 <p class=MsoNormal>Open a new file editor window by clicking on <strong>File</strong>
 &#9658; <strong>New Window</strong>. Type in the following code into the file
@@ -1825,32 +1825,32 @@ file. You can download this file from <span class=URL><u>http://invpy.com/pyperc
 class=SourceCodeFilename><span style='font-size:13.0pt;line-height:115%'>Source
 code for vigenereCipher.py</span></span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 1.</span> <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 1.</span> <span
 class=SourceCodeComment># Vigenere Cipher (Polyalphabetic Substitution Cipher)</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 2.</span> <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 2.</span> <span
 class=SourceCodeComment># http://inventwithpython.com/hacking (BSD Licensed)</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 3. </span></p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 3. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 4.</span>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 4.</span>
 import pyperclip</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 5. </span></p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 5. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 6.</span>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 6.</span>
 LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 7. </span></p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 7. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 8.</span>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 8.</span>
 def main():</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 9.</span>    
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 9.</span>Â Â Â Â 
 <span class=SourceCodeComment># This text can be copy/pasted from
 http://invpy.com/vigenereCipher.py</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>10.</span>    
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>10.</span>Â Â Â Â 
 myMessage = &quot;&quot;&quot;Alan Mathison Turing was a British mathematician,
 logician, cryptanalyst, and computer scientist. He was highly influential in
 the development of computer science, providing a formalisation of the concepts
@@ -1880,42 +1880,42 @@ appalling way he was treated.&quot; As of May 2012 a private member's bill was
 before the House of Lords which would grant Turing a statutory pardon if
 enacted.&quot;&quot;&quot;</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>11.</span>    
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>11.</span>Â Â Â Â 
 myKey = 'ASIMOV'</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>12.</span>    
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>12.</span>Â Â Â Â 
 myMode = 'encrypt' <span class=SourceCodeComment># set to 'encrypt' or
 'decrypt'</span></p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>13. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>14.</span>    
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>14.</span>Â Â Â Â 
 if myMode == 'encrypt':</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>15.</span>        
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>15.</span>Â Â Â Â Â Â Â Â 
 translated = encryptMessage(myKey, myMessage)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>16.</span>    
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>16.</span>Â Â Â Â 
 elif myMode == 'decrypt':</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>17.</span>        
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>17.</span>Â Â Â Â Â Â Â Â 
 translated = decryptMessage(myKey, myMessage)</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>18. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>19.</span>    
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>19.</span>Â Â Â Â 
 print('%sed message:' % (myMode.title()))</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>20.</span>    
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>20.</span>Â Â Â Â 
 print(translated)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>21.</span>    
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>21.</span>Â Â Â Â 
 pyperclip.copy(translated)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>22.</span>    
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>22.</span>Â Â Â Â 
 print()</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>23.</span>    
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>23.</span>Â Â Â Â 
 print('The message has been copied to the clipboard.')</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>24. </span></p>
@@ -1925,7 +1925,7 @@ print('The message has been copied to the clipboard.')</p>
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>26.</span>
 def encryptMessage(key, message):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>27.</span>    
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>27.</span>Â Â Â Â 
 return translateMessage(key, message, 'encrypt')</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>28. </span></p>
@@ -1935,7 +1935,7 @@ return translateMessage(key, message, 'encrypt')</p>
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>30.</span>
 def decryptMessage(key, message):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>31.</span>    
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>31.</span>Â Â Â Â 
 return translateMessage(key, message, 'decrypt')</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>32. </span></p>
@@ -1945,93 +1945,93 @@ return translateMessage(key, message, 'decrypt')</p>
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>34.</span>
 def translateMessage(key, message, mode):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>35.</span>    
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>35.</span>Â Â Â Â 
 translated = [] <span class=SourceCodeComment># stores the encrypted/decrypted
 message string</span></p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>36. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>37.</span>    
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>37.</span>Â Â Â Â 
 keyIndex = 0</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>38.</span>    
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>38.</span>Â Â Â Â 
 key = key.upper()</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>39. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>40.</span>    
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>40.</span>Â Â Â Â 
 for symbol in message: <span class=SourceCodeComment># loop through each
 character in message</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>41.</span>        
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>41.</span>Â Â Â Â Â Â Â Â 
 num = LETTERS.find(symbol.upper())</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>42.</span>        
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>42.</span>Â Â Â Â Â Â Â Â 
 if num != -1: <span class=SourceCodeComment># -1 means symbol.upper() was not
 found in LETTERS</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>43.</span>            
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>43.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 if mode == 'encrypt':</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>44.</span>                
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>44.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 num += LETTERS.find(key[keyIndex]) <span class=SourceCodeComment># add if
 encrypting</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>45.</span>            
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>45.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 elif mode == 'decrypt':</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>46.</span>                
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>46.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 num -= LETTERS.find(key[keyIndex]) <span class=SourceCodeComment># subtract if
 decrypting</span></p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>47. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>48.</span>            
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>48.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 num %= len(LETTERS) <span class=SourceCodeComment># handle the potential wrap-around</span></p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>49. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>50.</span>            
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>50.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 <span class=SourceCodeComment># add the encrypted/decrypted symbol to the end
 of translated.</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>51.</span>            
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>51.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 if symbol.isupper():</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>52.</span>                
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>52.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 translated.append(LETTERS[num])</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>53.</span>           
- elif symbol.islower():</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>53.</span>Â Â Â Â Â Â Â Â Â Â Â 
+Â elif symbol.islower():</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>54.</span>                
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>54.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 translated.append(LETTERS[num].lower())</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>55. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>56.</span>            
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>56.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 keyIndex += 1 <span class=SourceCodeComment># move to the next letter in the
 key</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>57.</span>            
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>57.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 if keyIndex == len(key):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>58.</span>                
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>58.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 keyIndex = 0</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>59.</span>        
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>59.</span>Â Â Â Â Â Â Â Â 
 else:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>60.</span>    
-        <span class=SourceCodeComment># The symbol was not in LETTERS, so add
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>60.</span>Â Â Â Â 
+Â Â Â Â Â Â Â Â <span class=SourceCodeComment># The symbol was not in LETTERS, so add
 it to translated as is.</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>61.</span>            
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>61.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 translated.append(symbol)</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>62. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>63.</span>    
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>63.</span>Â Â Â Â 
 return ''.join(translated)</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>64. </span></p>
@@ -2048,12 +2048,12 @@ class=SourceCodeComment># the main() function.</span></p>
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>68.</span>
 if __name__ == '__main__':</p>
 
-<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>69.</span>    
+<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>69.</span>Â Â Â Â 
 main()</p>
 
 </div>
 
-<h2><a name="_Toc353630883">Sample Run of the Vigenère Cipher Program</a></h2>
+<h2><a name="_Toc353630883">Sample Run of the VigenÃ¨re Cipher Program</a></h2>
 
 <div style='border:solid windowtext 1.0pt;padding:6.0pt 4.0pt 6.0pt 4.0pt'>
 
@@ -2089,20 +2089,20 @@ efiohzd.</p>
 
 <p class=SourceCodeHeadline>vigenereCipher.py </p>
 
-<p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber> 1.</span> <span
+<p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>Â 1.</span> <span
 class=SourceCodeComment># Vigenere Cipher (Polyalphabetic Substitution Cipher)</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 2.</span> <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 2.</span> <span
 class=SourceCodeComment># http://inventwithpython.com/hacking (BSD Licensed)</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 3. </span></p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 3. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 4.</span>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 4.</span>
 import pyperclip</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 5. </span></p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 5. </span></p>
 
-<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber> 6.</span>
+<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>Â 6.</span>
 LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'</p>
 
 </div>
@@ -2116,67 +2116,67 @@ class=Literal>LETTERS</span> with a string of every uppercase letter.</p>
 
 <p class=SourceCodeHeadline>vigenereCipher.py </p>
 
-<p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber> 8.</span>
+<p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>Â 8.</span>
 def main():</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 9.</span>    
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 9.</span>Â Â Â Â 
 <span class=SourceCodeComment># This text can be copy/pasted from
 http://invpy.com/vigenereCipher.py</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>10.</span>    
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>10.</span>Â Â Â Â 
 myMessage = &quot;&quot;&quot;Alan Mathison Turing was a British mathematician,
 </p>
 
 <p class=SourceCodeFeaturedCxSpMiddle>&nbsp;</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle>        <span class=SourceCodeComment><i>...skipped
+<p class=SourceCodeFeaturedCxSpMiddle>Â Â Â Â Â Â Â  <span class=SourceCodeComment><i>...skipped
 for brevity...</i></span></p>
 
 <p class=SourceCodeFeaturedCxSpMiddle>&nbsp;</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle>grant Turing a statutory pardon if enacted.&quot;&quot;&quot;</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>11.</span>    
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>11.</span>Â Â Â Â 
 myKey = 'ASIMOV'</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>12.</span>    
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>12.</span>Â Â Â Â 
 myMode = 'encrypt' <span class=SourceCodeComment># set to 'encrypt' or
 'decrypt'</span></p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>13. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>14.</span>    
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>14.</span>Â Â Â Â 
 if myMode == 'encrypt':</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>15.</span>        
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>15.</span>Â Â Â Â Â Â Â Â 
 translated = encryptMessage(myKey, myMessage)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>16.</span>    
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>16.</span>Â Â Â Â 
 elif myMode == 'decrypt':</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>17.</span>        
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>17.</span>Â Â Â Â Â Â Â Â 
 translated = decryptMessage(myKey, myMessage)</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>18. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>19.</span>    
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>19.</span>Â Â Â Â 
 print('%sed message:' % (myMode.title()))</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>20.</span>    
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>20.</span>Â Â Â Â 
 print(translated)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>21.</span>    
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>21.</span>Â Â Â Â 
 pyperclip.copy(translated)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>22.</span>    
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>22.</span>Â Â Â Â 
 print()</p>
 
-<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>23.</span>    
+<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>23.</span>Â Â Â Â 
 print('The message has been copied to the clipboard.')</p>
 
 </div>
 
-<p class=MsoNormal>The <span class=Literal>main()</span> function for the Vigenère
+<p class=MsoNormal>The <span class=Literal>main()</span> function for the VigenÃ¨re
 cipher is exactly like the other <span class=Literal>main()</span> functions in
 this book: there are variables for <span class=Literal>message</span>, <span
 class=Literal>key</span>, and <span class=Literal>mode</span>. The user sets these
@@ -2196,7 +2196,7 @@ in <span class=Literal>translateMessage()</span>, which is explained later.</p>
 <p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>26.</span>
 def encryptMessage(key, message):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>27.</span>    
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>27.</span>Â Â Â Â 
 return translateMessage(key, message, 'encrypt')</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>28. </span></p>
@@ -2206,7 +2206,7 @@ return translateMessage(key, message, 'encrypt')</p>
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>30.</span>
 def decryptMessage(key, message):</p>
 
-<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>31.</span>     return
+<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>31.</span>Â Â  Â Â return
 translateMessage(key, message, 'decrypt')</p>
 
 </div>
@@ -2224,16 +2224,16 @@ functions are wrapper functions for <span class=Literal>translateMessage()</span
 <p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>34.</span>
 def translateMessage(key, message, mode):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>35.</span>    
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>35.</span>Â Â Â Â 
 translated = [] <span class=SourceCodeComment># stores the encrypted/decrypted
 message string</span></p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>36. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>37.</span>    
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>37.</span>Â Â Â Â 
 keyIndex = 0</p>
 
-<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>38.</span>    
+<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>38.</span>Â Â Â Â 
 key = key.upper()</p>
 
 </div>
@@ -2243,10 +2243,10 @@ function, we will slowly build the encrypted (or decrypted) string one
 character at a time. The list in <span class=Literal>translated</span> will
 store these characters so that they can be joined together once the string
 building is done. (The reason we use a list instead of just appending the
-characters to a string is explained in the “Building Strings in Python with
-Lists” section in Chapter 18.)</p>
+characters to a string is explained in the â€œBuilding Strings in Python with
+Listsâ€ section in Chapter 18.)</p>
 
-<p class=MsoNormal>Remember, the Vigenère cipher is just the Caesar cipher
+<p class=MsoNormal>Remember, the VigenÃ¨re cipher is just the Caesar cipher
 except that a different key is used depending on the position of the letter in
 the message. The <span class=Literal>keyIndex</span> variable keeps track of
 which subkey to use. The <span class=Literal>keyIndex</span> variable starts
@@ -2261,28 +2261,28 @@ it.</p>
 
 <p class=SourceCodeHeadline>vigenereCipher.py </p>
 
-<p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>40.</span>    
+<p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>40.</span>Â Â Â Â 
 for symbol in message: <span class=SourceCodeComment># loop through each
 character in message</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>41.</span>        
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>41.</span>Â Â Â Â Â Â Â Â 
 num = LETTERS.find(symbol.upper())</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>42.</span>        
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>42.</span>Â Â Â Â Â Â Â Â 
 if num != -1: <span class=SourceCodeComment># -1 means symbol.upper() was not
 found in LETTERS</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>43.</span>            
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>43.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 if mode == 'encrypt':</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>44.</span>                
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>44.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 num += LETTERS.find(key[keyIndex]) <span class=SourceCodeComment># add if
 encrypting</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>45.</span>      
-      elif mode == 'decrypt':</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>45.</span>Â Â Â Â Â Â 
+Â Â Â Â Â Â elif mode == 'decrypt':</p>
 
-<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>46.</span>                
+<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>46.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 num -= LETTERS.find(key[keyIndex]) <span class=SourceCodeComment># subtract if
 decrypting</span></p>
 
@@ -2305,16 +2305,16 @@ the subkey itself will always be what <span class=Literal>key[keyIndex]</span>
 evaluates to.</p>
 
 <p class=MsoNormal>Of course, this is just a single letter string. We need to
-find this letter’s index in the <span class=Literal>LETTERS</span> to convert
+find this letterâ€™s index in the <span class=Literal>LETTERS</span> to convert
 the subkey into an integer. This integer is then added (if encrypting) to the
-symbol’s number on line 44 or subtracted (if decrypting) to the symbol’s number
+symbolâ€™s number on line 44 or subtracted (if decrypting) to the symbolâ€™s number
 on line 46.</p>
 
 <div style='border:double #404040 1.5pt;padding:6.0pt 4.0pt 6.0pt 4.0pt'>
 
 <p class=SourceCodeHeadline>vigenereCipher.py </p>
 
-<p class=SourceCodeFeatured><span class=SourceLineNumber>48.</span>            
+<p class=SourceCodeFeatured><span class=SourceLineNumber>48.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 num %= len(LETTERS) <span class=SourceCodeComment># handle the potential wrap-around</span></p>
 
 </div>
@@ -2324,7 +2324,7 @@ class=Literal>num</span> was less than <span class=Literal>0</span> (in which
 case, we added <span class=Literal>len(LETTERS)</span> to it) or if the new
 value of <span class=Literal>num</span> was <span class=Literal>len(LETTERS)</span>
 or greater (in which case, we subtracted <span class=Literal>len(LETTERS)</span>
-from it). This handles the “wrap-around” cases.</p>
+from it). This handles the â€œwrap-aroundâ€ cases.</p>
 
 <p class=MsoNormal>However, there is a simpler way that handles both of these
 cases. If we mod the integer stored in num by <span class=Literal>len(LETTERS)</span>,
@@ -2338,33 +2338,33 @@ class=Literal>31</span> we would want to subtract <span class=Literal>26</span>
 to get <span class=Literal>5</span>. However <span class=Literal>-8 % 26</span>
 evaluates to <span class=Literal>18</span> and <span class=Literal>31 % 26</span>
 evaluates to <span class=Literal>5</span>. The modular arithmetic on line 48
-handles both “wrap-around” cases for us.</p>
+handles both â€œwrap-aroundâ€ cases for us.</p>
 
 <div style='border:double #404040 1.5pt;padding:6.0pt 4.0pt 6.0pt 4.0pt'>
 
 <p class=SourceCodeHeadline>vigenereCipher.py </p>
 
-<p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>50.</span>            
+<p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>50.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 <span class=SourceCodeComment># add the encrypted/decrypted symbol to the end
 of translated.</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>51.</span>            
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>51.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 if symbol.isupper():</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>52.</span>                
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>52.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 translated.append(LETTERS[num])</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>53.</span>            
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>53.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 elif symbol.islower():</p>
 
-<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>54.</span>                
+<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>54.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 translated.append(LETTERS[num].lower())</p>
 
 </div>
 
 <p class=MsoNormal>The encrypted (or decrypted) character exists at <span
 class=Literal>LETTERS[num]</span>. However, we want the encrypted (or
-decrypted) character’s case to match <span class=Literal>symbol</span>’s
+decrypted) characterâ€™s case to match <span class=Literal>symbol</span>â€™s
 original case. So if <span class=Literal>symbol</span> is an uppercase letter,
 the condition on line 51 will be <span class=Literal>True</span> and line 52
 will append the character at <span class=Literal>LETTERS[num]</span> to <span
@@ -2381,14 +2381,14 @@ encrypted (or decrypted) message to match the casing of the original message.</p
 
 <p class=SourceCodeHeadline>vigenereCipher.py </p>
 
-<p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>56.</span>            
+<p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>56.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 keyIndex += 1 <span class=SourceCodeComment># move to the next letter in the
 key</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>57.</span>            
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>57.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 if keyIndex == len(key):</p>
 
-<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>58.</span>                
+<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>58.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 keyIndex = 0</p>
 
 </div>
@@ -2409,14 +2409,14 @@ will point back to the first subkey.</p>
 
 <p class=SourceCodeHeadline>vigenereCipher.py </p>
 
-<p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>59.</span>        
+<p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>59.</span>Â Â Â Â Â Â Â Â 
 else:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>60.</span>            
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>60.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 <span class=SourceCodeComment># The symbol was not in LETTERS, so add it to
 translated as is.</span></p>
 
-<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>61.</span>            
+<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>61.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 translated.append(symbol)</p>
 
 </div>
@@ -2433,7 +2433,7 @@ this case, line 61 will just append the symbol untranslated.</p>
 
 <p class=SourceCodeHeadline>vigenereCipher.py </p>
 
-<p class=SourceCodeFeatured><span class=SourceLineNumber>63.</span>     return
+<p class=SourceCodeFeatured><span class=SourceLineNumber>63.</span>Â Â Â Â  return
 ''.join(translated)</p>
 
 </div>
@@ -2457,7 +2457,7 @@ class=SourceCodeComment># the main() function.</span></p>
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>68.</span>
 if __name__ == '__main__':</p>
 
-<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>69.</span>    
+<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>69.</span>Â Â Â Â 
 main()</p>
 
 </div>
@@ -2470,16 +2470,16 @@ class=Literal>decryptMessage()</span> functions.</p>
 <h2><a name="_Toc353630885">Summary</a></h2>
 
 <p class=MsoNormal>We are close to the end of the book, but notice how the
-Vigenère cipher isn’t that much more complicated than the second cipher program
+VigenÃ¨re cipher isnâ€™t that much more complicated than the second cipher program
 in this book, the Caesar cipher. With just a few changes, we can create a
 cipher that has exponentially many more possible keys than can be brute-forced.</p>
 
-<p class=MsoNormal>The Vigenère cipher is not vulnerable to the dictionary word
+<p class=MsoNormal>The VigenÃ¨re cipher is not vulnerable to the dictionary word
 pattern attack that our Simple Substitution hacker program uses. The
-“indecipherable cipher” kept secret messages secret for hundreds of years. The
-attack on the Vigenère cipher was not widely known until the early 20<sup>th</sup>
+â€œindecipherable cipherâ€ kept secret messages secret for hundreds of years. The
+attack on the VigenÃ¨re cipher was not widely known until the early 20<sup>th</sup>
 century. But of course, this cipher too eventually fell. In the next couple of
-chapters, we will learn new “frequency analysis” techniques to hack the Vigenère
+chapters, we will learn new â€œfrequency analysisâ€ techniques to hack the VigenÃ¨re
 cipher.</p>
 
 </div>
