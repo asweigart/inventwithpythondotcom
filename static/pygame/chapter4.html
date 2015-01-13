@@ -1,7 +1,7 @@
 <html>
 
 <head>
-<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta http-equiv=Content-Type content="text/html; charset=UTF-8">
 <meta name=Generator content="Microsoft Word 14 (filtered)">
 <style>
 <!--
@@ -694,7 +694,7 @@ ul
 <div style='border:none;border-bottom:solid #4F81BD 1.0pt;padding:0in 0in 4.0pt 0in'>
 
 <h1><a name="_Toc316488581"><span style='font-variant:normal !important;
-text-transform:uppercase'>Chapter 4 – Slide Puzzle</span></a></h1>
+text-transform:uppercase'>Chapter 4 â€“ Slide Puzzle</span></a></h1>
 
 </div>
 
@@ -718,339 +718,339 @@ to see if the differences between your code and the code in the book.</p>
 
 <div style='border:double windowtext 1.5pt;padding:6.0pt 4.0pt 6.0pt 4.0pt'>
 
-<p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>  1. </span><span
+<p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>Â  1. </span><span
 class=SourceCodeComment># Slide Puzzle</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>  2. </span><span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â  2. </span><span
 class=SourceCodeComment># By Al Sweigart al@inventwithpython.com</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>  3. </span><span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â  3. </span><span
 class=SourceCodeComment># http://inventwithpython.com/pygame</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>  4. </span><span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â  4. </span><span
 class=SourceCodeComment># Creative Commons BY-NC-SA 3.0 US</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>  5. </span></p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â  5. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>  6. </span>import
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â  6. </span>import
 pygame, sys, random</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>  7. </span>from
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â Â 7. </span>from
 pygame.locals import *</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>  8. </span></p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â  8. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>  9. </span><span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â  9. </span><span
 class=SourceCodeComment># Create the constants (go ahead and experiment with
 different values)</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 10. </span>BOARDWIDTH
-= 4  <span class=SourceCodeComment># number of columns in the board</span></p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 10. </span>BOARDWIDTH
+= 4Â  <span class=SourceCodeComment># number of columns in the board</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 11. </span>BOARDHEIGHT
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 11. </span>BOARDHEIGHT
 = 4 <span class=SourceCodeComment># number of rows in the board</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 12. </span>TILESIZE
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 12. </span>TILESIZE
 = 80</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 13. </span>WINDOWWIDTH
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 13. </span>WINDOWWIDTH
 = 640</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 14. </span>WINDOWHEIGHT
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 14. </span>WINDOWHEIGHT
 = 480</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 15. </span>FPS
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 15. </span>FPS
 = 30</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 16. </span>BLANK
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 16. </span>BLANK
 = None</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 17. </span></p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 17. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 18. </span><span
-class=SourceCodeComment>#                 R    G    B</span></p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 18. </span><span
+class=SourceCodeComment>#Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â  RÂ Â Â  GÂ Â Â  B</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 19. </span>BLACK
-=         (  0,   0,   0)</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 19. </span>BLACK
+=Â Â Â Â Â Â Â Â  (Â  0,Â Â  0,Â Â  0)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 20. </span>WHITE
-=         (255, 255, 255)</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 20. </span>WHITE
+=Â Â Â Â Â Â Â Â  (255, 255, 255)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 21. </span>BRIGHTBLUE
-=    (  0,  50, 255)</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 21. </span>BRIGHTBLUE
+=Â Â Â  (Â  0,Â  50, 255)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 22. </span>DARKTURQUOISE
-= (  3,  54,  73)</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 22. </span>DARKTURQUOISE
+= (Â  3,Â  54,Â  73)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 23. </span>GREEN
-=         (  0, 204,   0)</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 23. </span>GREEN
+=Â Â Â Â Â Â Â Â  (Â  0, 204,Â Â  0)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 24. </span></p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 24. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 25. </span>BGCOLOR
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 25. </span>BGCOLOR
 = DARKTURQUOISE</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 26. </span>TILECOLOR
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 26. </span>TILECOLOR
 = GREEN</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 27. </span>TEXTCOLOR
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 27. </span>TEXTCOLOR
 = WHITE</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 28. </span>BORDERCOLOR
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 28. </span>BORDERCOLOR
 = BRIGHTBLUE</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 29. </span>BASICFONTSIZE
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 29. </span>BASICFONTSIZE
 = 20</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 30. </span></p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 30. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 31. </span>BUTTONCOLOR
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 31. </span>BUTTONCOLOR
 = WHITE</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 32. </span>BUTTONTEXTCOLOR
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 32. </span>BUTTONTEXTCOLOR
 = BLACK</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 33. </span>MESSAGECOLOR
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 33. </span>MESSAGECOLOR
 = WHITE</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 34. </span></p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 34. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 35. </span>XMARGIN
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 35. </span>XMARGIN
 = int((WINDOWWIDTH - (TILESIZE * BOARDWIDTH + (BOARDWIDTH - 1))) / 2)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 36. </span>YMARGIN
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 36. </span>YMARGIN
 = int((WINDOWHEIGHT - (TILESIZE * BOARDHEIGHT + (BOARDHEIGHT - 1))) / 2)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 37. </span></p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 37. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 38. </span>UP
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 38. </span>UP
 = 'up'</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 39. </span>DOWN
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 39. </span>DOWN
 = 'down'</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 40. </span>LEFT
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 40. </span>LEFT
 = 'left'</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 41. </span>RIGHT
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 41. </span>RIGHT
 = 'right'</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 42. </span></p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 42. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 43. </span>def
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 43. </span>def
 main():</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 44. </span>    global
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 44. </span>Â Â Â Â global
 FPSCLOCK, DISPLAYSURF, BASICFONT, RESET_SURF, RESET_RECT, NEW_SURF, NEW_RECT,
 SOLVE_SURF, SOLVE_RECT</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 45. </span></p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 45. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 46. </span>    pygame.init()</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 46. </span>Â Â Â Â pygame.init()</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 47. </span>    FPSCLOCK
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 47. </span>Â Â Â Â FPSCLOCK
 = pygame.time.Clock()</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 48. </span>    DISPLAYSURF
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 48. </span>Â Â Â Â DISPLAYSURF
 = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 49. </span>    pygame.display.set_caption('Slide
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 49. </span>Â Â Â Â pygame.display.set_caption('Slide
 Puzzle')</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 50. </span>    BASICFONT
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 50. </span>Â Â Â Â BASICFONT
 = pygame.font.Font('freesansbold.ttf', BASICFONTSIZE)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 51. </span></p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 51. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 52. </span>    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 52. </span>Â Â Â Â <span
 class=SourceCodeComment># Store the option buttons and their rectangles in
 OPTIONS.</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 53. </span>    RESET_SURF,
-RESET_RECT = makeText('Reset',    TEXTCOLOR, TILECOLOR, WINDOWWIDTH - 120,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 53. </span>Â Â Â Â RESET_SURF,
+RESET_RECT = makeText('Reset',Â Â Â  TEXTCOLOR, TILECOLOR, WINDOWWIDTH - 120,
 WINDOWHEIGHT - 90)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 54. </span>    NEW_SURF,
-NEW_RECT   = makeText('New Game', TEXTCOLOR, TILECOLOR, WINDOWWIDTH - 120,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 54. </span>Â Â Â Â NEW_SURF,
+NEW_RECTÂ Â  = makeText('New Game', TEXTCOLOR, TILECOLOR, WINDOWWIDTH - 120,
 WINDOWHEIGHT - 60)</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle>&nbsp;</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 55. </span>    SOLVE_SURF,
-SOLVE_RECT = makeText('Solve',    TEXTCOLOR, TILECOLOR, WINDOWWIDTH - 120,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 55. </span>Â Â Â Â SOLVE_SURF,
+SOLVE_RECT = makeText('Solve',Â Â Â  TEXTCOLOR, TILECOLOR, WINDOWWIDTH - 120,
 WINDOWHEIGHT - 30)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 56. </span></p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 56. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 57. </span>    mainBoard,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 57. </span>Â Â Â Â mainBoard,
 solutionSeq = generateNewPuzzle(80)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 58. </span>    SOLVEDBOARD
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 58. </span>Â Â Â Â SOLVEDBOARD
 = getStartingBoard() <span class=SourceCodeComment># a solved board is the same
 as the board in a start state.</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 59. </span>    allMoves
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 59. </span>Â Â Â Â allMoves
 = [] <span class=SourceCodeComment># list of moves made from the solved
 configuration</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 60. </span></p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 60. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 61. </span>    while
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 61. </span>Â Â Â Â while
 True: <span class=SourceCodeComment># main game loop</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 62. </span>        slideTo
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 62. </span>Â Â Â Â Â Â Â Â slideTo
 = None <span class=SourceCodeComment># the direction, if any, a tile should
 slide</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 63. </span>        msg
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 63. </span>Â Â Â Â Â Â Â Â msg
 = '' <span class=SourceCodeComment># contains the message to show in the upper
 left corner.</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 64. </span>        if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 64. </span>Â Â Â Â Â Â Â Â if
 mainBoard == SOLVEDBOARD:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 65. </span>            msg
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 65. </span>Â Â Â Â Â Â Â Â Â Â Â Â msg
 = 'Solved!'</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 66. </span></p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 66. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 67. </span>        drawBoard(mainBoard,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 67. </span>Â Â Â Â Â Â Â Â drawBoard(mainBoard,
 msg)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 68. </span></p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 68. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 69. </span>        checkForQuit()</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 69. </span>Â Â Â Â Â Â Â Â checkForQuit()</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 70. </span>        for
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 70. </span>Â Â Â Â Â Â Â Â for
 event in pygame.event.get(): <span class=SourceCodeComment># event handling
 loop</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 71. </span>            if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 71. </span>Â Â Â Â Â Â Â Â Â Â Â Â if
 event.type == MOUSEBUTTONUP:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 72. </span>                spotx,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 72. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â spotx,
 spoty = getSpotClicked(mainBoard, event.pos[0], event.pos[1])</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 73. </span></p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 73. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 74. </span>                if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 74. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â if
 (spotx, spoty) == (None, None):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 75. </span>                    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 75. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â <span
 class=SourceCodeComment># check if the user clicked on an option button</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 76. </span>                    if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 76. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â if
 RESET_RECT.collidepoint(event.pos):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 77. </span>                        resetAnimation(mainBoard,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 77. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â resetAnimation(mainBoard,
 allMoves) <span class=SourceCodeComment># clicked on Reset button</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 78. </span>                        allMoves
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 78. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â allMoves
 = []</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 79. </span>                    elif
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 79. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â elif
 NEW_RECT.collidepoint(event.pos):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 80. </span>                        mainBoard,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 80. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â mainBoard,
 solutionSeq = generateNewPuzzle(80) <span class=SourceCodeComment># clicked on
 New Game button</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 81. </span>                        allMoves
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 81. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â allMoves
 = []</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 82. </span>                    elif
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 82. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â elif
 SOLVE_RECT.collidepoint(event.pos):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 83. </span>                        resetAnimation(mainBoard,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 83. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â resetAnimation(mainBoard,
 solutionSeq + allMoves) <span class=SourceCodeComment># clicked on Solve button</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 84. </span>                        allMoves
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 84. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â allMoves
 = []</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 85. </span>                else:</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 85. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â else:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 86. </span>                    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 86. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â <span
 class=SourceCodeComment># check if the clicked tile was next to the blank spot</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 87. </span></p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 87. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 88. </span>                    blankx,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 88. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â blankx,
 blanky = getBlankPosition(mainBoard)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 89. </span>                    if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 89. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â if
 spotx == blankx + 1 and spoty == blanky:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 90. </span>                        slideTo
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 90. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â slideTo
 = LEFT</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 91. </span>                    elif
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 91. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â elif
 spotx == blankx - 1 and spoty == blanky:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 92. </span>                        slideTo
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 92. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â slideTo
 = RIGHT</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 93. </span>                    elif
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 93. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â elif
 spotx == blankx and spoty == blanky + 1:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 94. </span>                        slideTo
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 94. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â slideTo
 = UP</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 95. </span>                    elif
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 95. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â elif
 spotx == blankx and spoty == blanky - 1:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 96. </span>                        slideTo
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 96. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â slideTo
 = DOWN</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 97. </span></p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 97. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 98. </span>            elif
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 98. </span>Â Â Â Â Â Â Â Â Â Â Â Â elif
 event.type == KEYUP:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 99. </span>                <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 99. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â <span
 class=SourceCodeComment># check if the user pressed a key to slide a tile</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>100. </span>                if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>100. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â if
 event.key in (K_LEFT, K_a) and isValidMove(mainBoard, LEFT):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>101. </span>                    slideTo
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>101. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â slideTo
 = LEFT</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>102. </span>                elif
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>102. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â elif
 event.key in (K_RIGHT, K_d) and isValidMove(mainBoard, RIGHT):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>103. </span>                    slideTo
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>103. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â slideTo
 = RIGHT</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>104. </span>                elif
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>104. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â elif
 event.key in (K_UP, K_w) and isValidMove(mainBoard, UP):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>105. </span>                    slideTo
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>105. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â slideTo
 = UP</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>106. </span>                elif
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>106. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â elif
 event.key in (K_DOWN, K_s) and isValidMove(mainBoard, DOWN):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>107. </span>                    slideTo
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>107. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â slideTo
 = DOWN</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>108. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>109. </span>        if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>109. </span>Â Â Â Â Â Â Â Â if
 slideTo:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>110. </span>            slideAnimation(mainBoard,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>110. </span>Â Â Â Â Â Â Â Â Â Â Â Â slideAnimation(mainBoard,
 slideTo, 'Click tile or press arrow keys to slide.', 8) <span
 class=SourceCodeComment># show slide on screen</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>111. </span>            makeMove(mainBoard,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>111. </span>Â Â Â Â Â Â Â Â Â Â Â Â makeMove(mainBoard,
 slideTo)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>112. </span>            allMoves.append(slideTo)
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>112. </span>Â Â Â Â Â Â Â Â Â Â Â Â allMoves.append(slideTo)
 <span class=SourceCodeComment># record the slide</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>113. </span>        pygame.display.update()</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>113. </span>Â Â Â Â Â Â Â Â pygame.display.update()</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>114. </span>        FPSCLOCK.tick(FPS)</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>114. </span>Â Â Â Â Â Â Â Â FPSCLOCK.tick(FPS)</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>115. </span></p>
 
@@ -1059,9 +1059,9 @@ slideTo)</p>
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>117. </span>def
 terminate():</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>118. </span>    pygame.quit()</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>118. </span>Â Â Â Â pygame.quit()</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>119. </span>    sys.exit()</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>119. </span>Â Â Â Â sys.exit()</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>120. </span></p>
 
@@ -1070,25 +1070,25 @@ terminate():</p>
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>122. </span>def
 checkForQuit():</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>123. </span>    for
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>123. </span>Â Â Â Â for
 event in pygame.event.get(QUIT): <span class=SourceCodeComment># get all the
 QUIT events</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>124. </span>        terminate()
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>124. </span>Â Â Â Â Â Â Â Â terminate()
 <span class=SourceCodeComment># terminate if any QUIT events are present</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>125. </span>    for
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>125. </span>Â Â Â Â for
 event in pygame.event.get(KEYUP): <span class=SourceCodeComment># get all the
 KEYUP events</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>126. </span>        if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>126. </span>Â Â Â Â Â Â Â Â if
 event.key == K_ESCAPE:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>127. </span>            terminate()
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>127. </span>Â Â Â Â Â Â Â Â Â Â Â Â terminate()
 <span class=SourceCodeComment># terminate if the KEYUP event was for the Esc
 key</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>128. </span>        pygame.event.post(event)
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>128. </span>Â Â Â Â Â Â Â Â pygame.event.post(event)
 <span class=SourceCodeComment># put the other KEYUP event objects back</span></p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>129. </span></p>
@@ -1098,48 +1098,48 @@ key</span></p>
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>131. </span>def
 getStartingBoard():</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>132. </span>    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>132. </span>Â Â Â Â <span
 class=SourceCodeComment># Return a board data structure with tiles in the
 solved state.</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>133. </span>    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>133. </span>Â Â Â Â <span
 class=SourceCodeComment># For example, if BOARDWIDTH and BOARDHEIGHT are both
 3, this function</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>134. </span>    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>134. </span>Â Â Â Â <span
 class=SourceCodeComment># returns [[1, 4, 7], [2, 5, 8], [3, 6, None]]</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>135. </span>    counter
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>135. </span>Â Â Â Â counter
 = 1</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>136. </span>    board
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>136. </span>Â Â Â Â board
 = []</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>137. </span>    for
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>137. </span>Â Â Â Â for
 x in range(BOARDWIDTH):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>138. </span>        column
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>138. </span>Â Â Â Â Â Â Â Â column
 = []</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>139. </span>        for
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>139. </span>Â Â Â Â Â Â Â Â for
 y in range(BOARDHEIGHT):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>140. </span>            column.append(counter)</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>140. </span>Â Â Â Â Â Â Â Â Â Â Â Â column.append(counter)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>141. </span>            counter
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>141. </span>Â Â Â Â Â Â Â Â Â Â Â Â counter
 += BOARDWIDTH</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>142. </span>        board.append(column)</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>142. </span>Â Â Â Â Â Â Â Â board.append(column)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>143. </span>        counter
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>143. </span>Â Â Â Â Â Â Â Â counter
 -= BOARDWIDTH * (BOARDHEIGHT - 1) + BOARDWIDTH - 1</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>144. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>145. </span>    board[BOARDWIDTH-1][BOARDHEIGHT-1]
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>145. </span>Â Â Â Â board[BOARDWIDTH-1][BOARDHEIGHT-1]
 = None</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>146. </span>    return
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>146. </span>Â Â Â Â return
 board</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>147. </span></p>
@@ -1149,20 +1149,20 @@ board</p>
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>149. </span>def
 getBlankPosition(board):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>150. </span>    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>150. </span>Â Â Â Â <span
 class=SourceCodeComment># Return the x and y of board coordinates of the blank
 space.</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>151. </span>    for
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>151. </span>Â Â Â Â for
 x in range(BOARDWIDTH):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>152. </span>        for
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>152. </span>Â Â Â Â Â Â Â Â for
 y in range(BOARDHEIGHT):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>153. </span>            if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>153. </span>Â Â Â Â Â Â Â Â Â Â Â Â if
 board[x][y] == None:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>154. </span>                return
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>154. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â return
 (x, y)</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>155. </span></p>
@@ -1172,36 +1172,36 @@ board[x][y] == None:</p>
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>157. </span>def
 makeMove(board, move):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>158. </span>    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>158. </span>Â Â Â Â <span
 class=SourceCodeComment># This function does not check if the move is valid.</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>159. </span>    blankx,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>159. </span>Â Â Â Â blankx,
 blanky = getBlankPosition(board)</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>160. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>161. </span>    if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>161. </span>Â Â Â Â if
 move == UP:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>162. </span>        board[blankx][blanky],
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>162. </span>Â Â Â Â Â Â Â Â board[blankx][blanky],
 board[blankx][blanky + 1] = board[blankx][blanky + 1], board[blankx][blanky]</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>163. </span>    elif
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>163. </span>Â Â Â Â elif
 move == DOWN:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>164. </span>        board[blankx][blanky],
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>164. </span>Â Â Â Â Â Â Â Â board[blankx][blanky],
 board[blankx][blanky - 1] = board[blankx][blanky - 1], board[blankx][blanky]</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>165. </span>    elif
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>165. </span>Â Â Â Â elif
 move == LEFT:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>166. </span>        board[blankx][blanky],
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>166. </span>Â Â Â Â Â Â Â Â board[blankx][blanky],
 board[blankx + 1][blanky] = board[blankx + 1][blanky], board[blankx][blanky]</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>167. </span>    elif
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>167. </span>Â Â Â Â elif
 move == RIGHT:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>168. </span>        board[blankx][blanky],
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>168. </span>Â Â Â Â Â Â Â Â board[blankx][blanky],
 board[blankx - 1][blanky] = board[blankx - 1][blanky], board[blankx][blanky]</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>169. </span></p>
@@ -1211,19 +1211,19 @@ board[blankx - 1][blanky] = board[blankx - 1][blanky], board[blankx][blanky]</p>
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>171. </span>def
 isValidMove(board, move):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>172. </span>    blankx,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>172. </span>Â Â Â Â blankx,
 blanky = getBlankPosition(board)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>173. </span>    return
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>173. </span>Â Â Â Â return
 (move == UP and blanky != len(board[0]) - 1) or \</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>174. </span>           (move
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>174. </span>Â Â Â Â Â Â Â Â Â Â Â (move
 == DOWN and blanky != 0) or \</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>175. </span>           (move
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>175. </span>Â Â Â Â Â Â Â Â Â Â Â (move
 == LEFT and blankx != len(board) - 1) or \</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>176. </span>           (move
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>176. </span>Â Â Â Â Â Â Â Â Â Â Â (move
 == RIGHT and blankx != 0)</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>177. </span></p>
@@ -1233,43 +1233,43 @@ blanky = getBlankPosition(board)</p>
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>179. </span>def
 getRandomMove(board, lastMove=None):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>180. </span>    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>180. </span>Â Â Â Â <span
 class=SourceCodeComment># start with a full list of all four moves</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>181. </span>    validMoves
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>181. </span>Â Â Â Â validMoves
 = [UP, DOWN, LEFT, RIGHT]</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>182. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>183. </span>    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>183. </span>Â Â Â Â <span
 class=SourceCodeComment># remove moves from the list as they are disqualified</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>184. </span>    if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>184. </span>Â Â Â Â if
 lastMove == UP or not isValidMove(board, DOWN):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>185. </span>        validMoves.remove(DOWN)</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>185. </span>Â Â Â Â Â Â Â Â validMoves.remove(DOWN)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>186. </span>    if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>186. </span>Â Â Â Â if
 lastMove == DOWN or not isValidMove(board, UP):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>187. </span>        validMoves.remove(UP)</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>187. </span>Â Â Â Â Â Â Â Â validMoves.remove(UP)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>188. </span>    if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>188. </span>Â Â Â Â if
 lastMove == LEFT or not isValidMove(board, RIGHT):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>189. </span>        validMoves.remove(RIGHT)</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>189. </span>Â Â Â Â Â Â Â Â validMoves.remove(RIGHT)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>190. </span>    if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>190. </span>Â Â Â Â if
 lastMove == RIGHT or not isValidMove(board, LEFT):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>191. </span>        validMoves.remove(LEFT)</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>191. </span>Â Â Â Â Â Â Â Â validMoves.remove(LEFT)</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>192. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>193. </span>    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>193. </span>Â Â Â Â <span
 class=SourceCodeComment># return a random move from the list of remaining moves</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>194. </span>    return
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>194. </span>Â Â Â Â return
 random.choice(validMoves)</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>195. </span></p>
@@ -1279,13 +1279,13 @@ random.choice(validMoves)</p>
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>197. </span>def
 getLeftTopOfTile(tileX, tileY):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>198. </span>    left
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>198. </span>Â Â Â Â left
 = XMARGIN + (tileX * TILESIZE) + (tileX - 1)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>199. </span>    top
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>199. </span>Â Â Â Â top
 = YMARGIN + (tileY * TILESIZE) + (tileY - 1)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>200. </span>    return
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>200. </span>Â Â Â Â return
 (left, top)</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>201. </span></p>
@@ -1295,29 +1295,29 @@ getLeftTopOfTile(tileX, tileY):</p>
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>203. </span>def
 getSpotClicked(board, x, y):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>204. </span>    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>204. </span>Â Â Â Â <span
 class=SourceCodeComment># from the x &amp; y pixel coordinates, get the x &amp;
 y board coordinates</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>205. </span>    for
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>205. </span>Â Â Â Â for
 tileX in range(len(board)):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>206. </span>        for
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>206. </span>Â Â Â Â Â Â Â Â for
 tileY in range(len(board[0])):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>207. </span>            left,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>207. </span>Â Â Â Â Â Â Â Â Â Â Â Â left,
 top = getLeftTopOfTile(tileX, tileY)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>208. </span>            tileRect
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>208. </span>Â Â Â Â Â Â Â Â Â Â Â Â tileRect
 = pygame.Rect(left, top, TILESIZE, TILESIZE)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>209. </span>            if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>209. </span>Â Â Â Â Â Â Â Â Â Â Â Â if
 tileRect.collidepoint(x, y):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>210. </span>                return
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>210. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â return
 (tileX, tileY)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>211. </span>    return
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>211. </span>Â Â Â Â return
 (None, None)</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>212. </span></p>
@@ -1327,29 +1327,29 @@ tileRect.collidepoint(x, y):</p>
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>214. </span>def
 drawTile(tilex, tiley, number, adjx=0, adjy=0):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>215. </span>    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>215. </span>Â Â Â Â <span
 class=SourceCodeComment># draw a tile at board coordinates tilex and tiley,
 optionally a few</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>216. </span>    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>216. </span>Â Â Â Â <span
 class=SourceCodeComment># pixels over (determined by adjx and adjy)</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>217. </span>    left,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>217. </span>Â Â Â Â left,
 top = getLeftTopOfTile(tilex, tiley)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>218. </span>    pygame.draw.rect(DISPLAYSURF,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>218. </span>Â Â Â Â pygame.draw.rect(DISPLAYSURF,
 TILECOLOR, (left + adjx, top + adjy, TILESIZE, TILESIZE))</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>219. </span>    textSurf
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>219. </span>Â Â Â Â textSurf
 = BASICFONT.render(str(number), True, TEXTCOLOR)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>220. </span>    textRect
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>220. </span>Â Â Â Â textRect
 = textSurf.get_rect()</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>221. </span>    textRect.center
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>221. </span>Â Â Â Â textRect.center
 = left + int(TILESIZE / 2) + adjx, top + int(TILESIZE / 2) + adjy</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>222. </span>    DISPLAYSURF.blit(textSurf,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>222. </span>Â Â Â Â DISPLAYSURF.blit(textSurf,
 textRect)</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>223. </span></p>
@@ -1359,19 +1359,19 @@ textRect)</p>
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>225. </span>def
 makeText(text, color, bgcolor, top, left):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>226. </span>    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>226. </span>Â Â Â Â <span
 class=SourceCodeComment># create the Surface and Rect objects for some text.</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>227. </span>    textSurf
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>227. </span>Â Â Â Â textSurf
 = BASICFONT.render(text, True, color, bgcolor)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>228. </span>    textRect
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>228. </span>Â Â Â Â textRect
 = textSurf.get_rect()</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>229. </span>    textRect.topleft
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>229. </span>Â Â Â Â textRect.topleft
 = (top, left)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>230. </span>    return
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>230. </span>Â Â Â Â return
 (textSurf, textRect)</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>231. </span></p>
@@ -1381,54 +1381,54 @@ class=SourceCodeComment># create the Surface and Rect objects for some text.</sp
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>233. </span>def
 drawBoard(board, message):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>234. </span>    DISPLAYSURF.fill(BGCOLOR)</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>234. </span>Â Â Â Â DISPLAYSURF.fill(BGCOLOR)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>235. </span>    if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>235. </span>Â Â Â Â if
 message:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>236. </span>        textSurf,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>236. </span>Â Â Â Â Â Â Â Â textSurf,
 textRect = makeText(message, MESSAGECOLOR, BGCOLOR, 5, 5)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>237. </span>        DISPLAYSURF.blit(textSurf,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>237. </span>Â Â Â Â Â Â Â Â DISPLAYSURF.blit(textSurf,
 textRect)</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>238. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>239. </span>    for
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>239. </span>Â Â Â Â for
 tilex in range(len(board)):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>240. </span>        for
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>240. </span>Â Â Â Â Â Â Â Â for
 tiley in range(len(board[0])):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>241. </span>            if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>241. </span>Â Â Â Â Â Â Â Â Â Â Â Â if
 board[tilex][tiley]:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>242. </span>                drawTile(tilex,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>242. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â drawTile(tilex,
 tiley, board[tilex][tiley])</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>243. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>244. </span>    left,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>244. </span>Â Â Â Â left,
 top = getLeftTopOfTile(0, 0)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>245. </span>    width
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>245. </span>Â Â Â Â width
 = BOARDWIDTH * TILESIZE</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>246. </span>    height
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>246. </span>Â Â Â Â height
 = BOARDHEIGHT * TILESIZE</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>247. </span>    pygame.draw.rect(DISPLAYSURF,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>247. </span>Â Â Â Â pygame.draw.rect(DISPLAYSURF,
 BORDERCOLOR, (left - 5, top - 5, width + 11, height + 11), 4)</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>248. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>249. </span>    DISPLAYSURF.blit(RESET_SURF,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>249. </span>Â Â Â Â DISPLAYSURF.blit(RESET_SURF,
 RESET_RECT)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>250. </span>    DISPLAYSURF.blit(NEW_SURF,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>250. </span>Â Â Â Â DISPLAYSURF.blit(NEW_SURF,
 NEW_RECT)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>251. </span>    DISPLAYSURF.blit(SOLVE_SURF,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>251. </span>Â Â Â Â DISPLAYSURF.blit(SOLVE_SURF,
 SOLVE_RECT)</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>252. </span></p>
@@ -1438,114 +1438,114 @@ SOLVE_RECT)</p>
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>254. </span>def
 slideAnimation(board, direction, message, animationSpeed):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>255. </span>    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>255. </span>Â Â Â Â <span
 class=SourceCodeComment># Note: This function does not check if the move is
 valid.</span></p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>256. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>257. </span>    blankx,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>257. </span>Â Â Â Â blankx,
 blanky = getBlankPosition(board)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>258. </span>    if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>258. </span>Â Â Â Â if
 direction == UP:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>259. </span>        movex
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>259. </span>Â Â Â Â Â Â Â Â movex
 = blankx</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>260. </span>        movey
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>260. </span>Â Â Â Â Â Â Â Â movey
 = blanky + 1</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>261. </span>    elif
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>261. </span>Â Â Â Â elif
 direction == DOWN:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>262. </span>        movex
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>262. </span>Â Â Â Â Â Â Â Â movex
 = blankx</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>263. </span>        movey
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>263. </span>Â Â Â Â Â Â Â Â movey
 = blanky - 1</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>264. </span>    elif
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>264. </span>Â Â Â Â elif
 direction == LEFT:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>265. </span>        movex
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>265. </span>Â Â Â Â Â Â Â Â movex
 = blankx + 1</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>266. </span>        movey
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>266. </span>Â Â Â Â Â Â Â Â movey
 = blanky</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>267. </span>    elif
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>267. </span>Â Â Â Â elif
 direction == RIGHT:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>268. </span>        movex
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>268. </span>Â Â Â Â Â Â Â Â movex
 = blankx - 1</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>269. </span>        movey
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>269. </span>Â Â Â Â Â Â Â Â movey
 = blanky</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>270. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>271. </span>    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>271. </span>Â Â Â Â <span
 class=SourceCodeComment># prepare the base surface</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>272. </span>    drawBoard(board,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>272. </span>Â Â Â Â drawBoard(board,
 message)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>273. </span>    baseSurf
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>273. </span>Â Â Â Â baseSurf
 = DISPLAYSURF.copy()</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>274. </span>    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>274. </span>Â Â Â Â <span
 class=SourceCodeComment># draw a blank space over the moving tile on the
 baseSurf Surface.</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>275. </span>    moveLeft,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>275. </span>Â Â Â Â moveLeft,
 moveTop = getLeftTopOfTile(movex, movey)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>276. </span>    pygame.draw.rect(baseSurf,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>276. </span>Â Â Â Â pygame.draw.rect(baseSurf,
 BGCOLOR, (moveLeft, moveTop, TILESIZE, TILESIZE))</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>277. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>278. </span>    for
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>278. </span>Â Â Â Â for
 i in range(0, TILESIZE, animationSpeed):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>279. </span>        <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>279. </span>Â Â Â Â Â Â Â Â <span
 class=SourceCodeComment># animate the tile sliding over</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>280. </span>        checkForQuit()</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>280. </span>Â Â Â Â Â Â Â Â checkForQuit()</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>281. </span>        DISPLAYSURF.blit(baseSurf,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>281. </span>Â Â Â Â Â Â Â Â DISPLAYSURF.blit(baseSurf,
 (0, 0))</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>282. </span>        if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>282. </span>Â Â Â Â Â Â Â Â if
 direction == UP:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>283. </span>            drawTile(movex,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>283. </span>Â Â Â Â Â Â Â Â Â Â Â Â drawTile(movex,
 movey, board[movex][movey], 0, -i)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>284. </span>        if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>284. </span>Â Â Â Â Â Â Â Â if
 direction == DOWN:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>285. </span>            drawTile(movex,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>285. </span>Â Â Â Â Â Â Â Â Â Â Â Â drawTile(movex,
 movey, board[movex][movey], 0, i)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>286. </span>        if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>286. </span>Â Â Â Â Â Â Â Â if
 direction == LEFT:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>287. </span>            drawTile(movex,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>287. </span>Â Â Â Â Â Â Â Â Â Â Â Â drawTile(movex,
 movey, board[movex][movey], -i, 0)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>288. </span>        if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>288. </span>Â Â Â Â Â Â Â Â if
 direction == RIGHT:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>289. </span>            drawTile(movex,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>289. </span>Â Â Â Â Â Â Â Â Â Â Â Â drawTile(movex,
 movey, board[movex][movey], i, 0)</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>290. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>291. </span>        pygame.display.update()</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>291. </span>Â Â Â Â Â Â Â Â pygame.display.update()</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>292. </span>        FPSCLOCK.tick(FPS)</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>292. </span>Â Â Â Â Â Â Â Â FPSCLOCK.tick(FPS)</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>293. </span></p>
 
@@ -1554,48 +1554,48 @@ movey, board[movex][movey], i, 0)</p>
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>295. </span>def
 generateNewPuzzle(numSlides):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>296. </span>    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>296. </span>Â Â Â Â <span
 class=SourceCodeComment># From a starting configuration, make numSlides number
 of moves (and</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>297. </span>    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>297. </span>Â Â Â Â <span
 class=SourceCodeComment># animate these moves).</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>298. </span>    sequence
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>298. </span>Â Â Â Â sequence
 = []</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>299. </span>    board
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>299. </span>Â Â Â Â board
 = getStartingBoard()</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>300. </span>    drawBoard(board,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>300. </span>Â Â Â Â drawBoard(board,
 '')</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>301. </span>    pygame.display.update()</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>301. </span>Â Â Â Â pygame.display.update()</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>302. </span>    pygame.time.wait(500)
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>302. </span>Â Â Â Â pygame.time.wait(500)
 <span class=SourceCodeComment># pause 500 milliseconds for effect</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>303. </span>    lastMove
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>303. </span>Â Â Â Â lastMove
 = None</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>304. </span>    for
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>304. </span>Â Â Â Â for
 i in range(numSlides):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>305. </span>        move
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>305. </span>Â Â Â Â Â Â Â Â move
 = getRandomMove(board, lastMove)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>306. </span>        slideAnimation(board,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>306. </span>Â Â Â Â Â Â Â Â slideAnimation(board,
 move, 'Generating new puzzle...', int(TILESIZE / 3))</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>307. </span>        makeMove(board,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>307. </span>Â Â Â Â Â Â Â Â makeMove(board,
 move)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>308. </span>        sequence.append(move)</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>308. </span>Â Â Â Â Â Â Â Â sequence.append(move)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>309. </span>        lastMove
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>309. </span>Â Â Â Â Â Â Â Â lastMove
 = move</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>310. </span>    return
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>310. </span>Â Â Â Â return
 (board, sequence)</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>311. </span></p>
@@ -1605,47 +1605,47 @@ move)</p>
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>313. </span>def
 resetAnimation(board, allMoves):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>314. </span>    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>314. </span>Â Â Â Â <span
 class=SourceCodeComment># make all of the moves in allMoves in reverse.</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>315. </span>    revAllMoves
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>315. </span>Â Â Â Â revAllMoves
 = allMoves[:] <span class=SourceCodeComment># gets a copy of the list</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>316. </span>    revAllMoves.reverse()</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>316. </span>Â Â Â Â revAllMoves.reverse()</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>317. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>318. </span>    for
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>318. </span>Â Â Â Â for
 move in revAllMoves:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>319. </span>        if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>319. </span>Â Â Â Â Â Â Â Â if
 move == UP:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>320. </span>            oppositeMove
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>320. </span>Â Â Â Â Â Â Â Â Â Â Â Â oppositeMove
 = DOWN</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>321. </span>        elif
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>321. </span>Â Â Â Â Â Â Â Â elif
 move == DOWN:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>322. </span>            oppositeMove
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>322. </span>Â Â Â Â Â Â Â Â Â Â Â Â oppositeMove
 = UP</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>323. </span>        elif
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>323. </span>Â Â Â Â Â Â Â Â elif
 move == RIGHT:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>324. </span>            oppositeMove
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>324. </span>Â Â Â Â Â Â Â Â Â Â Â Â oppositeMove
 = LEFT</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>325. </span>        elif
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>325. </span>Â Â Â Â Â Â Â Â elif
 move == LEFT:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>326. </span>            oppositeMove
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>326. </span>Â Â Â Â Â Â Â Â Â Â Â Â oppositeMove
 = RIGHT</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>327. </span>        slideAnimation(board,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>327. </span>Â Â Â Â Â Â Â Â slideAnimation(board,
 oppositeMove, '', int(TILESIZE / 2))</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>328. </span>        makeMove(board,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>328. </span>Â Â Â Â Â Â Â Â makeMove(board,
 oppositeMove)</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>329. </span></p>
@@ -1655,132 +1655,132 @@ oppositeMove)</p>
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>331. </span>if
 __name__ == '__main__':</p>
 
-<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>332. </span>    main()</p>
+<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>332. </span>Â Â Â Â main()</p>
 
 </div>
 
 <h2><a name="_Toc316488584">Second Verse, Same as the First</a></h2>
 
 <p class=MsoNormal>Much of the code in Wormy is similar to the previous games
-we’ve looked at, especially the constants being set at the start of the code.</p>
+weâ€™ve looked at, especially the constants being set at the start of the code.</p>
 
 <div style='border:double windowtext 1.5pt;padding:6.0pt 4.0pt 6.0pt 4.0pt'>
 
-<p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>  1. </span><span
+<p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>Â  1. </span><span
 class=SourceCodeComment># Slide Puzzle</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>  2. </span><span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â  2. </span><span
 class=SourceCodeComment># By Al Sweigart al@inventwithpython.com</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>  3. </span><span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â  3. </span><span
 class=SourceCodeComment># http://inventwithpython.com/pygame</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>  4. </span><span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â  4. </span><span
 class=SourceCodeComment># Creative Commons BY-NC-SA 3.0 US</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>  5. </span></p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â  5. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>  6. </span>import
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â  6. </span>import
 pygame, sys, random</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>  7. </span>from
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â  7. </span>from
 pygame.locals import *</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>  8. </span></p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â  8. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>  9. </span><span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â  9. </span><span
 class=SourceCodeComment># Create the constants (go ahead and experiment with
 different values)</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 10. </span>BOARDWIDTH
-= 4  <span class=SourceCodeComment># number of columns in the board</span></p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 10. </span>BOARDWIDTH
+= 4Â  <span class=SourceCodeComment># number of columns in the board</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 11. </span>BOARDHEIGHT
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 11. </span>BOARDHEIGHT
 = 4 <span class=SourceCodeComment># number of rows in the board</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 12. </span>TILESIZE
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 12. </span>TILESIZE
 = 80</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 13. </span>WINDOWWIDTH
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 13. </span>WINDOWWIDTH
 = 640</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 14. </span>WINDOWHEIGHT
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 14. </span>WINDOWHEIGHT
 = 480</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 15. </span>FPS
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 15. </span>FPS
 = 30</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 16. </span>BLANK
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 16. </span>BLANK
 = None</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 17. </span></p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 17. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 18. </span><span
-class=SourceCodeComment>#                 R    G    B</span></p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 18. </span><span
+class=SourceCodeComment>#Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â  RÂ Â Â  GÂ Â Â  B</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 19. </span>BLACK
-=         (  0,   0,   0)</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 19. </span>BLACK
+=Â Â Â Â Â Â Â Â  (Â  0,Â Â  0,Â Â  0)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 20. </span>WHITE
-=         (255, 255, 255)</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 20. </span>WHITE
+= Â Â Â Â Â Â Â Â (255, 255, 255)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 21. </span>BRIGHTBLUE
-=    (  0,  50, 255)</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 21. </span>BRIGHTBLUE
+=Â Â Â  (Â  0,Â  50, 255)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 22. </span>DARKTURQUOISE
-= (  3,  54,  73)</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 22. </span>DARKTURQUOISE
+= (Â  3,Â  54,Â  73)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 23. </span>GREEN
-=         (  0, 204,   0)</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 23. </span>GREEN
+=Â Â Â Â Â Â Â Â  (Â  0, 204,Â Â  0)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 24. </span></p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 24. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 25. </span>BGCOLOR
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 25. </span>BGCOLOR
 = DARKTURQUOISE</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 26. </span>TILECOLOR
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 26. </span>TILECOLOR
 = GREEN</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 27. </span>TEXTCOLOR
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 27. </span>TEXTCOLOR
 = WHITE</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 28. </span>BORDERCOLOR
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 28. </span>BORDERCOLOR
 = BRIGHTBLUE</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 29. </span>BASICFONTSIZE
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 29. </span>BASICFONTSIZE
 = 20</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 30. </span></p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 30. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 31. </span>BUTTONCOLOR
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 31. </span>BUTTONCOLOR
 = WHITE</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 32. </span>BUTTONTEXTCOLOR
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 32. </span>BUTTONTEXTCOLOR
 = BLACK</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 33. </span>MESSAGECOLOR
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 33. </span>MESSAGECOLOR
 = WHITE</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 34. </span></p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 34. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 35. </span>XMARGIN
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 35. </span>XMARGIN
 = int((WINDOWWIDTH - (TILESIZE * BOARDWIDTH + (BOARDWIDTH - 1))) / 2)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 36. </span>YMARGIN
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 36. </span>YMARGIN
 = int((WINDOWHEIGHT - (TILESIZE * BOARDHEIGHT + (BOARDHEIGHT - 1))) / 2)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 37. </span></p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 37. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 38. </span>UP
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 38. </span>UP
 = 'up'</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 39. </span>DOWN
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 39. </span>DOWN
 = 'down'</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 40. </span>LEFT
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 40. </span>LEFT
 = 'left'</p>
 
-<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber> 41. </span>RIGHT
+<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>Â 41. </span>RIGHT
 = 'right'</p>
 
 </div>
@@ -1793,53 +1793,53 @@ beginning of the Memory Puzzle game from the last chapter.</p>
 
 <div style='border:double windowtext 1.5pt;padding:6.0pt 4.0pt 6.0pt 4.0pt'>
 
-<p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber> 43. </span>def
+<p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>Â 43. </span>def
 main():</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 44. </span>    global
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 44. </span>Â Â Â Â global
 FPSCLOCK, DISPLAYSURF, BASICFONT, RESET_SURF, RESET_RECT, NEW_SURF, NEW_RECT,
 SOLVE_SURF, SOLVE_RECT</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 45. </span></p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 45. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 46. </span>    pygame.init()</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 46. </span>Â Â Â Â pygame.init()</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 47. </span>    FPSCLOCK
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 47. </span>Â Â Â Â FPSCLOCK
 = pygame.time.Clock()</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 48. </span>    DISPLAYSURF
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 48. </span>Â Â Â Â DISPLAYSURF
 = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 49. </span>    pygame.display.set_caption('Slide
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 49. </span>Â Â Â Â pygame.display.set_caption('Slide
 Puzzle')</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 50. </span>    BASICFONT
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 50. </span>Â Â Â Â BASICFONT
 = pygame.font.Font('freesansbold.ttf', BASICFONTSIZE)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 51. </span></p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 51. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 52. </span>    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 52. </span>Â Â Â Â <span
 class=SourceCodeComment># Store the option buttons and their rectangles in
 OPTIONS.</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 53. </span>    RESET_SURF,
-RESET_RECT = makeText('Reset',    TEXTCOLOR, TILECOLOR, WINDOWWIDTH - 120,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 53. </span>Â Â Â Â RESET_SURF,
+RESET_RECT = makeText('Reset',Â Â Â  TEXTCOLOR, TILECOLOR, WINDOWWIDTH - 120,
 WINDOWHEIGHT - 90)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 54. </span>    NEW_SURF,
-NEW_RECT   = makeText('New Game', TEXTCOLOR, TILECOLOR, WINDOWWIDTH - 120,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 54. </span>Â Â Â Â NEW_SURF,
+NEW_RECTÂ Â  = makeText('New Game', TEXTCOLOR, TILECOLOR, WINDOWWIDTH - 120,
 WINDOWHEIGHT - 60)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 55. </span>    SOLVE_SURF,
-SOLVE_RECT = makeText('Solve',    TEXTCOLOR, TILECOLOR, WINDOWWIDTH - 120,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 55. </span>Â Â Â Â SOLVE_SURF,
+SOLVE_RECT = makeText('Solve',Â Â Â  TEXTCOLOR, TILECOLOR, WINDOWWIDTH - 120,
 WINDOWHEIGHT - 30)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 56. </span></p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 56. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 57. </span>    mainBoard,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 57. </span>Â Â Â Â mainBoard,
 solutionSeq = generateNewPuzzle(80)</p>
 
-<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber> 58. </span>    SOLVEDBOARD
+<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>Â 58. </span>Â Â Â Â SOLVEDBOARD
 = getStartingBoard() <span class=SourceCodeComment># a solved board is the same
 as the board in a start state.</span></p>
 
@@ -1848,7 +1848,7 @@ as the board in a start state.</span></p>
 <p class=MsoNormal>Just like in the last chapter, the functions called from the
 <span class=Literal>main()</span> function calls will be explained later in the
 chapter. For now, you just need to know what they do and what values they
-return. You don’t need to know how they work.</p>
+return. You donâ€™t need to know how they work.</p>
 
 <p class=MsoNormal>The first part of the <span class=Literal>main()</span>
 function will handle creating the window, Clock object, and Font object. The <span
@@ -1856,16 +1856,16 @@ class=Literal>makeText()</span> function is defined later in the program, but
 for now you just need to know that it returns a <span class=Literal>pygame.Surface</span>
 object and <span class=Literal>pygame.Rect</span> object which can be used to
 make clickable buttons. The Slide Puzzle game will have three buttons: a
-“Reset” button that will undo any moves the player has made, a “New” button
-that will create a new slide puzzle, and a “Solve” button that will solve the
+â€œResetâ€ button that will undo any moves the player has made, a â€œNewâ€ button
+that will create a new slide puzzle, and a â€œSolveâ€ button that will solve the
 puzzle for the player.</p>
 
 <p class=MsoNormal>We will need to have two board data structures for this
 program. One board will represent the current game state. The other board will
-have its tiles in the “solved” state, meaning that all the tiles are lined up
-in order. When the current game state’s board is exactly the same as the solved
-board, then we know the player has won. (We won’t ever change this second one.
-It’ll just be there to compare the current game state board to.)</p>
+have its tiles in the â€œsolvedâ€ state, meaning that all the tiles are lined up
+in order. When the current game stateâ€™s board is exactly the same as the solved
+board, then we know the player has won. (We wonâ€™t ever change this second one.
+Itâ€™ll just be there to compare the current game state board to.)</p>
 
 <p class=MsoNormal>The <span class=Literal>generateNewPuzzle()</span> will
 create a board data structure that started off in the ordered, solved state and
@@ -1881,7 +1881,7 @@ will be stored in a variable named <span class=Literal>solutionSeq</span>).</p>
 
 <div style='border:double windowtext 1.5pt;padding:6.0pt 4.0pt 6.0pt 4.0pt'>
 
-<p class=SourceCodeFeatured><span class=SourceLineNumber> 59. </span>    allMoves
+<p class=SourceCodeFeatured><span class=SourceLineNumber>Â 59. </span>Â Â Â Â allMoves
 = [] <span class=SourceCodeComment># list of moves made from the solved
 configuration</span></p>
 
@@ -1892,13 +1892,13 @@ program the computer to do it, but that would require us to figure out an
 algorithm that can solve the slide puzzle. That would be very difficult and
 involve a lot of cleverness and effort to put into this program. </p>
 
-<p class=MsoNormal>Fortunately, there’s an easier way. We could just have the
+<p class=MsoNormal>Fortunately, thereâ€™s an easier way. We could just have the
 computer memorize all the random slides it made when it created the board data
 structure, and then the board can be solved just by performing the opposite
 slide. Since the board originally started in the solved state, undoing all the
 slides would return it to the solved state.</p>
 
-<p class=MsoNormal>For example, below we perform a “right” slide on the board
+<p class=MsoNormal>For example, below we perform a â€œrightâ€ slide on the board
 on the left side of the page, which leaves the board in the state that is on
 the right side of the page:</p>
 
@@ -1917,26 +1917,26 @@ solve these puzzles simply by looking at the current state of them.</p>
 
 <div style='border:double windowtext 1.5pt;padding:6.0pt 4.0pt 6.0pt 4.0pt'>
 
-<p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber> 61. </span>    while
+<p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>Â 61. </span>Â Â Â Â while
 True: <span class=SourceCodeComment># main game loop</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 62. </span>        slideTo
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 62. </span>Â Â Â Â Â Â Â Â slideTo
 = None <span class=SourceCodeComment># the direction, if any, a tile should
 slide</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 63. </span>        msg
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 63. </span>Â Â Â Â Â Â Â Â msg
 = '' <span class=SourceCodeComment># contains the message to show in the upper
 left corner.</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 64. </span>        if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 64. </span>Â Â Â Â Â Â Â Â if
 mainBoard == SOLVEDBOARD:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 65. </span>            msg
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 65. </span>Â Â Â Â Â Â Â Â Â Â Â Â msg
 = 'Solved!'</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 66. </span></p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 66. </span></p>
 
-<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber> 67. </span>        drawBoard(mainBoard,
+<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>Â 67. </span>Â Â Â Â Â Â Â Â drawBoard(mainBoard,
 msg)</p>
 
 </div>
@@ -1949,7 +1949,7 @@ to display at the top of the window. The program does a quick check on line 64
 to see if the board data structure has the same value as the solved board data
 structure stored in <span class=Literal>SOLVEDBOARD</span>. If so, then the <span
 class=Literal>msg</span> variable is changed to the string <span class=Literal>'Solved!'</span>.
-This won’t appear on the screen until <span class=Literal>drawBoard()</span>
+This wonâ€™t appear on the screen until <span class=Literal>drawBoard()</span>
 has been called to draw it to the <span class=Literal>DISPLAYSURF</span> Surface
 object (which is done on line 67) and <span class=Literal>pygame.display.update()</span>
 is called to draw the display Surface object on the actual computer screen
@@ -1959,52 +1959,52 @@ is called to draw the display Surface object on the actual computer screen
 
 <div style='border:double windowtext 1.5pt;padding:6.0pt 4.0pt 6.0pt 4.0pt'>
 
-<p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber> 69. </span>        checkForQuit()</p>
+<p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>Â 69. </span>Â Â Â Â Â Â Â Â checkForQuit()</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 70. </span>        for
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 70. </span>Â Â Â Â Â Â Â Â for
 event in pygame.event.get(): <span class=SourceCodeComment># event handling
 loop</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 71. </span>            if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 71. </span>Â Â Â Â Â Â Â Â Â Â Â Â if
 event.type == MOUSEBUTTONUP:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 72. </span>                spotx,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 72. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â spotx,
 spoty = getSpotClicked(mainBoard, event.pos[0], event.pos[1])</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 73. </span></p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 73. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 74. </span>                if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 74. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â if
 (spotx, spoty) == (None, None):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 75. </span>                    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 75. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â <span
 class=SourceCodeComment># check if the user clicked on an option button</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 76. </span>                    if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 76. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â if
 RESET_RECT.collidepoint(event.pos):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 77. </span>                        resetAnimation(mainBoard,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 77. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â resetAnimation(mainBoard,
 allMoves) <span class=SourceCodeComment># clicked on Reset button</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 78. </span>                        allMoves
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 78. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â allMoves
 = []</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 79. </span>                    elif
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 79. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â elif
 NEW_RECT.collidepoint(event.pos):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 80. </span>                        mainBoard,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 80. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â mainBoard,
 solutionSeq = generateNewPuzzle(80) <span class=SourceCodeComment># clicked on
 New Game button</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 81. </span>                        allMoves
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 81. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â allMoves
 = []</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 82. </span>                    elif
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 82. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â elif
 SOLVE_RECT.collidepoint(event.pos):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 83. </span>                        resetAnimation(mainBoard,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 83. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â resetAnimation(mainBoard,
 solutionSeq + allMoves) <span class=SourceCodeComment># clicked on Solve button</span></p>
 
-<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber> 84. </span>                        allMoves
+<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>Â 84. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â allMoves
 = []</p>
 
 </div>
@@ -2041,45 +2041,45 @@ the <span class=Literal>RESET_RECT</span>, <span class=Literal>NEW_RECT</span>,
 and <span class=Literal>SOLVE_RECT</span> variables. We can pass the mouse
 coordinates from the Event object to the <span class=Literal>collidepoint()</span>
 method. This method will return <span class=Literal>True</span> if the mouse
-coordinates are within the Rect object’s area and <span class=Literal>False</span>
+coordinates are within the Rect objectâ€™s area and <span class=Literal>False</span>
 otherwise.</p>
 
 <h2><a name="_Toc316488589">Sliding Tiles with the Mouse</a></h2>
 
 <div style='border:double windowtext 1.5pt;padding:6.0pt 4.0pt 6.0pt 4.0pt'>
 
-<p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber> 85. </span>                else:</p>
+<p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>Â 85. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â else:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 86. </span>                    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 86. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â <span
 class=SourceCodeComment># check if the clicked tile was next to the blank spot</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 87. </span></p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 87. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 88. </span>                    blankx,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 88. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â blankx,
 blanky = getBlankPosition(mainBoard)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 89. </span>                    if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 89. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â if
 spotx == blankx + 1 and spoty == blanky:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 90. </span>                        slideTo
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 90. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â slideTo
 = LEFT</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 91. </span>                    elif
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 91. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â elif
 spotx == blankx - 1 and spoty == blanky:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 92. </span>                        slideTo
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 92. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â slideTo
 = RIGHT</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 93. </span>                    elif
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 93. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â elif
 spotx == blankx and spoty == blanky + 1:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 94. </span>                        slideTo
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 94. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â slideTo
 = UP</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 95. </span>                    elif
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 95. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â elif
 spotx == blankx and spoty == blanky - 1:</p>
 
-<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber> 96. </span>                        slideTo
+<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>Â 96. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â slideTo
 = DOWN</p>
 
 </div>
@@ -2103,34 +2103,34 @@ the value that the tile should slide.</p>
 
 <div style='border:double windowtext 1.5pt;padding:6.0pt 4.0pt 6.0pt 4.0pt'>
 
-<p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber> 98. </span>            elif
+<p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>Â 98. </span>Â Â Â Â Â Â Â Â Â Â Â Â elif
 event.type == KEYUP:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber> 99. </span>                <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>Â 99. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â <span
 class=SourceCodeComment># check if the user pressed a key to slide a tile</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>100. </span>                if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>100. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â if
 event.key in (K_LEFT, K_a) and isValidMove(mainBoard, LEFT):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>101. </span>                    slideTo
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>101. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â slideTo
 = LEFT</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>102. </span>                elif
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>102. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â elif
 event.key in (K_RIGHT, K_d) and isValidMove(mainBoard, RIGHT):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>103. </span>                    slideTo
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>103. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â slideTo
 = RIGHT</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>104. </span>                elif
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>104. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â elif
 event.key in (K_UP, K_w) and isValidMove(mainBoard, UP):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>105. </span>                    slideTo
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>105. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â slideTo
 = UP</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>106. </span>                elif
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>106. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â elif
 event.key in (K_DOWN, K_s) and isValidMove(mainBoard, DOWN):</p>
 
-<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>107. </span>                    slideTo
+<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>107. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â slideTo
 = DOWN</p>
 
 </div>
@@ -2141,17 +2141,17 @@ statements on lines 100 to 107 let the user set the <span class=Literal>slideTo<
 variable by either pressing the arrow keys or the WASD keys (explained later).
 Each <span class=Literal>if</span> and <span class=Literal>elif</span>
 statement also has a call to <span class=Literal>isValidMove()</span> to make
-sure that the tile can slide in that direction. (We didn’t have to make this
+sure that the tile can slide in that direction. (We didnâ€™t have to make this
 call with the mouse clicks because the checks for the neighboring blank space
 did the same thing.)</p>
 
-<h2><a name="_Toc316488591">“Equal To One Of” Trick with the </a><span
+<h2><a name="_Toc316488591">â€œEqual To One Ofâ€ Trick with the </a><span
 class=Literal>in</span> Operator</h2>
 
 <p class=MsoNormal>The expression <span class=Literal>event.key in (K_LEFT,
 K_a)</span> is just a Python trick to make the code simpler. It is a way of
-saying “evaluate to <span class=Literal>True</span> if <span class=Literal>event.key</span>
-is equal to one of <span class=Literal>K_LEFT</span> or <span class=Literal>K_a</span>”.
+saying â€œevaluate to <span class=Literal>True</span> if <span class=Literal>event.key</span>
+is equal to one of <span class=Literal>K_LEFT</span> or <span class=Literal>K_a</span>â€.
 The following two expressions will evaluate the exact same way:</p>
 
 <div style='border:solid windowtext 1.0pt;padding:4.0pt 4.0pt 4.0pt 4.0pt'>
@@ -2186,7 +2186,7 @@ spam == 'cat' or spam == 'mouse' or spam == 'horse' or spam == 42 or spam ==
 <h2><a name="_Toc316488592">WASD and Arrow Keys</a></h2>
 
 <p class=MsoNormal>The W, A, S, and D keys (together called the WASD keys,
-pronounced “waz-dee”) are commonly used in computer games to do the same thing
+pronounced â€œwaz-deeâ€) are commonly used in computer games to do the same thing
 as the arrow keys, except the player can use their left hand instead (since the
 WASD keys are on the left side of the keyboard). W is for up, A is for left, S
 is for down, and D is for right. You can easily remember this because the WASD
@@ -2199,22 +2199,22 @@ height=91 id="Picture 21" src="chapter4_files/image003.png"></p>
 
 <div style='border:double windowtext 1.5pt;padding:6.0pt 4.0pt 6.0pt 4.0pt'>
 
-<p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>109. </span>        if
+<p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>109. </span>Â Â Â Â Â Â Â Â if
 slideTo:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>110. </span>            slideAnimation(mainBoard,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>110. </span>Â Â Â Â Â Â Â Â Â Â Â Â slideAnimation(mainBoard,
 slideTo, 'Click tile or press arrow keys to slide.', 8) <span
 class=SourceCodeComment># show slide on screen</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>111. </span>            makeMove(mainBoard,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>111. </span>Â Â Â Â Â Â Â Â Â Â Â Â makeMove(mainBoard,
 slideTo)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>112. </span>            allMoves.append(slideTo)
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>112. </span>Â Â Â Â Â Â Â Â Â Â Â Â allMoves.append(slideTo)
 <span class=SourceCodeComment># record the slide</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>113. </span>        pygame.display.update()</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>113. </span>Â Â Â Â Â Â Â Â pygame.display.update()</p>
 
-<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>114. </span>        FPSCLOCK.tick(FPS)</p>
+<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>114. </span>Â Â Â Â Â Â Â Â FPSCLOCK.tick(FPS)</p>
 
 </div>
 
@@ -2230,7 +2230,7 @@ the speed of the sliding.</p>
 structure (which is done by the <span class=Literal>makeMove()</span> function)
 and then add the slide to the <span class=Literal>allMoves</span> list of all
 the slides made so far. This is done so that if the player clicks on the
-“Reset” button, we know how to undo all the player’s slides.</p>
+â€œResetâ€ button, we know how to undo all the playerâ€™s slides.</p>
 
 <h2><a name="_Toc316488594">IDLE and Terminating Pygame Programs</a></h2>
 
@@ -2239,9 +2239,9 @@ the slides made so far. This is done so that if the player clicks on the
 <p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>117. </span>def
 terminate():</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>118. </span>    pygame.quit()</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>118. </span>Â Â Â Â pygame.quit()</p>
 
-<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>119. </span>    sys.exit()</p>
+<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>119. </span>Â Â Â Â sys.exit()</p>
 
 </div>
 
@@ -2251,32 +2251,32 @@ functions. This is a bit of syntactic sugar, so that instead of remembering to
 make both of these calls, there is just a single function we can call instead.</p>
 
 <h2><a name="_Toc316488595">Checking for a Specific Event, and Posting Events
-to Pygame’s Event Queue</a></h2>
+to Pygameâ€™s Event Queue</a></h2>
 
 <div style='border:double windowtext 1.5pt;padding:6.0pt 4.0pt 6.0pt 4.0pt'>
 
 <p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>122. </span>def
 checkForQuit():</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>123. </span>    for
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>123. </span>Â Â Â Â for
 event in pygame.event.get(QUIT): <span class=SourceCodeComment># get all the
 QUIT events</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>124. </span>        terminate()
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>124. </span>Â Â Â Â Â Â Â Â terminate()
 <span class=SourceCodeComment># terminate if any QUIT events are present</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>125. </span>    for
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>125. </span>Â Â Â Â for
 event in pygame.event.get(KEYUP): <span class=SourceCodeComment># get all the
 KEYUP events</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>126. </span>        if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>126. </span>Â Â Â Â Â Â Â Â if
 event.key == K_ESCAPE:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>127. </span>            terminate()
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>127. </span>Â Â Â Â Â Â Â Â Â Â Â Â terminate()
 <span class=SourceCodeComment># terminate if the KEYUP event was for the Esc
 key</span></p>
 
-<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>128. </span>        pygame.event.post(event)
+<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>128. </span>Â Â Â Â Â Â Â Â pygame.event.post(event)
 <span class=SourceCodeComment># put the other KEYUP event objects back</span></p>
 
 </div>
@@ -2297,13 +2297,13 @@ that are in the internal event queue. The rest of the events will stay in the
 event queue for the next time <span class=Literal>pygame.event.get()</span> is
 called.</p>
 
-<p class=MsoNormal>You should note that Pygame’s event queue only stores up to
+<p class=MsoNormal>You should note that Pygameâ€™s event queue only stores up to
 127 Event objects. If your program does not call <span class=Literal>pygame.event.get()</span>
-frequently enough and the queue fills up, then any new events that happen won’t
+frequently enough and the queue fills up, then any new events that happen wonâ€™t
 be added to the event queue.</p>
 
 <p class=MsoNormal>Line 123 pulls out a list of <span class=Literal>QUIT</span>
-events from Pygame’s event queue and returns them. If there are any <span
+events from Pygameâ€™s event queue and returns them. If there are any <span
 class=Literal>QUIT</span> events in the event queue, the program terminates.</p>
 
 <p class=MsoNormal>Line 125 pulls out all the <span class=Literal>KEYUP</span>
@@ -2311,11 +2311,11 @@ events from the event queue and checks if any of them are for the Esc key. If
 one of the events is, then the program terminates. However, there could be <span
 class=Literal>KEYUP</span> events for keys other than the Esc key. In this
 case, we need to put the <span class=Literal>KEYUP</span> event back into
-Pygame’s event queue. We can do this with the <span class=Literal>pygame.event.post()</span>
+Pygameâ€™s event queue. We can do this with the <span class=Literal>pygame.event.post()</span>
 function, which adds the Event object passed to it to the end of the Pygame
 event queue. This way, when line 70 calls <span class=Literal>pygame.event.get()</span>
 the non-Esc key <span class=Literal>KEYUP</span> events will still be there.
-Otherwise calls to <span class=Literal>checkForQuit()</span> would “consume”
+Otherwise calls to <span class=Literal>checkForQuit()</span> would â€œconsumeâ€
 all of the <span class=Literal>KEYUP</span> events and those events would never
 be handled.</p>
 
@@ -2330,63 +2330,63 @@ event queue.</p>
 <p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>131. </span>def
 getStartingBoard():</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>132. </span>    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>132. </span>Â Â Â Â <span
 class=SourceCodeComment># Return a board data structure with tiles in the
 solved state.</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>133. </span>    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>133. </span>Â Â Â Â <span
 class=SourceCodeComment># For example, if BOARDWIDTH and BOARDHEIGHT are both
 3, this function</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>134. </span>    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>134. </span>Â Â Â Â <span
 class=SourceCodeComment># returns [[1, 4, 7], [2, 5, 8], [3, 6, None]]</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>135. </span>    counter
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>135. </span>Â Â Â Â counter
 = 1</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>136. </span>    board
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>136. </span>Â Â Â Â board
 = []</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>137. </span>    for
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>137. </span>Â Â Â Â for
 x in range(BOARDWIDTH):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>138. </span>        column
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>138. </span>Â Â Â Â Â Â Â Â column
 = []</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>139. </span>        for
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>139. </span>Â Â Â Â Â Â Â Â for
 y in range(BOARDHEIGHT):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>140. </span>            column.append(counter)</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>140. </span>Â Â Â Â Â Â Â Â Â Â Â Â column.append(counter)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>141. </span>            counter
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>141. </span>Â Â Â Â Â Â Â Â Â Â Â Â counter
 += BOARDWIDTH</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>142. </span>        board.append(column)</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>142. </span>Â Â Â Â Â Â Â Â board.append(column)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>143. </span>        counter
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>143. </span>Â Â Â Â Â Â Â Â counter
 -= BOARDWIDTH * (BOARDHEIGHT - 1) + BOARDWIDTH - 1</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>144. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>145. </span>    board[BOARDWIDTH-1][BOARDHEIGHT-1]
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>145. </span>Â Â Â Â board[BOARDWIDTH-1][BOARDHEIGHT-1]
 = None</p>
 
-<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>146. </span>    return
+<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>146. </span>Â Â Â Â return
 board</p>
 
 </div>
 
 <p class=MsoNormal>The <span class=Literal>getStartingBoard()</span> data
-structure will create and return a data structure that represents a “solved”
+structure will create and return a data structure that represents a â€œsolvedâ€
 board, where all the numbered tiles are in order and the blank tile is in the
 lower right corner. This is done with nested <span class=Literal>for</span>
 loops, just like the board data structure in the Memory Puzzle game was made.</p>
 
-<p class=MsoNormal>However, notice that the first column isn’t going to be <span
+<p class=MsoNormal>However, notice that the first column isnâ€™t going to be <span
 class=Literal>[1, 2, 3]</span> but instead <span class=Literal>[1, 4, 7]</span>.
 This is because the numbers on the tiles increase by 1 going across the row,
 not down the column. Going down the column, the numbers increase by the size of
-the board’s width (which is stored in the <span class=Literal>BOARDWIDTH</span>
+the boardâ€™s width (which is stored in the <span class=Literal>BOARDWIDTH</span>
 constant). We will use the <span class=Literal>counter</span> variable to keep
 track of the number that should go on the next tile. When the numbering of the
 tiles in the column is finished, then we need to set <span class=Literal>counter</span>
@@ -2399,20 +2399,20 @@ to the number at the start of the next column. </p>
 <p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>149. </span>def
 getBlankPosition(board):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>150. </span>    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>150. </span>Â Â Â Â <span
 class=SourceCodeComment># Return the x and y of board coordinates of the blank
 space.</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>151. </span>    for
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>151. </span>Â Â Â Â for
 x in range(BOARDWIDTH):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>152. </span>        for
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>152. </span>Â Â Â Â Â Â Â Â for
 y in range(BOARDHEIGHT):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>153. </span>            if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>153. </span>Â Â Â Â Â Â Â Â Â Â Â Â if
 board[x][y] == None:</p>
 
-<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>154. </span>                return
+<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>154. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â return
 (x, y)</p>
 
 </div>
@@ -2432,36 +2432,36 @@ loops to find which space on the board is the blank space.</p>
 <p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>157. </span>def
 makeMove(board, move):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>158. </span>    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>158. </span>Â Â Â Â <span
 class=SourceCodeComment># This function does not check if the move is valid.</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>159. </span>    blankx,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>159. </span>Â Â Â Â blankx,
 blanky = getBlankPosition(board)</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>160. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>161. </span>    if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>161. </span>Â Â Â Â if
 move == UP:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>162. </span>        board[blankx][blanky],
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>162. </span>Â Â Â Â Â Â Â Â board[blankx][blanky],
 board[blankx][blanky + 1] = board[blankx][blanky + 1], board[blankx][blanky]</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>163. </span>    elif
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>163. </span>Â Â Â Â elif
 move == DOWN:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>164. </span>        board[blankx][blanky],
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>164. </span>Â Â Â Â Â Â Â Â board[blankx][blanky],
 board[blankx][blanky - 1] = board[blankx][blanky - 1], board[blankx][blanky]</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>165. </span>    elif
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>165. </span>Â Â Â Â elif
 move == LEFT:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>166. </span>        board[blankx][blanky],
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>166. </span>Â Â Â Â Â Â Â Â board[blankx][blanky],
 board[blankx + 1][blanky] = board[blankx + 1][blanky], board[blankx][blanky]</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>167. </span>    elif
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>167. </span>Â Â Â Â elif
 move == RIGHT:</p>
 
-<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>168. </span>        board[blankx][blanky],
+<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>168. </span>Â Â Â Â Â Â Â Â board[blankx][blanky],
 board[blankx - 1][blanky] = board[blankx - 1][blanky], board[blankx][blanky]</p>
 
 </div>
@@ -2471,7 +2471,7 @@ represents where all the tiles are. Whenever the player makes a move, the
 program needs to update this data structure. What happens is that the value for
 the tile is swapped with the value for the blank space.</p>
 
-<p class=MsoNormal>The <span class=Literal>makeMove()</span> function doesn’t
+<p class=MsoNormal>The <span class=Literal>makeMove()</span> function doesnâ€™t
 have to return any values, because the <span class=Literal>board</span>
 parameter has a list reference passed for its argument. This means that any
 changes we make to <span class=Literal>board</span> in this function will be
@@ -2485,19 +2485,19 @@ made to the list value that was passed to <span class=Literal>makeMove()</span>.
 <p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>171. </span>def
 isValidMove(board, move):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>172. </span>    blankx,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>172. </span>Â Â Â Â blankx,
 blanky = getBlankPosition(board)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>173. </span>    return
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>173. </span>Â Â Â Â return
 (move == UP and blanky != len(board[0]) - 1) or \</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>174. </span>           (move
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>174. </span>Â Â Â Â Â Â Â Â Â Â Â (move
 == DOWN and blanky != 0) or \</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>175. </span>           (move
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>175. </span>Â Â Â Â Â Â Â Â Â Â Â (move
 == LEFT and blankx != len(board) - 1) or \</p>
 
-<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>176. </span>           (move
+<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>176. </span>Â Â Â Â Â Â Â Â Â Â Â (move
 == RIGHT and blankx != 0)</p>
 
 </div>
@@ -2515,7 +2515,7 @@ to find the X and Y coordinates of the blank spot. Lines 173 to 176 are a <span
 class=Literal>return</span> statement with a single expression. The <span
 class=Literal>\</span> slashes at the end of the first three lines tells the
 Python interpreter that that is not the end of the line of code (even though it
-is at the end of the line). This will let us split up a “line of code” across
+is at the end of the line). This will let us split up a â€œline of codeâ€ across
 multiple lines to look pretty, rather than just have one very long unreadable
 line.</p>
 
@@ -2532,43 +2532,43 @@ blank space allows that move.</p>
 <p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>179. </span>def
 getRandomMove(board, lastMove=None):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>180. </span>    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>180. </span>Â Â Â Â <span
 class=SourceCodeComment># start with a full list of all four moves</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>181. </span>    validMoves
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>181. </span>Â Â Â Â validMoves
 = [UP, DOWN, LEFT, RIGHT]</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>182. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>183. </span>    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>183. </span>Â Â Â Â <span
 class=SourceCodeComment># remove moves from the list as they are disqualified</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>184. </span>    if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>184. </span>Â Â Â Â if
 lastMove == UP or not isValidMove(board, DOWN):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>185. </span>        validMoves.remove(DOWN)</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>185. </span>Â Â Â Â Â Â Â Â validMoves.remove(DOWN)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>186. </span>    if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>186. </span>Â Â Â Â if
 lastMove == DOWN or not isValidMove(board, UP):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>187. </span>        validMoves.remove(UP)</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>187. </span>Â Â Â Â Â Â Â Â validMoves.remove(UP)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>188. </span>    if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>188. </span>Â Â Â Â if
 lastMove == LEFT or not isValidMove(board, RIGHT):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>189. </span>        validMoves.remove(RIGHT)</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>189. </span>Â Â Â Â Â Â Â Â validMoves.remove(RIGHT)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>190. </span>    if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>190. </span>Â Â Â Â if
 lastMove == RIGHT or not isValidMove(board, LEFT):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>191. </span>        validMoves.remove(LEFT)</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>191. </span>Â Â Â Â Â Â Â Â validMoves.remove(LEFT)</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>192. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>193. </span>    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>193. </span>Â Â Â Â <span
 class=SourceCodeComment># return a random move from the list of remaining moves</span></p>
 
-<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>194. </span>    return
+<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>194. </span>Â Â Â Â return
 random.choice(validMoves)</p>
 
 </div>
@@ -2576,7 +2576,7 @@ random.choice(validMoves)</p>
 <p class=MsoNormal>At the beginning of the game, we start with the board data
 structure in the solved, ordered state and create the puzzle by randomly
 sliding around tiles. To decide which of the four directions we should slide,
-we’ll call our <span class=Literal>getRandomMove()</span> function. Normally we
+weâ€™ll call our <span class=Literal>getRandomMove()</span> function. Normally we
 could just use the <span class=Literal>random.choice()</span> function and pass
 it a tuple <span class=Literal>(UP, DOWN, LEFT, RIGHT)</span> to have Python
 simply randomly choose a direction value for us. But the Sliding Puzzle game
@@ -2584,7 +2584,7 @@ has a small restriction that prevents us from choosing a purely random number.</
 
 <p class=MsoNormal>If you had a slide puzzle and slid a tile to left, and then
 slid a tile to the right, you would end up with the exact same board you had at
-the start. It’s pointless to make a slide followed by the opposite slide. Also,
+the start. Itâ€™s pointless to make a slide followed by the opposite slide. Also,
 if the blank space is in the lower right corner than it is impossible to slide
 a tile up or to the left.</p>
 
@@ -2610,13 +2610,13 @@ and returned.</p>
 <p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>197. </span>def
 getLeftTopOfTile(tileX, tileY):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>198. </span>    left
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>198. </span>Â Â Â Â left
 = XMARGIN + (tileX * TILESIZE) + (tileX - 1)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>199. </span>    top
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>199. </span>Â Â Â Â top
 = YMARGIN + (tileY * TILESIZE) + (tileY - 1)</p>
 
-<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>200. </span>    return
+<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>200. </span>Â Â Â Â return
 (left, top)</p>
 
 </div>
@@ -2634,29 +2634,29 @@ Coordinates</a></h2>
 <p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>203. </span>def
 getSpotClicked(board, x, y):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>204. </span>    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>204. </span>Â Â Â Â <span
 class=SourceCodeComment># from the x &amp; y pixel coordinates, get the x &amp;
 y board coordinates</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>205. </span>    for
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>205. </span>Â Â Â Â for
 tileX in range(len(board)):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>206. </span>        for
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>206. </span>Â Â Â Â Â Â Â Â for
 tileY in range(len(board[0])):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>207. </span>            left,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>207. </span>Â Â Â Â Â Â Â Â Â Â Â Â left,
 top = getLeftTopOfTile(tileX, tileY)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>208. </span>            tileRect
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>208. </span>Â Â Â Â Â Â Â Â Â Â Â Â tileRect
 = pygame.Rect(left, top, TILESIZE, TILESIZE)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>209. </span>            if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>209. </span>Â Â Â Â Â Â Â Â Â Â Â Â if
 tileRect.collidepoint(x, y):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>210. </span>                return
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>210. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â return
 (tileX, tileY)</p>
 
-<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>211. </span>    return
+<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>211. </span>Â Â Â Â return
 (None, None)</p>
 
 </div>
@@ -2670,7 +2670,7 @@ coordinates. Since all of the tiles have a width and height that is set in the <
 class=Literal>TILESIZE</span> constant, we can create a Rect object that
 represents the space on the board by getting the pixel coordinates of the top
 left corner of the board space, and then use the <span class=Literal>collidepoint()</span>
-Rect method to see if the pixel coordinates are inside that Rect object’s area.</p>
+Rect method to see if the pixel coordinates are inside that Rect objectâ€™s area.</p>
 
 <p class=MsoNormal>If the pixel coordinates that were passed in were not over
 any board space, then the value <span class=Literal>(None, None)</span> is
@@ -2683,29 +2683,29 @@ returned.</p>
 <p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>214. </span>def
 drawTile(tilex, tiley, number, adjx=0, adjy=0):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>215. </span>    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>215. </span>Â Â Â Â <span
 class=SourceCodeComment># draw a tile at board coordinates tilex and tiley,
 optionally a few</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>216. </span>    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>216. </span>Â Â Â Â <span
 class=SourceCodeComment># pixels over (determined by adjx and adjy)</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>217. </span>    left,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>217. </span>Â Â Â Â left,
 top = getLeftTopOfTile(tilex, tiley)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>218. </span>    pygame.draw.rect(DISPLAYSURF,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>218. </span>Â Â Â Â pygame.draw.rect(DISPLAYSURF,
 TILECOLOR, (left + adjx, top + adjy, TILESIZE, TILESIZE))</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>219. </span>    textSurf
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>219. </span>Â Â Â Â textSurf
 = BASICFONT.render(str(number), True, TEXTCOLOR)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>220. </span>    textRect
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>220. </span>Â Â Â Â textRect
 = textSurf.get_rect()</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>221. </span>    textRect.center
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>221. </span>Â Â Â Â textRect.center
 = left + int(TILESIZE / 2) + adjx, top + int(TILESIZE / 2) + adjy</p>
 
-<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>222. </span>    DISPLAYSURF.blit(textSurf,
+<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>222. </span>Â Â Â Â DISPLAYSURF.blit(textSurf,
 textRect)</p>
 
 </div>
@@ -2713,7 +2713,7 @@ textRect)</p>
 <p class=MsoNormal>The <span class=Literal>drawTile()</span> function will draw
 a single numbered tile on the board. The <span class=Literal>tilex</span> and <span
 class=Literal>tiley</span> parameters are the board coordinates of the tile.
-The number parameter is a string of the tile’s number (like <span
+The number parameter is a string of the tileâ€™s number (like <span
 class=Literal>'3'</span> or <span class=Literal>'12'</span>). The <span
 class=Literal>adjx</span> and <span class=Literal>adjy</span> keyword
 parameters are for making minor adjustments to the position of the tile. For
@@ -2735,7 +2735,7 @@ first line 217 converts the board coordinates in <span class=Literal>tilex</span
 and <span class=Literal>tiley</span> to pixel coordinates, which we will store
 in variables <span class=Literal>left</span> and <span class=Literal>top</span>
 (since <span class=Literal>getLeftTopOfTile()</span> returns the top left
-corner’s coordinates). We draw the background square of the tile with a call to
+cornerâ€™s coordinates). We draw the background square of the tile with a call to
 <span class=Literal>pygame.draw.rect()</span> while adding the <span
 class=Literal>adjx</span> and <span class=Literal>adjy</span> values to <span
 class=Literal>left</span> and <span class=Literal>top</span> in case the code
@@ -2744,7 +2744,7 @@ needs to adjust the position of the tile.</p>
 <p class=MsoNormal>Lines 219 to 222 then create the Surface object that has the
 number text drawn on it. A Rect object for the Surface object is positioned,
 and then used to blit the Surface object to the display Surface. The <span
-class=Literal>drawTile()</span> function doesn’t call <span class=Literal>pygame.display.update()</span>
+class=Literal>drawTile()</span> function doesnâ€™t call <span class=Literal>pygame.display.update()</span>
 function, since the caller of <span class=Literal>drawTile()</span> probably
 will want to draw more tiles for the rest of the board before making them
 appear on the screen.</p>
@@ -2756,19 +2756,19 @@ appear on the screen.</p>
 <p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>225. </span>def
 makeText(text, color, bgcolor, top, left):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>226. </span>    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>226. </span>Â Â Â Â <span
 class=SourceCodeComment># create the Surface and Rect objects for some text.</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>227. </span>    textSurf
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>227. </span>Â Â Â Â textSurf
 = BASICFONT.render(text, True, color, bgcolor)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>228. </span>    textRect
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>228. </span>Â Â Â Â textRect
 = textSurf.get_rect()</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>229. </span>    textRect.topleft
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>229. </span>Â Â Â Â textRect.topleft
 = (top, left)</p>
 
-<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>230. </span>    return
+<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>230. </span>Â Â Â Â return
 (textSurf, textRect)</p>
 
 </div>
@@ -2790,29 +2790,29 @@ transparent background color.)</p>
 <p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>233. </span>def
 drawBoard(board, message):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>234. </span>    DISPLAYSURF.fill(BGCOLOR)</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>234. </span>Â Â Â Â DISPLAYSURF.fill(BGCOLOR)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>235. </span>    if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>235. </span>Â Â Â Â if
 message:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>236. </span>        textSurf,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>236. </span>Â Â Â Â Â Â Â Â textSurf,
 textRect = makeText(message, MESSAGECOLOR, BGCOLOR, 5, 5)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>237. </span>        DISPLAYSURF.blit(textSurf,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>237. </span>Â Â Â Â Â Â Â Â DISPLAYSURF.blit(textSurf,
 textRect)</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>238. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>239. </span>    for
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>239. </span>Â Â Â Â for
 tilex in range(len(board)):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>240. </span>        for
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>240. </span>Â Â Â Â Â Â Â Â for
 tiley in range(len(board[0])):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>241. </span>            if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>241. </span>Â Â Â Â Â Â Â Â Â Â Â Â if
 board[tilex][tiley]:</p>
 
-<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>242. </span>                drawTile(tilex,
+<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>242. </span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â drawTile(tilex,
 tiley, board[tilex][tiley])</p>
 
 </div>
@@ -2824,7 +2824,7 @@ anything that used to be drawn on the display Surface object before so that we
 start from scratch.</p>
 
 <p class=MsoNormal>Line 235 to 237 handles drawing the message at the top of
-the window. We use this for the “Generating new puzzle…” and other text we want
+the window. We use this for the â€œGenerating new puzzleâ€¦â€ and other text we want
 to display at the top of the window. Remember that <span class=Literal>if</span>
 statement conditions consider the blank string to be a <span class=Literal>False</span>
 value, so if message is set to <span class=Literal>''</span> then the condition
@@ -2838,16 +2838,16 @@ class=Literal>drawTile()</span> function.</p>
 
 <div style='border:double windowtext 1.5pt;padding:6.0pt 4.0pt 6.0pt 4.0pt'>
 
-<p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>244. </span>    left,
+<p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>244. </span>Â Â Â Â left,
 top = getLeftTopOfTile(0, 0)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>245. </span>    width
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>245. </span>Â Â Â Â width
 = BOARDWIDTH * TILESIZE</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>246. </span>    height
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>246. </span>Â Â Â Â height
 = BOARDHEIGHT * TILESIZE</p>
 
-<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>247. </span>    pygame.draw.rect(DISPLAYSURF,
+<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>247. </span>Â Â Â Â pygame.draw.rect(DISPLAYSURF,
 BORDERCOLOR, (left - 5, top - 5, width + 11, height + 11), 4)</p>
 
 </div>
@@ -2863,7 +2863,7 @@ class=Literal>BOARDHEIGHT</span> constants) multiplied by the size of the tiles
 <p class=MsoNormal>The rectangle we draw on line 247 will have a thickness of 4
 pixels, so we will move the boarder 5 pixels to the left and above where the <span
 class=Literal>top</span> and <span class=Literal>left</span> variables point so
-the thickness of the line won’t overlap the tiles. We will also add <span
+the thickness of the line wonâ€™t overlap the tiles. We will also add <span
 class=Literal>11</span> to the width and length (5 of those 11 pixels are to
 compensate for moving the rectangle to the left and up).</p>
 
@@ -2871,13 +2871,13 @@ compensate for moving the rectangle to the left and up).</p>
 
 <div style='border:double windowtext 1.5pt;padding:6.0pt 4.0pt 6.0pt 4.0pt'>
 
-<p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>249. </span>    DISPLAYSURF.blit(RESET_SURF,
+<p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>249. </span>Â Â Â Â DISPLAYSURF.blit(RESET_SURF,
 RESET_RECT)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>250. </span>    DISPLAYSURF.blit(NEW_SURF,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>250. </span>Â Â Â Â DISPLAYSURF.blit(NEW_SURF,
 NEW_RECT)</p>
 
-<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>251. </span>    DISPLAYSURF.blit(SOLVE_SURF,
+<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>251. </span>Â Â Â Â DISPLAYSURF.blit(SOLVE_SURF,
 SOLVE_RECT)</p>
 
 </div>
@@ -2894,49 +2894,49 @@ function.</p>
 <p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>254. </span>def
 slideAnimation(board, direction, message, animationSpeed):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>255. </span>    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>255. </span>Â Â Â Â <span
 class=SourceCodeComment># Note: This function does not check if the move is
 valid.</span></p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>256. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>257. </span>    blankx,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>257. </span>Â Â Â Â blankx,
 blanky = getBlankPosition(board)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>258. </span>    if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>258. </span>Â Â Â Â if
 direction == UP:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>259. </span>        movex
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>259. </span>Â Â Â Â Â Â Â Â movex
 = blankx</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>260. </span>        movey
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>260. </span>Â Â Â Â Â Â Â Â movey
 = blanky + 1</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>261. </span>    elif
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>261. </span>Â Â Â Â elif
 direction == DOWN:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>262. </span>        movex
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>262. </span>Â Â Â Â Â Â Â Â movex
 = blankx</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>263. </span>        movey
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>263. </span>Â Â Â Â Â Â Â Â movey
 = blanky - 1</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>264. </span>    elif
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>264. </span>Â Â Â Â elif
 direction == LEFT:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>265. </span>        movex
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>265. </span>Â Â Â Â Â Â Â Â movex
 = blankx + 1</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>266. </span>        movey
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>266. </span>Â Â Â Â Â Â Â Â movey
 = blanky</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>267. </span>    elif
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>267. </span>Â Â Â Â elif
 direction == RIGHT:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>268. </span>        movex
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>268. </span>Â Â Â Â Â Â Â Â movex
 = blankx - 1</p>
 
-<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>269. </span>        movey
+<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>269. </span>Â Â Â Â Â Â Â Â movey
 = blanky</p>
 
 </div>
@@ -2947,7 +2947,7 @@ on line 255 reminds us that the code that calls <span class=Literal>slideAnimati
 should make sure that the slide it passes for the direction parameter is a
 valid move to make.</p>
 
-<p class=MsoNormal>The blank space’s coordinates come from a call to <span
+<p class=MsoNormal>The blank spaceâ€™s coordinates come from a call to <span
 class=Literal>getBlankPosition()</span>. From these coordinates and the
 direction of the slide, we can figure out the XY board coordinates of the tile
 that will slide. These coordinates will be stored in the <span class=Literal>movex</span>
@@ -2958,23 +2958,23 @@ Method</h2>
 
 <div style='border:double windowtext 1.5pt;padding:6.0pt 4.0pt 6.0pt 4.0pt'>
 
-<p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>271. </span>    <span
+<p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>271. </span>Â Â Â Â <span
 class=SourceCodeComment># prepare the base surface</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>272. </span>    drawBoard(board,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>272. </span>Â Â Â Â drawBoard(board,
 message)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>273. </span>    baseSurf
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>273. </span>Â Â Â Â baseSurf
 = DISPLAYSURF.copy()</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>274. </span>    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>274. </span>Â Â Â Â <span
 class=SourceCodeComment># draw a blank space over the moving tile on the
 baseSurf Surface.</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>275. </span>    moveLeft,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>275. </span>Â Â Â Â moveLeft,
 moveTop = getLeftTopOfTile(movex, movey)</p>
 
-<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>276. </span>    pygame.draw.rect(baseSurf,
+<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>276. </span>Â Â Â Â pygame.draw.rect(baseSurf,
 BGCOLOR, (moveLeft, moveTop, TILESIZE, TILESIZE))</p>
 
 </div>
@@ -2990,7 +2990,7 @@ class=Literal>baseSurf</span> variable on line 273.</p>
 <p class=MsoNormal>Next, we paint another blank space over the tile that will
 slide. This is because when we draw each frame of the sliding animation, we
 will draw the sliding tile over different parts of the <span class=Literal>baseSurf</span>
-Surface object. If we didn’t blank out the moving tile on the <span
+Surface object. If we didnâ€™t blank out the moving tile on the <span
 class=Literal>baseSurf</span> Surface, then it would still be there as we draw
 the sliding tile. In that case, here is what the <span class=Literal>baseSurf</span>
 Surface would look like:</p>
@@ -2998,7 +2998,7 @@ Surface would look like:</p>
 <p class=MsoNormal align=center style='text-align:center'><img width=310
 height=242 id="Picture 6" src="chapter4_files/image004.jpg"></p>
 
-<p class=MsoNormal>And then what it would look like when we draw the “9” tile sliding
+<p class=MsoNormal>And then what it would look like when we draw the â€œ9â€ tile sliding
 upwards on top of it:</p>
 
 <p class=MsoNormal align=center style='text-align:center'><img width=310
@@ -3009,46 +3009,46 @@ running the program.</p>
 
 <div style='border:double windowtext 1.5pt;padding:6.0pt 4.0pt 6.0pt 4.0pt'>
 
-<p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>278. </span>    for
+<p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>278. </span>Â Â Â Â for
 i in range(0, TILESIZE, animationSpeed):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>279. </span>        <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>279. </span>Â Â Â Â Â Â Â Â <span
 class=SourceCodeComment># animate the tile sliding over</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>280. </span>        checkForQuit()</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>280. </span>Â Â Â Â Â Â Â Â checkForQuit()</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>281. </span>        DISPLAYSURF.blit(baseSurf,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>281. </span>Â Â Â Â Â Â Â Â DISPLAYSURF.blit(baseSurf,
 (0, 0))</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>282. </span>        if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>282. </span>Â Â Â Â Â Â Â Â if
 direction == UP:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>283. </span>            drawTile(movex,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>283. </span>Â Â Â Â Â Â Â Â Â Â Â Â drawTile(movex,
 movey, board[movex][movey], 0, -i)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>284. </span>        if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>284. </span>Â Â Â Â Â Â Â Â if
 direction == DOWN:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>285. </span>            drawTile(movex,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>285. </span>Â Â Â Â Â Â Â Â Â Â Â Â drawTile(movex,
 movey, board[movex][movey], 0, i)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>286. </span>        if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>286. </span>Â Â Â Â Â Â Â Â if
 direction == LEFT:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>287. </span>            drawTile(movex,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>287. </span>Â Â Â Â Â Â Â Â Â Â Â Â drawTile(movex,
 movey, board[movex][movey], -i, 0)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>288. </span>        if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>288. </span>Â Â Â Â Â Â Â Â if
 direction == RIGHT:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>289. </span>            drawTile(movex,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>289. </span>Â Â Â Â Â Â Â Â Â Â Â Â drawTile(movex,
 movey, board[movex][movey], i, 0)</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>290. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>291. </span>        pygame.display.update()</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>291. </span>Â Â Â Â Â Â Â Â pygame.display.update()</p>
 
-<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>292. </span>        FPSCLOCK.tick(FPS)</p>
+<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>292. </span>Â Â Â Â Â Â Â Â FPSCLOCK.tick(FPS)</p>
 
 </div>
 
@@ -3103,25 +3103,25 @@ class=Literal>checkForQuit()</span> function.</p>
 <p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>295. </span>def
 generateNewPuzzle(numSlides):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>296. </span>    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>296. </span>Â Â Â Â <span
 class=SourceCodeComment># From a starting configuration, make numSlides number
 of moves (and</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>297. </span>    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>297. </span>Â Â Â Â <span
 class=SourceCodeComment># animate these moves).</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>298. </span>    sequence
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>298. </span>Â Â Â Â sequence
 = []</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>299. </span>    board
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>299. </span>Â Â Â Â board
 = getStartingBoard()</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>300. </span>    drawBoard(board,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>300. </span>Â Â Â Â drawBoard(board,
 '')</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>301. </span>    pygame.display.update()</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>301. </span>Â Â Â Â pygame.display.update()</p>
 
-<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>302. </span>    pygame.time.wait(500)
+<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>302. </span>Â Â Â Â pygame.time.wait(500)
 <span class=SourceCodeComment># pause 500 milliseconds for effect</span></p>
 
 </div>
@@ -3135,27 +3135,27 @@ the player see the fresh board for a moment).</p>
 
 <div style='border:double windowtext 1.5pt;padding:6.0pt 4.0pt 6.0pt 4.0pt'>
 
-<p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>303. </span>    lastMove
+<p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>303. </span>Â Â Â Â lastMove
 = None</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>304. </span>    for
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>304. </span>Â Â Â Â for
 i in range(numSlides):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>305. </span>        move
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>305. </span>Â Â Â Â Â Â Â Â move
 = getRandomMove(board, lastMove)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>306. </span>        slideAnimation(board,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>306. </span>Â Â Â Â Â Â Â Â slideAnimation(board,
 move, 'Generating new puzzle...', int(TILESIZE / 3))</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>307. </span>        makeMove(board,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>307. </span>Â Â Â Â Â Â Â Â makeMove(board,
 move)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>308. </span>        sequence.append(move)</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>308. </span>Â Â Â Â Â Â Â Â sequence.append(move)</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>309. </span>        lastMove
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>309. </span>Â Â Â Â Â Â Â Â lastMove
 = move</p>
 
-<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>310. </span>    return
+<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>310. </span>Â Â Â Â return
 (board, sequence)</p>
 
 </div>
@@ -3169,8 +3169,8 @@ actually update the board data structure, we update the board by calling <span
 class=Literal>makeMove()</span> on line 307.</p>
 
 <p class=MsoNormal>We need to keep track of each of the random moves that was
-made so that the player can click the “Solve” button later and have the program
-undo all these random moves. (The “Being Smart By Using Stupid Code” section
+made so that the player can click the â€œSolveâ€ button later and have the program
+undo all these random moves. (The â€œBeing Smart By Using Stupid Codeâ€ section
 talks about why and how we do this.) So the move is appended to the list of
 moves in <span class=Literal>sequence</span> on line 308.</p>
 
@@ -3191,60 +3191,60 @@ structure and also the list of the random moves made on it.</p>
 <p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>313. </span>def
 resetAnimation(board, allMoves):</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>314. </span>    <span
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>314. </span>Â Â Â Â <span
 class=SourceCodeComment># make all of the moves in allMoves in reverse.</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>315. </span>    revAllMoves
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>315. </span>Â Â Â Â revAllMoves
 = allMoves[:] <span class=SourceCodeComment># gets a copy of the list</span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>316. </span>    revAllMoves.reverse()</p>
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>316. </span>Â Â Â Â revAllMoves.reverse()</p>
 
 <p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>317. </span></p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>318. </span>    for
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>318. </span>Â Â Â Â for
 move in revAllMoves:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>319. </span>        if
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>319. </span>Â Â Â Â Â Â Â Â if
 move == UP:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>320. </span>            oppositeMove
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>320. </span>Â Â Â Â Â Â Â Â Â Â Â Â oppositeMove
 = DOWN</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>321. </span>        elif
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>321. </span>Â Â Â Â Â Â Â Â elif
 move == DOWN:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>322. </span>            oppositeMove
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>322. </span>Â Â Â Â Â Â Â Â Â Â Â Â oppositeMove
 = UP</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>323. </span>        elif
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>323. </span>Â Â Â Â Â Â Â Â elif
 move == RIGHT:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>324. </span>            oppositeMove
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>324. </span>Â Â Â Â Â Â Â Â Â Â Â Â oppositeMove
 = LEFT</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>325. </span>        elif
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>325. </span>Â Â Â Â Â Â Â Â elif
 move == LEFT:</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>326. </span>            oppositeMove
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>326. </span>Â Â Â Â Â Â Â Â Â Â Â Â oppositeMove
 = RIGHT</p>
 
-<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>327. </span>        slideAnimation(board,
+<p class=SourceCodeFeaturedCxSpMiddle><span class=SourceLineNumber>327. </span>Â Â Â Â Â Â Â Â slideAnimation(board,
 oppositeMove, '', int(TILESIZE / 2))</p>
 
-<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>328. </span>        makeMove(board,
+<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>328. </span>Â Â Â Â Â Â Â Â makeMove(board,
 oppositeMove)</p>
 
 </div>
 
-<p class=MsoNormal>When the player clicks on “Reset” or “Solve”, the Slide
+<p class=MsoNormal>When the player clicks on â€œResetâ€ or â€œSolveâ€, the Slide
 Puzzle game program needs to undo all of the moves that were made to the board.
 The list of directional values for the slides will be passed as the argument
 for the <span class=Literal>allMoves</span> parameter.</p>
 
 <p class=MsoNormal>Line 315 uses list slicing to create a duplicate of the <span
-class=Literal>allMoves</span> list. Remember that if you don’t specify a number
+class=Literal>allMoves</span> list. Remember that if you donâ€™t specify a number
 before the <span class=Literal>:</span>, then Python assumes the slice should
-start from the very beginning of the list. And if you don’t specify a number
+start from the very beginning of the list. And if you donâ€™t specify a number
 after the <span class=Literal>:</span>, then Python assumes the slice should
 keep going to the very end of the list. So <span class=Literal>allMoves[:]</span>
 creates a list slice of the entire <span class=Literal>allMoves</span> list.
@@ -3271,7 +3271,7 @@ the board data structure.</p>
 <p class=SourceCodeFeaturedCxSpFirst><span class=SourceLineNumber>331. </span>if
 __name__ == '__main__':</p>
 
-<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>332. </span>    main()</p>
+<p class=SourceCodeFeaturedCxSpLast><span class=SourceLineNumber>332. </span>Â Â Â Â main()</p>
 
 </div>
 
@@ -3280,7 +3280,7 @@ class=Literal>def</span> statements have been executed to create all the
 functions, we call the <span class=Literal>main()</span> function to begin the
 meat of the program.</p>
 
-<p class=MsoNormal>That’s all there is to the Slide Puzzle program! But let’s
+<p class=MsoNormal>Thatâ€™s all there is to the Slide Puzzle program! But letâ€™s
 talk about some general programming concepts that came up in this game.</p>
 
 <h2><a name="_Toc316488612">Time vs. Memory Tradeoffs</a></h2>
@@ -3294,12 +3294,12 @@ execution time and memory usage.</p>
 <p class=MsoNormal>Usually, the faster a program can run, the better it is.
 This is especially true with programs that need to do a lot of calculations,
 whether they are scientific weather simulators or games with a large amount of
-detailed 3D graphics to draw. It’s also good to use the least amount of memory
+detailed 3D graphics to draw. Itâ€™s also good to use the least amount of memory
 possible. The more variables and the larger the lists your program uses, the
-more memory it takes up. (You can find out how to measure your program’s memory
+more memory it takes up. (You can find out how to measure your programâ€™s memory
 usage and execution time at <span class=URL><a href="http://invpy.com/profiling">http://invpy.com/profiling</a></span>.)</p>
 
-<p class=MsoNormal>Right now, the programs in this book aren’t big and complicated
+<p class=MsoNormal>Right now, the programs in this book arenâ€™t big and complicated
 enough where you have to worry about conserving memory or optimizing the
 execution time. But it can be something to consider as you become a more
 skilled programmer.</p>
@@ -3328,9 +3328,9 @@ is re-creating the solved-state board data structure each time we do this
 check.</p>
 
 <p class=MsoNormal>There is one thing you must remember though. Writing code
-that is readable is a very important skill. Code that is “readable” is code
+that is readable is a very important skill. Code that is â€œreadableâ€ is code
 that is easy to understand, especially by programmers who did not write the
-code. If another programmer can look at your program’s source code and figure
+code. If another programmer can look at your programâ€™s source code and figure
 out what it does without much trouble, then that program is very readable.
 Readability is important because when you want to fix bugs or add new features
 to your program (and bugs and ideas for new features <strong>always</strong>
@@ -3344,7 +3344,7 @@ should know that using short variable names like <span class=Literal>x</span>
 or <span class=Literal>num</span> instead of longer, more descriptive variable
 names like <span class=Literal>blankx</span> or <span class=Literal>numSlides</span>
 does not save you any memory when your program actually runs. Using these
-longer variable names is better because they’ll make your program more
+longer variable names is better because theyâ€™ll make your program more
 readable.</p>
 
 <p class=MsoNormal>You might also come up with some clever tricks that do save
@@ -3355,7 +3355,7 @@ just using two differently named variables. </p>
 <p class=MsoNormal>Try to avoid the temptation to do this. Usually, these
 tricks reduce code readability and make it harder to debug your programs.
 Modern computers have billions of bytes of memory, and saving a few bytes here
-and there really isn’t worth making the code more confusing for human
+and there really isnâ€™t worth making the code more confusing for human
 programmers.</p>
 
 <h2><a name="_Toc316488614">Nobody Cares About a Few Million Nanoseconds</a></h2>
@@ -3364,13 +3364,13 @@ programmers.</p>
 in some way to make it slightly faster by a few nanoseconds. These tricks also
 usually make the code harder to read. When you consider that several billion
 nanoseconds have passed in the time it takes you to read this sentence, saving
-a few nanoseconds of execution time in your program won’t be noticed by the
+a few nanoseconds of execution time in your program wonâ€™t be noticed by the
 player.</p>
 
 <h2><a name="_Toc316488615">Summary</a></h2>
 
-<p class=MsoNormal>This chapter hasn’t introduced any new Pygame programming
-concepts that the Memory Puzzle game didn’t use, aside from using the <span
+<p class=MsoNormal>This chapter hasnâ€™t introduced any new Pygame programming
+concepts that the Memory Puzzle game didnâ€™t use, aside from using the <span
 class=Literal>copy()</span> method of Surface objects. Just knowing a few
 different concepts will let you create completely different games.</p>
 
