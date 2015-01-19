@@ -55,7 +55,7 @@ for dirpath, dirnames, filenames in os.walk('content'):
         t = env.get_template(templateFilename)
 
         # Write the template to the output folder
-        outputFo = open(outputFilename, 'w')
+        outputFo = open(outputFilename, 'w', encoding='UTF-8')
         outputFo.write(t.render(base_href=BASE_HREF))
         outputFo.close()
 
