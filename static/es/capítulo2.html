@@ -1,0 +1,1393 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 14 (filtered)">
+<title>Invent Your Own Computer Games with Python</title>
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;}
+@font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;}
+@font-face
+	{font-family:Cambria;
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:Tahoma;
+	panose-1:2 11 6 4 3 5 4 4 2 4;}
+@font-face
+	{font-family:"Franklin Gothic Demi";
+	panose-1:2 11 7 3 2 1 2 2 2 4;}
+@font-face
+	{font-family:"Lucida Sans Typewriter";
+	panose-1:2 11 5 9 3 5 4 3 2 4;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+h1
+	{mso-style-link:"Heading 1 Char";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:24.0pt;
+	margin-left:0in;
+	line-height:115%;
+	page-break-after:avoid;
+	font-size:36.0pt;
+	font-family:"Franklin Gothic Demi","sans-serif";
+	font-variant:small-caps;
+	font-weight:bold;}
+h2
+	{mso-style-link:"Heading 2 Char";
+	margin-top:10.0pt;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:0in;
+	line-height:115%;
+	page-break-after:avoid;
+	font-size:16.0pt;
+	font-family:"Calibri","sans-serif";
+	color:#1F497D;
+	font-weight:bold;}
+h3
+	{mso-style-link:"Heading 3 Char";
+	margin-top:10.0pt;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:0in;
+	line-height:115%;
+	page-break-after:avoid;
+	font-size:14.0pt;
+	font-family:"Calibri","sans-serif";
+	color:#1F497D;
+	font-weight:bold;
+	font-style:italic;}
+p.MsoToc1, li.MsoToc1, div.MsoToc1
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:5.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoToc2, li.MsoToc2, div.MsoToc2
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:5.0pt;
+	margin-left:11.0pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoToc3, li.MsoToc3, div.MsoToc3
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:5.0pt;
+	margin-left:22.0pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoToc4, li.MsoToc4, div.MsoToc4
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:5.0pt;
+	margin-left:33.0pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.MsoToc5, li.MsoToc5, div.MsoToc5
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:5.0pt;
+	margin-left:44.0pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.MsoToc6, li.MsoToc6, div.MsoToc6
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:5.0pt;
+	margin-left:55.0pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.MsoToc7, li.MsoToc7, div.MsoToc7
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:5.0pt;
+	margin-left:66.0pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.MsoToc8, li.MsoToc8, div.MsoToc8
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:5.0pt;
+	margin-left:77.0pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.MsoToc9, li.MsoToc9, div.MsoToc9
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:5.0pt;
+	margin-left:88.0pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.MsoHeader, li.MsoHeader, div.MsoHeader
+	{mso-style-link:"Header Char";
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoFooter, li.MsoFooter, div.MsoFooter
+	{mso-style-link:"Footer Char";
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoCaption, li.MsoCaption, div.MsoCaption
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:0in;
+	text-align:center;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.MsoTitle, li.MsoTitle, div.MsoTitle
+	{mso-style-link:"Title Char";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:15.0pt;
+	margin-left:0in;
+	border:none;
+	padding:0in;
+	font-size:36.0pt;
+	font-family:"Franklin Gothic Demi","sans-serif";
+	letter-spacing:.25pt;}
+p.MsoTitleCxSpFirst, li.MsoTitleCxSpFirst, div.MsoTitleCxSpFirst
+	{mso-style-link:"Title Char";
+	margin:0in;
+	margin-bottom:.0001pt;
+	border:none;
+	padding:0in;
+	font-size:36.0pt;
+	font-family:"Franklin Gothic Demi","sans-serif";
+	letter-spacing:.25pt;}
+p.MsoTitleCxSpMiddle, li.MsoTitleCxSpMiddle, div.MsoTitleCxSpMiddle
+	{mso-style-link:"Title Char";
+	margin:0in;
+	margin-bottom:.0001pt;
+	border:none;
+	padding:0in;
+	font-size:36.0pt;
+	font-family:"Franklin Gothic Demi","sans-serif";
+	letter-spacing:.25pt;}
+p.MsoTitleCxSpLast, li.MsoTitleCxSpLast, div.MsoTitleCxSpLast
+	{mso-style-link:"Title Char";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:15.0pt;
+	margin-left:0in;
+	border:none;
+	padding:0in;
+	font-size:36.0pt;
+	font-family:"Franklin Gothic Demi","sans-serif";
+	letter-spacing:.25pt;}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:purple;
+	text-decoration:underline;}
+p
+	{margin-right:0in;
+	margin-left:0in;
+	font-size:12.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoAcetate, li.MsoAcetate, div.MsoAcetate
+	{mso-style-link:"Balloon Text Char";
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:8.0pt;
+	font-family:"Tahoma","sans-serif";}
+p.MsoNoSpacing, li.MsoNoSpacing, div.MsoNoSpacing
+	{mso-style-link:"No Spacing Char";
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoListParagraph, li.MsoListParagraph, div.MsoListParagraph
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:.5in;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoListParagraphCxSpFirst, li.MsoListParagraphCxSpFirst, div.MsoListParagraphCxSpFirst
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoListParagraphCxSpMiddle, li.MsoListParagraphCxSpMiddle, div.MsoListParagraphCxSpMiddle
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoListParagraphCxSpLast, li.MsoListParagraphCxSpLast, div.MsoListParagraphCxSpLast
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:.5in;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoTocHeading, li.MsoTocHeading, div.MsoTocHeading
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:24.0pt;
+	margin-left:0in;
+	line-height:115%;
+	page-break-after:avoid;
+	font-size:36.0pt;
+	font-family:"Franklin Gothic Demi","sans-serif";
+	font-variant:small-caps;
+	font-weight:bold;}
+span.Heading1Char
+	{mso-style-name:"Heading 1 Char";
+	mso-style-link:"Heading 1";
+	font-family:"Franklin Gothic Demi","sans-serif";
+	font-variant:small-caps;
+	font-weight:bold;}
+span.Heading2Char
+	{mso-style-name:"Heading 2 Char";
+	mso-style-link:"Heading 2";
+	font-family:"Times New Roman","serif";
+	color:#1F497D;
+	font-weight:bold;}
+span.Heading3Char
+	{mso-style-name:"Heading 3 Char";
+	mso-style-link:"Heading 3";
+	font-family:"Times New Roman","serif";
+	color:#1F497D;
+	font-weight:bold;
+	font-style:italic;}
+span.BalloonTextChar
+	{mso-style-name:"Balloon Text Char";
+	mso-style-link:"Balloon Text";
+	font-family:"Tahoma","sans-serif";}
+span.Definition
+	{mso-style-name:Definition;
+	font-family:"Calibri","sans-serif";
+	font-weight:bold;}
+span.NoSpacingChar
+	{mso-style-name:"No Spacing Char";
+	mso-style-link:"No Spacing";
+	font-family:"Times New Roman","serif";}
+span.URL
+	{mso-style-name:URL;
+	text-decoration:underline;}
+span.Literal
+	{mso-style-name:Literal;
+	font-family:"Lucida Sans Typewriter";}
+p.TopicsCoveredbox, li.TopicsCoveredbox, div.TopicsCoveredbox
+	{mso-style-name:"Topics Covered box";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:0in;
+	background:#DBE5F1;
+	border:none;
+	padding:0in;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.TopicsCoveredboxCxSpFirst, li.TopicsCoveredboxCxSpFirst, div.TopicsCoveredboxCxSpFirst
+	{mso-style-name:"Topics Covered boxCxSpFirst";
+	margin:0in;
+	margin-bottom:.0001pt;
+	background:#DBE5F1;
+	border:none;
+	padding:0in;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.TopicsCoveredboxCxSpMiddle, li.TopicsCoveredboxCxSpMiddle, div.TopicsCoveredboxCxSpMiddle
+	{mso-style-name:"Topics Covered boxCxSpMiddle";
+	margin:0in;
+	margin-bottom:.0001pt;
+	background:#DBE5F1;
+	border:none;
+	padding:0in;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.TopicsCoveredboxCxSpLast, li.TopicsCoveredboxCxSpLast, div.TopicsCoveredboxCxSpLast
+	{mso-style-name:"Topics Covered boxCxSpLast";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:0in;
+	background:#DBE5F1;
+	border:none;
+	padding:0in;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.CodeExample, li.CodeExample, div.CodeExample
+	{mso-style-name:"Code Example";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:12.0pt;
+	margin-left:0in;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:9.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.CodeExampleCxSpFirst, li.CodeExampleCxSpFirst, div.CodeExampleCxSpFirst
+	{mso-style-name:"Code ExampleCxSpFirst";
+	margin:0in;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:9.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.CodeExampleCxSpMiddle, li.CodeExampleCxSpMiddle, div.CodeExampleCxSpMiddle
+	{mso-style-name:"Code ExampleCxSpMiddle";
+	margin:0in;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:9.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.CodeExampleCxSpLast, li.CodeExampleCxSpLast, div.CodeExampleCxSpLast
+	{mso-style-name:"Code ExampleCxSpLast";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:12.0pt;
+	margin-left:0in;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:9.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.SourceCode, li.SourceCode, div.SourceCode
+	{mso-style-name:"Source Code";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:12.0pt;
+	margin-left:0in;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:9.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.SourceCodeCxSpFirst, li.SourceCodeCxSpFirst, div.SourceCodeCxSpFirst
+	{mso-style-name:"Source CodeCxSpFirst";
+	margin:0in;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:9.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.SourceCodeCxSpMiddle, li.SourceCodeCxSpMiddle, div.SourceCodeCxSpMiddle
+	{mso-style-name:"Source CodeCxSpMiddle";
+	margin:0in;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:9.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.SourceCodeCxSpLast, li.SourceCodeCxSpLast, div.SourceCodeCxSpLast
+	{mso-style-name:"Source CodeCxSpLast";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:12.0pt;
+	margin-left:0in;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:9.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.SampleRun, li.SampleRun, div.SampleRun
+	{mso-style-name:"Sample Run";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:12.0pt;
+	margin-left:0in;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:9.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.SampleRunCxSpFirst, li.SampleRunCxSpFirst, div.SampleRunCxSpFirst
+	{mso-style-name:"Sample RunCxSpFirst";
+	margin:0in;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:9.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.SampleRunCxSpMiddle, li.SampleRunCxSpMiddle, div.SampleRunCxSpMiddle
+	{mso-style-name:"Sample RunCxSpMiddle";
+	margin:0in;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:9.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.SampleRunCxSpLast, li.SampleRunCxSpLast, div.SampleRunCxSpLast
+	{mso-style-name:"Sample RunCxSpLast";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:12.0pt;
+	margin-left:0in;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:9.0pt;
+	font-family:"Lucida Sans Typewriter";}
+span.SampleRunResponse
+	{mso-style-name:"Sample Run Response";
+	color:#1F497D;
+	font-weight:bold;}
+span.SourceLineNumber
+	{mso-style-name:"Source Line Number";
+	color:#7F7F7F;}
+span.SourceCodeComment
+	{mso-style-name:"Source Code Comment";
+	color:#7F7F7F;}
+span.HeaderChar
+	{mso-style-name:"Header Char";
+	mso-style-link:Header;
+	font-family:"Times New Roman","serif";}
+span.FooterChar
+	{mso-style-name:"Footer Char";
+	mso-style-link:Footer;
+	font-family:"Times New Roman","serif";}
+p.TableHeading, li.TableHeading, div.TableHeading
+	{mso-style-name:"Table Heading";
+	margin:0in;
+	margin-bottom:.0001pt;
+	text-align:center;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";
+	font-weight:bold;}
+p.TableListing, li.TableListing, div.TableListing
+	{mso-style-name:"Table Listing";
+	margin:0in;
+	margin-bottom:.0001pt;
+	text-align:center;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.ImportantNote, li.ImportantNote, div.ImportantNote
+	{mso-style-name:"Important Note";
+	margin-top:0in;
+	margin-right:.5in;
+	margin-bottom:8.0pt;
+	margin-left:.5in;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+span.StrongBoxed
+	{mso-style-name:"Strong & Boxed";
+	border:solid windowtext 1.0pt;
+	padding:0in;
+	font-weight:bold;}
+span.TitleChar
+	{mso-style-name:"Title Char";
+	mso-style-link:Title;
+	font-family:"Franklin Gothic Demi","sans-serif";
+	letter-spacing:.25pt;}
+p.ChapterNumber, li.ChapterNumber, div.ChapterNumber
+	{mso-style-name:"Chapter Number";
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:26.0pt;
+	font-family:"Franklin Gothic Demi","sans-serif";}
+p.Body, li.Body, div.Body
+	{mso-style-name:Body;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:8.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.BodyFirst, li.BodyFirst, div.BodyFirst
+	{mso-style-name:"Body First";
+	margin:0in;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+span.Keycap
+	{mso-style-name:Keycap;
+	font-variant:small-caps;
+	color:blue;}
+span.FigureImageBorder
+	{mso-style-name:"Figure Image Border";
+	border:solid windowtext 1.0pt;
+	padding:0in;}
+p.SourceCodeFilename, li.SourceCodeFilename, div.SourceCodeFilename
+	{mso-style-name:"Source Code Filename";
+	margin:0in;
+	margin-bottom:.0001pt;
+	text-align:right;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:12.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.SourceCodeFilenameCxSpFirst, li.SourceCodeFilenameCxSpFirst, div.SourceCodeFilenameCxSpFirst
+	{mso-style-name:"Source Code FilenameCxSpFirst";
+	margin:0in;
+	margin-bottom:.0001pt;
+	text-align:right;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:12.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.SourceCodeFilenameCxSpMiddle, li.SourceCodeFilenameCxSpMiddle, div.SourceCodeFilenameCxSpMiddle
+	{mso-style-name:"Source Code FilenameCxSpMiddle";
+	margin:0in;
+	margin-bottom:.0001pt;
+	text-align:right;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:12.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.SourceCodeFilenameCxSpLast, li.SourceCodeFilenameCxSpLast, div.SourceCodeFilenameCxSpLast
+	{mso-style-name:"Source Code FilenameCxSpLast";
+	margin:0in;
+	margin-bottom:.0001pt;
+	text-align:right;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:12.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.Non-TOCHeading3, li.Non-TOCHeading3, div.Non-TOCHeading3
+	{mso-style-name:"Non-TOC Heading 3";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:14.0pt;
+	font-family:"Calibri","sans-serif";
+	color:#1F497D;
+	font-weight:bold;
+	font-style:italic;}
+.MsoChpDefault
+	{font-family:"Calibri","sans-serif";}
+.MsoPapDefault
+	{margin-bottom:10.0pt;
+	line-height:115%;}
+ /* Page Definitions */
+ @page WordSection1
+	{size:8.0in 10.0in;
+	margin:1.0in 1.0in 1.0in 1.0in;}
+div.WordSection1
+	{page:WordSection1;}
+ /* List Definitions */
+ ol
+	{margin-bottom:0in;}
+ul
+	{margin-bottom:0in;}
+-->
+</style>
+
+</head>
+
+<body lang=EN-US link=blue vlink=purple>
+
+<div class=WordSection1>
+
+<table class=MsoTableGrid border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse;border:none'>
+ <tr>
+  <td width=101 rowspan=2 valign=top style='width:60.85pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=ChapterNumber><img width=84 height=96 id="Picture 138"
+  src="capítulo2_files/image001.jpg"></p>
+  </td>
+  <td width=637 valign=top style='width:381.95pt;border:none;border-bottom:
+  solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=ChapterNumber>Capítulo 2</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=637 valign=top style='width:381.95pt;border:none;padding:0in 5.4pt 0in 5.4pt'>
+  <h1 style='line-height:normal'><a name="_Toc411726895"><span
+  style='font-variant:normal !important;text-transform:uppercase'>La Consola
+  Interactiva</span></a></h1>
+  </td>
+ </tr>
+</table>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt;
+background:#DBE5F1'>
+
+<p class=TopicsCoveredboxCxSpFirst style='background:#DBE5F1;border:none;
+padding:0in'><span lang=ES-MX>Temas Tratados En Este Capítulo:</span></p>
+
+<p class=TopicsCoveredboxCxSpMiddle style='margin-left:.25in;text-indent:-.25in;
+background:#DBE5F1;border:none;padding:0in'><span lang=ES-MX style='font-family:
+Symbol'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span lang=ES-MX>Enteros y Números de Punto Flotante</span></p>
+
+<p class=TopicsCoveredboxCxSpMiddle style='margin-left:.25in;text-indent:-.25in;
+background:#DBE5F1;border:none;padding:0in'><span style='font-family:Symbol'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span>Expresiones</p>
+
+<p class=TopicsCoveredboxCxSpMiddle style='margin-left:.25in;text-indent:-.25in;
+background:#DBE5F1;border:none;padding:0in'><span style='font-family:Symbol'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span>Valores</p>
+
+<p class=TopicsCoveredboxCxSpMiddle style='margin-left:.25in;text-indent:-.25in;
+background:#DBE5F1;border:none;padding:0in'><span style='font-family:Symbol'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span>Operadores</p>
+
+<p class=TopicsCoveredboxCxSpMiddle style='margin-left:.25in;text-indent:-.25in;
+background:#DBE5F1;border:none;padding:0in'><span style='font-family:Symbol'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span>Evaluación de Expresiones</p>
+
+<p class=TopicsCoveredboxCxSpLast style='margin-left:.25in;text-indent:-.25in;
+background:#DBE5F1;border:none;padding:0in'><span style='font-family:Symbol'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span>Almacenamiento de Valores en Variables</p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>Antes de poder crear juegos, necesitas aprender
+algunos conceptos básicos de programación. No crearás juegos en este capítulo,
+pero aprender estos conceptos es el primer paso para programar videojuegos.
+Comenzaremos por aprender cómo usar la consola interactiva de Python.</span></p>
+
+<h2><a name="_Toc411726896"><span lang=ES-MX>Operaciones Matemáticas Sencillas</span></a></h2>
+
+<p class=Body><span lang=ES-MX>Abre IDLE usando los pasos en el Capítulo 1, y
+haz que Python resuelva algunas operaciones matemáticas sencillas. La consola
+interactiva puede funcionar como una calculadora. Escribe </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>2 + 2</span></span><span
+lang=ES-MX> en la consola interactiva y presiona la tecla <span class=Keycap><span
+style='font-variant:normal !important;text-transform:uppercase'>intro</span></span>
+en tu teclado. (En algunos teclados, esta tecla se llama <span class=Keycap><span
+style='font-variant:normal !important;text-transform:uppercase'>return</span></span>.)
+La Figura 2-1 muestra cómo IDLE responde con el número 4.</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><img width=363
+height=176 id="Picture 4" src="capítulo2_files/image002.jpg"></p>
+
+<p class=MsoCaption><span lang=ES-MX>Figura 2-1: Escribe 2+2 en la consola
+interactiva.</span></p>
+
+<p class=Body><span lang=ES-MX>Este problema matemático es una simple
+instrucción de programación. El signo + le dice a la computadora que sume los
+números 2 y 2. La Tabla 2-1 presenta los otros operadores matemáticos
+disponibles en Python. El signo - restará números. El asterisco * los multiplicará.
+La barra / los dividirá.</span></p>
+
+<p class=TableListing><span lang=ES-MX>Tabla 2-1: Los diferentes operadores
+matemáticos en Python.</span></p>
+
+<div align=center>
+
+<table class=MsoNormalTable border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse'>
+ <tr style='height:13.1pt'>
+  <td width=108 valign=top style='width:64.55pt;border-top:double windowtext 1.5pt;
+  border-left:none;border-bottom:solid windowtext 1.0pt;border-right:none;
+  padding:0in 5.4pt 0in 5.4pt;height:13.1pt'>
+  <p class=TableHeading style='page-break-after:avoid'>Operador</p>
+  </td>
+  <td width=108 valign=top style='width:64.55pt;border-top:double windowtext 1.5pt;
+  border-left:none;border-bottom:solid windowtext 1.0pt;border-right:none;
+  padding:0in 5.4pt 0in 5.4pt;height:13.1pt'>
+  <p class=TableHeading style='page-break-after:avoid'>Operación</p>
+  </td>
+ </tr>
+ <tr style='height:13.1pt'>
+  <td width=108 valign=top style='width:64.55pt;border:none;padding:0in 5.4pt 0in 5.4pt;
+  height:13.1pt'>
+  <p class=TableListing style='page-break-after:avoid'>+</p>
+  </td>
+  <td width=108 valign=top style='width:64.55pt;border:none;padding:0in 5.4pt 0in 5.4pt;
+  height:13.1pt'>
+  <p class=TableListing style='page-break-after:avoid'>suma</p>
+  </td>
+ </tr>
+ <tr style='height:12.35pt'>
+  <td width=108 valign=top style='width:64.55pt;padding:0in 5.4pt 0in 5.4pt;
+  height:12.35pt'>
+  <p class=TableListing style='page-break-after:avoid'>-</p>
+  </td>
+  <td width=108 valign=top style='width:64.55pt;padding:0in 5.4pt 0in 5.4pt;
+  height:12.35pt'>
+  <p class=TableListing style='page-break-after:avoid'>resta</p>
+  </td>
+ </tr>
+ <tr style='height:13.1pt'>
+  <td width=108 valign=top style='width:64.55pt;padding:0in 5.4pt 0in 5.4pt;
+  height:13.1pt'>
+  <p class=TableListing style='page-break-after:avoid'>*</p>
+  </td>
+  <td width=108 valign=top style='width:64.55pt;padding:0in 5.4pt 0in 5.4pt;
+  height:13.1pt'>
+  <p class=TableListing style='page-break-after:avoid'>multiplicación</p>
+  </td>
+ </tr>
+ <tr style='height:13.1pt'>
+  <td width=108 valign=top style='width:64.55pt;border:none;border-bottom:double windowtext 1.5pt;
+  padding:0in 5.4pt 0in 5.4pt;height:13.1pt'>
+  <p class=TableListing>/</p>
+  </td>
+  <td width=108 valign=top style='width:64.55pt;border:none;border-bottom:double windowtext 1.5pt;
+  padding:0in 5.4pt 0in 5.4pt;height:13.1pt'>
+  <p class=TableListing>división</p>
+  </td>
+ </tr>
+</table>
+
+</div>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=Body><span lang=ES-MX>Cuando se usan de esta forma, +, -, *, y / se
+llama </span><span class=Definition><span lang=ES-MX>operadores</span></span><span
+lang=ES-MX>. Los operadores le dicen a Python qué hacer con los números que los
+rodean.</span></p>
+
+<p class=Non-TOCHeading3><span lang=ES-MX>Enteros y Números de Punto Flotante</span></p>
+
+<p class=Body><span class=Definition><span lang=ES-MX>Los enteros</span></span><span
+class=Definition><span lang=ES-MX style='font-family:"Times New Roman","serif";
+font-weight:normal'> (o </span></span><span class=Definition><span lang=ES-MX>ints</span></span><span
+class=Definition><span lang=ES-MX style='font-family:"Times New Roman","serif";
+font-weight:normal'> para abreviar) son precisamente números enteros como 4,
+99, y 0. </span></span><span class=Definition><span lang=ES-MX>Los números de
+punto flotante</span></span><span class=Definition><span lang=ES-MX
+style='font-family:"Times New Roman","serif";font-weight:normal'> (o </span></span><span
+class=Definition><span lang=ES-MX>floats</span></span><span class=Definition><span
+lang=ES-MX style='font-family:"Times New Roman","serif";font-weight:normal'>
+para abreviar) son fracciones o números con punto decimal como 3.5, 42.1 y 5.0.
+En Python, el número 5 is an integer, pero 5.0 es un float. A estos números se
+los llama </span></span><span class=Definition><span lang=ES-MX>valores</span></span><span
+class=Definition><span lang=ES-MX style='font-family:"Times New Roman","serif";
+font-weight:normal'>.</span></span></p>
+
+<p class=Body><b><i><span lang=ES-MX style='font-size:14.0pt;line-height:115%;
+font-family:"Calibri","sans-serif";color:#1F497D'>Expresiones</span></i></b></p>
+
+<p class=Body><span lang=ES-MX>Estos problemas matemáticos son ejemplos de
+expresiones. Las computadoras pueden resolver millones de estos problemas en
+segundos. </span><span class=Definition><span lang=ES-MX>Las expresiones</span></span><span
+lang=ES-MX> se componen de valores (los números) conectadas por operadores (los
+símbolos matemáticos). Prueba escribir algunos de estos problemas matemáticos
+en la consola interactiva, presiona la tecla <span class=Keycap><span
+style='font-variant:normal !important;text-transform:uppercase'>intro</span></span>
+después de cada uno.</span></p>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=CodeExampleCxSpFirst style='border:none;padding:0in'><span lang=ES-MX>2+2+2+2+2</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>8*6</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>10-5+6</span></p>
+
+<p class=CodeExampleCxSpLast style='border:none;padding:0in'><span lang=ES-MX>2 
++       2</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>Luego de introducir estas instrucciones, la
+consola interactiva se verá como la Figura 2-2.</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><img width=387
+height=219 id="Picture 6" src="capítulo2_files/image003.jpg"></p>
+
+<p class=MsoCaption><span lang=ES-MX>Figura 2-2: Así se ve la ventana de IDLE
+luego de introducir las instrucciones.</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><img width=251
+height=177 id="Picture 5" src="capítulo2_files/image004.jpg"></p>
+
+<p class=MsoCaption><span lang=ES-MX>Figura 2-3: Una expresión se compone de valores
+y operadores.</span></p>
+
+<p class=Body><span lang=ES-MX>En el ejemplo </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>2  +       2</span></span><span
+lang=ES-MX>, se ve que puede haber cualquier cantidad de espacios entre los
+valores y los operadores. Pero cada instrucción que escribas en la consola
+interactiva debe comenzar una línea.</span></p>
+
+<p class=Body><b><span lang=ES-MX style='font-size:16.0pt;line-height:115%;
+font-family:"Calibri","sans-serif";color:#1F497D'>Evaluación de Expresiones</span></b></p>
+
+<p class=Body><span lang=ES-MX>Cuando una computadora resuelve la expresión 10
++ 5 y obtiene el valor 15, ha </span><span class=Definition><span lang=ES-MX>evaluado</span></span><span
+lang=ES-MX> la expresión. Evaluar una expresión <em>la reduce a un único valor</em>,
+igual que resolver un problema de matemática lo reduce a un único número: la
+respuesta. Ambas expresiones </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>10 + 5</span></span><span lang=ES-MX>
+y </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>10 + 3 + 2</span></span><span lang=ES-MX> son evaluadas a </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>15</span></span><span
+lang=ES-MX>.</span></p>
+
+<p class=Body><span lang=ES-MX>Las expresiones pueden ser de cualquier tamaño,
+pero siempre serán evaluadas a un valor único. Incluso valores únicos son
+expresiones: La expresión </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>15</span></span><span lang=ES-MX> se
+evalúa al valor </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>15</span></span><span lang=ES-MX>. Por ejemplo, la
+expresión </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>8 * 3 / 2 + 2 + 7 - 9</span></span><span lang=ES-MX> se
+evalúa al valor </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>12.0</span></span><span lang=ES-MX> a través de los
+siguientes pasos:</span></p>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=CodeExampleCxSpFirst style='border:none;padding:0in'><span
+class=Literal><span lang=ES-MX>8 * 3 / 2 + 2 + 7 – 9</span></span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+class=Literal><span lang=ES-MX>                  </span></span><span
+class=Literal><span lang=ES-MX style='font-family:"Courier New"'>&#9660;</span></span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+class=Literal><span lang=ES-MX>   24 / 2 + 2 + 7 – 9</span></span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+class=Literal><span lang=ES-MX>                  </span></span><span
+class=Literal><span lang=ES-MX style='font-family:"Courier New"'>&#9660;</span></span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>     12.0 + 2 + 7 – 9</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+class=Literal><span lang=ES-MX>                  </span></span><span
+class=Literal><span lang=ES-MX style='font-family:"Courier New"'>&#9660;</span></span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>         14.0 + 7 – 9</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+class=Literal><span lang=ES-MX>                  </span></span><span
+class=Literal><span lang=ES-MX style='font-family:"Courier New"'>&#9660;</span></span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>             21.0 – 9</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+class=Literal><span lang=ES-MX>                  </span></span><span
+class=Literal><span lang=ES-MX style='font-family:"Courier New"'>&#9660;</span></span></p>
+
+<p class=CodeExampleCxSpLast style='border:none;padding:0in'><span lang=ES-MX>                
+12.0</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>No puedes ver todos estos pasos en la consola
+interactiva. La consola los realiza y sólo te muestra los resultados:</span></p>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=CodeExampleCxSpFirst style='border:none;padding:0in'><span lang=ES-MX>&gt;&gt;&gt;
+8 * 3 / 2 + 2 + 7 - 9</span></p>
+
+<p class=CodeExampleCxSpLast style='border:none;padding:0in'><span lang=ES-MX>12.0</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>Observa que el operador división </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>/</span></span><span
+lang=ES-MX> se evalúa a un valor float, como ocurre cuando </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>24 / 2</span></span><span
+lang=ES-MX> devuelve </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>12.0</span></span><span lang=ES-MX>.
+Las operaciones matemáticas con valores flotantes también devuelven valores
+flotantes, como cuando </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>12.0 + 2</span></span><span
+lang=ES-MX> devuelve </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>14.0</span></span><span lang=ES-MX>.</span></p>
+
+<p class=Body>Notice that the <span class=Literal><span style='font-size:9.0pt;
+line-height:115%'>/</span></span> division operator evaluates to a float value,
+as in <span class=Literal><span style='font-size:9.0pt;line-height:115%'>24 / 2</span></span>
+evaluating to <span class=Literal><span style='font-size:9.0pt;line-height:
+115%'>12.0</span></span>. Math operations with float values also evaluate to
+float values, as in <span class=Literal><span style='font-size:9.0pt;
+line-height:115%'>12.0 + 2</span></span> evaluating to <span class=Literal><span
+style='font-size:9.0pt;line-height:115%'>14.0</span></span>.</p>
+
+<p class=Body><b><i><span lang=ES-MX style='font-size:14.0pt;line-height:115%;
+font-family:"Calibri","sans-serif";color:#1F497D'>Errores de Sintaxis</span></i></b></p>
+
+<p class=Body><span lang=ES-MX>Si escribes </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>5 +</span></span><span
+lang=ES-MX> en la consola interactiva, obtendrás un mensaje de error.</span></p>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=CodeExampleCxSpFirst style='border:none;padding:0in'><span lang=ES-MX>&gt;&gt;&gt;
+5 +</span></p>
+
+<p class=CodeExampleCxSpLast style='border:none;padding:0in'><span lang=ES-MX>SyntaxError:
+invalid syntax</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>Este ocurre porque </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>5 +</span></span><span
+lang=ES-MX> no es una expresión. Las expresiones conectan valores mediante
+operadores. Pero el operador </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>+</span></span><span lang=ES-MX>
+espera un valor después del signo </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>+</span></span><span lang=ES-MX>.
+Cuando este valor no se encuentra, aparece un mensaje de error.</span></p>
+
+<p class=Body><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>SyntaxError</span></span><span lang=ES-MX> significa que
+Python no entiende la instrucción porque la has escrito de forma incorrecta.
+Una gran parte de programar computadoras se trata no sólo de decirle a la
+computadora qué hacer, sino también de saber cómo decírselo.</span></p>
+
+<p class=Body><span lang=ES-MX>Pero no te preocupes por cometer errores. Los
+errores no dañan tu computadora. Simplemente vuelve a escribir la instrucción
+correctamente en la consola interactiva luego del siguiente indicador </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>&gt;&gt;&gt;</span></span><span
+lang=ES-MX> de consola.</span></p>
+
+<h2><a name="_Toc411726897"><span lang=ES-MX>Almacenamiento de Valores en
+Variables</span></a></h2>
+
+<p class=Body><span lang=ES-MX>Puedes guardar el valor al cual al cual una
+expresión es evaluada para poder usarlo más adelante en el programa,
+almacenándolo en una </span><span class=Definition><span lang=ES-MX>variable</span></span><span
+lang=ES-MX>. Piensa una variable como una caja capaz de contener un valor.</span></p>
+
+<p class=Body><span lang=ES-MX>Una </span><span class=Definition><span
+lang=ES-MX>instrucción de asignación</span></span><span lang=ES-MX> guardará un
+valor dentro de una variable. Escribe el nombre de una variable seguido por el
+signo </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>=</span></span><span lang=ES-MX> (llamado </span><span
+class=Definition><span lang=ES-MX>operador de asignación</span></span><span
+lang=ES-MX>), y luego el valor a almacenar en la variable. Por ejemplo, ingresa
+</span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:
+115%'>spam = 15</span></span><span lang=ES-MX> en la consola interactiva:</span></p>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=CodeExampleCxSpFirst style='border:none;padding:0in'><span lang=ES-MX>&gt;&gt;&gt;
+spam = 15</span></p>
+
+<p class=CodeExampleCxSpLast style='border:none;padding:0in'><span lang=ES-MX>&gt;&gt;&gt;&nbsp;</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>La caja de la variable </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>spam</span></span><span
+lang=ES-MX> tendrá guardado el valor </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>15</span></span><span
+lang=ES-MX>, como se muestra en la Figura 2-4. El nombre “spam” es la etiqueta
+en la caja (para que Python pueda distinguir las variables) y el valor está
+escrito en una pequeña nota dentro de la caja. </span></p>
+
+<p class=Body><span lang=ES-MX>Cuando presiones <span class=Keycap><span
+style='font-variant:normal !important;text-transform:uppercase'>intro</span></span>
+no recibirás ninguna respuesta. En Python, si no aparece ningún mensaje de
+error significa que la instrucción se ha ejecutado correctamente. El indicador
+de consola </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>&gt;&gt;&gt;</span></span><span lang=ES-MX> aparecerá para
+que puedas tipear la próxima instrucción. </span></p>
+
+<p class=Body><span lang=ES-MX>&nbsp;</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><img width=242
+height=216 id="Picture 40" src="capítulo2_files/image005.png"></p>
+
+<p class=MsoCaption><span lang=ES-MX>Figura 2-4: Las variables son como cajas
+que pueden contener valores.</span></p>
+
+<p class=Body><span lang=ES-MX>A diferencia de las expresiones, </span><span
+class=Definition><span lang=ES-MX>las sentencias</span></span><span lang=ES-MX>
+no son evaluadas a ningún valor. Es por eso que no se muestra ningún valor en
+la siguiente línea de la consola interactiva a continuación de </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>spam =
+15</span></span><span lang=ES-MX>. Puede ser confuso diferenciar cuáles
+instrucciones son expresiones y cuáles son sentencias. Sólo recuerda que las
+expresiones son evaluadas a un valor único. Cualquier otro tipo de instrucción
+es una sentencia. </span></p>
+
+<p class=Body><span lang=ES-MX>Las variables almacenan valores, no expresiones.
+Por ejemplo, considera la expresión en las sentencias </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>spam =
+10 + 5</span></span><span lang=ES-MX> y </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>spam = 10 + 7 - 2</span></span><span
+lang=ES-MX>. Ambas son evaluadas a </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>15</span></span><span lang=ES-MX>. El
+resultado final es el mismo: Las dos sentencias de asignación almacenan el
+valor </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>15</span></span><span lang=ES-MX> en la variables </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>spam</span></span><span
+lang=ES-MX>.</span></p>
+
+<p class=Body><span lang=ES-MX>La primera vez que una variables es usada en una
+sentencia de asignación, Python creará esa variable. Para comprobar qué valor
+contiene una variable dada, escribe el nombre de la variable en la consola
+interactiva:</span></p>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=CodeExampleCxSpFirst style='border:none;padding:0in'>&gt;&gt;&gt; spam
+= 15</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>&gt;&gt;&gt;
+spam</p>
+
+<p class=CodeExampleCxSpLast style='border:none;padding:0in'>15</p>
+
+</div>
+
+<p class=Body>The expression <span class=Literal><span style='font-size:9.0pt;
+line-height:115%'>spam</span></span> evaluates to the value inside the <span
+class=Literal><span style='font-size:9.0pt;line-height:115%'>spam</span></span>
+variable: <span class=Literal><span style='font-size:9.0pt;line-height:115%'>15</span></span>.
+You can use variables in expressions. Try entering the following in the
+interactive shell:</p>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=CodeExampleCxSpFirst style='border:none;padding:0in'><span lang=ES-MX>&gt;&gt;&gt;
+spam = 15</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>&gt;&gt;&gt; spam + 5</span></p>
+
+<p class=CodeExampleCxSpLast style='border:none;padding:0in'><span lang=ES-MX>20</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>Haz fijado el valor de la variable spam en </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>15</span></span><span
+lang=ES-MX>, por lo que escribir </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>spam + 5</span></span><span
+lang=ES-MX> es como escribir la expresión </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>15 + 5</span></span><span
+lang=ES-MX>. Aquí se muestran los pasos para la evaluación de </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>spam +
+5</span></span><span lang=ES-MX>: </span></p>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=CodeExampleCxSpFirst style='border:none;padding:0in'><span lang=ES-MX>spam
++ 5</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+class=Literal><span lang=ES-MX>     </span></span><span class=Literal><span
+lang=ES-MX style='font-family:"Courier New"'>&#9660;</span></span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX> 15  + 5</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+class=Literal><span lang=ES-MX>     </span></span><span class=Literal><span
+lang=ES-MX style='font-family:"Courier New"'>&#9660;</span></span></p>
+
+<p class=CodeExampleCxSpLast style='border:none;padding:0in'><span lang=ES-MX>   
+20</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>No puedes usar una variable antes de que sea
+creada por una sentencia de asignación. Python responderá con </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>NameError</span></span><span
+lang=ES-MX> porque todavía no existe una variable con ese nombre. Escribir mal
+el nombre de una variable también causa este error:</span></p>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=CodeExampleCxSpFirst style='border:none;padding:0in'>&gt;&gt;&gt; spam
+= 15</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>&gt;&gt;&gt;
+spma</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>Traceback (most
+recent call last):</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>  File
+&quot;&lt;pyshell#8&gt;&quot;, line 1, in &lt;module&gt;</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>    spma</p>
+
+<p class=CodeExampleCxSpLast style='border:none;padding:0in'>NameError: name
+'spma' is not defined</p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>El error aparece porque hay una variable llamada
+</span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:
+115%'>spam</span></span><span lang=ES-MX>, pero ninguna llamada </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>spma</span></span><span
+lang=ES-MX>.</span></p>
+
+<p class=Body><span lang=ES-MX>Puedes cambiar el valor almacenado en una
+variable escribiendo otra sentencia de asignación. Por ejemplo, prueba escribir
+lo siguiente en la consola interactiva:</span></p>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=CodeExampleCxSpFirst style='border:none;padding:0in'><span lang=ES-MX>&gt;&gt;&gt;
+spam = 15</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>&gt;&gt;&gt; spam + 5</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>20</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>&gt;&gt;&gt; spam = 3</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>&gt;&gt;&gt; spam + 5</span></p>
+
+<p class=CodeExampleCxSpLast style='border:none;padding:0in'><span lang=ES-MX>8</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>La primera vez que escribes </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>spam +
+5</span></span><span lang=ES-MX>, la expresión se evalúa a </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>20</span></span><span
+lang=ES-MX> porque has guardado </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>15</span></span><span lang=ES-MX>
+dentro de </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>spam</span></span><span lang=ES-MX>. Sin embargo, cuando
+escribes </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>spam = 3</span></span><span lang=ES-MX>, el valor </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>15</span></span><span
+lang=ES-MX> es reemplazado, o </span><span class=Definition><span lang=ES-MX>sobrescrito</span></span><span
+lang=ES-MX>, con el valor </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>3</span></span><span lang=ES-MX>.
+Ahora cuando escribes </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>spam + 5</span></span><span
+lang=ES-MX>, la expresión se evalúa a </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>8</span></span><span
+lang=ES-MX> porque el valor de </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>spam</span></span><span lang=ES-MX> es
+ahora </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>3</span></span><span lang=ES-MX>. </span>La sobrescritura se
+muestra en la Figura 2-5. </p>
+
+<p class=Body align=center style='text-align:center'><img width=228 height=288
+id="Picture 20" src="capítulo2_files/image006.png"></p>
+
+<p class=MsoCaption><span lang=ES-MX>Figura 2-5: El valor 15 en spam es
+sobrescrito por el valor 3.</span></p>
+
+<p class=Body><span lang=ES-MX>Puedes incluso usar el valor en la variable </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>spam</span></span><span
+lang=ES-MX> para asignar un nuevo valor a </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>spam</span></span><span
+lang=ES-MX>:</span></p>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=CodeExampleCxSpFirst style='border:none;padding:0in'><span lang=ES-MX>&gt;&gt;&gt;
+spam = 15</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>&gt;&gt;&gt; spam = spam + 5</span></p>
+
+<p class=CodeExampleCxSpLast style='border:none;padding:0in'><span lang=ES-MX>20</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>La sentencia de asignación </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>spam =
+spam + 5</span></span><span lang=ES-MX> es como decir, “el nuevo valor de la
+variable spam será el valor actual de </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>spam</span></span><span
+lang=ES-MX> más cinco”. Continúa incrementando el valor de </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>spam</span></span><span
+lang=ES-MX> en </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>5</span></span><span lang=ES-MX> varias veces
+escribiendo lo siguiente en la consola interactiva: </span></p>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=CodeExampleCxSpFirst style='border:none;padding:0in'>&gt;&gt;&gt; spam
+= 15</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>&gt;&gt;&gt;
+spam = spam + 5</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>&gt;&gt;&gt;
+spam = spam + 5</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>&gt;&gt;&gt; spam = spam + 5</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>&gt;&gt;&gt; spam</span></p>
+
+<p class=CodeExampleCxSpLast style='border:none;padding:0in'><span lang=ES-MX>30</span></p>
+
+</div>
+
+<p class=Body><b><i><span lang=ES-MX style='font-size:14.0pt;line-height:115%;
+font-family:"Calibri","sans-serif";color:#1F497D'>Usando Más De Una Variable</span></i></b></p>
+
+<p class=Body><span lang=ES-MX>Crea tantas variables como necesites en tus
+programas. Por ejemplo, asignemos diferentes valores a dos variables llamadas </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>eggs</span></span><span
+lang=ES-MX> y </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>bacon</span></span><span lang=ES-MX>, de esta forma:</span></p>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=CodeExampleCxSpFirst style='border:none;padding:0in'><span lang=ES-MX>&gt;&gt;&gt;
+bacon = 10</span></p>
+
+<p class=CodeExampleCxSpLast style='border:none;padding:0in'><span lang=ES-MX>&gt;&gt;&gt;
+eggs = 15</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>Ahora la variable </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>bacon</span></span><span
+lang=ES-MX> almacena el valor </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>10</span></span><span lang=ES-MX>, y </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>eggs</span></span><span
+lang=ES-MX> almacena el valor </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>15</span></span><span lang=ES-MX>. Cada
+variable es una caja independiente con su propio valor, como en la Figura 2-6.</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><img width=355
+height=207 id="Picture 24" src="capítulo2_files/image007.jpg"></p>
+
+<p class=MsoCaption><span lang=ES-MX>Figura 2-6: Las variables “</span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt'>bacon</span></span><span
+lang=ES-MX>” y “</span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt'>eggs</span></span><span lang=ES-MX>” almacenan valores dentro de ellas.</span></p>
+
+<p class=Body><span lang=ES-MX>Intenta escribir </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>spam = bacon + eggs</span></span><span
+lang=ES-MX> en la consola interactiva, luego comprueba el nuevo valor de </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>spam</span></span><span
+lang=ES-MX>:</span></p>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=CodeExampleCxSpFirst style='border:none;padding:0in'>&gt;&gt;&gt; bacon
+= 10</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>&gt;&gt;&gt;
+eggs = 15</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>&gt;&gt;&gt;
+spam = bacon + eggs</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>&gt;&gt;&gt;
+spam</p>
+
+<p class=CodeExampleCxSpLast style='border:none;padding:0in'><span lang=ES-MX>25</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>El valor de </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>spam</span></span><span
+lang=ES-MX> es ahora </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>25</span></span><span lang=ES-MX>.
+Cuando sumas </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>bacon</span></span><span lang=ES-MX> y </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>eggs</span></span><span
+lang=ES-MX> estás sumando sus valores, que son </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>10</span></span><span
+lang=ES-MX> y </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>15</span></span><span lang=ES-MX> respectivamente. Las
+variables contienen valores, no expresiones. La variable </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>spam</span></span><span
+lang=ES-MX> recibió el valor </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>25</span></span><span lang=ES-MX>, y
+no la expresión </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>bacon + eggs</span></span><span lang=ES-MX>. Luego de
+la sentencia de asignación </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>spam = bacon +</span></span><span
+lang=ES-MX> </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>eggs</span></span><span lang=ES-MX>, cambiar </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>bacon</span></span><span
+lang=ES-MX> o </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>eggs</span></span><span lang=ES-MX> no afecta a </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>spam</span></span><span
+lang=ES-MX>.</span></p>
+
+<p class=Non-TOCHeading3><span lang=ES-MX>Resumen</span></p>
+
+<p class=Body><span lang=ES-MX>n este capítulo has aprendido los conceptos
+básicos para escribir instrucciones en Python. Python necesita que le digas
+exactamente qué hacer de forma estricta. Las computadoras no tienen sentido
+común y sólo entienden instrucciones específicas.</span></p>
+
+<p class=Body><span lang=ES-MX>Las expresiones son valores (tales como </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>2</span></span><span
+lang=ES-MX> ó </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>5</span></span><span lang=ES-MX>) combinados con
+operadores (tales como </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>+</span></span><span lang=ES-MX> o </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>-</span></span><span
+lang=ES-MX>). Python puede evaluar expresiones, es decir, reducirlas a un valor
+único. Puedes almacenar valores dentro de las variables de modo que tu programa
+sea capaz de recordarlas y usarlas más adelante.</span></p>
+
+<p class=Body><span lang=ES-MX>Hay muchos otros tipos de operadores y valores
+en Python. En el próximo capítulo, repasaras algunos  conceptos más y
+escribirás tu primer programa. Aprenderás a trabajar con texto en expresiones.
+Python no está limitado a números; ¡es más que sólo una calculadora!</span></p>
+
+<p class=MsoNormal><span lang=ES-MX>&nbsp;</span></p>
+
+</div>
+
+</body>
+
+</html>
