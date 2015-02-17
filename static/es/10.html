@@ -1,0 +1,3884 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<meta name=Generator content="Microsoft Word 14 (filtered)">
+<title>Invent Your Own Computer Games with Python</title>
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;}
+@font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;}
+@font-face
+	{font-family:Cambria;
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:Tahoma;
+	panose-1:2 11 6 4 3 5 4 4 2 4;}
+@font-face
+	{font-family:"Franklin Gothic Demi";
+	panose-1:2 11 7 3 2 1 2 2 2 4;}
+@font-face
+	{font-family:"Lucida Sans Typewriter";
+	panose-1:2 11 5 9 3 5 4 3 2 4;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+h1
+	{mso-style-link:"Heading 1 Char";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:24.0pt;
+	margin-left:0in;
+	line-height:115%;
+	page-break-after:avoid;
+	font-size:36.0pt;
+	font-family:"Franklin Gothic Demi","sans-serif";
+	font-variant:small-caps;
+	font-weight:bold;}
+h2
+	{mso-style-link:"Heading 2 Char";
+	margin-top:10.0pt;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:0in;
+	line-height:115%;
+	page-break-after:avoid;
+	font-size:16.0pt;
+	font-family:"Calibri","sans-serif";
+	color:#1F497D;
+	font-weight:bold;}
+h3
+	{mso-style-link:"Heading 3 Char";
+	margin-top:10.0pt;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:0in;
+	line-height:115%;
+	page-break-after:avoid;
+	font-size:14.0pt;
+	font-family:"Calibri","sans-serif";
+	color:#1F497D;
+	font-weight:bold;
+	font-style:italic;}
+p.MsoToc1, li.MsoToc1, div.MsoToc1
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:5.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoToc2, li.MsoToc2, div.MsoToc2
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:5.0pt;
+	margin-left:11.0pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoToc3, li.MsoToc3, div.MsoToc3
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:5.0pt;
+	margin-left:22.0pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoToc4, li.MsoToc4, div.MsoToc4
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:5.0pt;
+	margin-left:33.0pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.MsoToc5, li.MsoToc5, div.MsoToc5
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:5.0pt;
+	margin-left:44.0pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.MsoToc6, li.MsoToc6, div.MsoToc6
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:5.0pt;
+	margin-left:55.0pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.MsoToc7, li.MsoToc7, div.MsoToc7
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:5.0pt;
+	margin-left:66.0pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.MsoToc8, li.MsoToc8, div.MsoToc8
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:5.0pt;
+	margin-left:77.0pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.MsoToc9, li.MsoToc9, div.MsoToc9
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:5.0pt;
+	margin-left:88.0pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.MsoHeader, li.MsoHeader, div.MsoHeader
+	{mso-style-link:"Header Char";
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoFooter, li.MsoFooter, div.MsoFooter
+	{mso-style-link:"Footer Char";
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoCaption, li.MsoCaption, div.MsoCaption
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:0in;
+	text-align:center;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.MsoTitle, li.MsoTitle, div.MsoTitle
+	{mso-style-link:"Title Char";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:15.0pt;
+	margin-left:0in;
+	border:none;
+	padding:0in;
+	font-size:36.0pt;
+	font-family:"Franklin Gothic Demi","sans-serif";
+	letter-spacing:.25pt;}
+p.MsoTitleCxSpFirst, li.MsoTitleCxSpFirst, div.MsoTitleCxSpFirst
+	{mso-style-link:"Title Char";
+	margin:0in;
+	margin-bottom:.0001pt;
+	border:none;
+	padding:0in;
+	font-size:36.0pt;
+	font-family:"Franklin Gothic Demi","sans-serif";
+	letter-spacing:.25pt;}
+p.MsoTitleCxSpMiddle, li.MsoTitleCxSpMiddle, div.MsoTitleCxSpMiddle
+	{mso-style-link:"Title Char";
+	margin:0in;
+	margin-bottom:.0001pt;
+	border:none;
+	padding:0in;
+	font-size:36.0pt;
+	font-family:"Franklin Gothic Demi","sans-serif";
+	letter-spacing:.25pt;}
+p.MsoTitleCxSpLast, li.MsoTitleCxSpLast, div.MsoTitleCxSpLast
+	{mso-style-link:"Title Char";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:15.0pt;
+	margin-left:0in;
+	border:none;
+	padding:0in;
+	font-size:36.0pt;
+	font-family:"Franklin Gothic Demi","sans-serif";
+	letter-spacing:.25pt;}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:purple;
+	text-decoration:underline;}
+p
+	{margin-right:0in;
+	margin-left:0in;
+	font-size:12.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoAcetate, li.MsoAcetate, div.MsoAcetate
+	{mso-style-link:"Balloon Text Char";
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:8.0pt;
+	font-family:"Tahoma","sans-serif";}
+p.MsoNoSpacing, li.MsoNoSpacing, div.MsoNoSpacing
+	{mso-style-link:"No Spacing Char";
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoListParagraph, li.MsoListParagraph, div.MsoListParagraph
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:.5in;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoListParagraphCxSpFirst, li.MsoListParagraphCxSpFirst, div.MsoListParagraphCxSpFirst
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoListParagraphCxSpMiddle, li.MsoListParagraphCxSpMiddle, div.MsoListParagraphCxSpMiddle
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoListParagraphCxSpLast, li.MsoListParagraphCxSpLast, div.MsoListParagraphCxSpLast
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:.5in;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.MsoTocHeading, li.MsoTocHeading, div.MsoTocHeading
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:24.0pt;
+	margin-left:0in;
+	line-height:115%;
+	page-break-after:avoid;
+	font-size:36.0pt;
+	font-family:"Franklin Gothic Demi","sans-serif";
+	font-variant:small-caps;
+	font-weight:bold;}
+span.Heading1Char
+	{mso-style-name:"Heading 1 Char";
+	mso-style-link:"Heading 1";
+	font-family:"Franklin Gothic Demi","sans-serif";
+	font-variant:small-caps;
+	font-weight:bold;}
+span.Heading2Char
+	{mso-style-name:"Heading 2 Char";
+	mso-style-link:"Heading 2";
+	font-family:"Times New Roman","serif";
+	color:#1F497D;
+	font-weight:bold;}
+span.Heading3Char
+	{mso-style-name:"Heading 3 Char";
+	mso-style-link:"Heading 3";
+	font-family:"Times New Roman","serif";
+	color:#1F497D;
+	font-weight:bold;
+	font-style:italic;}
+span.BalloonTextChar
+	{mso-style-name:"Balloon Text Char";
+	mso-style-link:"Balloon Text";
+	font-family:"Tahoma","sans-serif";}
+span.Definition
+	{mso-style-name:Definition;
+	font-family:"Calibri","sans-serif";
+	font-weight:bold;}
+span.NoSpacingChar
+	{mso-style-name:"No Spacing Char";
+	mso-style-link:"No Spacing";
+	font-family:"Times New Roman","serif";}
+span.URL
+	{mso-style-name:URL;
+	text-decoration:underline;}
+span.Literal
+	{mso-style-name:Literal;
+	font-family:"Lucida Sans Typewriter";}
+p.TopicsCoveredbox, li.TopicsCoveredbox, div.TopicsCoveredbox
+	{mso-style-name:"Topics Covered box";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:0in;
+	background:#DBE5F1;
+	border:none;
+	padding:0in;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.TopicsCoveredboxCxSpFirst, li.TopicsCoveredboxCxSpFirst, div.TopicsCoveredboxCxSpFirst
+	{mso-style-name:"Topics Covered boxCxSpFirst";
+	margin:0in;
+	margin-bottom:.0001pt;
+	background:#DBE5F1;
+	border:none;
+	padding:0in;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.TopicsCoveredboxCxSpMiddle, li.TopicsCoveredboxCxSpMiddle, div.TopicsCoveredboxCxSpMiddle
+	{mso-style-name:"Topics Covered boxCxSpMiddle";
+	margin:0in;
+	margin-bottom:.0001pt;
+	background:#DBE5F1;
+	border:none;
+	padding:0in;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.TopicsCoveredboxCxSpLast, li.TopicsCoveredboxCxSpLast, div.TopicsCoveredboxCxSpLast
+	{mso-style-name:"Topics Covered boxCxSpLast";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:0in;
+	background:#DBE5F1;
+	border:none;
+	padding:0in;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.CodeExample, li.CodeExample, div.CodeExample
+	{mso-style-name:"Code Example";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:12.0pt;
+	margin-left:0in;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:9.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.CodeExampleCxSpFirst, li.CodeExampleCxSpFirst, div.CodeExampleCxSpFirst
+	{mso-style-name:"Code ExampleCxSpFirst";
+	margin:0in;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:9.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.CodeExampleCxSpMiddle, li.CodeExampleCxSpMiddle, div.CodeExampleCxSpMiddle
+	{mso-style-name:"Code ExampleCxSpMiddle";
+	margin:0in;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:9.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.CodeExampleCxSpLast, li.CodeExampleCxSpLast, div.CodeExampleCxSpLast
+	{mso-style-name:"Code ExampleCxSpLast";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:12.0pt;
+	margin-left:0in;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:9.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.SourceCode, li.SourceCode, div.SourceCode
+	{mso-style-name:"Source Code";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:12.0pt;
+	margin-left:0in;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:9.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.SourceCodeCxSpFirst, li.SourceCodeCxSpFirst, div.SourceCodeCxSpFirst
+	{mso-style-name:"Source CodeCxSpFirst";
+	margin:0in;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:9.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.SourceCodeCxSpMiddle, li.SourceCodeCxSpMiddle, div.SourceCodeCxSpMiddle
+	{mso-style-name:"Source CodeCxSpMiddle";
+	margin:0in;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:9.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.SourceCodeCxSpLast, li.SourceCodeCxSpLast, div.SourceCodeCxSpLast
+	{mso-style-name:"Source CodeCxSpLast";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:12.0pt;
+	margin-left:0in;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:9.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.SampleRun, li.SampleRun, div.SampleRun
+	{mso-style-name:"Sample Run";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:12.0pt;
+	margin-left:0in;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:9.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.SampleRunCxSpFirst, li.SampleRunCxSpFirst, div.SampleRunCxSpFirst
+	{mso-style-name:"Sample RunCxSpFirst";
+	margin:0in;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:9.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.SampleRunCxSpMiddle, li.SampleRunCxSpMiddle, div.SampleRunCxSpMiddle
+	{mso-style-name:"Sample RunCxSpMiddle";
+	margin:0in;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:9.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.SampleRunCxSpLast, li.SampleRunCxSpLast, div.SampleRunCxSpLast
+	{mso-style-name:"Sample RunCxSpLast";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:12.0pt;
+	margin-left:0in;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:9.0pt;
+	font-family:"Lucida Sans Typewriter";}
+span.SampleRunResponse
+	{mso-style-name:"Sample Run Response";
+	color:#1F497D;
+	font-weight:bold;}
+span.SourceLineNumber
+	{mso-style-name:"Source Line Number";
+	color:#7F7F7F;}
+span.SourceCodeComment
+	{mso-style-name:"Source Code Comment";
+	color:#7F7F7F;}
+span.HeaderChar
+	{mso-style-name:"Header Char";
+	mso-style-link:Header;
+	font-family:"Times New Roman","serif";}
+span.FooterChar
+	{mso-style-name:"Footer Char";
+	mso-style-link:Footer;
+	font-family:"Times New Roman","serif";}
+p.TableHeading, li.TableHeading, div.TableHeading
+	{mso-style-name:"Table Heading";
+	margin:0in;
+	margin-bottom:.0001pt;
+	text-align:center;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";
+	font-weight:bold;}
+p.TableListing, li.TableListing, div.TableListing
+	{mso-style-name:"Table Listing";
+	margin:0in;
+	margin-bottom:.0001pt;
+	text-align:center;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+p.ImportantNote, li.ImportantNote, div.ImportantNote
+	{mso-style-name:"Important Note";
+	margin-top:0in;
+	margin-right:.5in;
+	margin-bottom:8.0pt;
+	margin-left:.5in;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+span.StrongBoxed
+	{mso-style-name:"Strong & Boxed";
+	border:solid windowtext 1.0pt;
+	padding:0in;
+	font-weight:bold;}
+span.TitleChar
+	{mso-style-name:"Title Char";
+	mso-style-link:Title;
+	font-family:"Franklin Gothic Demi","sans-serif";
+	letter-spacing:.25pt;}
+p.ChapterNumber, li.ChapterNumber, div.ChapterNumber
+	{mso-style-name:"Chapter Number";
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:26.0pt;
+	font-family:"Franklin Gothic Demi","sans-serif";}
+p.Body, li.Body, div.Body
+	{mso-style-name:Body;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:8.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+p.BodyFirst, li.BodyFirst, div.BodyFirst
+	{mso-style-name:"Body First";
+	margin:0in;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	font-size:11.0pt;
+	font-family:"Times New Roman","serif";}
+span.Keycap
+	{mso-style-name:Keycap;
+	font-variant:small-caps;
+	color:blue;}
+span.FigureImageBorder
+	{mso-style-name:"Figure Image Border";
+	border:solid windowtext 1.0pt;
+	padding:0in;}
+p.SourceCodeFilename, li.SourceCodeFilename, div.SourceCodeFilename
+	{mso-style-name:"Source Code Filename";
+	margin:0in;
+	margin-bottom:.0001pt;
+	text-align:right;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:12.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.SourceCodeFilenameCxSpFirst, li.SourceCodeFilenameCxSpFirst, div.SourceCodeFilenameCxSpFirst
+	{mso-style-name:"Source Code FilenameCxSpFirst";
+	margin:0in;
+	margin-bottom:.0001pt;
+	text-align:right;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:12.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.SourceCodeFilenameCxSpMiddle, li.SourceCodeFilenameCxSpMiddle, div.SourceCodeFilenameCxSpMiddle
+	{mso-style-name:"Source Code FilenameCxSpMiddle";
+	margin:0in;
+	margin-bottom:.0001pt;
+	text-align:right;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:12.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.SourceCodeFilenameCxSpLast, li.SourceCodeFilenameCxSpLast, div.SourceCodeFilenameCxSpLast
+	{mso-style-name:"Source Code FilenameCxSpLast";
+	margin:0in;
+	margin-bottom:.0001pt;
+	text-align:right;
+	line-height:115%;
+	border:none;
+	padding:0in;
+	font-size:12.0pt;
+	font-family:"Lucida Sans Typewriter";}
+p.Non-TOCHeading3, li.Non-TOCHeading3, div.Non-TOCHeading3
+	{mso-style-name:"Non-TOC Heading 3";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:14.0pt;
+	font-family:"Calibri","sans-serif";
+	color:#1F497D;
+	font-weight:bold;
+	font-style:italic;}
+.MsoChpDefault
+	{font-family:"Calibri","sans-serif";}
+.MsoPapDefault
+	{margin-bottom:10.0pt;
+	line-height:115%;}
+ /* Page Definitions */
+ @page WordSection1
+	{size:8.0in 10.0in;
+	margin:1.0in 1.0in 1.0in 1.0in;}
+div.WordSection1
+	{page:WordSection1;}
+ /* List Definitions */
+ ol
+	{margin-bottom:0in;}
+ul
+	{margin-bottom:0in;}
+-->
+</style>
+
+</head>
+
+<body lang=EN-US link=blue vlink=purple>
+
+<div class=WordSection1>
+
+<table class=MsoTableGrid border=0 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse;border:none'>
+ <tr>
+  <td width=101 rowspan=2 valign=top style='width:60.85pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=ChapterNumber><img width=84 height=96 id="Picture 151"
+  src="10_files/image001.jpg"></p>
+  </td>
+  <td width=637 valign=top style='width:381.95pt;border:none;border-bottom:
+  solid windowtext 1.0pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=ChapterNumber>C<span lang=ES-MX>apítulo</span> 10</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=637 valign=top style='width:381.95pt;border:none;padding:0in 5.4pt 0in 5.4pt'>
+  <h1 style='line-height:normal'><a name="_Toc411726971"><span
+  style='font-variant:normal !important;text-transform:uppercase'>Ta Te Ti</span></a></h1>
+  </td>
+ </tr>
+</table>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt;
+background:#DBE5F1'>
+
+<p class=TopicsCoveredboxCxSpFirst style='background:#DBE5F1;border:none;
+padding:0in'><span lang=ES-MX>Temas Tratados En Este Capítulo:</span></p>
+
+<p class=TopicsCoveredboxCxSpMiddle style='margin-left:.25in;text-indent:-.25in;
+background:#DBE5F1;border:none;padding:0in'><span style='font-family:Symbol'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span>Inteligencia Artificial</p>
+
+<p class=TopicsCoveredboxCxSpMiddle style='margin-left:.25in;text-indent:-.25in;
+background:#DBE5F1;border:none;padding:0in'><span style='font-family:Symbol'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span>Referencias en Listas</p>
+
+<p class=TopicsCoveredboxCxSpMiddle style='margin-left:.25in;text-indent:-.25in;
+background:#DBE5F1;border:none;padding:0in'><span style='font-family:Symbol'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span>Evaluación en Cortocircuito</p>
+
+<p class=TopicsCoveredboxCxSpLast style='margin-left:.25in;text-indent:-.25in;
+background:#DBE5F1;border:none;padding:0in'><span style='font-family:Symbol'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span>El Valor <span class=Literal><span style='font-size:9.0pt'>None</span></span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>Este capítulo presenta un juego de Ta Te Ti
+contra una inteligencia artificial simple. Una </span><span class=Definition><span
+lang=ES-MX>inteligencia artificial</span></span><span lang=ES-MX> (</span><span
+class=Definition><span lang=ES-MX>IA</span></span><span lang=ES-MX>) es un
+programa de computadora que puede responder inteligentemente a los movimientos
+del jugador. Este juego no introduce ningún nuevo concepto que sea complicado.
+La inteligencia artificial del juego de Ta Te Ti consiste en sólo unas pocas
+líneas de código.</span></p>
+
+<p class=Body><span lang=ES-MX>Dos personas pueden jugar Ta Te Ti con lápiz y
+papel. Un jugador es X y el otro es O. En un tablero consistente en nueve
+cuadrados, los jugadores toman turnos para colocar sus X u O. Si un jugador
+consigue ubicar tres de sus marcas en el tablero sobre la misma línea, columna
+o alguna de las dos diagonales, gana. Cuando el tablero se llena y ningún
+jugador ha ganado, el juego termina en empate.</span></p>
+
+<p class=Body><span lang=ES-MX>Este capítulo no introduce muchos nuevos
+conceptos de programación. Hace uso de nuestro conocimiento adquirido hasta
+ahora para crear un jugador inteligente de Ta Te Ti. Empecemos mirando una
+prueba de ejecución del programa. El jugador hace su movimiento escribiendo el
+número del espacio en el que quiere jugar. Estos números están dispuestos de
+igual forma que las teclas numéricas en tu teclado (ver Figura 10-2).</span></p>
+
+<h2><a name="_Toc411726972"><span lang=ES-MX>Prueba de Ejecución de Ta Te Ti</span></a></h2>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=SampleRunCxSpFirst><span lang=ES-MX>¡Bienvenido al Ta Te Ti!</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>¿Deseas ser X o O?</span></p>
+
+<p class=SampleRunCxSpMiddle><span class=SampleRunResponse><span lang=ES-MX>X</span></span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>La computadora irá primero.</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>   |   |</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX> O |   |</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>   |   |</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>-----------</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>   |   |</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>   |   |</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>   |   |</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>-----------</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>   |   |</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>   |   |</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>   |   |</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>¿Cuál es tu próxima jugada? (1-9)<span
+class=SampleRunResponse><span style='color:windowtext;font-weight:normal'> </span></span></span></p>
+
+<p class=SampleRunCxSpMiddle><span class=SampleRunResponse><span lang=ES-MX>3</span></span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>   |   |</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX> O |   |</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>   |   |</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>-----------</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>   |   |</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>   |   |</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>   |   |</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>-----------</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>   |   |</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX> O |   | X</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>   |   |</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>¿Cuál es tu próxima jugada? (1-9)</span></p>
+
+<p class=SampleRunCxSpMiddle><span class=SampleRunResponse><span lang=ES-MX>4</span></span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>   |   |</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX> O |   | O</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>   |   |</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>-----------</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>   |   |</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX> X |   |</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>   |   |</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>-----------</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>   |   |</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX> O |   | X</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>   |   |</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>¿Cuál es tu próxima jugada? (1-9)</span></p>
+
+<p class=SampleRunCxSpMiddle><span class=SampleRunResponse><span lang=ES-MX>5</span></span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>   |   |</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX> O | O | O</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>   |   |</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>-----------</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>   |   |</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX> X | X |</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>   |   |</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>-----------</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>   |   |</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX> O |   | X</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>   |   |</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>¡La computadora te ha vencido! Has
+perdido.</span></p>
+
+<p class=SampleRunCxSpMiddle><span lang=ES-MX>¿Deseas volver a jugar? (sí/no)?<span
+class=SampleRunResponse> </span></span></p>
+
+<p class=SampleRunCxSpLast><span class=SampleRunResponse><span lang=ES-MX>no</span></span></p>
+
+</div>
+
+<h2><a name="_Toc411726973"><span lang=ES-MX>Código Fuente del Ta Te Ti</span></a></h2>
+
+<p class=Body><span lang=ES-MX>En una nueva ventana del editor de archivos,
+escribe el siguiente código y guárdalo como tateti.py. Luego ejecuta el juego
+pulsando <span class=Keycap><span style='font-variant:normal !important;
+text-transform:uppercase'>F5</span></span>.</span></p>
+
+<div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
+
+<p class=SourceCodeFilename><span lang=FR>tateti.py</span></p>
+
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber><span lang=FR>  1.</span></span><span
+lang=FR> <span class=SourceCodeComment># Ta Te Ti</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=FR>  2. </span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=FR>  </span></span><span
+class=SourceLineNumber><span lang=ES-MX>3.</span></span><span lang=ES-MX>
+import random</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 
+4.       </span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>  5.</span></span><span
+lang=ES-MX> def dibujarTablero(tablero):</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 
+6.</span></span><span lang=ES-MX>     <span class=SourceCodeComment># Esta
+función dibuja el tablero recibido como argumento.</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 
+7. </span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 
+8.</span></span><span lang=ES-MX>     <span class=SourceCodeComment>#
+&quot;tablero&quot; es una lista de 10 strings representando la pizarra (ignora
+índice 0)</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>  </span></span><span
+class=SourceLineNumber><span lang=FR>9.</span></span><span lang=FR>    
+print('   |   |')</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=FR> 10.</span></span><span
+lang=FR>     print(' ' + tablero[7] + ' | ' + tablero[8] + ' | ' + tablero[9])</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=FR> 11.</span></span><span
+lang=FR>     print('   |   |')</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=FR> 12.</span></span><span
+lang=FR>     print('-----------')</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=FR> 13.</span></span><span
+lang=FR>     print('   |   |')</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=FR> 14.</span></span><span
+lang=FR>     print(' ' + tablero[4] + ' | ' + tablero[5] + ' | ' + tablero[6])</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=FR> 15.</span></span><span
+lang=FR>     print('   |   |')</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=FR> 16.</span></span><span
+lang=FR>     print('-----------')</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=FR> 17.</span></span><span
+lang=FR>     print('   |   |')</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=FR> 18.</span></span><span
+lang=FR>     print(' ' + tablero[1] + ' | ' + tablero[2] + ' | ' + tablero[3])</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=FR> </span></span><span
+class=SourceLineNumber><span lang=ES-MX>19.</span></span><span lang=ES-MX>    
+print('   |   |')</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 20.
+</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 21.</span></span><span
+lang=ES-MX> def ingresaLetraJugador():</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 22.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># Permite al jugador typear que
+letra desea ser.</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 23.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># Devuelve una lista con las
+letras de los jugadores como primer item, y la de la computadora como segundo.</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> </span>24.</span>    
+letra = ''</p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 25.</span>    
+while not (letra == 'X' or letra == 'O'):</p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> </span><span
+class=SourceLineNumber><span lang=ES-MX>26.</span></span><span lang=ES-MX>        
+print('¿Deseas ser X o O?')</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 27.</span></span><span
+lang=ES-MX>         letra = input().upper()</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 28.
+</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 29.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># el primer elemento de la lista
+es la letra del jugador, el segundo es la letra de la computadora.</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> </span>30.</span>    
+if letra == 'X':</p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 31.</span>        
+return ['X', 'O']</p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> </span><span
+class=SourceLineNumber><span lang=ES-MX>32.</span></span><span lang=ES-MX>    
+else:</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 33.</span></span><span
+lang=ES-MX>         return ['O', 'X']</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 34.
+</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 35.</span></span><span
+lang=ES-MX> def quienComienza():</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 36.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># Elije al azar que jugador
+comienza.</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> </span>37.</span>    
+if random.randint(0, 1) == 0:</p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 38.</span>        
+return 'La computadora'</p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 39.</span>    
+else:</p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> </span><span
+class=SourceLineNumber><span lang=ES-MX>40.</span></span><span lang=ES-MX>        
+return 'El jugador'</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 41.
+</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 42.</span></span><span
+lang=ES-MX> def jugarDeNuevo():</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 43.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># Esta funcion devuelve True
+(Verdadero) si el jugador desea volver a jugar, de lo contrario devuelve False
+(Falso).</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 44.</span></span><span
+lang=ES-MX>     print('¿Deseas volver a jugar? </span>(sí/no)?')</p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 45.</span>    
+return input().lower().startswith('s')</p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> </span><span
+class=SourceLineNumber><span lang=ES-MX>46. </span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 47.</span></span><span
+lang=ES-MX> def hacerJugada(tablero, letra, jugada):</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 48.</span></span><span
+lang=ES-MX>     tablero[jugada] = letra</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 49.
+</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 50.</span></span><span
+lang=ES-MX> def esGanador(ta, le):</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 51.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># Dado un tablero y la letra de
+un jugador, devuelve True (verdadero) si el mismo ha ganado.</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 52.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># Utilizamos reemplazamos tablero
+por ta y letra por le para no escribir tanto.</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 53.</span></span><span
+lang=ES-MX>     return ((ta[7] == le and ta[8] == le and ta[9] == le) or <span
+class=SourceCodeComment># horizontal superior</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 54.</span></span><span
+lang=ES-MX>     (ta[4] == le and ta[5] == le and ta[6] == le) or <span
+class=SourceCodeComment># horizontal medio</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> </span></span><span
+class=SourceLineNumber><span lang=FR>55.</span></span><span lang=FR>     (ta[1]
+== le and ta[2] == le and ta[3] == le) or <span class=SourceCodeComment>#
+horizontal inferior</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=FR> 56.</span></span><span
+lang=FR>     (ta[7] == le and ta[4] == le and ta[1] == le) or <span
+class=SourceCodeComment># vertical izquierda</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=FR> 57.</span></span><span
+lang=FR>     (ta[8] == le and ta[5] == le and ta[2] == le) or <span
+class=SourceCodeComment># vertical medio</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=FR> 58.</span></span><span
+lang=FR>     (ta[9] == le and ta[6] == le and ta[3] == le) or <span
+class=SourceCodeComment># vertical derecha</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=FR> 59.</span></span><span
+lang=FR>     (ta[7] == le and ta[5] == le and ta[3] == le) or <span
+class=SourceCodeComment># diagonal</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=FR> 60.</span></span><span
+lang=FR>     (ta[9] == le and ta[5] == le and ta[1] == le)) <span
+class=SourceCodeComment># diagonal</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=FR> </span></span><span
+class=SourceLineNumber><span lang=ES-MX>61. </span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 62.</span></span><span
+lang=ES-MX> def obtenerDuplicadoTablero(tablero):</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 63.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># Duplica la lista del tablero y
+devuelve el duplicado.</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> </span>64.</span>    
+dupTablero = []</p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 65. </span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 66.</span>     for
+i in tablero:</p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 67.</span>        
+dupTablero.append(i)</p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 68. </span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 69.</span>    
+return dupTablero</p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 70. </span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> </span><span
+class=SourceLineNumber><span lang=ES-MX>71.</span></span><span lang=ES-MX> def
+hayEspacioLibre(tablero, jugada):</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 72.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># Devuelte true si hay espacio
+para efectuar la jugada en el tablero.</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 73.</span></span><span
+lang=ES-MX>     return tablero[jugada] == ' '</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 74.
+</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 75.</span></span><span
+lang=ES-MX> def obtenerJugadaJugador(tablero):</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 76.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># Permite al jugador escribir su
+jugada.</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 77.</span></span><span
+lang=ES-MX>     jugada = ' '</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 78.</span></span><span
+lang=ES-MX>     while jugada not in '1 2 3 4 5 6 7 8 9'.split() or not
+hayEspacioLibre(tablero, int(jugada)):</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 79.</span></span><span
+lang=ES-MX>         print('¿Cuál es tu próxima jugada? (1-9)')</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 80.</span></span><span
+lang=ES-MX>         jugada = input()</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 81.</span></span><span
+lang=ES-MX>     return int(jugada)</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 82.
+</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 83.</span></span><span
+lang=ES-MX> def elegirAzarDeLista(tablero, listaJugada):</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 84.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># Devuelve una jugada válida en
+el tablero de la lista recibida.</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 85.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># Devuelve None si no hay ninguna
+jugada válida.</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 86.</span></span><span
+lang=ES-MX>     jugadasPosibles = []</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 87.</span></span><span
+lang=ES-MX>     for i in listaJugada:</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 88.</span></span><span
+lang=ES-MX>         if hayEspacioLibre(tablero, i):</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 89.</span></span><span
+lang=ES-MX>             jugadasPosibles.append(i)</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 90.
+</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 91.</span></span><span
+lang=ES-MX>     if len(jugadasPosibles) != </span>0:</p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 92.</span>        
+return random.choice(jugadasPosibles)</p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 93.</span>    
+else:</p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> </span><span
+class=SourceLineNumber><span lang=ES-MX>94.</span></span><span lang=ES-MX>        
+return None</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 95.
+</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 96.</span></span><span
+lang=ES-MX> def obtenerJugadaComputadora(tablero, letraComputadora):</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 97.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># Dado un tablero y la letra de
+la computadora, determina que jugada efectuar.</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 98.</span></span><span
+lang=ES-MX>     if letraComputadora == 'X':</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 99.</span></span><span
+lang=ES-MX>         letraJugador = 'O'</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>100.</span></span><span
+lang=ES-MX>     else:</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>101.</span></span><span
+lang=ES-MX>         letraJugador = 'X'</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>102.
+</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>103.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># Aquí está nuestro algoritmo
+para nuestra IA (Inteligencia Artifical) del Ta Te Ti.</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>104.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># Primero, verifica si podemos
+ganar en la próxima jugada</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>105.</span></span><span
+lang=ES-MX>     for i in range(1, 10):</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>106.</span></span><span
+lang=ES-MX>         copia = obtenerDuplicadoTablero(tablero)</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>107.</span></span><span
+lang=ES-MX>         if hayEspacioLibre(copia, i):</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>108.</span></span><span
+lang=ES-MX>             hacerJugada(copia, letraComputadora, i)</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>109.</span></span><span
+lang=ES-MX>             if esGanador(copia, letraComputadora):</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>110.</span></span><span
+lang=ES-MX>                 return i</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>111.
+</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>112.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># Verifica si el jugador podría
+ganar en su próxima jugada, y lo bloquea.</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>113.</span></span><span
+lang=ES-MX>     for i in range(1, 10):</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>114.</span></span><span
+lang=ES-MX>         copia = obtenerDuplicadoTablero(tablero)</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>115.</span></span><span
+lang=ES-MX>         if hayEspacioLibre(copia, i):</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>116.</span></span><span
+lang=ES-MX>             hacerJugada(copia, letraJugador, i)</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>117.</span></span><span
+lang=ES-MX>             if esGanador(copia, letraJugador):</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>118.</span></span><span
+lang=ES-MX>                 return i</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>119.
+</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>120.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># Intenta ocupar una de las
+esquinas de estar libre.</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>121.</span></span><span
+lang=ES-MX>     jugada = elegirAzarDeLista(tablero, [1, 3, 7, 9])</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>122.</span></span><span
+lang=ES-MX>     if jugada != None:</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>123.</span></span><span
+lang=ES-MX>         return jugada</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>124.
+</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>125.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># De estar libre, intenta ocupar
+el centro.</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>126.</span></span><span
+lang=ES-MX>     if hayEspacioLibre(tablero, 5):</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>127.</span></span><span
+lang=ES-MX>         return 5</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>128.
+</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>129.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># Ocupa alguno de los lados.</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>130.</span></span><span
+lang=ES-MX>     return elegirAzarDeLista(tablero, [2, 4, 6, 8])</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>131.
+</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>132.</span></span><span
+lang=ES-MX> def tableroCompleto(tablero):</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>133.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># Devuelve True si cada espacio
+del tablero fue ocupado, caso contrario devuele False.</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>134.</span>     for
+i in range(1, 10):</p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>135.</span>        
+if hayEspacioLibre(tablero, i):</p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>136.</span>            
+return False</p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>137.</span>    
+return True</p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>138. </span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>139. </span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>140.</span>
+print('¡Bienvenido al Ta Te Ti!')</p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>141. </span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>142.</span> while
+True:</p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>143.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># Resetea el tablero</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>144.</span></span><span
+lang=ES-MX>     elTablero = [' '] * 10</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>145.</span></span><span
+lang=ES-MX>     letraJugador, letraComputadora = ingresaLetraJugador()</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>146.</span></span><span
+lang=ES-MX>     turno = quienComienza()</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>147.</span></span><span
+lang=ES-MX>     print(turno + ' irá primero.')</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>148.</span></span><span
+lang=ES-MX>     juegoEnCurso = True</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>149.
+</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>150.</span></span><span
+lang=ES-MX>     while juegoEnCurso:</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>151.</span></span><span
+lang=ES-MX>         if turno == 'El jugador':</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>152.</span></span><span
+lang=ES-MX>             <span class=SourceCodeComment># Turno del jugador</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>153.</span></span><span
+lang=ES-MX>             dibujarTablero(elTablero)</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>154.</span></span><span
+lang=ES-MX>             jugada = obtenerJugadaJugador(elTablero)</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>155.</span></span><span
+lang=ES-MX>             hacerJugada(elTablero, letraJugador, jugada)</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>156.
+</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>157.</span></span><span
+lang=ES-MX>             if esGanador(elTablero, letraJugador):</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>158.</span></span><span
+lang=ES-MX>                 dibujarTablero(elTablero)</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>159.</span></span><span
+lang=ES-MX>                 print('¡Felicidades, has ganado!')</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>160.</span></span><span
+lang=ES-MX>                 juegoEnCurso = False</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>161.</span></span><span
+lang=ES-MX>             else:</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>162.</span></span><span
+lang=ES-MX>                 if tableroCompleto(elTablero):</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>163.</span></span><span
+lang=ES-MX>                     dibujarTablero(elTablero)</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>164.</span></span><span
+lang=ES-MX>                     print('¡Es un empate!')</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>165.</span></span><span
+lang=ES-MX>                     break</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>166.</span></span><span
+lang=ES-MX>                 else:</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>167.</span></span><span
+lang=ES-MX>                     turno = 'La computadora'</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>168.
+</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>169.</span></span><span
+lang=ES-MX>         else:</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>170.</span></span><span
+lang=ES-MX>             <span class=SourceCodeComment># Turno de la computadora</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>171.</span></span><span
+lang=ES-MX>             jugada = obtenerJugadaComputadora(elTablero,
+letraComputadora)</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>172.</span></span><span
+lang=ES-MX>             hacerJugada(elTablero, letraComputadora, jugada)</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>173.
+</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>174.</span></span><span
+lang=ES-MX>             if esGanador(elTablero, letraComputadora):</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>175.</span></span><span
+lang=ES-MX>                 dibujarTablero(elTablero)</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>176.</span></span><span
+lang=ES-MX>                 print('¡La computadora te ha vencido! Has
+perdido.')</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>177.</span></span><span
+lang=ES-MX>                 juegoEnCurso = False</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>178.</span></span><span
+lang=ES-MX>             else:</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>179.</span></span><span
+lang=ES-MX>                 if tableroCompleto(elTablero):</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>180.</span></span><span
+lang=ES-MX>                     dibujarTablero(elTablero)</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>181.</span></span><span
+lang=ES-MX>                     print('¡Es un empate!')</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>182.</span></span><span
+lang=ES-MX>                     break</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>183.</span></span><span
+lang=ES-MX>                 else:</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>184.</span></span><span
+lang=ES-MX>                     turno = 'El jugador'</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>185.
+</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>186.</span></span><span
+lang=ES-MX>     if not jugarDeNuevo():</span></p>
+
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber><span lang=ES-MX>187.</span></span><span
+lang=ES-MX>         break</span></p>
+
+</div>
+
+<h2><a name="_Toc411726974"><span lang=ES-MX>Diseñando el Programa</span></a></h2>
+
+<p class=Body><span lang=ES-MX>La Figura 10-1 muestra cómo se vería un diagrama
+de flujo del Ta Te Ti. En nuestro programa del Ta Te Ti el jugador elige si
+quiere ser X u O. Quién toma el primer turno se elige al azar. Luego el jugador
+y la computadora toman turnos para jugar.</span></p>
+
+<p class=Body><span lang=ES-MX>Los recuadros a la izquierda del diagrama de flujo
+son lo que ocurre durante el turno del jugador. El lado derecho muestra lo que
+ocurre durante el turno de la computadora. El jugador tiene un recuadro extra
+para dibujar el tablero ya que la computadora no precisa ver el tablero impreso
+en la pantalla. Luego de que el jugador o la computadora hacen su movimiento,
+revisamos si han ganado u ocasionado un empate, y entonces cambia el turno del
+juego. Después de que termina el juego, le preguntamos al jugador si desea
+jugar otra vez.</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><img width=373
+height=468 id="Picture 9" src="10_files/image002.png"></p>
+
+<p class=MsoCaption><span lang=ES-MX>Figura 10-1: Diagrama de flujo para el Ta
+Te Ti</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><img width=510
+height=321 id="Picture 13" src="10_files/image003.jpg"></p>
+
+<p class=MsoCaption><span lang=ES-MX>Figura 10-2: El tablero está ordenado
+igual que el teclado numérico de la computadora.</span></p>
+
+<p class=Body><span lang=ES-MX>&nbsp;</span></p>
+
+<p class=Non-TOCHeading3><span lang=ES-MX>Representando el Tablero como Datos</span></p>
+
+<p class=Body><span lang=ES-MX>Primero, necesitamos entender cómo vamos a
+representar el tablero como una variable. Sobre papel, el tablero de Ta Te Ti
+se dibuja como un par de líneas horizontales y un par de líneas verticales, con
+una X, una O o un espacio vacío en cada una de las nueve regiones formadas.</span></p>
+
+<p class=Body><span lang=ES-MX>En el programa, el tablero de Ta Te Ti se
+representa como una lista de cadenas. Cada cadena representa uno de los nueve
+espacios en el tablero. Para que sea más fácil recordar qué índice de la lista
+corresponde a cada espacio, los ordenaremos igual que en el tablero numérico
+del teclado, como se muestra en la Figura 10-2.</span></p>
+
+<p class=Body><span lang=ES-MX>Las cadenas serán </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>'X'</span></span><span
+lang=ES-MX> para el jugador X, </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>'O'</span></span><span lang=ES-MX>
+para el jugador O, o un espacio simple </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>' '</span></span><span
+lang=ES-MX> para un espacio vacío.</span></p>
+
+<p class=Body><span lang=ES-MX>Entonces si una lista de diez cadenas se
+guardase en una variable llamada tablero, </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>tablero[7]</span></span><span
+lang=ES-MX> sería el espacio superior izquierdo en el tablero. De la misma forma
+</span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:
+115%'>tablero[5]</span></span><span lang=ES-MX> sería el centro, </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>tablero[4]</span></span><span
+lang=ES-MX> sería el costado izquierdo, etcétera. El programa ignorará la
+cadena en el índice </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>0</span></span><span lang=ES-MX> de la
+lista. El jugador entrará un número de </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>1</span></span><span
+lang=ES-MX> a </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>9</span></span><span lang=ES-MX> para decirle al juego
+sobre qué espacio quiere jugar.</span></p>
+
+<h2><a name="_Toc411726975"><span lang=ES-MX>IA del Juego</span></a></h2>
+
+<p class=Body><span lang=ES-MX>La IA necesitará poder ver el tablero y decidir
+sobre qué tipo de espacios mover. Para ser claros, definiremos tres tipos de
+espacios en el tablero de Ta Te Ti: esquinas, lados y el centro. La Figura 10-3
+presenta un esquema de qué es cada espacio.</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><img width=300
+height=295 id="Picture 14" src="10_files/image004.jpg"></p>
+
+<p class=MsoCaption><span lang=ES-MX>Figura 10-3: Ubicación de los lados, esquinas
+y centro en el tablero.</span></p>
+
+<p class=Body><span lang=ES-MX>La astucia de la IA para jugar al Ta Te Ti
+seguirá un algoritmo simple. Un </span><span class=Definition><span lang=ES-MX>algoritmo</span></span><span
+lang=ES-MX> es una serie finita de instrucciones para computar un resultado. Un
+único programa puede hacer uso de varios algoritmos diferentes. Un algoritmo
+puede representarse con un diagrama de flujo. El algoritmo de la IA del Ta Te
+Ti computa la mejor movida disponible, como se muestra en la Figura 10-4.</span></p>
+
+<p class=Body><span lang=ES-MX>El algoritmo de la IA consiste en los siguientes
+pasos:</span></p>
+
+<p class=MsoListParagraphCxSpFirst style='text-indent:-.25in'><span lang=ES-MX>1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+lang=ES-MX>Primero, ver si hay un movimiento con el que la computadora pueda
+ganar el juego. Si lo hay, hacer ese movimiento. En caso contrario, ir al paso
+2.</span></p>
+
+<p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in'>2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span
+lang=ES-MX>Ver si existe un movimiento disponible para el jugador que pueda
+hacer que la computadora pierda el juego. Si existe, la computadora debería
+jugar en ese lugar para bloquear la jugada ganadora. </span>En caso contrario,
+ir al paso 3.</p>
+
+<p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in'><span
+lang=ES-MX>3.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span lang=ES-MX>Comprobar si alguna de las esquinas (espacios 1,
+3, 7, ó 9) está disponible. Si lo está, mover allí. Si no hay ninguna esquina
+disponible, ir al paso 4.</span></p>
+
+<p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in'>4.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span
+lang=ES-MX>Comprobar si el centro está libre. Si lo está, jugar en el centro. </span>Si
+no lo está, ir al paso 5.</p>
+
+<p class=MsoListParagraphCxSpLast style='text-indent:-.25in'><span lang=ES-MX>5.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+lang=ES-MX>Jugar en cualquiera de los lados (espacios 2, 4, 6, u 8). No hay más
+pasos, ya que si hemos llegado al paso 5 los únicos espacios restantes son los
+lados.</span></p>
+
+<p class=Body><span lang=ES-MX>Todo esto ocurre dentro del casillero “Obtener
+movimiento de la computadora.” en nuestro diagrama de flujo de la Figura 10-1.
+Podrías añadir esta información al diagrama de flujo con los recuadros de la
+Figura 10-4.</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><img width=271
+height=397 id="Picture 15" src="10_files/image005.jpg"></p>
+
+<p class=MsoCaption><span lang=ES-MX>Figura 10-4: Los cinco pasos del algoritmo
+“Obtener movimiento de la computadora”. Las flechas salientes van al recuadro
+“Comprobar si la computadora ha ganado”.</span></p>
+
+<p class=Body><span lang=ES-MX>Este algoritmo es implementado en la función </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>obtenerJugadaComputadora()</span></span><span
+lang=ES-MX> y las otras funciones llamadas por </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>obtenerJugadaComputadora()</span></span><span
+lang=ES-MX>.</span></p>
+
+<p class=Non-TOCHeading3>The Start of the Program</p>
+
+<div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
+
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>  1.</span> <span
+class=SourceCodeComment># Ta Te Ti</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>  </span><span
+class=SourceLineNumber><span lang=ES-MX>2. </span></span></p>
+
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber><span lang=ES-MX>  3.</span></span><span
+lang=ES-MX> import random</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>El primer par de líneas son un comentario y la
+importación del módulo random para poder llamar a la función </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>randint()</span></span><span
+lang=ES-MX>.</span></p>
+
+<p class=Non-TOCHeading3><span lang=ES-MX>Dibujando el Tablero en la Pantalla</span></p>
+
+<div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
+
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber><span lang=ES-MX>  5.</span></span><span
+lang=ES-MX> def dibujarTablero(tablero):</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 
+6.</span></span><span lang=ES-MX>     <span class=SourceCodeComment># Esta
+función dibuja el tablero recibido como argumento.</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 
+7. </span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 
+8.</span></span><span lang=ES-MX>     <span class=SourceCodeComment>#
+&quot;tablero&quot; es una lista de 10 strings representando la pizarra (ignora
+índice 0)</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>  </span></span><span
+class=SourceLineNumber><span lang=FR>9.</span></span><span lang=FR>    
+print('   |   |')</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=FR> 10.</span></span><span
+lang=FR>     print(' ' + tablero[7] + ' | ' + tablero[8] + ' | ' + tablero[9])</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=FR> 11.</span></span><span
+lang=FR>     print('   |   |')</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=FR> 12.</span></span><span
+lang=FR>     print('-----------')</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=FR> 13.</span></span><span
+lang=FR>     print('   |   |')</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=FR> 14.</span></span><span
+lang=FR>     print(' ' + tablero[4] + ' | ' + tablero[5] + ' | ' + tablero[6])</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=FR> 15.</span></span><span
+lang=FR>     print('   |   |')</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=FR> 16.</span></span><span
+lang=FR>     print('-----------')</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=FR> 17.</span></span><span
+lang=FR>     print('   |   |')</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=FR> 18.</span></span><span
+lang=FR>     print(' ' + tablero[1] + ' | ' + tablero[2] + ' | ' + tablero[3])</span></p>
+
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber><span lang=FR> </span></span><span
+class=SourceLineNumber><span lang=ES-MX>19.</span></span><span lang=ES-MX>    
+print('   |   |')</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>La función </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>dibujarTablero()</span></span><span
+lang=ES-MX> imprimirá el tablero de juego representado por el parámetro
+tablero. Recuerda que nuestro tablero se representa como una lista de diez
+cadenas, donde la cadena correspondiente al índice </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>1</span></span><span
+lang=ES-MX> es la marca en el espacio 1 sobre el tablero del Ta Te Ti. La
+cadena en el índice </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>0</span></span><span lang=ES-MX> es
+ignorada. Muchas de nuestras funciones operarán pasando una lista de diez
+cadenas a modo de tablero.</span></p>
+
+<p class=Body><span lang=ES-MX>Asegúrate de escribir correctamente los espacios
+en las cadenas, ya que de otra forma el tablero se verá raro al imprimirse en
+pantalla. Aquí hay algunas llamadas de ejemplo (con un argumento como tablero)
+a </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>dibujarTablero()</span></span><span lang=ES-MX> junto con las
+correspondientes salidas de la función:</span></p>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=CodeExampleCxSpFirst style='border:none;padding:0in'>&gt;&gt;&gt;
+drawBoard([' ', ' ', ' ', ' ', 'X', 'O', ' ', 'X', ' ', 'O']</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>   |   |</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'> X |   | O</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>   |   |</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>-----------</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>   |   |</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'> X | O |</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>   |   |</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>-----------</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>   |   |</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>   |   |</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>   |   |</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>&gt;&gt;&gt; ['
+', 'O', 'O', ' ', ' ', 'X', ' ', ' ', ' ', ' ']</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>   |   |</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>   |   |  </p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>   |   |</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>-----------</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>   |   |</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>   | X |</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>   |   |</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>-----------</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>   |   |</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'> O | O |</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>   |   |</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>&gt;&gt;&gt; ['
+', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>   <span
+lang=ES-MX>|   |</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>   |   |  </span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>   |   |</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>-----------</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>   |   |</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>   |   |</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>   |   |</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>-----------</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>   |   |</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>   |   |</span></p>
+
+<p class=CodeExampleCxSpLast style='border:none;padding:0in'><span lang=ES-MX>  
+|   |</span></p>
+
+</div>
+
+<p class=Non-TOCHeading3><span lang=ES-MX>Dejando al Jugador elegir X u O</span></p>
+
+<div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
+
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber><span lang=ES-MX> 21.</span></span><span
+lang=ES-MX> def ingresaLetraJugador():</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 22.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># Permite al jugador typear que
+letra desea ser.</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 23.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># Devuelve una lista con las
+letras de los jugadores como primer item, y la de la computadora como segundo.</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> </span>24.</span>    
+letra = ''</p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 25.</span>    
+while not (letra == 'X' or letra == 'O'):</p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> </span><span
+class=SourceLineNumber><span lang=ES-MX>26.</span></span><span lang=ES-MX>        
+print('¿Deseas ser X o O?')</span></p>
+
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber><span lang=ES-MX> 27.</span></span><span
+lang=ES-MX>         letra = input().upper()</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>La función </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>ingresaLetraJugador()</span></span><span
+lang=ES-MX> pregunta al jugador si desea ser X u O. Continuará preguntando al
+jugador hasta que este escriba X u O. La línea 27 cambia automáticamente la
+cadena devuelta por la llamada a </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>input()</span></span><span lang=ES-MX>
+a letras mayúsculas con el método de cadena </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>upper()</span></span><span
+lang=ES-MX>.</span></p>
+
+<p class=Body><span lang=ES-MX>La condición del bucle while contiene
+paréntesis, lo que significa que la expresión dentro del paréntesis es evaluada
+primero. Si se asignara </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>'X'</span></span><span lang=ES-MX> a
+la variable </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>letra</span></span><span lang=ES-MX>, la expresión se
+evaluaría de esta forma:</span></p>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=CodeExampleCxSpFirst style='border:none;padding:0in'>not (letra == 'X'
+or letra == 'O')</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>      <span
+style='font-family:"Courier New"'>&#9660;</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>not ('X' ==
+'X'    or 'X' == 'O')</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>      <span
+style='font-family:"Courier New"'>&#9660;</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>not (  
+True       or    False)</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>      <span
+style='font-family:"Courier New"'>&#9660;</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>not (True)</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>      <span
+lang=ES-MX style='font-family:"Courier New"'>&#9660;</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>not True</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>      </span><span lang=ES-MX style='font-family:"Courier New"'>&#9660;</span></p>
+
+<p class=CodeExampleCxSpLast style='border:none;padding:0in'><span lang=ES-MX>   
+False</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>Si letra tiene valor </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>'X'</span></span><span
+lang=ES-MX> o </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>'O'</span></span><span lang=ES-MX>, entonces la
+condición del bucle es </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>False</span></span><span lang=ES-MX> y
+permite que la ejecución del programa continúe luego del bloque </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>while</span></span><span
+lang=ES-MX>.</span></p>
+
+<div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
+
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber><span lang=ES-MX> 29.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># el primer elemento de la lista
+es la letra del jugador, el segundo es la letra de la computadora.</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> </span>30.</span>    
+if letra == 'X':</p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 31.</span>        
+return ['X', 'O']</p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> </span><span
+class=SourceLineNumber><span lang=ES-MX>32.</span></span><span lang=ES-MX>    
+else:</span></p>
+
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber><span lang=ES-MX> 33.</span></span><span
+lang=ES-MX>         return ['O', 'X']</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>Esta función devuelve una lista con dos elementos.
+El primer elemento (la cadena del índice </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>0</span></span><span
+lang=ES-MX>) será la letra del jugador, y el segundo elemento (la cadena del
+índice </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>1</span></span><span lang=ES-MX>) será la letra de la
+computadora. Estas sentencias </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>if</span></span><span lang=ES-MX>-</span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>else</span></span><span
+lang=ES-MX> elige la lista adecuada a devolver.</span></p>
+
+<p class=Non-TOCHeading3><span lang=ES-MX>Decidiendo Quién Comienza</span></p>
+
+<div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
+
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber><span lang=ES-MX> 35.</span></span><span
+lang=ES-MX> def quienComienza():</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 36.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># Elije al azar que jugador
+comienza.</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> </span>37.</span>    
+if random.randint(0, 1) == 0:</p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 38.</span>        
+return 'La computadora'</p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 39.</span>    
+else:</p>
+
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber> </span><span
+class=SourceLineNumber><span lang=ES-MX>40.</span></span><span lang=ES-MX>        
+return 'El jugador'</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>La función </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>quienComienza()</span></span><span
+lang=ES-MX> lanza una moneda virtual para determinar quien comienza entre la
+computadora y el jugador. El lanzamiento virtual de moneda se realiza llamando
+a </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>random.randint(0, 1)</span></span><span lang=ES-MX>. Si esta
+llamada a función devuelve </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>0</span></span><span lang=ES-MX>, la
+función </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>quienComienza()</span></span><span lang=ES-MX> devuelve la
+cadena </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>'La computadora'</span></span><span lang=ES-MX>. De lo
+contrario, la función devuelve la cadena </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>'El jugador'</span></span><span
+lang=ES-MX>. El código que llama a esta función usará el valor de retorno para
+saber quién hará la primera movida del juego.</span></p>
+
+<p class=Non-TOCHeading3><span lang=ES-MX>Preguntando al Jugador si desea Jugar
+de Nuevo</span></p>
+
+<div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
+
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber><span lang=ES-MX> 42.</span></span><span
+lang=ES-MX> def jugarDeNuevo():</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 43.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># Esta funcion devuelve True
+(Verdadero) si el jugador desea volver a jugar, de lo contrario devuelve False
+(Falso).</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 44.</span></span><span
+lang=ES-MX>     print('¿Deseas volver a jugar? </span>(sí/no)?')</p>
+
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber> 45.</span>     return
+input().lower().startswith('s')</p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>La función </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>jugarDeNuevo()</span></span><span
+lang=ES-MX> pregunta al jugador si desea jugar de nuevo. Esta función devuelve
+True si el jugador escribe </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>'sí'</span></span><span lang=ES-MX> or
+</span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:
+115%'>'SÍ'</span></span><span lang=ES-MX> or </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>'s'</span></span><span
+lang=ES-MX> o cualquier cosa que comience con la letra S. Con cualquier otra
+respuesta, la función devuelve False. Esta función es igual a la utilizada en
+el juego del Ahorcado.</span></p>
+
+<p class=Non-TOCHeading3><span lang=ES-MX>Colocando una Marca en el Tablero</span></p>
+
+<div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
+
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber><span lang=ES-MX> 47.</span></span><span
+lang=ES-MX> def hacerJugada(tablero, letra, jugada):</span></p>
+
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber><span lang=ES-MX> 48.</span></span><span
+lang=ES-MX>     tablero[jugada] = letra</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>La función </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>hacerJugada()</span></span><span
+lang=ES-MX> es simple y consiste en sólo una línea. Los parámetros son una
+lista con diez cadenas llamada tablero, la letra de uno de los jugadores (</span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>'X'</span></span><span
+lang=ES-MX> u </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>'O'</span></span><span lang=ES-MX>) llamada </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>letra</span></span><span
+lang=ES-MX>, y un espacio en el tablero donde ese jugador quiere jugar (el cual
+es un entero de </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>1</span></span><span lang=ES-MX> a </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>9</span></span><span
+lang=ES-MX>) llamado </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>jugada</span></span><span lang=ES-MX>.</span></p>
+
+<p class=Body><span lang=ES-MX>Pero espera un segundo. Este código parece
+cambiar uno de los elementos de la lista </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>tablero</span></span><span
+lang=ES-MX> por el valor en </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>letra</span></span><span lang=ES-MX>.
+Pero como este código pertenece a una función, el parámetro </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>tablero</span></span><span
+lang=ES-MX> será olvidado al salir de esta función y abandonar el entorno de la
+función. El cambio a </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>tablero</span></span><span lang=ES-MX>
+también será olvidado.</span></p>
+
+<p class=Body><span lang=ES-MX>En realidad, esto no es lo que ocurre. Esto se
+debe a que las listas se comportan en forma especial cuando las pasas como
+argumentos a funciones. En realidad estás pasando una referencia a la lista y
+no la propia lista. Vamos a aprender ahora sobre la diferencia entre las listas
+y las referencias a listas.</span></p>
+
+<h2><a name="_Toc411726976"><span lang=ES-MX>Referencias</span></a></h2>
+
+<p class=MsoNormal><span lang=ES-MX>Prueba ingresar lo siguiente en la consola
+interactiva:</span></p>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=CodeExampleCxSpFirst style='border:none;padding:0in'>&gt;&gt;&gt; spam
+= 42</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>&gt;&gt;&gt;
+cheese = spam</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>&gt;&gt;&gt;
+spam = 100</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>&gt;&gt;&gt;
+spam</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>100</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>&gt;&gt;&gt; cheese</span></p>
+
+<p class=CodeExampleCxSpLast style='border:none;padding:0in'><span lang=ES-MX>42</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>Esto tiene sentido a partir de lo que sabes
+hasta ahora. Asignas </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>42</span></span><span lang=ES-MX> a la
+variable </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>spam</span></span><span lang=ES-MX>, y luego copias el valor
+en </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>spam</span></span><span lang=ES-MX> y lo asignas a la
+variable </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>cheese</span></span><span lang=ES-MX>. Cuando luego cambias </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>spam</span></span><span
+lang=ES-MX> a </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>100</span></span><span lang=ES-MX>, esto no afecta al
+valor en </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>cheese</span></span><span lang=ES-MX>. Esto es porque </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>spam</span></span><span
+lang=ES-MX> y </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>cheese</span></span><span lang=ES-MX> son variables
+diferentes que almacenan valores diferentes</span></p>
+
+<p class=Body><span lang=ES-MX>Pero las listas no funcionan así. Cuando asignas
+una lista a una variable usando el signo =, en realidad asignas a la variable
+una referencia a esa lista. Una </span><span class=Definition><span lang=ES-MX>referencia</span></span><span
+lang=ES-MX> es un valor que apunta a un dato. Aquí hay un ejemplo de código que
+hará que esto sea más fácil de entender. Escribe esto en la consola
+interactiva:</span></p>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=CodeExampleCxSpFirst style='border:none;padding:0in'><span lang=ES-MX>&gt;&gt;&gt;
+spam = [0, 1, 2, 3, 4, 5]</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>&gt;&gt;&gt; cheese = spam</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>&gt;&gt;&gt; cheese[1] = 'Hello!'</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>&gt;&gt;&gt;
+spam</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>[0, 'Hello!', 2,
+3, 4, 5]</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>&gt;&gt;&gt;
+cheese</p>
+
+<p class=CodeExampleCxSpLast style='border:none;padding:0in'>[0, 'Hello!', 2,
+3, 4, 5]</p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>Esto se ve raro. El código sólo modificó la
+lista </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>cheese</span></span><span lang=ES-MX>, pero parece que tanto
+la lista </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>cheese</span></span><span lang=ES-MX> como la lista </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>spam</span></span><span
+lang=ES-MX> han cambiado. Esto se debe a que la variable </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>spam</span></span><span
+lang=ES-MX> no contiene a la propia lista sino una referencia a la misma, como
+se muestra en la Figura 10-5. La lista en sí misma no está contenida en ninguna
+variable, sino que existe por fuera de ellas.</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><img width=410
+height=279 id="Picture 16" src="10_files/image006.png"></p>
+
+<p class=MsoCaption><span lang=ES-MX>Figura 10-5: Las variables no guardan
+listas, sino referencias a listas.</span></p>
+
+<p class=Body><span lang=ES-MX>Observa que </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>cheese = spam</span></span><span
+lang=ES-MX> copia <em>la referencia a lista</em> en </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>spam</span></span><span
+lang=ES-MX> a </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>cheese</span></span><span lang=ES-MX>, en lugar de
+copiar el propio valor de lista. Tanto </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>spam</span></span><span
+lang=ES-MX> como </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>cheese</span></span><span lang=ES-MX> guardan una
+referencia que apunta al mismo valor de lista. Pero sólo hay una lista. No se
+ha copiado la lista, sino una referencia a la misma. </span>La Figura 10-6
+ilustra esta copia.</p>
+
+<p class=MsoNormal align=center style='text-align:center'><img width=395
+height=338 id="Picture 17" src="10_files/image007.png"></p>
+
+<p class=MsoCaption><span lang=ES-MX>Figura 10-6: Dos variables guardan dos
+referencias a la misma lista.</span></p>
+
+<p class=Body><span lang=ES-MX>Entonces la línea </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>cheese[1] = '¡Hola!'</span></span><span
+lang=ES-MX> cambia la misma lista a la que se refiere </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>spam</span></span><span
+lang=ES-MX>. Es por esto que </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>spam</span></span><span lang=ES-MX> parece
+tener el mismo valor de lista que </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>cheese</span></span><span lang=ES-MX>.
+Ambas tienen referencias que apuntan a la misma lista, como se ve en la Figura
+10-7.</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><img width=388
+height=309 id="Picture 18" src="10_files/image008.jpg"></p>
+
+<p class=MsoCaption><span lang=ES-MX>Figura 10-7: Cambio de la lista cambia
+todas las variables con referencias a la lista.</span></p>
+
+<p class=Body><span lang=ES-MX>Si quieres que </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>spam</span></span><span
+lang=ES-MX> y </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>cheese</span></span><span lang=ES-MX> guarden dos
+listas diferentes, tienes que crear dos listas diferentes en lugar de copiar
+una referencia:</span></p>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=CodeExampleCxSpFirst style='border:none;padding:0in'><span lang=ES-MX>&gt;&gt;&gt;
+spam = [0, 1, 2, 3, 4, 5]</span></p>
+
+<p class=CodeExampleCxSpLast style='border:none;padding:0in'><span lang=ES-MX>&gt;&gt;&gt;
+cheese = [0, 1, 2, 3, 4, 5]</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>En el ejemplo anterior, spam y cheese almacenan
+dos listas diferentes (aunque el contenido de ambas sea idéntico). Pero si
+modificas una de las listas, esto no afectará a la otra porque las variables
+spam y cheese tienen referencias a dos listas diferentes:</span></p>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=CodeExampleCxSpFirst style='border:none;padding:0in'>&gt;&gt;&gt; spam
+= [0, 1, 2, 3, 4, 5]</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>&gt;&gt;&gt;
+cheese = [0, 1, 2, 3, 4, 5]</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>&gt;&gt;&gt;
+cheese[1] = 'Hello!'</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>&gt;&gt;&gt; spam</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>[0, 1, 2, 3, 4, 5]</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>&gt;&gt;&gt; cheese</span></p>
+
+<p class=CodeExampleCxSpLast style='border:none;padding:0in'><span lang=ES-MX>[0,
+'Hello!', 2, 3, 4, 5]</span></p>
+
+</div>
+
+<p class=MsoNormal><span lang=ES-MX>La Figura 10-8 muestra como las dos
+referencias apuntan a dos listas diferentes..</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><img width=686
+height=376 id="Picture 19" src="10_files/image009.jpg"></p>
+
+<p class=MsoCaption><span lang=ES-MX>igura 10-8: Dos variables con referencias
+a dos listas diferentes.</span></p>
+
+<p class=Body><span lang=ES-MX>Los diccionarios funcionan de la misma forma.
+Las variables no almacenan diccionarios, sino que almacenan referencias a
+diccionarios.</span></p>
+
+<p class=Non-TOCHeading3><span lang=ES-MX>Usando Referencias a Listas en </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>hacerJugada()</span></span></p>
+
+<p class=Body><span lang=ES-MX>Volvamos a la función </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>hacerJugada()</span></span><span
+lang=ES-MX>:</span></p>
+
+<div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
+
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber><span lang=ES-MX> 47.</span></span><span
+lang=ES-MX> def hacerJugada(tablero, letra, jugada):</span></p>
+
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber><span lang=ES-MX> 48.</span></span><span
+lang=ES-MX>     tablero[jugada] = letra</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>Cuando un valor de lista se pasa por el
+parámetro </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>tablero</span></span><span lang=ES-MX>, la variable local de
+la función es en realidad una copia de la referencia a la lista, no una copia
+de la lista. Pero una copia de la referencia sigue apuntando a la misma lista a
+la que apunta la referencia original. Entonces cualquier cambio a </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>tablero</span></span><span
+lang=ES-MX> en esta función ocurrirá también en la lista original. Así es cómo
+la función </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>hacerJugada()</span></span><span lang=ES-MX> modifica la
+lista original.</span></p>
+
+<p class=Body><span lang=ES-MX>Los parámetros </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>letra</span></span><span
+lang=ES-MX> y </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>jugada</span></span><span lang=ES-MX> son copias de los
+valores cadena y entero que pasamos. Como son copias de valores, si modificamos
+</span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:
+115%'>letra</span></span><span lang=ES-MX> o jugada en esta función, las
+variables originales que usamos al llamar a </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>hacerJugada()</span></span><span
+lang=ES-MX> no registrarán cambios.</span></p>
+
+<p class=Non-TOCHeading3><span lang=ES-MX>Comprobando si el Jugador Ha Ganado</span></p>
+
+<div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
+
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber><span lang=ES-MX> 50.</span></span><span
+lang=ES-MX> def esGanador(ta, le):</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 51.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># Dado un tablero y la letra de
+un jugador, devuelve True (verdadero) si el mismo ha ganado.</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 52.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># Utilizamos reemplazamos tablero
+por ta y letra por le para no escribir tanto.</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 53.</span></span><span
+lang=ES-MX>     return ((ta[7] == le and ta[8] == le and ta[9] == le) or <span
+class=SourceCodeComment># horizontal superior</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 54.</span></span><span
+lang=ES-MX>     (ta[4] == le and ta[5] == le and ta[6] == le) or <span
+class=SourceCodeComment># horizontal medio</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> </span></span><span
+class=SourceLineNumber><span lang=FR>55.</span></span><span lang=FR>     (ta[1]
+== le and ta[2] == le and ta[3] == le) or <span class=SourceCodeComment>#
+horizontal inferior</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=FR> 56.</span></span><span
+lang=FR>     (ta[7] == le and ta[4] == le and ta[1] == le) or <span
+class=SourceCodeComment># vertical izquierda</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=FR> 57.</span></span><span
+lang=FR>     (ta[8] == le and ta[5] == le and ta[2] == le) or <span
+class=SourceCodeComment># vertical medio</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=FR> 58.</span></span><span
+lang=FR>     (ta[9] == le and ta[6] == le and ta[3] == le) or <span
+class=SourceCodeComment># vertical derecha</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=FR> 59.</span></span><span
+lang=FR>     (ta[7] == le and ta[5] == le and ta[3] == le) or <span
+class=SourceCodeComment># diagonal</span></span></p>
+
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber><span lang=FR> 60.</span></span><span
+lang=FR>     (ta[9] == le and ta[5] == le and ta[1] == le)) <span
+class=SourceCodeComment># diagonal</span></span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>Las líneas 53 a 60 en la función </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>esGanador()</span></span><span
+lang=ES-MX> son el realidad una larga sentencia </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>return</span></span><span
+lang=ES-MX>. Los nombres </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>ta</span></span><span lang=ES-MX> y </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>le</span></span><span
+lang=ES-MX> son abreviaturas de los parámetros </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>tablero</span></span><span
+lang=ES-MX> y </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>letra</span></span><span lang=ES-MX> para no tener que
+escribir tanto en esta función. Recuerda, a Python no le importa qué nombres
+uses para tus variables.</span></p>
+
+<p class=Body><span lang=ES-MX>Hay ocho posibles formas de ganar al Ta Te Ti.
+Puedes formar una línea horizontal arriba, al medio o abajo. O puedes formar
+una línea vertical a la izquierda, al medio o a la derecha. O puedes formar cualquiera
+de las dos diagonales.</span></p>
+
+<p class=Body><span lang=ES-MX>Fíjate que cada línea de la condición comprueba
+si los tres espacios son iguales a la letra pasada (combinados con el operador
+and) y usamos el operador or para combinar las ocho diferentes formas de ganar.
+Esto significa que sólo una de las ocho formas necesita ser verdadera para que
+podamos afirmar que el jugador a quien pertenece la letra en </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>le</span></span><span
+lang=ES-MX> es el ganador.</span></p>
+
+<p class=Body><span lang=ES-MX>Supongamos que </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>le</span></span><span
+lang=ES-MX> es </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>'O'</span></span><span lang=ES-MX>, y el </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>tablero</span></span><span
+lang=ES-MX> se ve así:</span></p>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=CodeExampleCxSpFirst style='border:none;padding:0in'><span lang=ES-MX>  
+|   |</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX> X |   |</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>   |   |</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>-----------</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>   |   |</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>   | X |</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>   |   |</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>-----------</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>   |   |</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX> O | O | O</span></p>
+
+<p class=CodeExampleCxSpLast style='border:none;padding:0in'><span lang=ES-MX>  
+|   |</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>Así es como se evaluaría la expresión luego de
+la palabra reservada </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>return</span></span><span lang=ES-MX>
+en la línea 53:</span></p>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=CodeExampleCxSpFirst style='border:none;padding:0in'><span
+class=SourceLineNumber>53.</span>     return ((bo[7] == le and bo[8] == le and
+bo[9] == le) or <span class=SourceCodeComment># across the top</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+class=SourceLineNumber>54.</span>     (ta[4] == le and ta[5] == le and ta[6] ==
+le) or <span class=SourceCodeComment># across the middle</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+class=SourceLineNumber>55.</span>     (ta[1] == le and ta[2] == le and ta[3] ==
+le) or <span class=SourceCodeComment># across the bottom</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+class=SourceLineNumber>56.</span>     (ta[7] == le and ta[4] == le and ta[1] ==
+le) or <span class=SourceCodeComment># down the left side</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+class=SourceLineNumber>57.</span>     (ta[8] == le and ta[5] == le and ta[2] ==
+le) or <span class=SourceCodeComment># down the middle</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+class=SourceLineNumber>58.</span>     (ta[9] == le and ta[6] == le and ta[3] ==
+le) or <span class=SourceCodeComment># down the right side</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+class=SourceLineNumber><span lang=FR>59.</span></span><span lang=FR>     (ta[7]
+== le and ta[5] == le and ta[3] == le) or <span class=SourceCodeComment>#
+diagonal</span></span></p>
+
+<p class=CodeExampleCxSpLast style='border:none;padding:0in'><span
+class=SourceLineNumber><span lang=FR>60.</span></span><span lang=FR>     (ta[9]
+== le and ta[5] == le and ta[1] == le)) <span class=SourceCodeComment>#
+diagonal</span>            </span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>Primero Python reemplazará las variables </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>ta</span></span><span
+lang=ES-MX> y </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>le</span></span><span lang=ES-MX> por los valores que
+contienen::</span></p>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=CodeExampleCxSpFirst style='border:none;padding:0in'><span lang=ES-MX>   
+</span>return (('X' == 'O' and ' ' == 'O' and ' ' == 'O') or</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>    (' ' == 'O'
+and 'X' == 'O' and ' ' == 'O') or</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>    <span
+lang=ES-MX>('O' == 'O' and 'O' == 'O' and 'O' == 'O') or</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>    </span>('X' == 'O' and ' ' == 'O' and 'O' == 'O') or</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>    (' ' == 'O'
+and 'X' == 'O' and 'O' == 'O') or</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>    (' ' == 'O'
+and ' ' == 'O' and 'O' == 'O') or</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>    ('X' == 'O'
+and 'X' == 'O' and 'O' == 'O') or</p>
+
+<p class=CodeExampleCxSpLast style='border:none;padding:0in'>    <span
+lang=ES-MX>(' ' == 'O' and 'X' == 'O' and 'O' == 'O'))</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>A continuación, Python evaluará todas las
+comparaciones </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>==</span></span><span lang=ES-MX> dentro de los
+paréntesis a un valor Booleano:</span></p>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=CodeExampleCxSpFirst style='border:none;padding:0in'><span lang=ES-MX>   
+</span>return ((False and False and False) or</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>    (False and
+False and False) or</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>    (True and
+True and True) or</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>    (False and
+False and True) or</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>    (False and
+False and True) or</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>    (False and
+False and True) or</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>    (False and
+False and True) or</p>
+
+<p class=CodeExampleCxSpLast style='border:none;padding:0in'>    (False and
+False and True))</p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>Luego el intérprete Python evaluará todas estas
+expresiones dentro de los paréntesis:</span></p>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=CodeExampleCxSpFirst style='border:none;padding:0in'><span lang=ES-MX>   
+</span>return ((False) or</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>    (False) or</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>    (True) or</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>    (False) or</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>    (False) or</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>    (False) or</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>    <span
+lang=ES-MX>(False) or</span></p>
+
+<p class=CodeExampleCxSpLast style='border:none;padding:0in'><span lang=ES-MX>   
+(False))</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>&nbsp;</span></p>
+
+<p class=Body><span lang=ES-MX>Como ahora hay sólo un valor dentro del
+paréntesis, podemos eliminarlos:</span></p>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=CodeExampleCxSpFirst style='border:none;padding:0in'><span lang=ES-MX>   
+</span>return (False or</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>    False or</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>    True or</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>    False or</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>    False or</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>    False or</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>    <span
+lang=ES-MX>False or</span></p>
+
+<p class=CodeExampleCxSpLast style='border:none;padding:0in'><span lang=ES-MX> 
+  False)</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>Ahora evaluamos la expresión conectada por todos
+los operadores </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>or</span></span><span lang=ES-MX>:</span></p>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=CodeExample style='border:none;padding:0in'><span lang=ES-MX>    return
+(True)</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>Una vez más, eliminamos los paréntesis y nos
+quedamos con un solo valor:</span></p>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=CodeExample style='border:none;padding:0in'><span lang=ES-MX>    return
+True</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>Entonces dados estos valores para ta y le, la
+expresión se evaluaría a </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>True</span></span><span lang=ES-MX>.
+Así es cómo el programa puede decir si uno de los jugadores ha ganado el juego.</span></p>
+
+<p class=Non-TOCHeading3><span lang=ES-MX>Duplicando los Datos del Tablero</span></p>
+
+<div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
+
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber><span lang=ES-MX>62.</span></span><span
+lang=ES-MX> def obtenerDuplicadoTablero(tablero):</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 63.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># Duplica la lista del tablero y
+devuelve el duplicado.</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> </span>64.</span>    
+dupTablero = []</p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 65. </span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 66.</span>     for
+i in tablero:</p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> </span><span
+class=SourceLineNumber><span lang=ES-MX>67.</span></span><span lang=ES-MX>        
+dupTablero.append(i)</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 68.
+</span></span></p>
+
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber><span lang=ES-MX> 69.</span></span><span
+lang=ES-MX>     return dupTablero</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>La función </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>obtenerDuplicadoTablero()</span></span><span
+lang=ES-MX> está aquí para que podamos fácilmente hacer una copia de una dada
+lista de 10 cadenas que representa un tablero de Ta Te Ti en nuestro juego.
+Algunas veces querremos que nuestro algoritmo IA haga modificaciones
+temporarias a una copia provisoria del tablero sin cambiar el tablero original.
+En ese caso, llamaremos a esta función para hacer una copia de la lista del
+tablero. La nueva lista se crea en la línea 64, con los corchetes </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>[]</span></span><span
+lang=ES-MX> de lista vacía.</span></p>
+
+<p class=Body><span lang=ES-MX>Pero la lista almacenada en </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>dupTablero</span></span><span
+lang=ES-MX> en la línea 64 es sólo una lista vacía. El bucle </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>for</span></span><span
+lang=ES-MX> recorre el parámetro </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>tablero</span></span><span lang=ES-MX>,
+agregando una copia de los valores de cadena en el tablero original al tablero
+duplicado. Finalmente, después del bucle, se devuelve </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>dupTablero</span></span><span
+lang=ES-MX>. La función </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>obtenerDuplicadoTablero()</span></span><span
+lang=ES-MX> construye una copia del tablero original y devuelve una referencia
+a este nuevo tablero, y no al original. </span></p>
+
+<p class=Non-TOCHeading3><span lang=ES-MX>Comprobando si un Espacio en el
+Tablero está Libre</span></p>
+
+<div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
+
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber><span lang=ES-MX> 71.</span></span><span
+lang=ES-MX> def hayEspacioLibre(tablero, jugada):</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 72.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># Devuelte true si hay espacio
+para efectuar la jugada en el tablero.</span></span></p>
+
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber><span lang=ES-MX> 73.</span></span><span
+lang=ES-MX>     return tablero[jugada] == ' '</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>Esta es una función simple que, dado un tablero
+de Ta Te Ti y una posible jugada, confirmará si esa jugada está disponible o
+no. Recuerda que los espacios libres en la lista tablero se indican como una cadena
+con un espacio simple. Si el elemento en el índice del espacio indicado no es
+igual a una cadena con un espacio simple, el espacio está ocupado y no es una
+jugada válida.</span></p>
+
+<p class=Non-TOCHeading3><span lang=ES-MX>Permitiendo al Jugador Ingresar Su
+Jugada</span></p>
+
+<div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
+
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber><span lang=ES-MX> 75.</span></span><span
+lang=ES-MX> def obtenerJugadaJugador(tablero):</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 76.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># Permite al jugador escribir su
+jugada.</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 77.</span></span><span
+lang=ES-MX>     jugada = ' '</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 78.</span></span><span
+lang=ES-MX>     while jugada not in '1 2 3 4 5 6 7 8 9'.split() or not
+hayEspacioLibre(tablero, int(jugada)):</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 79.</span></span><span
+lang=ES-MX>         print('¿Cuál es tu próxima jugada? (1-9)')</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 80.</span></span><span
+lang=ES-MX>         jugada = input()</span></p>
+
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber><span lang=ES-MX> 81.</span></span><span
+lang=ES-MX>     return int(jugada)</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>La función </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>obtenerJugadaJugador()</span></span><span
+lang=ES-MX> pide al jugador que ingrese el número del espacio en el que desea
+jugar. El bucle se asegura de que la ejecución no prosiga hasta que el jugador
+haya ingresado un entero de 1 a 9. También comprueba que el espacio no esté
+ocupado, dado el tablero de Ta Te Ti pasado a la función en el parámetro
+tablero.</span></p>
+
+<p class=Body><span lang=ES-MX>Las dos líneas de código dentro del bucle </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>while</span></span><span
+lang=ES-MX> simplemente piden al jugador que ingrese un número de 1 a 9. La
+condición de la línea 78 es True si cualquiera de las expresiones <em>a la
+izquierda o a la derecha</em> del operador or es </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>True</span></span><span
+lang=ES-MX>.</span></p>
+
+<p class=Body><span lang=ES-MX>La expresión en el lado <em>izquierdo</em>
+comprueba si la jugada ingresada por el jugador es igual a </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>'1'</span></span><span
+lang=ES-MX>, </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>'2'</span></span><span lang=ES-MX>, </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>'3'</span></span><span
+lang=ES-MX>, y así hasta </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>'9'</span></span><span lang=ES-MX>
+mediante la creación de una lista con estas cadenas (usando el método </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>split()</span></span><span
+lang=ES-MX>) y comprobando si la </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>jugada</span></span><span lang=ES-MX>
+está en esta lista.</span></p>
+
+<p class=Body><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>'1 2 3 4 5 6 7 8 9'.split()</span></span><span lang=ES-MX> se
+evalúa a la lista </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>['1', '2', '3', '4', '5', '6', '7', '8', '9']</span></span><span
+lang=ES-MX>, pero es más fácil de escribir.</span></p>
+
+<p class=Body><span lang=ES-MX>La expresión sobre el lado <em>derecho</em>
+comprueba si la jugada que el jugador ingresó es un espacio libre en el
+tablero. Lo comprueba llamando a la función </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>hayEspacioLibre()</span></span><span
+lang=ES-MX>. Recuerda que </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>hayEspacioLibre()</span></span><span
+lang=ES-MX> devolverá </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>True</span></span><span lang=ES-MX> si
+la jugada que le hemos pasado está disponible en el tablero. Nota que </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>hayEspacioLibre()</span></span><span
+lang=ES-MX> espera un entero en el parámetro jugada, así que empleamos la
+función </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>int()</span></span><span lang=ES-MX> para evaluar la forma
+entera de </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>jugada</span></span><span lang=ES-MX>.</span></p>
+
+<p class=Body><span lang=ES-MX>Los operadores </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>not</span></span><span
+lang=ES-MX> se agregan a ambos lados de modo que la condición será </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>True</span></span><span
+lang=ES-MX> cuando cualquiera de estos requerimientos deje de cumplirse. Esto
+hará que el bucle pida al jugador una nueva jugada una y otra vez hasta que la
+jugada ingresada sea válida.</span></p>
+
+<p class=Body><span lang=ES-MX>Finalmente, en la línea 81, se devuelve la forma
+entera de la jugada ingresada por el jugador. Recuerda que </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>input()</span></span><span
+lang=ES-MX> devuelve una cadena, así que la función </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>int()</span></span><span
+lang=ES-MX> es llamada para devolver la forma entera de la cadena.</span></p>
+
+<h2><a name="_Toc411726977"><span lang=ES-MX>Evaluación en Cortocircuito</span></a></h2>
+
+<p class=Body><span lang=ES-MX>Puede ser que hayas notado un posible problema
+problema en nuestra función </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>obtenerJugadaJugador()</span></span><span
+lang=ES-MX>. ¿Qué pasaría si el jugador ingresara </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>'Z'</span></span><span
+lang=ES-MX> o alguna otra cadena no entera? La expresión </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>jugada
+not in '1 2 3 4 5 6 7 8 9'.split()</span></span><span lang=ES-MX> sobre el lado
+izquierdo devolvería </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>False</span></span><span lang=ES-MX>
+de acuerdo con lo esperado, y entonces evaluaríamos la expresión sobre el lado
+derecho del operador </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>or</span></span><span lang=ES-MX>.</span></p>
+
+<p class=Body>You may have noticed there’s a possible problem in the <span
+class=Literal><span style='font-size:9.0pt;line-height:115%'>getPlayerMove()</span></span>
+function. What if the player typed in <span class=Literal><span
+style='font-size:9.0pt;line-height:115%'>'Z'</span></span> or some other
+non-integer string? The expression <span class=Literal><span style='font-size:
+9.0pt;line-height:115%'>move not in '1 2 3 4 5 6 7 8 9'.split()</span></span>
+on the left side of <span class=Literal><span style='font-size:9.0pt;
+line-height:115%'>or</span></span> would return <span class=Literal><span
+style='font-size:9.0pt;line-height:115%'>False</span></span> as expected, and
+then Python would evaluate the expression on the right side of the <span
+class=Literal><span style='font-size:9.0pt;line-height:115%'>or</span></span>
+operator.</p>
+
+<p class=Body><span lang=ES-MX>Pero llamar a </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>int('Z')</span></span><span
+lang=ES-MX> ocasionaría un error. Python muestra este error porque la función </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>int()</span></span><span
+lang=ES-MX> sólo puede tomar cadenas o caracteres numéricos, tales como </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>'9'</span></span><span
+lang=ES-MX> o </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>'0'</span></span><span lang=ES-MX>, no cadenas como
+'Z'.</span></p>
+
+<p class=Body><span lang=ES-MX>Como un ejemplo de este tipo de error, prueba
+ingresar esto en la consola interactiva:</span></p>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=CodeExampleCxSpFirst style='border:none;padding:0in'>&gt;&gt;&gt;
+int('42')</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>42</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>&gt;&gt;&gt;
+int('Z')</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>Traceback (most
+recent call last):</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>  File
+&quot;&lt;pyshell#3&gt;&quot;, line 1, in &lt;module&gt;</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>    int('Z')</p>
+
+<p class=CodeExampleCxSpLast style='border:none;padding:0in'>ValueError:
+invalid literal for int() with base 10: 'Z'</p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>Pero cuando juegas al Ta Te Ti e intentas
+ingresar </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>'Z'</span></span><span lang=ES-MX> en tu jugada, este error
+no ocurre. La razón de esto es que la condición del bucle </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>while</span></span><span
+lang=ES-MX> está siendo cortocircuitada. </span></p>
+
+<p class=Body><span class=Definition><span lang=ES-MX>Evaluar en cortocircuito</span></span><span
+lang=ES-MX> quiere decur que como el lado izquierdo de la palabra reservada </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>or</span></span><span
+lang=ES-MX> (</span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>jugada not in '1 2 3 4 5 6 7 8 9'.split()</span></span><span
+lang=ES-MX>) se evalúa a </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>True</span></span><span lang=ES-MX>,
+el intérprete Python saba que la expresión completa será evaluada a </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>True</span></span><span
+lang=ES-MX>. No importa si la expresión sobre el lado derecho de la palabra
+reservada or se evalúa a </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>True</span></span><span lang=ES-MX> o </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>False</span></span><span
+lang=ES-MX>, porque sólo uno de los valores junto al operador or precisa ser </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>True</span></span><span
+lang=ES-MX>.</span></p>
+
+<p class=Body><span lang=ES-MX>Piensa en esto: La expresión </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>True or
+False</span></span><span lang=ES-MX> se evalúa a </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>True</span></span><span
+lang=ES-MX> y la expresión </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>True or True</span></span><span
+lang=ES-MX> también se evalúa a </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>True</span></span><span lang=ES-MX>.
+Si el valor sobre el lado izquierdo es </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>True</span></span><span
+lang=ES-MX>, no importa qué valor esté sobre el lado derecho:</span></p>
+
+<p class=Body align=center style='text-align:center'><span class=Literal><span
+style='font-size:9.0pt;line-height:115%'>False and &lt;&lt;&lt;anything&gt;&gt;&gt;</span></span>
+always evaluates to <span class=Literal><span style='font-size:9.0pt;
+line-height:115%'>False</span></span></p>
+
+<p class=Body align=center style='text-align:center'><span class=Literal><span
+style='font-size:9.0pt;line-height:115%'>True or &lt;&lt;&lt;anything&gt;&gt;&gt;</span></span>
+always evaluates to <span class=Literal><span style='font-size:9.0pt;
+line-height:115%'>True</span></span></p>
+
+<p class=Body><span lang=ES-MX>Entonces Python no comprueba el resto de la
+expresión y ni siquiera se molesta en evaluar la parte </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>not
+hayEspacioLibre(tablero, int(jugada))</span></span><span lang=ES-MX>. Esto
+significa las funciones </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>int()</span></span><span lang=ES-MX> y
+</span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:
+115%'>hayEspacioLibre()</span></span><span lang=ES-MX> nunca son llamadas
+mientras </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>jugada not in '1 2 3 4 5 6 7 8 9'.split()</span></span><span
+lang=ES-MX> sea </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>True</span></span><span lang=ES-MX>.</span></p>
+
+<p class=Body><span lang=ES-MX>Esto funciona bien para el programa, pues si la
+expresión del lado derecho es </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>True</span></span><span lang=ES-MX>
+entonces jugada no es una cadena en forma de número. Esto hace que int()
+devuelva un error. Las únicas veces que </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>jugada not in '1 2 3 4 5 6
+7 8 9'.split()</span></span><span lang=ES-MX> se evalúa a </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>False</span></span><span
+lang=ES-MX> son cuando jugada no es una cadena compuesta por un único dígito.
+En ese caso, la llamada a </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>int()</span></span><span lang=ES-MX>
+no nos daría un error.</span></p>
+
+<p class=Non-TOCHeading3><span lang=ES-MX>Un Ejemplo de Evaluación en
+Cortocircuito</span></p>
+
+<p class=Body><span lang=ES-MX>Aquí hay un pequeño programa que sirve como un
+buen ejemplo de evaluación en cortocircuito. Prueba escribir lo siguiente en la
+consola interactiva:</span></p>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=CodeExampleCxSpFirst style='border:none;padding:0in'><span lang=ES-MX>&gt;&gt;&gt;
+def DevuelveTrue():</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>       print('DevuelveTrue() ha sido llamada.')</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>       return True</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>&nbsp;</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>&gt;&gt;&gt; def DevuelveFalse():</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>       print('DevuelveFalse() ha sido llamada.')</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>       return False</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>&nbsp;</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>&gt;&gt;&gt; DevuelveTrue()</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>DevuelveTrue() ha sido llamada.</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>True</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>&gt;&gt;&gt; DevuelveFalse()</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>DevuelveFalse() ha sido llamada.</span></p>
+
+<p class=CodeExampleCxSpLast style='border:none;padding:0in'><span lang=ES-MX>False</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>Cuando </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>DevuelveTrue()</span></span><span
+lang=ES-MX> es llamada, IDLE imprime </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>'DevuelveTrue() ha sido
+llamada.'</span></span><span lang=ES-MX> y también muestra el valor retornado
+por </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>DevuelveTrue()</span></span><span lang=ES-MX>. Lo mismo
+ocurre con </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>DevuelveFalse()</span></span><span lang=ES-MX>.</span></p>
+
+<p class=Body><span lang=ES-MX>Ahora prueba escribir lo siguiente en la consola
+interactiva.</span></p>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=CodeExampleCxSpFirst style='border:none;padding:0in'><span lang=ES-MX>&gt;&gt;&gt;
+DevuelveFalse() or DevuelveTrue()</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>DevuelveFalse() ha sido llamada.</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>DevuelveTrue() ha sido llamada.</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>True</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>&gt;&gt;&gt; DevuelveTrue() or DevuelveFalse()</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>DevuelveTrue() ha sido llamada.</span></p>
+
+<p class=CodeExampleCxSpLast style='border:none;padding:0in'><span lang=ES-MX>True</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>La primera parte parece razonable: La expresión </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>DevuelveFalse()
+or DevuelveTrue()</span></span><span lang=ES-MX> llama a ambas funciones, por
+lo que puedes ver ambos mensajes impresos.</span></p>
+
+<p class=Body><span lang=ES-MX>Pero la segunda expresión sólo muestra </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>'DevuelveTrue()
+ha sido llamada.'</span></span><span lang=ES-MX> y no </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>'DevuelveFalse()
+ha sido llamada.'</span></span><span lang=ES-MX>. Esto se debe a que Python no
+ha llamado a </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>DevuelveFalse()</span></span><span lang=ES-MX>. Como el lado
+izquierdo del operador </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>or</span></span><span lang=ES-MX> es </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>True</span></span><span
+lang=ES-MX>, el resultado de </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>DevuelveFalse()</span></span><span
+lang=ES-MX> es irrelevante por lo que Python no se molesta en llamarla. La
+evaluación ha sido cortocircuitada.</span></p>
+
+<p class=Body><span lang=ES-MX>Lo mismo ocurre con el operador </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>and</span></span><span
+lang=ES-MX>. Prueba escribir lo siguiente en la consola interactiva:</span></p>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=CodeExampleCxSpFirst style='border:none;padding:0in'>&gt;&gt;&gt;
+ReturnsTrue() and ReturnsTrue()</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>ReturnsTrue()
+was called.</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>ReturnsTrue()
+was called.</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>True</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>&gt;&gt;&gt;
+ReturnsFalse() and ReturnsFalse()</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>ReturnsFalse() was called.</span></p>
+
+<p class=CodeExampleCxSpLast style='border:none;padding:0in'><span lang=ES-MX>False</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>Si el lado izquierdo del operador </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>and</span></span><span
+lang=ES-MX> es </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>False</span></span><span lang=ES-MX>, entonces la
+expresión completa será </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>False</span></span><span lang=ES-MX>.
+No importa lo que sea el lado derecho del operador </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>and</span></span><span
+lang=ES-MX>, de modo que Python no se molesta en evaluarlo. Tanto </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>False
+and True</span></span><span lang=ES-MX> como </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>False and False</span></span><span
+lang=ES-MX> se evalúan a </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>False</span></span><span lang=ES-MX>,
+por lo que Python cortocircuita la evaluación.</span></p>
+
+<p class=Non-TOCHeading3><span lang=ES-MX>Eligiendo una Jugada de una Lista de
+Jugadas</span></p>
+
+<div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
+
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber><span lang=ES-MX> 83.</span></span><span
+lang=ES-MX> def elegirAzarDeLista(tablero, listaJugada):</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 84.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># Devuelve una jugada válida en
+el tablero de la lista recibida.</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 85.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># Devuelve None si no hay ninguna
+jugada válida.</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 86.</span></span><span
+lang=ES-MX>     jugadasPosibles = []</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 87.</span></span><span
+lang=ES-MX>     for i in listaJugada:</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 88.</span></span><span
+lang=ES-MX>         if hayEspacioLibre(tablero, i):</span></p>
+
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber><span lang=ES-MX> 89.</span></span><span
+lang=ES-MX>             jugadasPosibles.append(i)</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>La función </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>elegirAzarDeLista()</span></span><span
+lang=ES-MX> es útil para el código IA más adelante en el programa. El parámetro
+tablero es una lista de cadenas que representa un tablero de Ta Te Ti. El
+segundo parámetro </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>listaJugada</span></span><span lang=ES-MX> es una lista
+de enteros con posibles espacios entre los cuales se puede elegir. Por ejemplo,
+si </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>listaJugada</span></span><span lang=ES-MX> is </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>[1, 3,
+7, 9]</span></span><span lang=ES-MX>, eso significa que </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>elegirAzarDeLista()</span></span><span
+lang=ES-MX> debería devolver el entero correspondiente a una de las esquinas.</span></p>
+
+<p class=Body><span lang=ES-MX>Sin embargo, </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>elegirAzarDeLista()</span></span><span
+lang=ES-MX> comprobará primero que es válido realizar una jugada en ese
+espacio. La lista </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>jugadasPosibles</span></span><span lang=ES-MX> comienza
+siendo una lista vacía. El bucle </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>for</span></span><span lang=ES-MX>
+itera sobre </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>listaJugada</span></span><span lang=ES-MX>. Las jugadas para
+las cuales </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>hayEspacioLibre()</span></span><span lang=ES-MX> devuelve </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>True</span></span><span
+lang=ES-MX> se agregan a </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>jugadasPosibles</span></span><span
+lang=ES-MX> usando el método </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>append()</span></span><span
+lang=ES-MX>.</span></p>
+
+<div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
+
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber><span lang=ES-MX> 91.</span></span><span
+lang=ES-MX>     if len(jugadasPosibles) != 0:</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 92.</span></span><span
+lang=ES-MX>         return random.choice(jugadasPosibles)</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 93.</span></span><span
+lang=ES-MX>     else:</span></p>
+
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber><span lang=ES-MX> 94.</span></span><span
+lang=ES-MX>         return None</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>En este punto, la lista </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>jugadasPosibles</span></span><span
+lang=ES-MX> contiene todas las jugadas que estaban en </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>listaJugada</span></span><span
+lang=ES-MX> y también son espacios libres en la lista tablero. Si la lista no
+está vacía, hay al menos una jugada posible.</span></p>
+
+<p class=Body><span lang=ES-MX>La lista podría estar vacía. Por ejemplo, si </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>listaJugada</span></span><span
+lang=ES-MX> fuera </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>[1, 3, 7, 9]</span></span><span lang=ES-MX> pero todas
+las esquinas del </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>tablero</span></span><span lang=ES-MX> estuviesen
+tomadas, la lista </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>jugadasPosibles</span></span><span lang=ES-MX> sería </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>[]</span></span><span
+lang=ES-MX>. En ese caso, </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>len(jugadasPosibles)</span></span><span
+lang=ES-MX> se evaluaría a </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>0</span></span><span lang=ES-MX> y la
+función devolvería el valor </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>None</span></span><span lang=ES-MX>.
+La próxima sección explica el valor </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>None</span></span><span
+lang=ES-MX>.</span></p>
+
+<h2><a name="_Toc411726978"><span lang=ES-MX>El Valor </span></a><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>None</span></span></h2>
+
+<p class=Body><span lang=ES-MX>El </span><span class=Definition><span
+lang=ES-MX>valor None</span></span><span lang=ES-MX> representa la ausencia de
+un valor. </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>None</span></span><span lang=ES-MX> es el único valor del
+tipo de datos </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>NoneType</span></span><span lang=ES-MX>. Puede ser útil
+emplear el valor </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>None</span></span><span lang=ES-MX> cuando necesites un
+valor que exprese “no existe” o “ninguno de los anteriores”.</span></p>
+
+<p class=Body><span lang=ES-MX>Pongamos por caso que tienes una variable
+llamada </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>respuestaExámen</span></span><span lang=ES-MX> para guardar
+la respuesta a una pregunta de selección múltiple. La variable podría contener </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>True</span></span><span
+lang=ES-MX> o </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>False</span></span><span lang=ES-MX> para indicar la
+respuesta del usuario. Podrías asignar </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>None</span></span><span
+lang=ES-MX> a </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>respuestaExámen</span></span><span lang=ES-MX> si el
+usuario saltease la pregunta sin responderla. Usar </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>None</span></span><span
+lang=ES-MX> es una forma clara de indicar que el usuario no ha respondido la
+pregunta.</span></p>
+
+<p class=Body><span lang=ES-MX>Las funciones que retornan llegando al final de
+la función (es decir, sin alcanzar una sentencia return) devolverán </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>None</span></span><span
+lang=ES-MX>. El valor </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>None</span></span><span lang=ES-MX> se
+escribe sin comillas, con una “N” mayúscula y las letras “one” en minúsculas.</span></p>
+
+<p class=Body><span lang=ES-MX>Como una nota al margen, </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>None</span></span><span
+lang=ES-MX> no se muestra en la consola interactiva como ocurriría con otros
+valores:</span></p>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=CodeExampleCxSpFirst style='border:none;padding:0in'><span lang=ES-MX>&gt;&gt;&gt;
+2 + 2</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>4</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>&gt;&gt;&gt; 'Esto es una cadena.'</span></p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>'Esto es una cadena.'</span></p>
+
+<p class=CodeExampleCxSpLast style='border:none;padding:0in'><span lang=ES-MX>&gt;&gt;&gt;
+None</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>Las funciones que aparentan no devolver nada en
+realidad devuelven el valor </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>None</span></span><span lang=ES-MX>. </span>Por
+ejemplo, <span class=Literal><span style='font-size:9.0pt;line-height:115%'>print()</span></span>
+devuelve <span class=Literal><span style='font-size:9.0pt;line-height:115%'>None</span></span>:</p>
+
+<div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
+
+<p class=CodeExampleCxSpFirst style='border:none;padding:0in'>&gt;&gt;&gt; spam
+= print('Hello world!')</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>Hello world!</p>
+
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'><span
+lang=ES-MX>&gt;&gt;&gt; spam == None</span></p>
+
+<p class=CodeExampleCxSpLast style='border:none;padding:0in'><span lang=ES-MX>True</span></p>
+
+</div>
+
+<p class=Non-TOCHeading3><span lang=ES-MX>Creando la Inteligencia Artificial de
+la Computadora</span></p>
+
+<div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
+
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber><span lang=ES-MX> 96.</span></span><span
+lang=ES-MX> def obtenerJugadaComputadora(tablero, letraComputadora):</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 97.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># Dado un tablero y la letra de
+la computadora, determina que jugada efectuar.</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 98.</span></span><span
+lang=ES-MX>     if letraComputadora == 'X':</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX> 99.</span></span><span
+lang=ES-MX>         letraJugador = 'O'</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>100.</span></span><span
+lang=ES-MX>     else:</span></p>
+
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber><span lang=ES-MX>101.</span></span><span
+lang=ES-MX>         letraJugador = 'X'</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>La función </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>obtenerJugadaComputadora()</span></span><span
+lang=ES-MX> contiene al código de la IA. El primer argumento es un tablero de
+Ta Te Ti en el parámetro </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>tablero</span></span><span lang=ES-MX>.
+El segundo es la letra correspondiente a la computadora, sea </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>'X'</span></span><span
+lang=ES-MX> u </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>'O'</span></span><span lang=ES-MX> en el parámetro </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>letraComputadora</span></span><span
+lang=ES-MX>. Las primeras líneas simplemente asignan la otra letra a una
+variable llamada </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>letraJugador</span></span><span lang=ES-MX>. De esta
+forma el mismo código puede usarse independientemente de si la computadora es X
+u O.</span></p>
+
+<p class=Body><span lang=ES-MX>La función devuelve un entero de 1 a 9 que
+representa el espacio en el que la computadora hará su jugada.</span></p>
+
+<p class=Body><span lang=ES-MX>Recuerda cómo funciona el algoritmo del Ta Te Ti:</span></p>
+
+<p class=Body style='margin-left:.5in;text-indent:-.25in'><span lang=ES-MX
+style='font-family:Symbol'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span lang=ES-MX>Primero, ver si hay una jugada con que la
+computadora pueda ganar el juego. Si la hay, hacer esa jugada. En caso contrario,
+continuar al segundo paso.</span></p>
+
+<p class=Body style='margin-left:.5in;text-indent:-.25in'><span
+style='font-family:Symbol'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span lang=ES-MX>Segundo, ver si hay una jugada con la que el
+jugador pueda vencer a la computadora. Si la hay, la computadora debería jugar
+en ese lugar para bloquear al jugador. </span>En caso contrario, continuar al
+tercer paso.</p>
+
+<p class=Body style='margin-left:.5in;text-indent:-.25in'><span
+style='font-family:Symbol'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span lang=ES-MX>Tercero, comprobar si alguna de las esquinas
+(espacios 1, 3, 7, o 9) está disponible. </span>Si ninguna esquina está disponible,
+continuar al cuarto paso.</p>
+
+<p class=Body style='margin-left:.5in;text-indent:-.25in'><span
+style='font-family:Symbol'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span lang=ES-MX>Cuarto, comprobar si el centro está libre. Si lo
+está, jugar allí. </span>En caso contrario, continuar al quinto paso.</p>
+
+<p class=Body style='margin-left:.5in;text-indent:-.25in'><span lang=ES-MX
+style='font-family:Symbol'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span lang=ES-MX>Quinto, jugar sobre cualquiera de los lados
+(espacios 2, 4, 6 u 8). No hay más pasos, pues si hemos llegado al quinto paso
+significa que sólo quedan los espacios sobre los lados.</span></p>
+
+<p class=Non-TOCHeading3><span lang=ES-MX>La Computadora Comprueba si puede Ganar
+en Una Jugada</span></p>
+
+<div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
+
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber><span lang=ES-MX>103.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># Aquí está nuestro algoritmo
+para nuestra IA (Inteligencia Artifical) del Ta Te Ti.</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>104.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># Primero, verifica si podemos
+ganar en la próxima jugada</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>105.</span></span><span
+lang=ES-MX>     for i in range(1, 10):</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>106.</span></span><span
+lang=ES-MX>         copia = obtenerDuplicadoTablero(tablero)</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>107.</span></span><span
+lang=ES-MX>         if hayEspacioLibre(copia, i):</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>108.</span></span><span
+lang=ES-MX>             hacerJugada(copia, letraComputadora, i)</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>109.</span></span><span
+lang=ES-MX>             if esGanador(copia, letraComputadora):</span></p>
+
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber><span lang=ES-MX>110.</span></span><span
+lang=ES-MX>                 return i</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>Antes que nada, si la computadora puede ganar en
+la siguiente jugada, debería hacer la jugada ganadora inmediatamente. El bucle </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>for</span></span><span
+lang=ES-MX> que empieza en la línea 105 itera sobre cada posible jugada de 1 a
+9. El código dentro del bucle simula lo que ocurriría si la computadora hiciera
+esa jugada.</span></p>
+
+<p class=Body><span lang=ES-MX>La primera línea en el bucle (línea 106) crea
+una copia de la lista </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>tablero</span></span><span lang=ES-MX>.
+Esto es para que la jugada simulada dentro del bucle no modifique el tablero
+real de Ta Te Ti guardado en la variable </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>tablero</span></span><span
+lang=ES-MX>. La función </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>obtenerDuplicadoTablero()</span></span><span
+lang=ES-MX> devuelve una copia idéntica pero independiente del tablero.</span></p>
+
+<p class=Body><span lang=ES-MX>La línea 107 comprueba si el espacio está libre
+y, si es así, simula hacer la jugada en la copia del tablero. Si esta jugada
+resulta en una victoria para la computadora, la la función devuelve el entero
+correspondiente a esa jugada.</span></p>
+
+<p class=Body><span lang=ES-MX>Si ninguna de las jugadas posibles resulta en
+una victoria, el bucle concluye y la ejecución del programa continúa en la
+línea 113.</span></p>
+
+<p class=Non-TOCHeading3><span lang=ES-MX>La Computadora Comprueba si el
+Jugador puede Ganar en Una Jugada</span></p>
+
+<div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
+
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber><span lang=ES-MX>112.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># Verifica si el jugador podría
+ganar en su próxima jugada, y lo bloquea.</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>113.</span></span><span
+lang=ES-MX>     for i in range(1, 10):</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>114.</span></span><span
+lang=ES-MX>         copia = obtenerDuplicadoTablero(tablero)</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>115.</span></span><span
+lang=ES-MX>         if hayEspacioLibre(copia, i):</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>116.</span></span><span
+lang=ES-MX>             hacerJugada(copia, letraJugador, i)</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>117.</span></span><span
+lang=ES-MX>             if esGanador(copia, letraJugador):</span></p>
+
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber><span lang=ES-MX>118.</span></span><span
+lang=ES-MX>                 return i</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>A continuación, el código simula un movimiento
+del jugador en cada uno de los espacios. Este código es similar al bucle anterior,
+excepto que es la letra del jugador que se coloca sobre la copia del tablero.
+Si la función </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>esGanador()</span></span><span lang=ES-MX> muestra que
+el jugador ganaría con este movimiento, la computadora devuelve esta jugada
+para bloquear la victoria del jugador.</span></p>
+
+<p class=Body><span lang=ES-MX>Si el jugador humano no puede ganar en la
+siguiente movida, el bucle </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>for</span></span><span lang=ES-MX>
+eventualmente concluye y la ejecución del programa continúa en la línea 121.</span></p>
+
+<p class=Non-TOCHeading3><span lang=ES-MX>Comprobando las Esquinas, Centro y
+Espacios sobre los Lados (en ese Orden)</span></p>
+
+<div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
+
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber><span lang=ES-MX>120.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># Intenta ocupar una de las
+esquinas de estar libre.</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>121.</span></span><span
+lang=ES-MX>     jugada = elegirAzarDeLista(tablero, [1, 3, 7, 9])</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>122.</span></span><span
+lang=ES-MX>     if jugada != None:</span></p>
+
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber><span lang=ES-MX>123.</span></span><span
+lang=ES-MX>         return jugada</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>La llamada a </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>elegirAzarDeLista()</span></span><span
+lang=ES-MX> con la lista </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>[1, 3, 7, 9]</span></span><span
+lang=ES-MX> asegura que la función devuelva el entero de una de de las
+esquinas: </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>1</span></span><span lang=ES-MX>, </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>3</span></span><span
+lang=ES-MX>, </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>7</span></span><span lang=ES-MX>, ó </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>9</span></span><span
+lang=ES-MX>. Si todas las esquinas están tomadas, la función </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>elegirAzarDeLista()</span></span><span
+lang=ES-MX> devuelve </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>None</span></span><span lang=ES-MX> y
+la ejecución continúa en la línea 126.</span></p>
+
+<div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
+
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber><span lang=ES-MX>125.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># De estar libre, intenta ocupar
+el centro.</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>126.</span></span><span
+lang=ES-MX>     if hayEspacioLibre(tablero, 5):</span></p>
+
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber><span lang=ES-MX>127.</span></span><span
+lang=ES-MX>         return 5</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>Si ninguna de las esquinas está disponible, la
+línea 127 intentará jugar en el centro. Si el centro no está libre, la ejecución
+continúa sobre la línea 130.</span></p>
+
+<div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
+
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber><span lang=ES-MX>129.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># Ocupa alguno de los lados.</span></span></p>
+
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber><span lang=ES-MX>130.</span></span><span
+lang=ES-MX>     return elegirAzarDeLista(tablero, [2, 4, 6, 8])</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>Este código también llama a </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>elegirAzarDeLista()</span></span><span
+lang=ES-MX>, sólo que le pasamos una lista con los espacios sobre los lados (</span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>[2, 4,
+6, 8]</span></span><span lang=ES-MX>). Esta función no devolverá </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>None</span></span><span
+lang=ES-MX> pues los espacios sobre los lados son los únicos que pueden estar
+disponibles. Esto concluye la función </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>obtenerJugadaComputadora()</span></span><span
+lang=ES-MX> y el algoritmo IA.</span></p>
+
+<p class=Non-TOCHeading3><span lang=ES-MX>Comprobando si el Tablero está Lleno</span></p>
+
+<div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
+
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber><span lang=ES-MX>132.</span></span><span
+lang=ES-MX> def tableroCompleto(tablero):</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>133.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># Devuelve True si cada espacio
+del tablero fue ocupado, caso contrario devuele False.</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>134.</span>     for
+i in range(1, 10):</p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>135.</span>        
+if hayEspacioLibre(tablero, i):</p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>136.</span></span><span
+lang=ES-MX>             return False</span></p>
+
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber><span lang=ES-MX>137.</span></span><span
+lang=ES-MX>     return True</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>La última función es </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>tableroCompleto()</span></span><span
+lang=ES-MX>. Esta función devuelve </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>True</span></span><span lang=ES-MX> si
+la lista tablero pasada como argumento tiene una </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>'X'</span></span><span
+lang=ES-MX> o una </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>'O'</span></span><span lang=ES-MX> en cada índice
+(excepto por el índice </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>0</span></span><span lang=ES-MX>, que
+es ignorado por el código). Si hay al menos un casillero en el tablero con
+espacio simple </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>' '</span></span><span lang=ES-MX> asignado, esta
+función devolverá </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>False</span></span><span lang=ES-MX>.</span></p>
+
+<p class=Body><span lang=ES-MX>El bucle for nos permite comprobar los espacios
+1 a 9 en el tablero de Ta Te Ti. Apenas encuentra un espacio libre en el
+tablero (es decir, cuando </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>hayEspacioLibre(tablero, i)</span></span><span
+lang=ES-MX> devuelve </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>True</span></span><span lang=ES-MX>)
+la función </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>tableroCompleto()</span></span><span lang=ES-MX> devuelve </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>False</span></span><span
+lang=ES-MX>.</span></p>
+
+<p class=Body><span lang=ES-MX>Si la ejecución concluye todas las operaciones
+del bucle, significa que ninguno de los espacios está libre. Entonces se
+ejecutará la línea 137 y </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>devolverá True</span></span><span
+lang=ES-MX>.</span></p>
+
+<p class=Non-TOCHeading3><span lang=ES-MX>El Inicio del Juego</span></p>
+
+<div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
+
+<p class=SourceCode><span class=SourceLineNumber><span lang=ES-MX>140.</span></span><span
+lang=ES-MX> print('¡Bienvenido al Ta Te Ti!')</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>La línea 140 es la primera línea que no está
+dentro de una función, de modo que es la primera línea de código que se ejecuta
+al entrar a este programa. Consiste en el saludo al jugador.</span></p>
+
+<div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
+
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber><span lang=ES-MX>142.</span></span><span
+lang=ES-MX> while True:</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>143.</span></span><span
+lang=ES-MX>     <span class=SourceCodeComment># Resetea el tablero</span></span></p>
+
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber><span lang=ES-MX>144.</span></span><span
+lang=ES-MX>     elTablero = [' '] * 10</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>Este bucle while tiene al valor </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>True</span></span><span
+lang=ES-MX> por condición, y continuará iterando hasta que la ejecución llegue
+a una sentencia </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>break</span></span><span lang=ES-MX>. La línea 144
+configura el tablero principal de Ta Te Ti que usaremos, al cual llamaremos </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>elTablero</span></span><span
+lang=ES-MX>. Es una lista de 10 cadenas, donde cada una de ellas es un espacio
+simple </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>' '</span></span><span lang=ES-MX>.</span></p>
+
+<p class=Body><span lang=ES-MX>En lugar de escribir esta lista completa, la
+línea 44 usa replicación de listas. Es más corto y claro escribir </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>[' '] *
+10</span></span><span lang=ES-MX> que escribir </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>[' ', ' ', ' ', ' ', ' ', '
+', ' ', ' ', ' ', ' ']</span></span><span lang=ES-MX>.</span></p>
+
+<p class=Non-TOCHeading3><span lang=ES-MX>Decidiendo la Letra del Jugador y
+Quién Comienza</span></p>
+
+<div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
+
+<p class=SourceCode><span class=SourceLineNumber><span lang=ES-MX>145.</span></span><span
+lang=ES-MX>     letraJugador, letraComputadora = ingresaLetraJugador()</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>La función </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>ingresaLetraJugador()</span></span><span
+lang=ES-MX> permite al jugador elegir si quiere ser X u O. La función devuelve
+una lista de dos cadenas, la cual puede ser </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>['X', 'O']</span></span><span
+lang=ES-MX> o </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>['O', 'X']</span></span><span lang=ES-MX>. El truco de
+asignación múltiple asignará </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>letraJugador</span></span><span
+lang=ES-MX> al primer elemento en la lista devuelta y </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>letraComputadora</span></span><span
+lang=ES-MX> al segundo.</span></p>
+
+<div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
+
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber><span lang=ES-MX>146.</span></span><span
+lang=ES-MX>     turno = quienComienza()</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>147.</span></span><span
+lang=ES-MX>     print(turno + ' irá primero.')</span></p>
+
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber><span lang=ES-MX>148.</span></span><span
+lang=ES-MX>     juegoEnCurso = True</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>La función </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>quienComienza()</span></span><span
+lang=ES-MX> decide aleatoriamente quién comienza, y devuelve la cadena </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>'El
+jugador'</span></span><span lang=ES-MX> o bien </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>'La computadora'</span></span><span
+lang=ES-MX> y la línea 147 comunica al jugador quién comenzará.</span></p>
+
+<p class=Non-TOCHeading3><span lang=ES-MX>Ejecutando el Turno del Jugador</span></p>
+
+<div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
+
+<p class=SourceCode><span class=SourceLineNumber><span lang=ES-MX>150.</span></span><span
+lang=ES-MX>     while juegoEnCurso:</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>El bucle de la línea 150 continuará alternando
+entre el código del turno del jugador y el del turno de la computadora,
+mientras la </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>juegoEnCurso</span></span><span lang=ES-MX> tenga asignado el
+valor </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>True</span></span><span lang=ES-MX>.</span></p>
+
+<div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
+
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber><span lang=ES-MX>151.</span></span><span
+lang=ES-MX>         if turno == 'El jugador':</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>152.</span></span><span
+lang=ES-MX>             <span class=SourceCodeComment># Turno del jugador</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>153.</span></span><span
+lang=ES-MX>             dibujarTablero(elTablero)</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>154.</span></span><span
+lang=ES-MX>             jugada = obtenerJugadaJugador(elTablero)</span></p>
+
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber><span lang=ES-MX>155.</span></span><span
+lang=ES-MX>             hacerJugada(elTablero, letraJugador, jugada)</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>El valor en la variable </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>turno</span></span><span
+lang=ES-MX> es originalmente asignado por llamada a la función </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>quienComienza()</span></span><span
+lang=ES-MX> en la línea 146. Su valor original es </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>'El jugador'</span></span><span
+lang=ES-MX> o </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>'La computadora'</span></span><span lang=ES-MX>. Si
+turno es igual a </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>'La computadora'</span></span><span lang=ES-MX>, la
+condición es </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>False</span></span><span lang=ES-MX> y la ejecución salta a
+la línea 169.</span></p>
+
+<p class=Body><span lang=ES-MX>Primero, la línea 153 llama a la función </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>dibujarTablero()</span></span><span
+lang=ES-MX> pasándole la variable </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>elTablero</span></span><span
+lang=ES-MX> para dibujar el tablero en la pantalla. Entonces la función </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>obtenerJugadaJugador()</span></span><span
+lang=ES-MX> permite al jugador ingresar su jugada (y también comprueba que sea
+una movida válida). La función </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>hacerJugada()</span></span><span
+lang=ES-MX> actualiza </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>elTablero</span></span><span
+lang=ES-MX> para reflejar esta jugada.</span></p>
+
+<div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
+
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber><span lang=ES-MX>157.</span></span><span
+lang=ES-MX>             if esGanador(elTablero, letraJugador):</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>158.</span></span><span
+lang=ES-MX>                 dibujarTablero(elTablero)</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>159.</span></span><span
+lang=ES-MX>                 print('¡Felicidades, has ganado!')</span></p>
+
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber><span lang=ES-MX>160.</span></span><span
+lang=ES-MX>                 juegoEnCurso = False</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>Luego de que el jugador ha jugado, la
+computadora debería comprobar si ha ganado el juego. Si la función </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>esGanador()</span></span><span
+lang=ES-MX> devuelve </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>True</span></span><span lang=ES-MX>,
+el código del bloque if muestra el tablero ganador e imprime un mensaje
+comunicando al jugador que ha ganado.</span></p>
+
+<p class=Body><span lang=ES-MX>Se asigna el valor </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>False</span></span><span
+lang=ES-MX> a la variable </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>juegoEnCurso</span></span><span
+lang=ES-MX> de modo que la ejecución no continúe con el turno de la
+computadora.</span></p>
+
+<div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
+
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber><span lang=ES-MX>161.</span></span><span
+lang=ES-MX>             else:</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>162.</span></span><span
+lang=ES-MX>                 if tableroCompleto(elTablero):</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>163.</span></span><span
+lang=ES-MX>                     dibujarTablero(elTablero)</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>164.</span></span><span
+lang=ES-MX>                     print('¡Es un empate!')</span></p>
+
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber><span lang=ES-MX>165.</span></span><span
+lang=ES-MX>                     break</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>Si el jugador no ganó con esta última jugada,
+tal vez esta movida ha llenado el tablero y ocasionado un empate. En este
+bloque else, la función </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>tableroCompleto()</span></span><span
+lang=ES-MX> devuelve </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>True</span></span><span lang=ES-MX> si
+no hay más movimientos disponibles. En ese caso, el bloque </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>if</span></span><span
+lang=ES-MX> que comienza en la línea 162 muestra el tablero empatado y comunica
+al jugador que ha habido un empate. La ejecución sale entonces del bucle </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>while</span></span><span
+lang=ES-MX> y salta a la línea 186.</span></p>
+
+<div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
+
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber><span lang=ES-MX>166.</span></span><span
+lang=ES-MX>                 else:</span></p>
+
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber><span lang=ES-MX>167.</span></span><span
+lang=ES-MX>                     turno = 'La computadora'</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>Si el jugador no ha ganado u ocasionado un
+empate, la línea 167 asigna </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>'La computadora'</span></span><span
+lang=ES-MX> a la variable turno, de modo que ejecute el código para el turno de
+la computadora en la siguiente iteración.</span></p>
+
+<p class=Non-TOCHeading3><span lang=ES-MX>Ejecutando el Turno de la Computadora</span></p>
+
+<p class=Body><span lang=ES-MX>Si la variable </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>turno</span></span><span
+lang=ES-MX> no es </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>'El Jugador'</span></span><span lang=ES-MX> para la
+condición en la línea 151, entonces es el turno de la computadora. El código en
+este bloque else es similar al código para el turno del jugador.</span></p>
+
+<div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
+
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber><span lang=ES-MX>169.</span></span><span
+lang=ES-MX>         else:</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>170.</span></span><span
+lang=ES-MX>             <span class=SourceCodeComment># Turno de la computadora</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>171.</span></span><span
+lang=ES-MX>             jugada = obtenerJugadaComputadora(elTablero,
+letraComputadora)</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>172.</span></span><span
+lang=ES-MX>             hacerJugada(elTablero, letraComputadora, jugada)</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>173.
+</span></span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>174.</span></span><span
+lang=ES-MX>             if esGanador(elTablero, letraComputadora):</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>175.</span></span><span
+lang=ES-MX>                 dibujarTablero(elTablero)</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>176.</span></span><span
+lang=ES-MX>                 print('¡La computadora te ha vencido! Has
+perdido.')</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>177.</span></span><span
+lang=ES-MX>                 juegoEnCurso = False</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>178.</span></span><span
+lang=ES-MX>             else:</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>179.</span></span><span
+lang=ES-MX>                 if tableroCompleto(elTablero):</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>180.</span></span><span
+lang=ES-MX>                     dibujarTablero(elTablero)</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>181.</span></span><span
+lang=ES-MX>                     print('¡Es un empate!')</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>182.</span></span><span
+lang=ES-MX>                     break</span></p>
+
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber><span lang=ES-MX>183.</span></span><span
+lang=ES-MX>                 else:</span></p>
+
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber><span lang=ES-MX>184.</span></span><span
+lang=ES-MX>                     turno = 'El jugador'</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>Las líneas 170 a 184 son casi idénticas al
+código del turno del jugador en las líneas 152 a 167. La única diferencia es
+que se comprueba si ha habido un empate luego del turno de la computadora en
+lugar de hacerlo luego del turno del jugador.</span></p>
+
+<p class=Body><span lang=ES-MX>Si no existe un ganador y no es un empate, la
+línea 184 cambia el turno al jugador. No hay más líneas de código dentro del
+bucle </span><span class=Literal><span lang=ES-MX style='font-size:9.0pt;
+line-height:115%'>while</span></span><span lang=ES-MX>, de modo que la
+ejecución vuelve a la sentencia </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>while</span></span><span lang=ES-MX>
+en la línea 150.</span></p>
+
+<div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
+
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber><span lang=ES-MX>186.</span></span><span
+lang=ES-MX>     if not jugarDeNuevo():</span></p>
+
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber><span lang=ES-MX>187.</span></span><span
+lang=ES-MX>         break</span></p>
+
+</div>
+
+<p class=Body><span lang=ES-MX>Las líneas 186 y 187 se encuentran
+inmediatamente a continuación del bloque </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>while</span></span><span
+lang=ES-MX> que comienza con la sentencia </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>while</span></span><span
+lang=ES-MX> en la línea 150. Se asigna </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>False</span></span><span
+lang=ES-MX> a </span><span class=Literal><span lang=ES-MX style='font-size:
+9.0pt;line-height:115%'>juegoEnCurso</span></span><span lang=ES-MX> cuando el
+juego ha terminado, por lo que en este punto se pregunta al jugador si desea
+jugar de nuevo.</span></p>
+
+<p class=Body><span lang=ES-MX>Si </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>jugarDeNuevo()</span></span><span
+lang=ES-MX> devuelve </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>False</span></span><span lang=ES-MX>,
+la condición de la sentencia </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>if</span></span><span lang=ES-MX> es </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>True</span></span><span
+lang=ES-MX> (porque el operador </span><span class=Literal><span lang=ES-MX
+style='font-size:9.0pt;line-height:115%'>not</span></span><span lang=ES-MX>
+invierte el valor Booleano) y se ejecuta la sentencia </span><span
+class=Literal><span lang=ES-MX style='font-size:9.0pt;line-height:115%'>break</span></span><span
+lang=ES-MX>. Esto interrumpe la ejecución del bucle </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>while</span></span><span
+lang=ES-MX> que había comenzado en la línea 142. Como no hay más líneas de
+código a continuación de ese bloque </span><span class=Literal><span
+lang=ES-MX style='font-size:9.0pt;line-height:115%'>while</span></span><span
+lang=ES-MX>, el programa termina.</span></p>
+
+<p class=Non-TOCHeading3><span lang=ES-MX>Resumen</span></p>
+
+<p class=MsoNormal><span lang=ES-MX>Crear un programa que pueda jugar un juego
+se reduce a considerar cuidadosamente todas las situaciones posibles en las que
+la IA pueda encontrarse y cómo responder en cada una de esas situaciones. La IA
+del Ta Te Ti es simple porque no hay muchos movimientos posibles en Ta Te Ti
+comparado con un juego como el ajedrez o las damas.</span></p>
+
+<p class=MsoNormal><span lang=ES-MX>Nuestra IA simplemente comprueba si puede
+ganar en la próxima jugada. Si no es posible, bloquea la movida del jugador
+cuando está a punto de ganar. En cualquier otro caso la IA simplemente intenta
+jugar en cualquier esquina disponible, luego el centro y por último los lados.
+Este es un algoritmo simple y fácil de seguir.</span></p>
+
+<p class=MsoNormal><span lang=ES-MX>La clave para implementar nuestro algoritmo
+IA es hacer una copia de los datos del tablero y simular jugadas sobre la
+copia. De este modo, el código de IA puede hacer esa jugada en el tablero real.
+Este tipo de simulación es efectivo a la hora de predecir si una jugada es
+buena o no.</span></p>
+
+</div>
+
+</body>
+
+</html>
