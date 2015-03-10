@@ -4,21 +4,12 @@ AddHandler text/plain .py
 
 AddCharset UTF-8 .html
 
-<IfModule mod_expires.c>
-ExpiresActive On
-ExpiresDefault "access plus 1 day"
-ExpiresByType image/gif "access plus 1 day"
-ExpiresByType image/png "access plus 1 day"
-ExpiresByType image/jpg "access plus 1 day"
-ExpiresByType image/jpeg "access plus 1 day"
-ExpiresByType text/css "access 1 day"
-ExpiresByType application/javascript "access plus 1 day"
-</IfModule>
-
 RewriteEngine on
 
 #RewriteCond %{HTTPS} !=on
 #RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+RewriteRule ^inventwithpython3rd.pdf$ http://inventwithpython.com/inventwithpython_3rd.pdf [NE,R,L]
 
 RewriteRule ^chapter1$ http://inventwithpython.com/chapters/index.html#chapter1 [NE,R,L]
 RewriteRule ^chapter1/index.html$ http://inventwithpython.com/chapters/index.html#chapter1 [NE,R,L]
