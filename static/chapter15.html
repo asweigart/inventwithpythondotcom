@@ -663,30 +663,30 @@ background:#DBE5F1'>
 padding:0in'>Topics Covered In This Chapter:</p>
 
 <p class=TopicsCoveredboxCxSpMiddle style='margin-left:.25in;text-indent:-.25in;
-background:#DBE5F1;border:none;padding:0in'><span style='font-family:Symbol'>·<span
+background:#DBE5F1;border:none;padding:0in'><span style='font-family:Symbol'>Â·<span
 style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 </span></span>The <span class=Literal><span style='font-size:9.0pt'>bool()</span></span>
 Function</p>
 
 <p class=TopicsCoveredboxCxSpLast style='margin-left:.25in;text-indent:-.25in;
-background:#DBE5F1;border:none;padding:0in'><span style='font-family:Symbol'>·<span
+background:#DBE5F1;border:none;padding:0in'><span style='font-family:Symbol'>Â·<span
 style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 </span></span>How to Play Reversi</p>
 
 </div>
 
-<p class=Body>In this chapter, we’ll make a game called Reversi (also called
-Othello). Reversi is a board game that is played on a grid, so we’ll use a
+<p class=Body>In this chapter, weâ€™ll make a game called Reversi (also called
+Othello). Reversi is a board game that is played on a grid, so weâ€™ll use a
 Cartesian coordinate system with XY coordinates. It is a game played with two
 players. Our version of the game will have a computer AI that is more advanced
 than the AI we made for Tic Tac Toe. In fact, this AI is so good that it will
 probably beat you almost every time you play. (I know I lose whenever I play
 against it!)</p>
 
-<p class=Body>Reversi has an 8 × 8 board and tiles that are black on one side
-and white on the other (our game will use O’s and X’s instead). The starting
+<p class=Body>Reversi has an 8 Ã— 8 board and tiles that are black on one side
+and white on the other (our game will use Oâ€™s and Xâ€™s instead). The starting
 board looks like Figure 15-1. The black player and white player take turns
-placing down a new tile of their color. Any of the opponent’s tiles that are
+placing down a new tile of their color. Any of the opponentâ€™s tiles that are
 between the new tile and the other tiles of that color are flipped. The goal of
 the game is to have as many of the tiles with your color as possible. For
 example, Figure 15-2 is what it looks like if the white player places a new
@@ -743,18 +743,18 @@ results in a board that looks like Figure 15-4.</p>
  </tr>
  <tr>
   <td width=399 valign=top style='width:239.4pt;padding:0in 5.4pt 0in 5.4pt'>
-  <p class=MsoCaption>Figure 15-3: White’s move will flip over one of black’s
+  <p class=MsoCaption>Figure 15-3: Whiteâ€™s move will flip over one of blackâ€™s
   tiles.</p>
   </td>
   <td width=399 valign=top style='width:239.4pt;padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoCaption>Figure 15-4: Black places a new tile, which flips over
-  one of white’s tiles.</p>
+  one of whiteâ€™s tiles.</p>
   </td>
  </tr>
 </table>
 
 <p class=Body>Tiles in all directions are flipped as long as they are between
-the player’s new tile and existing tile. In Figure 15-5, the white player
+the playerâ€™s new tile and existing tile. In Figure 15-5, the white player
 places a tile at 3, 6 and flips black tiles in both directions (marked by the
 lines.) The result is in Figure 15-6.</p>
 
@@ -774,11 +774,11 @@ lines.) The result is in Figure 15-6.</p>
  </tr>
  <tr>
   <td width=399 valign=top style='width:239.4pt;padding:0in 5.4pt 0in 5.4pt'>
-  <p class=MsoCaption>Figure 15-5: White’s second move at 3, 6 will flip two of
-  black’s tiles.</p>
+  <p class=MsoCaption>Figure 15-5: Whiteâ€™s second move at 3, 6 will flip two of
+  blackâ€™s tiles.</p>
   </td>
   <td width=399 valign=top style='width:239.4pt;padding:0in 5.4pt 0in 5.4pt'>
-  <p class=MsoCaption>Figure 15-6: The board after white’s second move.</p>
+  <p class=MsoCaption>Figure 15-6: The board after whiteâ€™s second move.</p>
   </td>
  </tr>
 </table>
@@ -804,73 +804,73 @@ will select the move that claims the most tiles.</p>
 
 <p class=SampleRunCxSpMiddle>The player will go first.</p>
 
-<p class=SampleRunCxSpMiddle>    1   2   3   4   5   6   7   8</p>
+<p class=SampleRunCxSpMiddle>Â Â Â  1Â Â  2Â Â  3Â Â  4Â Â  5Â Â  6Â Â  7Â Â  8</p>
 
-<p class=SampleRunCxSpMiddle>  +---+---+---+---+---+---+---+---+</p>
+<p class=SampleRunCxSpMiddle>Â  +---+---+---+---+---+---+---+---+</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>1 |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>1 |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  +---+---+---+---+---+---+---+---+</p>
+<p class=SampleRunCxSpMiddle>Â  +---+---+---+---+---+---+---+---+</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>2 |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>2 |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  +---+---+---+---+---+---+---+---+</p>
+<p class=SampleRunCxSpMiddle>Â  +---+---+---+---+---+---+---+---+</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>3 |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>3 | Â Â |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  +---+---+---+---+---+---+---+---+</p>
+<p class=SampleRunCxSpMiddle>Â  +---+---+---+---+---+---+---+---+</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>4 |   |   |   | X | O |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>4 |Â Â  |Â Â  |Â Â  | X | O |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  +---+---+---+---+---+---+---+---+</p>
+<p class=SampleRunCxSpMiddle>Â  +---+---+---+---+---+---+---+---+</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  | Â Â |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>5 |   |   |   | O | X |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>5 |Â Â  |Â Â  |Â Â  | O | X |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  +---+---+---+---+---+---+---+---+</p>
+<p class=SampleRunCxSpMiddle>Â  +---+---+---+---+---+---+---+---+</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>6 |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>6 |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  +---+---+---+---+---+---+---+---+</p>
+<p class=SampleRunCxSpMiddle>Â  +---+---+---+---+---+---+---+---+</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>7 |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>7 |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  +---+---+---+---+---+---+---+---+</p>
+<p class=SampleRunCxSpMiddle>Â  +---+---+---+---+---+---+---+---+</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>8 |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>8 |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  | Â Â |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  +---+---+---+---+---+---+---+---+</p>
+<p class=SampleRunCxSpMiddle>Â  +---+---+---+---+---+---+---+---+</p>
 
 <p class=SampleRunCxSpMiddle>You have 2 points. The computer has 2 points.</p>
 
@@ -879,73 +879,73 @@ hints to turn off/on hints.</p>
 
 <p class=SampleRunCxSpMiddle><span class=SampleRunResponse>53</span></p>
 
-<p class=SampleRunCxSpMiddle>    1   2   3   4   5   6   7   8</p>
+<p class=SampleRunCxSpMiddle>Â Â Â  1Â Â  2Â Â  3Â Â  4Â Â  5Â Â  6Â Â  7Â Â  8</p>
 
-<p class=SampleRunCxSpMiddle>  +---+---+---+---+---+---+---+---+</p>
+<p class=SampleRunCxSpMiddle>Â  +---+---+---+---+---+---+---+---+</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>1 |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>1 |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  +---+---+---+---+---+---+---+---+</p>
+<p class=SampleRunCxSpMiddle>Â  +---+---+---+---+---+---+---+---+</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>2 |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>2 |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  +---+---+---+---+---+---+---+---+</p>
+<p class=SampleRunCxSpMiddle>Â  +---+---+---+---+---+---+---+---+</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>3 |   |   |   |   | X |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>3 |Â Â  |Â Â  |Â Â  |Â Â  | X |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  +---+---+---+---+---+---+---+---+</p>
+<p class=SampleRunCxSpMiddle>Â  +---+---+---+---+---+---+---+---+</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>4 |   |   |   | X | X |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>4 |Â Â  |Â Â  |Â Â  | X | X |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  | Â Â |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  +---+---+---+---+---+---+---+---+</p>
+<p class=SampleRunCxSpMiddle>Â  +---+---+---+---+---+---+---+---+</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>5 |   |   |   | O | X |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>5 |Â Â  |Â Â  |Â Â  | O | X |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  +---+---+---+---+---+---+---+---+</p>
+<p class=SampleRunCxSpMiddle>Â  +---+---+---+---+---+---+---+---+</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>6 |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>6 |Â Â  |Â Â  | Â Â |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  +---+---+---+---+---+---+---+---+</p>
+<p class=SampleRunCxSpMiddle>Â  +---+---+---+---+---+---+---+---+</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>7 |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>7 |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  +---+---+---+---+---+---+---+---+</p>
+<p class=SampleRunCxSpMiddle>Â  +---+---+---+---+---+---+---+---+</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>8 |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>8 |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  +---+---+---+---+---+---+---+---+</p>
+<p class=SampleRunCxSpMiddle>Â  +---+---+---+---+---+---+---+---+</p>
 
 <p class=SampleRunCxSpMiddle>You have 4 points. The computer has 1 points.</p>
 
@@ -957,73 +957,73 @@ hints to turn off/on hints.</p>
 
 <p class=SampleRunCxSpMiddle>&nbsp;</p>
 
-<p class=SampleRunCxSpMiddle>    1   2   3   4   5   6   7   8</p>
+<p class=SampleRunCxSpMiddle>Â Â Â  1Â Â  2Â Â  3Â Â  4Â Â  5Â Â  6Â Â  7Â Â  8</p>
 
-<p class=SampleRunCxSpMiddle>  +---+---+---+---+---+---+---+---+</p>
+<p class=SampleRunCxSpMiddle>Â  +---+---+---+---+---+---+---+---+</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
 <p class=SampleRunCxSpMiddle>1 | O | O | O | O | O | O | O | O |</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  +---+---+---+---+---+---+---+---+</p>
+<p class=SampleRunCxSpMiddle>Â  +---+---+---+---+---+---+---+---+</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
 <p class=SampleRunCxSpMiddle>2 | O | O | O | O | O | O | O | O |</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  +---+---+---+---+---+---+---+---+</p>
+<p class=SampleRunCxSpMiddle>Â  +---+---+---+---+---+---+---+---+</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
 <p class=SampleRunCxSpMiddle>3 | O | O | O | O | O | O | O | O |</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  +---+---+---+---+---+---+---+---+</p>
+<p class=SampleRunCxSpMiddle>Â  +---+---+---+---+---+---+---+---+</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  | Â Â |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
 <p class=SampleRunCxSpMiddle>4 | O | O | X | O | O | O | O | O |</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  +---+---+---+---+---+---+---+---+</p>
+<p class=SampleRunCxSpMiddle>Â  +---+---+---+---+---+---+---+---+</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
 <p class=SampleRunCxSpMiddle>5 | O | O | O | X | O | X | O | X |</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  +---+---+---+---+---+---+---+---+</p>
+<p class=SampleRunCxSpMiddle>Â  +---+---+---+---+---+---+---+---+</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>6 | O | X | O | X | X | O | O |   |</p>
+<p class=SampleRunCxSpMiddle>6 | O | X | O | X | X | O | O |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  +---+---+---+---+---+---+---+---+</p>
+<p class=SampleRunCxSpMiddle>Â  +---+---+---+---+---+---+---+---+</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
 <p class=SampleRunCxSpMiddle>7 | O | X | X | O | O | O | O | O |</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  | Â Â |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  +---+---+---+---+---+---+---+---+</p>
+<p class=SampleRunCxSpMiddle>Â  +---+---+---+---+---+---+---+---+</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>8 | O | X | X | O |   |   | X |   |</p>
+<p class=SampleRunCxSpMiddle>8 | O | X | X | O |Â Â  |Â Â  | X |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  |   |   |   |   |   |   |   |   |</p>
+<p class=SampleRunCxSpMiddle>Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=SampleRunCxSpMiddle>  +---+---+---+---+---+---+---+---+</p>
+<p class=SampleRunCxSpMiddle>Â  +---+---+---+---+---+---+---+---+</p>
 
 <p class=SampleRunCxSpMiddle>You have 12 points. The computer has 48 points.</p>
 
@@ -1043,7 +1043,7 @@ hints to turn off/on hints.</p>
 </div>
 
 <p class=MsoNormal>As you can see, the AI was pretty good at beating me 46 to
-15. To help the player out, we’ll program the game to provide hints. If the
+15. To help the player out, weâ€™ll program the game to provide hints. If the
 player types <span class=Literal><span style='font-size:9.0pt;line-height:115%'>'hints'</span></span>
 as their move, they can toggle the hints mode on and off. When hints mode is
 on, all the possible moves the player can make will show up on the board as <span
@@ -1056,425 +1056,425 @@ characters, like this:</p>
 
 <div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
 
-<p class=CodeExampleCxSpFirst style='border:none;padding:0in'>    1   2   3  
-4   5   6   7   8</p>
+<p class=CodeExampleCxSpFirst style='border:none;padding:0in'>Â Â Â  1Â Â  2Â Â  3Â Â 
+4Â Â  5Â Â  6Â Â  7Â Â  8</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'> 
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>Â 
 +---+---+---+---+---+---+---+---+</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>  |   |   |  
-|   |   |   |   |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>Â  |Â Â  |Â Â  |Â Â 
+|Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>1 |   |   |  
-|   |   |   |   |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>1 |Â Â  |Â Â  |Â Â 
+|Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>  |   |   |  
-|   |   |   |   |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>Â  |Â Â  |Â Â  |Â Â 
+|Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'> 
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>Â 
 +---+---+---+---+---+---+---+---+</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>  |   |   |  
-|   |   |   |   |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>Â  |Â Â  |Â Â  |Â Â 
+|Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>2 |   |   |   |
-. |   | . |   |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>2 |Â Â  |Â Â  |Â Â  |
+. |Â Â  | . |Â Â  |Â Â  |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>  |   |   |  
-|   |   |   |   |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>Â  |Â Â  |Â Â  |Â Â 
+|Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'> 
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>Â 
 +---+---+---+---+---+---+---+---+</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>  |   |   |  
-|   |   |   |   |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>Â  |Â Â  |Â Â  |Â Â 
+|Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>3 |   |   |   |
-O | O | O |   |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>3 |Â Â  |Â Â  |Â Â  |
+O | O | O |Â Â  |Â Â  |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>  |   |   |  
-|   |   |   |   |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>Â  |Â Â  |Â Â  |Â Â 
+|Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>  +---+---+---+---+---+---+---+---+</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>Â  +---+---+---+---+---+---+---+---+</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>  |   |   |  
-|   |   |   |   |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>Â  |Â Â  |Â Â  |Â Â 
+|Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>4 |   |   | . |
-O | O | X |   |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>4 |Â Â  |Â Â  | . |
+O | O | X |Â Â  |Â Â  |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>  |   |   |  
-|   |   |   |   |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>Â  |Â Â  |Â Â  |Â Â 
+|Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'> 
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>Â 
 +---+---+---+---+---+---+---+---+</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>  |   |   |  
-|   |   |   |   |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>Â  |Â Â  |Â Â  |Â Â 
+|Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>5 |   |   | . |
-O | O | O | X |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>5 |Â Â  |Â Â  | . |
+O | O | O | X |Â Â  |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>  |   |   |  
-|   |   |   |   |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>Â  |Â Â  | Â Â |Â Â 
+|Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'> 
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>Â 
 +---+---+---+---+---+---+---+---+</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>  |   |   |  
-|   |   |   |   |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>Â  |Â Â  |Â Â  |Â Â 
+|Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>6 |   |   |   |
-. |   | . |   |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>6 |Â Â  |Â Â  |Â Â  |
+. |Â Â  | . |Â Â  |Â Â  |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>  |   |   |  
-|   |   |   |   |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>Â  |Â Â  |Â Â  |Â Â 
+|Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'> 
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>Â 
 +---+---+---+---+---+---+---+---+</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>  |   |   |  
-|   |   |   |   |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>Â  |Â Â  |Â Â  |Â Â 
+|Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>7 |   |   |   |  
-|   |   |   |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>7 |Â Â  |Â Â  | Â Â |Â Â 
+|Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>  |   |   |  
-|   |   |   |   |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>Â  |Â Â  |Â Â  |Â Â 
+|Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'> 
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>Â 
 +---+---+---+---+---+---+---+---+</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>  |   |   |  
-|   |   |   |   |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>Â  |Â Â  |Â Â  |Â Â 
+|Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>8 |   |   |  
-|   |   |   |   |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>8 |Â Â  |Â Â  |Â Â 
+|Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>  |   |   |  
-|   |   |   |   |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>Â  |Â Â  |Â Â  |Â Â 
+|Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
-<p class=CodeExampleCxSpLast style='border:none;padding:0in'> 
+<p class=CodeExampleCxSpLast style='border:none;padding:0in'>Â 
 +---+---+---+---+---+---+---+---+</p>
 
 </div>
 
 <h2><a name="_Toc405145157">Source Code of Reversi</a></h2>
 
-<p class=Body>Reversi is a mammoth program compared to our previous games. It’s
-over 300 lines long! But don’t worry, many of these lines are comments or blank
+<p class=Body>Reversi is a mammoth program compared to our previous games. Itâ€™s
+over 300 lines long! But donâ€™t worry, many of these lines are comments or blank
 lines to space out the code and make it more readable.</p>
 
-<p class=Body>As with our other programs, we’ll first create several functions
+<p class=Body>As with our other programs, weâ€™ll first create several functions
 to carry out Reversi-related tasks that the main section will call. Roughly the
 first 250 lines of code are for these helper functions, and the last 50 lines
 of code implement the Reversi game itself.</p>
 
 <p class=Body>If you get errors after typing this code in, compare the code you
-typed to the book’s code with the online diff tool at <span class=URL><u>http://invpy.com/diff/reversi</u></span>.</p>
+typed to the bookâ€™s code with the online diff tool at <span class=URL><u>http://invpy.com/diff/reversi</u></span>.</p>
 
 <div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
 
 <p class=SourceCodeFilename>reversi.py</p>
 
-<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>  1.</span> <span
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>Â  1.</span> <span
 class=SourceCodeComment># Reversi</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>  2. </span></p>
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â  2. </span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>  3.</span> import
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â  3.</span> import
 random</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>  4.</span> import
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â  4.</span> import
 sys</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>  5.</span> </p>
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â  5.</span> </p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>  6.</span> def
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â  6.</span> def
 drawBoard(board):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>  7.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â  7.</span>Â Â Â Â  <span
 class=SourceCodeComment># This function prints out the board that it was
 passed. Returns None.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>  8.</span>    
-HLINE = '  +---+---+---+---+---+---+---+---+'</p>
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â  8.</span>Â Â Â Â 
+HLINE = 'Â  +---+---+---+---+---+---+---+---+'</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>  9.</span>    
-VLINE = '  |   |   |   |   |   |   |   |   |'</p>
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â  9.</span>Â Â Â Â 
+VLINE = 'Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |'</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 10. </span></p>
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 10. </span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 11.</span>    
-print('    1   2   3   4   5   6   7   8')</p>
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 11.</span>Â Â Â Â 
+print('Â Â Â  1Â Â  2Â Â  3Â Â  4Â Â  5Â Â  6Â Â  7Â Â  8')</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 12.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 12.</span>Â Â Â Â 
 print(HLINE)</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 13.</span>     for
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 13.</span>Â Â Â Â  for
 y in range(8):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 14.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 14.</span>Â Â Â Â Â Â Â Â 
 print(VLINE)</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 15.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 15.</span>Â Â Â Â Â Â Â Â 
 print(y+1, end=' ')</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 16.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 16.</span>Â Â Â Â Â Â Â Â 
 for x in range(8):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 17.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 17.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 print('| %s' % (board[x][y]), end=' ')</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 18.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 18.</span>Â Â Â Â Â Â Â Â 
 print('|')</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 19.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 19.</span>Â Â Â Â Â Â Â Â 
 print(VLINE)</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 20.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 20.</span>Â Â Â Â Â Â Â Â 
 print(HLINE)</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 21. </span></p>
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 21. </span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 22. </span></p>
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 22. </span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 23.</span> def
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 23.</span> def
 resetBoard(board):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 24.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 24.</span>Â Â Â Â  <span
 class=SourceCodeComment># Blanks out the board it is passed, except for the
 original starting position.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 25.</span>     for
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 25.</span>Â Â Â Â  for
 x in range(8):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 26.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 26.</span>Â Â Â Â Â Â Â Â 
 for y in range(8):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 27.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 27.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 board[x][y] = ' '</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 28. </span></p>
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 28. </span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 29.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 29.</span>Â Â Â Â  <span
 class=SourceCodeComment># Starting pieces:</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 30.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 30.</span>Â Â Â Â 
 board[3][3] = 'X'</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 31.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 31.</span>Â Â Â Â 
 board[3][4] = 'O'</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 32.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 32.</span>Â Â Â Â 
 board[4][3] = 'O'</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 33.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 33.</span>Â Â Â Â 
 board[4][4] = 'X'</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 34. </span></p>
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 34. </span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 35. </span></p>
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 35. </span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 36.</span> def
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 36.</span> def
 getNewBoard():</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 37.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 37.</span>Â Â Â Â  <span
 class=SourceCodeComment># Creates a brand new, blank board data structure.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 38.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 38.</span>Â Â Â Â 
 board = []</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 39.</span>     for
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 39.</span>Â Â Â Â  for
 i in range(8):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 40.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 40.</span>Â Â Â Â Â Â Â Â 
 board.append([' '] * 8)</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 41. </span></p>
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 41. </span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 42.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 42.</span>Â Â Â Â 
 return board</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 43. </span></p>
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 43. </span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 44. </span></p>
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 44. </span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 45.</span> def
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 45.</span> def
 isValidMove(board, tile, xstart, ystart):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 46.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 46.</span>Â Â Â Â  <span
 class=SourceCodeComment># Returns False if the player's move on space xstart,
 ystart is invalid.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 47.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 47.</span>Â Â Â Â  <span
 class=SourceCodeComment># If it is a valid move, returns a list of spaces that
 would become the player's if they made a move here.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 48.</span>     if
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 48.</span>Â Â Â Â  if
 board[xstart][ystart] != ' ' or not isOnBoard(xstart, ystart):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 49.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 49.</span>Â Â Â Â Â Â Â Â 
 return False</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 50. </span></p>
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 50. </span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 51.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 51.</span>Â Â Â Â 
 board[xstart][ystart] = tile <span class=SourceCodeComment># temporarily set
 the tile on the board.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 52. </span></p>
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 52. </span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 53.</span>     if
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 53.</span>Â Â Â Â  if
 tile == 'X':</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 54.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 54.</span>Â Â Â Â Â Â Â Â 
 otherTile = 'O'</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 55.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 55.</span>Â Â Â Â 
 else:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 56.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 56.</span>Â Â Â Â Â Â Â Â 
 otherTile = 'X'</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 57. </span></p>
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 57. </span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 58.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 58.</span>Â Â Â Â 
 tilesToFlip = []</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 59.</span>     for
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 59.</span>Â Â Â Â  for
 xdirection, ydirection in [[0, 1], [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1],
 [-1, 0], [-1, 1]]:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 60.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 60.</span>Â Â Â Â Â Â Â Â 
 x, y = xstart, ystart</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 61.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 61.</span>Â Â Â Â Â Â Â Â 
 x += xdirection <span class=SourceCodeComment># first step in the direction</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 62.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 62.</span>Â Â Â Â Â Â Â Â 
 y += ydirection <span class=SourceCodeComment># first step in the direction</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 63.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 63.</span>Â Â Â Â Â Â Â Â 
 if isOnBoard(x, y) and board[x][y] == otherTile:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 64.</span>             <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 64.</span>Â Â Â Â Â Â  Â Â Â Â Â Â <span
 class=SourceCodeComment># There is a piece belonging to the other player next
 to our piece.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 65.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 65.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 x += xdirection</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 66.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 66.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 y += ydirection</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 67.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 67.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 if not isOnBoard(x, y):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 68.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 68.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 continue</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 69.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 69.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 while board[x][y] == otherTile:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 70.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 70.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 x += xdirection</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 71.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 71.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 y += ydirection</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 72.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 72.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 if not isOnBoard(x, y): <span class=SourceCodeComment># break out of while
 loop, then continue in for loop</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 73.</span>                    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 73.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 break</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 74.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 74.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 if not isOnBoard(x, y):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 75.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 75.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 continue</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 76.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 76.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 if board[x][y] == tile:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 77.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 77.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 <span class=SourceCodeComment># There are pieces to flip over. Go in the
 reverse direction until we reach the original space, noting all the tiles along
 the way.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 78.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 78.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 while True:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 79.</span>                    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 79.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 x -= xdirection</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 80.</span>                    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 80.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 y -= ydirection</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 81.</span>                    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 81.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 if x == xstart and y == ystart:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 82.</span>                        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 82.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 break</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 83.</span>                    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 83.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 tilesToFlip.append([x, y])</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 84. </span></p>
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 84. </span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 85.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 85.</span>Â Â Â Â 
 board[xstart][ystart] = ' ' <span class=SourceCodeComment># restore the empty
 space</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 86.</span>     if
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 86.</span>Â Â Â Â  if
 len(tilesToFlip) == 0: <span class=SourceCodeComment># If no tiles were
 flipped, this is not a valid move.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 87.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 87.</span>Â Â Â Â Â Â Â Â 
 return False</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 88.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 88.</span>Â Â Â Â 
 return tilesToFlip</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 89. </span></p>
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 89. </span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 90. </span></p>
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 90. </span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 91.</span> def
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 91.</span> def
 isOnBoard(x, y):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 92.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 92.</span>Â Â Â Â  <span
 class=SourceCodeComment># Returns True if the coordinates are located on the
 board.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 93.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 93.</span>Â Â Â Â 
 return x &gt;= 0 and x &lt;= 7 and y &gt;= 0 and y &lt;=7</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 94. </span></p>
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 94. </span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 95. </span></p>
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 95. </span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 96.</span> def
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 96.</span> def
 getBoardWithValidMoves(board, tile):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 97.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 97.</span>Â Â Â Â  <span
 class=SourceCodeComment># Returns a new board with . marking the valid moves
 the given player can make.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 98.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 98.</span>Â Â Â Â 
 dupeBoard = getBoardCopy(board)</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 99. </span></p>
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 99. </span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>100.</span>     for
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>100.</span>Â Â Â Â  for
 x, y in getValidMoves(dupeBoard, tile):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>101.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>101.</span>Â Â Â Â Â Â Â Â 
 dupeBoard[x][y] = '.'</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>102.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>102.</span>Â Â Â Â 
 return dupeBoard</p>
 
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>103. </span></p>
@@ -1484,28 +1484,28 @@ return dupeBoard</p>
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>105.</span> def
 getValidMoves(board, tile):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>106.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>106.</span>Â Â Â Â  <span
 class=SourceCodeComment># Returns a list of [x,y] lists of valid moves for the
 given player on the given board.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>107.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>107.</span>Â Â Â Â 
 validMoves = []</p>
 
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>108. </span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>109.</span>     for
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>109.</span>Â Â Â Â  for
 x in range(8):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>110.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>110.</span>Â Â Â Â Â Â Â Â 
 for y in range(8):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>111.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>111.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 if isValidMove(board, tile, x, y) != False:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>112.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>112.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 validMoves.append([x, y])</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>113.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>113.</span>Â Â Â Â 
 return validMoves</p>
 
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>114. </span></p>
@@ -1515,35 +1515,35 @@ return validMoves</p>
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>116.</span> def
 getScoreOfBoard(board):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>117.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>117.</span>Â Â Â Â  <span
 class=SourceCodeComment># Determine the score by counting the tiles. Returns a
 dictionary with keys 'X' and 'O'.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>118.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>118.</span>Â Â Â Â 
 xscore = 0</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>119.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>119.</span>Â Â Â Â 
 oscore = 0</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>120.</span>     for
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>120.</span>Â Â Â Â  for
 x in range(8):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>121.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>121.</span>Â Â Â Â Â Â Â Â 
 for y in range(8):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>122.</span>             if
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>122.</span>Â  Â Â Â Â Â Â Â Â Â Â Â if
 board[x][y] == 'X':</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>123.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>123.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 xscore += 1</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>124.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>124.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 if board[x][y] == 'O':</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>125.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>125.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 oscore += 1</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>126.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>126.</span>Â Â Â Â 
 return {'X':xscore, 'O':oscore}</p>
 
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>127. </span></p>
@@ -1553,41 +1553,41 @@ return {'X':xscore, 'O':oscore}</p>
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>129.</span> def
 enterPlayerTile():</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>130.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>130.</span>Â Â Â Â  <span
 class=SourceCodeComment># Lets the player type which tile they want to be.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>131.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>131.</span>Â Â Â Â  <span
 class=SourceCodeComment># Returns a list with the player's tile as the first
 item, and the computer's tile as the second.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>132.</span>     tile
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>132.</span>Â Â Â Â  tile
 = ''</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>133.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>133.</span>Â Â Â Â 
 while not (tile == 'X' or tile == 'O'):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>134.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>134.</span>Â Â Â Â Â Â Â Â 
 print('Do you want to be X or O?')</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>135.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>135.</span>Â Â Â Â Â Â Â Â 
 tile = input().upper()</p>
 
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>136. </span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>137.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>137.</span>Â Â Â Â  <span
 class=SourceCodeComment># the first element in the list is the player's tile,
 the second is the computer's tile.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>138.</span>     if
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>138.</span>Â Â Â Â  if
 tile == 'X':</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>139.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>139.</span>Â Â Â Â Â Â Â Â 
 return ['X', 'O']</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>140.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>140.</span>Â Â Â Â 
 else:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>141.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>141.</span>Â Â Â Â Â Â Â Â 
 return ['O', 'X']</p>
 
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>142. </span></p>
@@ -1597,19 +1597,19 @@ return ['O', 'X']</p>
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>144.</span> def
 whoGoesFirst():</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>145.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>145.</span>Â Â Â Â  <span
 class=SourceCodeComment># Randomly choose the player who goes first.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>146.</span>     if
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>146.</span>Â Â Â Â  if
 random.randint(0, 1) == 0:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>147.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>147.</span>Â Â Â Â Â Â Â Â 
 return 'computer'</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>148.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>148.</span>Â Â Â Â 
 else:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>149.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>149.</span>Â Â Â Â Â Â Â Â 
 return 'player'</p>
 
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>150. </span></p>
@@ -1618,14 +1618,14 @@ return 'player'</p>
 
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>152.</span> def playAgain():</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>153.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>153.</span>Â Â Â Â  <span
 class=SourceCodeComment># This function returns True if the player wants to
 play again, otherwise it returns False.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>154.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>154.</span>Â Â Â Â 
 print('Do you want to play again? (yes or no)')</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>155.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>155.</span>Â Â Â Â 
 return input().lower().startswith('y')</p>
 
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>156. </span></p>
@@ -1635,37 +1635,37 @@ return input().lower().startswith('y')</p>
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>158.</span> def
 makeMove(board, tile, xstart, ystart):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>159.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>159.</span>Â Â Â Â  <span
 class=SourceCodeComment># Place the tile on the board at xstart, ystart, and
 flip any of the opponent's pieces.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>160.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>160.</span>Â Â Â Â  <span
 class=SourceCodeComment># Returns False if this is an invalid move, True if it
 is valid.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>161.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>161.</span>Â Â Â Â 
 tilesToFlip = isValidMove(board, tile, xstart, ystart)</p>
 
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>162. </span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>163.</span>     if
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>163.</span>Â Â Â Â  if
 tilesToFlip == False:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>164.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>164.</span>Â Â Â Â Â Â Â Â 
 return False</p>
 
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>165. </span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>166.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>166.</span>Â Â Â Â 
 board[xstart][ystart] = tile</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>167.</span>     for
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>167.</span>Â Â Â Â  for
 x, y in tilesToFlip:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>168.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>168.</span>Â Â Â Â Â Â Â Â 
 board[x][y] = tile</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>169.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>169.</span>Â Â Â Â 
 return True</p>
 
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>170. </span></p>
@@ -1675,27 +1675,27 @@ return True</p>
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>172.</span> def
 getBoardCopy(board):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>173.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>173.</span>Â Â Â Â  <span
 class=SourceCodeComment># Make a duplicate of the board list and return the
 duplicate.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>174.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>174.</span>Â Â Â Â 
 dupeBoard = getNewBoard()</p>
 
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>175. </span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>176.</span>     for
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>176.</span>Â Â Â Â  for
 x in range(8):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>177.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>177.</span>Â Â Â Â Â Â Â Â 
 for y in range(8):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>178.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>178.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 dupeBoard[x][y] = board[x][y]</p>
 
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>179. </span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>180.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>180.</span>Â Â Â Â 
 return dupeBoard</p>
 
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>181. </span></p>
@@ -1705,11 +1705,11 @@ return dupeBoard</p>
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>183.</span> def
 isOnCorner(x, y):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>184.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>184.</span>Â Â Â Â  <span
 class=SourceCodeComment># Returns True if the position is in one of the four
 corners.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>185.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>185.</span>Â Â Â Â 
 return (x == 0 and y == 0) or (x == 7 and y == 0) or (x == 0 and y == 7) or (x
 == 7 and y == 7)</p>
 
@@ -1720,74 +1720,74 @@ return (x == 0 and y == 0) or (x == 7 and y == 0) or (x == 0 and y == 7) or (x
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>188.</span> def
 getPlayerMove(board, playerTile):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>189.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>189.</span>Â Â Â Â  <span
 class=SourceCodeComment># Let the player type in their move.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>190.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>190.</span>Â Â Â Â  <span
 class=SourceCodeComment># Returns the move as [x, y] (or returns the strings
 'hints' or 'quit')</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>191.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>191.</span>Â Â Â Â 
 DIGITS1TO8 = '1 2 3 4 5 6 7 8'.split()</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>192.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>192.</span>Â Â Â Â 
 while True:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>193.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>193.</span>Â Â Â Â Â Â Â Â 
 print('Enter your move, or type quit to end the game, or hints to turn off/on
 hints.')</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>194.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>194.</span>Â Â Â Â Â Â Â Â 
 move = input().lower()</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>195.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>195.</span>Â Â Â Â Â Â Â Â 
 if move == 'quit':</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>196.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>196.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 return 'quit'</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>197.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>197.</span>Â Â Â Â Â Â Â Â 
 if move == 'hints':</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>198.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>198.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 return 'hints'</p>
 
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>199. </span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>200.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>200.</span>Â Â Â Â Â Â Â Â 
 if len(move) == 2 and move[0] in DIGITS1TO8 and move[1] in DIGITS1TO8:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>201.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>201.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 x = int(move[0]) - 1</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>202.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>202.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 y = int(move[1]) - 1</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>203.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>203.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 if isValidMove(board, playerTile, x, y) == False:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>204.</span>              
-  continue</p>
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>204.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
+Â Â continue</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>205.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>205.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 else:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>206.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>206.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 break</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>207.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>207.</span>Â Â Â Â Â Â Â Â 
 else:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>208.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>208.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 print('That is not a valid move. Type the x digit (1-8), then the y digit
 (1-8).')</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>209.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>209.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 print('For example, 81 will be the top-right corner.')</p>
 
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>210. </span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>211.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>211.</span>Â Â Â Â 
 return [x, y]</p>
 
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>212. </span></p>
@@ -1797,69 +1797,69 @@ return [x, y]</p>
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>214.</span> def
 getComputerMove(board, computerTile):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>215.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>215.</span>Â Â Â Â  <span
 class=SourceCodeComment># Given a board and the computer's tile, determine
 where to</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>216.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>216.</span>Â Â Â Â  <span
 class=SourceCodeComment># move and return that move as a [x, y] list.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>217.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>217.</span>Â Â Â Â 
 possibleMoves = getValidMoves(board, computerTile)</p>
 
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>218. </span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>219.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>219.</span>Â Â Â Â  <span
 class=SourceCodeComment># randomize the order of the possible moves</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>220.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>220.</span>Â Â Â Â 
 random.shuffle(possibleMoves)</p>
 
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>221. </span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>222.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>222.</span>Â Â Â Â  <span
 class=SourceCodeComment># always go for a corner if available.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>223.</span>     for
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>223.</span>Â Â Â Â  for
 x, y in possibleMoves:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>224.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>224.</span>Â Â Â Â Â Â Â Â 
 if isOnCorner(x, y):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>225.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>225.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 return [x, y]</p>
 
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>226. </span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>227.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>227.</span>Â Â Â Â  <span
 class=SourceCodeComment># Go through all the possible moves and remember the
 best scoring move</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>228.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>228.</span>Â Â Â Â 
 bestScore = -1</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>229.</span>     for
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>229.</span>Â Â Â Â  for
 x, y in possibleMoves:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>230.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>230.</span>Â Â Â Â Â Â Â Â 
 dupeBoard = getBoardCopy(board)</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>231.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>231.</span>Â Â Â Â Â Â Â Â 
 makeMove(dupeBoard, computerTile, x, y)</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>232.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>232.</span>Â Â Â Â Â Â Â Â 
 score = getScoreOfBoard(dupeBoard)[computerTile]</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>233.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>233.</span>Â Â Â Â Â Â Â Â 
 if score &gt; bestScore:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>234.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>234.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 bestMove = [x, y]</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>235.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>235.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 bestScore = score</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>236.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>236.</span>Â Â Â Â 
 return bestMove</p>
 
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>237. </span></p>
@@ -1869,13 +1869,13 @@ return bestMove</p>
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>239.</span> def
 showPoints(playerTile, computerTile):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>240.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>240.</span>Â Â Â Â  <span
 class=SourceCodeComment># Prints out the current score.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>241.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>241.</span>Â Â Â Â 
 scores = getScoreOfBoard(mainBoard)</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>242.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>242.</span>Â Â Â Â 
 print('You have %s points. The computer has %s points.' % (scores[playerTile],
 scores[computerTile]))</p>
 
@@ -1893,174 +1893,174 @@ print('Welcome to Reversi!')</p>
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>248.</span> while
 True:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>249.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>249.</span>Â Â Â Â  <span
 class=SourceCodeComment># Reset the board and game.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>250.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>250.</span>Â Â Â Â 
 mainBoard = getNewBoard()</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>251.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>251.</span>Â Â Â Â 
 resetBoard(mainBoard)</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>252.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>252.</span>Â Â Â Â 
 playerTile, computerTile = enterPlayerTile()</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>253.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>253.</span>Â Â Â Â 
 showHints = False</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>254.</span>     turn
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>254.</span>Â Â Â Â  turn
 = whoGoesFirst()</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>255.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>255.</span>Â Â Â Â 
 print('The ' + turn + ' will go first.')</p>
 
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>256. </span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>257.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>257.</span>Â Â Â Â 
 while True:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>258.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>258.</span>Â Â Â Â Â Â Â Â 
 if turn == 'player':</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>259.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>259.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 <span class=SourceCodeComment># Player's turn.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>260.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>260.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 if showHints:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>261.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>261.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 validMovesBoard = getBoardWithValidMoves(mainBoard, playerTile)</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>262.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>262.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 drawBoard(validMovesBoard)</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>263.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>263.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 else:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>264.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>264.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 drawBoard(mainBoard)</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>265.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>265.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 showPoints(playerTile, computerTile)</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>266.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>266.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 move = getPlayerMove(mainBoard, playerTile)</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>267.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>267.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 if move == 'quit':</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>268.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>268.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 print('Thanks for playing!')</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>269.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>269.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 sys.exit() <span class=SourceCodeComment># terminate the program</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>270.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>270.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 elif move == 'hints':</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>271.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>271.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 showHints = not showHints</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>272.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>272.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 continue</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>273.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>273.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 else:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>274.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>274.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 makeMove(mainBoard, playerTile, move[0], move[1])</p>
 
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>275. </span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>276.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>276.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 if getValidMoves(mainBoard, computerTile) == []:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>277.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>277.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 break</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>278.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>278.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 else:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>279.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>279.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 turn = 'computer'</p>
 
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>280. </span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>281.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>281.</span>Â Â Â Â Â Â Â Â 
 else:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>282.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>282.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 <span class=SourceCodeComment># Computer's turn.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>283.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>283.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 drawBoard(mainBoard)</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>284.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>284.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 showPoints(playerTile, computerTile)</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>285.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>285.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 input('Press Enter to see the computer\'s move.')</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>286.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>286.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 x, y = getComputerMove(mainBoard, computerTile)</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>287.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>287.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 makeMove(mainBoard, computerTile, x, y)</p>
 
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>288. </span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>289.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>289.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 if getValidMoves(mainBoard, playerTile) == []:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>290.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>290.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 break</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>291.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>291.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 else:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>292.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>292.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 turn = 'player'</p>
 
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>293. </span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>294.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>294.</span>Â Â Â Â  <span
 class=SourceCodeComment># Display the final score.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>295.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>295.</span>Â Â Â Â 
 drawBoard(mainBoard)</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>296.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>296.</span>Â Â Â Â 
 scores = getScoreOfBoard(mainBoard)</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>297.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>297.</span>Â Â Â Â 
 print('X scored %s points. O scored %s points.' % (scores['X'], scores['O']))</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>298.</span>     if
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>298.</span>Â Â Â Â  if
 scores[playerTile] &gt; scores[computerTile]:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>299.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>299.</span>Â Â Â Â Â Â Â Â 
 print('You beat the computer by %s points! Congratulations!' %
 (scores[playerTile] - scores[computerTile]))</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>300.</span>     elif
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>300.</span>Â Â Â Â  elif
 scores[playerTile] &lt; scores[computerTile]:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>301.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>301.</span>Â Â Â Â Â Â Â Â 
 print('You lost. The computer beat you by %s points.' % (scores[computerTile] -
 scores[playerTile]))</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>302.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>302.</span>Â Â Â Â 
 else:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>303.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>303.</span>Â Â Â Â Â Â Â Â 
 print('The game was a tie!')</p>
 
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>304. </span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>305.</span>     if
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>305.</span>Â Â Â Â  if
 not playAgain():</p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber>306.</span>        
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>306.</span>Â Â Â Â Â Â Â Â 
 break</p>
 
 </div>
@@ -2069,7 +2069,7 @@ break</p>
 
 <p class=Non-TOCHeading3>The Game Board Data Structure</p>
 
-<p class=Body>Before getting into the code, let’s figure out the board’s data
+<p class=Body>Before getting into the code, letâ€™s figure out the boardâ€™s data
 structure. This data structure is a list of lists, just like the one in the
 previous Sonar game. The list of lists is created so that <span class=Literal><span
 style='font-size:9.0pt;line-height:115%'>board[x][y]</span></span> will
@@ -2085,7 +2085,7 @@ line-height:115%'>'.'</span></span> period character (to represent a possible
 move in hint mode), or an <span class=Literal><span style='font-size:9.0pt;
 line-height:115%'>'X'</span></span> or <span class=Literal><span
 style='font-size:9.0pt;line-height:115%'>'O'</span></span> (to represent a
-player’s tile). Whenever you see a parameter named <span class=Literal><span
+playerâ€™s tile). Whenever you see a parameter named <span class=Literal><span
 style='font-size:9.0pt;line-height:115%'>board</span></span>, it is meant to be
 this kind of list of lists data structure.</p>
 
@@ -2093,13 +2093,13 @@ this kind of list of lists data structure.</p>
 
 <div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
 
-<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>  1.</span> <span
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>Â  1.</span> <span
 class=SourceCodeComment># Reversi</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>  2.</span> import
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â  2.</span> import
 random</p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber>  3.</span> import sys</p>
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>Â  3.</span> import sys</p>
 
 </div>
 
@@ -2115,25 +2115,25 @@ style='font-size:9.0pt;line-height:115%'>exit()</span></span> function.</p>
 
 <div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
 
-<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>  6.</span> def
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>Â  6.</span> def
 drawBoard(board):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>  7.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â  7.</span>Â Â Â Â  <span
 class=SourceCodeComment># This function prints out the board that it was
 passed. Returns None.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>  8.</span>    
-HLINE = '  +---+---+---+---+---+---+---+---+'</p>
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â  8.</span>Â Â Â Â 
+HLINE = 'Â  +---+---+---+---+---+---+---+---+'</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>  9.</span>    
-VLINE = '  |   |   |   |   |   |   |   |   |'</p>
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â  9.</span>Â Â Â Â 
+VLINE = 'Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |Â Â  |'</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 10.</span></p>
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 10.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 11.</span>    
-print('    1   2   3   4   5   6   7   8')</p>
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 11.</span>Â Â Â Â 
+print('Â Â Â  1Â Â  2Â Â  3Â Â  4Â Â  5Â Â  6Â Â  7Â Â  8')</p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber> 12.</span>    
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>Â 12.</span>Â Â Â Â 
 print(HLINE)</p>
 
 </div>
@@ -2153,11 +2153,11 @@ line-height:115%'>'X'</span></span>):</p>
 
 <p class=CodeExampleCxSpFirst style='border:none;padding:0in'>+---+</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>|   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>|Â Â  |</p>
 
 <p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>| X |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>|   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>|Â Â  |</p>
 
 <p class=CodeExampleCxSpLast style='border:none;padding:0in'>+---+</p>
 
@@ -2170,7 +2170,7 @@ you from typing out the string repeatedly.</p>
 
 <p class=Body>There are also lines above and below the center of tile that are
 nothing but <span class=Literal><span style='font-size:9.0pt;line-height:115%'>'|'</span></span>
-characters (called “pipe” characters) with three spaces between. This is stored
+characters (called â€œpipeâ€ characters) with three spaces between. This is stored
 in a constant named <span class=Literal><span style='font-size:9.0pt;
 line-height:115%'>VLINE</span></span>.</p>
 
@@ -2181,28 +2181,28 @@ top horizontal line of the board.</p>
 
 <div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
 
-<p class=SourceCodeCxSpFirst><span class=SourceLineNumber> 13.</span>     for y
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>Â 13.</span>Â Â Â Â  for y
 in range(8):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 14.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 14.</span>Â Â Â Â Â Â Â Â 
 print(VLINE)</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 15.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 15.</span>Â Â Â Â Â Â Â Â 
 print(y+1, end=' ')</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 16.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 16.</span>Â Â Â Â Â Â Â Â 
 for x in range(8):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 17.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 17.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 print('| %s' % (board[x][y]), end=' ')</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 18.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 18.</span>Â Â Â Â Â Â Â Â 
 print('|')</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 19.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 19.</span>Â Â Â Â Â Â Â Â 
 print(VLINE)</p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber> 20.</span>         print(HLINE)</p>
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>Â 20.</span> Â Â Â Â Â Â Â Â print(HLINE)</p>
 
 </div>
 
@@ -2240,14 +2240,14 @@ line 20 prints an entire row of the board like this:</p>
 
 <div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
 
-<p class=CodeExampleCxSpFirst style='border:none;padding:0in'>|   |   |   |  
-|   |   |   |   |</p>
+<p class=CodeExampleCxSpFirst style='border:none;padding:0in'>|Â Â  |Â Â  |Â Â  |Â Â 
+|Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
 <p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>| X | X | X | X
 | X | X | X | X |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>|   |   |   |  
-|   |   |   |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>|Â Â  |Â Â  |Â Â  |Â Â 
+|Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
 <p class=CodeExampleCxSpLast style='border:none;padding:0in'>+---+---+---+---+---+---+---+---+</p>
 
@@ -2262,91 +2262,91 @@ instead of <span class=Literal><span style='font-size:9.0pt;line-height:115%'>'X
 
 <div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
 
-<p class=CodeExampleCxSpFirst style='border:none;padding:0in'>|   |   |   |  
-|   |   |   |   |</p>
+<p class=CodeExampleCxSpFirst style='border:none;padding:0in'>|Â Â  |Â Â  |Â Â  |Â Â 
+|Â Â  | Â Â |Â Â  |Â Â  |</p>
 
 <p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>| X | X | X | X
 | X | X | X | X |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>|   |   |   |  
-|   |   |   |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>|Â Â  |Â Â  |Â Â  |Â Â 
+|Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
 <p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>+---+---+---+---+---+---+---+---+</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>|   |   |   |  
-|   |   |   |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>|Â Â  |Â Â  |Â Â  |Â Â 
+|Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
 <p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>| X | X | X | X
 | X | X | X | X |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>|   |   |   |  
-|   |   |   |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>|Â Â  |Â Â  |Â Â  |Â Â 
+|Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
 <p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>+---+---+---+---+---+---+---+---+</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>|   |   |   |  
-|   |   |   |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>|Â Â  | Â Â |Â Â  |Â Â 
+|Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
 <p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>| X | X | X | X
 | X | X | X | X |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>|   |   |   |  
-|   |   |   |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>|Â Â  |Â Â  |Â Â  |Â Â 
+|Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
 <p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>+---+---+---+---+---+---+---+---+</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>|   |   |   |  
-|   |   |   |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>|Â Â  |Â Â  |Â Â  |Â Â 
+|Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
 <p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>| X | X | X | X
 | X | X | X | X |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>|   |   |   |  
-|   |   |   |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>|Â Â  |Â Â  |Â Â  |Â Â 
+|Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
 <p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>+---+---+---+---+---+---+---+---+</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>|   |   |   |  
-|   |   |   |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>|Â Â  |Â Â  |Â Â  |Â Â 
+|Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
 <p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>| X | X | X | X
 | X | X | X | X |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>|   |   |   |  
-|   |   |   |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>|Â Â  |Â Â  |Â Â  |Â Â 
+|Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
 <p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>+---+---+---+---+---+---+---+---+</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>|   |   |   |  
-|   |   |   |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>|Â Â  |Â Â  |Â Â  |Â Â 
+|Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
 <p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>| X | X | X | X
 | X | X | X | X |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>|   |   |   |  
-|   |   |   |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>|Â Â  |Â Â  |Â Â  |Â Â 
+| Â Â |Â Â  |Â Â  |Â Â  |</p>
 
 <p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>+---+---+---+---+---+---+---+---+</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>|   |   |   |  
-|   |   |   |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>|Â Â  |Â Â  |Â Â  |Â Â 
+|Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
 <p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>| X | X | X | X
 | X | X | X | X |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>|   |   |   |  
-|   |   |   |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>|Â Â  |Â Â  |Â Â  |Â Â 
+|Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
 <p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>+---+---+---+---+---+---+---+---+</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>|   |   |   |  
-|   |   |   |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>|Â Â  |Â Â  |Â Â  |Â Â 
+|Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
 <p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>| X | X | X | X
 | X | X | X | X |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>|   |   |   |  
-|   |   |   |   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>| Â Â |Â Â  |Â Â  |Â Â 
+|Â Â  |Â Â  |Â Â  |Â Â  |</p>
 
 <p class=CodeExampleCxSpLast style='border:none;padding:0in'>+---+---+---+---+---+---+---+---+</p>
 
@@ -2356,20 +2356,20 @@ instead of <span class=Literal><span style='font-size:9.0pt;line-height:115%'>'X
 
 <div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
 
-<p class=SourceCodeCxSpFirst><span class=SourceLineNumber> 23.</span> def
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>Â 23.</span> def
 resetBoard(board):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 24.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 24.</span>Â Â Â Â  <span
 class=SourceCodeComment># Blanks out the board it is passed, except for the
 original starting position.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 25.</span>     for
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 25.</span>Â Â Â Â  for
 x in range(8):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 26.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 26.</span>Â Â Â Â Â Â Â Â 
 for y in range(8):</p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber> 27.</span>            
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>Â 27.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 board[x][y] = ' '</p>
 
 </div>
@@ -2384,19 +2384,19 @@ function is called as part of starting a new game.</p>
 
 <div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
 
-<p class=SourceCodeCxSpFirst><span class=SourceLineNumber> 29.</span>     <span
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>Â 29.</span>Â Â Â Â  <span
 class=SourceCodeComment># Starting pieces:</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 30.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 30.</span>Â Â Â Â 
 board[3][3] = 'X'</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 31.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 31.</span>Â Â Â Â 
 board[3][4] = 'O'</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 32.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 32.</span>Â Â Â Â 
 board[4][3] = 'O'</p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber> 33.</span>    
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>Â 33.</span>Â Â Â Â 
 board[4][4] = 'X'</p>
 
 </div>
@@ -2409,31 +2409,31 @@ laid down in the center. Lines 30 to 33 set those tiles on the blank board.</p>
 class=Literal><span style='font-size:9.0pt;line-height:115%'>board</span></span>
 variable, because <span class=Literal><span style='font-size:9.0pt;line-height:
 115%'>board</span></span> is a reference to a list. Making changes inside the
-function’s local scope will modify the original list that was passed as the
+functionâ€™s local scope will modify the original list that was passed as the
 argument. (See the References section in Chapter 10.)</p>
 
 <p class=Non-TOCHeading3>Creating a New Game Board Data Structure</p>
 
 <div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
 
-<p class=SourceCodeCxSpFirst><span class=SourceLineNumber> 36.</span> def
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>Â 36.</span> def
 getNewBoard():</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 37.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 37.</span>Â Â Â Â  <span
 class=SourceCodeComment># Creates a brand new, blank board data structure.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 38.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 38.</span>Â Â Â Â 
 board = []</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 39.</span>     for
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 39.</span>Â Â Â Â  for
 i in range(8):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 40.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 40.</span>Â Â Â Â Â Â Â Â 
 board.append([' '] * 8)</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 41.</span></p>
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 41.</span></p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber> 42.</span>     return
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>Â 42.</span>Â Â Â Â  return
 board</p>
 
 </div>
@@ -2447,7 +2447,7 @@ evaluates to be the same as <span class=Literal><span style='font-size:9.0pt;
 line-height:115%'>[' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']</span></span> but
 with less typing.) </p>
 
-<p class=Body>Line 39’s <span class=Literal><span style='font-size:9.0pt;
+<p class=Body>Line 39â€™s <span class=Literal><span style='font-size:9.0pt;
 line-height:115%'>for</span></span> loop here creates the eight inner lists.
 The spaces represent a completely empty game board.</p>
 
@@ -2461,70 +2461,70 @@ strings.</p>
 
 <div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
 
-<p class=SourceCodeCxSpFirst><span class=SourceLineNumber> 45.</span> def
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>Â 45.</span> def
 isValidMove(board, tile, xstart, ystart):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 46.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 46.</span>Â Â Â Â  <span
 class=SourceCodeComment># Returns False if the player's move on space xstart,
 ystart is invalid.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 47.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 47.</span>Â Â Â Â  <span
 class=SourceCodeComment># If it is a valid move, returns a list of spaces that
 would become the player's if they made a move here.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 48.</span>     if
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 48.</span>Â Â Â Â  if
 board[xstart][ystart] != ' ' or not isOnBoard(xstart, ystart):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 49.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 49.</span>Â Â Â Â Â Â Â Â 
 return False</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 50.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 50.</span>Â Â Â Â 
 board[xstart][ystart] = tile <span class=SourceCodeComment># temporarily set
 the tile on the board.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 51.</span>     if
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 51.</span>Â Â Â Â  if
 tile == 'X':</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 52.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 52.</span>Â Â Â Â Â Â Â Â 
 otherTile = 'O'</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 53.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 53.</span>Â Â Â Â 
 else:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 54.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 54.</span>Â Â Â Â Â Â Â Â 
 otherTile = 'X'</p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber> 55.</span>    
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>Â 55.</span>Â Â Â Â 
 tilesToFlip = []</p>
 
 </div>
 
-<p class=Body>Given a board data structure, the player’s tile, and the XY
-coordinates for player’s move, <span class=Literal><span style='font-size:9.0pt;
+<p class=Body>Given a board data structure, the playerâ€™s tile, and the XY
+coordinates for playerâ€™s move, <span class=Literal><span style='font-size:9.0pt;
 line-height:115%'>isValidMove()</span></span> should return <span
 class=Literal><span style='font-size:9.0pt;line-height:115%'>True</span></span>
 if the Reversi game rules allow a move to those coordinates and <span
 class=Literal><span style='font-size:9.0pt;line-height:115%'>False</span></span>
-if they don’t.</p>
+if they donâ€™t.</p>
 
 <p class=Body>Line 48 checks if the XY coordinates are not on the game board,
-or if the space isn’t empty. <span class=Literal><span style='font-size:9.0pt;
+or if the space isnâ€™t empty. <span class=Literal><span style='font-size:9.0pt;
 line-height:115%'>isOnBoard()</span></span> is a function defined later in the
 program that makes sure both the X and Y coordinates are between <span
 class=Literal><span style='font-size:9.0pt;line-height:115%'>0</span></span>
 and <span class=Literal><span style='font-size:9.0pt;line-height:115%'>7</span></span>.</p>
 
-<p class=Body>The next step is to temporarily place the player’s tile on the
+<p class=Body>The next step is to temporarily place the playerâ€™s tile on the
 board. This tile will be removed (by setting the board space back to <span
 class=Literal><span style='font-size:9.0pt;line-height:115%'>' '</span></span>
 before returning).</p>
 
-<p class=MsoNormal>The player’s tile (either the human player or the computer
+<p class=MsoNormal>The playerâ€™s tile (either the human player or the computer
 player) is in <span class=Literal><span style='font-size:9.0pt;line-height:
 115%'>tile</span></span>, but this function will need to know the other
-player’s tile. If the player’s tile is <span class=Literal><span
+playerâ€™s tile. If the playerâ€™s tile is <span class=Literal><span
 style='font-size:9.0pt;line-height:115%'>'X'</span></span> then obviously the
-other player’s tile is <span class=Literal><span style='font-size:9.0pt;
+other playerâ€™s tile is <span class=Literal><span style='font-size:9.0pt;
 line-height:115%'>'O'</span></span>, and vice versa.</p>
 
 <p class=Body>Finally, if the given XY coordinate ends up as a valid position, <span
@@ -2533,7 +2533,7 @@ returns a list of all the opponent's tiles that would be flipped by this move.</
 
 <div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
 
-<p class=SourceCode><span class=SourceLineNumber> 59.</span>     for
+<p class=SourceCode><span class=SourceLineNumber>Â 59.</span>Â Â Â Â  for
 xdirection, ydirection in [[0, 1], [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1],
 [-1, 0], [-1, 1]]:</p>
 
@@ -2549,12 +2549,12 @@ directions. The program moves in a direction by adding the first value in the
 two-item list to the X coordinate, and the second value to the Y coordinate.</p>
 
 <p class=Body>Because the X coordinates increase as you go to the right, you
-can “move” to the right by adding <span class=Literal><span style='font-size:
+can â€œmoveâ€ to the right by adding <span class=Literal><span style='font-size:
 9.0pt;line-height:115%'>1</span></span> to the X coordinate. So the <span
 class=Literal><span style='font-size:9.0pt;line-height:115%'>[1, 0]</span></span>
 list adds <span class=Literal><span style='font-size:9.0pt;line-height:115%'>1</span></span>
 to the X coordinate and <span class=Literal><span style='font-size:9.0pt;
-line-height:115%'>0</span></span> to the Y coordinate, resulting in “movement”
+line-height:115%'>0</span></span> to the Y coordinate, resulting in â€œmovementâ€
 to the right. Moving to the left is the opposite: you would subtract <span
 class=Literal><span style='font-size:9.0pt;line-height:115%'>1</span></span>
 (that is, add <span class=Literal><span style='font-size:9.0pt;line-height:
@@ -2581,17 +2581,17 @@ directions.</p>
 
 <div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
 
-<p class=SourceCodeCxSpFirst><span class=SourceLineNumber> 59.</span>     for
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>Â 59.</span>Â Â Â Â  for
 xdirection, ydirection in [[0, 1], [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1],
 [-1, 0], [-1, 1]]:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 60.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 60.</span>Â Â Â Â Â Â Â Â 
 x, y = xstart, ystart</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 61.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 61.</span>Â Â Â Â Â Â Â Â 
 x += xdirection <span class=SourceCodeComment># first step in the direction</span></p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber> 62.</span>         y
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>Â 62.</span>Â Â Â Â Â Â Â Â  y
 += ydirection <span class=SourceCodeComment># first step in the direction</span></p>
 
 </div>
@@ -2604,7 +2604,7 @@ same value as <span class=Literal><span style='font-size:9.0pt;line-height:
 line-height:115%'>ystart</span></span>, respectively, using multiple
 assignment. Change <span class=Literal><span style='font-size:9.0pt;line-height:
 115%'>x</span></span> and <span class=Literal><span style='font-size:9.0pt;
-line-height:115%'>y</span></span> to “move” in the direction that <span
+line-height:115%'>y</span></span> to â€œmoveâ€ in the direction that <span
 class=Literal><span style='font-size:9.0pt;line-height:115%'>xdirection</span></span>
 and <span class=Literal><span style='font-size:9.0pt;line-height:115%'>ydirection</span></span>
 dictate. The <span class=Literal><span style='font-size:9.0pt;line-height:115%'>xstart</span></span>
@@ -2614,63 +2614,63 @@ originally started from.</p>
 
 <div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
 
-<p class=SourceCodeCxSpFirst><span class=SourceLineNumber> 63.</span>        
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>Â 63.</span>Â Â Â Â Â Â Â Â 
 if isOnBoard(x, y) and board[x][y] == otherTile:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 64.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 64.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 <span class=SourceCodeComment># There is a piece belonging to the other player
 next to our piece.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 65.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 65.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 x += xdirection</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 66.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 66.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 y += ydirection</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 67.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 67.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 if not isOnBoard(x, y):</p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber> 68.</span>                
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>Â 68.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 continue</p>
 
 </div>
 
 <p class=Body>Remember, in order for this to be a valid move, the first step in
 this direction must be 1) on the board and 2) must be occupied by the other
-player’s tile. Otherwise there aren’t any of the opponent’s tiles to flip, and
-a valid move must flip over at least one tile. If these two things aren’t true,
-line 63’s condition isn’t <span class=Literal><span style='font-size:9.0pt;
+playerâ€™s tile. Otherwise there arenâ€™t any of the opponentâ€™s tiles to flip, and
+a valid move must flip over at least one tile. If these two things arenâ€™t true,
+line 63â€™s condition isnâ€™t <span class=Literal><span style='font-size:9.0pt;
 line-height:115%'>True</span></span> and the execution goes back to the <span
 class=Literal><span style='font-size:9.0pt;line-height:115%'>for</span></span>
 statement for the next direction.</p>
 
-<p class=Body>But if the first space does have the other player’s tile, then
+<p class=Body>But if the first space does have the other playerâ€™s tile, then
 the program should keep checking in that direction until it reaches one of the
-player’s tiles. If it reaches past the end of the board though, then line 68
+playerâ€™s tiles. If it reaches past the end of the board though, then line 68
 should continue back to the <span class=Literal><span style='font-size:9.0pt;
 line-height:115%'>for</span></span> statement to try the next direction.</p>
 
 <div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
 
-<p class=SourceCodeCxSpFirst><span class=SourceLineNumber> 69.</span>            
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>Â 69.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 while board[x][y] == otherTile:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 70.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 70.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 x += xdirection</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 71.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 71.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 y += ydirection</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 72.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 72.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 if not isOnBoard(x, y): <span class=SourceCodeComment># break out of while
 loop, then continue in for loop</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 73.</span>                     break</p>
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 73.</span>Â Â Â Â Â  Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â break</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 74.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 74.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 if not isOnBoard(x, y):</p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber> 75.</span>                
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>Â 75.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 continue</p>
 
 </div>
@@ -2680,7 +2680,7 @@ continue</p>
 class=Literal><span style='font-size:9.0pt;line-height:115%'>x</span></span>
 and <span class=Literal><span style='font-size:9.0pt;line-height:115%'>y</span></span>
 keep going in the current direction as long as it keeps seeing a trail of the
-other player’s tiles. If line 72 detects that <span class=Literal><span
+other playerâ€™s tiles. If line 72 detects that <span class=Literal><span
 style='font-size:9.0pt;line-height:115%'>x</span></span> and <span
 class=Literal><span style='font-size:9.0pt;line-height:115%'>y</span></span>
 moved off of the board, line 73 breaks out of the <span class=Literal><span
@@ -2694,7 +2694,7 @@ line-height:115%'>for</span></span> loop. This is why line 74 rechecks <span
 class=Literal><span style='font-size:9.0pt;line-height:115%'>not isOnBoard(x,
 y)</span></span> and runs <span class=Literal><span style='font-size:9.0pt;
 line-height:115%'>continue</span></span>, which moves execution to the next
-direction in line 59’s <span class=Literal><span style='font-size:9.0pt;
+direction in line 59â€™s <span class=Literal><span style='font-size:9.0pt;
 line-height:115%'>for</span></span> statement. Remember, <span class=Literal><span
 style='font-size:9.0pt;line-height:115%'>break</span></span> and <span
 class=Literal><span style='font-size:9.0pt;line-height:115%'>continue</span></span>
@@ -2704,35 +2704,35 @@ statements will only break or continue from the innermost loop they are in.</p>
 
 <div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
 
-<p class=SourceCodeCxSpFirst><span class=SourceLineNumber> 76.</span>            
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>Â 76.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 if board[x][y] == tile:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 77.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 77.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 <span class=SourceCodeComment># There are pieces to flip over. Go in the
 reverse direction until we reach the original space, noting all the tiles along
 the way.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 78.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 78.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 while True:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 79.</span>                    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 79.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 x -= xdirection</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 80.</span>                    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 80.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 y -= ydirection</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 81.</span>                    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 81.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 if x == xstart and y == ystart:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 82.</span>                        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 82.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 break</p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber> 83.</span>                     tilesToFlip.append([x,
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>Â 83.</span>Â Â Â Â  Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â tilesToFlip.append([x,
 y])</p>
 
 </div>
 
-<p class=Body>Line 69’s <span class=Literal><span style='font-size:9.0pt;
+<p class=Body>Line 69â€™s <span class=Literal><span style='font-size:9.0pt;
 line-height:115%'>while</span></span> loop stops looping when the code has
 reached the end of the <span class=Literal><span style='font-size:9.0pt;
 line-height:115%'>otherTile</span></span> tiles. Line 76 checks if this space
@@ -2753,18 +2753,18 @@ line-height:115%'>tilesToFlip</span></span> list.</p>
 
 <div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
 
-<p class=SourceCodeCxSpFirst><span class=SourceLineNumber> 85.</span>    
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>Â 85.</span>Â Â Â Â 
 board[xstart][ystart] = ' ' <span class=SourceCodeComment># restore the empty
 space</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 86.</span>     if
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 86.</span>Â Â Â Â  if
 len(tilesToFlip) == 0: <span class=SourceCodeComment># If no tiles were
 flipped, this is not a valid move.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 87.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 87.</span>Â Â Â Â Â Â Â Â 
 return False</p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber> 88.</span>     return
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>Â 88.</span>Â Â Â Â  return
 tilesToFlip</p>
 
 </div>
@@ -2773,16 +2773,16 @@ tilesToFlip</p>
 115%'>for</span></span> loop that started on line 59 does this in all eight
 directions. After that loop is done, the <span class=Literal><span
 style='font-size:9.0pt;line-height:115%'>tilesToFlip</span></span> list will
-contain the XY coordinates all of our opponent’s tiles that would be flipped if
+contain the XY coordinates all of our opponentâ€™s tiles that would be flipped if
 the player moved on <span class=Literal><span style='font-size:9.0pt;
 line-height:115%'>xstart</span></span>, <span class=Literal><span
 style='font-size:9.0pt;line-height:115%'>ystart</span></span>. Remember, the <span
 class=Literal><span style='font-size:9.0pt;line-height:115%'>isValidMove()</span></span>
-function is only checking to see if the original move was valid. It doesn’t
+function is only checking to see if the original move was valid. It doesnâ€™t
 actually permanently change the data structure of the game board.</p>
 
 <p class=Body>If none of the eight directions ended up flipping at least one of
-the opponent’s tiles, then <span class=Literal><span style='font-size:9.0pt;
+the opponentâ€™s tiles, then <span class=Literal><span style='font-size:9.0pt;
 line-height:115%'>tilesToFlip</span></span> will be an empty list. This is a
 sign that this move is not valid and <span class=Literal><span
 style='font-size:9.0pt;line-height:115%'>isValidMove()</span></span> should
@@ -2801,14 +2801,14 @@ style='font-size:9.0pt;line-height:115%'>tilesToFlip</span></span>.</p>
 
 <div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
 
-<p class=SourceCodeCxSpFirst><span class=SourceLineNumber> 91.</span> def
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>Â 91.</span> def
 isOnBoard(x, y):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 92.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 92.</span>Â Â Â Â  <span
 class=SourceCodeComment># Returns True if the coordinates are located on the
 board.</span></p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber> 93.</span>     return
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>Â 93.</span>Â Â Â Â  return
 x &gt;= 0 and x &lt;= 7 and y &gt;= 0 and y &lt;=7</p>
 
 </div>
@@ -2833,25 +2833,25 @@ class=Literal><span style='font-size:9.0pt;line-height:115%'>7</span></span>.</p
 
 <div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
 
-<p class=SourceCodeCxSpFirst><span class=SourceLineNumber> 96.</span> def
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>Â 96.</span> def
 getBoardWithValidMoves(board, tile):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 97.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 97.</span>Â Â Â Â  <span
 class=SourceCodeComment># Returns a new board with . marking the valid moves
 the given player can make.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 98.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 98.</span>Â Â Â Â 
 dupeBoard = getBoardCopy(board)</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 99.</span></p>
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 99.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>100.</span>     for
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>100.</span>Â Â Â Â  for
 x, y in getValidMoves(dupeBoard, tile):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>101.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>101.</span>Â Â Â Â Â Â Â Â 
 dupeBoard[x][y] = '.'</p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber>102.</span>     return
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>102.</span>Â Â Â Â  return
 dupeBoard</p>
 
 </div>
@@ -2878,28 +2878,28 @@ periods in those spaces and returned.</p>
 <p class=SourceCodeCxSpFirst><span class=SourceLineNumber>105.</span> def
 getValidMoves(board, tile):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>106.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>106.</span>Â Â Â Â  <span
 class=SourceCodeComment># Returns a list of [x,y] lists of valid moves for the
 given player on the given board.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>107.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>107.</span>Â Â Â Â 
 validMoves = []</p>
 
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>108.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>109.</span>     for
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>109.</span>Â Â Â Â  for
 x in range(8):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>110.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>110.</span>Â Â Â Â Â Â Â Â 
 for y in range(8):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>111.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>111.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 if isValidMove(board, tile, x, y) != False:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>112.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>112.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 validMoves.append([x, y])</p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber>113.</span>     return
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>113.</span>Â Â Â Â  return
 validMoves</p>
 
 </div>
@@ -2907,7 +2907,7 @@ validMoves</p>
 <p class=Body>The <span class=Literal><span style='font-size:9.0pt;line-height:
 115%'>getValidMoves()</span></span> function returns a list of two-item lists.
 These lists hold the XY coordinates for all valid moves for <span
-class=Literal><span style='font-size:9.0pt;line-height:115%'>tile</span></span>’s
+class=Literal><span style='font-size:9.0pt;line-height:115%'>tile</span></span>â€™s
 player for the board data structure in the <span class=Literal><span
 style='font-size:9.0pt;line-height:115%'>board</span></span> parameter.</p>
 
@@ -2991,7 +2991,7 @@ bool({'spam':'cheese', 'fizz':'buzz'})</p>
 
 </div>
 
-<p class=Body>Imagine that any statement’s condition is placed inside a call to
+<p class=Body>Imagine that any statementâ€™s condition is placed inside a call to
 <span class=Literal><span style='font-size:9.0pt;line-height:115%'>bool()</span></span>.
 That is, conditions are automatically interpreted as Boolean values. This is
 why the condition on line 111 works correctly. The call to the <span
@@ -3001,7 +3001,7 @@ style='font-size:9.0pt;line-height:115%'>False</span></span> or a non-empty
 list.<br>
 If you imagine that the entire condition is placed inside a call to <span
 class=Literal><span style='font-size:9.0pt;line-height:115%'>bool()</span></span>,
-then line 111’s condition <span class=Literal><span style='font-size:9.0pt;
+then line 111â€™s condition <span class=Literal><span style='font-size:9.0pt;
 line-height:115%'>False</span></span> becomes <span class=Literal><span
 style='font-size:9.0pt;line-height:115%'>bool(False)</span></span> (which, of
 course, evaluates to <span class=Literal><span style='font-size:9.0pt;
@@ -3017,35 +3017,35 @@ style='font-size:9.0pt;line-height:115%'>True</span></span>.</p>
 <p class=SourceCodeCxSpFirst><span class=SourceLineNumber>116.</span> def
 getScoreOfBoard(board):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>117.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>117.</span>Â Â Â Â  <span
 class=SourceCodeComment># Determine the score by counting the tiles. Returns a
 dictionary with keys 'X' and 'O'.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>118.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>118.</span>Â Â Â Â 
 xscore = 0</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>119.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>119.</span>Â Â Â Â 
 oscore = 0</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>120.</span>     for
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>120.</span>Â Â Â Â  for
 x in range(8):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>121.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>121.</span>Â Â Â Â Â Â Â Â 
 for y in range(8):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>122.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>122.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 if board[x][y] == 'X':</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>123.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>123.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 xscore += 1</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>124.</span>             if
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>124.</span>Â Â Â Â Â  Â Â Â Â Â Â Â if
 board[x][y] == 'O':</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>125.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>125.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 oscore += 1</p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber>126.</span>     return
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>126.</span>Â Â Â Â  return
 {'X':xscore, 'O':oscore}</p>
 
 </div>
@@ -3062,30 +3062,30 @@ line-height:115%'>'O'</span></span> tile, the code increments <span
 class=Literal><span style='font-size:9.0pt;line-height:115%'>oscore</span></span>
 on line 125</p>
 
-<p class=Non-TOCHeading3>Getting the Player’s Tile Choice</p>
+<p class=Non-TOCHeading3>Getting the Playerâ€™s Tile Choice</p>
 
 <div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
 
 <p class=SourceCodeCxSpFirst><span class=SourceLineNumber>129.</span> def
 enterPlayerTile():</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>130.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>130.</span>Â Â Â Â  <span
 class=SourceCodeComment># Lets the player type which tile they want to be.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>131.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>131.</span>Â Â Â Â  <span
 class=SourceCodeComment># Returns a list with the player's tile as the first
 item, and the computer's tile as the second.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>132.</span>     tile
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>132.</span>Â Â Â Â  tile
 = ''</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>133.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>133.</span>Â Â Â Â 
 while not (tile == 'X' or tile == 'O'):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>134.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>134.</span>Â Â Â Â Â Â Â Â 
 print('Do you want to be X or O?')</p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber>135.</span>        
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>135.</span>Â Â Â Â Â Â Â Â 
 tile = input().upper()</p>
 
 </div>
@@ -3100,27 +3100,27 @@ class=Literal><span style='font-size:9.0pt;line-height:115%'>'O'</span></span>.<
 
 <div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
 
-<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>137.</span>     <span
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>137.</span>Â Â Â Â  <span
 class=SourceCodeComment># the first element in the list is the player's tile,
 the second is the computer's tile.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>138.</span>     if
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>138.</span>Â Â Â Â  if
 tile == 'X':</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>139.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>139.</span>Â Â Â Â Â Â Â Â 
 return ['X', 'O']</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>140.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>140.</span>Â Â Â Â 
 else:</p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber>141.</span>        
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>141.</span>Â Â Â Â Â Â Â Â 
 return ['O', 'X']</p>
 
 </div>
 
 <p class=Body>The <span class=Literal><span style='font-size:9.0pt;line-height:
 115%'>enterPlayerTile()</span></span> function then returns a two-item list,
-where the player’s tile choice is the first item and the computer’s tile is the
+where the playerâ€™s tile choice is the first item and the computerâ€™s tile is the
 second. Line 252, which calls <span class=Literal><span style='font-size:9.0pt;
 line-height:115%'>enterPlayerTile()</span></span>, uses multiple assignment to
 put these two returned items in two variables.</p>
@@ -3132,19 +3132,19 @@ put these two returned items in two variables.</p>
 <p class=SourceCodeCxSpFirst><span class=SourceLineNumber>144.</span> def
 whoGoesFirst():</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>145.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>145.</span>Â Â Â Â  <span
 class=SourceCodeComment># Randomly choose the player who goes first.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>146.</span>     if
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>146.</span>Â Â Â Â  if
 random.randint(0, 1) == 0:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>147.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>147.</span>Â Â Â Â Â Â Â Â 
 return 'computer'</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>148.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>148.</span>Â Â Â Â 
 else:</p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber>149.</span>        
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>149.</span>Â Â Â Â Â Â Â Â 
 return 'player'</p>
 
 </div>
@@ -3162,14 +3162,14 @@ style='font-size:9.0pt;line-height:115%'>'player'</span></span>.</p>
 <p class=SourceCodeCxSpFirst><span class=SourceLineNumber>152.</span> def
 playAgain():</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>153.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>153.</span>Â Â Â Â  <span
 class=SourceCodeComment># This function returns True if the player wants to
 play again, otherwise it returns False.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>154.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>154.</span>Â Â Â Â 
 print('Do you want to play again? (yes or no)')</p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber>155.</span>     return
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>155.</span>Â Â Â Â  return
 input().lower().startswith('y')</p>
 
 </div>
@@ -3189,15 +3189,15 @@ line-height:115%'>False</span></span>.</p>
 <p class=SourceCodeCxSpFirst><span class=SourceLineNumber>158.</span> def
 makeMove(board, tile, xstart, ystart):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>159.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>159.</span>Â Â Â Â  <span
 class=SourceCodeComment># Place the tile on the board at xstart, ystart, and
 flip any of the opponent's pieces.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>160.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>160.</span>Â Â Â Â  <span
 class=SourceCodeComment># Returns False if this is an invalid move, True if it
 is valid.</span></p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber>161.</span>    
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>161.</span>Â Â Â Â 
 tilesToFlip = isValidMove(board, tile, xstart, ystart)</p>
 
 </div>
@@ -3222,24 +3222,24 @@ class=Literal><span style='font-size:9.0pt;line-height:115%'>False</span></span>
 
 <div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
 
-<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>163.</span>     if
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>163.</span>Â Â Â Â  if
 tilesToFlip == False:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>164.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>164.</span>Â Â Â Â Â Â Â Â 
 return False</p>
 
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>165. </span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>166.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>166.</span>Â Â Â Â 
 board[xstart][ystart] = tile</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>167.</span>     for
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>167.</span>Â Â Â Â  for
 x, y in tilesToFlip:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>168.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>168.</span>Â Â Â Â Â Â Â Â 
 board[x][y] = tile</p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber>169.</span>     return
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>169.</span>Â Â Â Â  return
 True</p>
 
 </div>
@@ -3258,7 +3258,7 @@ board to put down the tiles (the <span class=Literal><span style='font-size:
 9.0pt;line-height:115%'>'X'</span></span> or <span class=Literal><span
 style='font-size:9.0pt;line-height:115%'>'O'</span></span> string in <span
 class=Literal><span style='font-size:9.0pt;line-height:115%'>tile</span></span>).
-Line 166 sets the space that the player has moved on. Line 167’s <span
+Line 166 sets the space that the player has moved on. Line 167â€™s <span
 class=Literal><span style='font-size:9.0pt;line-height:115%'>for</span></span>
 loop sets all the tiles that are in <span class=Literal><span style='font-size:
 9.0pt;line-height:115%'>tilesToFlip</span></span>.</p>
@@ -3269,27 +3269,27 @@ loop sets all the tiles that are in <span class=Literal><span style='font-size:
 
 <p class=SourceCodeCxSpFirst><span class=SourceLineNumber>172.</span> def getBoardCopy(board):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>173.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>173.</span>Â Â Â Â  <span
 class=SourceCodeComment># Make a duplicate of the board list and return the
 duplicate.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>174.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>174.</span>Â Â Â Â 
 dupeBoard = getNewBoard()</p>
 
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>175.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>176.</span>     for
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>176.</span>Â Â Â Â  for
 x in range(8):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>177.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>177.</span>Â Â Â Â Â Â Â Â 
 for y in range(8):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>178.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>178.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 dupeBoard[x][y] = board[x][y]</p>
 
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>179.</span></p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber>180.</span>     return
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>180.</span>Â Â Â Â  return
 dupeBoard</p>
 
 </div>
@@ -3323,11 +3323,11 @@ class=Literal><span style='font-size:9.0pt;line-height:115%'>dupeBoard</span></s
 <p class=SourceCodeCxSpFirst><span class=SourceLineNumber>183.</span> def
 isOnCorner(x, y):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>184.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>184.</span>Â Â Â Â  <span
 class=SourceCodeComment># Returns True if the position is in one of the four
 corners.</span></p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber>185.</span>     return
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>185.</span>Â Â Â Â  return
 (x == 0 and y == 0) or (x == 7 and y == 0) or (x == 0 and y == 7) or (x == 7
 and y == 7)</p>
 
@@ -3340,21 +3340,21 @@ are on a corner space at coordinates (0,0), (7,0), (0,7) or (7,7). Otherwise <sp
 class=Literal><span style='font-size:9.0pt;line-height:115%'>isOnCorner()</span></span>
 returns <span class=Literal><span style='font-size:9.0pt;line-height:115%'>False</span></span>.</p>
 
-<p class=Non-TOCHeading3>Getting the Player’s Move</p>
+<p class=Non-TOCHeading3>Getting the Playerâ€™s Move</p>
 
 <div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
 
 <p class=SourceCodeCxSpFirst><span class=SourceLineNumber>188.</span> def
 getPlayerMove(board, playerTile):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>189.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>189.</span>Â Â Â Â  <span
 class=SourceCodeComment># Let the player type in their move.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>190.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>190.</span>Â Â Â Â  <span
 class=SourceCodeComment># Returns the move as [x, y] (or returns the strings
 'hints' or 'quit')</span></p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber>191.</span>    
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>191.</span>Â Â Â Â 
 DIGITS1TO8 = '1 2 3 4 5 6 7 8'.split()</p>
 
 </div>
@@ -3372,33 +3372,33 @@ style='font-size:9.0pt;line-height:115%'>'quit'</span></span> to quit the game.<
 class=Literal><span style='font-size:9.0pt;line-height:115%'>['1', '2', '3',
 '4', '5', '6', '7', '8']</span></span>. The <span class=Literal><span
 style='font-size:9.0pt;line-height:115%'>DIGITS1TO8</span></span> constant is
-used because it is easier to type than the entire list. You can’t use the <span
+used because it is easier to type than the entire list. You canâ€™t use the <span
 class=Literal><span style='font-size:9.0pt;line-height:115%'>isdigit()</span></span>
 method because that would allow 0 and 9 to be entered, which are not valid
-coordinates on the 8 × 8 board.</p>
+coordinates on the 8 Ã— 8 board.</p>
 
 <div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
 
-<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>192.</span>     while
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>192.</span>Â Â Â Â  while
 True:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>193.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>193.</span>Â Â Â Â Â Â Â Â 
 print('Enter your move, or type quit to end the game, or hints to turn off/on
 hints.')</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>194.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>194.</span>Â Â Â Â Â Â Â Â 
 move = input().lower()</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>195.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>195.</span>Â Â Â Â Â Â Â Â 
 if move == 'quit':</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>196.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>196.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 return 'quit'</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>197.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>197.</span>Â Â Â Â Â Â Â Â 
 if move == 'hints':</p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber>198.</span>            
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>198.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 return 'hints'</p>
 
 </div>
@@ -3422,25 +3422,25 @@ the player wants to quit or toggle hints mode.</p>
 
 <div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
 
-<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>200.</span>        
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>200.</span>Â Â Â Â Â Â Â Â 
 if len(move) == 2 and move[0] in DIGITS1TO8 and move[1] in DIGITS1TO8:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>201.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>201.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 x = int(move[0]) - 1</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>202.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>202.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 y = int(move[1]) - 1</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>203.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>203.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 if isValidMove(board, playerTile, x, y) == False:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>204.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>204.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 continue</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>205.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>205.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 else:</p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber>206.</span>                
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>206.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 break</p>
 
 </div>
@@ -3468,12 +3468,12 @@ lines 201 and 202 subtract 1.</p>
 <p class=Body>Even if the player typed in a correct move, the code still needs
 to check that the move is allowed by the rules of Reversi. This is done by <span
 class=Literal><span style='font-size:9.0pt;line-height:115%'>isValidMove()</span></span>
-which is passed the game board data structure, the player’s tile, and the XY
+which is passed the game board data structure, the playerâ€™s tile, and the XY
 coordinates of the move.</p>
 
 <p class=Body>If <span class=Literal><span style='font-size:9.0pt;line-height:
 115%'>isValidMove()</span></span> returns <span class=Literal><span
-style='font-size:9.0pt;line-height:115%'>False</span></span>, then line 204’s <span
+style='font-size:9.0pt;line-height:115%'>False</span></span>, then line 204â€™s <span
 class=Literal><span style='font-size:9.0pt;line-height:115%'>continue</span></span>
 statement executes. The execution will then go back to the beginning of the <span
 class=Literal><span style='font-size:9.0pt;line-height:115%'>while</span></span>
@@ -3485,51 +3485,51 @@ line-height:115%'>while</span></span> loop.</p>
 
 <div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
 
-<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>207.</span>        
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>207.</span>Â Â Â Â Â Â Â Â 
 else:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>208.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>208.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 print('That is not a valid move. Type the x digit (1-8), then the y digit
 (1-8).')</p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber>209.</span>            
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>209.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 print('For example, 81 will be the top-right corner.')</p>
 
 </div>
 
 <p class=Body>If the <span class=Literal><span style='font-size:9.0pt;
-line-height:115%'>if</span></span> statement’s condition on line 200 was <span
+line-height:115%'>if</span></span> statementâ€™s condition on line 200 was <span
 class=Literal><span style='font-size:9.0pt;line-height:115%'>False</span></span>,
-then the player didn’t type in a valid move. Lines 208 and 209 instructs them
+then the player didnâ€™t type in a valid move. Lines 208 and 209 instructs them
 on how to correctly type in moves. Afterwards, the execution moves back to the <span
 class=Literal><span style='font-size:9.0pt;line-height:115%'>while</span></span>
-statement on line 192 because line 209 isn’t only the last line in the
+statement on line 192 because line 209 isnâ€™t only the last line in the
 else-block, but also the last line in the while-block.</p>
 
 <div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
 
-<p class=SourceCode><span class=SourceLineNumber>211.</span>     return [x, y]</p>
+<p class=SourceCode><span class=SourceLineNumber>211.</span>Â Â Â Â  return [x, y]</p>
 
 </div>
 
 <p class=Body>Finally, <span class=Literal><span style='font-size:9.0pt;
 line-height:115%'>getPlayerMove()</span></span> returns a two-item list with
-the XY coordinates of the player’s valid move.</p>
+the XY coordinates of the playerâ€™s valid move.</p>
 
-<p class=Non-TOCHeading3>Getting the Computer’s Move</p>
+<p class=Non-TOCHeading3>Getting the Computerâ€™s Move</p>
 
 <div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
 
 <p class=SourceCodeCxSpFirst><span class=SourceLineNumber>214.</span> def
 getComputerMove(board, computerTile):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>215.</span>     #
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>215.</span>Â Â Â Â  #
 Given a board and the computer's tile, determine where to</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>216.</span>     #
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>216.</span>Â Â Â Â  #
 move and return that move as a [x, y] list.</p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber>217.</span>    
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>217.</span>Â Â Â Â 
 possibleMoves = getValidMoves(board, computerTile)</p>
 
 </div>
@@ -3544,16 +3544,16 @@ show the player all the potential moves they can make. </p>
 
 <p class=Body>But if <span class=Literal><span style='font-size:9.0pt;
 line-height:115%'>getValidMoves()</span></span> is called with the computer
-AI’s tile (in <span class=Literal><span style='font-size:9.0pt;line-height:
+AIâ€™s tile (in <span class=Literal><span style='font-size:9.0pt;line-height:
 115%'>computerTile</span></span>), it will also find all the possible moves
 that the computer can make. The AI will select the best move from this list.</p>
 
 <div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
 
-<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>219.</span>     <span
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>219.</span>Â Â Â Â  <span
 class=SourceCodeComment># randomize the order of the possible moves</span></p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber>220.</span>    
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>220.</span>Â Â Â Â 
 random.shuffle(possibleMoves)</p>
 
 </div>
@@ -3563,22 +3563,22 @@ line-height:115%'>random.shuffle()</span></span> will randomize the order of
 moves in the <span class=Literal><span style='font-size:9.0pt;line-height:115%'>possibleMoves</span></span>
 list. Why we want to shuffle the <span class=Literal><span style='font-size:
 9.0pt;line-height:115%'>possibleMoves</span></span> list will be explained
-later, but first let’s look at the algorithm.</p>
+later, but first letâ€™s look at the algorithm.</p>
 
 <p class=Non-TOCHeading3>Corner Moves are the Best Moves</p>
 
 <div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
 
-<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>222.</span>     <span
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>222.</span>Â Â Â Â  <span
 class=SourceCodeComment># always go for a corner if available.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>223.</span>     for
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>223.</span>Â Â Â Â  for
 x, y in possibleMoves:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>224.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>224.</span>Â Â Â Â Â Â Â Â 
 if isOnCorner(x, y):</p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber>225.</span>            
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>225.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 return [x, y]</p>
 
 </div>
@@ -3604,41 +3604,41 @@ random which corner move is first in the list.</p>
 
 <div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
 
-<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>227.</span>     <span
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>227.</span>Â Â Â Â  <span
 class=SourceCodeComment># Go through all the possible moves and remember the
 best scoring move</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>228.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>228.</span>Â Â Â Â 
 bestScore = -1</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>229.</span>     for
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>229.</span>Â Â Â Â  for
 x, y in possibleMoves:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>230.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>230.</span>Â Â Â Â Â Â Â Â 
 dupeBoard = getBoardCopy(board)</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>231.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>231.</span>Â Â Â Â Â Â Â Â 
 makeMove(dupeBoard, computerTile, x, y)</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>232.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>232.</span>Â Â Â Â Â Â Â Â 
 score = getScoreOfBoard(dupeBoard)[computerTile]</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>233.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>233.</span>Â Â Â Â Â Â Â Â 
 if score &gt; bestScore:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>234.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>234.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 bestMove = [x, y]</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>235.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>235.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 bestScore = score</p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber>236.</span>     return
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>236.</span>Â Â Â Â  return
 bestMove</p>
 
 </div>
 
 <p class=Body>If there are no corner moves, loop through the entire list and
-find out which move results in the highest score. Line 229’s <span
+find out which move results in the highest score. Line 229â€™s <span
 class=Literal><span style='font-size:9.0pt;line-height:115%'>for</span></span>
 loop will set <span class=Literal><span style='font-size:9.0pt;line-height:
 115%'>x</span></span> and <span class=Literal><span style='font-size:9.0pt;
@@ -3647,7 +3647,7 @@ style='font-size:9.0pt;line-height:115%'>possibleMoves</span></span>. <span
 class=Literal><span style='font-size:9.0pt;line-height:115%'>bestMove</span></span>
 is set to the highest scoring move the code has found so far, and <span
 class=Literal><span style='font-size:9.0pt;line-height:115%'>bestScore</span></span>
-is set to the best move’s score.</p>
+is set to the best moveâ€™s score.</p>
 
 <p class=Body>When the code in the loop finds a move that scores higher than <span
 class=Literal><span style='font-size:9.0pt;line-height:115%'>bestScore</span></span>,
@@ -3660,7 +3660,7 @@ Structures</p>
 
 <p class=Body>Before simulating a move, line 230 makes a duplicate game board
 data structure by calling <span class=Literal><span style='font-size:9.0pt;
-line-height:115%'>getBoardCopy()</span></span>. You’ll want a copy so you can
+line-height:115%'>getBoardCopy()</span></span>. Youâ€™ll want a copy so you can
 modify without changing the real game board data structure stored in the <span
 class=Literal><span style='font-size:9.0pt;line-height:115%'>board</span></span>
 variable.</p>
@@ -3670,8 +3670,8 @@ variable.</p>
 (stored in <span class=Literal><span style='font-size:9.0pt;line-height:115%'>dupeBoard</span></span>)
 instead of the real board. This will simulate what would happen on the real
 board if this move was made. <span class=Literal><span style='font-size:9.0pt;
-line-height:115%'>makeMove()</span></span> will handle placing the computer’s
-tile and the flipping the player’s tiles on the duplicate board.</p>
+line-height:115%'>makeMove()</span></span> will handle placing the computerâ€™s
+tile and the flipping the playerâ€™s tiles on the duplicate board.</p>
 
 <p class=Body>Line 232 calls <span class=Literal><span style='font-size:9.0pt;
 line-height:115%'>getScoreOfBoard()</span></span>with the duplicate board,
@@ -3716,8 +3716,8 @@ is set to one of the moves from <span class=Literal><span style='font-size:
 9.0pt;line-height:115%'>possibleMoves</span></span> when it returns.</p>
 
 <p class=Body>Even though the code always chooses the first in the list of
-these tied moves, it’s random because the list order was shuffled on line 220.
-This ensures that the AI won’t be predictable when there’s more than one best
+these tied moves, itâ€™s random because the list order was shuffled on line 220.
+This ensures that the AI wonâ€™t be predictable when thereâ€™s more than one best
 move.</p>
 
 <p class=Non-TOCHeading3>Printing the Scores to the Screen</p>
@@ -3727,13 +3727,13 @@ move.</p>
 <p class=SourceCodeCxSpFirst><span class=SourceLineNumber>239.</span> def
 showPoints(playerTile, computerTile):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>240.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>240.</span>Â Â Â Â  <span
 class=SourceCodeComment># Prints out the current score.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>241.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>241.</span>Â Â Â Â 
 scores = getScoreOfBoard(mainBoard)</p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber>242.</span>    
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>242.</span>Â Â Â Â 
 print('You have %s points. The computer has %s points.' % (scores[playerTile],
 scores[computerTile]))</p>
 
@@ -3742,14 +3742,14 @@ scores[computerTile]))</p>
 <p class=Body><span class=Literal><span style='font-size:9.0pt;line-height:
 115%'>showPoints()</span></span> calls the <span class=Literal><span
 style='font-size:9.0pt;line-height:115%'>getScoreOfBoard()</span></span>
-function and then prints the player’s and computer’s scores. Remember that <span
+function and then prints the playerâ€™s and computerâ€™s scores. Remember that <span
 class=Literal><span style='font-size:9.0pt;line-height:115%'>getScoreOfBoard()</span></span>
 returns a dictionary with the keys <span class=Literal><span style='font-size:
 9.0pt;line-height:115%'>'X'</span></span> and <span class=Literal><span
 style='font-size:9.0pt;line-height:115%'>'O'</span></span> and values of the
 scores for the X and O players.</p>
 
-<p class=Body>That’s all the functions for the Reversi game. The code starting
+<p class=Body>Thatâ€™s all the functions for the Reversi game. The code starting
 on line 246 will implement the actual game and calls these functions as needed.</p>
 
 <p class=Non-TOCHeading3>The Start of the Game</p>
@@ -3764,25 +3764,25 @@ print('Welcome to Reversi!')</p>
 <p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>248.</span> while
 True:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>249.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>249.</span>Â Â Â Â  <span
 class=SourceCodeComment># Reset the board and game.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>250.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>250.</span>Â Â Â Â 
 mainBoard = getNewBoard()</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>251.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>251.</span>Â Â Â Â 
 resetBoard(mainBoard)</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>252.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>252.</span>Â Â Â Â 
 playerTile, computerTile = enterPlayerTile()</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>253.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>253.</span>Â Â Â Â 
 showHints = False</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>254.</span>     turn
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>254.</span>Â Â Â Â  turn
 = whoGoesFirst()</p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber>255.</span>    
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>255.</span>Â Â Â Â 
 print('The ' + turn + ' will go first.')</p>
 
 </div>
@@ -3817,35 +3817,35 @@ It will keep track of whose turn it is. It is set to the return value of <span
 class=Literal><span style='font-size:9.0pt;line-height:115%'>whoGoesFirst()</span></span>,
 which randomly chooses who will go first.</p>
 
-<p class=Non-TOCHeading3>Running the Player’s Turn</p>
+<p class=Non-TOCHeading3>Running the Playerâ€™s Turn</p>
 
 <div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
 
-<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>257.</span>     while
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>257.</span>Â Â Â Â  while
 True:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>258.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>258.</span>Â Â Â Â Â Â Â Â 
 if turn == 'player':</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>259.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>259.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 <span class=SourceCodeComment># Player's turn.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>260.</span>             if
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>260.</span>Â Â Â  Â Â Â Â Â Â Â Â Â if
 showHints:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>261.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>261.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 validMovesBoard = getBoardWithValidMoves(mainBoard, playerTile)</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>262.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>262.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 drawBoard(validMovesBoard)</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>263.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>263.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 else:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>264.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>264.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 drawBoard(mainBoard)</p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber>265.</span>            
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>265.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 showPoints(playerTile, computerTile)</p>
 
 </div>
@@ -3857,8 +3857,8 @@ loop when the current game is over.</p>
 
 <p class=Body>Line 258 has an <span class=Literal><span style='font-size:9.0pt;
 line-height:115%'>if</span></span> statement whose body has the code that runs
-if it is the player’s turn. (The else-block that starts on line 282 has the
-code for the computer’s turn.) </p>
+if it is the playerâ€™s turn. (The else-block that starts on line 282 has the
+code for the computerâ€™s turn.) </p>
 
 <p class=Body>First the board is displayed on the screen. If hints mode is on
 (that is, <span class=Literal><span style='font-size:9.0pt;line-height:115%'>showHints</span></span>
@@ -3884,7 +3884,7 @@ print the current score by calling <span class=Literal><span style='font-size:
 
 <div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
 
-<p class=SourceCode><span class=SourceLineNumber>266.</span>             move =
+<p class=SourceCode><span class=SourceLineNumber>266.</span>Â Â Â Â Â Â Â Â Â Â Â Â  move =
 getPlayerMove(mainBoard, playerTile)</p>
 
 </div>
@@ -3892,7 +3892,7 @@ getPlayerMove(mainBoard, playerTile)</p>
 <p class=Body>Next, let the player type in their move. <span class=Literal><span
 style='font-size:9.0pt;line-height:115%'>getPlayerMove()</span></span> handles
 this, and its return value is a two-item list of the XY coordinate of the
-player’s move. <span class=Literal><span style='font-size:9.0pt;line-height:
+playerâ€™s move. <span class=Literal><span style='font-size:9.0pt;line-height:
 115%'>getPlayerMove()</span></span> has already made sure that the move the
 player typed in is a valid move.</p>
 
@@ -3902,28 +3902,28 @@ player typed in is a valid move.</p>
 
 <div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
 
-<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>267.</span>            
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>267.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 if move == 'quit':</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>268.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>268.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 print('Thanks for playing!')</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>269.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>269.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 sys.exit() <span class=SourceCodeComment># terminate the program</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>270.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>270.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 elif move == 'hints':</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>271.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>271.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 showHints = not showHints</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>272.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>272.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 continue</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>273.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>273.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 else:</p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber>274.</span>                
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>274.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 makeMove(mainBoard, playerTile, move[0], move[1])</p>
 
 </div>
@@ -3953,31 +3953,31 @@ evaluates to <span class=Literal><span style='font-size:9.0pt;line-height:115%'>
 Then the <span class=Literal><span style='font-size:9.0pt;line-height:115%'>continue</span></span>
 statement moves the execution to the start of the loop (<span class=Literal><span
 style='font-size:9.0pt;line-height:115%'>turn</span></span> has not changed, so
-it will still be the player’s turn).</p>
+it will still be the playerâ€™s turn).</p>
 
-<p class=MsoNormal>Otherwise, if the player didn’t quit or toggle hints mode,
+<p class=MsoNormal>Otherwise, if the player didnâ€™t quit or toggle hints mode,
 line 274 calls <span class=Literal><span style='font-size:9.0pt;line-height:
-115%'>makeMove()</span></span> to make the player’s move on the board.</p>
+115%'>makeMove()</span></span> to make the playerâ€™s move on the board.</p>
 
-<p class=Non-TOCHeading3>Make the Player’s Move</p>
+<p class=Non-TOCHeading3>Make the Playerâ€™s Move</p>
 
 <div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
 
-<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>276.</span>             if
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>276.</span>Â Â Â Â Â  Â Â Â Â Â Â Â if
 getValidMoves(mainBoard, computerTile) == []:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>277.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>277.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 break</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>278.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>278.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 else:</p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber>279.</span>                
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>279.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 turn = 'computer'</p>
 
 </div>
 
-<p class=Body>After making the player’s move, line 276 calls <span
+<p class=Body>After making the playerâ€™s move, line 276 calls <span
 class=Literal><span style='font-size:9.0pt;line-height:115%'>getValidMoves()</span></span>
 to see if the computer could make any moves. If <span class=Literal><span
 style='font-size:9.0pt;line-height:115%'>getValidMoves()</span></span> returns
@@ -3992,31 +3992,31 @@ class=Literal><span style='font-size:9.0pt;line-height:115%'>'computer'</span></
 The flow of execution skips the else-block and reaches the end of the
 while-block, so execution jumps back to the <span class=Literal><span
 style='font-size:9.0pt;line-height:115%'>while</span></span> statement on line
-257. This time, however, it will be the computer’s turn.</p>
+257. This time, however, it will be the computerâ€™s turn.</p>
 
-<p class=Non-TOCHeading3>Running the Computer’s Turn</p>
+<p class=Non-TOCHeading3>Running the Computerâ€™s Turn</p>
 
 <div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
 
-<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>281.</span>        
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>281.</span>Â Â Â Â Â Â Â Â 
 else:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>282.</span>             <span
-class=SourceCodeComment># Computer’s turn.</span></p>
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>282.</span>Â Â Â Â Â Â Â  Â Â Â Â Â <span
+class=SourceCodeComment># Computerâ€™s turn.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>283.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>283.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 drawBoard(mainBoard)</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>284.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>284.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 showPoints(playerTile, computerTile)</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>285.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>285.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 input('Press Enter to see the computer\'s move.')</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>286.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>286.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 x, y = getComputerMove(mainBoard, computerTile)</p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber>287.</span>             makeMove(mainBoard,
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>287.</span>Â Â Â  Â Â Â Â Â Â Â Â Â makeMove(mainBoard,
 computerTile, x, y)</p>
 
 </div>
@@ -4041,7 +4041,7 @@ line-height:115%'>input()</span></span>.</p>
 class=Keycap><span style='font-variant:normal !important;text-transform:uppercase'>enter</span></span>,
 line 286 calls <span class=Literal><span style='font-size:9.0pt;line-height:
 115%'>getComputerMove()</span></span> to get the XY coordinates of the
-computer’s next move. These coordinates are stored in variables <span
+computerâ€™s next move. These coordinates are stored in variables <span
 class=Literal><span style='font-size:9.0pt;line-height:115%'>x</span></span>
 and <span class=Literal><span style='font-size:9.0pt;line-height:115%'>y</span></span>
 using multiple assignment.</p>
@@ -4049,12 +4049,12 @@ using multiple assignment.</p>
 <p class=Body>Finally, pass <span class=Literal><span style='font-size:9.0pt;
 line-height:115%'>x</span></span> and <span class=Literal><span
 style='font-size:9.0pt;line-height:115%'>y</span></span>, along with the game
-board data structure and the computer’s tile, to the <span class=Literal><span
+board data structure and the computerâ€™s tile, to the <span class=Literal><span
 style='font-size:9.0pt;line-height:115%'>makeMove()</span></span> function.
-This places the computer’s tile on the game board in <span class=Literal><span
+This places the computerâ€™s tile on the game board in <span class=Literal><span
 style='font-size:9.0pt;line-height:115%'>mainBoard</span></span> to reflect the
-computer’s move. Line 286’s call to <span class=Literal><span style='font-size:
-9.0pt;line-height:115%'>getComputerMove()</span></span> got the computer’s move
+computerâ€™s move. Line 286â€™s call to <span class=Literal><span style='font-size:
+9.0pt;line-height:115%'>getComputerMove()</span></span> got the computerâ€™s move
 (and stored it in variables <span class=Literal><span style='font-size:9.0pt;
 line-height:115%'>x</span></span> and <span class=Literal><span
 style='font-size:9.0pt;line-height:115%'>y</span></span>). The call to <span
@@ -4063,16 +4063,16 @@ on line 287 makes the move on the board.</p>
 
 <div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
 
-<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>289.</span>            
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>289.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 if getValidMoves(mainBoard, playerTile) == []:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>290.</span>                
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>290.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 break</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>291.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>291.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 else:</p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber>292.</span>                
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>292.</span>Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â 
 turn = 'player'</p>
 
 </div>
@@ -4085,7 +4085,7 @@ there are no valid moves. That means the game is over, and line 290 breaks out
 of the <span class=Literal><span style='font-size:9.0pt;line-height:115%'>while</span></span>
 loop.</p>
 
-<p class=Body>Otherwise, there’s at least one possible move the player should
+<p class=Body>Otherwise, thereâ€™s at least one possible move the player should
 make. The <span class=Literal><span style='font-size:9.0pt;line-height:115%'>turn</span></span>
 variable is to <span class=Literal><span style='font-size:9.0pt;line-height:
 115%'>'player'</span></span>. There is no more code in the while-block after
@@ -4099,36 +4099,36 @@ style='font-size:9.0pt;line-height:115%'>while</span></span> statement on line
 
 <div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
 
-<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>294.</span>     <span
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>294.</span>Â Â Â Â  <span
 class=SourceCodeComment># Display the final score.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>295.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>295.</span>Â Â Â Â 
 drawBoard(mainBoard)</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>296.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>296.</span>Â Â Â Â 
 scores = getScoreOfBoard(mainBoard)</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>297.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>297.</span>Â Â Â Â 
 print('X scored %s points. O scored %s points.' % (scores['X'], scores['O']))</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>298.</span>     if
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>298.</span>Â Â Â  Â if
 scores[playerTile] &gt; scores[computerTile]:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>299.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>299.</span>Â Â Â Â Â Â Â Â 
 print('You beat the computer by %s points! Congratulations!' %
 (scores[playerTile] - scores[computerTile]))</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>300.</span>     elif
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>300.</span>Â Â Â Â  elif
 scores[playerTile] &lt; scores[computerTile]:</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>301.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>301.</span>Â Â Â Â Â Â Â Â 
 print('You lost. The computer beat you by %s points.' % (scores[computerTile] -
 scores[playerTile]))</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>302.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>302.</span>Â Â Â Â 
 else:</p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber>303.</span>        
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>303.</span>Â Â Â Â Â Â Â Â 
 print('The game was a tie!')</p>
 
 </div>
@@ -4143,18 +4143,18 @@ should print the board and scores and determine who won the game.</p>
 115%'>getScoreOfBoard()</span></span> will return a dictionary with keys <span
 class=Literal><span style='font-size:9.0pt;line-height:115%'>'X'</span></span>
 and <span class=Literal><span style='font-size:9.0pt;line-height:115%'>'O'</span></span>
-and values of both players’ scores. By checking if the player’s score is
-greater than, less than, or equal to the computer’s score, you can know if the
+and values of both playersâ€™ scores. By checking if the playerâ€™s score is
+greater than, less than, or equal to the computerâ€™s score, you can know if the
 player won, lost, or tied, respectively.</p>
 
 <p class=Non-TOCHeading3>Ask the Player to Play Again</p>
 
 <div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
 
-<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>305.</span>     if
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>305.</span>Â Â Â Â  if
 not playAgain():</p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber>306.</span>        
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>306.</span>Â Â Â Â Â Â Â Â 
 break</p>
 
 </div>
@@ -4167,7 +4167,7 @@ class=Literal><span style='font-size:9.0pt;line-height:115%'>playAgain()</span><
 returns <span class=Literal><span style='font-size:9.0pt;line-height:115%'>False</span></span>,
 the <span class=Literal><span style='font-size:9.0pt;line-height:115%'>not</span></span>
 operator makes the <span class=Literal><span style='font-size:9.0pt;line-height:
-115%'>if</span></span> statement’s condition <span class=Literal><span
+115%'>if</span></span> statementâ€™s condition <span class=Literal><span
 style='font-size:9.0pt;line-height:115%'>True</span></span>, the execution
 breaks out of the <span class=Literal><span style='font-size:9.0pt;line-height:
 115%'>while</span></span> loop that started on line 248. Since there are no
@@ -4176,7 +4176,7 @@ more lines of code after this while-block, the program terminates.</p>
 <p class=Body>Otherwise, <span class=Literal><span style='font-size:9.0pt;
 line-height:115%'>playAgain()</span></span> has returned <span class=Literal><span
 style='font-size:9.0pt;line-height:115%'>True</span></span> (making the <span
-class=Literal><span style='font-size:9.0pt;line-height:115%'>if</span></span> statement’s
+class=Literal><span style='font-size:9.0pt;line-height:115%'>if</span></span> statementâ€™s
 condition <span class=Literal><span style='font-size:9.0pt;line-height:115%'>False</span></span>),
 and so execution loops back to the <span class=Literal><span style='font-size:
 9.0pt;line-height:115%'>while</span></span> statement on line 248 and a new
@@ -4187,32 +4187,32 @@ style='font-size:9.0pt;line-height:115%'>drawBoard()</span></span> Function</p>
 
 <p class=Body>The board you draw for the Reversi game is large. But you could
 change the <span class=Literal><span style='font-size:9.0pt;line-height:115%'>drawBoard()</span></span>
-function’s code to draw out a much smaller board, while keeping the rest of the
+functionâ€™s code to draw out a much smaller board, while keeping the rest of the
 game code the same. The new, smaller board would look like this:</p>
 
 <div style='border:solid windowtext 1.0pt;padding:1.0pt 4.0pt 1.0pt 4.0pt'>
 
-<p class=CodeExampleCxSpFirst style='border:none;padding:0in'>  12345678</p>
+<p class=CodeExampleCxSpFirst style='border:none;padding:0in'>Â  12345678</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'> +--------+</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>Â +--------+</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>1|    O   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>1|Â Â Â  OÂ Â  |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>2|   XOX  |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>2|Â Â  XOXÂ  |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>3|    O   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>3|Â Â Â  OÂ Â  |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>4| XXXXX  |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>4| XXXXXÂ  |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>5|  .OX   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>5|Â  .OXÂ Â  |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>6|  OOO   |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>6|Â  OOOÂ Â  |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>7| ..O..  |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>7| ..O..Â  |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>8|   O    |</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>8|Â Â  OÂ Â Â  |</p>
 
-<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'> +--------+</p>
+<p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>Â +--------+</p>
 
 <p class=CodeExampleCxSpMiddle style='border:none;padding:0in'>You have 8
 points. The computer has 9 points.</p>
@@ -4228,53 +4228,53 @@ starting at line 6. You can also download this code from <span class=URL><u>http
 
 <div style='border:double windowtext 1.5pt;padding:3.0pt 4.0pt 3.0pt 4.0pt'>
 
-<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>  6.</span> def
+<p class=SourceCodeCxSpFirst><span class=SourceLineNumber>Â  6.</span> def
 drawBoard(board):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>  7.</span>     <span
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â  7.</span>Â Â Â Â  <span
 class=SourceCodeComment># This function prints out the board that it was
 passed. Returns None.</span></p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>  8.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â  8.</span>Â Â Â Â 
 HLINE = ' +--------+'</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>  9.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â  9.</span>Â Â Â Â 
 print(' 12345678')</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 10.</span>    
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 10.</span>Â Â Â Â 
 print(HLINE)</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 11.</span>     for
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 11.</span>Â Â Â Â  for
 y in range(8):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 12.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 12.</span>Â Â Â Â Â Â Â Â 
 print('%s|' % (y+1), end='')</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 13.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 13.</span>Â Â Â Â Â Â Â Â 
 for x in range(8):</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 14.</span>            
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 14.</span>Â Â Â Â Â Â Â Â Â Â Â Â 
 print(board[x][y], end='')</p>
 
-<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber> 15.</span>        
+<p class=SourceCodeCxSpMiddle><span class=SourceLineNumber>Â 15.</span>Â Â Â Â Â Â Â Â 
 print('|')</p>
 
-<p class=SourceCodeCxSpLast><span class=SourceLineNumber> 16.</span>    
+<p class=SourceCodeCxSpLast><span class=SourceLineNumber>Â 16.</span>Â Â Â Â 
 print(HLINE)</p>
 
 </div>
 
 <p class=Non-TOCHeading3>Summary</p>
 
-<p class=Body>The AI may seem almost unbeatable, but this isn’t because the
+<p class=Body>The AI may seem almost unbeatable, but this isnâ€™t because the
 computer is smart. The strategy it follows is simple: move on the corner if you
 can, otherwise make the move that will flip over the most tiles. We could do
 that, but it would be slow to figure out how many tiles would be flipped for
 every possible valid move we could make. But calculating this for the computer
-is simple. The computer isn’t smarter than us, it’s just much faster!</p>
+is simple. The computer isnâ€™t smarter than us, itâ€™s just much faster!</p>
 
 <p class=Body>This game is similar to Sonar because it makes use of a grid for
-a board. It is also like the Tic Tac Toe game because there’s an AI that plans
+a board. It is also like the Tic Tac Toe game because thereâ€™s an AI that plans
 out the best move for it to take. This chapter only introduced one new concept:
 that empty lists, blank strings, and the integer <span class=Literal><span
 style='font-size:9.0pt;line-height:115%'>0</span></span> all evaluate to <span
@@ -4282,7 +4282,7 @@ class=Literal><span style='font-size:9.0pt;line-height:115%'>False</span></span>
 in the context of a condition.</p>
 
 <p class=Body>Other than that, this game used programming concepts you already
-knew! You don’t have to know much about programming to create interesting
+knew! You donâ€™t have to know much about programming to create interesting
 games. However, this game is stretching how far you can get with ASCII art. The
 board took up almost the entire screen to draw, and the game didn't have any
 color.</p>
