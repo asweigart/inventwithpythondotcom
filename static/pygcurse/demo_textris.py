@@ -1,8 +1,11 @@
 # Textris (a Tetris clone)
 # By Al Sweigart al@inventwithpython.com
 # Simplified BSD License, Copyright 2011 Al Sweigart
+import sys
+import os
+sys.path.append(os.path.abspath('..'))
 
-import random, time, pygame, sys
+import random, time, pygame
 import pygcurse as pygcurse
 from pygame.locals import *
 
@@ -176,13 +179,7 @@ def main():
 
     showTextScreen('Textris')
     while True: # main game loop
-        if random.randint(0, 1) == 0:
-            pygame.mixer.music.load('tetrisb.mid')
-        else:
-            pygame.mixer.music.load('tetrisc.mid')
-        pygame.mixer.music.play(-1, 0.0)
         runGame()
-        pygame.mixer.music.stop()
         showTextScreen('Game Over')
 
 
@@ -237,9 +234,7 @@ def runGame():
                 if (event.key == K_p):
                     # Pausing the game
                     WINDOWSURF.fill(BGCOLOR)
-                    pygame.mixer.music.stop()
                     showTextScreen('Paused') # pause until a key press
-                    pygame.mixer.music.play(-1, 0.0)
                     lastFallTime = time.time()
                     lastMoveDownTime = time.time()
                     lastMoveSidewaysTime = time.time()
