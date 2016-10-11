@@ -272,7 +272,7 @@ def getCornerSideBestMove(board, tile):
 
 
 def getSideBestMove(board, tile):
-    # Return a corner move, or a side move, or the best move.
+    # Return a side move, or then the best move.
     possibleMoves = getValidMoves(board, tile)
 
     # randomize the order of the possible moves
@@ -293,7 +293,7 @@ def getWorstMove(board, tile):
     # randomize the order of the possible moves
     random.shuffle(possibleMoves)
 
-    # Go through all the possible moves and remember the best scoring move
+    # Go through all the possible moves and remember the worst scoring move
     worstScore = 64
     for x, y in possibleMoves:
         dupeBoard = getBoardCopy(board)
@@ -307,7 +307,7 @@ def getWorstMove(board, tile):
 
 
 def getCornerWorstMove(board, tile):
-    # Return a corner, a space, or the move that flips the least number of tiles.
+    # Return a corner, or then the move that flips the least number of tiles.
     possibleMoves = getValidMoves(board, tile)
 
     # randomize the order of the possible moves

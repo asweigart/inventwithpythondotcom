@@ -56,7 +56,7 @@ while True:
             b['rect'].left += MOVESPEED
             b['rect'].top -= MOVESPEED
 
-        # check if the block has move out of the window
+        # check if the block has moved out of the window
         if b['rect'].top < 0:
             # block has moved past the top
             if b['dir'] == UPLEFT:
