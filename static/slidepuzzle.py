@@ -2,7 +2,7 @@
 # By Al Sweigart al@inventwithpython.com
 # http://inventwithpython.com/pygame
 # Released under a "Simplified BSD" license
-
+# Original "slidepuzzle.py" has been updated (commented) by Kun Lee T03
 import pygame, sys, random  #The program uses pygame module to design slide puzzle game
 from pygame.locals import *
 
