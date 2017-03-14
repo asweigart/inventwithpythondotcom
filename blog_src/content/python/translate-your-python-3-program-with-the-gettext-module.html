@@ -1,0 +1,90 @@
+<html>
+    <head>
+        <title>Translate Your Python 3 Program with the gettext Module</title>
+        <meta name="tags" content="" />
+        <meta name="date" content="2014-12-20 12:00" />
+        <meta name="summary" content="" />
+    </head>
+    <body>
+
+            <p>You've written a Python 3 program and want to make it available in other languages. You <em>could</em> duplicate the entire code-base, then go painstakingly through each .py file and replace any text strings you find. But this would mean you have two separate copies of your code, which doubles your workload every time you need to make a change or fix a bug. And if you want your program in other languages, it gets even worse.</p>
+<p>Fortunately, Python provides a solution with the <code>gettext</code> module.</p>
+<p><span id="more-1893"></span></p>
+<h3>A Hack Solution</h3>
+<p>You could hack together your own solution. For example, you could replace every string in your program with a function call (with the function name being something simple, like <code>_()</code>)) which will return the string translated into the correct language. For example, if your program was:</p>
+<pre>print('Hello world!')</pre>
+<p>...you could change this to:</p>
+<pre>print(_('Hello world!'))</pre>
+<p>...and the <code>_()</code> function could return the translation for <code>'Hello world!'</code> based on what language setting the program had. For example, if the language setting was stored in a global variable named <code>LANGUAGE</code>, the <code>_()</code> function could look like this:</p>
+<pre>def _(s):
+    spanishStrings = {'Hello world!': 'Hola Mundo!'}
+    frenchStrings = {'Hello world!': 'Bonjour le monde!'}
+    germanStrings = {'Hello world!': 'Hallo Welt!'}
+
+    if LANGUAGE == 'English':
+        return s
+    if LANGUAGE == 'Spanish':
+        return spanishStrings[s]
+    if LANGUAGE == 'French':
+        return frenchStrings[s]
+    if LANGUAGE == 'German':
+        return germanStrings[s]</pre>
+<p>This would work, but you'd be reinventing the wheel. This is pretty much what Python's <code>gettext</code> module does. <a href="https://en.wikipedia.org/wiki/Gettext" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://en.wikipedia.org/wiki/Gettext', 'gettext']);" >gettext</a> is a set of tools and file formats created in the early 1990s to standardize software internationalization (also called I18N). gettext was designed as a system for all programming languages, but we'll focus on Python in this article.</p>
+<h3>The Example Program</h3>
+<p>Say you have a simple "Guess the Number" game written in Python 3 that you want to translate. The <a href="/blogstatic/gettext/guess_original.py">source code to this program is here</a>. There are four steps to internationalizing this program:</p>
+<ol>
+<li>Modify the .py file's source code so that the strings are passed to a function named <code>_()</code>.</li>
+<li>Use the <em>pygettext.py</em> script that comes installed with Python to create a "pot" file from the source code.</li>
+<li>Use the free cross-platform <a href="http://poedit.net/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://poedit.net/', 'Poedit']);" >Poedit</a> software to create the .po and .mo files from the pot file.</li>
+<li>Modify your .py file's source code again to import the <code>gettext</code> module and set up the language setting.</li>
+</ol>
+<h3>Step 1: Add the _() Function</h3>
+<p>First, go through all of the strings in your program that will need to be translated and replace them with <code>_()</code> calls. The gettext system for Python uses <code>_()</code> as the generic name for getting the translated string since it is a short name.</p>
+<p>Note that using string formatting instead of string concatenation will make your program easier to translate. For example, using string concatenation your program would have to look like this:</p>
+<pre>print('Good job, ' + myName + '! You guessed my number in ' + guessesTaken + ' guesses!')
+
+print(_('Good job, ') + myName + _('! You guessed my number in ') + guessesTaken + _(' guesses!'))</pre>
+<p>This results in three separate strings that need to be translated, as opposed to the single string needed in the string formatting approach:</p>
+<pre>print('Good job, %s! You guessed my number in %s guesses!' % (myName, guessesTaken))
+
+print(_('Good job, %s! You guessed my number in %s guesses!') % (myName, guessesTaken))</pre>
+<p>When you've gone through the "Guess the Number" source code, <a href="guess.py">it will look like this</a>. You won't be able to run this program since the <code>_()</code> function is undefined. This change is just so that the <em>pygettext.py</em> script can find all the strings that need to be translated.</p>
+<h3>Step 2: Extract the Strings Using pygettext.py</h3>
+<p>In the <em>Tools/i18n</em> of your Python installation (<em>C:\Python34\Tools\i18n</em> on Windows) is the <em>pygettext.py</em> script. While the normal gettext unix command parse C/C++ source code for translatable strings and the xgettext unix command can parse other languages, <em>pygettext.py</em> knows how to parse Python source code. It will find all of these strings and produce a "pot" file.</p>
+<p>On Windows, I've run this script like so:</p>
+<pre>C:\>py -3.4 C:\Python34\Tools\i18n\pygettext.py -d guess guess.py</pre>
+<p>This creates a pot file named <em>guess.pot</em>. This is just a normal plaintext file that lists all the translated strings it found in the source code by search for <code>_()</code> calls. You can <a href="/blogstatic/gettext/guess.pot?27f655">view the <em>guess.pot</em> file here</a>.</p>
+<h3>Step 3: Translate the Strings using Poedit</h3>
+<p>You could fill in the translation using a text editor, but the free Poedit software makes it easier. <a href="http://poedit.net" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://poedit.net', 'Download it from http://poedit.net']);" >Download it from http://poedit.net</a>. Select <strong>File > New from POT/PO file...</strong> and select your <em>guess.po</em> file.</p>
+<p><img src="/blogstatic/gettext/poedit_new.jpg?27f655" /></p>
+<p>Poedit will ask what language you want to translate the strings to. For this example, we'll use Spanish:</p>
+<p><img src="/blogstatic/gettext/poedit_translate.jpg?27f655" /></p>
+<p>Then fill in the translations. (I'm using <a href="http://translate.google.com" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://translate.google.com', 'http://translate.google.com']);" >http://translate.google.com</a>, so it probably sounds a bit odd to actual Spanish-speakers.)</p>
+<p><img src="/blogstatic/gettext/poedit_filledin.jpg?27f655" /></p>
+<p>And now save the file in it's gettext-formatted folder. Saving will create the .po file (a human-readable text file identical to the original .pot file, except with the Spanish translations) and a .mo file (a machine-readable version which the <code>gettext</code> module will read. These files have to be saved in a certain folder structure for <code>gettext</code> to be able to find them. They look like this (say I have "es" Spanish files and "de" German files):</p>
+<pre>./guess.py
+./guess.pot
+./locale/es/LC_MESSAGES/guess.mo
+./locale/es/LC_MESSAGES/guess.po
+./locale/de/LC_MESSAGES/guess.mo
+./locale/de/LC_MESSAGES/guess.po</pre>
+<p>These two-character language names like "es" for Spanish and "de" for German are called <a href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes', 'ISO 639-1 codes']);" >ISO 639-1 codes</a> and are standard abbreviations for languages. You don't <em>have</em> to use them, but it makes sense to follow that naming standard.</p>
+<h3>Step 4: Add gettext Code to Your Program</h3>
+<p>Now that you have the .mo file that contains the translations, modify your Python script to use it. Add the following to your program:</p>
+<pre>import gettext
+es = gettext.translation('guess', localedir='locale', languages=['es'])
+es.install()</pre>
+<p>The first argument <code>'guess'</code> is the "domain", which basically means the "guess" part of the <em>guess.mo</em> filename. The <code>localedir</code> is the directory location of the <em>locale</em> folder you created. This can be either a relative or absolute path. The <code>'es'</code> string describes the folder under the <em>locale</em> folder. The <em>LC_MESSAGES</em> folder is a standard name</p>
+<p>The <code>install()</code> method will cause all the <code>_()</code> calls to return the Spanish translated string. If you want to go back to the original English, just assign a lambda function value to <code>_</code> that returns the string it was passed:</p>
+<pre>import gettext
+es = gettext.translation('guess', localedir='locale', languages=['es'])
+print(_('Hello! What is your name?'))  # prints Spanish
+
+_ = lambda s: s</pre>
+<p>print(_('Hello! What is your name?'))  # prints English</p>
+<p>You can <a href="/blogstatic/gettext/guess.py">view the translation-ready source code for the "Guess the Number"</a>. If you want to run this program, <a href="/blogstatic/gettext/guess_gettext.zip?27f655">download and unzip this zip file</a> with it's <em>locale</em> folders and .mo file set up.</p>
+<h3>Further Reading</h3>
+<p>I am by no means an expert on I18N or gettext, and please leave comments if I'm breaking any best practices in this tutorial. Most of the time your software will not switch languages while it's running, and instead read one of the <code>LANGUAGE</code>, <code>LC_ALL</code>, <code>LC_MESSAGES</code>, and <code>LANG</code> environment variables to figure out the locale of the computer it's running on. I'll update this tutorial as I learn more.</p>
+
+    </body>
+</html>

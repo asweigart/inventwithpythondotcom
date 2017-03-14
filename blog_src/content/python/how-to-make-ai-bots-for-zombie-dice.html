@@ -1,0 +1,144 @@
+<html>
+    <head>
+        <title>Programming AI Bots for Zombie Dice</title>
+        <meta name="tags" content="" />
+        <meta name="date" content="2012-11-21 12:00" />
+        <meta name="summary" content="" />
+    </head>
+    <body>
+
+
+			<p><strong>UPDATE: I've set up a wiki for posting your own Zombie Dice bots: <a href="http://zombiedice.inventwithpython.com/">http://zombiedice.inventwithpython.com/</a></strong></p>
+<p><a href="https://github.com/asweigart/zombiedice" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/zombiedice', 'Download the Zombie Dice Python code from GitHub']);" >Download the Zombie Dice Python code from GitHub</a> or as a <a href="/files/zombiedicesim.zip?27f655">zip file</a>.</p>
+<p>This tutorial outlines how to create a tournament simulation program for the Zombie Dice game in <a href="http://python.org" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://python.org', 'Python']);" >Python</a>. With this tournament program, you can also code your own AI bots to play Zombie Dice against each other. You can quickly test out how the different strategies the bots use compare against each other over thousands of simulated games. This tutorial assumes you know basic Python programming. (You can learn to program from the free book on this site, <a href="http://inventwithpython.com/chapters">"Invent Your Own Computer Games with Python"</a>.</p>
+<p>Computer game simulations make for great science fair experiments, and since the rules to Zombie Dice are so simple it's fairly easy to program a simulation for it.</p>
+<h2>The Rules of Zombie Dice</h2>
+<p>Zombie Dice is a dice rolling game that is fun for groups, quick to play, and can be learned in a couple minutes. It has a "push your luck" game mechanic.</p>
+<p>Each of the players is a zombie. Each of the dice represents a human victim. You want to eat brains and avoid shotgun blasts. If the footsteps come up, the human has eluded you. The rules are summarized below: (Or <a href="http://www.sjgames.com/dice/zombiedice/img/ZDRules_English.pdf" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.sjgames.com/dice/zombiedice/img/ZDRules_English.pdf', 'view the official rules PDF']);" >view the official rules PDF</a> or <a href="http://www.sjgames.com/dice/zombiedice/demo.html" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.sjgames.com/dice/zombiedice/demo.html', 'view the Flash tutorial']);" >view the Flash tutorial</a>.)</p>
+<p><span id="more-1159"></span></p>
+<ol>
+<li>On your turn grab 3 dice from the cup and roll them. Dice are colored red, yellow, and green and have footsteps, brains, or shotgun icons.</li>
+<li>Set aside any brain and shotgun dice.</li>
+<li>If you have 3 shotguns, your turn ends with a score of 0.</li>
+<li>You can decide to either stop rolling or roll again.</li>
+<li>If you stop, your score for this turn is the number of brains you have.</li>
+<li>If you re-roll, keep the footsteps dice you rolled, set aside the brain and shotgun dice rolled, and randomly grab dice to replace the brain and shotgun dice. Roll the 3 dice.</li>
+<li>Go back to step 4. You basically can keep re-rolling for as long as you want to push your luck.</li>
+</ol>
+<p>To win:</p>
+<li>Once a player gets 13 brains, finish the round. If there is a tie, the tied players play a single tie breaker round.</li>
+<li>Also, if you run out of dice for your turn, note the number of brain dice you've rolled and place those brain dice back into the cup. Then continue as normal.</li>
+<p>The colors note your odds of winning. The entire dice set has 6 green, 4 yellow, and 3 red dice.</p>
+<p><img src="/blog/images/zombiedice_diceset.png?27f655" /></p>
+<p><a href="http://youtu.be/PlYAcsJxLM4?t=1m10s" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://youtu.be/PlYAcsJxLM4?t=1m10s', 'Here\'s a video of gameplay:\n']);" >Here's a video of gameplay:</p>
+<p><img src="/blog/images/zombie_dice_youtube.png?27f655" /></a></p>
+<h2>Running the Tournament Program</h2>
+<p><a href="/files/zombiedicesim.zip?27f655">Download the Zombie Dice simulation code.</a> This should run with Python 2 and Python 3. You can also find it on <a href="https://github.com/asweigart/zombiedice" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/zombiedice', 'GitHub']);" >GitHub</a>. The two main files are:</p>
+<ul>
+<li><strong>zombiedice.py</strong> is the basic simulator and outputs text results when the tournament is finished.</li>
+<li><strong>zombiedice_web.py</strong> runs a web server and launches your browser to provide a GUI and real-time updates while the tournament is in progress.</li>
+</ul>
+<p><a href="/blog/images/zombiedice_screenshot1.png?27f655"><img src="/blog/images/zombiedice_screenshot1.png?27f655" width="600" /></a></p>
+<p><a href="/blog/images/zombiedice_screenshot2.gif?27f655"><img src="/blog/images/zombiedice_screenshot2.gif?27f655" width="600" /></a></p>
+<p>When you click the "Begin Tournament" button, the simulation will begin with the loaded bots:</p>
+<p><a href="/blog/images/zombiedice_screenshot3.gif?27f655"><img src="/blog/images/zombiedice_screenshot3.gif?27f655" width="600" /></a></p>
+<p>When the simulation has finished, you can reload the page to start a new tournament.</p>
+<p>To edit which bots are being run in the simulation, modify the <code>BOTS</code> list at the top of zombiedice_web.py.</p>
+<h2>The AI Bots</h2>
+<p>Each zombie AI bot will be a class that has:</p>
+<ul>
+<li>A <code>name</code> member which is set in the constructor function. The name uniquely identifies the bot in a tournament (this way you can have multiple bots from the same class compete against each other.)</li>
+<li>A <code>turn()</code> method that has a <code>gameState</code> tuple passed to it.</li>
+<li>The <code>turn()</code> method calls a global <code>roll()</code> function (<code>zombiedice.roll()</code> if your bot is in another file that imports zombiedice.py) as many times as it likes. The turn is over when the <code>turn()</code> method returns. (Calls to <code>roll()</code> after getting three shotgun blasts have no effect, and roll() simply returns an empty list.)</li>
+<li>Optionally you can have a <code>newGame()</code> and/or <code>endGame()</code> methods that are called so that the bot can know when a game has started and ended (in case the bot should change its strategy if it is winning or losing a multi-game tournament.)</li>
+</ul>
+<p><code></p>
+<pre># A "skeleton" zombie class. Get it? Skeleton? Heh heh heh... eh... nevermind.
+class MyZombie(object):
+    def __init__(self, name):
+        self.name = name
+
+    def newGame(self):
+        pass # do nothing
+
+    def endGame(self, gameState):
+        pass # do nothing
+
+    def turn(gameState):
+        results = roll()</pre>
+<p></code></p>
+<p>The <code>gameState</code> parameter is a dictionary with the following keys:</p>
+<ul>
+<li>Key <code>'order'</code> has a value of a list of player order like <code>['player1name', 'player2name', ...]</code>.</li>
+<li>Key <code>'scores'</code> has a value of a dictionary with scores like <code>{'player1name': player1score, 'player2name': player2score, ...}</code>.</li>
+<li>Key <code>'round'</code> has a value of an integer telling which round it is in the current game. (The first round is 1.)</li>
+</ul>
+<p>The return value of <code>roll()</code> is a list of three dictionaries that have the color and icon of the rolls. For example:<br />
+<code>[{'color': 'green', 'icon': 'shotgun'}, {'color': 'red', 'icon': 'footsteps'}, {'color': 'yellow', 'icon': 'brains')]</code></p>
+<p>There are uppercase constant variables that you can use instead of string values, just to avoid typos:<br />
+<code>[{COLOR: GREEN, ICON: SHOTGUN}, {COLOR: RED, ICON: FOOTSTEPS}, {COLOR: YELLOW, ICON: BRAINS}]</code></p>
+<p>For example, here's the code for a Zombie Dice bot that keeps rolling until they have at least 3 brains:</p>
+<p><code></p>
+<pre>class ThreeBrainsThenStops(object):
+    def __init__(self, name):
+        self.name = name
+    
+    def newGame(self):
+        pass # do nothing
+
+    def endGame(self, gameState):
+        pass # do nothing
+
+    def turn(self, gameState):
+        brains = 0
+        while brains < 3:
+            results = roll()
+            if results = []:
+                return
+            for i in results:
+                if i[ICON] == BRAINS:
+                    brains += 1</pre>
+<p></code></p>
+<h2>Loading Bots into the Tournament Program</h2>
+<p>To configure a tournament, create a new Python script (called config.py in this example, but any name is fine) and run zombiedice.py like this:</p>
+<p><code>python zombiedice.py config.py</code></p>
+<p>The config file is formatted with games, ui, and bots variables:</p>
+<ul>
+<li><code>games</code> - integer, the number of games to simulate</li>
+<li><code>ui</code> - string, either "web" for web interface or "cli" for command line interface</li>
+<li><code>bots</code> - a list of lists. Each inner list represents a bot, and has values:</li>
+<ul>
+<li>filename - string, the python file where the bot code is</li>
+<li>class name - string, the name of the class</li>
+<li>bot name - string, the name of the bot instance</li>
+<li>args - arguments passed to the bot's constructor</li>
+</ul>
+</ul>
+<p>Additionally, the config file can have these variables:</p>
+<ul>
+<code>verbose</code> - boolean, if True, output game info to stdout<br />
+<code>exceptions_lose_game</code> - boolean, if True, an exception in the bot code causes the bot to forfeit the current game. If False, an exception crashes the tournament program.<br />
+<code>max_turn_time</code> - if None, there is no time limit for a bot's turn. Otherwise, the number of seconds the bot has per turn before forfeiting the current game.
+</ul>
+<p>Example config.py file:</p>
+<pre>games = 100
+ui = 'web'
+bots = [
+    ['zombieBotExamples.py', 'RandomCoinFlipZombie', 'Random Bot'],
+    ['zombieBotExamples.py', 'MonteCarloZombie', 'Monte Carlo Bot', 40, 20],
+    ['zombieBotExamples.py', 'MinNumShotgunsThenStopsZombie', 'Min Shotguns Bot', 2],
+]</pre>
+<h2>The Included Bots</h2>
+<p>The zombiedice.py program has some basic bots:</p>
+<ul>
+<li>The <code>ZombieBot_RandomCoinFlip</code> bot simply has a 50/50 chance of continuing to call the <code>roll()</code> function or stopping. It'll most likely lose most games.</li>
+<li>The <code>ZombieBot_MinNumShotgunsThenStops</code> bot will continue to call the <code>roll()</code> function until it has a minimum number of shotgun rolls. This minimum can be set by passing an integer for the <code>minShotguns</code> parameter.</li>
+<li>The <code>ZombieBot_HumanPlayer</code> bot actually uses <code>print()</code> and <code>input()</code> calls so that a human player can play against the bots.</li>
+<li>The <code>ZombieBot_RollsUntilInTheLead</code> bot will keep rolling until it gets into the lead compared to the other bots. This bot takes higher risks once it starts trailing.</li>
+<li>The <code>ZombieBot_MonteCarlo</code> bot is the most sophisticated of all the bots. It basically runs several random experiments to see if the next roll would result in 3 or more shotguns. You can pass different values to the constructors to tell it how many experiments to run on each turn and what percentage of them must not result in death to roll again.</li>
+</ul>
+<p>Write your own bots and then see how they do against these simple bots. You can post your code to <a href="https://gist.github.com" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://gist.github.com', 'https://gist.github.com']);" >https://gist.github.com</a> and post a link to it in the comments section below.</p>
+					
+
+    </body>
+</html>

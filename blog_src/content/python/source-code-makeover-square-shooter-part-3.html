@@ -1,0 +1,110 @@
+<html>
+    <head>
+        <title>Source Code Makeover: Square Shooter, Part 3</title>
+        <meta name="tags" content="" />
+        <meta name="date" content="2012-08-13 12:00" />
+        <meta name="summary" content="" />
+    </head>
+    <body>
+
+
+			<p>This is a continuation from <a href="http://inventwithpython.com/blog/2012/08/09/source-code-makeover-square-shooter-part-1/">Part 1</a> and <a href="http://inventwithpython.com/blog/2012/08/10/source-code-makeover-square-shooter-part-2/">Part 2</a>, where I go through the source code of <a href="http://www.pygame.org/project-Square+Shooter-2430-4094.html" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.pygame.org/project-Square+Shooter-2430-4094.html', 'Square Shooter']);" >Square Shooter</a>, an Asteroids clone, and try to redesign the code to be more readable.</p>
+<p>Now that I've refactored the code, I'll try adding three new features: multiple bullets, a shotgun powerup and a UI change to show the remaining time for each powerup.</p>
+<p><span id="more-965"></span></p>
+<h3>Adding support for multiple bullets</h3>
+<p><a href="https://github.com/asweigart/source_code_makeover/commit/d33186a6ae51d98895ae194b332532f74c94af57#L34L362" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/d33186a6ae51d98895ae194b332532f74c94af57#L34L362', '(These changes can be seen in the github history.)']);" >(These changes can be seen in the github history.)</a> (Note that I accidentally checked in a lot of other files with this check in, please ignore them.)</p>
+<p>First, the multiple bullets. I've learned from the code that the GameWorld object has a <code>bullet</code> member that shows the current location of the single bullet in the world. It's set to a <code>Bullet</code> object when there's a bullet on the map or None when there's no bullet anywhere. I'm going to change this to a list data structure, which can hold multiple <code>Bullet</code> objects (or be an empty list if there are no bullets on the map.) I'll rename it from <code>bullet</code> to <code>bullets</code> to reflect the multiple-bullet nature.</p>
+<p>Any place where the <code>bullet</code> member is set to None (to delete the bullet) will instead either be set to <code>[]</code> or have a <code>del</code> statement called on a <code>Bullet</code> item in the list. Any place where the <code>bullet</code> member was set to a <code>Bullet</code> object will be changed instead to have an <code>append()</code> method call to add a new <code>Bullet</code> object to the list.</p>
+<p>Now that there can be more than one bullet on the map, we have to change the <code>if</code> statement that checks if the bullet has collided with a bubble to a loop that checks each bullet for colliding with a bubble. We will change this line:</p>
+<blockquote>
+<pre>if self.bullet != None and self.bullet.collides_with(b):<pre></blockquote>
+
+...to these lines:
+
+<blockquote><pre>for i in range(len(self.bullets) - 1, -1, -1):
+    if self.bullets[i].collides_with(b):</pre>
+</blockquote>
+<p>Note that in an earlier change, we modified the <code>shoot_at()</code> method of the <code>Ship</code> class to return a list of <code>Bullet</code> objects rather than just a single <code>Bullet</code> object. This was done in anticipation of this future multi-bullet feature. We need to modify the caller of <code>shoot_at()</code> to append all of the <code>Bullet</code> objects to the <code>world.bullet</code> list. That is where this code comes from:</p>
+<blockquote>
+<pre>if len(world.bullets) < 5:
+    world.bullets.extend(world.ship.shoot_at(x / float(MAP_WIDTH), y / float(MAP_HEIGHT)))</pre>
+</blockquote>
+<p>The <code>extend()</code> list method is kind of like <code>append()</code>, except it appends all the items in a list instead of appending just one value.</p>
+<p>The <code>len(world.bullets) < 5</code> prevents new bullets from being added if there are five or more bullets currently on the map. (You can change this value to anything you want, but I wanted to prevent the player from just spamming the map full of bullets.</p>
+<p>Checking these changes in with the git log message, <a href="https://github.com/asweigart/source_code_makeover/commit/d33186a6ae51d98895ae194b332532f74c94af57#L34L362" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/d33186a6ae51d98895ae194b332532f74c94af57#L34L362', '&quot;Add support for multiple bullets.&quot;']);" >"Add support for multiple bullets."</a></p>
+<h3>Add a shotgun powerup</h3>
+<p><a href="https://github.com/asweigart/source_code_makeover/commit/35a149cf3f01193647ba2c63340978587b6ac8f1#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/35a149cf3f01193647ba2c63340978587b6ac8f1#square-shooter', '(These changes can be seen in the github history.)']);" >(These changes can be seen in the github history.)</a></p>
+<p>The shotgun powerup will have the ship fire multiple spread-out shots each time the mouse button is clicked. To get an idea of what code will be needed for this powerup, let's look at what code implements the other (freeze, super bullet, shield) powerups:</p>
+<ul>
+<li>A <code>'shotgun'</code> "kind".</li>
+<li>Code that draws the shotgun powerup icon in the <code>Powerup</code> class's <code>render()</code> function.</li>
+<li>A <code>_shotgun_timer</code> member for the <code>Ship</code> class to show how much time there is left for this powerup (and set to <code>0</code> when the player doesn't have this powerup.)</li>
+<li>Code that decreases <code>_shotgun_timer</code> over time in the <code>update()</code> method.</li>
+<li>Methods <code>add_shotgun()</code> and <code>has_shotgun()</code> for the <code>Ship</code> class.</li>
+</ul>
+<p>These changes are pretty much just copying the code used for the other powerups. We'll need to add some custom code to the shoot_at() method so that it returns multiple bullets if <code>has_shotgun()</code> returns <code>True</code>. Here's the new code that does this (and also replaces the previous code that only created a single <code>Bullet</code> object.)</p>
+<blockquote>
+<pre>bullets = []
+for i in range(5):
+    b = Bullet()
+    b.pos.copy(self.pos);
+    b.speed.x = x * 3
+    b.speed.y = y * 3
+
+    # Help out the poor sods who click on their
+    # own ship and get stuck with a non-moving
+    # bullet. (2009-11-14)
+    if abs(x) < 0.1 and abs(y) < 0.1:
+        b.speed.x *= 30
+        b.speed.y *= 30
+
+    if not self.has_shotgun():
+        return [b] # just return the one bullet
+    b.speed.x += random.uniform(-0.15, 0.15)
+    b.speed.y += random.uniform(-0.15, 0.15)
+
+    bullets.append(b)
+return bullets</pre>
+</blockquote>
+<p>Note that even though we loop 5 times, if <code>has_shotgun()</code> returns <code>False</code>, we just return the first <code>Bullet</code> object in a single-item list (since the caller is expecting a list of <code>Bullet</code> objects, not just a single <code>Bullet</code> object value.) Otherwise, a list of 5 <code>Bullet</code> objects will be returned.</p>
+<p>Also notice that the <code>return</code> statement for the non-shotgun case occurs before this code:</p>
+<blockquote>
+<pre>    b.speed.x += random.uniform(-0.15, 0.15)
+    b.speed.y += random.uniform(-0.15, 0.15)</pre>
+</blockquote>
+<p>This code alters the trajectory of the bullet very slightly. This is what causes the "spread" of bullets.</p>
+<p>I'll check in this code with the log message, <a href="https://github.com/asweigart/source_code_makeover/commit/35a149cf3f01193647ba2c63340978587b6ac8f1#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/35a149cf3f01193647ba2c63340978587b6ac8f1#square-shooter', '&quot;Added the Shotgun powerup&quot;']);" >"Added the Shotgun powerup"</a></p>
+<p>I'm going to make a slight improvement to the powerup icon for the shotgun blast by adding a couple lines so the icon looks more like the spread: Checked in with message, <a href="https://github.com/asweigart/source_code_makeover/commit/424d1704b23d560184a12be971c036f68c795fb5#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/424d1704b23d560184a12be971c036f68c795fb5#square-shooter', '&quot;Improved the shotgun powerup drawing&quot;']);" >"Improved the shotgun powerup drawing"</a></p>
+<h3>Adding powerup timer UI</h3>
+<p><a href="https://github.com/asweigart/source_code_makeover/commit/b720a9c44570284a319a9e3726310fff2c0caec8#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/b720a9c44570284a319a9e3726310fff2c0caec8#square-shooter', '(These changes can be seen in the github history.)']);" >(These changes can be seen in the github history.)</a></p>
+<p>One of the things that struck me when I first started playing Square Shooter was that I didn't know what the power ups did at all. They just had these abstract looking icons, but I didn't really know which was which or what they did (the freeze was obvious, but square around my ship didn't obviously seem like a shield.)</p>
+<p>Also, I'm not sure how long these power ups will last. In this change, we add a User Interface that displays the powerups we have as well as how much longer we will have them. In the green sidebar, we'll add the name of the powerup along with how many seconds  it has remaining.</p>
+<p>First, we'll need to change the <code>has_shield()</code>, <code>has_super_bullets()</code>, and <code>has_freeze()</code> methods to return the amount of time they have left, rather than a simple boolean. WARNING! You should always be careful when changing either the parameters or the return value of a function. Anything that calls these functions might break. Be sure to do extensive testing before checking in this code.</p>
+<p>This isn't too much of a concern for our case, because a zero value returned by these methods will be equivalent to <code>False</code> and a non-zero value will be equivalent to <code>True</code>. And also, this code is not part of a library that 3rd parties depend on. (Imagine how many people would have to change their code if Pygame decided to rename <code>pygame.Rect</code> to <code>pygame.Rectangle</code>.)</p>
+<p>Just to make sure that a negative value is returned from these methods (a negative float value is non-zero, so it will be equivalent to <code>True</code>), we will also add a check for a negative value and return <code>0</code> in that case.</p>
+<p>Here's the code that we add to the <code>GameScreen</code> class's <code>render()</code> method (which draws the other parts of the green sidebar):</p>
+<blockquote>
+<pre>text_y = 48 * 6
+if self.world.ship:
+    powerup_status = ((self.world.ship.has_shield(), 'Shield ' + str(int(self.world.ship.has_shield()))),
+                      (self.world.ship.has_super_bullets(), 'Super Bullet ' + str(int(self.world.ship.has_super_bullets()))),
+                      (self.world.ship.has_freeze(), 'Freeze ' + str(int(self.world.ship.has_freeze()))),
+                      (self.world.ship.has_shotgun(), 'Shotgun ' + str(int(self.world.ship.has_shotgun()))))
+    for seconds_left, text in powerup_status:
+        if seconds_left:
+            text = self.msg_font.render(text, False, BLACK)
+            self.screen.blit(text, (MAP_WIDTH + 20, text_y))
+            text_y += 25</pre>
+</blockquote>
+<p><img src="/images/squareshooter_shotgun_screenshot.png?27f655" width="500" /></p>
+<p>First, we create a data structure that is a tuple of tuples which hold the number of seconds remaining for the powerup (so we can tell if the powerup is active or not) and a string with the powerup's name and the number of (whole) seconds left for it.</p>
+<p>The rest of the code will render this text and blit it to the sidebar. The <code>text_y</code> variable will increment whenever it writes out some text, so that the next bit of text will be below the previous one.</p>
+<p>Checking in these changes with the log message, <a href="https://github.com/asweigart/source_code_makeover/commit/b720a9c44570284a319a9e3726310fff2c0caec8#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/b720a9c44570284a319a9e3726310fff2c0caec8#square-shooter', 'Add UI for timers, modified has_[powerup]() methods to return time left.']);" >Add UI for timers, modified has_[powerup]() methods to return time left.</a></p>
+<h3>End of Square Shooter's makeover</h3>
+<p>That's all I'll do for now. With the code organized, making new features becomes slightly easier. I'll leave you with one last bit of advice: you might not always have to go back and refactor code. Code doesn't rust if you don't modify it: the Square Shooter game worked perfectly fine without bugs before I made these changes. Refactoring is for the benefit of human programmers, not the computer. Any time you make changes (even improvements) you run the risk of adding new bugs.</p>
+<p>You only need to go back and refactor if it will make future changes easier to do. Of course, since code almost always has bugs, you are pretty much guaranteed to need to change it. (The code, as opposed to UI and feature, changes are covered in <a href="http://inventwithpython.com/blog/2012/08/09/source-code-makeover-square-shooter-part-1/">Part 1</a> and <a href="http://inventwithpython.com/blog/2012/08/10/source-code-makeover-square-shooter-part-2/">Part 2</a>.)</p>
+<p>Either way, I hope this blog series has given you ideas on how you can write cleaner and more readable code (and what makes code "clean" and "readable".) Keep an eye out for future Source Code Makeover blog posts, and thanks for reading!</p>
+					
+
+    </body>
+</html>

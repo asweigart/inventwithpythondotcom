@@ -1,0 +1,972 @@
+<html>
+    <head>
+        <title>Making a Text Adventure Game with the cmd and textwrap Python Modules</title>
+        <meta name="tags" content="" />
+        <meta name="date" content="2014-12-11 12:00" />
+        <meta name="summary" content="" />
+    </head>
+    <body>
+
+            <p>Text adventures are an old game genre where the entire world is textually described as a series of rooms. Play involves entering simple text commands such as "move north" or "eat pie". Each room in the game world has its own text description, items on the ground, and exits to adjacent rooms. "Room" is a general name for a single area in the game world: a room can be a large open canyon or the inside of a wardrobe. Multi-user text adventures, called MUDs or Multi-User Dungeons, were the precursor to modern MMORPGs. You can still play MUDs today by finding them on <a href="http://www.mudconnect.com/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.mudconnect.com/', 'The Mud Connector']);" >The Mud Connector</a>.</p>
+<p><img src="http://inventwithpython.com/blogstatic/esotera.png?27f655" alt="Screenshot of an old text adventure game." /></p>
+<p>Text adventures are easyto make because they don't require graphics. This tutorial uses two Python modules, <code>cmd</code> and <code>textwrap</code> and makes minimal use of object-oriented programming, but you don't have to know OOP concepts to follow. (But in general, text adventures would do very well with an object-oriented approach.) This tutorial is for beginner Python 3 programmers.</p>
+<p><a href="https://github.com/asweigart/textadventuredemo" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/textadventuredemo', 'The code for Text Adventure Demo is available on GitHub.']);" >The code for Text Adventure Demo is available on GitHub.</a></p>
+<p><span id="more-1623"></span></p>
+<p>The <code>cmd</code> module provides a generic command-line interface that has several useful features:</p>
+<ul>
+<li><strong>Tab-completion</strong> - Type a partial command and press tab, and the game can guess the rest of the command.</li>
+<li><strong>History browsing</strong> - Press the up arrow key to bring up the previously entered commands.</li>
+<li><strong>Automatic help</strong> - A help system for commands is automatically generated for your commands.</li>
+</ul>
+<p>The Python Debugger (<a href="http://pythonconquerstheuniverse.wordpress.com/2009/09/10/debugging-in-python/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://pythonconquerstheuniverse.wordpress.com/2009/09/10/debugging-in-python/', 'tutorial here']);" >tutorial here</a>) in the <code>pdb</code> module makes use of the <code>cmd</code> module for its command line interface.</p>
+<p>To get tab-completion to work on Windows, download and install this module: <a href="https://pypi.python.org/pypi/pyreadline/2.0" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://pypi.python.org/pypi/pyreadline/2.0', 'https://pypi.python.org/pypi/pyreadline/2.0']);" >https://pypi.python.org/pypi/pyreadline/2.0</a> (On Windows with Python 3, open a command window and type <code>cd c:\Python34\Scripts</code> and then <code>pip install pyreadline</code>.</p>
+<p>Our program will be about turn-based, single-player, and about 800 lines long. You can download the complete version from here: <a href="https://raw.githubusercontent.com/asweigart/textadventuredemo/master/textadventuredemo.py" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://raw.githubusercontent.com/asweigart/textadventuredemo/master/textadventuredemo.py', 'Download textadventuredemo.py']);" >Download textadventuredemo.py</a> or look at the <a href="https://raw.githubusercontent.com/asweigart/textadventuredemo" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://raw.githubusercontent.com/asweigart/textadventuredemo', 'GitHub page']);" >GitHub page</a>.</p>
+<h3>Demo of Game Play</h3>
+<p>Here's what our text adventure game will look like. It won't have combat, but will have a small town that you can navigate while picking up and looking at different things. Money isn't implemented, but shops to buy and sell at are.</p>
+<blockquote style="font-family: monospace;"><p>Text Adventure Demo!<br />
+====================</p>
+<p>(Type "help" for commands.)</p>
+<p>Town Square<br />
+===========<br />
+The town square is a large open space with a fountain in the center. Streets<br />
+lead in all directions.</p>
+<p>A welcome sign stands here.<br />
+A bubbling fountain of green water.</p>
+<p>North: North Y Street<br />
+South: South Y Street<br />
+East: East X Street<br />
+West: West X Street</p>
+<p>&gt; <strong>look sign</strong><br />
+The welcome sign reads, "Welcome to this text adventure demo. You can type<br />
+"help" for a list of commands to use. Be sure to check out Al's cool programming<br />
+books at http://inventwithpython.com"</p>
+<p>&gt; <strong>look fountain</strong><br />
+The water in the fountain is a bright green color. Is that... gatorade?</p>
+<p>&gt; <strong>north</strong><br />
+You move to the north.<br />
+North Y Street<br />
+==============<br />
+The northern end of Y Street has really gone down hill. Pot holes are everywhere, as are stray cats, rats, and wombats.</p>
+<p>A sign stands here, not bolted to the ground.</p>
+<p>South: Town Square<br />
+East: Bakery<br />
+West: Thief Guild</p>
+<p>&gt; <strong>look sign</strong><br />
+The sign reads, "Do Not Take This Sign"</p>
+<p>&gt; <strong>take sign</strong><br />
+You take a sign.</p>
+<p>&gt; <strong>inventory</strong><br />
+Inventory:<br />
+Do Not Take Sign Sign<br />
+Donut<br />
+Sword<br />
+README Note</p>
+<p>&gt; <strong>look readme</strong><br />
+The README note reads, "Welcome to the text adventure demo. Be sure to check out the source code to see how this game is put together."</p>
+<p>&gt; <strong>eat donut</strong><br />
+You eat a donut</p>
+<p>&gt; <strong>eat readme</strong><br />
+You eat a README note</p>
+<p>&gt; <strong>eat sword</strong><br />
+You cannot eat that.</p>
+<p>&gt; <strong>inventory</strong><br />
+Inventory:<br />
+Sword<br />
+Do Not Take Sign Sign</p>
+<p>&gt; <strong>e</strong><br />
+You move to the east.<br />
+Bakery<br />
+======<br />
+The delightful smell of meat pies fills the air, making you hungry. The baker flashes a grin, as he slides a box marked "Not Human Organs" under a table with his foot.</p>
+<p>A "Shopping HOWTO" note rests on the ground.</p>
+<p>South: East X Street<br />
+West: North Y Street</p>
+<p>&gt; <strong>list</strong><br />
+For sale:<br />
+- Meat Pie<br />
+- Donut<br />
+- Bagel</p>
+<p>&gt; <strong>buy pie</strong><br />
+You have purchased a meat pie</p>
+<p>&gt; <strong>buy pie</strong><br />
+You have purchased a meat pie</p>
+<p>&gt; <strong>buy pie</strong><br />
+You have purchased a meat pie</p>
+<p>&gt; <strong>inventory</strong><br />
+Inventory:<br />
+Meat Pie (3)<br />
+Sword<br />
+Do Not Take Sign Sign</p>
+<p>&gt; <strong>quit</strong><br />
+Thanks for playing!</p></blockquote>
+<h3>The "Choose Your Own Adventure" Mistake</h3>
+<p>Beginners tend to write code that looks like a "Choose Your Own Adventure" book: the execution starts at the beginning of the program, then it jumps to another part of the code (just like the reader would turn to some page at a branching point in the book). <a href="http://inventwithpython.com/extra/dragon2.py">I have an example of this type of program in my dragon2.py game.</a> This works, but the program becomes unwieldy as it gets larger.</p>
+<p>You won't have a <code>townSquare()</code> function that displays the Town Square text when called like so:</p>
+<div class="highlight">
+<pre><span class="k">def</span> <span class="nf">townSquare</span><span class="p">():</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&#39;The town square is a large open space with a fountain in the center. Streets lead in all directions.&#39;</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">TOWN_SQUARE_HAS_SIGN</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;A welcome sign stands here.&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">TOWN_SQUARE_HAS_FOUNTAIN</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">getFountainDescription</span><span class="p">())</span>
+    <span class="k">print</span><span class="p">()</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&#39;North: North Y Street&#39;</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&#39;South: South Y Street&#39;</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&#39;East: East X Street&#39;</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&#39;West: West X Street&#39;</span><span class="p">)</span>
+</pre>
+</div>
+<p>A better way to program a game is a more <strong>data structure-centric</strong> approach. This sounds very abstract. Here's an example of the data structure you'll have for locations in your game:</p>
+<div class="highlight">
+<pre><span class="n">worldRooms</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&#39;Town Square&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="n">DESC</span><span class="p">:</span> <span class="s">&#39;The town square is a large open space with a fountain in the center. Streets lead in all directions.&#39;</span><span class="p">,</span>
+        <span class="n">NORTH</span><span class="p">:</span> <span class="s">&#39;North Y Street&#39;</span><span class="p">,</span>
+        <span class="n">EAST</span><span class="p">:</span> <span class="s">&#39;East X Street&#39;</span><span class="p">,</span>
+        <span class="n">SOUTH</span><span class="p">:</span> <span class="s">&#39;South Y Street&#39;</span><span class="p">,</span>
+        <span class="n">WEST</span><span class="p">:</span> <span class="s">&#39;West X Street&#39;</span><span class="p">,</span>
+        <span class="n">GROUND</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;Welcome Sign&#39;</span><span class="p">,</span> <span class="s">&#39;Fountain&#39;</span><span class="p">]},</span>
+    <span class="s">&#39;North Y Street&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="n">DESC</span><span class="p">:</span> <span class="s">&#39;The northern end of Y Street has really gone down hill. Pot holes are everywhere, as are stray cats, rats, and wombats.&#39;</span><span class="p">,</span>
+        <span class="n">WEST</span><span class="p">:</span> <span class="s">&#39;Thief Guild&#39;</span><span class="p">,</span>
+        <span class="n">EAST</span><span class="p">:</span> <span class="s">&#39;Bakery&#39;</span><span class="p">,</span>
+        <span class="n">SOUTH</span><span class="p">:</span> <span class="s">&#39;Town Square&#39;</span><span class="p">,</span>
+        <span class="n">GROUND</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;Do Not Take Sign Sign&#39;</span><span class="p">]},</span>
+        <span class="p">...</span>
+</pre>
+</div>
+<p>You can see that the general structure of the <code>worldRooms</code> dictionary is:</p>
+<div class="highlight">
+<pre><span class="n">worldRooms</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&#39;Room Name&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="n">DESC</span><span class="p">:</span> <span class="s">&#39;Description of room.&#39;</span><span class="p">,</span>
+        <span class="n">NORTH</span><span class="p">:</span> <span class="s">&#39;Name of room to the north.&#39;</span><span class="p">,</span>
+        <span class="n">GROUND</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;Name of an item on the ground in this room&#39;</span><span class="p">,</span> <span class="s">&#39;Another item name&#39;</span><span class="p">]</span>
+    <span class="p">},</span>
+        <span class="p">...</span>
+<span class="p">}</span>
+</pre>
+</div>
+<p>And here's a data structure to hold the different types of items in the game:</p>
+<div class="highlight">
+<pre><span class="n">worldItems</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&#39;Welcome Sign&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="n">GROUNDDESC</span><span class="p">:</span> <span class="s">&#39;A welcome sign stands here.&#39;</span><span class="p">,</span>
+        <span class="n">SHORTDESC</span><span class="p">:</span> <span class="s">&#39;a welcome sign&#39;</span><span class="p">,</span>
+        <span class="n">LONGDESC</span><span class="p">:</span> <span class="s">&#39;The welcome sign reads, &quot;Welcome to this text adventure demo. You can type &quot;help&quot; for a list of commands to use. Be sure to check out Al</span><span class="se">\&#39;</span><span class="s">s cool programming books at http://inventwithpython.com&quot;&#39;</span><span class="p">,</span>
+        <span class="n">TAKEABLE</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="n">DESCWORDS</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;welcome&#39;</span><span class="p">,</span> <span class="s">&#39;sign&#39;</span><span class="p">]},</span>
+    <span class="s">&#39;Fountain&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="n">GROUNDDESC</span><span class="p">:</span> <span class="s">&#39;A bubbling fountain of green water.&#39;</span><span class="p">,</span>
+        <span class="n">SHORTDESC</span><span class="p">:</span> <span class="s">&#39;a fountain&#39;</span><span class="p">,</span>
+        <span class="n">LONGDESC</span><span class="p">:</span> <span class="s">&#39;The water in the fountain is a bright green color. Is that... gatorade?&#39;</span><span class="p">,</span>
+        <span class="n">TAKEABLE</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="n">DESCWORDS</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;fountain&#39;</span><span class="p">]},</span>
+        <span class="p">...</span>
+</pre>
+</div>
+<p>You can see that the general structure of the <code>worldRooms</code> dictionary is:</p>
+<div class="highlight">
+<pre><span class="n">worldItems</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&#39;Item Name&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="n">GROUNDDESC</span><span class="p">:</span> <span class="s">&#39;How this item is described when on the ground.&#39;</span><span class="p">,</span>
+        <span class="n">SHORTDESC</span><span class="p">:</span> <span class="s">&#39;A short description of this item.&#39;</span><span class="p">,</span>
+        <span class="n">LONGDESC</span><span class="p">:</span> <span class="s">&#39;A long description of this item, used when the player looks at it.&#39;</span><span class="p">,</span>
+        <span class="n">TAKEABLE</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="c"># whether this item can be taken and put in your inventory</span>
+        <span class="n">DESCWORDS</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;a word the player can use to refer to this item&#39;</span><span class="p">,</span> <span class="s">&#39;another word&#39;</span><span class="p">]</span>
+    <span class="p">},</span>
+        <span class="p">...</span>
+<span class="p">}</span>
+</pre>
+</div>
+<p>By putting the rooms and items into data structures, now you can write a <strong>single</strong> <code>displayLocation()</code> function that can display <em>any</em> room in the game because it works off of the values in the <code>worldRooms</code> data structure. You can write code that deals with rooms and items generically. Writing a big game world will be much faster, just like how interchangeable parts speed up manufacturing and factories.</p>
+<p>A map of the full world looks something like this:</p>
+<pre>        +---------+    +---------+
+        | Thief   O    | Bakery  |
+        | Guild   |    |         |
++------++------O--+    +----O----+
+| Used |
+|Anvils|        Town Square     +--------+
+|      O                        |Obs Deck|
++------++----O----+    +----O----/  /
+        | Black-  O    | Wizard /  /
+        | smith   |    | Tower    /
+        +---------+    +---------+</pre>
+<p>(Data structures like these are normally put into classes in objet-oriented programming. To keep this text adventure demo simple, I'm using dictionaries and lists.)</p>
+<h3>Constant Variables and Global Variables</h3>
+<p>Start from scratch with a blank <code>textadventuredemo.py</code> file. Add a <code>#! python3</code> <a href="https://stackoverflow.com/questions/2429511/why-do-people-write-usr-bin-env-python-on-the-first-line-of-a-python-script" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://stackoverflow.com/questions/2429511/why-do-people-write-usr-bin-env-python-on-the-first-line-of-a-python-script', 'shebang line']);" >shebang line</a>, some comments describing the program, and the <code>worldRooms</code> and <code>worldItems</code> data structures. Since this is mostly text and not code, you might want to just copy and paste the code from <a href="https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/datastructures.py" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/datastructures.py', 'the snippet on GitHub']);" >the snippet on GitHub</a>.</p>
+<p>The keys in the above data structures are constant variables:</p>
+<div class="highlight">
+<pre><span class="n">DESC</span> <span class="o">=</span> <span class="s">&#39;desc&#39;</span>
+<span class="n">NORTH</span> <span class="o">=</span> <span class="s">&#39;north&#39;</span>
+<span class="n">SOUTH</span> <span class="o">=</span> <span class="s">&#39;south&#39;</span>
+<span class="n">EAST</span> <span class="o">=</span> <span class="s">&#39;east&#39;</span>
+<span class="n">WEST</span> <span class="o">=</span> <span class="s">&#39;west&#39;</span>
+<span class="n">UP</span> <span class="o">=</span> <span class="s">&#39;up&#39;</span>
+<span class="n">DOWN</span> <span class="o">=</span> <span class="s">&#39;down&#39;</span>
+<span class="n">GROUND</span> <span class="o">=</span> <span class="s">&#39;ground&#39;</span>
+<span class="n">SHOP</span> <span class="o">=</span> <span class="s">&#39;shop&#39;</span>
+<span class="n">GROUNDDESC</span> <span class="o">=</span> <span class="s">&#39;grounddesc&#39;</span>
+<span class="n">SHORTDESC</span> <span class="o">=</span> <span class="s">&#39;shortdesc&#39;</span>
+<span class="n">LONGDESC</span> <span class="o">=</span> <span class="s">&#39;longdesc&#39;</span>
+<span class="n">TAKEABLE</span> <span class="o">=</span> <span class="s">&#39;takeable&#39;</span>
+<span class="n">EDIBLE</span> <span class="o">=</span> <span class="s">&#39;edible&#39;</span>
+<span class="n">DESCWORDS</span> <span class="o">=</span> <span class="s">&#39;descwords&#39;</span>
+</pre>
+</div>
+<p>The reason that constant variables are used instead of typing the string directly is to minimize the chance of errors. If you mistype the string <code>'desc'</code> as <code>'dsec'</code>, Python will not immediately complain because since <code>'dsec'</code> is a valid string. Later there will be a KeyError when you try to use <code>'dsec'</code> as a key, but this is a vague error message that could have many causes.</p>
+<p>But if you are using constant variables instead, mistyping <code>DESC</code> as <code>DSEC</code> will immediately crash the program with a NameError exception since <code>DSEC</code> isn't a variable name. <strong>The sooner your program crashes, the easier it is to find the crash-causing bug.</strong> If your program silently continued to work, it will take longer to trace the original bug.</p>
+<p>There is also the <code>SCREEN_WIDTH</code> constant, which will be used by the <code>textwrap</code> module to determine how wide the program should assume the screen is:</p>
+<div class="highlight">
+<pre><span class="n">SCREEN_WIDTH</span> <span class="o">=</span> <span class="mi">80</span></pre>
+</div>
+<p>Th <code>SCREEN_WIDTH</code> constant will be explained in the next section.</p>
+<p>The <code>location</code> and <code>inventory</code> global variables will keep track of the player's position and inventory. The <code>showFullExits</code> variable tracks whether to show full or brief versions of the current room's exits (this is explained later in the <code>displayLocation()</code> function). Add the following code to your program:</p>
+<div class="highlight">
+<pre><span class="n">location</span> <span class="o">=</span> <span class="s">&#39;Town Square&#39;</span> <span class="c"># start in town square</span>
+<span class="n">inventory</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;README Note&#39;</span><span class="p">,</span> <span class="s">&#39;Sword&#39;</span><span class="p">,</span> <span class="s">&#39;Donut&#39;</span><span class="p">]</span> <span class="c"># start with blank inventory</span>
+<span class="n">showFullExits</span> <span class="o">=</span> <span class="bp">True</span>
+</pre>
+</div>
+<p>(Normally your programs should avoid using global variables, but they're used here to keep the text adventure demo code simple.)</p>
+<p>Also, import the following modules into you program:</p>
+<div class="highlight">
+<pre><span class="kn">import</span> <span class="nn">cmd</span><span class="o">,</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">textwrap</span>
+</pre>
+</div>
+<h3>The textwrap Module</h3>
+<p>The <code>textwrap</code> module can intelligently break up a string into multiple lines of a given width. You might think this is easily done with code such as the following, which breaks the <code>desc</code> string up into lines 80 characters wide:</p>
+<div class="highlight">
+<pre><span class="n">desc</span> <span class="o">=</span> <span class="s">&#39;The town square is a large open space with a fountain in the center. Streets lead in all directions.&#39;</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">desc</span><span class="p">),</span> <span class="mi">80</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">desc</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="mi">80</span><span class="p">])</span>
+</pre>
+</div>
+<p>But this can cut off a line right in the middle of words, like this:</p>
+<div class="highlight">
+<pre>The town square is a large open space with a fountain in the center. Streets lea
+d in all directions.</pre>
+</div>
+<p>The <code>textwrap.wrap()</code> function is smart enough to avoid chopping lines in the middle of a word. It returns a list, with each line as a string in the list:</p>
+<div class="highlight">
+<pre><span class="kn">import</span> <span class="nn">textwrap</span>
+<span class="n">desc</span> <span class="o">=</span> <span class="s">&#39;The town square is a large open space with a fountain in the center. Streets lead in all directions.&#39;</span>
+
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">textwrap</span><span class="o">.</span><span class="n">wrap</span><span class="p">(</span><span class="n">desc</span><span class="p">,</span> <span class="mi">80</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+</pre>
+</div>
+<div class="highlight">
+<pre>The town square is a large open space with a fountain in the center. Streets
+lead in all directions.</pre>
+</div>
+<p>To make it easy to change the screen width that <code>textwrap.wrap()</code> uses, pass the <code>SCREEN_WIDTH</code> constant for the second argument. That way, if you want to change the screen width you only need to change the <code>SCREEN_WIDTH</code> value.</p>
+<h3>Location and Movement Functions</h3>
+<p>When the player walks into a room, the displayed text looks something like this:</p>
+<blockquote style="font-family: monospace;"><p>Town Square<br />
+===========<br />
+The town square is a large open space with a fountain in the center. Streets<br />
+lead in all directions.</p>
+<p>A welcome sign stands here.<br />
+A bubbling fountain of green water.</p>
+<p>North: North Y Street<br />
+South: South Y Street<br />
+East: East X Street<br />
+West: West X Street
+</p></blockquote>
+<p>The data for each room is tied up in the <code>worldRooms</code> variable. You need a function that, given the name of the room as a string, will print out text like the above. This will need to print out:</p>
+<ul>
+<li>The room's name</li>
+<li>The room's description</li>
+<li>A list of the items on the ground in this room</li>
+<li>A list of all the available exits</li>
+</ul>
+<p>Add the following code to your program:</p>
+<div class="highlight">
+<pre><span class="k">def</span> <span class="nf">displayLocation</span><span class="p">(</span><span class="n">loc</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A helper function for displaying an area&#39;s description and exits.&quot;&quot;&quot;</span>
+    <span class="c"># Print the room name.</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">loc</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&#39;=&#39;</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">loc</span><span class="p">))</span>
+
+    <span class="c"># Print the room&#39;s description (using textwrap.wrap())</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">textwrap</span><span class="o">.</span><span class="n">wrap</span><span class="p">(</span><span class="n">worldRooms</span><span class="p">[</span><span class="n">loc</span><span class="p">][</span><span class="n">DESC</span><span class="p">],</span> <span class="n">SCREEN_WIDTH</span><span class="p">)))</span>
+
+    <span class="c"># Print all the items on the ground.</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">worldRooms</span><span class="p">[</span><span class="n">loc</span><span class="p">][</span><span class="n">GROUND</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">worldRooms</span><span class="p">[</span><span class="n">loc</span><span class="p">][</span><span class="n">GROUND</span><span class="p">]:</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">worldItems</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="n">GROUNDDESC</span><span class="p">])</span>
+
+    <span class="c"># Print all the exits.</span>
+    <span class="n">exits</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">direction</span> <span class="ow">in</span> <span class="p">(</span><span class="n">NORTH</span><span class="p">,</span> <span class="n">SOUTH</span><span class="p">,</span> <span class="n">EAST</span><span class="p">,</span> <span class="n">WEST</span><span class="p">,</span> <span class="n">UP</span><span class="p">,</span> <span class="n">DOWN</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">direction</span> <span class="ow">in</span> <span class="n">worldRooms</span><span class="p">[</span><span class="n">loc</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">exits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">direction</span><span class="o">.</span><span class="n">title</span><span class="p">())</span>
+    <span class="k">print</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">showFullExits</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">direction</span> <span class="ow">in</span> <span class="p">(</span><span class="n">NORTH</span><span class="p">,</span> <span class="n">SOUTH</span><span class="p">,</span> <span class="n">EAST</span><span class="p">,</span> <span class="n">WEST</span><span class="p">,</span> <span class="n">UP</span><span class="p">,</span> <span class="n">DOWN</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">direction</span> <span class="ow">in</span> <span class="n">worldRooms</span><span class="p">[</span><span class="n">location</span><span class="p">]:</span>
+                <span class="k">print</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">direction</span><span class="o">.</span><span class="n">title</span><span class="p">(),</span> <span class="n">worldRooms</span><span class="p">[</span><span class="n">location</span><span class="p">][</span><span class="n">direction</span><span class="p">]))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;Exits: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="s">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">exits</span><span class="p">))</span>
+</pre>
+</div>
+<p>There will also be a <code>moveDirection()</code> function that, given a north/south/east/west/up/down string argument, will change the <code>location</code> global variable to the new location.</p>
+<p>But it will only do this if the direction was a valid one to make. If the player is able to move in the given direction, the new room's description will be displayed on the screen. Add the following code to your program:</p>
+<div class="highlight">
+<pre><span class="k">def</span> <span class="nf">moveDirection</span><span class="p">(</span><span class="n">direction</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A helper function that changes the location of the player.&quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">location</span>
+
+    <span class="k">if</span> <span class="n">direction</span> <span class="ow">in</span> <span class="n">worldRooms</span><span class="p">[</span><span class="n">location</span><span class="p">]:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;You move to the </span><span class="si">%s</span><span class="s">.&#39;</span> <span class="o">%</span> <span class="n">direction</span><span class="p">)</span>
+        <span class="n">location</span> <span class="o">=</span> <span class="n">worldRooms</span><span class="p">[</span><span class="n">location</span><span class="p">][</span><span class="n">direction</span><span class="p">]</span>
+        <span class="n">displayLocation</span><span class="p">(</span><span class="n">location</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;You cannot move in that direction&#39;</span><span class="p">)</span>
+</pre>
+</div>
+<p>You'll see how these functions are used by the command line interface in a bit. But if you want to see how the code you have so far works, add the following temporary code:</p>
+<div class="highlight">
+<pre><span class="c"># TEMPORARY CODE:</span>
+<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+    <span class="n">displayLocation</span><span class="p">(</span><span class="n">location</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="nb">input</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">response</span> <span class="o">==</span> <span class="s">&#39;quit&#39;</span><span class="p">:</span>
+        <span class="k">break</span>
+    <span class="k">if</span> <span class="n">response</span> <span class="ow">in</span> <span class="p">(</span><span class="n">NORTH</span><span class="p">,</span> <span class="n">SOUTH</span><span class="p">,</span> <span class="n">EAST</span><span class="p">,</span> <span class="n">WEST</span><span class="p">,</span> <span class="n">UP</span><span class="p">,</span> <span class="n">DOWN</span><span class="p">):</span>
+        <span class="n">moveDirection</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</pre>
+</div>
+<p>Your program will now look like <a href="https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/movement.py" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/movement.py', 'this source code on GitHub']);" >this source code on GitHub</a>. When you run this program, you will be able to move around the game world by typing <code>north</code>, <code>south</code>, <code>east</code>, <code>west</code>, <code>up</code>, and <code>down</code>.</p>
+<p>Notice a few things about this game world:</p>
+<ul>
+<li>Moving in an invalid direction results in <code>'You cannot move in that direction'</code> printed to the screen.</li>
+<li>At the top of the wizard's tower, the "Magical Escalator to Nowhere" room's up exit <em>leads to itself</em>. This means if you exit up from this room, you will arrive in the same room. You can effectively go up an infinite amount of times. This is a side effect of the way the room data structures are set up.</li>
+</ul>
+<p>There are just a few more helper functions you'll need.</p>
+<h3>Item Helper Functions</h3>
+<p>These functions all work with the item data structure you have already set up. You won't quite see how these functions are needed right now, but they will be explained later.</p>
+<p>Remember that the <code>worldItems</code> variable is a dictionary with key-value pairs that look like this:</p>
+<div class="highlight">
+<pre>    <span class="s">&#39;Fountain&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="n">GROUNDDESC</span><span class="p">:</span> <span class="s">&#39;A bubbling fountain of green water.&#39;</span><span class="p">,</span>
+        <span class="n">SHORTDESC</span><span class="p">:</span> <span class="s">&#39;a fountain&#39;</span><span class="p">,</span>
+        <span class="n">LONGDESC</span><span class="p">:</span> <span class="s">&#39;The water in the fountain is a bright green color. Is that... gatorade?&#39;</span><span class="p">,</span>
+        <span class="n">TAKEABLE</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+        <span class="n">DESCWORDS</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;fountain&#39;</span><span class="p">]},</span>
+</pre>
+</div>
+<p>The helper functions for items are:</p>
+<ul>
+<li><code>getAllDescWords()</code> - Given a list of strings of item names, return a list with all of these items' DESCWORDS strings.</li>
+<li><code>getAllFirstDescWords()</code> - Given a list of strings of item names, return a list with all of these items' first DESCWORDS strings.</li>
+<li><code>getFirstItemMatchingDesc()</code> - Given a string and a list of item names, return a string of the name of the first item that has a DESCWORD string that matches the given string argument.</li>
+<li><code>getAllItemsMatchingDesc()</code> - Given a string and a list of item names, return a list of strings of item names for items that have the given string argument as one of their DESCWORD strings.</li>
+</ul>
+<p>Add the following code to your programs:</p>
+<div class="highlight">
+<pre><span class="k">def</span> <span class="nf">getAllDescWords</span><span class="p">(</span><span class="n">itemList</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns a list of &quot;description words&quot; for each item named in itemList.&quot;&quot;&quot;</span>
+    <span class="n">itemList</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">itemList</span><span class="p">))</span> <span class="c"># make itemList unique</span>
+    <span class="n">descWords</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">itemList</span><span class="p">:</span>
+        <span class="n">descWords</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">worldItems</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="n">DESCWORDS</span><span class="p">])</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">descWords</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">getAllFirstDescWords</span><span class="p">(</span><span class="n">itemList</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns a list of the first &quot;description word&quot; in the list of</span>
+<span class="sd">    description words for each item named in itemList.&quot;&quot;&quot;</span>
+    <span class="n">itemList</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">itemList</span><span class="p">))</span> <span class="c"># make itemList unique</span>
+    <span class="n">descWords</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">itemList</span><span class="p">:</span>
+        <span class="n">descWords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">worldItems</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="n">DESCWORDS</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">descWords</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">getFirstItemMatchingDesc</span><span class="p">(</span><span class="n">desc</span><span class="p">,</span> <span class="n">itemList</span><span class="p">):</span>
+    <span class="n">itemList</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">itemList</span><span class="p">))</span> <span class="c"># make itemList unique</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">itemList</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">desc</span> <span class="ow">in</span> <span class="n">worldItems</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="n">DESCWORDS</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="n">item</span>
+    <span class="k">return</span> <span class="bp">None</span>
+
+<span class="k">def</span> <span class="nf">getAllItemsMatchingDesc</span><span class="p">(</span><span class="n">desc</span><span class="p">,</span> <span class="n">itemList</span><span class="p">):</span>
+    <span class="n">itemList</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">itemList</span><span class="p">))</span> <span class="c"># make itemList unique</span>
+    <span class="n">matchingItems</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">itemList</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">desc</span> <span class="ow">in</span> <span class="n">worldItems</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="n">DESCWORDS</span><span class="p">]:</span>
+            <span class="n">matchingItems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">matchingItems</span>
+</pre>
+</div>
+<p>The <code>list(set(itemList))</code> code is a Pythonic way to get rid of duplicate values in a list by coverting the list to a set and back to a list. Note that this might change the order of the values in the list, since the set data type is unordered.</p>
+<h3>Creating a Command Line Interface with the cmd Module</h3>
+<p>The <code>cmd</code> module frees us from reinventing the wheel when creating the command line interface for the text adventure. First, create a class that subclasses <code>cmd.Cmd</code>. The <code>cmd</code> module will read any methods that begin with <code>do_</code>, <code>complete_</code> and <code>help_</code> for it's command, tab-completion, and help system features, respectively.</p>
+<p>Here's a short example. Add the following code to your program:</p>
+<div class="highlight">
+<pre><span class="k">class</span> <span class="nc">TextAdventureCmd</span><span class="p">(</span><span class="n">cmd</span><span class="o">.</span><span class="n">Cmd</span><span class="p">):</span>
+    <span class="n">prompt</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&gt; &#39;</span>
+
+    <span class="c"># The default() method is called when none of the other do_*() command methods match.</span>
+    <span class="k">def</span> <span class="nf">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;I do not understand that command. Type &quot;help&quot; for a list of commands.&#39;</span><span class="p">)</span>
+
+    <span class="c"># A very simple &quot;quit&quot; command to terminate the program:</span>
+    <span class="k">def</span> <span class="nf">do_quit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Quit the game.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">True</span> <span class="c"># this exits the Cmd application loop in TextAdventureCmd.cmdloop()</span>
+
+    <span class="k">def</span> <span class="nf">help_combat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;Combat is not implemented in this program.&#39;</span><span class="p">)</span>
+</pre>
+</div>
+<p>There are several cmd-specific things about this code:</p>
+<ul>
+<li>The string in the <code>prompt</code> member variable is printed when the player is expected to begin typing in a command. In your text adventure's case, this will be the <code>'\n>'</code> string: a newline followed by a &gt; character.</li>
+<li>The <code>default()</code> method will be called by the command line interface when it cannot understand the command the player typed. In this case, a "I do not understand" message is printed to the screen.</li>
+<li>When the player types in a command, the command line interface checks if there are any methods of the same name as the command to handle it. For example, "quit" would be handled by <code>do_quit()</code>. If the player entered the "qwerty" command but there is no <code>do_qwerty()</code> method, the <code>default()</code> method is called instead.</li>
+<li>When a <code>do_&lt;command&gt;()</code> returns, the command line interface will let the player type in another command. If a <code>do_&lt;command&gt;()</code> returns the value <code>True</code>, the command line interface will stop asking for commands.</li>
+<li>The <code>do_quit()</code> method implements the "quit" command. Since it returns <code>True</code>, the command line interface will stop asking the player for commands.</li>
+<li>The docstring at the top of each <code>do_&lt;command&gt;()</code> function will automatically be used for the command line interface's help system.
+<li>The <code>help_combat()</code> method implements the "help combat" command. You can add as many help topics as you want: typing "help" by itself lists all of them. Since there is no combat in this text adventure, this function prints a message telling the player there is no combat.</li>
+<li>The <code>arg</code> parameter in <code>default()</code> and <code>do_quit()</code> will be explained later.</li>
+</ul>
+<p>To kick off the command line interface code, you will need to call the <code>cmd.Cmd</code> object's <code>cmdloop()</code> method. Take out the temporary code in the <code>while True:</code> loop and add the following to your program:</p>
+<div class="highlight">
+<pre><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&#39;Text Adventure Demo!&#39;</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&#39;====================&#39;</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">()</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&#39;(Type &quot;help&quot; for commands.)&#39;</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">()</span>
+    <span class="n">displayLocation</span><span class="p">(</span><span class="n">location</span><span class="p">)</span>
+    <span class="n">TextAdventureCmd</span><span class="p">()</span><span class="o">.</span><span class="n">cmdloop</span><span class="p">()</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&#39;Thanks for playing!&#39;</span><span class="p">)</span>
+</pre>
+</div>
+<p>Your program should now look like <a href="https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/basiccmdloop.py" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/basiccmdloop.py', 'this file on GitHub']);" >this file on GitHub</a>.</p>
+<h3>The cmd Help System</h3>
+<p>When you run this program, the movement commands won't work (they were implemented in the temporary <code>while</code> loop you removed) but you can run the "help", "help quit", and "help combat" commands:</p>
+<blockquote style="font-family: monospace;"><p>&gt; <strong>help</strong></p>
+<p>Documented commands (type help <topic>):<br />
+========================================<br />
+help  quit</p>
+<p>Miscellaneous help topics:<br />
+==========================<br />
+combat</p>
+<p>&gt; <strong>help quit</strong><br />
+Quit the game.</p>
+<p>&gt; <strong>help combat</strong><br />
+Combat is not implemented in this program.</p></blockquote>
+<p>Notice that the "quit" command's docstring has been used for the "help quit" command. You can end this program by running "quit", which makes the command line interface call the <code>do_quit()</code> method. Since it is a <code>do_&lt;command&gt;()</code> method that returns <code>True</code>, it causes the <code>TextAdventureCmd().cmdloop()</code> function return and the execution reaches the end of the source code.</p>
+<p>As a free feature provided by the command line interface, pressing the up arrow key will cycle through the command history. This provides an easy way to re-enter commands you previously typed.</p>
+<h3>The Move Commands and Tab Completion</h3>
+<p>In order to move the player around, you'll need a <code>do_north()</code> method for the "north" command, a <code>do_south()</code> method for the "south" command, and so on. All of these methods will simply call the <code>moveDirection()</code> function with the appropriate argument. Add the following to your program:</p>
+<div class="highlight">
+<pre>    <span class="c"># These direction commands have a long (i.e. north) and show (i.e. n) form.</span>
+    <span class="c"># Since the code is basically the same, I put it in the moveDirection()</span>
+    <span class="c"># function.</span>
+    <span class="k">def</span> <span class="nf">do_north</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Go to the area to the north, if possible.&quot;&quot;&quot;</span>
+        <span class="n">moveDirection</span><span class="p">(</span><span class="s">&#39;north&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">do_south</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Go to the area to the south, if possible.&quot;&quot;&quot;</span>
+        <span class="n">moveDirection</span><span class="p">(</span><span class="s">&#39;south&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">do_east</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Go to the area to the east, if possible.&quot;&quot;&quot;</span>
+        <span class="n">moveDirection</span><span class="p">(</span><span class="s">&#39;east&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">do_west</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Go to the area to the west, if possible.&quot;&quot;&quot;</span>
+        <span class="n">moveDirection</span><span class="p">(</span><span class="s">&#39;west&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">do_up</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Go to the area upwards, if possible.&quot;&quot;&quot;</span>
+        <span class="n">moveDirection</span><span class="p">(</span><span class="s">&#39;up&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">do_down</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Go to the area downwards, if possible.&quot;&quot;&quot;</span>
+        <span class="n">moveDirection</span><span class="p">(</span><span class="s">&#39;down&#39;</span><span class="p">)</span>
+
+    <span class="c"># Since the code is the exact same, we can just copy the</span>
+    <span class="c"># methods with shortened names:</span>
+    <span class="n">do_n</span> <span class="o">=</span> <span class="n">do_north</span>
+    <span class="n">do_s</span> <span class="o">=</span> <span class="n">do_south</span>
+    <span class="n">do_e</span> <span class="o">=</span> <span class="n">do_east</span>
+    <span class="n">do_w</span> <span class="o">=</span> <span class="n">do_west</span>
+    <span class="n">do_u</span> <span class="o">=</span> <span class="n">do_up</span>
+    <span class="n">do_d</span> <span class="o">=</span> <span class="n">do_down</span>
+</pre>
+</div>
+<p>Because the "n" and "north" commands would do the same thing, we can create another function with the same code by assigning <code>do_n = do_north</code>, and so on.</p>
+<p>To toggle the Boolean value in the global <code>showFullExits</code> variable, an "exits" command can be implemented in <code>do_exits()</code>. Add the following to your program:</p>
+<div class="highlight">
+<pre>    <span class="k">def</span> <span class="nf">do_exits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Toggle showing full exit descriptions or brief exit descriptions.&quot;&quot;&quot;</span>
+        <span class="k">global</span> <span class="n">showFullExits</span>
+        <span class="n">showFullExits</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">showFullExits</span>
+        <span class="k">if</span> <span class="n">showFullExits</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;Showing full exit descriptions.&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;Showing brief exit descriptions.&#39;</span><span class="p">)</span>
+</pre>
+</div>
+<p>With this code, your program should look like <a href="https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/cmdmovement.py" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/cmdmovement.py', 'this file on GitHub']);" >this file on GitHub</a>. When you run this program, the north/south/east/west/up/down commands will all work.</p>
+<h3>Inventory</h3>
+<p>The "inventory" command will display the contents of the <code>inventory</code> global variable. Rather than just a <code>do_inventory()</code> method that runs <code>print(inventory)</code>, there's additional code that checks if the player has more than one of a type of item. So an <code>inventory</code> value of <code>['Donut', 'Donut', 'Donut']</code> will display a single line: <code>Donut (3)</code>.</p>
+<p>Add the following code to your program:</p>
+<div class="highlight">
+<pre>    <span class="k">def</span> <span class="nf">do_inventory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Display a list of the items in your possession.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">inventory</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;Inventory:</span><span class="se">\n</span><span class="s">  (nothing)&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c"># first get a count of each distinct item in the inventory</span>
+        <span class="n">itemCount</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">inventory</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">itemCount</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">itemCount</span><span class="p">[</span><span class="n">item</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">itemCount</span><span class="p">[</span><span class="n">item</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="c"># get a list of inventory items with duplicates removed:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;Inventory:&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">inventory</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">itemCount</span><span class="p">[</span><span class="n">item</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">print</span><span class="p">(</span><span class="s">&#39;  </span><span class="si">%s</span><span class="s"> (</span><span class="si">%s</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">itemCount</span><span class="p">[</span><span class="n">item</span><span class="p">]))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">print</span><span class="p">(</span><span class="s">&#39;  &#39;</span> <span class="o">+</span> <span class="n">item</span><span class="p">)</span>
+
+    <span class="n">do_inv</span> <span class="o">=</span> <span class="n">do_inventory</span>
+</pre>
+</div>
+<p>To add an identical "inv" shortcut command, the <code>do_inv = do_inventory</code> line is added after the <code>do_inventory()</code> function.</p>
+<h3>Taking and Dropping Items</h3>
+<p>Every room in the <code>worldRooms</code> data structure has a <code>GROUND</code> key whose value is a list of items on the ground of that room. By removing items from the <code>inventory</code> list and adding them to the <code>GROUND</code> list, the player can "drop" the item in a certain room. The items will continue to be on the ground even if the player leaves the room and comes back. Similarly, by removing a value from the <code>GROUND</code> list and adding it to the <code>inventory</code> list, the player can "take" the item.</p>
+<p>The "take" and "drop" commands are a bit more complicated: There is text that follows the "take" and "drop" words such as in "take sign" or "drop sword". The additional text is passed to the <code>do_&lt;command&gt;()</code> function for its <code>arg</code> parameter. So if the player enters the command "drop sword", the <code>do_drop()</code> method is called with <code>'sword'</code> passed for its <code>arg</code> parameter.</p>
+<p>The drop and take methods will have to do more than modify <code>inventory</code> and the <code>GROUND</code> key's value. They must handle the player forgetting to specify what to take/drop, check that the item is actually on the ground/inventory, and if the object is "takeable" (that is, it's <code>TAKEABLE</code> key's value is <code>True</code>).</p>
+<p>Also, items can be referred to by any of it's <code>DESCWORDS</code> from the <code>worldItems</code> data structure. For example, the sword item:</p>
+<div class="highlight">
+<pre>    <span class="s">&#39;Sword&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="n">GROUNDDESC</span><span class="p">:</span> <span class="s">&#39;A sword lies on the ground.&#39;</span><span class="p">,</span>
+        <span class="n">SHORTDESC</span><span class="p">:</span> <span class="s">&#39;a sword&#39;</span><span class="p">,</span>
+        <span class="n">LONGDESC</span><span class="p">:</span> <span class="s">&#39;A longsword, engraved with the word, &quot;Exkaleber&quot;&#39;</span><span class="p">,</span>
+        <span class="n">DESCWORDS</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;sword&#39;</span><span class="p">,</span> <span class="s">&#39;exkaleber&#39;</span><span class="p">,</span> <span class="s">&#39;longsword&#39;</span><span class="p">]},}</span></pre>
+</div>
+<p>...has a <code>DESCWORDS</code> value of <code>['sword', 'exkaleber', 'longsword']</code>. So the "drop sword", "drop exkaleer", and "drop longsword" would all refer to the same sword to drop.</p>
+<p>Add the following code to your program:</p>
+<div class="highlight">
+<pre>    <span class="k">def</span> <span class="nf">do_take</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;&quot;take &lt;item&gt; - Take an item on the ground.&quot;&quot;&quot;</span>
+
+        <span class="c"># put this value in a more suitably named variable</span>
+        <span class="n">itemToTake</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">itemToTake</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;Take what? Type &quot;look&quot; the items on the ground here.&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">cantTake</span> <span class="o">=</span> <span class="bp">False</span>
+
+        <span class="c"># get the item name that the player&#39;s command describes</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">getAllItemsMatchingDesc</span><span class="p">(</span><span class="n">itemToTake</span><span class="p">,</span> <span class="n">worldRooms</span><span class="p">[</span><span class="n">location</span><span class="p">][</span><span class="n">GROUND</span><span class="p">]):</span>
+            <span class="k">if</span> <span class="n">worldItems</span><span class="p">[</span><span class="n">item</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">TAKEABLE</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span> <span class="o">==</span> <span class="bp">False</span><span class="p">:</span>
+                <span class="n">cantTake</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="k">continue</span> <span class="c"># there may be other items named this that you can take, so we continue checking</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;You take </span><span class="si">%s</span><span class="s">.&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">worldItems</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="n">SHORTDESC</span><span class="p">]))</span>
+            <span class="n">worldRooms</span><span class="p">[</span><span class="n">location</span><span class="p">][</span><span class="n">GROUND</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="c"># remove from the ground</span>
+            <span class="n">inventory</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="c"># add to inventory</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="n">cantTake</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;You cannot take &quot;</span><span class="si">%s</span><span class="s">&quot;.&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">itemToTake</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;That is not on the ground.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">do_drop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;&quot;drop &lt;item&gt; - Drop an item from your inventory onto the ground.&quot;&quot;&quot;</span>
+
+        <span class="c"># put this value in a more suitably named variable</span>
+        <span class="n">itemToDrop</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="c"># get a list of all &quot;description words&quot; for each item in the inventory</span>
+        <span class="n">invDescWords</span> <span class="o">=</span> <span class="n">getAllDescWords</span><span class="p">(</span><span class="n">inventory</span><span class="p">)</span>
+
+        <span class="c"># find out if the player doesn&#39;t have that item</span>
+        <span class="k">if</span> <span class="n">itemToDrop</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">invDescWords</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;You do not have &quot;</span><span class="si">%s</span><span class="s">&quot; in your inventory.&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">itemToDrop</span><span class="p">))</span>
+            <span class="k">return</span>
+
+        <span class="c"># get the item name that the player&#39;s command describes</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="n">getFirstItemMatchingDesc</span><span class="p">(</span><span class="n">itemToDrop</span><span class="p">,</span> <span class="n">inventory</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">item</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;You drop </span><span class="si">%s</span><span class="s">.&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">worldItems</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="n">SHORTDESC</span><span class="p">]))</span>
+            <span class="n">inventory</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="c"># remove from inventory</span>
+            <span class="n">worldRooms</span><span class="p">[</span><span class="n">location</span><span class="p">][</span><span class="n">GROUND</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="c"># add to the ground</span></pre>
+</div>
+<p>After you are finished, your program will look like <a href="https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/takedrop.py" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/takedrop.py', 'this file on GitHub']);" >this file on GitHub</a>. When you run the program, you will be able to drop and take items (provided they have the <code>TAKEABLE</code> setting).</p>
+<h3>Tab Completion</h3>
+<p>if the player types a partial command, such as "nor", they can press the Tab key and the command line interface will complete the command: "north". The command line  interface knows this because "north" is the only command that begins with "nor". If there were other commands that began with "nor", pressing Tab would bring up a list of possible complete commands.</p>
+<p>However, say that the player has an <code>inventory</code> value of <code>['sword', 'swingset', 'swampwater']</code> and had entered "drop sw" and pressed Tab. The command line interface knows all the commands because it can see what <code>do_%lt;command&gt;()</code> functions there are. But items on the ground or in the inventory are specific to your program, so you will need a way to tell the command line interface what it should return for possible tab completions.</p>
+<p>This is done by the <code>complete_&lt;command&gt;()</code> methods. These methods have the following parameters:</p>
+<ul>
+<li><code>text</code> is the part after the command. If "drop sw" were being completed, <code>text</code> would be set to <code>'sw'</code>.</li>
+<li><code>line</code> is the entire command that was entered. If "drop sw" were being completed, <code>line</code> would be set to <code>'drop sw'</code>.</li>
+<li><code>begidx</code> is index in <code>line</code> where the last word begins. If "drop sw" were being completed, <code>begidx</code> would be <code>5</code>, which is where <code>'sw'</code> begins.</li>
+<li><code>endidx</code> is index in <code>line</code> where the last word begins. If "drop sw" were being completed, <code>endidx</code> would be <code>7</code>, which is where <code>'sw'</code> ends.</li>
+</ul>
+<p>When the Tab key is pressed, the command's <code>complete_&lt;command&gt;()</code> method is called and passed the command typed in so far. For example, typing "drop sw"-Tab will call the <code>complete_drop()</code> method and typing "take sw"-Tab will call the <code>complete_take()</code> method. If a <code>complete_&lt;command&gt;()</code> method command doesn't exist, such as not <code>complete_qwerty()</code> method for "qwerty sw", then the command line interface does nothing.</p>
+<p>Using the <code>getAllFirstDescWords()</code> helper function, you can add <code>complete_take()</code> and <code>complete_drop()</code> methods to determine what item the player is trying to take or drop. Add the following to your program:</p>
+<div class="highlight">
+<pre>    <span class="k">def</span> <span class="nf">complete_take</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
+        <span class="n">possibleItems</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="c"># if the user has only typed &quot;take&quot; but no item name:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">getAllFirstDescWords</span><span class="p">(</span><span class="n">worldRooms</span><span class="p">[</span><span class="n">location</span><span class="p">][</span><span class="n">GROUND</span><span class="p">])</span>
+
+        <span class="c"># otherwise, get a list of all &quot;description words&quot; for ground items matching the command text so far:</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">worldRooms</span><span class="p">[</span><span class="n">location</span><span class="p">][</span><span class="n">GROUND</span><span class="p">])):</span>
+            <span class="k">for</span> <span class="n">descWord</span> <span class="ow">in</span> <span class="n">worldItems</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="n">DESCWORDS</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">descWord</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="ow">and</span> <span class="n">worldItems</span><span class="p">[</span><span class="n">item</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">TAKEABLE</span><span class="p">,</span> <span class="bp">True</span><span class="p">):</span>
+                    <span class="n">possibleItems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">descWord</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">possibleItems</span><span class="p">))</span> <span class="c"># make list unique</span>
+
+
+    <span class="k">def</span> <span class="nf">complete_drop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
+        <span class="n">possibleItems</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">itemToDrop</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="c"># get a list of all &quot;description words&quot; for each item in the inventory</span>
+        <span class="n">invDescWords</span> <span class="o">=</span> <span class="n">getAllDescWords</span><span class="p">(</span><span class="n">inventory</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">descWord</span> <span class="ow">in</span> <span class="n">invDescWords</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;drop </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">descWord</span><span class="p">)):</span>
+                <span class="k">return</span> <span class="p">[]</span> <span class="c"># command is complete</span>
+
+        <span class="c"># if the user has only typed &quot;drop&quot; but no item name:</span>
+        <span class="k">if</span> <span class="n">itemToDrop</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">getAllFirstDescWords</span><span class="p">(</span><span class="n">inventory</span><span class="p">)</span>
+
+        <span class="c"># otherwise, get a list of all &quot;description words&quot; for inventory items matching the command text so far:</span>
+        <span class="k">for</span> <span class="n">descWord</span> <span class="ow">in</span> <span class="n">invDescWords</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">descWord</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+                <span class="n">possibleItems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">descWord</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">possibleItems</span><span class="p">))</span> <span class="c"># make list unique</span>
+</pre>
+</div>
+<p>Your program will look like <a href="https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/takedrop_complete.py" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/takedrop_complete.py', 'this file on GitHub']);" >this file on GitHub</a>. When you run the program, you will be able to type "drop sw", then press Tab, and the command will complete to "drop sword".</p>
+<h3>Looking at Things</h3>
+<p>The "look" command will have similar <code>do_look()</code> and <code>complete_look()</code> methods. Typing "look" will print the current room's <code>DEC</code> key's value. Typing "look exits" will print the names of all the adjacent rooms, while "look <direction>" will print the name of the room in that direction. The player can also type "look <item>" to look at a item that is either on the ground or in their inventory.</p>
+<p>Enter the following code for the "look" command:</p>
+<div class="highlight">
+<pre>    <span class="k">def</span> <span class="nf">do_look</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Look at an item, direction, or the area:</span>
+<span class="sd">&quot;look&quot; - display the current area&#39;s description</span>
+<span class="sd">&quot;look &lt;direction&gt;&quot; - display the description of the area in that direction</span>
+<span class="sd">&quot;look exits&quot; - display the description of all adjacent areas</span>
+<span class="sd">&quot;look &lt;item&gt;&quot; - display the description of an item on the ground or in your inventory&quot;&quot;&quot;</span>
+
+        <span class="n">lookingAt</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">lookingAt</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
+            <span class="c"># &quot;look&quot; will re-print the area description</span>
+            <span class="n">displayLocation</span><span class="p">(</span><span class="n">location</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="n">lookingAt</span> <span class="o">==</span> <span class="s">&#39;exits&#39;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">direction</span> <span class="ow">in</span> <span class="p">(</span><span class="n">NORTH</span><span class="p">,</span> <span class="n">SOUTH</span><span class="p">,</span> <span class="n">EAST</span><span class="p">,</span> <span class="n">WEST</span><span class="p">,</span> <span class="n">UP</span><span class="p">,</span> <span class="n">DOWN</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">direction</span> <span class="ow">in</span> <span class="n">worldRooms</span><span class="p">[</span><span class="n">location</span><span class="p">]:</span>
+                    <span class="k">print</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">direction</span><span class="o">.</span><span class="n">title</span><span class="p">(),</span> <span class="n">worldRooms</span><span class="p">[</span><span class="n">location</span><span class="p">][</span><span class="n">direction</span><span class="p">]))</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="n">lookingAt</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;north&#39;</span><span class="p">,</span> <span class="s">&#39;west&#39;</span><span class="p">,</span> <span class="s">&#39;east&#39;</span><span class="p">,</span> <span class="s">&#39;south&#39;</span><span class="p">,</span> <span class="s">&#39;up&#39;</span><span class="p">,</span> <span class="s">&#39;down&#39;</span><span class="p">,</span> <span class="s">&#39;n&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">,</span> <span class="s">&#39;e&#39;</span><span class="p">,</span> <span class="s">&#39;s&#39;</span><span class="p">,</span> <span class="s">&#39;u&#39;</span><span class="p">,</span> <span class="s">&#39;d&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">lookingAt</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;n&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">NORTH</span> <span class="ow">in</span> <span class="n">worldRooms</span><span class="p">[</span><span class="n">location</span><span class="p">]:</span>
+                <span class="k">print</span><span class="p">(</span><span class="n">worldRooms</span><span class="p">[</span><span class="n">location</span><span class="p">][</span><span class="n">NORTH</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">lookingAt</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;w&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">WEST</span> <span class="ow">in</span> <span class="n">worldRooms</span><span class="p">[</span><span class="n">location</span><span class="p">]:</span>
+                <span class="k">print</span><span class="p">(</span><span class="n">worldRooms</span><span class="p">[</span><span class="n">location</span><span class="p">][</span><span class="n">WEST</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">lookingAt</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;e&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">EAST</span> <span class="ow">in</span> <span class="n">worldRooms</span><span class="p">[</span><span class="n">location</span><span class="p">]:</span>
+                <span class="k">print</span><span class="p">(</span><span class="n">worldRooms</span><span class="p">[</span><span class="n">location</span><span class="p">][</span><span class="n">EAST</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">lookingAt</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">SOUTH</span> <span class="ow">in</span> <span class="n">worldRooms</span><span class="p">[</span><span class="n">location</span><span class="p">]:</span>
+                <span class="k">print</span><span class="p">(</span><span class="n">worldRooms</span><span class="p">[</span><span class="n">location</span><span class="p">][</span><span class="n">SOUTH</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">lookingAt</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;u&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">UP</span> <span class="ow">in</span> <span class="n">worldRooms</span><span class="p">[</span><span class="n">location</span><span class="p">]:</span>
+                <span class="k">print</span><span class="p">(</span><span class="n">worldRooms</span><span class="p">[</span><span class="n">location</span><span class="p">][</span><span class="n">UP</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">lookingAt</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;d&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">DOWN</span> <span class="ow">in</span> <span class="n">worldRooms</span><span class="p">[</span><span class="n">location</span><span class="p">]:</span>
+                <span class="k">print</span><span class="p">(</span><span class="n">worldRooms</span><span class="p">[</span><span class="n">location</span><span class="p">][</span><span class="n">DOWN</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">print</span><span class="p">(</span><span class="s">&#39;There is nothing in that direction.&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c"># see if the item being looked at is on the ground at this location</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="n">getFirstItemMatchingDesc</span><span class="p">(</span><span class="n">lookingAt</span><span class="p">,</span> <span class="n">worldRooms</span><span class="p">[</span><span class="n">location</span><span class="p">][</span><span class="n">GROUND</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">item</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">textwrap</span><span class="o">.</span><span class="n">wrap</span><span class="p">(</span><span class="n">worldItems</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="n">LONGDESC</span><span class="p">],</span> <span class="n">SCREEN_WIDTH</span><span class="p">)))</span>
+            <span class="k">return</span>
+
+        <span class="c"># see if the item being looked at is in the inventory</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="n">getFirstItemMatchingDesc</span><span class="p">(</span><span class="n">lookingAt</span><span class="p">,</span> <span class="n">inventory</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">item</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">textwrap</span><span class="o">.</span><span class="n">wrap</span><span class="p">(</span><span class="n">worldItems</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="n">LONGDESC</span><span class="p">],</span> <span class="n">SCREEN_WIDTH</span><span class="p">)))</span>
+            <span class="k">return</span>
+
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;You do not see that nearby.&#39;</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">complete_look</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
+        <span class="n">possibleItems</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">lookingAt</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="c"># get a list of all &quot;description words&quot; for each item in the inventory</span>
+        <span class="n">invDescWords</span> <span class="o">=</span> <span class="n">getAllDescWords</span><span class="p">(</span><span class="n">inventory</span><span class="p">)</span>
+        <span class="n">groundDescWords</span> <span class="o">=</span> <span class="n">getAllDescWords</span><span class="p">(</span><span class="n">worldRooms</span><span class="p">[</span><span class="n">location</span><span class="p">][</span><span class="n">GROUND</span><span class="p">])</span>
+        <span class="n">shopDescWords</span> <span class="o">=</span> <span class="n">getAllDescWords</span><span class="p">(</span><span class="n">worldRooms</span><span class="p">[</span><span class="n">location</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">SHOP</span><span class="p">,</span> <span class="p">[]))</span>
+
+        <span class="k">for</span> <span class="n">descWord</span> <span class="ow">in</span> <span class="n">invDescWords</span> <span class="o">+</span> <span class="n">groundDescWords</span> <span class="o">+</span> <span class="n">shopDescWords</span> <span class="o">+</span> <span class="p">[</span><span class="n">NORTH</span><span class="p">,</span> <span class="n">SOUTH</span><span class="p">,</span> <span class="n">EAST</span><span class="p">,</span> <span class="n">WEST</span><span class="p">,</span> <span class="n">UP</span><span class="p">,</span> <span class="n">DOWN</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;look </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">descWord</span><span class="p">)):</span>
+                <span class="k">return</span> <span class="p">[]</span> <span class="c"># command is complete</span>
+
+        <span class="c"># if the user has only typed &quot;look&quot; but no item name, show all items on ground, shop and directions:</span>
+        <span class="k">if</span> <span class="n">lookingAt</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
+            <span class="n">possibleItems</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">getAllFirstDescWords</span><span class="p">(</span><span class="n">worldRooms</span><span class="p">[</span><span class="n">location</span><span class="p">][</span><span class="n">GROUND</span><span class="p">]))</span>
+            <span class="n">possibleItems</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">getAllFirstDescWords</span><span class="p">(</span><span class="n">worldRooms</span><span class="p">[</span><span class="n">location</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">SHOP</span><span class="p">,</span> <span class="p">[])))</span>
+            <span class="k">for</span> <span class="n">direction</span> <span class="ow">in</span> <span class="p">(</span><span class="n">NORTH</span><span class="p">,</span> <span class="n">SOUTH</span><span class="p">,</span> <span class="n">EAST</span><span class="p">,</span> <span class="n">WEST</span><span class="p">,</span> <span class="n">UP</span><span class="p">,</span> <span class="n">DOWN</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">direction</span> <span class="ow">in</span> <span class="n">worldRooms</span><span class="p">[</span><span class="n">location</span><span class="p">]:</span>
+                    <span class="n">possibleItems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">possibleItems</span><span class="p">))</span> <span class="c"># make list unique</span>
+
+        <span class="c"># otherwise, get a list of all &quot;description words&quot; for ground items matching the command text so far:</span>
+        <span class="k">for</span> <span class="n">descWord</span> <span class="ow">in</span> <span class="n">groundDescWords</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">descWord</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">lookingAt</span><span class="p">):</span>
+                <span class="n">possibleItems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">descWord</span><span class="p">)</span>
+
+        <span class="c"># otherwise, get a list of all &quot;description words&quot; for items for sale at the shop (if this is one):</span>
+        <span class="k">for</span> <span class="n">descWord</span> <span class="ow">in</span> <span class="n">shopDescWords</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">descWord</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">lookingAt</span><span class="p">):</span>
+                <span class="n">possibleItems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">descWord</span><span class="p">)</span>
+
+        <span class="c"># check for matching directions</span>
+        <span class="k">for</span> <span class="n">direction</span> <span class="ow">in</span> <span class="p">(</span><span class="n">NORTH</span><span class="p">,</span> <span class="n">SOUTH</span><span class="p">,</span> <span class="n">EAST</span><span class="p">,</span> <span class="n">WEST</span><span class="p">,</span> <span class="n">UP</span><span class="p">,</span> <span class="n">DOWN</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">direction</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">lookingAt</span><span class="p">):</span>
+                <span class="n">possibleItems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span>
+
+        <span class="c"># get a list of all &quot;description words&quot; for inventory items matching the command text so far:</span>
+        <span class="k">for</span> <span class="n">descWord</span> <span class="ow">in</span> <span class="n">invDescWords</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">descWord</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">lookingAt</span><span class="p">):</span>
+                <span class="n">possibleItems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">descWord</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">possibleItems</span><span class="p">))</span> <span class="c"># make list unique</span>
+</pre>
+</div>
+<p>The program will now look like <a href="https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/look.py" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/look.py', 'this file on GitHub']);" >this file on GitHub</a>.</p>
+<h3>Shops</h3>
+<p>Shops are rooms that have a <code>SHOP</code> key, such as the Bakery room:</p>
+<div class="highlight">
+<pre>    <span class="s">&#39;Bakery&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="n">DESC</span><span class="p">:</span> <span class="s">&#39;The delightful smell of meat pies fills the air, making you hungry. The baker flashes a grin, as he slides a box marked &quot;Not Human Organs&quot; under a table with his foot.&#39;</span><span class="p">,</span>
+        <span class="n">WEST</span><span class="p">:</span> <span class="s">&#39;North Y Street&#39;</span><span class="p">,</span>
+        <span class="n">SOUTH</span><span class="p">:</span> <span class="s">&#39;East X Street&#39;</span><span class="p">,</span>
+        <span class="n">SHOP</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;Meat Pie&#39;</span><span class="p">,</span> <span class="s">&#39;Donut&#39;</span><span class="p">,</span> <span class="s">&#39;Bagel&#39;</span><span class="p">],</span>
+        <span class="n">GROUND</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;Shop Howto&#39;</span><span class="p">]},</span>
+</pre>
+</div>
+<p>The value for the <code>SHOP</code> is a list of items that the shop sells. Inside these rooms, the player can run the "list" command (to see what is for sale), the "buy" command (to purchase an item), and the "sell" command (to pawn an item from the player's inventory). For simplicity, any item can be sold to any shop. Also, money is currently not implemented in this game, so items in the shop are free.</p>
+<p>Several things must be checked when the player tries to run these commands: Is the player currently in a shop room? Did the player forget to specify what they want to buy or sell? Does the shop sell what the player wants to buy? Does the player have the item they want to sell to the shop? The following code implements the "list", "buy", and "sell" commands and addresses all these issues. Add the following code to your program:</p>
+<div class="highlight">
+<pre>    <span class="k">def</span> <span class="nf">do_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;List the items for sale at the current location&#39;s shop. &quot;list full&quot; will show details of the items.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">SHOP</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">worldRooms</span><span class="p">[</span><span class="n">location</span><span class="p">]:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;This is not a shop.&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">arg</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;For sale:&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">worldRooms</span><span class="p">[</span><span class="n">location</span><span class="p">][</span><span class="n">SHOP</span><span class="p">]:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;  - </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">item</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">arg</span> <span class="o">==</span> <span class="s">&#39;full&#39;</span><span class="p">:</span>
+                <span class="k">print</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">textwrap</span><span class="o">.</span><span class="n">wrap</span><span class="p">(</span><span class="n">worldItems</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="n">LONGDESC</span><span class="p">],</span> <span class="n">SCREEN_WIDTH</span><span class="p">)))</span>
+
+
+    <span class="k">def</span> <span class="nf">do_buy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;&quot;buy &lt;item&gt;&quot; - buy an item at the current location&#39;s shop.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">SHOP</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">worldRooms</span><span class="p">[</span><span class="n">location</span><span class="p">]:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;This is not a shop.&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">itemToBuy</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">itemToBuy</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;Buy what? Type &quot;list&quot; or &quot;list full&quot; to see a list of items for sale.&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">item</span> <span class="o">=</span> <span class="n">getFirstItemMatchingDesc</span><span class="p">(</span><span class="n">itemToBuy</span><span class="p">,</span> <span class="n">worldRooms</span><span class="p">[</span><span class="n">location</span><span class="p">][</span><span class="n">SHOP</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">item</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="c"># NOTE - If you wanted to implement money, here is where you would add</span>
+            <span class="c"># code that checks if the player has enough, then deducts the price</span>
+            <span class="c"># from their money.</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;You have purchased </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">worldItems</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="n">SHORTDESC</span><span class="p">]))</span>
+            <span class="n">inventory</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;&quot;</span><span class="si">%s</span><span class="s">&quot; is not sold here. Type &quot;list&quot; or &quot;list full&quot; to see a list of items for sale.&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">itemToBuy</span><span class="p">))</span>
+
+
+    <span class="k">def</span> <span class="nf">complete_buy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">SHOP</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">worldRooms</span><span class="p">[</span><span class="n">location</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
+        <span class="n">itemToBuy</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">possibleItems</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c"># if the user has only typed &quot;buy&quot; but no item name:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">itemToBuy</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">getAllFirstDescWords</span><span class="p">(</span><span class="n">worldRooms</span><span class="p">[</span><span class="n">location</span><span class="p">][</span><span class="n">SHOP</span><span class="p">])</span>
+
+        <span class="c"># otherwise, get a list of all &quot;description words&quot; for shop items matching the command text so far:</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">worldRooms</span><span class="p">[</span><span class="n">location</span><span class="p">][</span><span class="n">SHOP</span><span class="p">])):</span>
+            <span class="k">for</span> <span class="n">descWord</span> <span class="ow">in</span> <span class="n">worldItems</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="n">DESCWORDS</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">descWord</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+                    <span class="n">possibleItems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">descWord</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">possibleItems</span><span class="p">))</span> <span class="c"># make list unique</span>
+
+
+    <span class="k">def</span> <span class="nf">do_sell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;&quot;sell &lt;item&gt;&quot; - sell an item at the current location&#39;s shop.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">SHOP</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">worldRooms</span><span class="p">[</span><span class="n">location</span><span class="p">]:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;This is not a shop.&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">itemToSell</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">itemToSell</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;Sell what? Type &quot;inventory&quot; or &quot;inv&quot; to see your inventory.&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">inventory</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">itemToSell</span> <span class="ow">in</span> <span class="n">worldItems</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="n">DESCWORDS</span><span class="p">]:</span>
+                <span class="c"># NOTE - If you wanted to implement money, here is where you would add</span>
+                <span class="c"># code that gives the player money for selling the item.</span>
+                <span class="k">print</span><span class="p">(</span><span class="s">&#39;You have sold </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">worldItems</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="n">SHORTDESC</span><span class="p">]))</span>
+                <span class="n">inventory</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+                <span class="k">return</span>
+
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;You do not have &quot;</span><span class="si">%s</span><span class="s">&quot;. Type &quot;inventory&quot; or &quot;inv&quot; to see your inventory.&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">itemToSell</span><span class="p">))</span>
+
+
+    <span class="k">def</span> <span class="nf">complete_sell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">SHOP</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">worldRooms</span><span class="p">[</span><span class="n">location</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
+        <span class="n">itemToSell</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">possibleItems</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c"># if the user has only typed &quot;sell&quot; but no item name:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">itemToSell</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">getAllFirstDescWords</span><span class="p">(</span><span class="n">inventory</span><span class="p">)</span>
+
+        <span class="c"># otherwise, get a list of all &quot;description words&quot; for inventory items matching the command text so far:</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">inventory</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">descWord</span> <span class="ow">in</span> <span class="n">worldItems</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="n">DESCWORDS</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">descWord</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+                    <span class="n">possibleItems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">descWord</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">possibleItems</span><span class="p">))</span> <span class="c"># make list unique</span>
+</pre>
+</div>
+<p>When you are finished typing in this code, your program will look like <a href="https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/shops.py" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/shops.py', 'this file on GitHub']);" >this file on GitHub</a>.</p>
+<h3>Eating</h3>
+<p>Some items are marked as edible by having an <code>EDIBLE</code> key set to <code>True</code> For example, Meat Pies, Bagels, and Donuts are all edible items:</p>
+<div class="highlight">
+<pre>    <span class="s">&#39;Meat Pie&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="n">GROUNDDESC</span><span class="p">:</span> <span class="s">&#39;A suspicious meat pie rests on the ground.&#39;</span><span class="p">,</span>
+        <span class="n">SHORTDESC</span><span class="p">:</span> <span class="s">&#39;a meat pie&#39;</span><span class="p">,</span>
+        <span class="n">LONGDESC</span><span class="p">:</span> <span class="s">&#39;A meat pie. It tastes like chicken.&#39;</span><span class="p">,</span>
+        <span class="n">EDIBLE</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="n">DESCWORDS</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;pie&#39;</span><span class="p">,</span> <span class="s">&#39;meat&#39;</span><span class="p">]},</span>
+    <span class="s">&#39;Bagel&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="n">GROUNDDESC</span><span class="p">:</span> <span class="s">&#39;A bagel rests on the ground. (Gross.)&#39;</span><span class="p">,</span>
+        <span class="n">SHORTDESC</span><span class="p">:</span> <span class="s">&#39;a bagel&#39;</span><span class="p">,</span>
+        <span class="n">LONGDESC</span><span class="p">:</span> <span class="s">&#39;It is a donut-shaped bagel.&#39;</span><span class="p">,</span>
+        <span class="n">EDIBLE</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="n">DESCWORDS</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;bagel&#39;</span><span class="p">]},</span>
+    <span class="s">&#39;Donut&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="n">GROUNDDESC</span><span class="p">:</span> <span class="s">&#39;A donut rests on the ground. (Gross.)&#39;</span><span class="p">,</span>
+        <span class="n">SHORTDESC</span><span class="p">:</span> <span class="s">&#39;a donut&#39;</span><span class="p">,</span>
+        <span class="n">LONGDESC</span><span class="p">:</span> <span class="s">&#39;It is a bagel-shaped donut.&#39;</span><span class="p">,</span>
+        <span class="n">EDIBLE</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="n">DESCWORDS</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;donut&#39;</span><span class="p">]},</span>
+</pre>
+</div>
+<p>For simplicity, eating things doesn't do anything other than remove them from your inventory. But you could implement health or hunger levels in your text adventure, and need eat (or drink) items or else have adverse effects. There's nothing new about how the <code>do_eat()</code> and <code>complete_eat()</code> functions work. Add the following code to your program:</p>
+<div class="highlight">
+<pre>    <span class="k">def</span> <span class="nf">do_eat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;&quot;eat &lt;item&gt;&quot; - eat an item in your inventory.&quot;&quot;&quot;</span>
+        <span class="n">itemToEat</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">itemToEat</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;Eat what? Type &quot;inventory&quot; or &quot;inv&quot; to see your inventory.&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">cantEat</span> <span class="o">=</span> <span class="bp">False</span>
+
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">getAllItemsMatchingDesc</span><span class="p">(</span><span class="n">itemToEat</span><span class="p">,</span> <span class="n">inventory</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">worldItems</span><span class="p">[</span><span class="n">item</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">EDIBLE</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span> <span class="o">==</span> <span class="bp">False</span><span class="p">:</span>
+                <span class="n">cantEat</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="k">continue</span> <span class="c"># there may be other items named this that you can eat, so we continue checking</span>
+            <span class="c"># NOTE - If you wanted to implement hunger levels, here is where</span>
+            <span class="c"># you would add code that changes the player&#39;s hunger level.</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;You eat </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">worldItems</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="n">SHORTDESC</span><span class="p">]))</span>
+            <span class="n">inventory</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="n">cantEat</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;You cannot eat that.&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;You do not have &quot;</span><span class="si">%s</span><span class="s">&quot;. Type &quot;inventory&quot; or &quot;inv&quot; to see your inventory.&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">itemToEat</span><span class="p">))</span>
+
+
+    <span class="k">def</span> <span class="nf">complete_eat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">begidx</span><span class="p">,</span> <span class="n">endidx</span><span class="p">):</span>
+        <span class="n">itemToEat</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">possibleItems</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c"># if the user has only typed &quot;eat&quot; but no item name:</span>
+        <span class="k">if</span> <span class="n">itemToEat</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">getAllFirstDescWords</span><span class="p">(</span><span class="n">inventory</span><span class="p">)</span>
+
+        <span class="c"># otherwise, get a list of all &quot;description words&quot; for edible inventory items matching the command text so far:</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">inventory</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">descWord</span> <span class="ow">in</span> <span class="n">worldItems</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="n">DESCWORDS</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">descWord</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="ow">and</span> <span class="n">worldItems</span><span class="p">[</span><span class="n">item</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">EDIBLE</span><span class="p">,</span> <span class="bp">False</span><span class="p">):</span>
+                    <span class="n">possibleItems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">descWord</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">possibleItems</span><span class="p">))</span> <span class="c"># make list unique</span>
+</pre>
+</div>
+<p>With the above code added, you will have finished the entire text adventure program. This program can be downloaded from GitHub: <a href="https://raw.githubusercontent.com/asweigart/textadventuredemo/master/textadventuredemo.py" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://raw.githubusercontent.com/asweigart/textadventuredemo/master/textadventuredemo.py', 'https://raw.githubusercontent.com/asweigart/textadventuredemo/master/textadventuredemo.py']);" >https://raw.githubusercontent.com/asweigart/textadventuredemo/master/textadventuredemo.py</a></p>
+<h3>Ideas for New Features</h3>
+<p>That's it for this text adventure tutorial. Because of the <code>cmd</code> module's command line interface features, it is fairly easy to add new commands to your game. From here, there are several things you could add to your game:</p>
+<ul>
+<li>Add HP, hunger/thirst levels, and status effects. (These are common to RPG-like games.)</li>
+<li>Combat with randomly wandering monsters.</li>
+<li>Casting magic spells, or learning new spells from spellbook items.</li>
+<li>Drinking items, including potions which can have magical effects.</li>
+<li>Equipping items, such as wearing helmets or wielding swords.</li>
+<li>Money, including different types of currencies that shops can accept or deny.</li>
+<li>Several new rooms to expand the world.</li>
+</ul>
+<p>If you are interested in creating a <a href="http://www.roguebasin.com/index.php?title=Main_Page" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.roguebasin.com/index.php?title=Main_Page', 'roguelike']);" >roguelike</a> (a genre that is sort of like the Diablo games except with ASCII-art graphics), the libtcod module will be very helpful. There are tutorials <a href="http://www.roguebasin.com/index.php?title=Complete_Roguelike_Tutorial,_using_python%2Blibtcod" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.roguebasin.com/index.php?title=Complete_Roguelike_Tutorial,_using_python%2Blibtcod', 'here']);" >here</a> and <a href="http://kooneiform.wordpress.com/2009/03/29/241/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://kooneiform.wordpress.com/2009/03/29/241/', 'here']);" >here</a>.</p>
+<p>I detail the differences between these genre of text-based games in my blog post, <a href="http://inventwithpython.com/blog/2013/06/05/text-adventure-vs-mud-vs-roguelike-vs-dwarf-fortress/">Text Adventure vs. MUD vs. Roguelike vs. Dwarf Fortress</a>.</p>
+<p>You can try playing MUDs you find through <a href="http://www.mudconnect.com/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.mudconnect.com/', 'The Mud Connector']);" >The Mud Connector</a> to get new ideas for additional features you'd like to add. Good luck, and have fun!</p>
+
+    </body>
+</html>

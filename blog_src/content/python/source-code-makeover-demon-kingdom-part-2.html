@@ -1,0 +1,108 @@
+<html>
+    <head>
+        <title>Source Code Makeover: Demon Kingdom, Part 2</title>
+        <meta name="tags" content="" />
+        <meta name="date" content="2013-06-13 12:00" />
+        <meta name="summary" content="" />
+    </head>
+    <body>
+
+
+			<p>This is a continuation of <a href="http://inventwithpython.com/blog/2013/06/12/source-code-makeover-demon-kingdom-part-1/">Part 1</a>. I make a lot of the same changes as before, mostly removing duplicate code.<br />
+<span id="more-1488"></span></p>
+<h3>Single-Item Tuple Gotcha, Getting Rid of Redundant update() Call</h3>
+<p>Diff of these changes: <a href="https://github.com/asweigart/source_code_makeover/commit/167bde21f02f7d6b8610b475dcdf31eb09b5277b#DemonKingdom/demonkingdom_makeover.py" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/167bde21f02f7d6b8610b475dcdf31eb09b5277b#DemonKingdom/demonkingdom_makeover.py', 'Fixed single-item tuple syntax error and moved initial calls to update to the AnimatedSprite ctor.']);" >Fixed single-item tuple syntax error and moved initial calls to update to the AnimatedSprite ctor.</a></p>
+<p>Since the <code>AnimatedSprite</code> class's <code>update()</code> method is <strong>always</strong> called after the <code>Monster</code> constructor, so we might as well get rid of that method and put its code directly in the constructor function.</p>
+<p>Also, there was a slight bug with my last check-in. In Python, a tuple with just one item in it needs a trailing comma to be recognized as a tuple. (Otherwise it'll just be seen as a value inside parentheses.) The values in the <code>MONSTER_RATIOS</code> variable need this comma added.</p>
+<p>You can see this in the interactive shell:</p>
+<pre>>>> type( (42, 99) )
+&lt;type 'tuple'&gt;
+>>> type( (42) )
+&lt;type 'int'&gt;
+>>> type( (42,) )
+&lt;type 'tuple'&gt;</pre>
+<h3>Simplying the "final wave" Variables</h3>
+<p>Diff of these changes: <a href="https://github.com/asweigart/source_code_makeover/commit/75cb5e43eb17c925af91503801a13fc1abbe3ee8#DemonKingdom/demonkingdom_makeover.py" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/75cb5e43eb17c925af91503801a13fc1abbe3ee8#DemonKingdom/demonkingdom_makeover.py', 'Got rid of a lot of redundant code by adding a FINAL_WAVE_MONSTERS data structure and a populateFinalWave() function.']);" >Got rid of a lot of redundant code by adding a FINAL_WAVE_MONSTERS data structure and a populateFinalWave() function.</a></p>
+<p>There are quite a few "finalWave" variables that have a <code>for</code> loop set up to add various monsters to a list. They look like this:</p>
+<pre>for i in range(21):
+    if i - 4 <= 0:
+        type = "bat"
+        min = -1
+        max = -100
+    elif i - 13 <= 0:
+        type = "plant"
+        min = -20
+        max = -70
+    elif i - 17 <= 0:
+        min = -30
+        max = -60
+        type = "tree"
+    elif i >= 18:
+        type = "genie"
+        min = -30
+        max = -60
+    # monster adding code here</pre>
+<p>I can see what they were doing, but they do it in an overly complicated way. When <code>i</code> is between 0 and 4 then the type is "bat", <strong>else if</strong> <code>i</code> is 13 or less (but greater than 4, because of the elif) then the type is "plant".</p>
+<p>But the <code>if</code> statements that check the value of <code>i</code> inside this loop aren't necessary. It would be better to just have several loops without them, which makes the number of each type of monster much more obvious:</p>
+<pre>for i in range(5):
+    type = 'bat'
+    min = -1
+    max = -100
+    # monster adding code here
+for i in range(9):
+    type = 'plant'
+    min = -20
+    max = -70
+    # monster adding code here
+for i in range(4):
+    type = 'tree'
+    min = -30
+    max = -60
+    # monster adding code here
+for i in range(3):
+    type = 'genie'
+    min = -30
+    max = -60
+    # monster adding code here</pre>
+<p>This code would be used for each "final wave" variable. But we can reduce this even further by just setting up a function with this code and a data structure for each final wave. The new <code>FINAL_WAVE_MONSTERS</code> variable will hold the data for each level's final wave of monsters. The new <code>populateFinalWave()</code> function has this code typed out just once.</p>
+<h3>Put Sequential Variables into a Single List</h3>
+<p>Diff of these changes: <a href="https://github.com/asweigart/source_code_makeover/commit/62400e8be04e0bbfb8793614b403a46e22a73850#DemonKingdom/demonkingdom_makeover.py" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/62400e8be04e0bbfb8793614b403a46e22a73850#DemonKingdom/demonkingdom_makeover.py', 'Replaced the finalWaveN variables with a list.']);" >Replaced the finalWaveN variables with a list.</a></p>
+<p>We should put the values of the <code>finalWave1</code>, <code>finalWave2</code>, <code>finalWave3</code>, and so on into a single list varialbe, <code>finalWaves</code>. In this particular case, this doesn't reduce the amount of code. But if we want to do something with this data in a future change, a list is much easier to work with.</p>
+<h3>Adding a Function to Replace Redundant Code</h3>
+<p>Diff of these changes: <a href="https://github.com/asweigart/source_code_makeover/commit/76c05b8f6d678e223eab3f1e119b1e24effd891a#DemonKingdom/demonkingdom_makeover.py" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/76c05b8f6d678e223eab3f1e119b1e24effd891a#DemonKingdom/demonkingdom_makeover.py', 'Got rid of redundant code by adding a populateRandomMonsters() function.']);" >Got rid of redundant code by adding a populateRandomMonsters() function.</a></p>
+<p>There's a lot of code in the program that is a copy/pasted form of this:</p>
+<pre>for i in range(random.randint(10, 20)):
+    type = random.choice(MONSTER_RATIOS[0])
+    m = Monster(screen, *MONSTER_STATS[type]["image"])
+    m.set_rect(random.randint( - 500, -1), random.randint(25, WINDOW_HEIGHT - 70 - SIDEBAR_HEIGHT))
+    m.set_speed(MONSTER_STATS[type]["speed"])
+    m.set_life(MONSTER_STATS[type]["life"])
+    monsters1.add(m)</pre>
+<p>We can put this code in a single function, and replace all these redundant lines of code with a function call. The new <code>populateRandomMonsters()</code> function does the same thing as these loops.</p>
+<h3>Put Repeated Code in a Loop</h3>
+<p>Diff of these changes: <a href="https://github.com/asweigart/source_code_makeover/commit/fb3b2bd221eae805176796488ef1d5e367c28aac#DemonKingdom/demonkingdom_makeover.py" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/fb3b2bd221eae805176796488ef1d5e367c28aac#DemonKingdom/demonkingdom_makeover.py', 'Put duplicate code into a loop to populate monster sprite groups.']);" >Put duplicate code into a loop to populate monster sprite groups.</a></p>
+<p>We see this code repeated for each level:</p>
+<pre>#Level 1
+randomMonsters[0] = populateRandomMonsters(1)
+finalWaves[0] = populateFinalWave(1)</pre>
+<p>By putting this code inside a <code>for</code> loop, we only need it typed out once.</p>
+<h3>Remove fireballsOff Variable</h3>
+<p>Diff of these changes: <a href="https://github.com/asweigart/source_code_makeover/commit/e8d969a44951bc2c9c2102ee77971e036f8f5269#DemonKingdom/demonkingdom_makeover.py" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/e8d969a44951bc2c9c2102ee77971e036f8f5269#DemonKingdom/demonkingdom_makeover.py', 'Got rid of fireballsOff SpriteGroup object.']);" >Got rid of fireballsOff SpriteGroup object.</a></p>
+<p>(This check-in was actually a mistake on my part. I originally thought this code was pointlessly duplicated. But the separate <code>fireballs</code> and <code>fireballsOff</code> variables are set up so that the user cannot cast the fireball spell again until the previous fireballs have hit a monster or fallen past the edge of the screen. I'll correct this in a future update.)</p>
+<p>(I make this mistake again in the next check in for the ghosts and whirlwind spells. Diff of these changes: <a href="https://github.com/asweigart/source_code_makeover/commit/c7be6991ed5d9de29709a115262bc090e9225bf5#DemonKingdom/demonkingdom_makeover.py" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/c7be6991ed5d9de29709a115262bc090e9225bf5#DemonKingdom/demonkingdom_makeover.py', 'Got rid of whirlwindsOff and ghostsOff SpriteGroup objects as well.']);" >Got rid of whirlwindsOff and ghostsOff SpriteGroup objects as well.</a>)</p>
+<h3>Regression Fix</h3>
+<p>Diff of these changes: <a href="https://github.com/asweigart/source_code_makeover/commit/8fb972dfab2e92478e5b492552e23f2676ecaaa2#DemonKingdom/demonkingdom_makeover.py" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/8fb972dfab2e92478e5b492552e23f2676ecaaa2#DemonKingdom/demonkingdom_makeover.py', 'Fixed a regression with doneText']);" >Fixed a regression with doneText</a></p>
+<p>While changing code, I added a new bug. This type of bug is commonly called a <strong>regression</strong>. This check-in fixes it.</p>
+<h3>Putting Duplicate Code for Each Level in a Single Loop</h3>
+<p>Diff of these changes: <a href="https://github.com/asweigart/source_code_makeover/commit/532a1d3859f96a00f006d5c246e9b0dfd52a8031#DemonKingdom/demonkingdom_makeover.py" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/532a1d3859f96a00f006d5c246e9b0dfd52a8031#DemonKingdom/demonkingdom_makeover.py', 'Collapsed the code that set the monsters object into a loop.']);" >Collapsed the code that set the monsters object into a loop.</a></p>
+<p>For each of the six levels there is a wave of monsters followed by a "final wave". Rather than copy and paste the code for each level, we can put it into a single loop. (After level 3 and 6, we display the "done text" to the user.)</p>
+<h3>Fixing a Bug and Removing Debug Code</h3>
+<p>Diff of these changes: <a href="https://github.com/asweigart/source_code_makeover/commit/8444fe98070273e2a6ba770e76acb79717e0b433#DemonKingdom/demonkingdom_makeover.py" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/8444fe98070273e2a6ba770e76acb79717e0b433#DemonKingdom/demonkingdom_makeover.py', 'Fixed a couple bugs with the levelText and also an exception at the end of the game.']);" >Fixed a couple bugs with the levelText and also an exception at the end of the game.</a> and <a href="https://github.com/asweigart/source_code_makeover/commit/7d00949a10b408e67265fce2633a7ae0bf8a6882#DemonKingdom/demonkingdom_makeover.py" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/7d00949a10b408e67265fce2633a7ae0bf8a6882#DemonKingdom/demonkingdom_makeover.py', 'Took out some debug settings and code.']);" >Took out some debug settings and code.</a></p>
+<p>These check-ins were to fix a minor bug, and then a second check-in to remove some temporary debug code I accidentally checked in.</p>
+<p></p>
+<p>There are a few more changes that we can make in part 3. But so far we've reduced a program that had 773 lines of code down to 504 lines of code, which is a huge improvement! A good rule of thumb is that the less code there is, the easier it will be to understand and debug.</p>
+<p>(UPDATE: I actually probably won't be finishing part 3, which wouldn't have that many novel changes anyway.)</p>
+					
+
+    </body>
+</html>

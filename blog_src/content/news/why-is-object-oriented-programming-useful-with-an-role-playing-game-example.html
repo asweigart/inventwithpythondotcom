@@ -1,0 +1,289 @@
+<html>
+    <head>
+        <title>Why is Object-Oriented Programming Useful? (With a Role Playing Game Example)</title>
+        <meta name="tags" content="" />
+        <meta name="date" content="2014-12-02 12:00" />
+        <meta name="summary" content="" />
+    </head>
+    <body>
+
+            <p>This blog post is those still new to programming and have probably heard about "object-oriented programming", "OOP", "classes", "inheritance/encapsulation/polymorphism", and other computer science terms but still don't get what exactly OOP is used for. In this post I'll explain <em>why</em> OOP is used and how it makes coding easier. This post uses Python 3 code, but the concepts apply to any programming language.</p>
+
+<p>There are two key non-OOP concepts to understand right off the bat:<br />
+<ol>
+    <li><strong>Duplicate code is a Bad Thing.</strong></li>
+    <li><strong>Code will always be changed.</strong></li>
+</ol></p>
+
+
+<span id="more-1717"></span>
+
+<p>Aside from small "throw-away" programs that are written for some single task and only run once, you'll almost always need to update your code to either <strong>fix bugs</strong> or <strong>add new features</strong>. A large part of writing good software is writing software that is readable and easy to change.</p>
+
+<p>If you have copy/pasted code in your program, changing it requires making the same change to multiple places in your program. This is problematic. If you miss applying the change to some places, you'll fail to fix the bug everywhere or implement the new feature inconsistently. <em>Duplicate code is a Bad Thing.</em> Having duplicate code in your program is setting yourself up for bugs and headache.</p>
+
+<p>Functions let you get rid of duplicate code. You write the code in a function once, and just call the function everywhere your program needs that code run. Updating the function's code updates it everywhere the function is called automatically. Just as functions makes updating code easier, using object-oriented programming techniques also organizes your code to make changes easier. <em>And code will always be changed.</em></p>
+
+<strong>The Role Playing Game Example</strong></p>
+
+<p>Most OOP tutorials stink. They have "Car" classes with "Honk" methods and other examples that are unrelatable to the actual programs that new coders write or have used before. So this blog will use an RPG-style video game (think World of Warcraft, Pokemon, or Dungeons & Dragons). We're used to thinking of things in these games as a collection of integers and strings. Check out all the numbers on this Diablo status screen or D & D character sheet:</p>
+
+<p><a href="/blogstatic/oop_stats1.jpg?27f655"><img src="/blogstatic/oop_stats1.jpg?27f655"></a></p>
+
+<p><a href="/blogstatic/oop_stats2.jpg?27f655"><img src="/blogstatic/oop_stats2.jpg?27f655"></a></p>
+
+<p>Taking out the graphics from these RPG video games, the characters, armor, and other objects are just a bunch of integer or string values in variables. Without using object-oriented concepts, you could implement these things in Python code like this:</p>
+
+<p><textarea wrap="off" style="width: 100%; height: 150px; overflow: auto; font-family: monospace; color: black;">name = 'Elsa'
+health = 50
+magicPoints = 80
+inventory = {'gold': 40, 'healing potion': 2, 'key': 1}
+
+print('The hero %s has %s health.' % (name, health))</textarea></p>
+
+<p>The above variable names are pretty generic. To add monsters in this program, you'll need to rename the player character's variables and make new ones for the monsters:</p>
+
+<p><textarea wrap="off" style="width: 100%; height: 150px; overflow: auto; font-family: monospace; color: black;">heroName = 'Elsa'
+heroHealth = 50
+heroMagicPoints = 80
+heroInventory = {'gold': 40, 'healing potion': 2, 'key': 1}
+monsterName = 'Goblin'
+monsterHealth = 20
+monsterMagicPoints = 0
+monsterInventory = {'gold': 12, 'dagger': 1}
+
+print('The hero %s has %s health.' % (heroName, heroHealth))</textarea></p>
+
+<p>But of course you'll want to have more than one monster, but then you'll have variables like <code>monster1Name</code>, <code>monster2Name</code>, etc. That's a poor way to code, so maybe you'll make the monster variables into lists:</p>
+
+<p><textarea wrap="off" style="width: 100%; height: 150px; overflow: auto; font-family: monospace; color: black;">monsterName = ['Goblin', 'Dragon', 'Goblin']
+monsterHealth = [20, 300, 18]
+monsterMagicPoints = [0, 200, 0]
+monsterInventory = [{'gold': 12, 'dagger': 1}, {'gold': 890, 'magic amulet': 1}, {'gold': 15, 'dagger': 1}]</textarea></p>
+
+<p>Then you could just have the first goblin's stats be the values at index <code>0</code> in the lists, the dragon's stats are at index <code>1</code>, and the other goblin's stats are at index <code>2</code>. This way you could have multiple monsters contained in these variables.</p>
+
+<p>But this kind of code easily leads to bugs. If your lists get out of sync, the program will no longer work correctly. Say the player vanquishes the goblin at index <code>0</code> and the program calls a vanquishMonster() function. But the function has a bug and deletes the values from all the lists except (accidentally) <code>monsterInventory</code>:</p>
+
+<p><textarea wrap="off" style="width: 100%; height: 180px; overflow: auto; font-family: monospace; color: black;">def vanquishMonster(monsterIndex):
+&nbsp;&nbsp;&nbsp;&nbsp;del monsterName[monsterIndex]
+&nbsp;&nbsp;&nbsp;&nbsp;del monsterHealth[monsterIndex]
+&nbsp;&nbsp;&nbsp;&nbsp;del monsterMagicPoints[monsterIndex]
+&nbsp;&nbsp;&nbsp;&nbsp;# Note there is no del for monsterInventory
+
+vanquishMonster(0)</textarea></p>
+
+<p>The monster lists end up looking like:</p>
+
+<p><textarea wrap="off" style="width: 100%; height: 150px; overflow: auto; font-family: monospace; color: black;">monsterName = ['Dragon', 'Goblin']
+monsterHealth = [300, 18]
+monsterMagicPoints = [200, 0]
+monsterInventory = [{'gold': 12, 'dagger': 1}, {'gold': 890, 'magic amulet': 1}, {'gold': 15, 'dagger': 1}]</textarea></p>
+
+<p>Now it looks like the dragon's inventory is the same as the old goblin's inventory. And the second goblin now has the inventory the dragon had. <em>This is quickly getting out of hand.</em>  The problem is that you have <em>one</em> monster's data spread out over multiple variables. You could fix this by putting a single monster's data into a dictionary, and then have a list of dictionaries:</p>
+
+<p><textarea wrap="off" style="width: 100%; height: 180px; overflow: auto; font-family: monospace; color: black;">monsters = [{'name': 'Goblin', 'health': 20, 'magic points': 0, 'inventory': {'gold': 12, 'dagger': 1}},
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{'name': 'Dragon', 'health': 300, 'magic points': 200, 'inventory': {'gold': 890, 'magic amulet': 1}},
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{'name': 'Goblin', 'health': 18, 'magic points': 0, 'inventory': {'gold': 15, 'dagger': 1}}]</textarea></p>
+
+<p>G'ah. This code is getting complex. For example, the inventory of a monster is a dictionary-in-a-dictionary-in-a-list. What if things like spells or inventory items also have their own attributes and need to be dictionaries? What if an inventory item could be a sack, which itself contains other inventory items? This monsters dictionary would get intense.</p>
+
+<p>This is something that object-oriented programming can solve by creating a new data type.</p>
+
+<p><strong>Creating Classes</strong></p>
+
+<p><strong>Classes are the blueprints for a new data type in your program.</strong> Object-oriented programming provides a new approach for modeling the armor, monsters, etc. much better than a hodge-podge of lists and dictionaries, even though OOP concepts it take some getting used to.</p>
+
+<p>In fact, since the hero will have all the same features of monsters (health, inventory, etc.) we can just have a generic <code>LivingThing</code> class that the hero and monsters share. Your code can be changed to look like this:</p>
+
+<p><textarea wrap="off" style="width: 100%; height: 300px; overflow: auto; font-family: monospace; color: black;">class LivingThing():
+&nbsp;&nbsp;&nbsp;&nbsp;def __init__(self, name, health, magicPoints, inventory):
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.name = name
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.health = health
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.magicPoints = magicPoints
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.inventory = inventory
+
+# Create the LivingThing object for the hero.
+hero = LivingThing('Elsa', 50, 80, {})
+monsters = []
+monsters.append(LivingThing('Goblin', 20, 0, {'gold': 12, 'dagger': 1}))
+monsters.append(LivingThing('Dragon', 300, 200, {'gold': 890, 'magic amulet': 1}))
+
+print('The hero %s has %s health.' % (hero.name, hero.health))</textarea></p>
+
+<p>Hey look, using classes has already cut down our code in half since we can use the same code for both player characters and monsters.</p>
+
+<p>In the above code you are defining a new data type/class (pedantics aside, but the two terms are basically the same. See also: <a href="https://stackoverflow.com/questions/468145/what-is-the-difference-between-type-and-class" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://stackoverflow.com/questions/468145/what-is-the-difference-between-type-and-class', 'Stack Overflow - What\'s the difference between a type and a class?']);" >Stack Overflow - What's the difference between a type and a class?</a>) called <code>LivingThing</code>. You can have <code>LivingThing</code> values/objects (again, two terms for basically the same thing) just like you can have integer values, string values, or boolean values.</p>
+
+<p>Some Python-specific details about the above code:</p>
+
+<p><textarea wrap="off" style="width: 100%; height: 150px; overflow: auto; font-family: monospace; color: black;">class LivingThing():</textarea></p>
+
+<p>The above is a <code>class</code> statement that defines a new class, just like <code>def</code> statements define a new function. The class's name is <code>LivingThing</code>.</p>
+
+<p><textarea wrap="off" style="width: 100%; height: 150px; overflow: auto; font-family: monospace; color: black;">&nbsp;&nbsp;&nbsp;&nbsp;def __init__(self, name, health, magicPoints, inventory):</textarea></p>
+
+<p>The above defines a method for the <code>LivingThing</code> class. <strong>"Method"</strong> is just the name used for functions that belong to a class. (See also: <a href="https://stackoverflow.com/questions/155609/what-is-the-difference-between-a-method-and-a-function" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://stackoverflow.com/questions/155609/what-is-the-difference-between-a-method-and-a-function', 'Stack Overflow - What is the difference between a method and a function?']);" >Stack Overflow - What is the difference between a method and a function?</a>)</p>
+
+<p>This particular method is special. The name <code>__init__()</code> is used for the "constructor function" (also called a "constructor method", or "constructor" or "ctor" for short) for the class. While a class is a blue print for a new data type, you still need to create values of this data type in order to have something that you can store in variables or pass to functions.</p>
+
+<p>When called, the constructor creates the new object, runs the code in the constructor, and returns the new object. This is what the <code>hero = LivingThing('Elsa', 50, 80, {})</code> line is. No matter what the class name is, the constructor is always named <code>__init__</code>.</p>
+
+<p>If a class has no <code>__init__()</code> method, Python supplies a generic constructor method for your class that doesn't do anything. But the <code>__init__()</code> method is a good place for code that does the initial setup of a new object.</p>
+
+<p>In Python, the first parameter for methods <code>self</code>. The <code>self</code> parameter is used to create member variables, explained next.</p>
+
+<p>The body of the constructor function is this:</p>
+
+<p><textarea wrap="off" style="width: 100%; height: 150px; overflow: auto; font-family: monospace; color: black;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.name = name
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.health = health
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.magicPoints = magicPoints
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.inventory = inventory</textarea></p>
+
+<p>This seems a bit repetitive, but what this code does is create member variables for the object being created by the constructor. Member variables will begin with <code>self.</code> to show that they are member variables belonging to the object, and not just regular local variables in the method.</p>
+
+<p><strong>Calling the Constructor</strong></p>
+
+<p><textarea wrap="off" style="width: 100%; height: 150px; overflow: auto; font-family: monospace; color: black;"># Create the LivingThing object for the hero.
+hero = LivingThing('Elsa', 50, 80, {})
+monsters = [LivingThing('Goblin', 20, 0, {'gold': 12, 'dagger': 1}),
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LivingThing('Dragon', 300, 200, {'gold': 890, 'magic amulet': 1}),
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LivingThing('Goblin', 18, 0, {'gold': 15, 'dagger': 1})]
+
+print('The hero %s has %s health.' % (hero.name, hero.health))</textarea></p>
+
+<p>The constructor call in Python will just look like a function call using the the class's name. So <code>LivingThing()</code> is the call to the <code>LivingThing</code> class's <code>__init__()</code> constructor. The above <code>LivingThing('Elsa', 50, 80, {})</code> call creates a new <code>LivingThing</code> object is created and stored in the <code>hero</code> variable. The above code also creates <code>LivingThing</code> objects for the three monsters and stores them in the <code>monsters</code> list.</p>
+
+<p>And here's where we begin to see the benefits of object-oriented programming. If another programmer is reading your code, when they see the <code>LivingThing()</code> call they know they can just look for "class LivingThing" and find out the details of everything they need to know about what a <code>LivingThing</code> is.</p>
+
+<p>But an even bigger benefit comes when you try to update your <code>LivingThing</code> class.</p>
+
+<strong>Updating Classes</strong></p>
+
+Say you wanted to add "hunger" levels to your RPG. If a hero or monster has a <code>hunger</code> level of <code>0</code>, they are not at all hungry. But if their <code>hunger</code> level is above <code>100</code>, then they take damage and their <code>health</code> value decreases each day. You could change your <code>__init__()</code> method to this:</p>
+
+<p><textarea wrap="off" style="width: 100%; height: 150px; overflow: auto; font-family: monospace; color: black;">&nbsp;&nbsp;&nbsp;&nbsp;def __init__(self, name, health, magicPoints, inventory):
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.name = name
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.health = health
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.magicPoints = magicPoints
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.inventory = inventory
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.hunger = 0  # all living things start with hunger level 0</textarea></p>
+
+<p>Without changing <em>any</em> other line of code, <em>every</em> <code>LivingThing</code> object in your game now has a hunger level! You don't have to worry about some <code>LivingThing</code> objects having the <code>hunger</code> member variable and some not: the very definition of what a <code>LivingThing</code> is has been updated.</p>
+
+<p>You also don't have to change any of the constructor calls since you didn't add a new hunger level parameter to the <code>__init__()</code> method. That's because <code>0</code> is a good common-sense default value for a new <code>LivingThing</code> object's hunger level. If you do add a new parameter to <code>__init__()</code> for the hunger levels, you'll have to update all the code that calls the constructor. But this is true for any function anyway.</p>
+
+<p>If your RPG has a lot of default values for things, you can avoid a lot of "boilerplate" code by using classes with a constructor that sets the default for you.</p>
+
+<p><strong>Methods</strong></p>
+
+<p>Methods are useful for running code that affect the object itself. For example, you could just have code that changes the health of a LivingThing object directly:</p>
+
+<p><textarea wrap="off" style="width: 100%; height: 150px; overflow: auto; font-family: monospace; color: black;">hero = LivingThing('Elsa', 50, {})
+hero.health -= 10  # Elsa takes 10 points of damage</textarea></p>
+
+<p>But this isn't a very robust way to handle taking damage. Lots of other game logic needs to be checked whenever something takes damage. For example, say you want to check if a character dies each time they take damage. You would need code like this:</p>
+
+<p><textarea wrap="off" style="width: 100%; height: 150px; overflow: auto; font-family: monospace; color: black;">hero = LivingThing('Elsa', 50, {})
+hero.health -= 10  # Elsa takes 10 points of damage
+if hero.health < 0:
+&nbsp;&nbsp;&nbsp;&nbsp;print(hero.name + ' has died!')</textarea></p>
+
+<p>The problem with the above approach is that you would need that check everywhere your code decreases the health of a <code>LivingThing</code> object. But duplicating code is a Bad Thing. The non-OOP way to prevent duplicate code would be to put it in a function:</p>
+
+<p><textarea wrap="off" style="width: 100%; height: 200px; overflow: auto; font-family: monospace; color: black;">def takeDamage(livingThingObject, dmgAmount):
+&nbsp;&nbsp;&nbsp;&nbsp;livingThingObject.health = self.health - dmgAmount
+&nbsp;&nbsp;&nbsp;&nbsp;if livingThingObject.health < 0:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print(livingThingObject.name + ' is dead!')
+
+hero = LivingThing('Elsa', 50, {})
+takeDamage(hero, 10)  # Elsa takes 10 points of damage</textarea></p>
+
+<p>This is a better solution because any updates to <code>takeDamage()</code> (such as factoring in armor, protective spells, bonuses, etc.) just have to be added to the <code>takeDamage()</code> function.</p>
+
+<p>However, the downside is that when your program grows in size, it's easy for <code>takeDamage()</code> to get lost in among them. It isn't so clear that <code>takeDamage()</code> is related to the <code>LivingThing</code> class. If you have hundreds of functions in your program, it will be hard to figure out which ones are related to the <code>LivingThing</code> class.</p>
+
+<p>The solution is to turn this function into a <code>LivingThing</code> method:</p>
+
+<p><textarea wrap="off" style="width: 100%; height: 300px; overflow: auto; font-family: monospace; color: black;">class LivingThing():
+&nbsp;&nbsp;&nbsp;&nbsp;# ...other code in the class...
+
+&nbsp;&nbsp;&nbsp;&nbsp;def takeDamage(self, dmgAmount):
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.health = self.health - dmgAmount
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if self.health == 0:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print(self.name + ' is dead!')
+
+&nbsp;&nbsp;&nbsp;&nbsp;# ...other code in the class...
+
+hero = LivingThing('Elsa', 50, {})
+hero.takeDamage(10)  # Elsa takes 10 points of damage</textarea></p>
+
+<p>Once your program has many classes, each with many methods and member variables, you will begin to see how OOP can help organize your programs to be more manageable.</p>
+
+<p><strong>Public and Private Methods</strong></p>
+
+<p>Methods and member variables can be marked as public or private. Public methods can be called and public member variables can be set by any code, inside or outside of the class. Private methods can be called and private member variables can be set only by code inside the object's own class.</p>
+
+<p>In some languages such as Java, this "can be called/set" is strictly enforced by the compiler. In Python, there's no such concept as "private" and "public". All methods and member variables are "public". However, the convention is that if a method name begins with an underscore, it is marked as private. This is why you'll see methods such as <code>_takeDamage()</code>. Nothing prevents you from writing code that calls private methods or set private member variables from outside the object's class, but you've been fairly warned not to do that.</p>
+
+<p>The reason for having this public/private distinction is to set expectations for how the class interacts with outside code. (See also: <a href="https://stackoverflow.com/questions/2620699/why-private-methods-in-the-object-oriented" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://stackoverflow.com/questions/2620699/why-private-methods-in-the-object-oriented', 'Stack Overflow - Why &quot;private&quot; methods in the object oriented?']);" >Stack Overflow - Why "private" methods in the object oriented?</a>) The programmer of the class expects that other people won't write code that calls the private methods or sets the private member variables.</p>
+
+<p>For example, the <code>takeDamage()</code> method factors in checking for death if health falls below 0. You may want to add all sorts of other checks in the code. Things like armor, agility, and protective spells could factor in to reduce the damage taken. The <code>LivingThing</code> object might be wearing an enchanted cape that <em>heals</em> them by adding the damage amount to their <code>health</code> instead of subtracting. All of this game logic can go in the <code>takeDamage()</code> method.</p>
+
+<p>But all of OOP organizing is for nothing if you accidentally put this code in there:</p>
+
+<p><textarea wrap="off" style="width: 100%; height: 150px; overflow: auto; font-family: monospace; color: black;">class LivingThing():
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# ...code in the class...
+
+hero = LivingThing('Elsa', 50, {})
+
+# ...some more code...
+
+if someCondition:
+&nbsp;&nbsp;&nbsp;&nbsp;hero.health -= 50</textarea></p>
+
+<p>That <code>hero.health -= 50</code> will subtract 50 points of health, without taking into any consideration what armor Elsa is wearing, if she has protective spells, or is wearing that enchanted healing cape. This code bluntly decrements <code>health</code> by <code>50</code>.</p>
+
+<p>It's easy to forget about the <code>takeDamage()</code> method and accidentally write code like this. This doesn't check if the <code>hero</code> object's <code>health</code> member variable has dropped below <code>0</code>. The program continues as though Elsa is alive even if she has negative health! This is a bug we can avoid with public/private members and methods.</p>
+
+<p>If you rename the <code>health</code> member variable to <code>_health</code> and mark it private, then it's easy to catch this bug when you write it:</p>
+
+<p><textarea style="width: 100%; height: 150px; overflow: auto; font-family: monospace; color: black;">hero = LivingThing('Elsa', 50, {})
+
+# ...some more code...
+
+if someCondition:
+&nbsp;&nbsp;&nbsp;&nbsp;hero._health -= 50 # WAIT! This code is outside the hero object's class but modifying a private member variable! This must be a bug!</textarea></p>
+
+<p>In a language like Java where the compiler enforces private/public access, it would be impossible to write a program that illegally accesses a private member or method. Object-oriented programming helps prevent these kinds of bugs.</p>
+
+<p><strong>Inheritance</strong></p>
+
+<p>Using the LivingThing class for dragons is nice, but dragons have a lot of other qualities in addition to the ones provided by <code>LivingThing</code>. So you want to create a new <code>Dragon</code> class that will have member variables like <code>airSpeed</code> and <code>breathType</code> (which can be string such as <code>'fire'</code>, <code>'blizzard'</code>, <code>'lightning'</code>, <code>'poison gas'</code>, etc).</p>
+
+<p>Since <code>Dragon</code> objects will also have <code>health</code>, <code>magicPoints</code>, <code>inventory</code>, and all the other things that <code>LivingThing</code> objects have, you <em>could</em> just create a new <code>Dragon</code> class and copy/paste all the code from your <code>LivingThing</code> class. But this would result in duplicate code, which is a Bad Thing.</p>
+
+<p>Instead, make a <code>Dragon</code> class that is a <strong>subclass</strong> of the <code>LivingThing</code> class:</p>
+
+<p><textarea wrap="off" style="width: 100%; height: 150px; overflow: auto; font-family: monospace; color: black;">class LivingThing():
+&nbsp;&nbsp;&nbsp;&nbsp;# ...other code in the class...
+
+class Dragon(LivingThing):
+&nbsp;&nbsp;&nbsp;&nbsp;# ...Dragon-specific code in the class...</textarea></p>
+
+<p>This is effectively saying, "A <code>Dragon</code> is the same as a <code>LivingThing</code>, with some additional methods and member variables". When you create a <code>Dragon</code> object, it will automatically have all the same methods and member variables as <code>LivingThing</code> (saving us from duplicating the code). But it could also have dragon-specific methods and member variables to it. Further, any code that deals with a <code>LivingThing</code> object can automatically handle a <code>Dragon</code> object because <code>Dragon</code> objects already have the <code>LivingThing</code> members and methods. This principle is called <strong>subtype polymorphism</strong>.</p>
+
+<p>In practice, inheritance is easy to abuse though. You must be certain that any conceivable change or update you make to the <code>LivingThing</code> class would also be something you would want the <code>Dragon</code> class <em>and every other subclass of <code>LivingThing</code></em> to also have. This might not always be so straightforward.</p>
+
+<p>For example, what if you created <code>Monster</code> and <code>Hero</code> subclasses of the <code>LivingThing</code> class, and then created <code>FlyingMonster</code> and <code>MagicalMonster</code> subclasses from <code>Monster</code>. Would the new <code>Dragon</code> class be a subclass of <code>FlyingMonster</code> or <code>MagicalMonster</code>? Or maybe just its own subclass of <code>Monster</code>?</p>
+
+<p>This is where inheritance and OOP start to get tricky and religious arguments over the "correct" way to design classes come about. I want to keep this blog post short and simple, so I'll leave these topics as exercises for the reader to look into. (See also <a href="https://stackoverflow.com/questions/49002/prefer-composition-over-inheritance" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://stackoverflow.com/questions/49002/prefer-composition-over-inheritance', 'Stack Overflow - Prefer composition over inheritance?']);" >Stack Overflow - Prefer composition over inheritance?</a> and <a href="https://en.wikipedia.org/wiki/Composition_over_inheritance" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://en.wikipedia.org/wiki/Composition_over_inheritance', 'Wikipedia - Composition over inheritance']);" >Wikipedia - Composition over inheritance</a>)</p>
+
+<p><strong>Summary</strong></p>
+
+<p>I hate programming tutorials for beginners that start with object-oriented programming. OOP is a very abstract concept. Until have some experience and are writing large programs, you won't understand why using classes and objects makes programming easier. Instead, the neophyte is left with a steep learning curve to climb and no idea why they're climbing it. I hope the RPG example has at least given you a glimpse as to why OOP can be helpful. There is MUCH more to OOP. If you want to learn more, try googling for <a href="https://www.google.com/search?q=python%20object%20oriented%20design" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://www.google.com/search?q=python%20object%20oriented%20design', '&quot;python object oriented design&quot;']);" >"python object oriented design"</a> or <a href="https://www.google.com/search?q=python+design+patterns" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://www.google.com/search?q=python+design+patterns', '&quot;python design patterns&quot;']);" >"python design patterns"</a>.</p>
+
+<p>If you are still confused by OOP concepts, feel free to write programs without classes. You don't <strong>need</strong> them and they can result in over-engineered code. But once you have some coding experience under your belt, the benefits of object-oriented programming will become apparent. Good luck!</p>
+
+    </body>
+</html>

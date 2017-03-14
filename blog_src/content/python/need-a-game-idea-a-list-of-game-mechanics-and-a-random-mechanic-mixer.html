@@ -1,0 +1,63 @@
+<html>
+    <head>
+        <title>Need a Game Idea? A List of Game Mechanics and a Random Mechanic Mixer.</title>
+        <meta name="tags" content="" />
+        <meta name="date" content="2012-07-30 12:00" />
+        <meta name="summary" content="" />
+    </head>
+    <body>
+
+
+			<p>If you need an idea for a game, try this random game mechanic generator:</p>
+<p><iframe src="/randommechanic.html" width="100%" border="0" height="200"></iframe></p>
+<p>A full list is at the bottom of this page. I wanted to get fairly low level with these game mechanics, so I don't include things such as "first person shooter" or "puzzles" (since those are, in my opinion, more correctly called genres).</p>
+<p>Just to prove to myself that this generator isn't worthless, I decided to make some small Python/Pygame games based off of it. These games are fairly rough since I wanted to rapidly produce them as proof-of-concepts. The mechanics that got selected were:</p>
+<p><span id="more-710"></span></p>
+<ul>
+<li><em>Hidden Image / Where's Waldo?, Switch Modes, Avoiding Unkillable Objects</em> which resulted in "Flag Capture" - A game where you have a specific target flag to pick up out of a sea of red or blue flags. While in blue mode the red flags will hurt you and while in red mode the blue flags will hurt you. You must move your character close enough to the target flag to click on it with the mouse and pick it up.</li>
+<li><em>Bouncing Objects, Bullet Hell, Teleports</em> which resulted in "Incoming!" - A game where you must survive shots being fired at you. Complicating matters is that there are several teleports that the bullets could enter, making it tricky to figure out where they'll be coming from.</li>
+</ul>
+<p><img src="/images/flagcapture_screenshot.png?27f655" width="400" /></p>
+<p><img src="/images/incoming_screenshot.png?27f655" width="400" /></p>
+<p><a href="/randommechanic_games.zip?27f655">Download the games.</a> (Requires Python & Pygame installed to run.)</p>
+<p>The full list of mechanics and their descriptions are below:</p>
+<ul>
+<li><strong>Avoiding Unkillable Objects</strong> - There are objects that the player cannot touch. These are different from normal enemies because they cannot be destroyed or moved.</li>
+<li><strong>Instant Death</strong> - Something causes the player to instantly die, such as spikes or bottomless pits.</li>
+<li><strong>Game Repeats Until You Die</strong> - There is no victory condition in the game, it just keeps going until the player dies. Or, especially with casual games, the game simply repeats after you beat it. (Example: Nibbles, Minefield, Solitare)</li>
+<li><strong>Remember an Increasing Number of Things</strong> - Tests the short-term memory of a player. (Example: Simon)</li>
+<li><strong>Repeat Pattern</strong> - The player must repeat a series of given steps. (Example: Simon, Dance Dance Revolution)</li>
+<li><strong>Forced Constant Movement</strong> - The player cannot stand still at any point. (Example: Nibbles, Rail Shooters, Asteroids, <a href="http://www.ferryhalim.com/orisinal/g3/bells.htm" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.ferryhalim.com/orisinal/g3/bells.htm', 'Winter Bells']);" >Winter Bells</a>)</li>
+<li><strong>Block Puzzles</strong> - The game involves standard sized objects that must be moved around in a specific way. (Example: Tetris, Sokoban, Connect Four, Dr. Mario, Kirby's Avalanche / Puyo Puyo)</li>
+<li><strong>Game Keeps Gets Harder Until You Die</strong> - Like "Game Repeats Until You Die" except the difficulty level also keeps increasing. (Example: Tetris)</li>
+<li><strong>Uncountable Number of Possible Paths</strong> - Most games have a few obvious places to go, but this mechanic means that the number of possible ways to order your movement quickly becomes thousands or millions of possible ways and it is not obvious which is the best. (Example: The Traveling Salesman Problem, Sokoban, Flood It, Bloxorz, Mazes)</li>
+<li><strong>Big Gains for You Can Be Big Gains for Enemy</strong> - There is an obvious and easy way to score points, but the more points you take the better position your enemy will be in also. (Example: Othello, Risk)</li>
+<li><strong>Block Path</strong> - You don't directly fight your enemies but instead tried to block their movements. (Example: Tron, Quoridor, Minotaurus, Abalone, Chess (capturing the king))</li>
+<li><strong>Information Overload</strong> - The game presents the player with lots of different variables and pieces of information, and the player must find patterns or make sense of it to make good (or even valid) moves. (Example: Quarto, Set, Bejeweled)</li>
+<li><strong>Disinformation</strong> - The player must try to bluff the opponent into thinking they are stronger (for evasion) or weaker (for traps) than they really are. (Example: Poker, Stratego)</li>
+<li><strong>Switch Modes</strong> - The player needs to constantly switch between two (or more) modes to effectively fight or move. (Example: Ikaruga, Marshie's Malloween Mix-Up, Pacman (switching between running from ghosts to eating them))</li>
+<li><strong>Push Mole Down, Mole Pops Up</strong> - The moves that the player make will also cause obstacles to appear. Many moves are obviously possible, but the move that does not have negative side effects is not obvious.  (Example: Slide Puzzle, Traffic Jam, Lights Out)</li>
+<li><strong>Cut Off One Head, Two Grow Back</strong> - Like "Push Mole Down, Mole Pops Up" except that making some necessary progress also causes the game to become more difficult. (Example: Asteroids)</li>
+<li><strong>Bouncing Object</strong> - You cannot directly control an object's movement, but can try to direct it so that the environment directs its path. (Example: Pong, Arkanoid)</li>
+<li><strong>Gravity</strong> - Like "Forced Constant Movement" except objects are pulled either in a certain direction or are pulled towards certain objects. Also consider: zero gravity, reverse gravity, changeable gravity.</li>
+<li><strong>Mouse Dexterity</strong> - The player must move the mouse in a specific way without making errors. Often combined with "Forced Constant Movement" or "Avoiding Unkillable Objects". Keyboard or game controllers usually require this sort of dexterity, but the mouse is usually reserved for either looking around or menu selection (neither of which requires dexterity). (Example: Fruit Ninja, <a href="http://inventwithpython.com/blog/2011/09/17/new-game-source-code-simon-gesture-simon-clone-with-mouse-gestures/">Simon Gesture</a>)</li>
+<li><strong>Spinning Plates</strong> - The player's attention must be split between multiple simultaneous objectives. Often objects need "recharging" as they deplete at different rates. (Example: Rampart, Diner Dash)</li>
+<li><strong>Teleports</strong> - Rather than moving conventionally, the player can teleport to different parts of the screen. The player may or may not be able to control where the teleport goes.</li>
+<li><strong>Squad</strong> - Rather than a single character, the player controls multiple characters that must work together to achieve an objective. (Example: Syndicate, <a href="http://www.ferryhalim.com/orisinal/g3/tea.htm" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.ferryhalim.com/orisinal/g3/tea.htm', 'A Daily Cup of Tea']);" >A Daily Cup of Tea</a>)</li>
+<li><strong>Scarce Resource</strong> - There is an easy way for the player to fight enemies/score points, but it is a scarce resource. The player needs to balance hoarding the resource vs. using them effectively. (Example: Lunar Lander, Many zombie games)</li>
+<li><strong>Jumping</strong> - Almost always combined with gravity, the player must jump from one platform to another and not fall. (Example: Mario)</li>
+<li><strong>Hidden Image / Where's Waldo?</strong> - Like "Information Overload", but the player is looking at a complex scene for a particular item, clue, or pattern. (Example: Many point-and-click adventure games)</li>
+<li><strong>Timed</strong> - The player must achieve a task within a time limited. Some power ups or achievements can extend the time.</li>
+<li><strong>Protect a Target</strong> - The player must not only stay alive themselves, but protect a target from enemies. The target may or may not be moving. (Example: Missile Command)</li>
+<li><strong>Undirected Exploration</strong> - The player has a large map that they can wander freely around, although obtaining items or solving clues will help open up new areas. The player often backtracks through places. (Example: Cave Story, Metroid, Castlevania)</li>
+<li><strong>Bullet Hell</strong> - The player is surrounded by a very large number of enemies or deadly objects. They are easy to handle individually but difficult in large numbers. (Example: "Bullet hell" games, many zombie games)</li>
+<li><strong>Buy Low, Sell High</strong> - The game has different items that have changing value. The player must identify when it is good to acquire items when they are plentiful or cheap, and when it is good to sell them when they are scarce or valuable.</li>
+<li><strong>Brawling</strong> - The player's character has several different types of attacks (mostly melee, not ranged) to use against one or multiple enemies. (Example: Street Fighter 2, Double Dragon, River City Ransom)</li>
+<li><strong>Dialogue Tree</strong> - When the player talks to other characters, they select one of many possible things to say. (Example: Many RPGs)</li>
+<li><strong>Building</strong> - The player can place different types of building blocks anywhere in the world to construct objects. (Example: SimCity, Minecraft, Rampart)</li>
+<li><strong>Race</strong> - The player must reach a place before the opponent does. Like "Timed" except the enemy as a "timer" can be slowed down by the player's actions, or there may be multiple enemies being raced against.</li>
+</ul>
+					
+
+    </body>
+</html>

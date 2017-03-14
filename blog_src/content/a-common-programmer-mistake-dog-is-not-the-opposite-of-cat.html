@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <title>A Common Programmer Mistake: Dog is not the Opposite of Cat</title>
+        <meta name="tags" content="" />
+        <meta name="date" content="2012-06-21 12:00" />
+        <meta name="summary" content="" />
+    </head>
+    <body>
+
+
+			<p>True is the opposite of false. Up is the opposite of down. What is the opposite of dog?</p>
+<p>If you replied “cat”, what exactly makes cats the opposite of dogs the same way up is the opposite of down?</p>
+<p><img src="/images/yesthisisdog.jpg" /></p>
+<p>I use this example to point out a common problem that software developers make with variable and parameter names. When there are two possible values for some variable or parameter, it is very common that it should be defined as a boolean type.<br />
+<span id="more-788"></span><br />
+For example, a parameter might be called foobarEnabled and a True or False value is passed for it. This makes sense. The foobar is either enabled or disabled. “Not enabled” has a distinct and unambiguous opposite value, “disabled”. A boolean here makes perfect sense.</p>
+<p>However, there is also a case when the two (and only two) possible values are not necessarily opposites. In this case, a boolean value is the wrong data type to use. On a recent web app I was working on, there is a form that has an “add foo” and “edit foo” mode, depending on whether the widget is adding a new foo or editing an existing foo (they use pretty much the same form fields, but the backend needs to know for technical reasons.)</p>
+<p>To differentiate between them, the function that handles this form has an isAddMode parameter. If the form was submitted in Add mode, a True value is passed to this parameter. If the form was submitted in Edit mode, a False value is passed to this parameter. Knowing that “add” and “edit” are the only two values, this makes sense to the programmer writing this code. (But then again, programmers always think the code they themselves write makes sense.)</p>
+<p>But from the perspective of another programmer who has to maintain this code later, this is the completely wrong name and data type for this parameter. Having “not add mode” does not instinctively convey “edit mode” the same way “not enabled” conveys “disabled”.</p>
+<p>Dog is not the opposite of cat.</p>
+<p>The correct name for a parameter like this would be something like “mode” or “addOrEditMode” depending on how verbose you want to be. The correct data type for a parameter like this is an enum type with two values for “add” and “edit”.<br />
+It may seem like a trivial detail, but making your code as readable as English is a key to having cleanly written code which is easy to understand and easy to debug.</p>
+<p>(By the way, if you would like to know what the opposite of “cat” is, it’s “triceratops”.)</p>
+
+
+    </body>
+</html>

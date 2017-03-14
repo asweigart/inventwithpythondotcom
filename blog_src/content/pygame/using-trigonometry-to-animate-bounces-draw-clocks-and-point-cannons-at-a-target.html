@@ -1,0 +1,248 @@
+<html>
+    <head>
+        <title>Using Trigonometry to Animate Bounces, Draw Clocks, and Point Cannons at a Target</title>
+        <meta name="tags" content="" />
+        <meta name="date" content="2012-07-18 12:00" />
+        <meta name="summary" content="" />
+    </head>
+    <body>
+
+
+			<h3>About Trigonometry</h3>
+<p><a href="/blogstatic/trig_bounce.gif?27f655"><img src="/blogstatic/trig_bounce.gif?27f655" height="150" /></a> <a href="/blogstatic/trig_waves.gif?27f655"><img src="/blogstatic/trig_waves.gif?27f655" height="150" /></a> <a href="/blogstatic/trig_circle.gif?27f655"><img src="/blogstatic/trig_circle.gif?27f655" height="150" /></a> <a href="/blogstatic/trig_clock.png?27f655"><img src="/blogstatic/trig_clock.png?27f655" height="150" /></a> <a href="/blogstatic/trig_cannons.gif?27f655"><img src="/blogstatic/trig_cannons.gif?27f655" height="150" /></a> <a href="/blogstatic/trig_eyes.png?27f655"><img src="/blogstatic/trig_eyes.png?27f655" height="150" /></a> <a href="/blogstatic/trig_redcenter.gif?27f655"><img src="/blogstatic/trig_redcenter.gif?27f655" height="150" /></a></p>
+<p>(Links to the <a href="http://www.python.org/getit/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.python.org/getit/', 'Python']);" >Python</a> programs in this tutorial. Requires <a href="http://www.python.org/getit/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.python.org/getit/', 'Python']);" >Python</a> and <a href="http://www.pygame.org/download.shtml" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.pygame.org/download.shtml', 'Pygame']);" >Pygame</a> to be installed.)</p>
+<ul>
+<li><a href="/blogstatic/trig_bounce.py">trig_bounce.py</a></li>
+<li><a href="/blogstatic/trig_waves.py">trig_waves.py</a></li>
+<li><a href="/blogstatic/trig_circle.py">trig_circle.py</a></li>
+<li><a href="/blogstatic/trig_clock.py">trig_clock.py</a></li>
+<li><a href="/blogstatic/trig_cannons.py">trig_cannons.py</a></li>
+<li><a href="/blogstatic/trig_eyes.py">trig_eyes.py</a></li>
+<li><a href="/blogstatic/trig_redcenter.py">trig_redcenter.py</a></li>
+</ul>
+<p><a href="http://en.wikipedia.org/wiki/Trigonometry#Overview" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://en.wikipedia.org/wiki/Trigonometry#Overview', 'Trigonometry']);" >Trigonometry</a> is the branch of mathematics that studies triangles and the relationships between their sides and the angles between these sides. The sine, cosine, and tangent trigonometry functions are implemented as programming functions in most languages and given the names sin(), cos(), and tan(). In Python, these functions exist in the <code>math</code> module. These functions are very handy in games and graphical programs because of the smooth wave-like pattern their return values produce.</p>
+<p>This tutorial shows how you can get a variety of neat animation behavior using these functions in your programs. (The animated gifs you see above were taken from the programs in this tutorial.) The code examples in this tutorial should work with both Python 2 and Python 3.</p>
+<h3>Trig Function Basics</h3>
+<p>You don't need to know how these functions work. Let's just treat these functions as black boxes: they take one number parameter in, and return a float value out. If you already know the mathematics of sine and cosine, then you can just skim this section.</p>
+<p>In the interactive shell, let's see what <code>math.sin()</code> returns for some values:</p>
+<pre>>>> import math
+>>> math.sin(1)
+0.8414709848078965
+>>> math.sin(2)
+0.90929742682568171
+>>> math.sin(3)
+0.14112000805986721
+>>> math.sin(4)
+-0.7568024953079282
+>>> math.sin(5)
+-0.95892427466313845</pre>
+<p>It looks like <code>math.sin()</code> just spits out some random-looking float values. (Actually, it's the length of the opposite side divided by the hypotenuse of a right triangle with the given angle. But you don't need to know or understand this.) But if we graph the return values of the input arguments <code>1</code> through <code>10</code> on a graph, we can see the pattern:</p>
+<p><img src="http://inventwithpython.com/pygame/chapter8_files/image011.png?27f655" /></p>
+<p><span id="more-823"></span></p>
+<p>If you figure out the sine values for some more numbers (for example, <code>1.5</code> and <code>1.5</code> and so on) and then connect the dots with lines, you can see this wave pattern more easily:</p>
+<p><img src="http://inventwithpython.com/pygame/chapter8_files/image012.png?27f655" /></p>
+<p>In fact, if you kept adding more and more data points to this graph, you would see that the complete sine wave looks like this:</p>
+<p><img src="http://inventwithpython.com/pygame/chapter8_files/image013.jpg?27f655" /></p>
+<p>The significant input/output pairs for sine are:</p>
+<table border="0" style="border: 1px solid black;">
+<tr>
+<td align="center"><strong>Math Function</strong></td>
+<td align="center"><strong>Python Code</td>
+<td align="center"><strong>Return Value</strong></td>
+</tr>
+<tr>
+<td align="center">sine of 0</td>
+<td align="center"><code>math.sin(0)</code></td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">sine of π / 2</td>
+<td align="center"><code>math.sin(math.pi / 2)</code></td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center">sine of π</td>
+<td align="center"><code>math.sin(math.pi)</code></td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">sine of 3π / 2</td>
+<td align="center"><code>math.sin(3 * math.pi / 2)</code></td>
+<td align="center">-1</td>
+</tr>
+<tr>
+<td align="center">sine of 2π</td>
+<td align="center"><code>math.sin(2 * math.pi)</code></td>
+<td align="center">0</td>
+</tr>
+</table>
+<p>Notice that <code>math.sin(0)</code> returns <code>0</code>, then the return value gradually increases until <code>math.sin(3.14 / 2)</code> (that is, half of pi) returns <code>1</code>, then it begins to decrease until <code>math.sin(3.14)</code> returns <code>0</code>. (The number <code>3.14</code> is a special number in mathematics called pi (pronounced the same as delicious "pie".) This value is stored in the variable <code>pi</code> in the <code>math</code> module and has the float value <code>3.1415926535897931</code>.</p>
+<p><img src="/images/Sin_drawing_process.gif?27f655" /></p>
+<p>The pattern of return values for <code>math.cos()</code> looks similar, it just runs a little bit behind the sine wave:</p>
+<p><img src="/images/trig_cosine.png?27f655" /></p>
+<p>This wavey-looking pattern of return values makes <code>math.sin()</code> and <code>math.cos()</code> pretty handy for a few graphics and animation programming techniques. <strong>The core benefit is that these are functions can take a linearly changing (that is, changes at a set rate) input and give an output that oscillates between -1.0 and 1.0.</strong></p>
+<h3>Bouncing Animation with Sine and Cosine</h3>
+<p>Our first programming example shows some simple bouncing animation (though technically not a parabola, but though not physics-precise this bounce is simple to implement):</p>
+<p><img src="/images/trig_bounce.gif?27f655" /></p>
+<p><a href="/trig_bounce.py">Download the Python source code for trig_bounce.py.</a></p>
+<p>Here's the main part of the code for the blue bouncing ball's Y position:</p>
+<pre>    yPos = -1 * math.sin(step) * AMPLITUDE
+&nbsp;
+    ...some other code...
+&nbsp;
+    step += 0.02</pre>
+<p>When we call the <code>math.sin()</code> function, we pass it <code>step</code> for the argument. The <code>step</code> variable starts at 0 and is incremented on line 65 by 0.02. So the calls to <code>math.sin()</code> are: <code>math.sin(0)</code>, <code>math.sin(0.02)</code>, <code>math.sin(0.04)</code>, and so on.</p>
+<p>The return value (that is, the output) is used for the Y coordinate. It is multiplied by <code>-1</code> because in Pygame (and most programming languages) the Y coordinate increases going down. This is the opposite direction used in Cartesian coordinates in your math class.</p>
+<p>The return value is also multiplied by the value in the <code>AMPLITUDE</code> variable, so that instead of ranging over <code>-1.0</code> to <code>1.0</code>, it will range between <code>(-1.0 * AMPLITUDE)</code> to <code>(1.0 * AMPLITUDE)</code>. Which is to say, it ranges from <code>-AMPLITUDE</code> to <code>AMPLITUDE</code>. Since we set <code>AMPLITUDE</code> to <code>100</code> on line 29 of <a href="/trig_bounce.py">trig_bounce.py</a>, this causes the Y coordinate to move over a range of 200 pixels (from a Y coordinate of -100 to 100). If we increase <code>AMPLITUDE</code>, then the ball will move over a larger range (and move faster, since it covers a larger distance in the same amount of time).</p>
+<p>Things to note:</p>
+<ul>
+<li>Increasing <code>AMPLITUDE</code> = Increasing the range that the ball moves over.</li>
+<li>Increasing <code>AMPLITUDE</code> = Increasing the speed that the ball moves (since it moves over a larger range in the same time as before).</li>
+<li>Increasing the amount <code>step</code> increments by = Increases the speed the ball moves.</li>
+</ul>
+<p>On line 55, we pass the red ball's <code>math.sin()</code> return value to <code>abs()</code> which makes sure any negative return value is converted to a positive number. This is what causes the red ball to "bounce" instead of oscillate like the blue ball.</p>
+<h3>Changing the Amplitude and Frequency of the Waves</h3>
+<p>You can see the return values for the <code>math.sin()</code> and <code>math.cos()</code> functions (as well as the return value of <code>math.sin()</code> multiplied by a large amplitude value, and the return value of <code>math.sin()</code> with a larger input parameter to increase the wave's frequency) in the <a href="/trig_waves.py">trig_waves.py</a> program:</p>
+<p><img src="/images/trig_waves.gif?27f655" /></p>
+<p><a href="/trig_waves.py">Download the Python source code for trig_waves.py.</a></p>
+<p>As you can see, the cosine wave is exactly the same as the sine wave, except a little further behind it. Take a look at the source code to see how we can adjust the <code>math.sin()</code> calls to change the shape of the wave.</p>
+<pre>    # sine wave
+    yPos = -1 * math.sin(step) * AMPLITUDE
+&nbsp;
+    ...some other code...
+&nbsp;
+    # high amplitude sine wave
+    yPos = -1 * math.sin(step) * (AMPLITUDE + 100) # Note the "+ 100" to the amplitude!
+&nbsp;
+    ...some other code...
+&nbsp;
+    # high frequency sine wave
+    yPos = -1 * math.sin(step * 4) * AMPLITUDE # Note the "* 4" to the frequency</pre>
+<h3>Moving in a Circle</h3>
+<p>The cosine functions can be used for getting the X and Y coordinates of a circle. The <a href="/trig_circle.py">trig_circle.py</a> program shows a ball moving in a circle (along with two other balls that are moving only along the X-axis and only along the Y-axis). </p>
+<p><img src="/images/trig_circle.gif?27f655" /></p>
+<p><a href="/trig_circle.py">Download the Python source code for trig_circle.py.</a></p>
+<p>In <a href="/trig_circle.py">trig_circle.py</a>, these are lines 56 to 60:</p>
+<pre>    # draw blue ball
+    xPos =      math.cos(step) * AMPLITUDE
+    yPos = -1 * math.sin(step) * AMPLITUDE
+    #yPos = -1 * abs(math.sin(step) * AMPLITUDE) # uncomment this line to make the ball bounce
+    pygame.draw.circle(DISPLAYSURF, BRIGHTBLUE, (int(xPos) + WIN_CENTERX, int(yPos) + WIN_CENTERY), 20)</pre>
+<p>Remember, the multiplication by <code>-1</code> for <code>yPos</code> is because Pygame's Y coordinates increase going down. Note that the <code>xPos</code> and <code>yPos</code> variables are converted to integers and added to <code>WIN_CENTERX</code> and <code>WIN_CENTERY</code> before being passed to <code>pygame.draw.circle()</code>. While multiplying the input argument will increase the amplitude of the wave, adding a number to the output will move the coordinate (this is called translation). Since we want the ball's X and Y coordinates to be in the center of the window, we add <code>WIN_CENTERX</code> and <code>WIN_CENTERY</code> to them.</p>
+<p>You can see the vertical component of this movement with the ball drawn by lines 62 and 63:</p>
+<pre>    # draw vertically moving red ball
+    pygame.draw.circle(DISPLAYSURF, DARKRED, (WINDOWWIDTH - 30, int(yPos) + WIN_CENTERY), 20)</pre>
+<p>You can see the horizontal component of the circular movement with the ball drawn by lines 65 and 66:</p>
+<pre>    # draw horizontally moving red ball
+    pygame.draw.circle(DISPLAYSURF, DARKRED, (int(xPos) + WIN_CENTERX, WINDOWHEIGHT - 30), 20)</pre>
+<p>If you uncomment the second <code>yPos</code> assignment statement, the Y coordinate will be set to the absolute value of the previous calculation. This causes the blue ball to bounce back and forth, since the Y coordinate can never become negative. Try uncommenting this line and re-running the program.</p>
+<p><strong>Note:</strong> When you use <code>math.cos()</code> to calculate the X coordinate and <code>math.sin()</code> to calculate the Y coordinate, using an argument of <code>0</code> returns the coordinates of the right edge of the circle and goes counter-clockwise as you increment the argument. </p>
+<p>If you use <code>math.sin()</code> to calculate the X coordinate and <code>math.cos()</code> to calculate the Y coordinate, passing an argument of <code>0</code> returns the coordinates of the top edge of the circle and goes clockwise as you increment the argument.</p>
+<h3>Making An Analog Clock Program</h3>
+<p>If you look at the Windows clock (or whatever system clock your OS has), you'll notice that it draws a line from the center of the clock to the numbers that are laid out around the clock. Pygame already provides function that can draw a line if you give it the X and Y coordinates for the two ends of the line.</p>
+<p>The numbers of the clock are arranged in a circle, so we can use <code>math.sin()</code> and <code>math.cos()</code> to get the X and Y coordinates for the other end of the line. You can also use the trig functions to figure out the X and Y coordinates of the numbers.</p>
+<p><img src="/images/trig_clock.png?27f655" /></p>
+<p><a href="/trig_clock.py">Download the Python source code for trig_clock.py.</a></p>
+<p>The main part of the program is the <code>getTickPosition()</code> function. This returns the X and Y coordinate of a "tick" position of a clock, which we define as starting at 0 at the top of the clock and increasing in a clockwise direction.</p>
+<pre># This function retrieves the x, y coordinates based on a "tick" mark, which ranges between 0 and 60
+# A "tick" of 0 is at the top of the circle, 30 is at the bottom, 45 is at the "9 o'clock" position, etc.
+# The "stretch" is how far from the origin the x, y return values will be
+# "originx" and "originy" will be where the center of the circle is (almost always the center of the window)
+def getTickPosition(tick, stretch=1.0, originx=WIN_CENTERX, originy=WIN_CENTERY):
+    # uncomment to have a "rotating clock" feature.
+    # This works by pushing the "tick" amount forward
+    #tick += (time.time() % 15) * 4
+
+    # The cos() and sin()
+    tick -= 15
+
+    # ensure that tick is between 0 and 60
+    tick = tick % 60
+
+    tick = 60 - tick
+
+    # the argument to sin() or cos() needs to range between 0 and 2 * math.pi
+    # Since tick is always between 0 and 60, (tick / 60.0) will always be between 0.0 and 1.0
+    # The (tick / 60.0) lets us break up the range between 0 and 2 * math.pi into 60 increments.
+    x =      math.cos(2 * math.pi * (tick / 60.0))
+    y = -1 * math.sin(2 * math.pi * (tick / 60.0)) # "-1 *" because in Pygame, the y coordinates increase going down (the opposite of how they normally go in mathematics)
+
+    # sin() and cos() return a number between -1.0 and 1.0, so multiply to stretch it out.
+    x *= stretch
+    y *= stretch
+
+    # Then do the translation (i.e. sliding) of the x and y points.
+    # NOTE: Always do the translation addition AFTER doing the stretch.
+    x += originx
+    y += originy
+
+    return x, y</pre>
+<p>Also notice in the source code there are three lines that you can uncomment to apply different animation effects to the clock. Go ahead and experiment with them:</p>
+<pre>    # uncomment to have a "rotating clock" feature.
+    # This works by pushing the "tick" amount forward
+    #tick += (time.time() % 15) * 4
+&nbsp;
+    ...some other code...
+&nbsp;
+    # Uncomment this if you don't want the second hand to move smoothly:
+    #now_second = now[5]
+&nbsp;
+    ...some other code...
+&nbsp;
+    # Uncomment this if you want the "pulsing clock" feature:
+    #CLOCKSIZE = originalClockSize + math.sin(2 * math.pi * (time.time() % 1)) * PULSESIZE</pre>
+<h3>Pointing Cannons at a Target</h3>
+<p><img src="/images/trig_cannons.gif?27f655" /></p>
+<p><a href="/trig_cannons.py">Download the Python source code for trig_circle.py.</a></p>
+<p>There is another trig function called tangent and its inverse, arctangent. In Python, this is implemented in the <code>math.tan()</code> and <code>math.atan()</code> functions. One very useful thing that the tangent functions are good for finding the amount of rotation needed to point an object at another, given their X and Y coordinates. The Python function I've implemented for this makes use of the <code>math.atan2()</code> function (an arctangent function with x and y parameters rather than a single radian parameter) in lines 45 to 52 of <a href="/trig_cannons.py">trig_cannons.py</a>:</p>
+<pre>def getAngle(x1, y1, x2, y2):
+    # Return value is 0 for right, 90 for up, 180 for left, and 270 for down (and all values between 0 and 360)
+    rise = y1 - y2
+    run = x1 - x2
+    angle = math.atan2(run, rise) # get the angle in radians
+    angle = angle * (180 / math.pi) # convert to degrees
+    angle = (angle + 90) % 360 # adjust for a right-facing sprite
+    return angle</pre>
+<p>The <code>getAngle()</code> function takes in the X and Y coordinates of two points, and returns the number of degrees that the object at the first point should be rotated to be pointing at the second point.</p>
+<p>With the code in <code>getAngle()</code>, we can set up several different cannons on the screen and have them always pointed at the mouse cursor by rotating the cannon's image (on its <code>Surface</code> object) by the return value of <code>getAngle()</code>. That is what this code does:</p>
+<pre>        degrees = getAngle(cannonx, cannony, mousex, mousey)
+
+        # rotate a copy of the cannon image and draw it
+        rotatedSurf = pygame.transform.rotate(cannonSurf, degrees)</pre>
+<p>Remember to pass the cannon's X and Y coordinates as the first pair of arguments to <code>getAngle()</code>, otherwise you will get the angle that the mouse cursor would rotate to point to the cannon instead of vice versa.</p>
+<h3>Red Orbiting Circle</h3>
+<p>The <a href="/trig_redcenter.py">trig_redcenter.py</a> program is a simplified version of the code that will be in the "following eyes" program next. The basic idea of this program is to get the angle between the mouse cursor and the center of the window (which involves calling the <code>math.atan2()</code> function). Then a red circle is placed a constant distance away from the center at this angle (which involves <code>math.cos()</code> and <code>math.sin()</code>, since all the points a constant distance from one point forms a circle.)</p>
+<p><img src="/images/trig_redcenter.gif?27f655" /></p>
+<p><a href="/trig_redcenter.py">Download the Python source code for trig_redcenter.py.</a></p>
+<pre>    # draw the cannons pointed at the mouse cursor
+    mousex, mousey = pygame.mouse.get_pos()
+
+    degrees = getAngle(WIN_CENTERX, WIN_CENTERY, mousex, mousey)
+
+    # draw the thin central red circle
+    pygame.draw.circle(DISPLAYSURF, RED, (WIN_CENTERX, WIN_CENTERY), 100, 4)
+
+    # draw the big circle on the edge
+    xPos = math.cos(degrees * (math.pi / 180)) * 100
+    yPos = math.sin(degrees * (math.pi / 180)) * 100
+    pygame.draw.circle(DISPLAYSURF, RED, (int(xPos) + WIN_CENTERX, -1 * int(yPos) + WIN_CENTERY), 40)</pre>
+<p>This makes it look like the mouse is sliding the big red circle along the thing circle. This effect will be used in the next program.</p>
+<h3>Eyes Following the Mouse Cursor</h3>
+<p>The <a href="/trig_eyes.py">trig_eyes.py</a> program uses this same <code>getAngle()</code> function to make eyes that will follow the mouse pointer. You can see that the solid black circle of the eyeball has it's center X and Y coordinates set by this code:</p>
+<pre>        degrees = getAngle(eyex, eyey, mousex, mousey)
+
+        # draw the outline of the eye
+        pygame.draw.circle(DISPLAYSURF, BLACK, (eyex, eyey), 15, 1)
+
+        # draw the black part of the eye
+        xPos = math.cos(degrees * (math.pi / 180)) * 5
+        yPos = math.sin(degrees * (math.pi / 180)) * 5
+        pygame.draw.circle(DISPLAYSURF, BLACK, (int(xPos) + eyex, -1 * int(yPos) + eyey), 10)</pre>
+<p>To make the eyes "follow" the mouse cursor, we need to have the pupil circle be a constant distance from the center of the eye. We do this with code similar to the code in <a href="/trig_redcenter.py">trig_redcenter.py</a>. We just make sure this distance and the radius of the pupil circles adds up to the radius of the outline circle of the eye. That way the pupil will always be at the edge of the eye outline.</p>
+<p>When we put two of these together, they look like a pair of eyes following the mouse circle.</p>
+<h3>Conclusion</h3>
+<p>There aren't many times that you need to know complex math in programming. But the basic trig functions that programming languages provide are very helpful for various graphics and animation techniques like the ones outlined here. I hope this tutorial has been helpful. Feel free to ask any further questions in the comments or email me. <a href="/cdn-cgi/l/email-protection#7819143811160e1d160c0f110c1008010c101716561b1715"><span class="__cf_email__" data-cfemail="80e1ecc0e9eef6e5eef4f7e9f4e8f0f9f4e8efeeaee3efed">[email&#160;protected]</span><script data-cfhash='f9e31' type="text/javascript">/* <![CDATA[ */!function(t,e,r,n,c,a,p){try{t=document.currentScript||function(){for(t=document.getElementsByTagName('script'),e=t.length;e--;)if(t[e].getAttribute('data-cfhash'))return t[e]}();if(t&&(c=t.previousSibling)){p=t.parentNode;if(a=c.getAttribute('data-cfemail')){for(e='',r='0x'+a.substr(0,2)|0,n=2;a.length-n;n+=2)e+='%'+('0'+('0x'+a.substr(n,2)^r).toString(16)).slice(-2);p.replaceChild(document.createTextNode(decodeURIComponent(e)),c)}p.removeChild(t)}}catch(u){}}()/* ]]> */</script></a></p>
+					
+
+    </body>
+</html>

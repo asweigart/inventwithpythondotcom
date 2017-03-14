@@ -1,0 +1,384 @@
+<html>
+    <head>
+        <title>Designing a Button UI Module for Pygame</title>
+        <meta name="tags" content="" />
+        <meta name="date" content="2012-10-30 12:00" />
+        <meta name="summary" content="" />
+    </head>
+    <body>
+
+
+			<p><a href="http://pygame.org" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://pygame.org', 'Pygame']);" >Pygame</a> is a 2D graphics and gaming library for Python. It's pretty nifty because it essentially gives you a blank window that you can draw any shapes or lines or images you want on it. But it doesn't come with any UI elements like buttons, scrollbars, or check boxes. This post will go through not only creating a button class for Pygame, but also the reasoning behind why I've set up the code as it is. This is more of a "how to create a module other people can use" tutorial than a UI or Pygame tutorial.</p>
+<p>This tutorial assumes you know the basics of Pygame and Python programming. If you don't, it's probably easy enough to follow anyway.</p>
+<p>A button is a common user interface (UI) control that is used in many software applications. It seems simple enough: there's a button on the window and you click on it and something happens. But there's a lot of details we should plan out ahead of time. Remember, we want to make a generic button class so that other programmers can use this in their games and programs. Once you've read through the process here, you'll be familiar with how to make your own modules for UI elements.</p>
+<p>Designing a UI button class is good a good programming practice exercise.</p>
+<p><span style="font-size: 1.4em">Download the PygButton module from PyPI by running "pip install pygbutton". You can also look at just the <a href="http://inventwithpython.com/pygbutton.py">pygbutton.py</a> file itself.</span></p>
+<p>Or <a href="https://github.com/asweigart/pygbutton" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/pygbutton', 'download it from the git repository on GitHub']);" >download it from the git repository on GitHub</a>.</p>
+<h2>The Feature List (and the Non-Feature List)</h2>
+<p>First, let's create a list of design details for the buttons:<br />
+<span id="more-1054"></span></p>
+<ol>
+<li>Can have any width or height.</li>
+<li>The buttons can have text on them. The font and size can be customized.</li>
+<li>The background color of the button can be changed to any RGB value, as can the foreground (text) color.</li>
+<li>The button's properties (bgcolor, bgcolor, text, font, size, etc.) can be dynamically changed.</li>
+<li>The button has three states: normal, down (when the mouse cursor has pressed down on the button), and highlight (when the mouse cursor is over the button but not pressing down).
+<li>Pygame's mouse events are passed to the button's handleEvent() method, which update's the button's state and calls any event-handling code.</li>
+<li>The button recognizes 6 different types of events: mouse enter, mouse exit, mouse down, mouse up, mouse click, and mouse move. (These are explained later.)</li>
+<li>Instead of text, the user will be able to specify images for the three different states. We'll call these image-based buttons.</li>
+<li>The button's visibility can be toggled on and off.</li>
+</ol>
+<p>And it's always a good idea to come up with a list of things we specifically won't implement (to avoid feature creep each time we think, "Hey, it'd be cool if we could..."). These features could always be implemented later.</p>
+<ol>
+<li>Must be rectangular (i.e. can't be oval).</li>
+<li>No transparency.</li>
+<li>No more than the three states.</li>
+<li>No hotkeys attached to them, or keyboard focus.</li>
+<li>No special "double click" event (it'll just be two click events).</li>
+<li>For now, the highlight state looks identical to the normal state for text-based buttons.</li>
+<li>A button is either text-based or image-based, there's no hybrid.</li>
+<li>No "disabled" state.</li>
+<li>Only one font & color at a time for text-based buttons.</li>
+<li>The text caption will always be centered, not left- or right-aligned.</li>
+</ol>
+<p><em>(But you can add these features to your own code if you want.)</em></p>
+<h2>Design Details</h2>
+<p>Whenever you're designing something, always do a prior art search first. Looking at how buttons on a web page work is a good case to examine, for example.</p>
+<p>The buttons have three states and can have a different appearance for each state.</p>
+<ul>
+<li>The <strong>"normal" state</strong> is what the button looks like when it has not been clicked and the mouse is not over it.</li>
+<li>The <strong>"highlight" state</strong> is what the button looks like when the mouse is hovering over it, but not clicking it. We can use this to add some kind of highlighting behavior when the mouse glides over the button. For normal text-based buttons, this state will look identical to the normal state.</li>
+<li>The <strong>"down" state</strong> is what the button looks like when it is being clicked down.</li>
+</ul>
+<p>There are also six different "button events" that the buttons can produce based on the Pygame mouse events that are passed to them:</p>
+<ul>
+<li><strong>Enter</strong> - When a MOUSEMOTION event has told the button that the mouse is over the button when previously it wasn't.</li>
+<li><strong>Exit</strong> - When a MOUSEMOTION event has told the button that the mouse is no longer over the button when previously it was.</li>
+<li><strong>Move</strong> - When the button has received a MOUSEMOTION event.</li>
+<li><strong>Down</strong> - When the mouse is pressed down on the button.</li>
+<li><strong>Up</strong> - When the mouse is released on the button.</li>
+<li><strong>Click</strong> - When the mouse was pressed down on the button and released over the button. (Releasing the mouse off of the button does not trigger the click event.)</li>
+</ul>
+<p><em>(Note: The buttons won't produce Pygame USEREVENTS. I didn't see a significant need for them.)</em></p>
+<p>As to how the mouse button looks, I'll be using the Windows look-and-feel of buttons. Here's what they look like zoomed in:</p>
+<p><img src="http://inventwithpython.com/blog/images/pygbutton_buttons.png?27f655" /></p>
+<p>Notice that the 3D appearance is caused by drawing these black, gray, and white outlines. These lines don't change if the background color of the button changes.</p>
+<h2>What the API will Look Like</h2>
+<p>Before diving into coding, we need a concrete plan for how other programmers will use this module. <strong>It doesn't matter how sophisticated your library is, if it is opaque, difficult to learn, and inconsistent no one will want to learn it and it will not be used.</strong> It's important to get these details right the first time, because making changes (like changing a function name or getting rid of a class) later on could break other people's code that uses your library. This means they won't adopt newer versions and new features (since the newer version breaks their code), which further limits the popularity of your module.</p>
+<p>The button's API will have three main parts: the constructor function that creates it, the function that draws the button to a pygame.Surface object (to display it on the screen), and a handleEvent() method that we can pass pygame.Event objects to so it knows what is happening in the program. The code will roughly look like this:</p>
+<p><code></p>
+<pre>myButton = pygbutton.PygButton(rectObj, 'Caption text')
+...
+for event in pygame.event.get(): # event handling loop
+    myButton.handleEvent(event)
+...
+myButton.draw(displaySurface)</pre>
+<p></code></p>
+<p>Before we start coding, we should write out the method names and parameters for the PygButton class first. This will help cement what we want to code before we start coding:</p>
+<ul>
+<li><code>def __init__(self, rect=None, caption='', bgcolor=LIGHTGRAY, fgcolor=BLACK, font=None, normal=None, down=None, highlight=None)</code> - The constructor. Note that pretty much everything has a default argument. If the user just wants asimple button, we shouldn't have to make her write out tons of boilerplate code. Let's just supply default values.</li>
+<li><code>def handleEvent(self, eventObj)</code> - Changes the button's state if the Pygame event passed is relevant.</li>
+<li><code>def draw(self, surfaceObj)</code> - Draws the button (in its current state) to the surfaceObj surface.</li>
+<li><code>def mouseClick(self, event)</code> - Called when the button has a click event. (These methods don't do anything in the PygButton class, but you can override this class to implement code in these methods.)</li>
+<li><code>def mouseEnter(self, event)</code> - Called when the button has a "mouse enter" event.</li>
+<li><code>def mouseExit(self, event)</code> - Called when the button has a "mouse exit" event.</li>
+<li><code>def mouseMove(self, event)</code> - Called when the button has a "mouse move" event.</li>
+<li><code>def mouseDown(self, event)</code> - Called when the button has a mouse button down event.</li>
+<li><code>def mouseUp(self, event)</code> - Called when the button has a mouse button up event.</li>
+<li><code>def setSurfaces(self, normalSurface, downSurface=None, highlightSurface=None)</code> - Let's the user specify either image filenames or pygame.Surface objects to use for each of the states. (This sets the button to be an image-based button.)</li>
+</ul>
+<p>And here are some properties that we'd like to set for the PygButton class. Whenever you think you'll need a get and set method for something (i.e. getCaption() and setCaption() instead of just a caption property), this is a strong indication that a property would be better instead.</p>
+<ul>
+<li><code>caption</code> - The string for the text caption in the center of the button.</li>
+<li><code>rect</code> - A pygame.Rect object which gives the position and size of the button.</li>
+<li><code>visible</code> - A boolean that sets the button to visible (True) or invisible (False).</li>
+<li><code>fgcolor</code> - An RGB tuple or pygame.Color object for the text (foreground) color.</li>
+<li><code>bgcolor</code> - An RGB tuple or pygame.Color object for the background color.</li>
+<li><code>font</code> - A pygame.font.Font object for the font (and size) to use for the text caption.</li>
+</ul>
+<p>Setting any of these properties (other than rect) will result in the button becoming a text-based button if it was previously an image-based button. Setting the rect property of an image-based button simply resizes the images.</p>
+<p>Note that we don't have properties for setting the normal, down, and highlight Surfaces. This is because when we switch from a normal text-based button (which uses the caption, fgcolor, bgcolor, and font properties) to an image-based button, we want to set the images for all three Surfaces at the same time (even though we have defaults for the down and highlight surfaces.)</p>
+<h2>The Preamble Code</h2>
+<p>Here's the code that goes at the top of the pygbutton.py file. It imports Pygame and calls the init() function for the fonts and creates a few constants that we'll use in the module.</p>
+<p><code></p>
+<pre>import pygame
+from pygame.locals import *
+
+pygame.font.init()
+PYGBUTTON_FONT = pygame.font.Font('freesansbold.ttf', 14)
+
+BLACK     = (  0,   0,   0)
+WHITE     = (255, 255, 255)
+DARKGRAY  = ( 64,  64,  64)
+GRAY      = (128, 128, 128)
+LIGHTGRAY = (212, 208, 200)</pre>
+<p></code></p>
+<h2>The Constructor Function</h2>
+<p>The constructor function is fairly straight forward. There are many different attributes that we can customize for a button, but we can always just create a standard default button.</p>
+<p><code></p>
+<pre>class PygButton(object):
+    def __init__(self, rect=None, caption='', bgcolor=LIGHTGRAY, fgcolor=BLACK, font=None, normal=None, down=None, highlight=None):
+        if rect is None:
+            self._rect = pygame.Rect(0, 0, 30, 60)
+        else:
+            self._rect = pygame.Rect(rect)
+
+        self._caption = caption
+        self._bgcolor = bgcolor
+        self._fgcolor = fgcolor
+
+        if font is None:
+            self._font = PYGBUTTON_FONT
+        else:
+            self._font = font
+
+        # tracks the state of the button
+        self.buttonDown = False # is the button currently pushed down?
+        self.mouseOverButton = False # is the mouse currently hovering over the button?
+        self.lastMouseDownOverButton = False # was the last mouse down event over the mouse button? (Used to track clicks.)
+        self._visible = True # is the button visible
+        self.customSurfaces = False # button starts as a text button instead of having custom images for each surface
+
+        if normal is None:
+            # create the surfaces for a text button
+            self.surfaceNormal = pygame.Surface(self._rect.size)
+            self.surfaceDown = pygame.Surface(self._rect.size)
+            self.surfaceHighlight = pygame.Surface(self._rect.size)
+            self._update() # draw the initial button images
+        else:
+            # create the surfaces for a custom image button
+            self.setSurfaces(normal, down, highlight)</pre>
+<p></code></p>
+<p>For image-based buttons, the setSurfaces() method is called, which handles the default images for the Down and Highlight state if they are unspecified. It also checks that the images are the same size. Note that the user can specify either pygame.Surface objects or string filename values.</p>
+<p><code></p>
+<pre>    def setSurfaces(self, normalSurface, downSurface=None, highlightSurface=None):
+        """Switch the button to a custom image type of button (rather than a
+        text button). You can specify either a pygame.Surface object or a
+        string of a filename to load for each of the three button appearance
+        states."""
+        if downSurface is None:
+            downSurface = normalSurface
+        if highlightSurface is None:
+            highlightSurface = normalSurface
+
+        if type(normalSurface) == str:
+            self.origSurfaceNormal = pygame.image.load(normalSurface)
+        if type(downSurface) == str:
+            self.origSurfaceDown = pygame.image.load(downSurface)
+        if type(highlightSurface) == str:
+            self.origSurfaceHighlight = pygame.image.load(highlightSurface)
+
+        if self.origSurfaceNormal.get_size() != self.origSurfaceDown.get_size() != self.origSurfaceHighlight.get_size():
+            raise Exception('foo')
+
+        self.surfaceNormal = self.origSurfaceNormal
+        self.surfaceDown = self.origSurfaceDown
+        self.surfaceHighlight = self.origSurfaceHighlight
+        self.customSurfaces = True
+        self._rect = pygame.Rect((self._rect.left, self._rect.top, self.surfaceNormal.get_width(), self.surfaceNormal.get_height()))</code></pre>
+<p>Note that the PygButton class also stores the original images in the origSurfaceNormal, origSurfaceDown, and origSurfaceHighlight member variables. This is so that when the code does a resize, we are resizing the original images. The button could be resized multiple times, and this would result in poor quality if we tried to resize and previously resized image. (The same way a photocopy of a photocopy of a photocopy reduces the image quality.)</p>
+<h2>The draw() Method</h2>
+<p>The draw() method is straightforward since it only copies the surfaceNormal, surfaceDown, and surfaceHighlight properties to the passed pygame.Surface object. The draw() method is called whenever the button's current state needs to be drawn to a Surface object. Drawing the buttons themselves will be handled by the _update() method.</p>
+<p><code></p>
+<pre>def draw(self, surfaceObj):
+    """Blit the current button's appearance to the surface object."""
+    if self._visible:
+        if self.buttonDown:
+            surfaceObj.blit(self.surfaceDown, self._rect)
+        elif self.mouseOverButton:
+            surfaceObj.blit(self.surfaceHighlight, self._rect)
+        else:
+            surfaceObj.blit(self.surfaceNormal, self._rect)</pre>
+<p></code></p>
+<p>The _update() method will be called whenever the appearance of the buttons has been modified. This happens when the text, background color, size, etc. of the button has changed. This is why the name of _update() begins with an underscore; it's only called by the class's code itself. It shouldn't be called by the user.</p>
+<p>The _update() method is mostly drawing code for text-based buttons (or resizing the images for image-based buttons).</p>
+<p><code></p>
+<pre>    def _update(self):
+        """Redraw the button's Surface object. Call this method when the button has changed appearance."""
+        if self.customSurfaces:
+            self.surfaceNormal    = pygame.transform.smoothscale(self.origSurfaceNormal, self._rect.size)
+            self.surfaceDown      = pygame.transform.smoothscale(self.origSurfaceDown, self._rect.size)
+            self.surfaceHighlight = pygame.transform.smoothscale(self.origSurfaceHighlight, self._rect.size)
+            return
+
+        w = self._rect.width # syntactic sugar
+        h = self._rect.height # syntactic sugar
+
+        # fill background color for all buttons
+        self.surfaceNormal.fill(self.bgcolor)
+        self.surfaceDown.fill(self.bgcolor)
+        self.surfaceHighlight.fill(self.bgcolor)
+
+        # draw caption text for all buttons
+        captionSurf = self._font.render(self._caption, True, self.fgcolor, self.bgcolor)
+        captionRect = captionSurf.get_rect()
+        captionRect.center = int(w / 2), int(h / 2)
+        self.surfaceNormal.blit(captionSurf, captionRect)
+        self.surfaceDown.blit(captionSurf, captionRect)
+
+        # draw border for normal button
+        pygame.draw.rect(self.surfaceNormal, BLACK, pygame.Rect((0, 0, w, h)), 1) # black border around everything
+        pygame.draw.line(self.surfaceNormal, WHITE, (1, 1), (w - 2, 1))
+        pygame.draw.line(self.surfaceNormal, WHITE, (1, 1), (1, h - 2))
+        pygame.draw.line(self.surfaceNormal, DARKGRAY, (1, h - 1), (w - 1, h - 1))
+        pygame.draw.line(self.surfaceNormal, DARKGRAY, (w - 1, 1), (w - 1, h - 1))
+        pygame.draw.line(self.surfaceNormal, GRAY, (2, h - 2), (w - 2, h - 2))
+        pygame.draw.line(self.surfaceNormal, GRAY, (w - 2, 2), (w - 2, h - 2))
+
+        # draw border for down button
+        pygame.draw.rect(self.surfaceDown, BLACK, pygame.Rect((0, 0, w, h)), 1) # black border around everything
+        pygame.draw.line(self.surfaceDown, WHITE, (1, 1), (w - 2, 1))
+        pygame.draw.line(self.surfaceDown, WHITE, (1, 1), (1, h - 2))
+        pygame.draw.line(self.surfaceDown, DARKGRAY, (1, h - 2), (1, 1))
+        pygame.draw.line(self.surfaceDown, DARKGRAY, (1, 1), (w - 2, 1))
+        pygame.draw.line(self.surfaceDown, GRAY, (2, h - 3), (2, 2))
+        pygame.draw.line(self.surfaceDown, GRAY, (2, 2), (w - 3, 2))
+
+        # draw border for highlight button
+        self.surfaceHighlight = self.surfaceNormal</pre>
+<p></code></p>
+<h2>The Event Callback Methods</h2>
+<p>There are two ways that we can execute code in response to button-related events. The first is to have a method in the PygButton class (and its subclasses) get called that contains the code we want to run.</p>
+<p>We'll just put stub functions for these methods. Any subclasses that inherit from PygButton can override these methods and use any code they want. But for now, they do nothing:</p>
+<p><code></p>
+<pre>    def mouseClick(self, event):
+        pass # This class is meant to be overridden.
+    def mouseEnter(self, event):
+        pass # This class is meant to be overridden.
+    def mouseMove(self, event):
+        pass # This class is meant to be overridden.
+    def mouseExit(self, event):
+        pass # This class is meant to be overridden.
+    def mouseDown(self, event):
+        pass # This class is meant to be overridden.
+    def mouseUp(self, event):
+        pass # This class is meant to be overridden.</pre>
+<p></code></p>
+<h2>The handleEvent() Method</h2>
+<p>Whenever our program calls pygame.event.get_events() to retrieve all the events generated (for keyboard, mouse, etc. events) we should pass them to handleEvent() so the buttons can update their state. The second way to execute code in response to button events is with the return value of handleEvent().</p>
+<p>The handleEvent() method has been set up so that it returns a list of all button events that have happened due to the normal Pygame events passed to handleEvent(). So if a mouse move Pygame event has happened over the button (when previously the mouse cursor wasn't over the button), the handleEvent() method will return the list ['enter', 'move'].</p>
+<p>The caller of handleEvent() can perform any actions in response to these events.</p>
+<p>Here's the code for handleEvent():</p>
+<p><code></p>
+<pre>def handleEvent(self, eventObj):
+    if eventObj.type not in (MOUSEMOTION, MOUSEBUTTONUP, MOUSEBUTTONDOWN) or not self._visible:
+        # The button only cares bout mouse-related events (or no events, if it is invisible)
+        return []
+
+    retVal = []
+
+    hasExited = False
+    if not self.mouseOverButton and self._rect.collidepoint(eventObj.pos):
+        # if mouse has entered the button:
+        self.mouseOverButton = True
+        self.mouseEnter(eventObj)
+        retVal.append('enter')
+    elif self.mouseOverButton and not self._rect.collidepoint(eventObj.pos):
+        # if mouse has exited the button:
+        self.mouseOverButton = False
+        hasExited = True # call mouseExit() later, since we want mouseMove() to be handled before mouseExit()
+
+    if self._rect.collidepoint(eventObj.pos):
+        # if mouse event happened over the button:
+        if eventObj.type == MOUSEMOTION:
+            self.mouseMove(eventObj)
+            retVal.append('move')
+        elif eventObj.type == MOUSEBUTTONDOWN:
+            self.buttonDown = True
+            self.lastMouseDownOverButton = True
+            self.mouseDown(eventObj)
+            retVal.append('down')
+    else:
+        if eventObj.type in (MOUSEBUTTONUP, MOUSEBUTTONDOWN):
+            # if an up/down happens off the button, then the next up won't cause mouseClick()
+            self.lastMouseDownOverButton = False
+
+    # mouse up is handled whether or not it was over the button
+    doMouseClick = False
+    if eventObj.type == MOUSEBUTTONUP:
+        if self.lastMouseDownOverButton:
+            doMouseClick = True
+        self.lastMouseDownOverButton = False
+
+        if self.buttonDown:
+            self.buttonDown = False
+            self.mouseUp(eventObj)
+            retVal.append('up')
+
+        if doMouseClick:
+            self.buttonDown = False
+            self.mouseClick(eventObj)
+            retVal.append('click')
+
+    if hasExited:
+        self.mouseExit(eventObj)
+        retVal.append('exit')
+
+    return retVal</pre>
+<p></code></p>
+<h2>PygButton Properties</h2>
+<p>Instead of having simple member variables for the caption, rect, visible, fgcolor, bgcolor, and font, we can use <a href="http://docs.python.org/3.2/library/functions.html#property" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://docs.python.org/3.2/library/functions.html#property', 'Python properties']);" >Python properties</a> instead. This is better, because each time these values get updated we need to run some code that updates the Surface objects that hold the button's look. In other languages, this would require the use of bulky get and set methods. Python's property() function lets us assign methods to be called whenever the member variables need to be get or set.</p>
+<p><code></p>
+<pre>    def _propGetCaption(self):
+        return self._caption
+
+    def _propSetCaption(self, captionText):
+        self.customSurfaces = False
+        self._caption = captionText
+        self._update()
+
+    def _propGetRect(self):
+        return self._rect
+
+    def _propSetRect(self, newRect):
+        # Note that changing the attributes of the Rect won't update the button. You have to re-assign the rect member.
+        self._update()
+        self._rect = newRect
+
+    def _propGetVisible(self):
+        return self._visible
+
+    def _propSetVisible(self, setting):
+        self._visible = setting
+
+    def _propGetFgColor(self):
+        return self._fgcolor
+
+    def _propSetFgColor(self, setting):
+        self.customSurfaces = False
+        self._fgcolor = setting
+        self._update()
+
+    def _propGetBgColor(self):
+        return self._bgcolor
+
+    def _propSetBgColor(self, setting):
+        self.customSurfaces = False
+        self._bgcolor = setting
+        self._update()
+
+    def _propGetFont(self):
+        return self._font
+
+    def _propSetFont(self, setting):
+        self.customSurfaces = False
+        self._font = setting
+        self._update()
+
+    caption = property(_propGetCaption, _propSetCaption)
+    rect = property(_propGetRect, _propSetRect)
+    visible = property(_propGetVisible, _propSetVisible)
+    fgcolor = property(_propGetFgColor, _propSetFgColor)
+    bgcolor = property(_propGetBgColor, _propSetBgColor)
+    font = property(_propGetFont, _propSetFont)</pre>
+<p></code></p>
+<h2>Example Programs</h2>
+<p><strong>This is a very important step.</strong> We need to accompany the module with some example programs that show how simple it is to actually use the module in a working program. I would even say that <strong>including example programs is more important than having documentation</strong> (for smaller libraries, at least.)</p>
+<p><a href="http://inventwithpython.com/pygbutton_src.zip?27f655">Download the PygButton module and example programs here.</a></p>
+<p><img src="http://inventwithpython.com/blog/images/pygbutton_test1_screenshot.png?27f655" /></p>
+<p><img src="http://inventwithpython.com/blog/images/pygbutton_test2_screenshot.png?27f655" /></p>
+<p><img src="http://inventwithpython.com/blog/images/pygbutton_test3_screenshot.png?27f655" /></p>
+					
+
+    </body>
+</html>

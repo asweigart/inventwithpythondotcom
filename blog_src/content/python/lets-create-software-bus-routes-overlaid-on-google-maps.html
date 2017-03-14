@@ -1,0 +1,277 @@
+<html>
+    <head>
+        <title>"Let's Create Software" Tutorial: Bus Routes Overlaid on Google Maps</title>
+        <meta name="tags" content="" />
+        <meta name="date" content="2014-02-11 12:00" />
+        <meta name="summary" content="" />
+    </head>
+    <body>
+
+
+			<p><em>The "Let's Create Software" series covers the creation of small, complete software projects from start to finish. The entire process and code is explained to give beginner and intermediate programmers an idea of what it is like to not just program, but create an entire piece of software from scratch.</em></p>
+<p>There's a <a href="http://www.sfmta.com/maps/muni-system-map" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.sfmta.com/maps/muni-system-map', 'large PDF system map']);" >large PDF system map</a> of all the Muni bus routes in San Francisco (as well as <a href="http://www.sfmta.com/maps" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.sfmta.com/maps', 'maps of the individual Muni routes']);" >maps of the individual Muni routes</a>). If I need to find directions, Google Maps' mass transit instructions are fine. But sometimes I'd like to just browse all the routes throughout the city. However the large PDF is slow to render on my laptop (moreso on my phone). Scrolling the PDF also results in a lengthy wait for redrawing.</p>
+<p>So I had the idea to use Google Maps' API to draw out a map of all the Muni routes. This would have the benefit of the system map PDF but also be easier to load and navigate. I have no experience using the Google Maps API and am vaguely aware that there's public data about Muni bus routes, but I'll learn along the way.</p>
+<p><strong><a href="/sfmuni">The completed SF Muni Google Map.</a></strong></p>
+<p><img src="/sfmuni/sfmuni_screenshot1.png?27f655" /></p>
+<p><img src="/sfmuni/sfmuni_screenshot2.png?27f655" /></p>
+<p>To follow along with this tutorial, it helps to have a bit of Python or JavaScript knowledge, or know a little bit about programming. I've tried to keep this as straightforward as possible, even for non-programmers to roughly follow.</p>
+<p>This project will involve writing a few "throw-away" scripts to parse and extract data, and my preferred language is Python. While I do all the scripts in Python 3 (note: Python 3 has some backwards incompatibilities with Python 2. My scripts might not run on Python 2), you can use whatever language you like. The final software will be done with JavaScript since it is a web page that uses the Google Maps API. (The final result is here: <a href="http://inventwithpython.com/sfmuni/">http://inventwithpython.com/sfmuni/</a></p>
+<p>In general, by "throw-away" script I mean a script that is written in order to be run once to perform a task. Software such as Firefox or Angry Birds I want to keep around to run again and again, but a throw-away script I just need to automate a certain task. I'll still keep this script; I won't actually delete this script once I've run it, but I most likely won't ever need it again.</p>
+<p>A note to beginning programmers who might feel like this project might be too advanced for them: even though I have years of experience programming, I still made many mistakes and went down a few blind alleys while putting this code together. Although it looks like I just sat down and typed out this code, just remember that this tutorial is the polished outcome of quite a bit of tenacious work. Don't be discouraged or intimidated, just keep at it!</p>
+<p><span id="more-1626"></span></p>
+<h2>Prior Art Search</h2>
+<p>The first part before we do any programming project is to see what else is already out there. It might be fun to reimplement something that's already out there, but by looking at what other people have done, we can get ideas for what we might want to do. Or you might find the exact software you wanted is already made, and can save yourself the trouble.</p>
+<p>Doing a few Google Searches, I see that there's <a href="http://www.sflivebus.com/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.sflivebus.com/', 'SF Live Bus']);" >SF Live Bus</a>, which gives a live feed of every bus's position using the Google Maps API and the NextBus API. But it doesn't show the routes on the maps like the system map does.</p>
+<p><a href="http://www.nextbus.com/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.nextbus.com/', 'NextBus']);" >NextBus</a> has outfitted the buses and trains of many municipal transit systems with GPS locators and provides a data feed of them. They also have an API that is well documented.</p>
+<p>Other than that, I haven't really found anything like what I want to do specifically.</p>
+<h2>Decide on Features (and Non-Features)</h2>
+<p>Here's what I want the software to do:</p>
+<ul>
+<li>Use Google Maps with all the usual navigation controls that it provides, but all the Muni routes are overlaid on top of it.</li>
+<li>Also, have all the stops marked on the map.</li>
+</ul>
+<p>Also, it's important to come up with a list of features you will <strong>not</strong> have. It's really easy to say, "Hey it'd be cool if it could do this..." and keep accumulating features and making the software more complicated. While good learning experiences for the programmer, half-finished projects are almost always useless for other people. Our system map software will <strong>not</strong> have:</p>
+<ul>
+<li>Display current position of the buses.</li>
+<li>Have bus predictions for the stops.</li>
+<li>Offer directions between locations.</li>
+</ul>
+<p>I'll come up with new features as I make progress, but keeping the scope of the project from constantly expanding will prevent me from ending up with another half-finished project.</p>
+<h2>Research</h2>
+<p>There are four things I'll have to learn before I can create this:</p>
+<ol>
+<li>Get a list of all the bus routes for San Francisco Muni .</li>
+<li>Figure out the coordinates of the routes so that I can draw them on the map.</li>
+<li>Figure out the coordinates of all the stops in the city.</li>
+<li>Learn enough of the Google Maps API to create a map and draw lines and markers on it.</li>
+</ol>
+<p>The NextBus site has <a href="http://www.nextbus.com/xmlFeedDocs/NextBusXMLFeed.pdf‎" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.nextbus.com/xmlFeedDocs/NextBusXMLFeed.pdf‎', 'a PDF that explains their public data feed']);" >a PDF that explains their public data feed</a>. We can use that to figure out the coordinates for routes and stops. You don't have to read it, I'll be explaining what I do as I do it.</p>
+<h2>Getting a List of Routes</h2>
+<p>According to the <a href="http://www.nextbus.com/xmlFeedDocs/NextBusXMLFeed.pdf‎" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.nextbus.com/xmlFeedDocs/NextBusXMLFeed.pdf‎', 'NextBus PDF']);" >NextBus PDF</a>, <code>sf-muni</code> is the "agency name" (NextBus provides info for many different cities' bus systems) that we plug into the URL for the XML data feed. You can access <a href="http://webservices.nextbus.com/service/publicXMLFeed?command=routeList&a=sf-muni" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://webservices.nextbus.com/service/publicXMLFeed?command=routeList&amp;a=sf-muni', 'http://webservices.nextbus.com/service/publicXMLFeed?command=routeList&amp;a=sf-muni']);" >http://webservices.nextbus.com/service/publicXMLFeed?command=routeList&a=sf-muni</a> to get XML text with all the routes. The XML looks like this:</p>
+<pre>&lt;?xml version="1.0" encoding="utf-8" ?&gt; 
+&lt;body copyright="All data copyright San Francisco Muni 2014."&gt;
+&lt;route tag="F" title="F-Market & Wharves"/&gt;
+&lt;route tag="J" title="J-Church"/&gt;
+&lt;route tag="KT" title="KT-Ingleside/Third Street"/&gt;
+&lt;route tag="L" title="L-Taraval"/&gt;
+...</pre>
+<p>I need to extract the information in the <code>tag</code> and <code>title</code> attributes. I <em>could</em> just spend time copying & pasting this information, but instead I'll write a throw-away Python script (called <a href="/sfmuni/getroutes.py">getroutes.py</a> to do this for me.</p>
+<p>Download <a href="/sfmuni/getroutes.py">getroutes.py</a> or <a href="http://pastebin.com/xn4msVJu" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://pastebin.com/xn4msVJu', 'view it online']);" >view it online</a>.</p>
+<p>I've installed the <a href="http://docs.python-requests.org/en/latest/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://docs.python-requests.org/en/latest/', 'Requests']);" >Requests</a> module to make downloading the XML data easier. The <a href="http://docs.python-requests.org/en/latest/user/quickstart/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://docs.python-requests.org/en/latest/user/quickstart/', 'quick start']);" >quick start</a> page has a good intro in how to use it. To download a web page, you <code>import requests</code> and then call <code>requests.get()</code> to download the page. The <code>requests.get()</code> function returns a "request object" which has the webpage as a string in the <code>text</code> attribute. (The Requests module is <strong>much</strong> easier to use than Python's urllib2 module.)</p>
+<p>I'll use the <code>xml</code> and <code>pprint</code> modules to turn the XML text file into a Python dictionary value that is saved to a file named <a href="/sfmuni/routedata.py">routedata.py</a>. I can pass a dictionary value to the <code>pprint.pformat()</code> function, and it will return a string of what that dictionary would look like typed as code. </p>
+<p>I'm using Python code to generate Python code! This sounds complicated, but just keep in mind that a Python script is just a plain text file: Technically this is Python code that generates Python code: <code>print("print('Hello world!')")</code>.</p>
+<p>Download <a href="/sfmuni/routedata.py">routedata.py</a> or <a href="http://pastebin.com/jYiBDUk6" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://pastebin.com/jYiBDUk6', 'view it online']);" >view it online</a>.</p>
+<p>I now have a <a href="/sfmuni/routedata.py">routedata.py</a> file that looks like this:</p>
+<pre>allRoutes = {'1': '1-California',
+ '10': '10-Townsend',
+ '108': '108-Treasure Island',
+ '12': '12-Folsom/Pacific',
+...</pre>
+<p>I won't actually run this script, but I'll import it for the <code>allRoutes</code> variable in future scripts. There are 81 routes listed in this dictionary.</p>
+<p>The entire process has looked like this:</p>
+<p><strong>NextBus XML feed URL > getroutes.py processing > Dictionary in routedata.py</strong></p>
+<h2>Getting Route Path Data</h2>
+<p>The <a href="http://www.nextbus.com/xmlFeedDocs/NextBusXMLFeed.pdf‎" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.nextbus.com/xmlFeedDocs/NextBusXMLFeed.pdf‎', 'NextBus PDF']);" >NextBus PDF</a> explaining their API says I can access a URL like <a href="http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a=sf-muni&r=N" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&amp;a=sf-muni&amp;r=N', 'http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&amp;a=sf-muni&amp;r=N']);" >http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a=sf-muni&r=N</a> to get all the information about the N route. I just have to replace "N" with the other route names in the URL to get info for the other routes. Part of the XML at this URL looks like this:</p>
+<pre>&lt;path&gt;
+&lt;point lat="37.76017" lon="-122.50878"/&gt;
+&lt;point lat="37.7603" lon="-122.50812"/&gt;
+&lt;point lat="37.76039" lon="-122.50606"/&gt;
+&lt;point lat="37.76052" lon="-122.50284"/&gt;
+&lt;point lat="37.76068" lon="-122.49915"/&gt;
+&lt;point lat="37.76083" lon="-122.49596"/&gt;
+&lt;/path&gt;
+&lt;path&gt;
+&lt;point lat="37.76493" lon="-122.45651"/&gt;
+&lt;point lat="37.76537" lon="-122.45293"/&gt;</pre>
+<p>Each &lt;path&gt; element has the &lt;point&gt; elements which have latitude and longitude data "that can be used to draw a route on a map." (according to the <a href="http://www.nextbus.com/xmlFeedDocs/NextBusXMLFeed.pdf‎" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.nextbus.com/xmlFeedDocs/NextBusXMLFeed.pdf‎', 'NextBus PDF']);" >NextBus PDF</a>.) The reason there are multiple &lt;path&gt; elements instead of one giant &lt;path&gt; element is also explained in the PDF: </p>
+<blockquote><p>"Due to the nature of the configuration there can be many separate paths, some of them overlapping. A map client should simply draw all of the paths. The paths are not necessarily in any kind of order so you should only connect the points within a path. You should <strong>not</strong> connect the points between two separate paths though."</p></blockquote>
+<p>So we'll need to write another script that downloads the XML for each of the 81 routes, parses it to get the path information, and then put it in a big Python dictionary. I want the Python dictionary to look something like this:</p>
+<pre>allRoutesPathData = {'N': [ [{'lon': XXX, 'lat': XXX}, {'lon': XXX, 'lat': XXX}, ...], ... ],
+                     '1': [ [{'lon': XXX, 'lat': XXX}, {'lon': XXX, 'lat': XXX}, ...], ... ],
+...</pre>
+<p>The dictionary's keys will be strings of the route name. The values will be lists of lists which represent each &lt;path&gt; element. This list will contain a series of dictionaries with keys <code>'lon'</code> and <code>lat</code> for the coordinate points.</p>
+<p>My <a href="/sfmuni/getpathdata.py">getpathdata.py</a> script will create the URL for each route, download the XML, parse the longitude and latitude data in the XML, and then produce a giant Python dictionary with this data in a file named <a href="/sfmuni/munipaths.py">munipaths.py</a>.</p>
+<p>Download <a href="/sfmuni/getpathdata.py">getpathdata.py</a> or <a href="http://pastebin.com/Qw9KrxZ8" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://pastebin.com/Qw9KrxZ8', 'view it online']);" >view it online</a>.</p>
+<p>Download <a href="/sfmuni/munipaths.py">munipaths.py</a>.</p>
+<p>The output of this program is in <a href="/sfmuni/munipaths.py">munipaths.py</a> and looks like this:</p>
+<pre>munipaths = {'1': [[{'lat': '37.78984', 'lon': '-122.43367'},
+        {'lat': '37.78999', 'lon': '-122.4325'},
+        {'lat': '37.79019', 'lon': '-122.43085'},
+        {'lat': '37.79036', 'lon': '-122.42918'},
+        {'lat': '37.79068', 'lon': '-122.42714'},
+...</pre>
+<p>This process can be summarized as:</p>
+<p><strong>Each NextBus route URL > getpathdata.py processing > Dictionary in munipaths.py</strong></p>
+<h2>Getting Route Stop Data</h2>
+<p>We'll also collect the stop information from the same XML feed that had the path information. According to the <a href="http://www.nextbus.com/xmlFeedDocs/NextBusXMLFeed.pdf‎" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.nextbus.com/xmlFeedDocs/NextBusXMLFeed.pdf‎', 'NextBus PDF']);" >NextBus PDF</a>, the attributes we'll be interested in are "title", "lat", "lon", and "stopId". I'll write a script to download and extract this data just like I did with the path data. I'll call this script <a href="/sfmuni/getstopdata.py">getstopdata.py</a> and make it from a modified <a href="/sfmuni/getpathdata.py">getpathdata.py</a>.</p>
+<p>Download <a href="/sfmuni/getstopdata.py">getstopdata.py</a> or <a href="http://pastebin.com/eVeLNspA" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://pastebin.com/eVeLNspA', 'view it online']);" >view it online</a>.</p>
+<p>Download <a href="/sfmuni/munistops.py">munistops.py</a>.</p>
+<p>It outputs the giant Python dictionary to <a href="/sfmuni/munistops.py">munistops.py</a>, which looks like this:</p>
+<pre>munistops = {'1': [{'lat': '37.7954199',
+        'lon': '-122.397',
+        'stopId': '14015',
+        'title': 'Clay St & Drumm St'},
+       {'lat': '37.7945',
+        'lon': '-122.3976099',
+        'stopId': '16294',
+        'title': 'Sacramento St & Davis St'},
+...</pre>
+<p>This process can be summarized as:</p>
+<p><strong>Each NextBus route URL > getstopdata.py processing > Dictionary in munistops.py</strong></p>
+<h2>Figure Out How Google Maps API Works</h2>
+<p>Okay! Now that we have all our data, we need to figure out how to draw it on Google Maps using their API. First, I'm going to <a href="https://developers.google.com/maps/documentation/javascript/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://developers.google.com/maps/documentation/javascript/', 'start reading through the Google Maps API documentation']);" >start reading through the Google Maps API documentation</a>. (You don't have to read it, I'll summarize.)</p>
+<p>It starts off "This documentation is designed for people familiar with JavaScript programming and object-oriented programming concepts." So you'll have to know a bit of JavaScript to make use of it.</p>
+<p>First, <a href="https://developers.google.com/maps/documentation/javascript/tutorial#api_key" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://developers.google.com/maps/documentation/javascript/tutorial#api_key', 'according to the guide']);" >according to the guide</a>, we have to <a href="https://code.google.com/apis/console/?noredirect" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://code.google.com/apis/console/?noredirect', 'sign up for a Google API key']);" >sign up for a Google API key</a>. This will require having a Google account. The instructions seem a bit out of date (Google has a new Dev Console site). From the APIs menu item on the left, I had to turn on "Google Maps API v3". Then I went to the Credentials menu item on the left, and clicked the "Create New Key" button and typed in "*.inventwithpython.com/*" and "inventwithpython.com/*" as the HTTP referers since this is where I'll host the map. (My inventwithpython.com site can optionally be www.inventwithpython.com, hence the two different referers.)</p>
+<p>This gave me my API key, which for me was "AIzaSyAq1luszpXp057mCW_qifsvM-_fzCOf2Ok" (This key will only work on maps on the inventwithpython.com site, so you can't copy and paste it into your own apps. But getting your own API key is pretty easy.)</p>
+<p>I'll host the map at <a href="http://inventwithpython.com/sfmuni">http://inventwithpython.com/sfmuni</a> in the index.html file (that way, the user won't have to type the "index.html" part of the URL).</p>
+<p>You can <a href="http://pastebin.com/7HWNKLan" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://pastebin.com/7HWNKLan', 'view the final source HTML of index.html online']);" >view the final source HTML of index.html online</a>.</p>
+<p>I've copied their <a href="https://developers.google.com/maps/documentation/javascript/tutorial#HelloWorld" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://developers.google.com/maps/documentation/javascript/tutorial#HelloWorld', '&quot;Hello World&quot;']);" >"Hello World"</a> example, entering in my own API key and setting the "sensor" parameter to "false" (since this site won't use GPS to find the user's position).</p>
+<p>I browsed to <a href="http://maps.google.com" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://maps.google.com', 'http://maps.google.com']);" >http://maps.google.com</a> and did a search for "San Francisco, CA", and then clicking the "link" icon I got this URL: <a href="https://maps.google.com/?ll=37.7577,-122.4376&spn=0.15906,0.308647&t=m&z=12" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://maps.google.com/?ll=37.7577,-122.4376&amp;spn=0.15906,0.308647&amp;t=m&amp;z=12', 'https://maps.google.com/?ll=37.7577,-122.4376&amp;spn=0.15906,0.308647&amp;t=m&amp;z=12']);" >https://maps.google.com/?ll=37.7577,-122.4376&spn=0.15906,0.308647&t=m&z=12</a>. This gives a nice full view of San Francisco, and the <code>ll=37.7577,-122.4376</code> part of the URL tells me the latitude and longitude values of the current map. I set the initial latitude and longitude of my Google Map to 37.7577 and -122.4376, and the initial zoom level to 12.</p>
+<p>I've posted this first map at this URL: <a href="http://inventwithpython.com/sfmuni/firstmap.html">http://inventwithpython.com/sfmuni/firstmap.html</a>. You can <a href="http://pastebin.com/2WjAsKjg" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://pastebin.com/2WjAsKjg', 'view the source HTML of this webpage online']);" >view the source HTML of this webpage online</a>.</p>
+<h2>Drawing Lines on the Google Map</h2>
+<p>Next, I need to read up some more to figure out how to draw what Google Maps calls "polylines" on the map. I'll use polylines to draw out the routes. There is <a href="https://developers.google.com/maps/documentation/javascript/shapes#polylines" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://developers.google.com/maps/documentation/javascript/shapes#polylines', 'documentation for drawing shapes']);" >documentation for drawing shapes</a> as well as <a href="https://developers.google.com/maps/documentation/javascript/examples/polyline-simple" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://developers.google.com/maps/documentation/javascript/examples/polyline-simple', 'an example using polylines']);" >an example using polylines</a> on the Google site.</p>
+<p>From the documentation, it looks like I have to have JavaScript code that creates a series of "google.maps.LatLng" objects which are used to create a "google.maps.Polyline" object. I can also set the color, opacity, and width (in pixels) of the polyline with the strokeColor, strokeOpacity, and strokeWeight parameters for the Polyline constructor.</p>
+<p>After all that, I call <code>setMap(map)</code> on the Polyline object, where <code>map</code> is the Google map object that was used in the "Hello World" example and is in firstmap.html page</p>
+<p>So I'm going to have to write Python code to generate the text of the JavaScript code. (Once again, I could do all this typing by hand, but that would take hours and hours.) But first, while I'll use the same width and opacity for each route, I don't want to use the same color for each route. I could just use the colors from the original <a href="http://www.sfmta.com/maps/muni-system-map" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.sfmta.com/maps/muni-system-map', 'Muni System Map PDF']);" >Muni System Map PDF</a>, but there's a lot of color reuse. Instead I'll use some standard RGB colors: #FF0000, #00FF00, #0000FF, #FFFF00, #00FFFF, #FF00FF, #800000, #008000, #000080, #808000, #008080, #800080</p>
+<p>The JavaScript code I have to generate for each Polyline object looks something like this:</p>
+<pre>var routePath = new google.maps.Polyline({
+    path: [new google.maps.LatLng(37.78984, -122.43367), ... ],
+    strokeColor: '#FF0000',
+    strokeOpacity: 1.0,
+    strokeWeight: 2
+  });
+routePath.setMap(map);</pre>
+<p>I wrote <a href="/sfmuni/generatePolylineJS.py">generatePolylineJS.py</a> to create this JavaScript code, which is outputted to a text file named <a href="/sfmuni/polylineJS.js?27f655">polylineJS.js</a>:</p>
+<p>Download <a href="/sfmuni/generatePolylineJS.py">generatePolylineJS.py</a> or <a href="http://pastebin.com/e6vsaaYb" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://pastebin.com/e6vsaaYb', 'view it online']);" >view it online</a>.</p>
+<p>Download <a href="/sfmuni/polylineJS.js?27f655">polylineJS.js</a>.</p>
+<p>The JavaScript code output is ready to be copied and pasted into our maps web page, and it looks like this:</p>
+<pre>var routePath = new google.maps.Polyline({
+    path: [new google.maps.LatLng(37.77774, -122.43817), new google.maps.LatLng( ... ],
+    strokeColor: '#00FF00',
+    strokeOpacity: 1.0,
+    strokeWeight: 2
+  });
+routePath.setMap(map);
+
+var routePath = new google.maps.Polyline({
+    path: [new google.maps.LatLng(37.77999, -122.42014) ...
+...</pre>
+<p>I've copied and pasted all this text into my maps web page, index.html, at the end of the <code>initialize()</code> function. You can view what the file looks like at this point here: <a href="http://inventwithpython.com/sfmuni/secondmap.html">http://inventwithpython.com/sfmuni/secondmap.html</a> (Right-click this link to save the HTML file.)</p>
+<p>Look at how huge this html file is! Over 800 kb! I'm glad I wrote a script that could automatically grab the route coordinates from the NextBus feed and then generate the necessary JavaScript for me. If I had to somehow manually mark each of the latitude and longitude points for each of the routes, that would have taken weeks!</p>
+<h2>Reducing the File Size</h2>
+<p>There are 14,266 points in the web page now for all the routes. The web page file is about 800 kb in size, which will be slow to load for smart phones. Let's take out all the redundant code by simply placing the latitude and longitude numbers in a JavaScript object, and then have JavaScript code go through this object to create the Polyline objects. We'll have to write a Python script to generate this JavaScript code for us.</p>
+<p>We want to go from this:</p>
+<pre>var routePath = new google.maps.Polyline({
+    path: [new google.maps.LatLng(37.77774, -122.43817), new google.maps.LatLng( ... ],
+    strokeColor: '#00FF00',
+    strokeOpacity: 1.0,
+    strokeWeight: 2
+  });
+routePath.setMap(map);
+
+var routePath = new google.maps.Polyline({
+    path: [new google.maps.LatLng(37.77999, -122.42014) ...
+...</pre>
+<p>...to something like this:</p>
+<pre>var allData = {"38BX": [[37.78271,-122.4458,37.78537,-122.44643,37.79107,-122.40095,37.79117, ... (a lot more data here)
+var routeColors = {"38BX": "#00FF00","9": "#008000", ...
+var routeNames = ["38BX","9","8X", ...
+
+
+for (var i = 0; i < routeNames.length; i++) { // loop over each route
+    var routeName = routeNames[i];
+    for (var j = 0; j < allData[routeName].length; j++) { // loop over each path on the route
+        var curPath = allData[routeName][j];
+        var polylinePoints = [];
+        for (var k = 0; k < curPath.length; k += 2) { // loop over each point in the path
+            polylinePoints.push(new google.maps.LatLng(curPath[k], curPath[k+1]));
+        }
+        var routePath = new google.maps.Polyline({
+            path: polylinePoints,
+            strokeColor: routeColors[routeName],
+            strokeOpacity: 1.0,
+            strokeWeight: 2
+            });
+        routePath.setMap(map);
+    }
+}</pre>
+<p>This will be much smaller since we only have the <code>new google.maps.LatLng(...)</code> and <code>var routePath = new google.maps.Polyline(...)</code> code typed once. The JavaScript code creates an array named <code>polylinePoints</code> that has <code>google.maps.LatLng</code> objects in it for the points on each path on each route. The <code>routeColors</code> JavaScript array will store the randomly-determined color to use for each route.</p>
+<p>Also, I noticed that my data currently has a lot of redundant routes on it. For example, the 14 Mission bus route is the same as the 14L "Local" Mission and 14X "Express" Mission routes. I'll set up my new script to not include the following routes: 1AX, 1BX, 5L, 8AX, 8BX, 9L, 14L, 14X, 28L, 31AX, 31BX, 38L, 38AX, 38BX, 71L, K OWL, L OWL, M OWL, N OWL, T OWL. (Routes like the 82X stay because the original route 82 no longer exists.) Also, I later found out that routes 59, 60, 61, 30X, and NX are listed in the NextBus XML feed but are no longer in service.</p>
+<p>This JavaScript code will be generated by our Python script (named <a href="/sfmuni/generatePolylineJS2.py">generatePolylineJS2.py</a>) and outputted to a file named <a href="/sfmuni/polylineJS2.py">polylineJS2.js</a>. We can copy and paste this JavaScript code into our map web page.</p>
+<p>Download <a href="/sfmuni/generatePolylineJS2.py">generatePolylineJS2.py</a> or <a href="http://pastebin.com/PW0njP6n" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://pastebin.com/PW0njP6n', 'view it online']);" >view it online</a>.</p>
+<p>Download the output file, <a href="/sfmuni/polylineJS2.js?27f655">polylineJS2.js</a>, or <a href="http://pastebin.com/Ap6YVUGT" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://pastebin.com/Ap6YVUGT', 'view it online']);" >view it online</a>.</p>
+<p>The new map web page is at <a href="/sfmuni/thirdmap.html">thirdmap.html</a>. It's the same as <a href="/sfmuni/secondmap.html">secondmap.html</a>, except at 226 kb it's about 70% smaller, making it much faster to load.</p>
+<h2>Adding Mouseover Events to the Lines</h2>
+<p>The different colors don't tell us what the route numbers are. It'd be nice if this information showed up whenever we hovered the mouse over it. According to the <a href="https://developers.google.com/maps/documentation/javascript/events" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://developers.google.com/maps/documentation/javascript/events', 'Events documentation for Google Maps']);" >Events documentation for Google Maps</a>, we can just call <code>addListener()</code> on the <code>google.maps.Polyline</code> and pass them the string <code>'mouseover'</code> and a JavaScript function to call when the mouse hovers over the polyline.</p>
+<p>To display the route name, we can use an <a href="https://developers.google.com/maps/documentation/javascript/infowindows" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://developers.google.com/maps/documentation/javascript/infowindows', 'InfoWindow object']);" >InfoWindow object</a> that Google Maps provides. When the mouse hovers over a line, move the InfoWindow to the mouse cursor, and then open it and display the route name. When the mouse leaves a line (the <code>'mouseout'</code> event) we want to close the InfoWindow.</p>
+<p>When the event handling function is called, Google Maps will pass it a <a href="https://developers.google.com/maps/documentation/javascript/reference#MouseEvent" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://developers.google.com/maps/documentation/javascript/reference#MouseEvent', 'MouseEvent']);" >MouseEvent</a> object with has a <code>latLng</code> property of where the mouse event happened. We can use that location to set the position of the InfoWindow.</p>
+<p>After poking around the Google Maps documentation, here's the code I came up with to do this:</p>
+<pre>var routeNames = ["38BX", ... (a bunch more code)
+
+var routeInfoWindow = new google.maps.InfoWindow({ // this info window shows the route name when the mouse hovers over a route line
+  disableAutoPan: true
+});
+
+...(other code)...
+
+        var routePath = new google.maps.Polyline({
+            path: polylinePoints,
+            strokeColor: routeColors[routeName],
+            strokeOpacity: 1.0,
+            strokeWeight: 2
+            });
+
+        (function(thisRouteName) { // making this into a closure so that "thisRouteName" keeps its value
+          google.maps.event.addListener(routePath, 'mouseover', function(moevent) {
+            routeInfoWindow.setPosition(moevent.latLng); // set the info window where the mouse is
+            routeInfoWindow.setContent(thisRouteName);
+            routeInfoWindow.open(map);
+          });
+        })(routeName);
+
+        routePath.setMap(map);
+...(rest of the map web page)...</pre>
+<p>I decided not to have code that closes the window on the mouseout event because then you have to get the mouse precisely on the super skinny line, which was less than ideal. Also, I realized that I could make these info windows have not just the text of the route name, but also make them into a link to the <a href="http://www.sfmta.com/maps/categories/muni-route-maps" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.sfmta.com/maps/categories/muni-route-maps', 'individual route maps on the Muni website']);" >individual route maps on the Muni website</a>. (Although since the URLs for these maps are named like <a href="http://www.sfmta.com/node/11329" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.sfmta.com/node/11329', 'http://www.sfmta.com/node/11329']);" >http://www.sfmta.com/node/11329</a> instead of having names based off the route name, I had to copy and paste the links from my browser and into my code. The JavaScript I added looks like this:</p>
+<p><code>var routeMapLinks = {"1":"11329", "10":"11341", "108":"11406", "12":"11342", "14":"11343", "16X":"11344", "17":"76586", "18":"11346", "19":"11347", "2":"11330", "21":"11348", "22":"11349", "23":"11350", "24":"11351", "27":"11352", "28":"11353", "29":"11355", "3":"11331", "30":"11356", "31":"11358", "33":"11359", "35":"11360", "36":"11361", "37":"11362", "38":"11363", "39":"11364", "41":"11365", "43":"11366", "44":"11367", "45":"11357", "47":"11368", "48":"11369", "49":"87351", "5":"11332", "52":"11371", "54":"11372", "56":"11373", "6":"11333", "66":"11377", "67":"11378", "71":"88001", "76X":"11379", "81X":"11381", "82X":"11382", "83X":"11383", "88":"73391", "8X":"72596", "9":"11339", "90":"11385", "91":"11386", "F":"11399", "J":"11387", "K":"71901", "KT":"69176", "L":"11398", "M":"11397", "N":"11388"};</code></p>
+<p>I've made the code adjustments to the map web page and you can view it here: <a href="http://inventwithpython.com/sfmuni/fourthmap.html">http://inventwithpython.com/sfmuni/fourthmap.html</a>. You can <a href="http://pastebin.com/eHtuL53k" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://pastebin.com/eHtuL53k', 'view the source HTML online']);" >view the source HTML online</a>.</p>
+<h2>Adding Bus Stop Markers to the Map</h2>
+<p>Next, we want to add Google Map's markers for each of the stops. One slight problem with the data in munistops.py though: it has a list of stops for each route, but because some stops are used by multiple routes there's a lot of redundant information there. We need to make a dictionary where the keys are stops and the values hold the information for the stop (including a list of routes that the stop serves).</p>
+<p>According to the <a href="https://developers.google.com/maps/documentation/javascript/reference#Marker" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://developers.google.com/maps/documentation/javascript/reference#Marker', 'Google Maps API documentation for markers']);" >Google Maps API documentation for markers</a>, adding a marker to the map looks like this:</p>
+<pre>var marker = new google.maps.Marker({
+    position: new google.maps.LatLng(<lat number>, <lng number>),
+    map: map,
+    title: "Some Title Text"
+    });</pre>
+<p>There's a slight problem. We have our bus stop data in a format where the keys are route names and the values are lists of stops. Since multiple routes use the same stops, we will end up with redundant bus stop markers on our map. We need to invert it so we have a Python dictionary of bus stops as keys and route names (and other info) as the values. I've written <a href="/sfmunicleanup_stops.py/">cleanup_stops.py</a> to generate the JavaScript I need (it is outputted to <a href="/sfmuni/stops_cleanedup.js?27f655">stops_cleanedup.js</a>).</p>
+<p>Download <a href="/sfmuni/cleanup_stops.py">cleanup_stops.py</a> or <a href="http://pastebin.com/aqJPqm7W" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://pastebin.com/aqJPqm7W', 'view it online']);" >view it online</a>.</p>
+<p>Download <a href="/sfmuni/stops_cleanedup.js?27f655">stops_cleanedup.js</a> or <a href="http://pastebin.com/QGXxiyrE" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://pastebin.com/QGXxiyrE', 'view it online']);" >view it online</a>.</p>
+<p>The map web page with stop markers is here: <a href="http://inventwithpython.com/sfmuni/fifthmap.html">http://inventwithpython.com/sfmuni/fifthmap.html</a></p>
+<p><img src="/sfmuni/sfmuni_screenshot3.png?27f655" /></p>
+<p>Wow. That looks horrible. I realized that I don't need another InfoWindow to appear when you click on the marker, because hovering the mouse over the marker will show a tooltip with the stop's name. But even after commenting that out, the sheer number of stops makes the map look terrible.</p>
+<p>I could add code that makes a single route's stop markers appear when the mouse is over the route polyline. Or maybe the markers only show up once you are zoomed in enough. But I like the fourth map that didn't have the markers, so I'll just go with that. (Making bus stop markers appear and disappear on the map as the mouse hovers over the route polyline is left as an exercise for the reader.)</p>
+<p>The final product is hosted at <a href="http://inventwithpython.com/sfmuni/">http://inventwithpython.com/sfmuni/</a></p>
+<p>You can <a href="http://pastebin.com/7HWNKLan" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://pastebin.com/7HWNKLan', 'view the final source HTML online']);" >view the final source HTML online</a>.</p>
+<h2>Summary</h2>
+<p>That's the entire product: a Google Map with the San Francisco Muni routes drawn over it. At the start of this project I had no experience with the Google Maps API and didn't know where I'd get the route info. I spent much more time reading documentation and experimenting than I did writing code, which is usually how projects go.</p>
+<p>Here are the files in this tutorial:</p>
+<ul>
+<li><a href="/sfmuni/getroutes.py">getroutes.py</a></li>
+<li><a href="/sfmuni/routedata.py">routedata.py</a></li>
+<li><a href="/sfmuni/getpathdata.py">getpathdata.py</a></li>
+<li><a href="/sfmuni/munipaths.py">munipaths.py</a></li>
+<li><a href="/sfmuni/getstopdata.py">getstopdata.py</a></li>
+<li><a href="/sfmuni/munistops.py">munistops.py</a></li>
+<li><a href="/sfmuni/generatePolylineJS.py">generatePolylineJS.py</a></li>
+<li><a href="/sfmuni/polylineJS.js?27f655">polylineJS.js</a></li>
+<li><a href="/sfmuni/generatePolylineJS2.py">generatePolylineJS2.py</a></li>
+<li><a href="/sfmuni/polylineJS2.js?27f655">polylineJS2.js</a></li>
+<li><a href="/sfmuni/cleanup_stops.py">cleanup_stops.py</a></li>
+<li><a href="/sfmuni/stops_cleanedup.js?27f655">stops_cleanedup.js</a></li>
+<li><a href="/sfmuni/index.html">index.html</a></li>
+</ul>
+<p>My final secret: I play the <a href="http://en.wikipedia.org/wiki/Augmented_reality" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://en.wikipedia.org/wiki/Augmented_reality', 'AR game']);" >AR game</a> <a href="http://ingress.com" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://ingress.com', 'Ingress']);" >Ingress</a> and the reason I wanted a better Muni system map was so that I could compare it to the Ingress map of portals in the game. The 71 bus through the Haight goes by a ton of portals, and it's nice to hit them all while sitting in a bus seat, and I was wondering if there were other routes similarly packed with portals. To do that, I needed a Muni system map that was easy to navigate. :)</p>
+<p>I hope you enjoyed this tutorial. Please leave comments for any parts you have trouble understanding or you think need more explanation. Have fun and keep coding!</p>
+					
+
+    </body>
+</html>

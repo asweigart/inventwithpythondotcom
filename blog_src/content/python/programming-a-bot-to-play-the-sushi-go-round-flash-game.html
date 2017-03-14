@@ -1,0 +1,620 @@
+<html>
+    <head>
+        <title>Programming a Bot to Play the "Sushi Go Round" Flash Game</title>
+        <meta name="tags" content="" />
+        <meta name="date" content="2014-12-17 12:00" />
+        <meta name="summary" content="" />
+    </head>
+    <body>
+
+            <p><strong>Update 2015/01/08:</strong> If you attended my NCSS class on making a bot for this game, you can download the <a href="/sushi.zip?27f655">sushi.zip</a> file which has all the code in bot5.py. Feel free to send questions to me at <a href="/cdn-cgi/l/email-protection#40212c00292e36252e3437293428303934282f2e6e232f2d"><span class="__cf_email__" data-cfemail="5839341831362e3d362c2f312c3028212c303736763b3735">[email&#160;protected]</span><script data-cfhash='f9e31' type="text/javascript">/* <![CDATA[ */!function(t,e,r,n,c,a,p){try{t=document.currentScript||function(){for(t=document.getElementsByTagName('script'),e=t.length;e--;)if(t[e].getAttribute('data-cfhash'))return t[e]}();if(t&&(c=t.previousSibling)){p=t.parentNode;if(a=c.getAttribute('data-cfemail')){for(e='',r='0x'+a.substr(0,2)|0,n=2;a.length-n;n+=2)e+='%'+('0'+('0x'+a.substr(n,2)^r).toString(16)).slice(-2);p.replaceChild(document.createTextNode(decodeURIComponent(e)),c)}p.removeChild(t)}}catch(u){}}()/* ]]> */</script></a> or tweet at me: <a href="http://twitter.com/AlSweigart" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://twitter.com/AlSweigart', '@AlSweigart']);" >@AlSweigart</a></p>
+<p>This tutorial teaches how to write a bot that can automatically play the Flash game Sushi Go Round. The concepts in this tutorial can be applied to make bots that play other games as well. It's inspired by the <a href="http://code.tutsplus.com/tutorials/how-to-build-a-python-bot-that-can-play-web-games--active-11117" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://code.tutsplus.com/tutorials/how-to-build-a-python-bot-that-can-play-web-games--active-11117', 'How to Build a Python Bot That Can Play Web Games']);" >How to Build a Python Bot That Can Play Web Games</a> by Chris Kiehl. The primary improvement of this tutorial is it uses the cross-platform <a href="https://pypi.python.org/pypi/PyAutoGUI" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://pypi.python.org/pypi/PyAutoGUI', 'PyAutoGUI']);" >PyAutoGUI</a> module to control the mouse and take screenshots. It is <a href="http://pyautogui.readthedocs.org/en/latest/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://pyautogui.readthedocs.org/en/latest/', 'documented on its ReadTheDocs page']);" >documented on its ReadTheDocs page</a>.</p>
+<p><a href="/blogstatic/sushigoroundbot.jpg?27f655"><img src="/blogstatic/sushigoroundbot.jpg?27f655" /></a></p>
+<p>Sushi Go Round is a resource management game similar to "Dine N Dash". You fill customer orders for different types of sushi and place them on the conveyor belt. Incoming customers may take other customer's sushi orders, forcing you to remake orders. Customers who wait too long to get orders end up leaving, costing you reputation. Angry customers can be placated with saki, but this bot does not make use of that feature. Ingredients will have to be ordered as they get low.</p>
+<p>I've refined this bot so that it can successfully play all the way through the game, ending up with a score of about 38,000. The top scores are a little over 100,000, so there is still room for improvement with this bot. You can watch a <a href="http://youtu.be/lfk_T6VKhTE" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://youtu.be/lfk_T6VKhTE', 'YouTube video of the bot playing']);" >YouTube video of the bot playing</a>.</p>
+<p><iframe width="560" height="315" src="//www.youtube.com/embed/lfk_T6VKhTE" frameborder="0" allowfullscreen></iframe></p>
+<p>The source code and images for the bot can be <a href="/blogstatic/sushigoround.zip?27f655">downloaded here</a> or <a href="https://github.com/asweigart/sushigoroundbot" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/sushigoroundbot', 'viewed on GitHub']);" >viewed on GitHub</a>.</p>
+<p><span id="more-1865"></span></p>
+<h3>Step 1 - Install PyAutoGUI and Download Images</h3>
+<p>First, install PyAutoGUI by <a href="https://pypi.python.org/pypi/PyAutoGUI" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://pypi.python.org/pypi/PyAutoGUI', 'downloading it from PyPI']);" >downloading it from PyPI</a> or <a href="https://docs.python.org/3/installing/index.html" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://docs.python.org/3/installing/index.html', 'installing it through the pip program that comes with Python 3']);" >installing it through the pip program that comes with Python 3</a>. If you've installed PyAutoGUI before, use the -U option to update it to the latest version. This tutorial uses Python 3, though PyAutoGUI and the bot code work with either Python 2 or 3.</p>
+<p>You can check if PyAutoGUI has been installed correctly by running <code>import pyautogui</code> in the interactive shell. Full documentation for PyAutoGUI is available at <a href="http://pyautogui.readthedocs.org/en/latest/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://pyautogui.readthedocs.org/en/latest/', 'http://pyautogui.readthedocs.org']);" >http://pyautogui.readthedocs.org</a>.</p>
+<p>PyAutoGUI provides basic image recognition by finding the screen coordinates of a provided image. To save yourself time of taking screenshots and making these images yourself, <a href="/blogstatic/sushigoround.zip?27f655">download them from the zip file here</a>. All of the images should be stored in an <code>/images</code> folder:</p>
+<p><img src="/blogstatic/sushi_california_roll_order.png?27f655" /> <img src="/blogstatic/sushi_clear_mat.png?27f655" /> <img src="/blogstatic/sushi_gunkan_maki_order.png?27f655" /> <img src="/blogstatic/sushi_nori_order_button.png?27f655" /> <img src="/blogstatic/sushi_normal_delivery_button.png?27f655" /> <img src="/blogstatic/sushi_onigiri_order.png?27f655" /> <img src="/blogstatic/sushi_skip_button.png?27f655" /> <img src="/blogstatic/sushi_cant_afford_rice.png?27f655" /></p>
+<h3>Step 2 - Basic Setup</h3>
+<p>Create a <em>sushigoround.py</em> file and enter the following code:</p>
+<div class="highlight">
+<pre><span class="c">#! python3</span>
+<span class="sd">&quot;&quot;&quot;Sushi Go Round Bot</span>
+<span class="sd">Al Sweigart <a class="__cf_email__" href="/cdn-cgi/l/email-protection" data-cfemail="16777a567f7860737862617f627e666f627e79783875797b">[email&#160;protected]</a><script data-cfhash='f9e31' type="text/javascript">/* <![CDATA[ */!function(t,e,r,n,c,a,p){try{t=document.currentScript||function(){for(t=document.getElementsByTagName('script'),e=t.length;e--;)if(t[e].getAttribute('data-cfhash'))return t[e]}();if(t&&(c=t.previousSibling)){p=t.parentNode;if(a=c.getAttribute('data-cfemail')){for(e='',r='0x'+a.substr(0,2)|0,n=2;a.length-n;n+=2)e+='%'+('0'+('0x'+a.substr(n,2)^r).toString(16)).slice(-2);p.replaceChild(document.createTextNode(decodeURIComponent(e)),c)}p.removeChild(t)}}catch(u){}}()/* ]]> */</script> @AlSweigart</span>
+
+<span class="sd">A bot program to automatically play the Sushi Go Round flash game at http://miniclip.com/games/sushi-go-round/en/</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">pyautogui</span><span class="o">,</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">logging</span><span class="o">,</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">random</span><span class="o">,</span> <span class="nn">copy</span>
+
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;</span><span class="si">%(asctime)s</span><span class="s">.</span><span class="si">%(msecs)03d</span><span class="s">: </span><span class="si">%(message)s</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">datefmt</span><span class="o">=</span><span class="s">&#39;%H:%M:%S&#39;</span><span class="p">)</span>
+<span class="c">#logging.disable(logging.DEBUG) # uncomment to block debug log messages</span>
+</pre>
+</div>
+<p>This generic code sets up a <a href="https://stackoverflow.com/questions/2429511/why-do-people-write-usr-bin-env-python-on-the-first-line-of-a-python-script" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://stackoverflow.com/questions/2429511/why-do-people-write-usr-bin-env-python-on-the-first-line-of-a-python-script', 'shebang line']);" >shebang line</a>, some comments to describe the program, imports for several modules, and setting up logging so that the <code>logging.debug()</code> function will output debug messages. (I explain why logging is preferable to <code>print()</code> calls <a href="http://inventwithpython.com/blog/2012/04/06/stop-using-print-for-debugging-a-5-minute-quickstart-guide-to-pythons-logging-module/">in this blog post</a>.</p>
+<h3>Step 3 - Constants Setup</h3>
+<p>Next, there are several variable constants set up for this program. I use constants as a way to detect typos; mistyping a string value as <code>'califrnia_roll'</code> will cause bugs but Python won't directly point out the typo. Mistyping a variable name as <code>CALIFRNIA_ROLL</code> will cause Python to raise a <code>NameError</code> exception, letting you quickly fix it.</p>
+<p>First, set up constants for each type of order in the game, as well as a tuple of all the orders:</p>
+<div class="highlight">
+<pre><span class="c"># Food order constants (don&#39;t change these: the image filenames depend on these specific values)</span>
+<span class="n">ONIGIRI</span> <span class="o">=</span> <span class="s">&#39;onigiri&#39;</span>
+<span class="n">GUNKAN_MAKI</span> <span class="o">=</span> <span class="s">&#39;gunkan_maki&#39;</span>
+<span class="n">CALIFORNIA_ROLL</span> <span class="o">=</span> <span class="s">&#39;california_roll&#39;</span>
+<span class="n">SALMON_ROLL</span> <span class="o">=</span> <span class="s">&#39;salmon_roll&#39;</span>
+<span class="n">SHRIMP_SUSHI</span> <span class="o">=</span> <span class="s">&#39;shrimp_sushi&#39;</span>
+<span class="n">UNAGI_ROLL</span> <span class="o">=</span> <span class="s">&#39;unagi_roll&#39;</span>
+<span class="n">DRAGON_ROLL</span> <span class="o">=</span> <span class="s">&#39;dragon_roll&#39;</span>
+<span class="n">COMBO</span> <span class="o">=</span> <span class="s">&#39;combo&#39;</span>
+<span class="n">ALL_ORDER_TYPES</span> <span class="o">=</span> <span class="p">(</span><span class="n">ONIGIRI</span><span class="p">,</span> <span class="n">GUNKAN_MAKI</span><span class="p">,</span> <span class="n">CALIFORNIA_ROLL</span><span class="p">,</span> <span class="n">SALMON_ROLL</span><span class="p">,</span> <span class="n">SHRIMP_SUSHI</span><span class="p">,</span> <span class="n">UNAGI_ROLL</span><span class="p">,</span> <span class="n">DRAGON_ROLL</span><span class="p">,</span> <span class="n">COMBO</span><span class="p">)</span>
+</pre>
+</div>
+<p>Next, set up constants for each of the ingredients and the recipes for each order. (This tutorial saves you from having to look up the recipe information in the game yourself.)</p>
+<div class="highlight">
+<pre><span class="c"># Ingredient constants (don&#39;t change these: the image filenames depend on these specific values)</span>
+<span class="n">SHRIMP</span> <span class="o">=</span> <span class="s">&#39;shrimp&#39;</span>
+<span class="n">RICE</span> <span class="o">=</span> <span class="s">&#39;rice&#39;</span>
+<span class="n">NORI</span> <span class="o">=</span> <span class="s">&#39;nori&#39;</span>
+<span class="n">ROE</span> <span class="o">=</span> <span class="s">&#39;roe&#39;</span>
+<span class="n">SALMON</span> <span class="o">=</span> <span class="s">&#39;salmon&#39;</span>
+<span class="n">UNAGI</span> <span class="o">=</span> <span class="s">&#39;unagi&#39;</span>
+<span class="n">RECIPE</span> <span class="o">=</span> <span class="p">{</span><span class="n">ONIGIRI</span><span class="p">:</span>         <span class="p">{</span><span class="n">RICE</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="n">NORI</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+          <span class="n">CALIFORNIA_ROLL</span><span class="p">:</span> <span class="p">{</span><span class="n">RICE</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">NORI</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ROE</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+          <span class="n">GUNKAN_MAKI</span><span class="p">:</span>     <span class="p">{</span><span class="n">RICE</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">NORI</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ROE</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+          <span class="n">SALMON_ROLL</span><span class="p">:</span>     <span class="p">{</span><span class="n">RICE</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">NORI</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">SALMON</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+          <span class="n">SHRIMP_SUSHI</span><span class="p">:</span>    <span class="p">{</span><span class="n">RICE</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">NORI</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">SHRIMP</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+          <span class="n">UNAGI_ROLL</span><span class="p">:</span>      <span class="p">{</span><span class="n">RICE</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">NORI</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">UNAGI</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+          <span class="n">DRAGON_ROLL</span><span class="p">:</span>     <span class="p">{</span><span class="n">RICE</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="n">NORI</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ROE</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">UNAGI</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+          <span class="n">COMBO</span><span class="p">:</span>           <span class="p">{</span><span class="n">RICE</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="n">NORI</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ROE</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">SALMON</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">UNAGI</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">SHRIMP</span><span class="p">:</span> <span class="mi">1</span><span class="p">},}</span>
+</pre>
+</div>
+<p>Next are several constants and global variables used in the program. Although using global variables is generally a bad idea for making maintainable programs, this Python script is just a one off and I didn't want to make it complicated for newer programmers who don't yet know object-oriented programming concepts. The variables are described in the comments:</p>
+<div class="highlight">
+<pre><span class="n">LEVEL_WIN_MESSAGE</span> <span class="o">=</span> <span class="s">&#39;win&#39;</span> <span class="c"># checkForGameOver() returns this value if the level has been won</span>
+
+<span class="c"># Settings</span>
+<span class="n">MIN_INGREDIENTS</span> <span class="o">=</span> <span class="mi">4</span> <span class="c"># if an ingredient gets below this value, order more</span>
+<span class="n">PLATE_CLEARING_FREQ</span> <span class="o">=</span> <span class="mi">8</span> <span class="c"># plates are cleared every this number of seconds, roughly</span>
+<span class="n">NORMAL_RESTOCK_TIME</span> <span class="o">=</span> <span class="mi">7</span> <span class="c"># the number of seconds it takes to restock inventory after ordering it (at normal speed, not express)</span>
+<span class="n">TIME_TO_REMAKE</span> <span class="o">=</span> <span class="mi">30</span> <span class="c"># if an order goes unfilled for this number of seconds, remake it</span>
+
+<span class="c"># Global variables</span>
+<span class="n">LEVEL</span> <span class="o">=</span> <span class="mi">1</span> <span class="c"># current level being played</span>
+<span class="n">INVENTORY</span> <span class="o">=</span> <span class="p">{</span><span class="n">SHRIMP</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="n">RICE</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+             <span class="n">NORI</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>  <span class="n">ROE</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+             <span class="n">SALMON</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="n">UNAGI</span><span class="p">:</span> <span class="mi">5</span><span class="p">}</span>
+<span class="n">GAME_REGION</span> <span class="o">=</span> <span class="p">()</span> <span class="c"># (left, top, width, height) values coordinates of the game window</span>
+<span class="n">ORDERING_COMPLETE</span> <span class="o">=</span> <span class="p">{</span><span class="n">SHRIMP</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="n">RICE</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="n">NORI</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="n">ROE</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="n">SALMON</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="n">UNAGI</span><span class="p">:</span> <span class="bp">None</span><span class="p">}</span> <span class="c"># unix timestamp when an ordered ingredient will have arrived</span>
+<span class="n">ROLLING_COMPLETE</span> <span class="o">=</span> <span class="mi">0</span> <span class="c"># unix timestamp of when the rolling of the mat will have completed</span>
+<span class="n">LAST_PLATE_CLEARING</span> <span class="o">=</span> <span class="mi">0</span> <span class="c"># unix timestamp of the last time the plates were cleared</span>
+<span class="n">LAST_GAME_OVER_CHECK</span> <span class="o">=</span> <span class="mi">0</span> <span class="c"># unix timestamp when we last checked for the Game Over or You Win messages</span>
+</pre>
+</div>
+<p>Note: a "unix timestamp" is the number of seconds since midnight, January 1, 1970. It is returned by the <code>time.time()</code> function. For example, if <code>time.time()</code> is called at 10:36:54.392 PM on December 16, 2014, it will return the value <code>1418798214.392</code>. Ten seconds later it will return the value <code>1418798224.392</code>. Subtracting these values is how the bot can measure how much time has passed.</p>
+<p>And finally set up some global variables which will store coordinates for various things in the game window. The <code>GAME_REGION</code> variable stores the position of the Sushi Go Round game itself. Once that value has been acquired, the <code>setupCoordinates()</code> function (described later) will populate the values in these variables:</p>
+<div class="highlight">
+<pre><span class="c"># various coordinates of objects in the game</span>
+<span class="n">GAME_REGION</span> <span class="o">=</span> <span class="p">()</span> <span class="c"># (left, top, width, height) values coordinates of the entire game window</span>
+<span class="n">INGRED_COORDS</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="n">PHONE_COORDS</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="n">TOPPING_COORDS</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="n">ORDER_BUTTON_COORDS</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="n">RICE1_COORDS</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="n">RICE2_COORDS</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="n">NORMAL_DELIVERY_BUTTON_COORDS</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="n">MAT_COORDS</span> <span class="o">=</span> <span class="bp">None</span>
+</pre>
+</div>
+<h3>Step 4 - The main() Function</h3>
+<p>The <code>main()</code> ties together the code that runs from the very start of the bot program. It assumes that the Sushi Go Round game is visible on the screen and at the opening start screen (which has the flashing "PLAY" button).</p>
+<p>Because PyAutoGUI takes control of the mouse, it can be hard to get the program's terminal window back in focus to shut it down. <a href="http://pyautogui.readthedocs.org/en/latest/introduction.html#fail-safes" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://pyautogui.readthedocs.org/en/latest/introduction.html#fail-safes', 'PyAutoGUI has a fail-safe feature;']);" >PyAutoGUI has a fail-safe feature;</a> if you move the mouse cursor to the top-left corner of the screen PyAutoGUI will raise an exception and terminate the program.</p>
+<div class="highlight">
+<pre><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Runs the entire program. The Sushi Go Round game must be visible on the screen and the PLAY button visible.&quot;&quot;&quot;</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Program Started. Press Ctrl-C to abort at any time.&#39;</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;To interrupt mouse movement, move mouse to upper left corner.&#39;</span><span class="p">)</span>
+    <span class="n">getGameRegion</span><span class="p">()</span>
+    <span class="n">navigateStartGameMenu</span><span class="p">()</span>
+    <span class="n">setupCoordinates</span><span class="p">()</span>
+    <span class="n">startServing</span><span class="p">()</span>
+</pre>
+</div>
+<h3>Step 5 - Image Recognition and Finding the Game Screen</h3>
+<p>Computer vision and optical character recognition (OCR) are major topics of computer science. The good thing about Sushi Go Round is that you don't need to know any of that because the game uses static 2D sprites. A california roll in the game will always look the same down to the pixel. So we can use PyAutoGUI's pixel-recognition functions to "see" where on the screen different objects are.</p>
+<p>The <code>pyautogui.locateOnScreen()</code> function takes a string filename argument and returns a (left, top, width, height) tuple of integer coordinates for where the image is found on the screen. (The "left" value is the X-coordinate of the left edge, the "top" value is the Y-coordinate of the top edge. With the XY coordinates of the top-left corner and the width and height, you can completely describe the region.)</p>
+<p>If the image isn't found on the screen, the function returns <code>None</code>. An optional <code>region</code> keyword argument can specify a smaller region of the screen to search (a smaller region means faster detection). Without a region specified, the entire screen is searched.</p>
+<p>The location of the game window itself will be stored later in the <code>GAME_REGION</code> variable, which holds a (left, top, width, height) tuple of integers. (The (left, top, width, height) tuples are used throughout PyAutoGUI.) These values are visualized in the following graphic:</p>
+<p><a href="/blogstatic/sushigoroundcoordinates.png?27f655"><img src="/blogstatic/sushigoroundcoordinates.png?27f655" /></a></p>
+<p>To find the game window, we search for the top-right corner image, which is stored in <em>top_right_corner.png</em>. (These image files are included in the <a href="/blogstatic/sushigoround.zip?27f655">zip file download</a>.) Once this image is located on the screen, the <code>GAME_REGION</code> variable can be populated.</p>
+<div class="highlight">
+<pre><span class="k">def</span> <span class="nf">imPath</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A shortcut for joining the &#39;images/&#39;&#39; file path, since it is used so often. Returns the filename with &#39;images/&#39; prepended.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;images&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">getGameRegion</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Obtains the region that the Sushi Go Round game is on the screen and assigns it to GAME_REGION. The game must be at the start screen (where the PLAY button is visible).&quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">GAME_REGION</span>
+
+    <span class="c"># identify the top-left corner</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Finding game region...&#39;</span><span class="p">)</span>
+    <span class="n">region</span> <span class="o">=</span> <span class="n">pyautogui</span><span class="o">.</span><span class="n">locateOnScreen</span><span class="p">(</span><span class="n">imPath</span><span class="p">(</span><span class="s">&#39;top_right_corner.png&#39;</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">region</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s">&#39;Could not find game on screen. Is the game visible?&#39;</span><span class="p">)</span>
+
+    <span class="c"># calculate the region of the entire game</span>
+    <span class="n">topRightX</span> <span class="o">=</span> <span class="n">region</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">region</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="c"># left + width</span>
+    <span class="n">topRightY</span> <span class="o">=</span> <span class="n">region</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="c"># top</span>
+    <span class="n">GAME_REGION</span> <span class="o">=</span> <span class="p">(</span><span class="n">topRightX</span> <span class="o">-</span> <span class="mi">640</span><span class="p">,</span> <span class="n">topRightY</span><span class="p">,</span> <span class="mi">640</span><span class="p">,</span> <span class="mi">480</span><span class="p">)</span> <span class="c"># the game screen is always 640 x 480</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Game region found: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">GAME_REGION</span><span class="p">,))</span>
+</pre>
+</div>
+<p>Note that running PyAutoGUI's image recongition takes a relatively long time to execute (several hundred milliseconds). This can be mitigated by searching a smaller region instead of the entire screen. And since some objects will always appear in the same place in the game window, you can rely on using static integer coordinates instead of image recognition to find them.</p>
+<h3>Step 6 - Dealing with Coordinates</h3>
+<p>Many of the buttons in the game's user interface will always be in the same location. The coordinates for these buttons can be pre-programmed ahead of time. You could take a screenshot, paste the image into a graphics program such as Photoshop or MS Paint, and find all of the XY coordinates yourself. But this tutorial has done this step for you. The other coordinate global variables are populated in the <code>setupCoordinates()</code> function. Note that they are all relative to where the game window (whose coordinates are in <code>GAME_REGION</code>) is.</p>
+<p>For example, the coordinates for the Salmon ordering button are set to <code>(GAME_REGION[0] + 496, GAME_REGION[1] + 329)</code>. This is visualized in the following graphic:</p>
+<p><a href="/blogstatic/sushigoroundcoordinates2.png?27f655"><img src="/blogstatic/sushigoroundcoordinates2.png?27f655" /></a></p>
+<div class="highlight">
+<pre><span class="k">def</span> <span class="nf">setupCoordinates</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Sets several of the coordinate-related global variables, after acquiring the value for GAME_REGION.&quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">INGRED_COORDS</span><span class="p">,</span> <span class="n">PHONE_COORDS</span><span class="p">,</span> <span class="n">TOPPING_COORDS</span><span class="p">,</span> <span class="n">ORDER_BUTTON_COORDS</span><span class="p">,</span> <span class="n">RICE1_COORDS</span><span class="p">,</span> <span class="n">RICE2_COORDS</span><span class="p">,</span> <span class="n">NORMAL_DELIVERY_BUTTON_COORDS</span><span class="p">,</span> <span class="n">MAT_COORDS</span><span class="p">,</span> <span class="n">LEVEL</span>
+    <span class="n">INGRED_COORDS</span> <span class="o">=</span> <span class="p">{</span><span class="n">SHRIMP</span><span class="p">:</span> <span class="p">(</span><span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">40</span><span class="p">,</span> <span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">335</span><span class="p">),</span>
+                     <span class="n">RICE</span><span class="p">:</span>   <span class="p">(</span><span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">95</span><span class="p">,</span> <span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">335</span><span class="p">),</span>
+                     <span class="n">NORI</span><span class="p">:</span>   <span class="p">(</span><span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">40</span><span class="p">,</span> <span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">385</span><span class="p">),</span>
+                     <span class="n">ROE</span><span class="p">:</span>    <span class="p">(</span><span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">95</span><span class="p">,</span> <span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">385</span><span class="p">),</span>
+                     <span class="n">SALMON</span><span class="p">:</span> <span class="p">(</span><span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">40</span><span class="p">,</span> <span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">425</span><span class="p">),</span>
+                     <span class="n">UNAGI</span><span class="p">:</span>  <span class="p">(</span><span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">95</span><span class="p">,</span> <span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">425</span><span class="p">),}</span>
+    <span class="n">PHONE_COORDS</span> <span class="o">=</span> <span class="p">(</span><span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">560</span><span class="p">,</span> <span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">360</span><span class="p">)</span>
+    <span class="n">TOPPING_COORDS</span> <span class="o">=</span> <span class="p">(</span><span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">513</span><span class="p">,</span> <span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">269</span><span class="p">)</span>
+    <span class="n">ORDER_BUTTON_COORDS</span> <span class="o">=</span> <span class="p">{</span><span class="n">SHRIMP</span><span class="p">:</span> <span class="p">(</span><span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">496</span><span class="p">,</span> <span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">222</span><span class="p">),</span>
+                           <span class="n">UNAGI</span><span class="p">:</span>  <span class="p">(</span><span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">578</span><span class="p">,</span> <span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">222</span><span class="p">),</span>
+                           <span class="n">NORI</span><span class="p">:</span>   <span class="p">(</span><span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">496</span><span class="p">,</span> <span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">281</span><span class="p">),</span>
+                           <span class="n">ROE</span><span class="p">:</span>    <span class="p">(</span><span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">578</span><span class="p">,</span> <span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">281</span><span class="p">),</span>
+                           <span class="n">SALMON</span><span class="p">:</span> <span class="p">(</span><span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">496</span><span class="p">,</span> <span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">329</span><span class="p">),}</span>
+    <span class="n">RICE1_COORDS</span> <span class="o">=</span> <span class="p">(</span><span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">543</span><span class="p">,</span> <span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">294</span><span class="p">)</span>
+    <span class="n">RICE2_COORDS</span> <span class="o">=</span> <span class="p">(</span><span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">545</span><span class="p">,</span> <span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">269</span><span class="p">)</span>
+
+    <span class="n">NORMAL_DELIVERY_BUTTON_COORDS</span> <span class="o">=</span> <span class="p">(</span><span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">495</span><span class="p">,</span> <span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">293</span><span class="p">)</span>
+
+    <span class="n">MAT_COORDS</span> <span class="o">=</span> <span class="p">(</span><span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">190</span><span class="p">,</span> <span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">375</span><span class="p">)</span>
+
+    <span class="n">LEVEL</span> <span class="o">=</span> <span class="mi">1</span>
+</pre>
+</div>
+<p>This tutorial does the tedious coordinate-finding work for you, but if you ever need to do it yourself you can use the <code>pyautogui.displayMousePosition()</code> function to display the XY coordinates of the mouse cursor. The coordinates update as you move the mouse, so you can move the mouse to the desired location on the screen, then view its current coordinates. The <code>displayMousePosition()</code> function also shows that pixel's RGB color value.</p>
+<p><a href="/blogstatic/displaymouseposition.png?27f655"><img src="/blogstatic/displaymouseposition.png?27f655" /></a></p>
+<p>You can also pass X and Y offsets to the function to set the (0, 0) origin somewhere besides the top-left corner of the screen. When you are done, press Ctrl-C to return from the function.</p>
+<h3>Step 7 - Controlling the Mouse</h3>
+<p>PyAutogui has a <code>pyautogui.click()</code> function that can be passed a (x, y) tuple argument of the coordinates on the screen to click on. Often you can use the return value of <code>pyautogui.locateCenterOnScreen()</code> for this argument. The click is done immediately, but the optional <code>duration</code> keyword argument will specify the number of seconds PyAutoGUI spends moving to the (x, y) coordinate. A small delay makes it easier to visually follow along with the bot's clicking.</p>
+<p>Since the SKIP button in the game is flashing, the <code>pyautogui.locateCenterOnScreen(imPath('skip_button.png'), region=GAME_REGION)</code> call might not be able to find it if it is flashing in the other color than <em>skip_button.png</em> has. This is why there is a <code>while</code> loop that keeps searching until it finds it. Remember, <code>locateCenterOnScreen()</code> will return <code>None</code> if it can't find the image on the screen.</p>
+<div class="highlight">
+<pre><span class="k">def</span> <span class="nf">navigateStartGameMenu</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Performs the clicks to navigate form the start screen (where the PLAY button is visible) to the beginning of the first level.&quot;&quot;&quot;</span>
+    <span class="c"># Click on everything needed to get past the menus at the start of the game.</span>
+
+    <span class="c"># click on Play</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Looking for Play button...&#39;</span><span class="p">)</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span> <span class="c"># loop because it could be the blue or pink Play button displayed at the moment.</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">pyautogui</span><span class="o">.</span><span class="n">locateCenterOnScreen</span><span class="p">(</span><span class="n">imPath</span><span class="p">(</span><span class="s">&#39;play_button.png&#39;</span><span class="p">),</span> <span class="n">region</span><span class="o">=</span><span class="n">GAME_REGION</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pos</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">break</span>
+    <span class="n">pyautogui</span><span class="o">.</span><span class="n">click</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Clicked on Play button.&#39;</span><span class="p">)</span>
+
+    <span class="c"># click on Continue</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">pyautogui</span><span class="o">.</span><span class="n">locateCenterOnScreen</span><span class="p">(</span><span class="n">imPath</span><span class="p">(</span><span class="s">&#39;continue_button.png&#39;</span><span class="p">),</span> <span class="n">region</span><span class="o">=</span><span class="n">GAME_REGION</span><span class="p">)</span>
+    <span class="n">pyautogui</span><span class="o">.</span><span class="n">click</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Clicked on Continue button.&#39;</span><span class="p">)</span>
+
+    <span class="c"># click on Skip</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Looking for Skip button...&#39;</span><span class="p">)</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span> <span class="c"># loop because it could be the yellow or red Skip button displayed at the moment.</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">pyautogui</span><span class="o">.</span><span class="n">locateCenterOnScreen</span><span class="p">(</span><span class="n">imPath</span><span class="p">(</span><span class="s">&#39;skip_button.png&#39;</span><span class="p">),</span> <span class="n">region</span><span class="o">=</span><span class="n">GAME_REGION</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pos</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">break</span>
+    <span class="n">pyautogui</span><span class="o">.</span><span class="n">click</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Clicked on Skip button.&#39;</span><span class="p">)</span>
+
+    <span class="c"># click on Continue</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">pyautogui</span><span class="o">.</span><span class="n">locateCenterOnScreen</span><span class="p">(</span><span class="n">imPath</span><span class="p">(</span><span class="s">&#39;continue_button.png&#39;</span><span class="p">),</span> <span class="n">region</span><span class="o">=</span><span class="n">GAME_REGION</span><span class="p">)</span>
+    <span class="n">pyautogui</span><span class="o">.</span><span class="n">click</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Clicked on Continue button.&#39;</span><span class="p">)</span>
+</pre>
+</div>
+<p>Once the buttons at the start of the game have been navigated past, the main part of the bot code can begin.</p>
+<h3>Step 8 - The startServing() Function</h3>
+<p>The <code>startServing()</code> function handles all of the main game play. This includes:</p>
+<ul>
+<li>Seeing which orders are being requested from customers.</li>
+<li>Creating dishes to fill orders.</li>
+<li>Ordering more ingredients when running low on them.</li>
+<li>Checking if customers haven't received their orders in a long time and remaking those orders.</li>
+<li>Clearing finished plates.</li>
+<li>Checking if ordered ingredients have arrived.</li>
+<li>Checking if the game has been lost or if the level has been won.</li>
+</ul>
+<p>Much of this functionality is passed on to other functions, which are explained later. The first part of <code>startServing()</code> sets up all the variables for a new game:</p>
+<div class="highlight">
+<pre><span class="k">def</span> <span class="nf">startServing</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;The main game playing function. This function handles all aspects of game play, including identifying orders, making orders, buying ingredients and other features.&quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">LAST_GAME_OVER_CHECK</span><span class="p">,</span> <span class="n">INVENTORY</span><span class="p">,</span> <span class="n">ORDERING_COMPLETE</span><span class="p">,</span> <span class="n">LEVEL</span>
+
+    <span class="c"># Reset all game state variables.</span>
+    <span class="n">oldOrders</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">backOrders</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">remakeOrders</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">remakeTimes</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">LAST_GAME_OVER_CHECK</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">ORDERING_COMPLETE</span> <span class="o">=</span> <span class="p">{</span><span class="n">SHRIMP</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="n">RICE</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="n">NORI</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                         <span class="n">ROE</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="n">SALMON</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="n">UNAGI</span><span class="p">:</span> <span class="bp">None</span><span class="p">}</span></pre>
+</div>
+<p>The next part scans the region where customers orders are displayed:</p>
+<p><a href="/blogstatic/sushigoround_scanning.png?27f655"><img src="/blogstatic/sushigoround_scanning.png?27f655" /></a></p>
+<p>This is handled by the <code>getOrders()</code> function. Since you'll be repeatedly scanning for the orders but don't want to remake orders each time you scan them, you need to find out which new orders have appeared since the last scan, and which orders have disappeared since the last scan (either because the customer is eating or has left). This is handled by the <code>getOrdersDifference()</code>.</p>
+<p>The keys in these "orders dictionaries" will be the (left, top, width, height) tuple of where the order image was identified. This is just to keep the customers distinct. The values will be the strings in one of the ingredient constants like <code>CALIFORNIA_ROLL</code> or <code>ONIGIRI</code>. The <code>remakeTimes</code> dictionary has similar keys, but it's values are unix timestamps (returned from <code>time.time()</code>) for when the dish should be remade if it is still being requested by the customer.</p>
+<div class="highlight">
+<pre>    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="c"># Check for orders, see which are new and which are gone since last time.</span>
+        <span class="n">currentOrders</span> <span class="o">=</span> <span class="n">getOrders</span><span class="p">()</span>
+        <span class="n">added</span><span class="p">,</span> <span class="n">removed</span> <span class="o">=</span> <span class="n">getOrdersDifference</span><span class="p">(</span><span class="n">currentOrders</span><span class="p">,</span> <span class="n">oldOrders</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">added</span> <span class="o">!=</span> <span class="p">{}:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;New orders: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">added</span><span class="o">.</span><span class="n">values</span><span class="p">())))</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">added</span><span class="p">:</span>
+                <span class="n">remakeTimes</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">+</span> <span class="n">TIME_TO_REMAKE</span>
+        <span class="k">if</span> <span class="n">removed</span> <span class="o">!=</span> <span class="p">{}:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Removed orders: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">removed</span><span class="o">.</span><span class="n">values</span><span class="p">())))</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">removed</span><span class="p">:</span>
+                <span class="k">del</span> <span class="n">remakeTimes</span><span class="p">[</span><span class="n">k</span><span class="p">]</span></pre>
+</div>
+<p>The next part goes through the <code>remakeTimes</code> dictionary and checks if any of those timestamps are before the current time (as returned by <code>time.time()</code>). In that case, add this order to the <code>remakeOrders</code> dictionary (which is similar but separate to the <code>added</code> orders dictionary of new orders.)</p>
+<div class="highlight">
+<pre>        <span class="c"># Check if the remake times have past, and add those to the remakeOrders dictionary.</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">remakeTime</span> <span class="ow">in</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">remakeTimes</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">remakeTime</span><span class="p">:</span>
+                <span class="n">remakeTimes</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">+</span> <span class="n">TIME_TO_REMAKE</span> <span class="c"># reset remake time</span>
+                <span class="n">remakeOrders</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">currentOrders</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s"> added to remake orders.&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">currentOrders</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span></pre>
+</div>
+<p>Next, the program loops through all the newly requested orders in the <code>added</code> dictionary and attempts to make them. The <code>makeOrder()</code> function (described later) will return <code>None</code> if the order was successfully made. Otherwise, it will return a string of the ingredient it doesn't have enough of. In that case, <code>orderIngredient()</code> (described later) is called and the order is placed on the <code>backOrders</code> dictionary.</p>
+<div class="highlight">
+<pre>        <span class="c"># Attempt to make the order.</span>
+        <span class="k">for</span> <span class="n">pos</span><span class="p">,</span> <span class="n">order</span> <span class="ow">in</span> <span class="n">added</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">makeOrder</span><span class="p">(</span><span class="n">order</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">orderIngredient</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+                <span class="n">backOrders</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">=</span> <span class="n">order</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Ingredients for </span><span class="si">%s</span><span class="s"> not available. Putting on back order.&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">order</span><span class="p">))</span></pre>
+</div>
+<p>When a customer picks up their meal, they'll spend a few seconds eating and then leave behind a dirty dish. Click this dirty dish so that a new customer will take that seat. Instead of using image recognition (which is slow), the bot can just occassionally click on all six plates. There's no penalty to clicking on the plate when the customer is eating or if there is no plate at that seat.</p>
+<p>Since this doesn't need to be done frequently, the <code>if random.randint(1, 10) == 1 or time.time() - PLATE_CLEARING_FREQ > LAST_PLATE_CLEARING:</code> statement will only do this roughly once every 10 iterations, or if more than 6 seconds (the value in <code>PLATE_CLEARING_FREQ</code>) has passed since the last plate clearing (according to the timestamp in <code>LAST_PLATE_CLEARING</code>).</p>
+<p>The actual clicking is done by the <code>clickOnPlates()</code> function, described later.</p>
+<div class="highlight">
+<pre>        <span class="c"># Clear any finished plates.</span>
+        <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">PLATE_CLEARING_FREQ</span> <span class="o">&gt;</span> <span class="n">LAST_PLATE_CLEARING</span><span class="p">:</span>
+            <span class="n">clickOnPlates</span><span class="p">()</span></pre>
+</div>
+<p>It's easy to keep track of ingredient quanties as you make dishes. Each level starts with a set quantity of ingredients, encoded in the <code>INVENTORY = {SHRIMP: 5, RICE: 10, NORI: 10, ROE: 10, SALMON: 5, UNAGI: 5}</code> lines. You can subtract values in the <code>INVENTORY</code> dictionary as you use ingredients.</p>
+<p>When you order ingredients they don't arrive immediately. If you used image recognition for the numbers in the lower left corner of the game window it would require grabbing tons of screenshots and slow down the bot. Instead, since orders take less than 7 seconds to arrive (which is why the <code>NORMAL_RESTOCK_TIME</code> is set to 7), the <code>ORDERING_COMPLETE</code> can store unix timestamps for 7 seconds in the future when <code>INVENTORY</code> can be updated.</p>
+<p>The values in <code>ORDERING_COMPLETE</code> are <code>None</code> if they are not currently being ordered and delivered.</p>
+<p>The next part of code checks if the current time (as returned by <code>time.time()</code>) has passed. If so, the <code>INVENTORY</code> dictionary's values are updated.</p>
+<div class="highlight">
+<pre>        <span class="c"># Check if ingredient orders have arrived.</span>
+        <span class="n">updateInventory</span><span class="p">()</span>
+
+        <span class="c"># Go through and see if any back orders can be filled.</span>
+        <span class="k">for</span> <span class="n">pos</span><span class="p">,</span> <span class="n">order</span> <span class="ow">in</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">backOrders</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">makeOrder</span><span class="p">(</span><span class="n">order</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">del</span> <span class="n">backOrders</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="c"># remove from back orders</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Filled back order for </span><span class="si">%s</span><span class="s">.&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">order</span><span class="p">))</span></pre>
+</div>
+<p>The <code>remakeOrders</code> dictionary contains orders that (for whatever reason) didn't make it to the customer. This code is similar to the previous dish-making code:</p>
+<div class="highlight">
+<pre>        <span class="c"># Go through and see if any remake orders can be filled.</span>
+        <span class="k">for</span> <span class="n">pos</span><span class="p">,</span> <span class="n">order</span> <span class="ow">in</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">remakeOrders</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">pos</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">currentOrders</span><span class="p">:</span>
+                <span class="k">del</span> <span class="n">remakeOrders</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Canceled remake order for </span><span class="si">%s</span><span class="s">.&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">order</span><span class="p">))</span>
+                <span class="k">continue</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">makeOrder</span><span class="p">(</span><span class="n">order</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">del</span> <span class="n">remakeOrders</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="c"># remove from remake orders</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Filled remake order for </span><span class="si">%s</span><span class="s">.&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">order</span><span class="p">))</span></pre>
+</div>
+<p>The next part checks the <code>INVENTORY</code> dictionary to see if there is less than 4 (the value stored in the <code>MIN_INGREDIENTS</code> constant) of any ingredient. If so, more is ordered by calling the <code>orderIngredient()</code> function (described later). This isn't something that needs to be checkeded frequently, so it is enclosed in an <code>if</code> statement that runs 1 in 5 times:</p>
+<div class="highlight">
+<pre>        <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c"># order any ingredients that are below the minimum amount</span>
+            <span class="k">for</span> <span class="n">ingredient</span><span class="p">,</span> <span class="n">amount</span> <span class="ow">in</span> <span class="n">INVENTORY</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">amount</span> <span class="o">&lt;</span> <span class="n">MIN_INGREDIENTS</span><span class="p">:</span>
+                    <span class="n">orderIngredient</span><span class="p">(</span><span class="n">ingredient</span><span class="p">)</span></pre>
+</div>
+<p>The next part checks for the "You Win" or "You Fail" message. Since this check doesn't need to happen frequently at all, the <code>if time.time() - 12 > LAST_GAME_OVER_CHECK:</code> statement only runs it once every 12 seconds. <code>LAST_GAME_OVER_CHECK</code> is updated with the current time from <code>time.time()</code> every time the check is performed. The <code>checkForGameOver()</code> function (described later) terminates the program if the player has lost, or returns the string in the <code>LEVEL_WIN_MESSAGE</code> constant if the level has been beaten.</p>
+<p>If the level has been beaten, the code resets many of the variables:</p>
+<div class="highlight">
+<pre>        <span class="c"># check for the &quot;You Win&quot; or &quot;You Fail&quot; messages</span>
+        <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="mi">12</span> <span class="o">&gt;</span> <span class="n">LAST_GAME_OVER_CHECK</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">checkForGameOver</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">result</span> <span class="o">==</span> <span class="n">LEVEL_WIN_MESSAGE</span><span class="p">:</span>
+                <span class="c"># player has completed the level</span>
+
+                <span class="c"># Reset inventory and orders.</span>
+                <span class="n">INVENTORY</span> <span class="o">=</span> <span class="p">{</span><span class="n">SHRIMP</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="n">RICE</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+                             <span class="n">NORI</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="n">ROE</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+                             <span class="n">SALMON</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="n">UNAGI</span><span class="p">:</span> <span class="mi">5</span><span class="p">}</span>
+                <span class="n">ORDERING_COMPLETE</span> <span class="o">=</span> <span class="p">{</span><span class="n">SHRIMP</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="n">RICE</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                                     <span class="n">NORI</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="n">ROE</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+                                     <span class="n">SALMON</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="n">UNAGI</span><span class="p">:</span> <span class="bp">None</span><span class="p">}</span>
+                <span class="n">backOrders</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">remakeOrders</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">currentOrders</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">oldOrders</span> <span class="o">=</span> <span class="p">{}</span></pre>
+</div>
+<p>Also, the bot will let the user view the end-level stats for 5 seconds before clicking Continue to move on to the next level.</p>
+<div class="highlight">
+<pre>                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Level </span><span class="si">%s</span><span class="s"> complete.&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">LEVEL</span><span class="p">))</span>
+                <span class="n">LEVEL</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="c"># give another 5 seconds to tally score</span>
+
+                <span class="c"># Click buttons to continue to next level.</span>
+                <span class="n">pos</span> <span class="o">=</span> <span class="n">pyautogui</span><span class="o">.</span><span class="n">locateCenterOnScreen</span><span class="p">(</span><span class="n">imPath</span><span class="p">(</span><span class="s">&#39;continue_button.png&#39;</span><span class="p">),</span> <span class="n">region</span><span class="o">=</span><span class="n">GAME_REGION</span><span class="p">)</span>
+                <span class="n">pyautogui</span><span class="o">.</span><span class="n">click</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Clicked on Continue button.&#39;</span><span class="p">)</span>
+                <span class="n">pos</span> <span class="o">=</span> <span class="n">pyautogui</span><span class="o">.</span><span class="n">locateCenterOnScreen</span><span class="p">(</span><span class="n">imPath</span><span class="p">(</span><span class="s">&#39;continue_button.png&#39;</span><span class="p">),</span> <span class="n">region</span><span class="o">=</span><span class="n">GAME_REGION</span><span class="p">)</span></pre>
+</div>
+<p>For every level except for the last, there will be a second Continue button to click on. On the last level, the bot doesn't do this so the user can view the game ending.</p>
+<div class="highlight">
+<pre>
+                <span class="k">if</span> <span class="n">LEVEL</span> <span class="o">&lt;=</span> <span class="mi">7</span><span class="p">:</span> <span class="c"># click the second continue if the game isn&#39;t finished.</span>
+                    <span class="n">pyautogui</span><span class="o">.</span><span class="n">click</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Clicked on Continue button.&#39;</span><span class="p">)</span>
+
+        <span class="n">oldOrders</span> <span class="o">=</span> <span class="n">currentOrders</span></pre>
+</div>
+<h3>Step 9 - Clearing the Plates</h3>
+<p>The <code>clickOnPlates()</code> function blindly clicks on all six places where there could be a dirty plate to clean up. This works because there is no penalty for clicking when there isn't a dirty plate, freeing the bot from having to use performance-costly image recognition to first identify the dirty plate.</p>
+<p>The <code>LAST_PLATE_CLEARING</code> global variable contains the timestamp of the last time the plates were cleared. This is used to determine if a long time has passed since the plates have been cleared.</p>
+<div class="highlight">
+<pre><span class="k">def</span> <span class="nf">clickOnPlates</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Clicks the mouse on the six places where finished plates will be flashing. This function does not check for flashing plates, but simply clicks on all six places.</span>
+
+<span class="sd">    Sets LAST_PLATE_CLEARING to the current time.&quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">LAST_PLATE_CLEARING</span>
+
+    <span class="c"># just blindly click on all the places where a plate should be</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">):</span>
+        <span class="n">pyautogui</span><span class="o">.</span><span class="n">click</span><span class="p">(</span><span class="mi">83</span> <span class="o">+</span> <span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="mi">101</span><span class="p">),</span> <span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">203</span><span class="p">)</span>
+    <span class="n">LAST_PLATE_CLEARING</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+</pre>
+</div>
+<h3>Step 10 - Getting the Orders from Customers</h3>
+<p>Customer orders appear as dish images in word bubbles above their heads. PyAutoGUI's image recognition can be used to scan this region of the game screen and match them to the images in <em>california_roll_order.png</em>, <em>gunkan_maki_order.png</em>, <em>onigiri_order.png</em>, and so on:</p>
+<p><img src="/blogstatic/sushi_california_roll_order.png?27f655" /> <img src="/blogstatic/sushi_gunkan_maki_order.png?27f655" /> <img src="/blogstatic/sushi_onigiri_order.png?27f655" /></p>
+<p>The <code>getOrders()</code> function finds all the current orders being requested. Figuring out which of these orders have been seen before (and possible already fulfilled) is done by the <code>getOrdersDifference()</code> function, explained in the next section.</p>
+<div class="highlight">
+<pre><span class="k">def</span> <span class="nf">getOrders</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Scans the screen for orders being made. Returns a dictionary with a (left, top, width, height) tuple of integers for keys and the order constant for a value.</span>
+
+<span class="sd">    The order constants are ONIGIRI, GUNKAN_MAKI, CALIFORNIA_ROLL, SALMON_ROLL, SHRIMP_SUSHI, UNAGI_ROLL, DRAGON_ROLL, COMBO.&quot;&quot;&quot;</span>
+    <span class="n">orders</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">orderType</span> <span class="ow">in</span> <span class="p">(</span><span class="n">ALL_ORDER_TYPES</span><span class="p">):</span>
+        <span class="n">allOrders</span> <span class="o">=</span> <span class="n">pyautogui</span><span class="o">.</span><span class="n">locateAllOnScreen</span><span class="p">(</span><span class="n">imPath</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">_order.png&#39;</span> <span class="o">%</span> <span class="n">orderType</span><span class="p">),</span> <span class="n">region</span><span class="o">=</span><span class="p">(</span><span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">32</span><span class="p">,</span> <span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">46</span><span class="p">,</span> <span class="mi">558</span><span class="p">,</span> <span class="mi">44</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">order</span> <span class="ow">in</span> <span class="n">allOrders</span><span class="p">:</span>
+            <span class="n">orders</span><span class="p">[</span><span class="n">order</span><span class="p">]</span> <span class="o">=</span> <span class="n">orderType</span>
+    <span class="k">return</span> <span class="n">orders</span>
+
+The <code>newOrders</code> and <code>oldOrders</code> parameters have values that were returned from different calls to <code>getOrders()</code>. The orders that are new to newOrders are returned in the <code>added</code> dictionaries and the orders that have since been removed are returned in the <code>removed</code> dictionary.
+
+<span class="k">def</span> <span class="nf">getOrdersDifference</span><span class="p">(</span><span class="n">newOrders</span><span class="p">,</span> <span class="n">oldOrders</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Finds the differences between the orders dictionaries passed. Return value is a tuple of two dictionaries.</span>
+
+<span class="sd">    The first dictionary is the &quot;added&quot; dictionary of orders added to newOrders since oldOrders. The second dictionary is the &quot;removed&quot; dictionary of orders in oldOrders but removed in newOrders.</span>
+
+<span class="sd">    Each dictionary has (left, top, width, height) for keys and an order constant for a value.&quot;&quot;&quot;</span>
+    <span class="n">added</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">removed</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c"># find all orders in newOrders that are new and not found in oldOrders</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">newOrders</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">oldOrders</span><span class="p">:</span>
+            <span class="n">added</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">newOrders</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+    <span class="c"># find all orders in oldOrders that were removed and not found in newOrders</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">oldOrders</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">newOrders</span><span class="p">:</span>
+            <span class="n">removed</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">oldOrders</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">added</span><span class="p">,</span> <span class="n">removed</span>
+</pre>
+</div>
+<h3>Step 11 - Making the Orders</h3>
+<p>Creating a dish involves clicking on the correct ingredients and then clicking on the rolling mat. The dish is place on a conveyor belt and eventually makes its way to a customer. The first part of the function is just the docstring and a few <code>global</code> statements.</p>
+<div class="highlight">
+<pre><span class="k">def</span> <span class="nf">makeOrder</span><span class="p">(</span><span class="n">orderType</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Does the mouse clicks needed to create an order.</span>
+
+<span class="sd">    The orderType parameter has the value of one of the ONIGIRI, GUNKAN_MAKI, CALIFORNIA_ROLL, SALMON_ROLL, SHRIMP_SUSHI, UNAGI_ROLL, DRAGON_ROLL, COMBO constants.</span>
+
+<span class="sd">    The INVENTORY global variable is updated in this function for orders made.</span>
+
+<span class="sd">    The return value is None for a successfully made order, or the string of an ingredient constant if that needed ingredient is missing.&quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">ROLLING_COMPLETE</span><span class="p">,</span> <span class="n">INGRED_COORDS</span><span class="p">,</span> <span class="n">INVENTORY</span></pre>
+</div>
+<p>The next part of the code ensures that the bot doesn't try to make a dish when it's not possible. One of the reasons is that the mat is still in the process of rolling the previous dish. Also, a dish will stay on the mat after being rolled if there isn't space on the conveyor belt. (This happens when orders aren't picked up by a customer.)</p>
+<p>This is an important check: if the bot starts clicking on ingredients when the rolling mat is occupied, then the bot's <code>INVENTORY</code> dictionary will contain an inaccurate count of ingredients, leading to other mistakes and eventually losing the game.</p>
+<p>The mat takes about 1.5 seconds to complete, which is why the <code>ROLLING_COMPLETE = time.time() + 1.5</code> is run after clicking the mat to begin rolling it. This is a simple check that doesn't take long to run.</p>
+<p>But if the conveyor belt is occupied, then the previous order could still be on the mat waiting for a clear space on the belt. After performing the cheap <code>ROLLING_TIME</code> check, the bot then uses <code>pyautogui.locateOnScreen()</code> to see if the mat is clear. This guarantees that when the bot starts clicking on ingredients they will be moved to the mat.</p>
+<div class="highlight">
+<pre>    <span class="c"># wait until the mat is clear. The previous order could still be there if the conveyor belt has been full or the mat is currently rolling.</span>
+    <span class="k">while</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">ROLLING_COMPLETE</span> <span class="ow">and</span> <span class="n">pyautogui</span><span class="o">.</span><span class="n">locateOnScreen</span><span class="p">(</span><span class="n">imPath</span><span class="p">(</span><span class="s">&#39;clear_mat.png&#39;</span><span class="p">),</span> <span class="n">region</span><span class="o">=</span><span class="p">(</span><span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">115</span><span class="p">,</span> <span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">295</span><span class="p">,</span> <span class="mi">220</span><span class="p">,</span> <span class="mi">175</span><span class="p">))</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span></pre>
+</div>
+<p>But before the bot begins making a dish, it consults the <code>INVENTORY</code> dictionary to make sure it has enough of each of the ingredients in the dish's recipe. The recipes for each dish are held in the <code>RECIPES</code> constant.</p>
+<p>If there isn't enough of an ingredient, the string in the ingredient's constant is returned. This information will be used to place an order for more of that ingredient.</p>
+<div class="highlight">
+<pre>    <span class="c"># check that all ingredients are available in the inventory.</span>
+    <span class="k">for</span> <span class="n">ingredient</span><span class="p">,</span> <span class="n">amount</span> <span class="ow">in</span> <span class="n">RECIPE</span><span class="p">[</span><span class="n">orderType</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">INVENTORY</span><span class="p">[</span><span class="n">ingredient</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">amount</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;More </span><span class="si">%s</span><span class="s"> is needed to make </span><span class="si">%s</span><span class="s">.&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ingredient</span><span class="p">,</span> <span class="n">orderType</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">ingredient</span></pre>
+</div>
+<p>Once it has been confirmed there is enough of each ingredient, calls to <code>pyautogui.click()</code> cause the bot to click on the appropriate ingredients, then click on the mat to roll it. The <code>ROLLING_COMPLETE</code> global variable is updated with the timestamp of when the mat rolling will be finished (1.5 seconds in the future) so the next dish can be prepared.</p>
+<p>Just before the rolling mat is clicked though, the bot will check the conveyor belt for any excess dishes that weren't picked up by customers. While this is a waste of ingredients, these excess dishes tend to pile up (especially in the later levels), and slow down the bot from serving dishes to the point that it could lose the game. The call to <code>findAndClickPlatesOnBelt()</code> (described next) gets rid of any excess dishes that happen to be on the conveyor belt.</p>
+<div class="highlight">
+<pre>    <span class="c"># click on each of the ingredients</span>
+    <span class="k">for</span> <span class="n">ingredient</span><span class="p">,</span> <span class="n">amount</span> <span class="ow">in</span> <span class="n">RECIPE</span><span class="p">[</span><span class="n">orderType</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">amount</span><span class="p">):</span>
+            <span class="n">pyautogui</span><span class="o">.</span><span class="n">click</span><span class="p">(</span><span class="n">INGRED_COORDS</span><span class="p">[</span><span class="n">ingredient</span><span class="p">],</span> <span class="n">duration</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+            <span class="n">INVENTORY</span><span class="p">[</span><span class="n">ingredient</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">1</span>
+    <span class="n">findAndClickPlatesOnBelt</span><span class="p">()</span> <span class="c"># get rid of any left over meals on the conveyor belt, which may stall this meal from being loaded on the belt</span>
+    <span class="n">pyautogui</span><span class="o">.</span><span class="n">click</span><span class="p">(</span><span class="n">MAT_COORDS</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span> <span class="c"># click the rolling mat to make the order</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Made a </span><span class="si">%s</span><span class="s"> order.&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">orderType</span><span class="p">))</span>
+    <span class="n">ROLLING_COMPLETE</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">+</span> <span class="mf">1.5</span> <span class="c"># give the mat enough time (1.5 seconds) to finish rolling before being used again</span>
+
+Sometimes other customers will swoop in and grab dishes that were intended for other customers. To prevent the customers from leaving, the <code>remakeTimes</code> dictionary keeps track of when orders will need to be remade. However, if the customer leaves before picking up this remade dish, then it will circle endlessly on the conveyor belt. Eventually these excess dishes can pile up and stall new dishes from being added. The <code>findAndClickPlatesOnBelt()</code> will scan the conveyor belt next to the rolling mat for any dishes and click on them to remove them.
+
+It does this by identifying the pink, blue, or red coloring of the plates. These colors are stored in the <em>pink_plate_color.png</em>, <em>blue_plate_color.png</em>, <em>red_plate_color.png</em> images.
+
+<span class="k">def</span> <span class="nf">findAndClickPlatesOnBelt</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Find any plates on the conveyor belt that can be removed and click on them to remove them. This will get rid of excess orders.&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">color</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;pink&#39;</span><span class="p">,</span> <span class="s">&#39;blue&#39;</span><span class="p">,</span> <span class="s">&#39;red&#39;</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">pyautogui</span><span class="o">.</span><span class="n">locateCenterOnScreen</span><span class="p">(</span><span class="n">imPath</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">_plate_color.png&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">color</span><span class="p">)),</span> <span class="n">region</span><span class="o">=</span><span class="p">(</span><span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">343</span><span class="p">,</span> <span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">80</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">pyautogui</span><span class="o">.</span><span class="n">click</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Clicked on </span><span class="si">%s</span><span class="s"> plate on belt at X: </span><span class="si">%s</span><span class="s"> Y: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+</pre>
+</div>
+<h3>Step 12 - Ordering More Ingredients</h3>
+<p>When the bot needs more ingredients, it must navigate the menu buttons on the phone in the lower right corner of the game window. This tutorial has already figured out these coordinates for you, but you could use the <code>pyautogui.displayMousePosition()</code> function to find coordinates for any pixel on the screen.</p>
+<p>The first step is to click on the phone:</p>
+<div class="highlight">
+<pre><span class="k">def</span> <span class="nf">orderIngredient</span><span class="p">(</span><span class="n">ingredient</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Do the clicks to purchase an ingredient. If successful, the ORDERING_COMPLETE dictionary is updated for when the ingredients will arive and INVENTORY can be updated. (This is handled in the updateInventory() function.)&quot;&quot;&quot;</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Ordering more </span><span class="si">%s</span><span class="s"> (inventory says </span><span class="si">%s</span><span class="s"> left)...&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ingredient</span><span class="p">,</span> <span class="n">INVENTORY</span><span class="p">[</span><span class="n">ingredient</span><span class="p">]))</span>
+    <span class="n">pyautogui</span><span class="o">.</span><span class="n">click</span><span class="p">(</span><span class="n">PHONE_COORDS</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span></pre>
+</div>
+<p>The next part of the code handles pressing the buttons to order rice. The timestamp in <code>ORDERING_COMPLETE</code> is checked to make sure a previous rice order hasn't been made. Then the screen is scanned for the <em>cant_afford_rice.png</em> image. The rice ordering button takes on a dimmed appearance if the player does not have enough money to order rice. In this case, the function returns.</p>
+<p><img src="/blogstatic/sushi_cant_afford_rice.png?27f655" /></p>
+<div class="highlight">
+<pre>    <span class="k">if</span> <span class="n">ingredient</span> <span class="o">==</span> <span class="n">RICE</span> <span class="ow">and</span> <span class="n">ORDERING_COMPLETE</span><span class="p">[</span><span class="n">RICE</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="c"># Order rice.</span>
+        <span class="n">pyautogui</span><span class="o">.</span><span class="n">click</span><span class="p">(</span><span class="n">RICE1_COORDS</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+
+        <span class="c"># Check if we can&#39;t afford the rice</span>
+        <span class="k">if</span> <span class="n">pyautogui</span><span class="o">.</span><span class="n">locateOnScreen</span><span class="p">(</span><span class="n">imPath</span><span class="p">(</span><span class="s">&#39;cant_afford_rice.png&#39;</span><span class="p">),</span> <span class="n">region</span><span class="o">=</span><span class="p">(</span><span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">498</span><span class="p">,</span> <span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">242</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">75</span><span class="p">)):</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Can&#39;t afford rice. Canceling.&quot;</span><span class="p">)</span>
+            <span class="n">pyautogui</span><span class="o">.</span><span class="n">click</span><span class="p">(</span><span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">585</span><span class="p">,</span> <span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">335</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span> <span class="c"># click cancel phone button</span>
+            <span class="k">return</span></pre>
+</div>
+<p>Otherwise, the bot will click on the rice button. The code doesn't update <code>INVENTORY</code> quite yet, as it will take time for the rice to be delivered. (For simplicity, the bot will never use the Express Delivery option, though you could certainly build in the intelligence to do that.) The expected delivery time is set in the <code>ORDERING_COMPLETE</code> dictionary.</p>
+<p>The <code>INVENTORY</code> will be updated with the new quantity in the <code>updateInventory()</code> function.</p>
+<div class="highlight">
+<pre>        <span class="c"># Purchase the rice</span>
+        <span class="n">pyautogui</span><span class="o">.</span><span class="n">click</span><span class="p">(</span><span class="n">RICE2_COORDS</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+        <span class="n">pyautogui</span><span class="o">.</span><span class="n">click</span><span class="p">(</span><span class="n">NORMAL_DELIVERY_BUTTON_COORDS</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+        <span class="n">ORDERING_COMPLETE</span><span class="p">[</span><span class="n">RICE</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">+</span> <span class="n">NORMAL_RESTOCK_TIME</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Ordered more </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">RICE</span><span class="p">))</span>
+        <span class="k">return</span></pre>
+</div>
+<p>The next part does something similar except it navigates the phone menu for the non-rice ingredients. The same general logic is used; if an ingredient isn't affordable, the dimmed button image will inform the bot that it can't be purchased.</p>
+<div class="highlight">
+<pre>    <span class="k">elif</span> <span class="n">ORDERING_COMPLETE</span><span class="p">[</span><span class="n">ingredient</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="c"># Order non-rice ingredient.</span>
+        <span class="n">pyautogui</span><span class="o">.</span><span class="n">click</span><span class="p">(</span><span class="n">TOPPING_COORDS</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+
+        <span class="c"># Check if we can&#39;t afford the ingredient</span>
+        <span class="k">if</span> <span class="n">pyautogui</span><span class="o">.</span><span class="n">locateOnScreen</span><span class="p">(</span><span class="n">imPath</span><span class="p">(</span><span class="s">&#39;cant_afford_</span><span class="si">%s</span><span class="s">.png&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ingredient</span><span class="p">)),</span> <span class="n">region</span><span class="o">=</span><span class="p">(</span><span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">446</span><span class="p">,</span> <span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">187</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="mi">180</span><span class="p">)):</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Can&#39;t afford </span><span class="si">%s</span><span class="s">. Canceling.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ingredient</span><span class="p">))</span>
+            <span class="n">pyautogui</span><span class="o">.</span><span class="n">click</span><span class="p">(</span><span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">597</span><span class="p">,</span> <span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">337</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span> <span class="c"># click cancel phone button</span>
+            <span class="k">return</span></pre>
+</div>
+<p>Note that the bot doesn't have to keep track of how much money it has. It only needs to know if it can afford an ingredient or not. For simplicity, the "normal delivery" option is always used instead of the costly "express delivery" option:</p>
+<div class="highlight">
+<pre>        <span class="c"># Order the ingredient</span>
+        <span class="n">pyautogui</span><span class="o">.</span><span class="n">click</span><span class="p">(</span><span class="n">ORDER_BUTTON_COORDS</span><span class="p">[</span><span class="n">ingredient</span><span class="p">],</span> <span class="n">duration</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+        <span class="n">pyautogui</span><span class="o">.</span><span class="n">click</span><span class="p">(</span><span class="n">NORMAL_DELIVERY_BUTTON_COORDS</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+        <span class="n">ORDERING_COMPLETE</span><span class="p">[</span><span class="n">ingredient</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">+</span> <span class="n">NORMAL_RESTOCK_TIME</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Ordered more </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ingredient</span><span class="p">))</span>
+        <span class="k">return</span></pre>
+</div>
+<p>If it turns out the bot couldn't afford the desired ingredient, the next part will close the phone menu by clicking on the coordinates for the "hang up" button:</p>
+<div class="highlight">
+<pre>    <span class="c"># The ingredient has already been ordered, so close the phone menu.</span>
+    <span class="n">pyautogui</span><span class="o">.</span><span class="n">click</span><span class="p">(</span><span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">589</span><span class="p">,</span> <span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">341</span><span class="p">)</span> <span class="c"># click cancel phone button</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Already ordered </span><span class="si">%s</span><span class="s">.&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ingredient</span><span class="p">))</span></pre>
+</div>
+<p>The <code>updateInventory()</code> function is frequently called to check if the timestamps in <code>ORDERING_COMPLETE</code> indicate that the ordered ingredients have arrived. In that case, it updates <code>INVENTORY</code> with the new values. Shrimp, unagi, and salmon deliveries always add 5. Nori, roe, and rice deliveries always add 10.</p>
+<div class="highlight">
+<pre><span class="k">def</span> <span class="nf">updateInventory</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Check if any ordered ingredients have arrived by looking at the timestamps in ORDERING_COMPLETE.</span>
+<span class="sd">    Update INVENTORY global variable with the new quantities.&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">ingredient</span> <span class="ow">in</span> <span class="n">INVENTORY</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">ORDERING_COMPLETE</span><span class="p">[</span><span class="n">ingredient</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">ORDERING_COMPLETE</span><span class="p">[</span><span class="n">ingredient</span><span class="p">]:</span>
+            <span class="n">ORDERING_COMPLETE</span><span class="p">[</span><span class="n">ingredient</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="k">if</span> <span class="n">ingredient</span> <span class="ow">in</span> <span class="p">(</span><span class="n">SHRIMP</span><span class="p">,</span> <span class="n">UNAGI</span><span class="p">,</span> <span class="n">SALMON</span><span class="p">):</span>
+                <span class="n">INVENTORY</span><span class="p">[</span><span class="n">ingredient</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">5</span>
+            <span class="k">elif</span> <span class="n">ingredient</span> <span class="ow">in</span> <span class="p">(</span><span class="n">NORI</span><span class="p">,</span> <span class="n">ROE</span><span class="p">,</span> <span class="n">RICE</span><span class="p">):</span>
+                <span class="n">INVENTORY</span><span class="p">[</span><span class="n">ingredient</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">10</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Updated inventory with added </span><span class="si">%s</span><span class="s">:&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ingredient</span><span class="p">))</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">INVENTORY</span><span class="p">)</span>
+</pre>
+</div>
+<h3>Step 13 - Checking for the End of the Level</h3>
+<p>The bot can tell when the level is over by doing image recognition for the <em>you_win.png</em> or <em>you_fail.png</em> images. If the game is over, the program terminates by calling <code>sys.exit()</code>. If the level has been beaten, the bot clicks on the "You Win" window so that it immediately tallies the stats and returns the string in the <code>LEVEL_WIN_MESSAGE</code>.</p>
+<div class="highlight">
+<pre><span class="k">def</span> <span class="nf">checkForGameOver</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Checks the screen for the &quot;You Win&quot; or &quot;You Fail&quot; message.</span>
+
+<span class="sd">    On winning, returns the string in LEVEL_WIN_MESSAGE.</span>
+
+<span class="sd">    On losing, the program terminates.&quot;&quot;&quot;</span>
+
+    <span class="c"># check for &quot;You Win&quot; message</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">pyautogui</span><span class="o">.</span><span class="n">locateOnScreen</span><span class="p">(</span><span class="n">imPath</span><span class="p">(</span><span class="s">&#39;you_win.png&#39;</span><span class="p">),</span> <span class="n">region</span><span class="o">=</span><span class="p">(</span><span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">188</span><span class="p">,</span> <span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">94</span><span class="p">,</span> <span class="mi">262</span><span class="p">,</span> <span class="mi">60</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">pyautogui</span><span class="o">.</span><span class="n">click</span><span class="p">(</span><span class="n">pyautogui</span><span class="o">.</span><span class="n">center</span><span class="p">(</span><span class="n">result</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">LEVEL_WIN_MESSAGE</span>
+
+    <span class="c"># check for &quot;You Fail&quot; message</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">pyautogui</span><span class="o">.</span><span class="n">locateOnScreen</span><span class="p">(</span><span class="n">imPath</span><span class="p">(</span><span class="s">&#39;you_failed.png&#39;</span><span class="p">),</span> <span class="n">region</span><span class="o">=</span><span class="p">(</span><span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">167</span><span class="p">,</span> <span class="n">GAME_REGION</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">133</span><span class="p">,</span> <span class="mi">314</span><span class="p">,</span> <span class="mi">39</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Game over. Quitting.&#39;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span></pre>
+</div>
+<p>Finally, the <code>main()</code> function is called if this script is being run (as opposed to imported as a module):</p>
+<div class="highlight">
+<pre><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre>
+</div>
+<h3>That's it!</h3>
+<p>If you download and run the bot, it doesn't have much problem beating all 7 levels of Sushi Go Round. But as you can tell from the leaderboard, if doesn't compare to the best human players. Feel free to modify the code to try to improve the performance of the bot.</p>
+<p>Sushi Go Round is a good candidate for creating a bot since it's 2D sprite graphics are static and easy to identify from screenshots. If you find any other similar such games, please list them in the comments below! I've found that the <a href="http://www.newgrounds.com/games/browse/genre/skill/interval/year/sort/score/min_score/0" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.newgrounds.com/games/browse/genre/skill/interval/year/sort/score/min_score/0', '&quot;Skill&quot; genre on Newgrounds']);" >"Skill" genre on Newgrounds</a>, "puzzle", "gathering", and "rhythm" games are usually bot-friendly since their images are easier to identify. (There's a <a href="http://newgrounds.wikia.com/wiki/List_of_Flash_Game_Genres" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://newgrounds.wikia.com/wiki/List_of_Flash_Game_Genres', 'list of Flash game genres here']);" >list of Flash game genres here</a>.) Look for ones that have retro pixel graphics. In particular, these games seem like good candidates for making bots:</p>
+<ul>
+<li><a href="http://www.newgrounds.com/portal/view/642967" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.newgrounds.com/portal/view/642967', 'Color Finger']);" >Color Finger</a></li>
+<li><a href="http://www.newgrounds.com/portal/view/634256" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.newgrounds.com/portal/view/634256', 'Cardinal']);" >Cardinal</a></li>
+<li><a href="http://www.newgrounds.com/portal/view/635494" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.newgrounds.com/portal/view/635494', 'Sagacious Saga']);" >Sagacious Saga</a> (helps if you know <a href="http://inventwithpython.com/blog/2011/08/11/recursion-explained-with-the-flood-fill-algorithm-and-zombies-and-cats/">the floodfill algorithm</a>)</li>
+<li><a href="http://www.newgrounds.com/portal/view/643915" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.newgrounds.com/portal/view/643915', 'Apple Catcher']);" >Apple Catcher</a></li>
+<li><a href="http://www.newgrounds.com/portal/view/637291" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.newgrounds.com/portal/view/637291', 'Cold Runner']);" >Cold Runner</a></li>
+<li><a href="http://www.newgrounds.com/portal/view/633907" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.newgrounds.com/portal/view/633907', 'GatherX']);" >GatherX</a></li>
+<li><a href="http://www.newgrounds.com/portal/view/633175" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.newgrounds.com/portal/view/633175', 'Next Avoider']);" >Next Avoider</a></li>
+<li><a href="http://www.newgrounds.com/portal/view/634591" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.newgrounds.com/portal/view/634591', 'Dodge Copter']);" >Dodge Copter</a></li>
+<li><a href="http://www.newgrounds.com/portal/view/631796" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.newgrounds.com/portal/view/631796', 'Rockocroco']);" >Rockocroco</a></li>
+<li><a href="http://www.newgrounds.com/portal/view/634395" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.newgrounds.com/portal/view/634395', 'Holy Stomping']);" >Holy Stomping</a></li>
+</ul>
+<p>And some trickier games, but still possible to make bots for:</p>
+<ul>
+<li><a href="http://www.newgrounds.com/portal/view/636211" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.newgrounds.com/portal/view/636211', '1']);" >1</a></li>
+<li><a href="http://www.newgrounds.com/portal/view/639339" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.newgrounds.com/portal/view/639339', 'Golden Duel']);" >Golden Duel</a></li>
+<li><a href="http://www.homestarrunner.com/weengame.html" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.homestarrunner.com/weengame.html', 'Homestar Runner: Marshie\'s Malloween Mix-Up']);" >Homestar Runner: Marshie's Malloween Mix-Up</a></li>
+<li><a href="http://www.newgrounds.com/portal/view/645866" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.newgrounds.com/portal/view/645866', 'Twin Cube']);" >Twin Cube</a></li>
+<li><a href="http://www.newgrounds.com/portal/view/630835" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.newgrounds.com/portal/view/630835', 'Rollasaurus']);" >Rollasaurus</a></li>
+<li><a href="http://www.newgrounds.com/portal/view/649860" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.newgrounds.com/portal/view/649860', 'Hyperwall']);" >Hyperwall</a></li>
+</ul>
+<p>Update: <a href="https://www.reddit.com/r/Python/comments/2pm3hj/programming_a_bot_in_python_to_play_the_sushi_go/cmy69zn" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://www.reddit.com/r/Python/comments/2pm3hj/programming_a_bot_in_python_to_play_the_sushi_go/cmy69zn', 'roddds on Reddit']);" >roddds on Reddit</a> posted a link to his own <a href="https://github.com/roddds/sushibot" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/roddds/sushibot', 'Sushi Go Round bot he had made previously']);" >Sushi Go Round bot he had made previously</a>. He also has <a href="https://github.com/roddds/DiamondDashBot" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/roddds/DiamondDashBot', 'code']);" >code</a> and a <a href="https://www.youtube.com/watch?v=AQv-z2LBu6w" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://www.youtube.com/watch?v=AQv-z2LBu6w', 'video']);" >video</a> for a <a href="http://www.wooga.com/games/diamonddash/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.wooga.com/games/diamonddash/', 'Diamond Dash']);" >Diamond Dash</a>-playing bot.</p>
+
+    </body>
+</html>

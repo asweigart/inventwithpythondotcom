@@ -1,0 +1,330 @@
+<html>
+    <head>
+        <title>Recursion Explained with the Flood Fill Algorithm (and Zombies and Cats)</title>
+        <meta name="tags" content="" />
+        <meta name="date" content="2011-08-11 12:00" />
+        <meta name="summary" content="" />
+    </head>
+    <body>
+
+
+			<p>This is a programming tutorial for beginner and intermediate programmers who want to learn what recursion is. The programming language used for the examples is Python, but you can probably follow along if you know programming in some other language such as PHP or JavaScript. There’s a lot more information about recursion on the Wikipedia article: <a href="http://en.wikipedia.org/wiki/Recursion_(computer_science)" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://en.wikipedia.org/wiki/Recursion_(computer_science)', 'http://en.wikipedia.org/wiki/Recursion_(computer_science)']);" >http://en.wikipedia.org/wiki/Recursion_(computer_science)</a> But this guide is meant to be a more practical guide to show how handy recursion is.</p>
+<p>The source code of everything in this article can be downloaded here: <a href="/blogstatic/floodfill/floodfill_src.zip?27f655">floodfill_src.zip</a></p>
+<p><span class="Apple-style-span" style="font-size: 20px; font-weight: bold;">Consider the Lazy Zombie</span></p>
+<p>This is a cat:</p>
+<p><img title="cat" src="/blogstatic/floodfill/cat_transparent.png" alt="" width="50" height="50" /></p>
+<p>This is a normal human:</p>
+<p><img title=" " src="/blogstatic/floodfill/human_transparent.png" alt="" width="50" height="50" /></p>
+<p>This is a normal human who has been turned into an ungodly, flesh-eating zombie of the undead:</p>
+<p><img title=" " src="/blogstatic/floodfill/zombie_transparent.png" alt="" width="50" height="50" /></p>
+<p>Zombies are lazy and will only bite things that are next to them. Humans that are bitten will then turn into zombies:</p>
+<p><img title=" " src="/blogstatic/floodfill/biting.png" alt="" width="250" height="50" /></p>
+<p>There is an interesting recursive principle here, because the humans that have turned into zombies will start to bite other humans that are next to them, which will make more zombies, who bite more adjacent humans, which will make more zombies, and so on and so on in a chain reaction:</p>
+<p><img src="/blogstatic/floodfill/biting5.png" alt="" width="550" height="50" /></p>
+<p><span id="more-341"></span>Zombies don’t bite cats though. (Well, they do, but a zombie-bitten cat won’t turn into a zombie.) If you put a zombie next to a cat, you’ll just end up with a zombie and a cat:</p>
+<p><img title=" " src="/blogstatic/floodfill/biting2.png" alt="" width="250" height="50" /></p>
+<p>So as long as there is a cat between the human and the lazy zombie, the human is safe:</p>
+<p><img title=" " src="/blogstatic/floodfill/biting3.png" alt="" width="350" height="50" /></p>
+<p>The same cannot be said of any humans who don’t have a cat between them and a zombie:</p>
+<p><img title=" " src="/blogstatic/floodfill/biting4.png" alt="" width="350" height="50" /></p>
+<p>So not only does this simple lazy-zombie principle cause a chain reaction of zombies, it also causes this chain reaction to stop when a cat is encountered. (Public Service Announcement: In the event of a zombie apocalypse, please locate your local crazy cat person for safety and shelter.)</p>
+<p><img src="/blogstatic/floodfill/crazycatlady_scene.png" alt="" width="310" height="296" /></p>
+<p>Let’s make a two dimensional field of humans, cats, and zombies like this:</p>
+<p><img src="/blogstatic/floodfill/2dzombiefield.png" alt="" width="350" height="300" /></p>
+<p>All we need is one starting zombie, and you’ll see the infection spread until the entire human population is zombified. But there’s hope. If there is an enclosed ring of cats blocking the initial zombie, then humanity is (slightly) saved. (In our example, zombies don’t bite diagonally.)</p>
+<p><img src="/blogstatic/floodfill/zombie1.gif" alt="" width="350" height="300" /></p>
+<p>But if there is a gap in the cats, then the entire population is doomed:</p>
+<p><img src="/blogstatic/floodfill/zombie2.gif" alt="" width="350" height="300" /></p>
+<p>This whole zombie thing is an elaborate and silly analogy for the flood fill algorithm.</p>
+<h2>The Basics: Recursive Calls and Base Cases</h2>
+<p>A <strong>recursive function</strong> is simply a function that calls itself. Here’s the simplest possible recursive function:</p>
+<pre>def foo():
+
+    foo()</pre>
+<p>The foo() function does nothing but call itself. The function doesn’t do anything useful (well, it will crash your program. That's kind of like being useful.) A recursive function's function call to itself is a <strong>recursive call</strong>.</p>
+<p>Here's a program that calls this pointless recursive function:</p>
+<pre>def foo():
+
+    foo()
+
+foo()</pre>
+<p>You can download it here: <a href="/blogstatic/floodfill/stackoverflow.py">stackoverflow.py</a> If you run this program, you'll get this error message: “RuntimeError: maximum recursion depth exceeded” (This is called a "stack overflow" and is explained later.) <strong>Stack overflows happen when a recursive function doesn't have a base case</strong> (explained next).</p>
+<p>Here's a relatively more useful recursive function:</p>
+<pre>def countdown(n):
+
+    print(n)
+
+
+
+    if n == 0:  # this is the base case
+
+        return  # return, instead of making more recursive calls
+
+
+
+    countdown(n - 1)  # the recursive call
+
+
+
+countdown(10)</pre>
+<p>You can download this program here: <a href="/blogstatic/floodfill/simplerecursion.py">simplerecursion.py</a>. When you run this program, the countdown() function is called and passed the integer 10 for the n parameter. The function will print this number, and then later call itself but pass the integer 9 (which is what n - 1 is). That second call to countdown results in 9 being printed to the screen, and then calls itself and passes 8. This keeps going until countdown() is called with an n parameter of 0. Then it just returns to the function which called it, which is the countdown() function. That function then returns to the function that called it (also the countdown() function) and the program keeps returning until it has returned from the original countdown() function call.</p>
+<p>The condition that a recursive function will stop making recursive calls to itself is called the <strong>base case</strong>.</p>
+<h2>A Stupid Recursive Example: Fibonacci Sequence</h2>
+<p>The recursion property can do some pretty cool and powerful things. Most textbook examples of recursion show the Fibonacci sequence. The <strong>Fibonacci sequence</strong> is a sequence of numbers that begins with the numbers 1 and 1, and then each number afterwards is the sum of the two previous numbers:</p>
+<p>1, 1, 2, 3, 5, 8, 13, 21, 34, 55 and so on…</p>
+<p>A recursive function to calculate the N<sup>th</sup> number of the Fibonacci sequence that is typed into Python’s interactive shell would look like this:</p>
+<pre>&gt;&gt;&gt; def getFib(n):
+
+...     if n == 1 or n == 2:
+
+...         return 1
+
+...     return getFib(n-1) + getFib(n-2)
+
+...
+
+&gt;&gt;&gt; getFib(4)
+
+3
+
+&gt;&gt;&gt; getFib(10)
+
+55
+
+&gt;&gt;&gt;</pre>
+<p>This works because to calculate getFib(5), you just add the results of getFib(4) and getFib(3) (and those in turn make more calls to getFib() until they reach the base case where getFib(1) or getFib(2) is called.) <strong>A good indicator that you can perform a task by using recursion is that the task can be divided into identical smaller sub-tasks.</strong> The Nth Fibonacci number can be calculated by calculating the N-1 and N-2 Fibonacci numbers, which themselves can be calculated by finding other Fibonacci numbers, until you reach the base case of having to calculate the 1st or 2nd Fibonacci numbers (which are both just 1.)</p>
+<p>But this is a stupid example of recursive functions. You could have easily written an <strong>iterative</strong> (that is, non-recursive) function to do the same thing:</p>
+<pre>&gt;&gt;&gt; def getFib(n):
+
+...     a = 1
+
+...     b = 1
+
+...     i = 3
+
+...     while i &lt;= n:
+
+...         c = a + b
+
+...         a = b
+
+...         b = c
+
+...         i = i + 1
+
+...     return b
+
+...
+
+&gt;&gt;&gt; getFib(10)
+
+55
+
+&gt;&gt;&gt;</pre>
+<p>The iterative function is a little bit longer, but it does the exact same thing as the recursive version and is probably easier to understand. This stupid example doesn’t show the power of recursion very well. Why learn recursion when straightforward iterative approach works just as well? Consider the flood fill problem, which does not have an obvious non-recursive solution...</p>
+<h2>Flood Filling</h2>
+<p><strong>Flood filling</strong> is when you want to change the color of an area of color in an image. It’s available in a lot of graphics programs and usually looks like a paint bucket being tilted over, like this:</p>
+<p><img src="/blogstatic/floodfill/floodicons.png" alt="" /></p>
+<p>For example, if we flood fill a circle, the change will look like this (the blue dot indicates where the flood filling starts):</p>
+<p><img class="alignnone" title=" " src="/blogstatic/floodfill/floodfill1.png" alt="" /></p>
+<p>The blue flood filling starts at that blue point (which was originally white), so it will keep spreading as long as it finds adjacent white pixels. Imagine it as blue paint pouring on that dot, and it keeps spreading until it hits any non-white colors (like the black circle). If we started the flood filling from the outside of the circle, then the entire outside area would be filled up instead:</p>
+<p><img title=" " src="/blogstatic/floodfill/floodfill3.png" alt="" /></p>
+<p>Flood filling a circle that is not completely enclosed wouldn’t work the same way. The flood filling color would “leak out” the open space in the circle and then fill up the outside space as well:</p>
+<p><img title=" " src="/blogstatic/floodfill/floodfill2.png" alt="" /></p>
+<p>The really clever thing about flood fill is that it can fill up any arbitrary enclosed shape:</p>
+<p><img title=" " src="/blogstatic/floodfill/floodfill4.png" alt="" /></p>
+<p>The image on your screen is nothing but individual squares of color called pixels. In order to change the color of the pixels, our function will have to calculate the X and Y coordinates of each pixel that needs  to be changed. It isn’t really obvious how to do that. There are so many different possible shapes, so how can we write one function that will handle all the possible shapes there are?</p>
+<p>Let’s write some code that does this. Here’s some simple pseudocode of a flood fill function:</p>
+<pre>def floodfill(x, y, oldColor, newColor):
+
+    # assume surface is a 2D image and surface[x][y] is the color at x, y.
+
+    if surface[x][y] != oldColor: # the base case
+
+        return
+
+    surface[x][y] = newColor
+
+    floodfill(x + 1, y, oldColor, newColor) # right
+
+    floodfill(x - 1, y, oldColor, newColor) # left
+
+    floodfill(x, y + 1, oldColor, newColor) # down
+
+    floodfill(x, y - 1, oldColor, newColor) # up</pre>
+<p>In this pseudocode example, surface[x][y] represents a pixel on some drawing surface (such as a window) of different pixels. You call the floodfill() function once with an X and Y coordinate, the color of the pixel you want to flood, and the new color that will flood the surface.</p>
+<p>If the X and Y coordinate on the surface matches the old color, it changes it to the new color. Not only that, but it will then call floodfill() on the pixel to its right, left, down, and up direction. It doesn’t matter what order these pixels are called, the result will always be the same. If those neighboring pixels are also the same as the old color, then the process starts all over again (just like a human turned into a zombie will begin biting all the neighboring humans). Those floodfill() calls will make other floodfill() calls, until they finally all return to the original floodfill() call, which itself returns. The surface will then have the old color flooded with the new color.</p>
+<p>Notice that our flood fill function has four recursive calls each time it is called. (Our countdown function only had one recursive call each time it was called.) This is fine. Some recursive algorithms just use different numbers of recursive function calls in their recursive functions.</p>
+<p>The base case for flood fill is when a different color (or the edge of the image) is encountered. That's when the recursive calls stop.</p>
+<h2>Text Flood Fill</h2>
+<p>Here's a Python program that implements the flood fill algorithm with a 2D text field: <a href="/blogstatic/floodfill/recursivefloodfill.py">recursivefloodfill.py</a></p>
+<p>The text field in the program (which you can change yourself to play around with) originally looks like this:</p>
+<pre>....................
+
+.......XXXXXXXXXX...
+
+.......X........X...
+
+.......X........X...
+
+..XXXXXX........X...
+
+..X.............X...
+
+..X.............X...
+
+..X........XXXXXX...
+
+..X........X........
+
+..XXXX..XXXX........
+
+.....XXXX...........
+
+....................
+
+....................</pre>
+<p>The program than starts flood filling at the coordinate (5, 8) (which is inside the outline of X's) with the + character. The floodFill() function sees that the character at (5, 8) is a period, so it will then recursive call itself on the neighboring coordinates and as long as these calls find a period at those coordinates, they will change it to a plus sign and continue to make recursive calls. The base case that stops more recursive calls is when a non-period character is found. The text field then looks like this:</p>
+<pre>....................
+
+.......XXXXXXXXXX...
+
+.......X++++++++X...
+
+.......X++++++++X...
+
+..XXXXXX++++++++X...
+
+..X+++++++++++++X...
+
+..X+++++++++++++X...
+
+..X++++++++XXXXXX...
+
+..X++++++++X........
+
+..XXXX++XXXX........
+
+.....XXXX...........
+
+....................
+
+....................</pre>
+<p>Then the floodFill() function is called again, this time on the coordinate (0, 0) (which is the top left corner of the field, and outside the X's) with the s character. The text field then looks like this:</p>
+<pre>ssssssssssssssssssss
+
+sssssssXXXXXXXXXXsss
+
+sssssssX++++++++Xsss
+
+sssssssX++++++++Xsss
+
+ssXXXXXX++++++++Xsss
+
+ssX+++++++++++++Xsss
+
+ssX+++++++++++++Xsss
+
+ssX++++++++XXXXXXsss
+
+ssX++++++++Xssssssss
+
+ssXXXX++XXXXssssssss
+
+sssssXXXXsssssssssss
+
+ssssssssssssssssssss
+
+ssssssssssssssssssss</pre>
+<p>The program that does the text flood fill can be downloaded here: <a href="/blogstatic/floodfill/recursivefloodfill.py">recursivefloodfill.py</a></p>
+<h2>Room Counting Program</h2>
+<p>This flood fill technique can be very useful for different problems. Imagine that you had some text that represented a map of different walls in a space. The #’s represent the walls. Given this as input, how can you find out how many intact rooms are in the data? For example, here's one possible map with four rooms (the wall that does not form a closed off room does not count as a room):</p>
+<pre>........................#.....
+
+........................#.....
+
+........................#.....
+
+.....######.............######
+
+.....#....#....######.........
+
+.....#....#....#....#.....#...
+
+.....######....##.###.....#...
+
+................#.#.......####
+
+................#.#...........
+
+######.....######.#######.....
+
+#....#.....#............#.....
+
+###..#.....#............#.....
+
+###..#.....##############.....
+
+#....#........................
+
+######........................</pre>
+<p>You can use flood fill to find out the answer. Just perform the flood fill algorithm on every possible empty space (in this case, the empty spaces are represented by periods). The number of rooms will be the number of times you find an empty space, minus one (since the area outside of all rooms will count as a “room”.)</p>
+<p>You can download a program that implements our room counting function here: <a href="/blogstatic/floodfill/roomcounter.py">roomcounter.py</a> You can modify the textmap variable to experiment with the function.</p>
+<pre><span class="Apple-style-span" style="font-family: Georgia, 'Times New Roman', 'Bitstream Charter', Times, serif; font-size: 13px; line-height: 19px; white-space: normal;">Flood filling the empty spaces will mark the map so that we know if we’ve already marked a room before.</span></pre>
+<h2>Sierpinski Triangles</h2>
+<p>Another example of a recursive function is a function that will draw Sierpinski triangles. A <strong>Sierpinski triangle</strong> simply is a triangle with an upside down triangle inside of it. This forms three other triangles (one on the top center, bottom left, and bottom right). It looks like the Triforce from the Legend of Zelda games.</p>
+<p>Drawing several levels of Sierpinski triangles is a recursive job. First you draw one Sierpinski triangle, and then you draw three more smaller Sierpinkski triangles, one in each of the three sub-triangles. Then you draw three more Sierpinski triangles each of the three sub-triangles in each of the three sub-triangles, and so on. Each level of drawing multiplies the total number of triangles by three. So 4 levels means 3 * 3 * 3 * 3 = 3^4 = 81 triangles. Seven levels of Sierpinski triangles would create 3^7 or 2,187 triangles. Here’s an animation of a new layer of Sierpinski triangles being drawn:</p>
+<p><img class="alignnone" src="/blogstatic/floodfill/sierpinski_animated.gif" alt="" width="320" height="240" /></p>
+<p>This animation maxes out at the 7<sup>th</sup> recursive level, since by then the sub-triangles become smaller than one pixel and can’t be drawn. (If the triangle looks a little funny, that’s because slight rounding errors happen once the triangles get so tiny.) The program that generates this animation is here: <a href="/blogstatic/floodfill/sierpinski.py">sierpinski.py</a> (this requires Pygame to be installed.)</p>
+<p>A Sierpinski triangle is known as a fractal, which are shapes that are composed of smaller, self-similar shapes. Recursion is naturally suited for making fractal pictures, which look pretty cool. There's a bunch of cool looking examples on the Wikipedia page for fractals: <a href="http://en.wikipedia.org/wiki/Fractal" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://en.wikipedia.org/wiki/Fractal', 'http://en.wikipedia.org/wiki/Fractal']);" >http://en.wikipedia.org/wiki/Fractal</a></p>
+<p>Recursion is at the base of fractals, and fractals are at the base of terrain generation algorithms. Many games don't have programmers design mountains by individually setting each polygon that makes up a mountain or hilly grassland. Instead they use a terrain generation algorithm (which is a bit too detailed to go into in this article. Check out the Wikipedia page: <a href="http://en.wikipedia.org/wiki/Fractal_landscape" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://en.wikipedia.org/wiki/Fractal_landscape', 'http://en.wikipedia.org/wiki/Fractal_landscape']);" >http://en.wikipedia.org/wiki/Fractal_landscape</a> )</p>
+<p><img class="alignnone" src="/blogstatic/floodfill/300px-Animated_fractal_mountain.gif" alt="" width="300" height="147" /></p>
+<p><span class="Apple-style-span" style="font-size: 20px; font-weight: bold;">Recursion is Just a Fancy Way of Using a Stack</span></p>
+<p>A stack is just like an array or a list, with one exception: items can only be added or removed from the very end of the stack. (Although when stacks are drawn out, people usually draw them vertically and things are only added or removed from the top of the stack. Think of a stack of plates.) It’s a very basic computer science data structure, and one that the computer actually uses at a low level. Programming languages just add a bunch of fancy features and manipulation of low level data structures (such as Python’s lists, dictionaries, or things like lists that contain lists) so that it is easier to write programs.</p>
+<p>Some detailed info about stacks can be found on the Wikipedia page: <a href="http://en.wikipedia.org/wiki/Stack_(data_structure)" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://en.wikipedia.org/wiki/Stack_(data_structure)', 'http://en.wikipedia.org/wiki/Stack_(data_structure)']);" >http://en.wikipedia.org/wiki/Stack_(data_structure)</a></p>
+<p>Think about what happens when your program calls a function. The execution jumps from the line of code that is calling the function and to the first line of code inside the function. After the function returns, the execution jumps back to the line after the calling line. If your programs calls a function named foo() which calls another function named bar(), the program’s execution will finish running bar(), jump back to the line in foo() that called bar(), finish running foo(), and then return back to the line that called foo().</p>
+<p>How does Python remember which line to jump back to when it returns from a function? It uses a stack. Look at this simple program which we described earlier:</p>
+<pre>def foo():
+
+    bar()
+
+def bar():</span>
+
+    print('Hello')
+
+foo()</pre>
+<p>This program calls foo(), which calls bar(), which then returns back to foo(), which then returns back to the line that called foo(). Every time a function is called, the line calling the function is saved to the stack. When a function returns, the item at the top of the stack is removed. Adding an item to the top of the stack is called “<strong>pushing</strong>” an item onto the stack. Removing an item from the top of the stack is called “<strong>popping</strong>” an item off the stack. If we drew out the “stack”, it would look like this:</p>
+<p><img class="alignnone" src="/blogstatic/floodfill/callstack.png" alt="" width="830" height="216" /></p>
+<p>If you called a function that called a function that called a function that called a function, this is how Python keeps track of where to return to whenever a function returns. This stack is called the “<strong>call stack</strong>”. (It’s also sometimes called an execution stack or run-time stack.) The Wikipedia page for call stacks is here: <a href="http://en.wikipedia.org/wiki/Call_stack" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://en.wikipedia.org/wiki/Call_stack', 'http://en.wikipedia.org/wiki/Call_stack']);" >http://en.wikipedia.org/wiki/Call_stack</a></p>
+<p>The call stack is stored in the computer’s memory. It cannot become infinitely large because no computer has an infinite amount of memory. So when a recursive function has a bug and never reaches a base case, eventually the computer runs out of memory and crashes the program. This is called a “<strong>stack overflow</strong>”. In Python, a stack overflow error looks like this: “RuntimeError: maximum recursion depth exceeded”</p>
+<p>Hey, instead of implicitly using the call stack when we have recursive functions, why don’t we just use our own stack structure instead? Then we could implement the flood fill algorithm without this complicated recursion stuff. (This is generally a bad idea. Recursion is really useful once you get used to them, and much easier than making your own data structure. But this example here is just to show how recursion is really just a nifty use of a stack data structure.)</p>
+<p>Here’s an example. Notice the addition of a list (which we use as a stack) and the lack of recursive function calls (i.e. the floodfill() function never calls floodfill()):</p>
+<pre>def floodfill(x, y, oldColor, newColor):
+
+    # assume surface is a 2D image and surface[x][y] is the color at x, y.
+
+    theStack = [ (x, y) ]
+
+    while len(theStack) &gt; 0:
+
+        x, y = theStack.pop()
+
+        if surface[x][y] != oldColor:
+
+            continue
+
+        surface[x][y] = newColor
+
+        theStack.append( (x + 1, y) )  # right
+
+        theStack.append( (x - 1, y) )  # left
+
+        theStack.append( (x, y + 1) )  # down
+
+        theStack.append( (x, y - 1) )  # up</pre>
+<p>This function does the same thing that the recursive version of floodfill() does, but with a stack instead of recursion. This is possible because recursion is really just using a stack itself (i.e. the call stack). But just as learning how to make programs with functions makes your programs easier to write (and if it was written by someone else, easier to read), once you master recursion, it is a very simple way to write programs that do complex tasks.</p>
+<p>You can email Al any questions you have at <a href="/cdn-cgi/l/email-protection#a5c4c9e5cccbd3c0cbd1d2ccd1cdd5dcd1cdcacb8bc6cac8" onclick="_gaq.push(['_trackEvent','mailto','al@inventwithpython.com']);"><span class="__cf_email__" data-cfemail="85e4e9c5ecebf3e0ebf1f2ecf1edf5fcf1edeaebabe6eae8">[email&#160;protected]</span><script data-cfhash='f9e31' type="text/javascript">/* <![CDATA[ */!function(t,e,r,n,c,a,p){try{t=document.currentScript||function(){for(t=document.getElementsByTagName('script'),e=t.length;e--;)if(t[e].getAttribute('data-cfhash'))return t[e]}();if(t&&(c=t.previousSibling)){p=t.parentNode;if(a=c.getAttribute('data-cfemail')){for(e='',r='0x'+a.substr(0,2)|0,n=2;a.length-n;n+=2)e+='%'+('0'+('0x'+a.substr(n,2)^r).toString(16)).slice(-2);p.replaceChild(document.createTextNode(decodeURIComponent(e)),c)}p.removeChild(t)}}catch(u){}}()/* ]]> */</script></a></p>
+
+
+    </body>
+</html>

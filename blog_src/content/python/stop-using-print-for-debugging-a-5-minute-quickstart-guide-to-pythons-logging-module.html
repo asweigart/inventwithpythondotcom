@@ -1,0 +1,76 @@
+<html>
+    <head>
+        <title>Stop Using "print" for Debugging: A 5 Minute Quickstart Guide to Python’s logging Module</title>
+        <meta name="tags" content="" />
+        <meta name="date" content="2012-04-06 12:00" />
+        <meta name="summary" content="" />
+    </head>
+    <body>
+
+
+			<ul>
+<li>This tutorial is short.</li>
+<li>To figure out bugs in your code, you might put in <code>print</code> statements/<code>print()</code> calls to display the value of variables.</li>
+<li>Don’t do this. Use the Python <code>logging</code> module.</li>
+</ul>
+<p>The <code>logging</code> is better than printing because:</p>
+<ul>
+<li>It's easy to put a timestamp in each message, which is very handy.</li>
+<li>You can have different levels of urgency for messages, and filter out less urgent messages.</li>
+<li>When you want to later find/remove log messages, you won't get them confused for real <code>print()</code> calls.</li>
+<li>If you just print to a log file, it's easy to leave the log function calls in and just ignore them when you don't need them. (You don't have to constantly pull out print() calls.)</li>
+</ul>
+<p>Using print is for coders with too much time on their hands. Use logging instead. Also, learn to use <a href="http://mihirknows.blogspot.com/2007/10/debugging-with-python-pdb-quick-and.html" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://mihirknows.blogspot.com/2007/10/debugging-with-python-pdb-quick-and.html', 'the Python debugger']);" >the Python debugger</a> to debug bugs and <a href="http://www.logilab.org/857" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.logilab.org/857', 'Pylint']);" >Pylint</a> to prevent bugs and make your code readable.</p>
+<p>To <strong>print log messages to the screen</strong>, copy and paste this code:</p>
+<blockquote><p><code>import logging<br />
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')<br />
+logging.debug('This is a log message.')</code></p></blockquote>
+<p>To <strong>write log messages to a file</strong>, you can copy and paste this code (the only difference is <strong>in bold</strong>):</p>
+<blockquote><p><code>import logging<br />
+logging.basicConfig(<strong>filename='log_filename.txt', </strong>level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')<br />
+logging.debug('This is a log message.')</code></p></blockquote>
+<p>Later runs of the program will append to the end of the log file, rather than overwrite the file.</p>
+<p>To log messages to a file <strong>AND</strong> printed to the screen, copy and paste the following:<br />
+<span id="more-675"></span></p>
+<blockquote><p><code>import logging<br />
+logger = logging.getLogger()<br />
+logger.setLevel(logging.DEBUG)</p>
+<p>formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')</p>
+<p>fh = logging.FileHandler('log_filename.txt')<br />
+fh.setLevel(logging.DEBUG)<br />
+fh.setFormatter(formatter)<br />
+logger.addHandler(fh)</p>
+<p>ch = logging.StreamHandler()<br />
+ch.setLevel(logging.DEBUG)<br />
+ch.setFormatter(formatter)<br />
+logger.addHandler(ch)</p>
+<p>logger.debug('This is a test log message.')</code></p></blockquote>
+<p>Make sure that the <code>logger</code> variable is global, so that you can use it in functions. (You don't need the "<code>global logger</code>" at the top of the function, because the <code>logger</code> variable is only read, not modified.)</p>
+<hr />
+<p>The different levels of logging, from highest urgency to lowest urgency, are:</p>
+<ol>
+<li>CRITICAL</li>
+<li>ERROR</li>
+<li>WARNING</li>
+<li>INFO</li>
+<li>DEBUG</li>
+</ol>
+<p>The <code>setLevel()</code> call sets the minimum log level of messages it actually logs. So if you <code>fh.setLevel(logging.ERROR)</code>, then WARNING, INFO, and DEBUG log messages will not be written to the log file (since <code>fh</code> is the log handler for the log file, as opposed to <code>ch</code> which is the handler for the console screen.)</p>
+<p>To write a log message in one of these five levels, use the following functions:</p>
+<ol>
+<li><code>logger.critical('This is a critical message.')</code></li>
+<li><code>logger.error('This is an error message.')</code></li>
+<li><code>logger.warning('This is a warning message.')</code></li>
+<li><code>logger.info('This is an informative message.')</code></li>
+<li><code>logger.debug('This is a low-level debug message.')</code></li>
+</ol>
+<p>There's plenty more you can do, but this all you need to know to never again use <code>print()</code> calls to do your debugging work.</p>
+<p>The <a href="http://docs.python.org/library/logging.html" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://docs.python.org/library/logging.html', 'Python documentation']);" >Python documentation</a> has more info, including a <a href="http://docs.python.org/howto/logging.html#logging-basic-tutorial" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://docs.python.org/howto/logging.html#logging-basic-tutorial', 'Basic Tutorial']);" >Basic Tutorial</a>, an <a href="http://docs.python.org/howto/logging.html#logging-advanced-tutorial" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://docs.python.org/howto/logging.html#logging-advanced-tutorial', 'Advanced Tutorial']);" >Advanced Tutorial</a>, and a <a href="http://docs.python.org/howto/logging-cookbook.html#logging-cookbook" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://docs.python.org/howto/logging-cookbook.html#logging-cookbook', 'Logging Cookbook']);" >Logging Cookbook</a>.</p>
+<p>Also, the <a href="http://docs.python.org/library/pprint.html#pprint.pprint" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://docs.python.org/library/pprint.html#pprint.pprint', 'pprint.pprint() function']);" >pprint.pprint() function</a> is great for "pretty printing" dictionaries and lists that have nested dictionaries and lists in them. The <a href="http://docs.python.org/library/pprint.html#pprint.pformat" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://docs.python.org/library/pprint.html#pprint.pformat', 'pprint.pformat() function']);" >pprint.pformat() function</a> returns the string of this content, rather than printing it to the screen.</p>
+<hr />
+<p>One final tip: You can use the <code>tail -f logfile.txt</code> command to show a file as it is being written to. The -f stands for "follow". Just leave a terminal/console window open with this command running, and new text in the log file will appear as it is written. This way, you don't have to keep opening/reloading a text editor to view the latest text in the log file.</p>
+<p>The tail command comes on Mac OS X and Linux OSes. On Windows, you can download the <a href="http://www.cygwin.com/install.html" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.cygwin.com/install.html', 'Cygwin project']);" >Cygwin project</a> to get the tail command.</p>
+					
+
+    </body>
+</html>
