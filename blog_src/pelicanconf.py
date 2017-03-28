@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 AUTHOR = 'Al Sweigart'
 SITENAME = 'The Invent with Python Blog'
-SITEURL = 'http://localhost:8000/blog'
+#SITEURL = 'http://localhost:8000/blog'
 SITEURL = 'https://inventwithpython.com/blog'
 
 PATH = 'content'
@@ -44,6 +44,6 @@ FILENAME_METADATA = '(?P<slug>.*?)\.html'
 SKIP_COLOPHON = True
 
 
-OUTPUT_PATH = 'blog'
+OUTPUT_PATH = '../static/blog'
 DISQUS_SITENAME = 'inventwithpython'
 GOOGLE_ANALYTICS = 'UA-5459430-3'

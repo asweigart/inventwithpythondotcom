@@ -1,0 +1,156 @@
+    <head>
+        <title>How to Install Django 1.10.6 and Python 3.6.0 on Dreamhost Shared Hosting</title>
+        <meta name="tags" content="django" />
+        <meta name="date" content="2017-03-14 12:00" />
+        <meta name="summary" content="" />
+    </head>
+    <body>
+
+
+<p><a href="https://www.djangoproject.com/">Django</a> is a web app framework for <a href="https://python.org">Python</a> (similar to Rails for Ruby). It implements common web app features so you don't have to write that code. <a href="https://www.dreamhost.com/">Dreamhost</a> is a web host that offers cheap but reliable web servers. Their <a href="https://www.dreamhost.com/hosting/shared/">shared hosting plan</a> is $11 a month, and provides more than enough disk space and bandwidth for personal sites.</p>
+
+<p>(If you'd like to help Invent with Python, <a href="https://www.dreamhost.com/r.cgi?239190">use this link to sign up for Dreamhost</a>.)</p>
+
+<p>I wanted to create a Django web app for my <a href="https://turtleappstore.com">https://turtleappstore.com</a> site to let others share Minecraft code projects for ComputerCraft. The process took some time to figure out, so I documented it here. Note that this tutorial is specific to Dreamhost, Django 1.10.6, and Python 3.6. The steps may vary if you use different versions or web hosts.</p>
+
+<h2>Setup</h2>
+
+<p>After you have purchased a shared hosting plan from Dreamhost, go to <a href="https://panel.dreamhost.com/">https://panel.dreamhost.com/</a> and log into your Dreamhost account. This tutorial assumes you have also registered for a domain name. From the sidebar, click Domains > Manage Domains, then click the Edit link next to the domain name you want to host the Django app. In this tutorial, I will be using <strong>example.turtleappstore.com</strong> for the domain name. Replace this with your domain name in any commands in this tutorial.</p>
+
+<p>You will see the configuration details for this domain name. Make sure that the <strong>Passenger (Ruby/NodeJS/Python apps only)</strong> checkbox is checked. This will also make the web directory end with <code>public</code>, such as <code>/home/username/example.turtleappstore.com/public</code>. The page will look like this:<br /><img src="/blogstatic/djangdreamhost/enable_passenger.png" /></p>
+
+<p>Aside: If you have multiple domain names with Dreamhost, I recommend creating a separate user for each one. (From the sidebar, click Users > Manage Users.) If the account or site is hacked, it will only affect that single domain instead of possibly all of your domains.</p>
+
+<p>The user account that manages this domain name must have "shell access". From the sidebar, click Users > Manage Users, then click the Edit link next to the user. Next to <strong>User Type</strong>, select "Shell user". This will allow you to SSH into the shared hosting server that the web server is running on.</p>
+
+<img src="/blogstatic/djangdreamhost/shell_user.png" /></p>
+
+<h2>SSH into the Server</h2>
+
+<p>Using an SSH program (such as <a href="http://www.putty.org/">Putty</a> on Windows, or the SSH program on Mac/Linux). Connect to your server (in my case, <code>example.turtleappstore.com</code>) using your shell user's username and password (not the Dreamhost username/password you used for <a href="https://panel.dreamhost.com/">https://panel.dreamhost.com/</a>.)</p>
+
+<h2>Download and Install Python 3.6.0</h2>
+
+<p>Enter the following commands (not the <code>[server]$</code> part, that's the shell prompt):</p>
+
+<pre>[server]$ cd ~
+[server]$ cd example.turtleappstore.com/
+[server]$ mkdir tmp
+[server]$ cd tmp
+[server]$ wget https://www.python.org/ftp/python/3.6.0/Python-3.6.0.tgz
+[server]$ tar zxvf Python-3.6.0.tgz
+[server]$ cd Python-3.6.0
+[server]$ ./configure --prefix=$HOME/opt/python-3.6.0
+[server]$ make
+[server]$ make install</pre>
+
+<p>Some of these commands will take a few minutes to run and output a lot of text. You shouldn't encounter any error messages, but if you do you'll need to figure out what is causing them. Try googling the error message to see if others have encountered it and described the solution.</p>
+
+<p>Next, add <code>export PATH=$HOME/opt/python-3.6.0/bin:$PATH</code> to the bottom of your <code>~/.bashrc</code> and <code>~/.bash_profile</code> files so that when your web server runs Python, it runs the Python 3.6.0 program you just installed and not Dreamhost's default Python (which is 2.7, as of 2017/03/14). Use a text editor such as <a href="http://www.openvim.com/">vi or vim</a> to do this.</p>
+
+<p>Then run the following to set the system path in your current SSH session (or logout and log back in):</p>
+
+<pre>[server]$ source ~/.bash_profile</pre>
+
+<p>Confirm that <code>python3</code> and <code>pip3</code> will use the Python you just installed by running the following and checking their output:</p>
+
+<pre>[server]$ which python3
+/home/your_username/opt/python-3.6.0/bin/python3
+[server]$ which pip3
+/home/your_username/opt/python-3.6.0/bin/pip3</pre>
+
+<p>With Python installed, you can now delete the temporary install files by running the following:</p>
+
+<pre>[server]]$ rm ~/example.turtleappstore.com/tmp/* -rf</pre>
+
+<h2>Download and Install Virtualenv</h2>
+
+<p><a href="http://docs.python-guide.org/en/latest/dev/virtualenvs/">Virtualenv</a> is a tool to keep installed modules separate for separate projects. This way, if you are working on one Python project that requires Django 1.10.6 and another that requires Django 1.3, you won't be constantly installing and uninstalling Django modules as you work on them. Virtual environments are a good idea to have.</p>
+
+<p>Run the following to install the virtualenv Python module:</p>
+
+<pre>[server]$ pip3 install virtualenv</pre>
+
+<p>Confirm that virtualenv was installed by running the following and checking the output:</p>
+
+<pre>[server]$ which virtualenv
+/home/dh_uz3hk6/opt/python-3.6.0/bin/virtualenv</pre>
+
+<p>According to the <a href="https://docs.python.org/3/library/venv.html">venv documentation</a>, in Python 3.6 you don't use <code>virtualenv</code> or <code>pyenv</code> but instead <code>python 3 -m venv</code> to prevent confusion as to which Python interpreter the virtual environment will be based on.</p>
+
+<p>Next, create a virtual environment for your project. I'll call mine <code>tas_venv</code>:</p>
+
+<pre>[server]$ python3 -m venv ~/tas_venv</pre>
+
+
+<p>From now on, before you install/unintall Python modules or run any Django scripts such as manage.py, you will need to make sure the virtual environment for your web app project is activated. Run the following:</p>
+
+<pre>[server]$ source ~/tas_venv/bin/activate
+(tas_venv) [server]$</pre>
+
+<p>You'll see the <code>(tas_venv)</code> prompt come up. To exit the virtual environment, just run <code>deactivate</code>.</p>
+
+
+<h2>Download and Install Django</h2>
+
+<p>With the <code>tas_venv</code> (or whatever you named it) virtual environment set up, install Django by running this:</p>
+
+<pre>(tas_venv) [server]$ pip3 install django==1.10.6</pre>
+
+<p>You can verify Django installed properly from the Python interactive shell:</p>
+
+<pre>(tas_venv) [server]$ python3
+Python 3.6.0 (default, Mar 14 2017, 18:13:54)
+[GCC 4.6.3] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import django
+>>> django.VERSION
+(1, 10, 6, 'final', 0)</pre>
+
+<p>Create the Django project for your site. I'm going to name mine tasproject:</p>
+
+<pre>(tas_venv) [server]$ cd ~/example.turtleappstore.com/
+(tas_venv) [server]$ python3 ~/tas_venv/bin/django-admin.py startproject tasproject</pre>
+
+<h2>Setup Passenger & Django</h2>
+
+<p>To finish setting up your site, create a file passenger_wsgi.py in the root of your website directory using a text editor. Add the following to it:</p>
+
+<pre>import sys, os
+cwd = os.getcwd()
+sys.path.append(cwd)
+sys.path.append(cwd + '/my_project')
+
+INTERP = os.path.expanduser("~/tas_venv/bin/python3")
+
+if sys.executable != INTERP: os.execl(INTERP, INTERP, *sys.argv)
+
+sys.path.insert(0,'$HOME/tas_venv/bin')
+sys.path.insert(0,'$HOME/tas_venv/lib/python3.6/site-packages/django')
+sys.path.insert(0,'$HOME/tas_venv/lib/python3.6/site-packages')
+
+os.environ['DJANGO_SETTINGS_MODULE'] = "tasproject.settings"
+from django.core.wsgi import get_wsgi_application
+application = get_wsgi_application()</pre>
+
+<p>(tas_venv is the name of the virtual environment, while tasproject is the name of the Django project.)</p>
+
+<p>Also add the following line to the ~/example.turtleappstore.com/tasproject/tasproject/settings.py file:</p>
+
+<pre>STATIC_ROOT = os.path.dirname(BASE_DIR) + '/static/'</pre>
+
+<p>(I'm not sure if this is true, but: Note that because Passenger causes Django to handle all web server requests, the <code>public</code> folder is not used for anything. Place images and other static files in the STATIC_ROOT folder.)</p>
+
+<p>Find the <code>ALLOWED_HOSTS = []</code> line and change it to this:</p>
+
+<pre>ALLOWED_HOSTS = ['example.turtleappstore.com']</pre>
+
+<p>Finally, create a restart.txt file to cause Passenger to reload your passenger_wsgi.py script:</p>
+
+<pre>[server]$ touch ~/example.turtleappstore.com/tmp/restart.txt</pre>
+
+<p>At this point, you should be able to open example.turtleappstore.com in a web browser and see Django's default "It worked!" page. Whenever you make a change, you need to re-touch the restart.txt file for Passenger to pick up the changes. Note that Passenger will handle <em>all</em> requests made to the example.turtleappstore.com. You can now start creating apps and working on your Django project as you normally would.</p>
+
+
+
+    </body>
