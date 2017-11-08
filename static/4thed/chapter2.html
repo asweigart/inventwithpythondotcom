@@ -1,0 +1,136 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Chapter 2: Writing Programs</title></head><body>
+<script type="text/javascript">
+//<![CDATA[
+
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5459430-3']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
+//]]>
+</script>
+
+
+<a href="chapter1.html">Prev: Chapter 1: The Interactive Shell</a> | <a href="chapter3.html">Next: Chapter 3: Guess the Number</a>
+
+
+<div id="calibre_link-30" class="calibre">
+<h2 class="h1" id="calibre_link-6"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-854" class="calibre1"></span><span class="big"><strong class="calibre2">2</strong></span><br class="calibre9" /><strong class="calibre2">WRITING PROGRAMS</strong></h2>
+<div class="imagec"><img src="images/00016.jpeg" alt="image" class="calibre3" /></div>
+<p class="noindent">Now let’s see what Python can do with text. Almost all programs display text to the user, and the user enters text into programs through the keyboard. In this chapter, you’ll make your first program, which does both of these things. You’ll learn how to store text in variables, combine text, and display text on the screen. The program you’ll create displays the greeting <span class="literal1">Hello world!</span> and asks for the user’s name.</p>
+<div class="sidebar">
+<p class="sidebart"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-345" class="calibre1"></span><strong class="calibre2">TOPICS COVERED IN THIS CHAPTER</strong></p>
+<p class="bull">• Strings</p>
+<p class="bull">• String concatenation</p>
+<p class="bull">• Data types (such as strings or integers)</p>
+<p class="bull">• Using the file editor to write programs</p>
+<p class="bull">• Saving and running programs in IDLE</p>
+<p class="bull">• Flow of execution</p>
+<p class="bull">• Comments</p>
+<p class="bull">• The <span class="literal1">print()</span> function</p>
+<p class="bull">• The <span class="literal1">input()</span> function</p>
+<p class="bull">• Case sensitivity</p>
+</div>
+<h3 class="h2" id="calibre_link-418"><strong class="calibre2">String Values</strong></h3>
+<p class="noindent">In Python, text values are called <em class="calibre6">strings</em>. String values can be used just like integer or float values. You can store strings in variables. In code, string values start and end with a single quote, <span class="literal1">'</span>. Enter this code into the interactive shell:</p>
+<p class="programs">&gt;&gt;&gt; <span class="codestrong">spam = 'hello'</span></p>
+<p class="indent">The single quotes tell Python where the string begins and ends. They are not part of the string value’s text. Now if you enter <span class="literal1">spam</span> into the interactive shell, you’ll see the contents of the <span class="literal1">spam</span> variable. Remember, Python evaluates variables as the value stored inside the variable. In this case, this is the string <span class="literal1">'hello'</span>.</p>
+<p class="programs">&gt;&gt;&gt; <span class="codestrong">spam = 'hello'</span><br class="calibre7" />&gt;&gt;&gt; <span class="codestrong">spam</span><br class="calibre7" />'hello'</p>
+<p class="indent">Strings can have any keyboard character in them and can be as long as you want. These are all examples of strings:</p>
+<p class="programs">'hello'<br class="calibre7" />'Hi there!'<br class="calibre7" />'KITTENS'<br class="calibre7" />'7 apples, 14 oranges, 3 lemons'<br class="calibre7" />'Anything not pertaining to elephants is irrelephant.'<br class="calibre7" />'A long time ago, in a galaxy far, far away...'<br class="calibre7" />'O*&amp;#wY%*&amp;OCfsdYO*&amp;gfC%YO*&amp;%3yc8r2'</p>
+<h3 class="h2" id="calibre_link-419"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-151" class="calibre1"></span><strong class="calibre2">String Concatenation</strong></h3>
+<p class="noindent">You can combine string values with operators to make expressions, just as you did with integer and float values. When you combine two strings with the <span class="literal1">+</span> operator, it’s called <em class="calibre6">string concatenation</em>. Enter <span class="literal1">'Hello' + 'World!'</span> into the interactive shell:</p>
+<p class="programs">&gt;&gt;&gt; <span class="codestrong">'Hello' + 'World!'</span><br class="calibre7" />'HelloWorld!'</p>
+<p class="indent">The expression evaluates to a single string value, <span class="literal1">'HelloWorld!'</span>. There is no space between the words because there was no space in either of the two concatenated strings, unlike in this example:</p>
+<p class="programs">&gt;&gt;&gt; <span class="codestrong">'Hello ' + 'World!'</span><br class="calibre7" />'Hello World!'</p>
+<p class="indent">The <span class="literal1">+</span> operator works differently on string and integer values because they are different <em class="calibre6">data types</em>. All values have a data type. The data type of the value <span class="literal1">'Hello'</span> is a string. The data type of the value <span class="literal1">5</span> is an integer. The data type tells Python what operators should do when evaluating expressions. The <span class="literal1">+</span> operator concatenates string values, but adds integer and float values.</p>
+<h3 class="h2" id="calibre_link-420"><strong class="calibre2">Writing Programs in IDLE’s File Editor</strong></h3>
+<p class="noindent">Until now, you’ve been typing instructions into IDLE’s interactive shell one at a time. When you write programs, though, you enter several instructions and have them run all at once, and this is what you’ll do next. It’s time to write your first program!</p>
+<p class="indent">In addition to the interpreter, IDLE has another part called the <em class="calibre6">file editor</em>. To open it, click the <strong class="calibre5">File</strong> menu at the top of the interactive shell. Then select <strong class="calibre5">New Window</strong> if you are using Windows or <strong class="calibre5">New File</strong> if you are using OS X. A blank window will appear for you to type your program’s code into, as shown in <a href="#calibre_link-31" class="calibre4">Figure 2-1</a>.</p>
+<div class="image"><img src="images/00035.jpeg" alt="image" class="calibre3" /></div>
+<p class="figcap"><a id="calibre_link-31" class="calibre4"></a><em class="calibre6">Figure 2-1: The file editor (left) and the interactive shell (right)</em></p>
+<p class="indent"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-168"></span>The two windows look similar, but just remember this: the interactive shell will have the <span class="literal1">&gt;&gt;&gt;</span> prompt, while the file editor will not.</p>
+<h4 class="h3" id="calibre_link-421"><em class="calibre10"><strong class="calibre2">Creating the Hello World Program</strong></em></h4>
+<p class="noindenta">It’s traditional for programmers to make their first program display <span class="literal1">Hello world!</span> on the screen. You’ll create your own Hello World program now.</p>
+<div class="image"><img src="images/00038.jpeg" alt="image" class="calibre3" /></div>
+<p class="indent">When you enter your program, remember not to enter the numbers at the beginning of each code line. They’re there so this book can refer to the code by line number. The bottom-right corner of the file editor will tell you where the blinking cursor is so you can check which line of code you are on. <a href="#calibre_link-32" class="calibre4">Figure 2-2</a> shows that the cursor is on line 1 (going up and down the editor) and column 0 (going left and right).</p>
+<div class="image"><img src="images/00039.jpeg" alt="image" class="calibre3" /></div>
+<p class="figcap"><a id="calibre_link-32" class="calibre4"></a><em class="calibre6">Figure 2-2: The bottom-right of the file editor tells you what line the cursor is on.</em></p>
+<p class="indent">Enter the following text into the new file editor window. This is the program’s <em class="calibre6">source code</em>. It contains the instructions Python will follow when the program is run.</p>
+<p class="sidenote"><em class="calibre6">hello.py</em></p>
+<p class="programs">1. # This program says hello and asks for my name.<br class="calibre7" />2. print('Hello world!')<br class="calibre7" />3. print('What is your name?')<br class="calibre7" />4. myName = input()<br class="calibre7" />5. print('It is good to meet you, ' + myName)</p>
+<p class="indent">IDLE will write different types of instructions with different colors. After you’re done typing the code, the window should look like <a href="#calibre_link-33" class="calibre4">Figure 2-3</a>.</p>
+<div class="image"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-336"></span><img src="images/00041.jpeg" alt="image" class="calibre3" /></div>
+<p class="figcap"><a id="calibre_link-33" class="calibre4"></a><em class="calibre6">Figure 2-3: The file editor will look like this after you enter your code.</em></p>
+<p class="indent">Check to make sure your IDLE window looks the same.</p>
+<h4 class="h3" id="calibre_link-422"><em class="calibre10"><strong class="calibre2">Saving Your Program</strong></em></h4>
+<p class="noindenta">Once you’ve entered your source code, save it by clicking <strong class="calibre5">File</strong> <img src="images/00042.jpeg" alt="image" class="calibre3" /> <strong class="calibre5">Save As</strong>. Or press <small class="calibre11">CTRL</small>-S to save with a keyboard shortcut. <a href="#calibre_link-34" class="calibre4">Figure 2-4</a> shows the Save As window that will open. Enter <em class="calibre6">hello.py</em> in the File name text field and then click <strong class="calibre5">Save</strong>.</p>
+<div class="image"><img src="images/00043.jpeg" alt="image" class="calibre3" /></div>
+<p class="figcap"><a id="calibre_link-34" class="calibre4"></a><em class="calibre6">Figure 2-4: Saving the program</em></p>
+<p class="indent">You should save your programs often while you write them. That way, if the computer crashes or you accidentally exit from IDLE, you won’t lose much work.</p>
+<p class="indent">To load your previously saved program, click <strong class="calibre5">File</strong> <img src="images/00042.jpeg" alt="image" class="calibre3" /> <strong class="calibre5">Open</strong>. Select the <em class="calibre6">hello.py</em> file in the window that appears and click the <strong class="calibre5">Open</strong> button. Your saved <em class="calibre6">hello.py</em> program will open in the file editor.</p>
+<h4 class="h3" id="calibre_link-423"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-274" class="calibre1"></span><em class="calibre10"><strong class="calibre2">Running Your Program</strong></em></h4>
+<p class="noindenta">Now it’s time to run the program. Click <strong class="calibre5">File</strong> <img src="images/00042.jpeg" alt="image" class="calibre3" /> <strong class="calibre5">Run Module</strong>. Or just press F5 from the file editor (<small class="calibre11">FN</small>-5 on OS X). Your program will run in the interactive shell.</p>
+<p class="indent">Enter your name when the program asks for it. This will look like <a href="#calibre_link-35" class="calibre4">Figure 2-5</a>.</p>
+<div class="image"><img src="images/00045.jpeg" alt="image" class="calibre3" /></div>
+<p class="figcap"><a id="calibre_link-35" class="calibre4"></a><em class="calibre6">Figure 2-5: The interactive shell after you run</em> hello.py</p>
+<p class="indent">When you type your name and press <small class="calibre11">ENTER</small>, the program will greet you by name. Congratulations! You have written your first program and are now a computer programmer. Press F5 again to run the program a second time and enter another name.</p>
+<p class="indent">If you got an error, compare your code to this book’s code with the online diff tool at <em class="calibre6"><a href="https://www.nostarch.com/inventwithpython#diff" class="calibre4">https://www.nostarch.com/inventwithpython#diff</a></em>. Copy and paste your code from the file editor into the web page and click the <strong class="calibre5">Compare</strong> button. This tool will highlight any differences between your code and the code in this book, as shown in <a href="#calibre_link-36" class="calibre4">Figure 2-6</a>.</p>
+<p class="indent">While coding, if you get a <span class="literal1">NameError</span> that looks like the following, that means you are using Python 2 instead of Python 3.</p>
+<p class="programs">Hello world!<br class="calibre7" />What is your name?<br class="calibre7" /><span class="codestrong">Albert</span><br class="calibre7" />Traceback (most recent call last):<br class="calibre7" />&nbsp;&nbsp;File "C:/Python26/test1.py", line 4, in &lt;module&gt;<br class="calibre7" />&nbsp;&nbsp;&nbsp;&nbsp;myName = input()<br class="calibre7" />&nbsp;&nbsp;File "&lt;string&gt;", line 1, in &lt;module&gt;<br class="calibre7" />NameError: name 'Albert' is not defined</p>
+<p class="indent">To fix the problem, install Python 3.4 and rerun the program. (See “<a href="#calibre_link-37" class="calibre4">Downloading and Installing Python</a>” on <a href="#calibre_link-38" class="calibre4">page xxv</a>.)</p>
+<div class="image"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-254"></span><img src="images/00048.jpeg" alt="image" class="calibre3" /></div>
+<p class="figcap"><a id="calibre_link-36" class="calibre4"></a><em class="calibre6">Figure 2-6: Using the diff tool at</em> <a href="https://www.nostarch.com/inventwithpython#diff" class="calibre4">https://www.nostarch.com/inventwithpython#diff</a></p>
+<h3 class="h2" id="calibre_link-424"><strong class="calibre2">How the Hello World Program Works</strong></h3>
+<p class="noindent">Each line of code is an instruction interpreted by Python. These instructions make up the program. A computer program’s instructions are like the steps in a recipe. Python completes each instruction in order, beginning from the top of the program and moving downward.</p>
+<p class="indent">The step where Python is currently working in the program is called the <em class="calibre6">execution</em>. When the program starts, the execution is at the first instruction. After executing the instruction, Python moves down to the next instruction.</p>
+<p class="indent">Let’s look at each line of code to see what it’s doing. We’ll begin with line number 1.</p>
+<h4 class="h3" id="calibre_link-425"><em class="calibre10"><strong class="calibre2">Comments for the Programmer</strong></em></h4>
+<p class="noindenta">The first line of the Hello World program is a <em class="calibre6">comment</em>:</p>
+<p class="programs">1. # This program says hello and asks for my name.</p>
+<p class="indent"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-165"></span>Any text following a hash mark (<span class="literal1">#</span>) is a comment. Comments are the programmer’s notes about what the code does; they are not written for Python but for you, the programmer. Python ignores comments when it runs a program. Programmers usually put a comment at the top of their code to give their program a title. The comment in the Hello World program tells you that the program says hello and asks for your name.</p>
+<h4 class="h3" id="calibre_link-426"><em class="calibre10"><strong class="calibre2">Functions: Mini-Programs Inside Programs</strong></em></h4>
+<p class="noindenta">A <em class="calibre6">function</em> is kind of like a mini-program inside your program that contains several instructions for Python to execute. The great thing about functions is that you only need to know what they do, not how they do it. Python provides some built-in functions already. We use <span class="literal1">print()</span> and <span class="literal1">input()</span> in the Hello World program.</p>
+<p class="indent">A <em class="calibre6">function call</em> is an instruction that tells Python to run the code inside a function. For example, your program calls the <span class="literal1">print()</span> function to display a string on the screen. The <span class="literal1">print()</span> function takes the string you type between the parentheses as input and displays that text on the screen.</p>
+<h5 class="h4" id="calibre_link-855"><strong class="calibre2">The print() Function</strong></h5>
+<p class="noindent">Lines 2 and 3 of the Hello World program are calls to <span class="literal1">print()</span>:</p>
+<p class="programs">2. print('Hello world!')<br class="calibre7" />3. print('What is your name?')</p>
+<p class="indent">A value between the parentheses in a function call is an <em class="calibre6">argument</em>. The argument on line 2’s <span class="literal1">print()</span> function call is <span class="literal1">'Hello world!'</span>, and the argument on line 3’s <span class="literal1">print()</span> function call is <span class="literal1">'What is your name?'</span>. This is called <em class="calibre6">passing</em> the argument to the function.</p>
+<h5 class="h4" id="calibre_link-856"><strong class="calibre2">The input() Function</strong></h5>
+<p class="noindent">Line 4 is an assignment statement with a variable, <span class="literal1">myName</span>, and a function call, <span class="literal1">input()</span>:</p>
+<p class="programs">4. myName = input()</p>
+<p class="indent">When <span class="literal1">input()</span> is called, the program waits for the user to enter text. The text string that the user enters becomes the value that the function call evaluates to. Function calls can be used in expressions anywhere a value can be used.</p>
+<p class="indent">The value that the function call evaluates to is called the <em class="calibre6">return value</em>. (In fact, “the value a function call returns” means the same thing as “the value a function call evaluates to.”) In this case, the return value of the <span class="literal1">input()</span> function is the string that the user entered: their name. If the user <span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-293"></span>enters <span class="literal1">Albert</span>, the <span class="literal1">input()</span> function call evaluates to the string <span class="literal1">'Albert'</span>. The evaluation looks like this:</p>
+<div class="image"><img src="images/00049.jpeg" alt="image" class="calibre3" /></div>
+<p class="indent">This is how the string value <span class="literal1">'Albert'</span> gets stored in the <span class="literal1">myName</span> variable.</p>
+<h5 class="h4" id="calibre_link-857"><strong class="calibre2">Expressions in Function Calls</strong></h5>
+<p class="noindent">The last line in the Hello World program is another <span class="literal1">print()</span> function call:</p>
+<p class="programs">5. print('It is good to meet you, ' + myName)</p>
+<p class="indent">The expression <span class="literal1">'It is good to meet you, ' + myName</span> is between the parentheses of <span class="literal1">print()</span>. Because arguments are always single values, Python will first evaluate this expression and then pass that value as the argument. If <span class="literal1">'Albert'</span> is stored in <span class="literal1">myName</span>, the evaluation looks like this:</p>
+<div class="image"><img src="images/00051.jpeg" alt="image" class="calibre3" /></div>
+<p class="indent">This is how the program greets the user by name.</p>
+<h4 class="h3" id="calibre_link-427"><em class="calibre10"><strong class="calibre2">The End of the Program</strong></em></h4>
+<p class="noindenta">Once the program executes the last line, it <em class="calibre6">terminates</em> or <em class="calibre6">exits</em>. This means the program stops running. Python forgets all of the values stored in variables, including the string stored in <span class="literal1">myName</span>. If you run the program again and enter a different name, the program will think that is your name:</p>
+<p class="programs">Hello world!<br class="calibre7" />What is your name?<br class="calibre7" /><span class="codestrong">Carolyn</span><br class="calibre7" />It is good to meet you, Carolyn</p>
+<p class="indent">Remember, the computer does exactly what you program it to do. Computers are dumb and just follow the instructions you give them exactly. The computer doesn’t care if you type in your name, someone else’s name, or something silly. Type in anything you want. The computer will treat it the same way:</p>
+<p class="programs">Hello world!<br class="calibre7" />What is your name?<br class="calibre7" /><span class="codestrong">poop</span><br class="calibre7" />It is good to meet you, poop</p>
+<h3 class="h2" id="calibre_link-428"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-232" class="calibre1"></span><strong class="calibre2">Naming Variables</strong></h3>
+<p class="noindent">Giving variables descriptive names makes it easier to understand what a program does. You could have called the <span class="literal1">myName</span> variable <span class="literal1">abrahamLincoln</span> or <span class="literal1">nAmE</span>, and Python would have run the program just the same. But those names don’t really tell you much about what information the variable might hold. As <a href="#calibre_link-39" class="calibre4">Chapter 1</a> discussed, if you were moving to a new house and you labeled every moving box <em class="calibre6">Stuff</em>, that wouldn’t be helpful at all! This book’s interactive shell examples use variable names like <span class="literal1">spam</span>, <span class="literal1">eggs</span>, and <span class="literal1">bacon</span> because the variable names in these examples don’t matter. However, this book’s programs all use descriptive names, and so should your programs.</p>
+<p class="indent">Variable names are <em class="calibre6">case sensitive</em>, which means the same variable name in a different case is considered a different variable. So <span class="literal1">spam</span>, <span class="literal1">SPAM</span>, <span class="literal1">Spam</span>, and <span class="literal1">sPAM</span> are four different variables in Python. They each contain their own separate values. It’s a bad idea to have differently cased variables in your program. Use descriptive names for your variables instead.</p>
+<p class="indent">Variable names are usually lowercase. If there’s more than one word in the variable name, it’s a good idea to capitalize each word after the first. For example, the variable name <span class="literal1">whatIHadForBreakfastThisMorning</span> is much easier to read than <span class="literal1">whatihadforbreakfastthismorning</span>. Capitalizing your variables this way is called <em class="calibre6">camel case</em> (because it resembles the humps on a camel’s back), and it makes your code more readable. Programmers also prefer using shorter variable names to make code easier to understand: <span class="literal1">breakfast</span> or <span class="literal1">foodThisMorning</span> is more readable than <span class="literal1">whatIHadForBreakfastThisMorning</span>. These are <em class="calibre6">conventions</em>&mdash;optional but standard ways of doing things in Python programming.</p>
+<h3 class="h2" id="calibre_link-429"><strong class="calibre2">Summary</strong></h3>
+<p class="noindent">Once you understand how to use strings and functions, you can start making programs that interact with users. This is important because text is the main way the user and the computer will communicate with each other. The user enters text through the keyboard with the <span class="literal1">input()</span> function, and the computer displays text on the screen with the <span class="literal1">print()</span> function.</p>
+<p class="indent">Strings are just values of a new data type. All values have a data type, and the data type of a value affects how the <span class="literal1">+</span> operator functions.</p>
+<p class="indent">Functions are used to carry out complicated instructions in your program. Python has many built-in functions that you’ll learn about in this book. Function calls can be used in expressions anywhere a value is used.</p>
+<p class="indent">The instruction or step in your program where Python is currently working is called the execution. In <a href="#calibre_link-40" class="calibre4">Chapter 3</a>, you’ll learn more about making the execution move in ways other than just straight down the program. Once you learn this, you’ll be ready to create games!</p>
+</div>
+
+
+<a href="chapter1.html">Prev: Chapter 1: The Interactive Shell</a> | <a href="chapter3.html">Next: Chapter 3: Guess the Number</a>
+
+</body></html>

@@ -1,0 +1,367 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Chapter 17: Creating Graphics</title></head><body>
+<script type="text/javascript">
+//<![CDATA[
+
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5459430-3']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
+//]]>
+</script>
+
+
+<a href="chapter16.html">Prev: Chapter 16: Reversegam AI Simulation</a> | <a href="chapter18.html">Next: Chapter 18: Animating Graphics</a>
+
+
+<div id="calibre_link-94" class="calibre">
+<h2 class="h1" id="calibre_link-95"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-921" class="calibre1"></span><span class="big"><strong class="calibre2">17</strong></span><br class="calibre9" /><strong class="calibre2">CREATING GRAPHICS</strong></h2>
+<div class="imagec"><img src="images/00016.jpeg" alt="image" class="calibre3" /></div>
+<p class="noindent">So far, all of our games have used only text. Text is displayed on the screen as output, and the player enters text as input. Just using text makes programming easy to learn. But in this chapter, we’ll make some more exciting programs with advanced graphics using the <span class="literal1">pygame</span> module.</p>
+<p class="indent"><a href="#calibre_link-95" class="calibre4">Chapters 17</a>, <a href="#calibre_link-96" class="calibre4">18</a>, <a href="#calibre_link-97" class="calibre4">19</a>, and <a href="#calibre_link-98" class="calibre4">20</a> will teach you how to use <span class="literal1">pygame</span> to make games with graphics, animations, mouse input, and sound. In these chapters, we’ll write source code for simple programs that demonstrate <span class="literal1">pygame</span> concepts. Then in <a href="#calibre_link-99" class="calibre4">Chapter 21</a>, we’ll put together all the concepts we learned to create a game.</p>
+<div class="sidebar">
+<p class="sidebart"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-296" class="calibre1"></span><strong class="calibre2">TOPICS COVERED IN THIS CHAPTER</strong></p>
+<p class="bull">• Installing <span class="literal1">pygame</span></p>
+<p class="bull">• Colors and fonts in <span class="literal1">pygame</span></p>
+<p class="bull">• Aliased and anti-aliased graphics</p>
+<p class="bull">• Attributes</p>
+<p class="bull">• The <span class="literal1">pygame.font.Font</span>, <span class="literal1">pygame.Surface</span>, <span class="literal1">pygame.Rect</span>, and <span class="literal1">pygame.PixelArray</span> data types</p>
+<p class="bull">• Constructor functions</p>
+<p class="bull">• <span class="literal1">pygame</span>’s drawing functions</p>
+<p class="bull">• The <span class="literal1">blit()</span> method for surface objects</p>
+<p class="bull">• Events</p>
+</div>
+<h3 class="h2" id="calibre_link-695"><strong class="calibre2">Installing pygame</strong></h3>
+<p class="noindent">The <span class="literal1">pygame</span> module helps developers create games by making it easier to draw graphics on your computer screen or add music to programs. The module doesn’t come with Python, but like Python, it’s free to download. Download <span class="literal1">pygame</span> at <em class="calibre6"><a href="https://www.nostarch.com/inventwithpython/" class="calibre4">https://www.nostarch.com/inventwithpython/</a></em>, and follow the instructions for your operating system.</p>
+<p class="indent">After the installer file finishes downloading, open it and follow the instructions until <span class="literal1">pygame</span> has finished installing. To check that it installed correctly, enter the following into the interactive shell:</p>
+<p class="programs">&gt;&gt;&gt; <span class="codestrong">import pygame</span></p>
+<p class="indent">If nothing appears after you press <small class="calibre11">ENTER</small>, then you know <span class="literal1">pygame</span> was successfully installed. If the error <span class="literal1">ImportError: No module named pygame</span> appears, try to install <span class="literal1">pygame</span> again (and make sure you typed <span class="literal1">import pygame</span> correctly).</p>
+<div class="note">
+<p class="notet"><span class="noteg"><strong class="calibre5">NOTE</strong></span></p>
+<p class="notep"><em class="calibre6">When writing your Python programs, don’t save your file as</em> pygame.py<em class="calibre6">. If you do, the</em> <span class="literal1"><span class="codeitalic">import pygame</span></span> <em class="calibre6">line will import your file instead of the real</em> <span class="literal1"><span class="codeitalic">pygame</span></span> <em class="calibre6">module, and none of your code will work.</em></p>
+</div>
+<h3 class="h2" id="calibre_link-696"><strong class="calibre2">Hello World in pygame</strong></h3>
+<p class="noindent">First, we’ll make a new <span class="literal1">pygame</span> Hello World program like the one you created at the beginning of the book. This time, you’ll use <span class="literal1">pygame</span> to make “Hello world!” appear in a graphical window instead of as text. We’ll just use <span class="literal1">pygame</span> to draw some shapes and lines on the window in this chapter, but you’ll use these skills to make your first animated game soon.</p>
+<p class="indent"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-342"></span>The <span class="literal1">pygame</span> module doesn’t work well with the interactive shell, so you can only write programs using <span class="literal1">pygame</span> in a file editor; you can’t send instructions one at a time through the interactive shell.</p>
+<p class="indent">Also, <span class="literal1">pygame</span> programs don’t use the <span class="literal1">print()</span> or <span class="literal1">input()</span> functions. There is no text input or output. Instead, <span class="literal1">pygame</span> displays output by drawing graphics and text in a separate window. Input to <span class="literal1">pygame</span> comes from the keyboard and the mouse through <em class="calibre6">events</em>, which are covered in “<a href="#calibre_link-100" class="calibre4">Events and the Game Loop</a>” on <a href="#calibre_link-101" class="calibre4">page 270</a>.</p>
+<h3 class="h2" id="calibre_link-697"><strong class="calibre2">Sample Run of pygame Hello World</strong></h3>
+<p class="noindent">When you run the graphical Hello World program, you should see a new window that looks like <a href="#calibre_link-102" class="calibre4">Figure 17-1</a>.</p>
+<div class="image"><img src="images/00085.jpeg" alt="image" class="calibre3" /></div>
+<p class="figcap"><a id="calibre_link-102" class="calibre4"></a><em class="calibre6">Figure 17-1: The</em> <span class="literal"><span class="codeitalic">pygame</span></span> <em class="calibre6">Hello World program</em></p>
+<p class="indent">The nice thing about using a window instead of a console is that text can appear anywhere in the window, not just after the previous text you have printed. The text can also be any color and size. The window is like a canvas, and you can draw whatever you like on it.</p>
+<h3 class="h2" id="calibre_link-698"><strong class="calibre2">Source Code for pygame Hello World</strong></h3>
+<p class="noindent">Enter the following code into the file editor and save it as <em class="calibre6">pygameHelloWorld.py</em>. If you get errors after typing in this code, compare the code you typed to the book’s code with the online diff tool at <em class="calibre6"><a href="https://www.nostarch.com/inventwithpython#diff" class="calibre4">https://www.nostarch.com/inventwithpython#diff</a></em>.</p>
+<div class="image"><img src="images/00020.jpeg" alt="image" class="calibre3" /></div>
+<p class="sidenote"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-922"></span><em class="calibre6">pygame HelloWorld.py</em></p>
+<p class="programs">&nbsp;1. import pygame, sys<br class="calibre7" />&nbsp;2. from pygame.locals import *<br class="calibre7" />&nbsp;3.<br class="calibre7" />&nbsp;4. # Set up pygame.<br class="calibre7" />&nbsp;5. pygame.init()<br class="calibre7" />&nbsp;6.<br class="calibre7" />&nbsp;7. # Set up the window.<br class="calibre7" />&nbsp;8. windowSurface = pygame.display.set_mode((500, 400), 0, 32)<br class="calibre7" />&nbsp;9. pygame.display.set_caption('Hello world!')<br class="calibre7" />10.<br class="calibre7" />11. # Set up the colors.<br class="calibre7" />12. BLACK = (0, 0, 0)<br class="calibre7" />13. WHITE = (255, 255, 255)<br class="calibre7" />14. RED = (255, 0, 0)<br class="calibre7" />15. GREEN = (0, 255, 0)<br class="calibre7" />16. BLUE = (0, 0, 255)<br class="calibre7" />17.<br class="calibre7" />18. # Set up the fonts.<br class="calibre7" />19. basicFont = pygame.font.SysFont(None, 48)<br class="calibre7" />20.<br class="calibre7" />21. # Set up the text.<br class="calibre7" />22. text = basicFont.render('Hello world!', True, WHITE, BLUE)<br class="calibre7" />23. textRect = text.get_rect()<br class="calibre7" />24. textRect.centerx = windowSurface.get_rect().centerx<br class="calibre7" />25. textRect.centery = windowSurface.get_rect().centery<br class="calibre7" />26.<br class="calibre7" />27. # Draw the white background onto the surface.<br class="calibre7" />28. windowSurface.fill(WHITE)<br class="calibre7" />29.<br class="calibre7" />30. # Draw a green polygon onto the surface.<br class="calibre7" />31. pygame.draw.polygon(windowSurface, GREEN, ((146, 0), (291, 106),<br class="calibre7" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(236, 277), (56, 277), (0, 106)))<br class="calibre7" />32.<br class="calibre7" />33. # Draw some blue lines onto the surface.<br class="calibre7" />34. pygame.draw.line(windowSurface, BLUE, (60, 60), (120, 60), 4)<br class="calibre7" />35. pygame.draw.line(windowSurface, BLUE, (120, 60), (60, 120))<br class="calibre7" />36. pygame.draw.line(windowSurface, BLUE, (60, 120), (120, 120), 4)<br class="calibre7" />37.<br class="calibre7" />38. # Draw a blue circle onto the surface.<br class="calibre7" />39. pygame.draw.circle(windowSurface, BLUE, (300, 50), 20, 0)<br class="calibre7" />40.<br class="calibre7" />41. # Draw a red ellipse onto the surface.<br class="calibre7" />42. pygame.draw.ellipse(windowSurface, RED, (300, 250, 40, 80), 1)<br class="calibre7" />43.<br class="calibre7" />44. # Draw the text's background rectangle onto the surface.<br class="calibre7" />45. pygame.draw.rect(windowSurface, RED, (textRect.left - 20,<br class="calibre7" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;textRect.top - 20, textRect.width + 40, textRect.height + 40))<br class="calibre7" />46.<br class="calibre7" />47. # Get a pixel array of the surface.<br class="calibre7" />48. pixArray = pygame.PixelArray(windowSurface)<br class="calibre7" />49. pixArray[480][380] = BLACK<br class="calibre7" />50. del pixArray<br class="calibre7" />51.<br class="calibre7" />52. # Draw the text onto the surface.<br class="calibre7" />53. windowSurface.blit(text, textRect)<br class="calibre7" />54.<br class="calibre7" />55. # Draw the window onto the screen.<br class="calibre7" />56. pygame.display.update()<br class="calibre7" />57.<br class="calibre7" />58. # Run the game loop.<br class="calibre7" />59. while True:<br class="calibre7" />60.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for event in pygame.event.get():<br class="calibre7" />61.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if event.type == QUIT:<br class="calibre7" />62.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pygame.quit()<br class="calibre7" />63.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys.exit()</p>
+<h3 class="h2" id="calibre_link-699"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-343" class="calibre1"></span><strong class="calibre2">Importing the pygame Module</strong></h3>
+<p class="noindent">Let’s go over each of these lines of code and find out what they do.</p>
+<p class="indent">First, you need to import the <span class="literal1">pygame</span> module so you can call its functions. You can import several modules on the same line by separating the module names with commas. Line 1 imports both the <span class="literal1">pygame</span> and <span class="literal1">sys</span> modules:</p>
+<p class="programs">1. import pygame, sys<br class="calibre7" />2. from pygame.locals import *</p>
+<p class="indent">The second line imports the <span class="literal1">pygame.locals</span> module. This module contains many constant variables that you’ll use with <span class="literal1">pygame</span>, such as <span class="literal1">QUIT</span>, which helps you quit the program, and <span class="literal1">K_ESCAPE</span>, which represents the <small class="calibre11">ESC</small> key.</p>
+<p class="indent">Line 2 also lets you use the <span class="literal1">pygames.locals</span> module without having to type <span class="literal1">pygames.locals.</span> in front of every method, constant, or anything else you call from the module.</p>
+<p class="indent">If you have <span class="literal1">from sys import *</span> instead of <span class="literal1">import sys</span> in your program, you could call <span class="literal1">exit()</span> instead of <span class="literal1">sys.exit()</span> in your code. But most of the time it’s better to use the full function name so you know which module the function is in.</p>
+<h3 class="h2" id="calibre_link-700"><strong class="calibre2">Initializing pygame</strong></h3>
+<p class="noindent">All <span class="literal1">pygame</span> programs must call <span class="literal1">pygame.init()</span> after importing the <span class="literal1">pygame</span> module but before calling any other <span class="literal1">pygame</span> functions:</p>
+<p class="programs">4. # Set up pygame.<br class="calibre7" />5. pygame.init()</p>
+<p class="indent">This initializes <span class="literal1">pygame</span> so it’s ready to use. You don’t need to know what <span class="literal1">init()</span> does; you just need to remember to call it before using any other <span class="literal1">pygame</span> functions.</p>
+<h3 class="h2" id="calibre_link-701"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-313" class="calibre1"></span><strong class="calibre2">Setting Up the pygame Window</strong></h3>
+<p class="noindent">Line 8 creates a <em class="calibre6">graphical user interface (GUI)</em> window by calling the <span class="literal1">set_mode()</span> method in the <span class="literal1">pygame.display</span> module. (The <span class="literal1">display</span> module is a module inside the <span class="literal1">pygame</span> module. Even the <span class="literal1">pygame</span> module has its own modules!)</p>
+<p class="programs">7. # Set up the window.<br class="calibre7" />8. windowSurface = pygame.display.set_mode((500, 400), 0, 32)<br class="calibre7" />9. pygame.display.set_caption('Hello world!')</p>
+<p class="indent">These methods help set up a window for <span class="literal1">pygame</span> to run in. As in the Sonar Treasure Hunt game, windows use a coordinate system, but the window’s coordinate system is organized in pixels.</p>
+<p class="indent">A <em class="calibre6">pixel</em> is the tiniest dot on your computer screen. A single pixel on your screen can light up in any color. All the pixels on your screen work together to display the pictures you see. We’ll create a window 500 pixels wide and 400 pixels tall by using a <em class="calibre6">tuple</em>.</p>
+<h4 class="h3" id="calibre_link-702"><em class="calibre10"><strong class="calibre2">Tuples</strong></em></h4>
+<p class="noindenta">Tuple values are similar to lists, except they use parentheses instead of square brackets. Also, like strings, tuples can’t be modified. For example, enter the following into the interactive shell:</p>
+<p class="programs">&nbsp;&nbsp;&nbsp;&gt;&gt;&gt; <span class="codestrong">spam = ('Life', 'Universe', 'Everything', 42)</span><br class="calibre7" /><span class="ent">➊</span> &gt;&gt;&gt; <span class="codestrong">spam[0]</span><br class="calibre7" />&nbsp;&nbsp;&nbsp;'Life'<br class="calibre7" />&nbsp;&nbsp;&nbsp;&gt;&gt;&gt; <span class="codestrong">spam[3]</span><br class="calibre7" />&nbsp;&nbsp;&nbsp;42<br class="calibre7" /><span class="ent">➋</span> &gt;&gt;&gt; <span class="codestrong">spam[1:3]</span><br class="calibre7" />&nbsp;&nbsp;&nbsp;('Universe', 'Everything')<br class="calibre7" /><span class="ent">➌</span> &gt;&gt;&gt; <span class="codestrong">spam[3] = 'Hello'</span><br class="calibre7" /><span class="ent">➍</span> Traceback (most recent call last):<br class="calibre7" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;File "&lt;stdin&gt;", line 1, in &lt;module&gt;<br class="calibre7" />&nbsp;&nbsp;&nbsp;TypeError: 'tuple' object does not support item assignment</p>
+<p class="indent">As you can see from the example, if you want to get just one item of a tuple <span class="ent">➊</span> or a range of items <span class="ent">➋</span>, you still use square brackets as you would with a list. However, if you try to change the item at index <span class="literal1">3</span> to the string <span class="literal1">'Hello'</span> <span class="ent">➌</span>, Python will raise an error <span class="ent">➍</span>.</p>
+<p class="indent">We’ll use tuples to set up <span class="literal1">pygame</span> windows. There are three parameters to the <span class="literal1">pygame.display.set_mode()</span> method. The first is a tuple of two integers for the width and height of the window, in pixels. To set up a 500- by 400-pixel window, you use the tuple <span class="literal1">(500, 400)</span> for the first argument to <span class="literal1">set_mode()</span>. The second and third parameters are advanced options that are beyond the scope of this book. Just pass <span class="literal1">0</span> and <span class="literal1">32</span> for them, respectively.</p>
+<h4 class="h3" id="calibre_link-703"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-233" class="calibre1"></span><em class="calibre10"><strong class="calibre2">Surface Objects</strong></em></h4>
+<p class="noindenta">The <span class="literal1">set_mode()</span> function returns a <span class="literal1">pygame.Surface</span> object (which we’ll call <span class="literal1">Surface</span> objects for short). <em class="calibre6">Object</em> is just another name for a value of a data type that has methods. For example, strings are objects in Python because they have data (the string itself) and methods (such as <span class="literal1">lower()</span> and <span class="literal1">split()</span>). The <span class="literal1">Surface</span> object represents the window.</p>
+<p class="indent">Variables store references to objects just as they store references for lists and dictionaries (see “<a href="#calibre_link-103" class="calibre4">List References</a>” on <a href="#calibre_link-104" class="calibre4">page 132</a>).</p>
+<p class="indent">The <span class="literal1">set_caption()</span> method on line 9 just sets the window’s caption to read <span class="literal1">'Hello World!'</span>. The caption is in the top left of the window.</p>
+<h3 class="h2" id="calibre_link-704"><strong class="calibre2">Setting Up Color Variables</strong></h3>
+<p class="noindent">There are three primary colors of light for pixels: red, green, and blue. By combining different amounts of these three colors (which is what your computer screen does), you can form any other color. In <span class="literal1">pygame</span>, colors are represented by tuples of three integers. These are called <em class="calibre6">RGB color</em> values, and we’ll use them in our program to assign colors to pixels. Since we don’t want to rewrite a three-number tuple every time we want to use a specific color in our program, we’ll make constants to hold tuples that are named after the color the tuple represents:</p>
+<p class="programs">11. # Set up the colors.<br class="calibre7" />12. BLACK = (0, 0, 0)<br class="calibre7" />13. WHITE = (255, 255, 255)<br class="calibre7" />14. RED = (255, 0, 0)<br class="calibre7" />15. GREEN = (0, 255, 0)<br class="calibre7" />16. BLUE = (0, 0, 255)</p>
+<p class="indent">The first value in the tuple determines how much red is in the color. A value of <span class="literal1">0</span> means there’s no red in the color, and a value of <span class="literal1">255</span> means there’s a maximum amount of red in the color. The second value is for green, and the third value is for blue. These three integers form an RGB tuple.</p>
+<p class="indent">For example, the tuple <span class="literal1">(0, 0, 0)</span> has no red, green, or blue. The resulting color is completely black, as in line 12. The tuple <span class="literal1">(255, 255, 255)</span> has a maximum amount of red, green, and blue, resulting in white, as in line 13.</p>
+<p class="indent">We’ll also use red, green, and blue, which are assigned in lines 14 to 16. The tuple <span class="literal1">(255, 0, 0)</span> represents the maximum amount of red but no green or blue, so the resulting color is red. Similarly, <span class="literal1">(0, 255, 0)</span> is green and <span class="literal1">(0, 0, 255)</span> is blue.</p>
+<p class="indent">You can mix the amount of red, green, and blue to get any shade of any color. <a href="#calibre_link-105" class="calibre4">Table 17-1</a> has some common colors and their RGB values. The web page <em class="calibre6"><a href="https://www.nostarch.com/inventwithpython/" class="calibre4">https://www.nostarch.com/inventwithpython/</a></em> lists several more tuple values for different colors.</p>
+<p class="tablecap"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-307"></span><a id="calibre_link-105" class="calibre4"></a><strong class="calibre5">Table 17-1:</strong> Colors and Their RGB Values</p>
+<table class="topbot">
+<thead class="calibre14">
+<tr class="calibre15">
+<td class="table_th"><p class="table"><strong class="calibre5">Color</strong></p></td>
+<td class="table_th"><p class="table"><strong class="calibre5">RGB value</strong></p></td>
+</tr>
+</thead>
+<tbody class="calibre16">
+<tr class="calibre15">
+<td class="table_3a"><p class="table">Black</p></td>
+<td class="table_3a"><p class="table">(0, 0, 0)</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table">Blue</p></td>
+<td class="table_3a"><p class="table">(0, 0, 255)</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table">Gray</p></td>
+<td class="table_3a"><p class="table">(128, 128, 128)</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table">Green</p></td>
+<td class="table_3a"><p class="table">(0, 128, 0)</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table">Lime</p></td>
+<td class="table_3a"><p class="table">(0, 255, 0)</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table">Purple</p></td>
+<td class="table_3a"><p class="table">(128, 0, 128)</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table">Red</p></td>
+<td class="table_3a"><p class="table">(255, 0, 0)</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table">Teal</p></td>
+<td class="table_3a"><p class="table">(0, 128, 128)</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table">White</p></td>
+<td class="table_3a"><p class="table">(255, 255, 255)</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table">Yellow</p></td>
+<td class="table_3a"><p class="table">(255, 255, 0)</p></td>
+</tr>
+</tbody>
+</table>
+<p class="indent">We’ll just use the five colors we’ve already defined, but in your programs, you can use any of these colors or even make up different colors.</p>
+<h3 class="h2" id="calibre_link-705"><strong class="calibre2">Writing Text on the pygame Window</strong></h3>
+<p class="noindent">Writing text on a window is a little different from just using <span class="literal1">print()</span>, as we’ve done in our text-based games. In order to write text on a window, we need to do some setup first.</p>
+<h4 class="h3" id="calibre_link-706"><em class="calibre10"><strong class="calibre2">Using Fonts to Style Text</strong></em></h4>
+<p class="noindenta">A font is a complete set of letters, numbers, symbols, and characters drawn in a single style. We’ll use fonts anytime we need to print text on a <span class="literal1">pygame</span> window. <a href="#calibre_link-106" class="calibre4">Figure 17-2</a> shows the same sentence printed in different fonts.</p>
+<div class="image"><img src="images/00096.jpeg" alt="image" class="calibre3" /></div>
+<p class="figcap"><a id="calibre_link-106" class="calibre4"></a><em class="calibre6">Figure 17-2: Examples of different fonts</em></p>
+<p class="indent"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-188"></span>In our earlier games, we only told Python to print text. The color, size, and font that were used to display this text were completely determined by your operating system. The Python program couldn’t change the font. However, <span class="literal1">pygame</span> can draw text in any font on your computer.</p>
+<p class="indent">Line 19 creates a <span class="literal1">pygame.font.Font</span> object (called a <span class="literal1">Font</span> object for short) by calling the <span class="literal1">pygame.font.SysFont()</span> function with two parameters:</p>
+<p class="programs">18. # Set up the fonts.<br class="calibre7" />19. basicFont = pygame.font.SysFont(None, 48)</p>
+<p class="indent">The first parameter is the name of the font, but we’ll pass the <span class="literal1">None</span> value to use the default system font. The second parameter is the size of the font (which is measured in units called <em class="calibre6">points</em>). We’ll draw <span class="literal1">'Hello world!'</span> on the window in the default font at 48 points. Generating an image of letters for text like “Hello world!” is called <em class="calibre6">rendering</em>.</p>
+<h4 class="h3" id="calibre_link-707"><em class="calibre10"><strong class="calibre2">Rendering a Font Object</strong></em></h4>
+<p class="noindenta">The <span class="literal1">Font</span> object that you’ve stored in the <span class="literal1">basicFont</span> variable has a method called <span class="literal1">render()</span>. This method will return a <span class="literal1">Surface</span> object with the text drawn on it. The first parameter to <span class="literal1">render()</span> is the string of the text to draw. The second parameter is a Boolean for whether or not to <em class="calibre6">anti-alias</em> the font. Anti-aliasing blurs your text slightly to make it look smoother. <a href="#calibre_link-107" class="calibre4">Figure 17-3</a> shows what a line looks like with and without anti-aliasing.</p>
+<div class="image"><img src="images/00107.jpeg" alt="image" class="calibre3" /></div>
+<p class="figcap"><a id="calibre_link-107" class="calibre4"></a><em class="calibre6">Figure 17-3: An enlarged view of an aliased line and an anti-aliased line</em></p>
+<p class="indent">On line 22, we pass <span class="literal1">True</span> to use anti-aliasing:</p>
+<p class="programs">21. # Set up the text.<br class="calibre7" />22. text = basicFont.render('Hello world!', True, WHITE, BLUE)</p>
+<p class="indent">The third and fourth parameters in line 22 are both RGB tuples. The third parameter is the color the text will be rendered in (white, in this case), and the fourth is the background color behind the text (blue). We assign the <span class="literal1">Font</span> object to the variable <span class="literal1">text</span>.</p>
+<p class="indent">Once we’ve set up the <span class="literal1">Font</span> object, we need to place it in a location on the window.</p>
+<h4 class="h3" id="calibre_link-708"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-197" class="calibre1"></span><em class="calibre10"><strong class="calibre2">Setting the Text Location with Rect Attributes</strong></em></h4>
+<p class="noindenta">The <span class="literal1">pygame.Rect</span> data type (called <span class="literal1">Rect</span> for short) represents rectangular areas of a certain size and location. This is what we use to set the location of objects on a window.</p>
+<p class="indent">To create a new <span class="literal1">Rect</span> object, you call the function <span class="literal1">pygame.Rect()</span>. Notice that the <span class="literal1">pygame.Rect()</span> function has the same name as the <span class="literal1">pygame.Rect</span> data type. Functions that have the same name as their data type and create objects or values of their data type are called <em class="calibre6">constructor functions</em>. The parameters for the <span class="literal1">pygame.Rect()</span> function are integers for the x- and y-coordinates of the top-left corner, followed by the width and height, all in pixels. The function name with the parameters looks like this: <span class="literal1">pygame.Rect(<span class="codeitalic">left</span>, <span class="codeitalic">top</span>, <span class="codeitalic">width</span>, <span class="codeitalic">height</span>)</span>.</p>
+<p class="indent">When we created the <span class="literal1">Font</span> object, a <span class="literal1">Rect</span> object was already made for it, so all we need to do now is retrieve it. To do that, we use the <span class="literal1">get_rect()</span> method on <span class="literal1">text</span> and assign the <span class="literal1">Rect</span> to <span class="literal1">textRect</span>:</p>
+<p class="programs">23. textRect = text.get_rect()<br class="calibre7" />24. textRect.centerx = windowSurface.get_rect().centerx<br class="calibre7" />25. textRect.centery = windowSurface.get_rect().centery</p>
+<p class="indent">Just as methods are functions that are associated with an object, <em class="calibre6">attributes</em> are variables that are associated with an object. The <span class="literal1">Rect</span> data type has many attributes that describe the rectangle they represent. In order to set the location of <span class="literal1">textRect</span> on the window, we need to assign its center <span class="literal1">x</span> and <span class="literal1">y</span> values to pixel coordinates on the window. Since each <span class="literal1">Rect</span> object already has attributes that store the x- and y-coordinates of the <span class="literal1">Rect</span>’s center, called <span class="literal1">centerx</span> and <span class="literal1">centery</span>, respectively, all we need to do is assign those coordinates values.</p>
+<p class="indent">We want to put <span class="literal1">textRect</span> in the center of the window, so we need to get the <span class="literal1">windowSurface Rect</span>, get its <span class="literal1">centerx</span> and <span class="literal1">centery</span> attributes, and then assign those to the <span class="literal1">centerx</span> and <span class="literal1">centery</span> attributes of <span class="literal1">textRect</span>. We do that in lines 24 and 25.</p>
+<p class="indent">There are many other <span class="literal1">Rect</span> attributes that we can use. <a href="#calibre_link-108" class="calibre4">Table 17-2</a> is a list of attributes of a <span class="literal1">Rect</span> object named <span class="literal1">myRect</span>.</p>
+<p class="tablecap"><a id="calibre_link-108" class="calibre4"></a><strong class="calibre5">Table 17-2:</strong> Rect Attributes</p>
+<table class="topbot">
+<thead class="calibre14">
+<tr class="calibre15">
+<td class="table_th"><p class="table"><span class="literal1"><span class="codestrong">pygame.Rect</span></span> <strong class="calibre5">attribute</strong></p></td>
+<td class="table_th"><p class="table"><strong class="calibre5">Description</strong></p></td>
+</tr>
+</thead>
+<tbody class="calibre16">
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">myRect.left</span></p></td>
+<td class="table_3a"><p class="table">Integer value of the x-coordinate of the left side of the rectangle</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">myRect.right</span></p></td>
+<td class="table_3a"><p class="table">Integer value of the x-coordinate of the right side of the rectangle</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">myRect.top</span></p></td>
+<td class="table_3a"><p class="table">Integer value of the y-coordinate of the top side of the rectangle</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">myRect.bottom</span></p></td>
+<td class="table_3a"><p class="table">Integer value of the y-coordinate of the bottom side of the rectangle</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-923"></span><span class="literal1">myRect.centerx</span></p></td>
+<td class="table_3a"><p class="table">Integer value of the x-coordinate of the center of the rectangle</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">myRect.centery</span></p></td>
+<td class="table_3a"><p class="table">Integer value of the y-coordinate of the center of the rectangle</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">myRect.width</span></p></td>
+<td class="table_3a"><p class="table">Integer value of the width of the rectangle</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">myRect.height</span></p></td>
+<td class="table_3a"><p class="table">Integer value of the height of the rectangle</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">myRect.size</span></p></td>
+<td class="table_3a"><p class="table">A tuple of two integers: <span class="literal1">(width, height)</span></p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">myRect.topleft</span></p></td>
+<td class="table_3a"><p class="table">A tuple of two integers: <span class="literal1">(left, top)</span></p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">myRect.topright</span></p></td>
+<td class="table_3a"><p class="table">A tuple of two integers: <span class="literal1">(right, top)</span></p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">myRect.bottomleft</span></p></td>
+<td class="table_3a"><p class="table">A tuple of two integers: <span class="literal1">(left, bottom)</span></p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">myRect.bottomright</span></p></td>
+<td class="table_3a"><p class="table">A tuple of two integers: <span class="literal1">(right, bottom)</span></p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">myRect.midleft</span></p></td>
+<td class="table_3a"><p class="table">A tuple of two integers: <span class="literal1">(left, centery)</span></p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">myRect.midright</span></p></td>
+<td class="table_3a"><p class="table">A tuple of two integers: <span class="literal1">(right, centery)</span></p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">myRect.midtop</span></p></td>
+<td class="table_3a"><p class="table">A tuple of two integers: <span class="literal1">(centerx, top)</span></p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">myRect.midbottom</span></p></td>
+<td class="table_3a"><p class="table">A tuple of two integers: <span class="literal1">(centerx, bottom)</span></p></td>
+</tr>
+</tbody>
+</table>
+<p class="indent">The great thing about <span class="literal1">Rect</span> objects is that if you modify any of these attributes, all the other attributes will automatically modify themselves, too. For example, if you create a <span class="literal1">Rect</span> object that is 20 pixels wide and 20 pixels tall and has the top-left corner at the coordinates <span class="literal1">(30, 40)</span>, then the x-coordinate of the right side will automatically be set to <span class="literal1">50</span> (because 20 + 30 = 50).</p>
+<p class="indent">Or if you instead change the <span class="literal1">left</span> attribute with the line <span class="literal1">myRect.left = 100</span>, then <span class="literal1">pygame</span> will automatically change the <span class="literal1">right</span> attribute to <span class="literal1">120</span> (because 20 + 100 = 120). Every other attribute for that <span class="literal1">Rect</span> object is also updated.</p>
+<div class="sidebar">
+<p class="sidebart"><strong class="calibre2">MORE ABOUT METHODS, MODULES, AND DATA TYPES</strong></p>
+<p class="noindent">Inside the <span class="literal1">pygame</span> module are the <span class="literal1">font</span> and <span class="literal1">surface</span> modules, and inside <em class="calibre6">those</em> modules are the <span class="literal1">Font</span> and <span class="literal1">Surface</span> data types. The <span class="literal1">pygame</span> programmers began the modules with a lowercase letter and the data types with an uppercase letter to make it easier to distinguish the data types and the modules.</p>
+<p class="indent">Notice that both the <span class="literal1">Font</span> object (stored in the <span class="literal1">text</span> variable on line 23) and the <span class="literal1">Surface</span> object (stored in the <span class="literal1">windowSurface</span> variable on line 24) have a method called <span class="literal1">get_rect()</span>. Technically, these are two different methods, but the programmers of <span class="literal1">pygame</span> gave them the same name because they both do the same thing: return <span class="literal1">Rect</span> objects that represent the size and position of the <span class="literal1">Font</span> or <span class="literal1">Surface</span> object.</p>
+</div>
+<h3 class="h2" id="calibre_link-709"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-253" class="calibre1"></span><strong class="calibre2">Filling a Surface Object with a Color</strong></h3>
+<p class="noindent">For our program, we want to fill the entire surface stored in <span class="literal1">windowSurface</span> with the color white. The <span class="literal1">fill()</span> function will completely cover the surface with the color you pass as the parameter. (Remember, the <span class="literal1">WHITE</span> variable was set to the value <span class="literal1">(255, 255, 255)</span> on line 13.)</p>
+<p class="programs">27. # Draw the white background onto the surface.<br class="calibre7" />28. windowSurface.fill(WHITE)</p>
+<p class="indent">Note that in <span class="literal1">pygame</span>, the window on the screen won’t change when you call the <span class="literal1">fill()</span> method or any of the other drawing functions. Rather, these will change the <span class="literal1">Surface</span> object, and you have to render the new <span class="literal1">Surface</span> object to the screen with the <span class="literal1">pygame.display.update()</span> function to see changes.</p>
+<p class="indent">This is because modifying the <span class="literal1">Surface</span> object in the computer’s memory is much faster than modifying the image on the screen. It is much more efficient to draw onto the screen once after all of the drawing functions have been drawn to the <span class="literal1">Surface</span> object.</p>
+<h3 class="h2" id="calibre_link-710"><strong class="calibre2">pygame’s Drawing Functions</strong></h3>
+<p class="noindent">So far, we’ve learned how to fill a <span class="literal1">pygame</span> window with a color and add text, but <span class="literal1">pygame</span> also has functions that let you draw shapes and lines. Each shape has its own function, and you can combine these shapes into different pictures for your graphical game.</p>
+<h4 class="h3" id="calibre_link-711"><em class="calibre10"><strong class="calibre2">Drawing a Polygon</strong></em></h4>
+<p class="noindenta">The <span class="literal1">pygame.draw.polygon()</span> function can draw any polygon shape you give it. A <em class="calibre6">polygon</em> is a multisided shape with sides that are straight lines. Circles and ellipses are not polygons, so we need to use different functions for those shapes.</p>
+<p class="indent">The function’s arguments, in order, are as follows:</p>
+<ol class="calibre12">
+<li value="1" class="calibre13"><p class="noindenta">The <span class="literal1">Surface</span> object to draw the polygon on.</p></li>
+<li value="2" class="calibre13"><p class="noindenta">The color of the polygon.</p></li>
+<li value="3" class="calibre13"><p class="noindenta">A tuple of tuples that represents the x- and y-coordinates of the points to draw in order. The last tuple will automatically connect to the first tuple to complete the shape.</p></li>
+<li value="4" class="calibre13"><p class="noindenta">Optionally, an integer for the width of the polygon lines. Without this, the polygon will be filled in.</p></li>
+</ol>
+<p class="indent">On line 31, we draw a green polygon onto our white <span class="literal1">Surface</span> object.</p>
+<p class="programs"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-332"></span>30. # Draw a green polygon onto the surface.<br class="calibre7" />31. pygame.draw.polygon(windowSurface, GREEN, ((146, 0), (291, 106),<br class="calibre7" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(236, 277), (56, 277), (0, 106)))</p>
+<p class="indent">We want our polygon to be filled, so we don’t give the last optional integer for line widths. <a href="#calibre_link-109" class="calibre4">Figure 17-4</a> shows some examples of polygons.</p>
+<div class="image"><img src="images/00026.jpeg" alt="image" class="calibre3" /></div>
+<p class="figcap"><a id="calibre_link-109" class="calibre4"></a><em class="calibre6">Figure 17-4: Examples of polygons</em></p>
+<h4 class="h3" id="calibre_link-712"><em class="calibre10"><strong class="calibre2">Drawing a Line</strong></em></h4>
+<p class="noindenta">The <span class="literal1">pygame.draw.line()</span> function just draws a line from one point on the screen to another point. The parameters for <span class="literal1">pygame.draw.line()</span>, in order, are as follows:</p>
+<ol class="calibre12">
+<li value="1" class="calibre13"><p class="noindenta">The <span class="literal1">Surface</span> object to draw the line on.</p></li>
+<li value="2" class="calibre13"><p class="noindenta">The color of the line.</p></li>
+<li value="3" class="calibre13"><p class="noindenta">A tuple of two integers for the x- and y-coordinates of one end of the line.</p></li>
+<li value="4" class="calibre13"><p class="noindenta">A tuple of two integers for the x- and y-coordinates of the other end of the line.</p></li>
+<li value="5" class="calibre13"><p class="noindenta">Optionally, an integer for the width of the line in pixels.</p></li>
+</ol>
+<p class="indent">In lines 34 to 36, we call <span class="literal1">pygame.draw.line()</span> three times:</p>
+<p class="programs">33. # Draw some blue lines onto the surface.<br class="calibre7" />34. pygame.draw.line(windowSurface, BLUE, (60, 60), (120, 60), 4)<br class="calibre7" />35. pygame.draw.line(windowSurface, BLUE, (120, 60), (60, 120))<br class="calibre7" />36. pygame.draw.line(windowSurface, BLUE, (60, 120), (120, 120), 4)</p>
+<p class="indent">If you don’t specify the <span class="literal1">width</span> parameter, it will take on the default value of <span class="literal1">1</span>. In lines 34 and 36, we pass <span class="literal1">4</span> for the width, so the lines will be 4 pixels thick. The three <span class="literal1">pygame.draw.line()</span> calls on lines 34, 35, and 36 draw the blue Z on the <span class="literal1">Surface</span> object.</p>
+<h4 class="h3" id="calibre_link-713"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-242" class="calibre1"></span><em class="calibre10"><strong class="calibre2">Drawing a Circle</strong></em></h4>
+<p class="noindenta">The <span class="literal1">pygame.draw.circle()</span> function draws circles on <span class="literal1">Surface</span> objects. Its parameters, in order, are as follows:</p>
+<ol class="calibre12">
+<li value="1" class="calibre13"><p class="noindenta">The <span class="literal1">Surface</span> object to draw the circle on.</p></li>
+<li value="2" class="calibre13"><p class="noindenta">The color of the circle.</p></li>
+<li value="3" class="calibre13"><p class="noindenta">A tuple of two integers for the x- and y-coordinates of the center of the circle.</p></li>
+<li value="4" class="calibre13"><p class="noindenta">An integer for the radius (that is, the size) of the circle.</p></li>
+<li value="5" class="calibre13"><p class="noindenta">Optionally, an integer for the width of the line. A width of <span class="literal1">0</span> means that the circle will be filled in.</p></li>
+</ol>
+<p class="indent">Line 39 draws a blue circle on the <span class="literal1">Surface</span> object:</p>
+<p class="programs">38. # Draw a blue circle onto the surface.<br class="calibre7" />39. pygame.draw.circle(windowSurface, BLUE, (300, 50), 20, 0)</p>
+<p class="indent">This circle’s center is at an x-coordinate of 300 and y-coordinate of 50. The radius of the circle is 20 pixels, and it is filled in with blue.</p>
+<h4 class="h3" id="calibre_link-714"><em class="calibre10"><strong class="calibre2">Drawing an Ellipse</strong></em></h4>
+<p class="noindenta">The <span class="literal1">pygame.draw.ellipse()</span> function is similar to the <span class="literal1">pygame.draw.circle()</span> function, but instead it draws an ellipse, which is like a squished circle. The <span class="literal1">pygame.draw.ellipse()</span> function’s parameters, in order, are as follows:</p>
+<ol class="calibre12">
+<li value="1" class="calibre13"><p class="noindenta">The <span class="literal1">Surface</span> object to draw the ellipse on.</p></li>
+<li value="2" class="calibre13"><p class="noindenta">The color of the ellipse.</p></li>
+<li value="3" class="calibre13"><p class="noindenta">A tuple of four integers for the left and top corner of the ellipse’s <span class="literal1">Rect</span> object and the width and height of the ellipse.</p></li>
+<li value="4" class="calibre13"><p class="noindenta">Optionally, an integer for the width of the line. A width of <span class="literal1">0</span> means that the ellipse will be filled in.</p></li>
+</ol>
+<p class="indent">Line 42 draws a red ellipse on the <span class="literal1">Surface</span> object:</p>
+<p class="programs">41. # Draw a red ellipse onto the surface.<br class="calibre7" />42. pygame.draw.ellipse(windowSurface, RED, (300, 250, 40, 80), 1)</p>
+<p class="indent">The ellipse’s top-left corner is at an x-coordinate of 300 and y-coordinate of 250. The shape is 40 pixels wide and 80 pixels tall. The ellipse’s outline is 1pixel wide.</p>
+<h4 class="h3" id="calibre_link-715"><em class="calibre10"><strong class="calibre2">Drawing a Rectangle</strong></em></h4>
+<p class="noindenta">The <span class="literal1">pygame.draw.rect()</span> function will draw a rectangle. The <span class="literal1">pygame.draw.rect()</span> function’s parameters, in order, are as follows:</p>
+<ol class="calibre12">
+<li value="1" class="calibre13"><p class="noindenta">The <span class="literal1">Surface</span> object to draw the rectangle on.</p></li>
+<li value="2" class="calibre13"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-210"></span><p class="noindenta">The color of the rectangle.</p></li>
+<li value="3" class="calibre13"><p class="noindenta">A tuple of four integers for the x- and y-coordinates of the top-left corner and the width and height of the rectangle. Instead of a tuple of four integers for the third parameter, you can also pass a <span class="literal1">Rect</span> object.</p></li>
+</ol>
+<p class="indent">In the Hello World program, we want the rectangle we draw to be visible 20 pixels around all the sides of <span class="literal1">text</span>. Remember, in line 23 we created a <span class="literal1">textRect</span> to contain our text. On line 45 we set the left and top points of the rectangle as the left and top of <span class="literal1">textRect</span> minus 20 (we subtract because coordinates decrease as you go left and up):</p>
+<p class="programs">44. # Draw the text's background rectangle onto the surface.<br class="calibre7" />45. pygame.draw.rect(windowSurface, RED, (textRect.left - 20,<br class="calibre7" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;textRect.top - 20, textRect.width + 40, textRect.height + 40))</p>
+<p class="indent">The width and height of the rectangle are equal to the width and height of the <span class="literal1">textRect</span> plus 40. We use 40 and not 20 because the left and top were moved back 20 pixels, so you need to make up for that space.</p>
+<h4 class="h3" id="calibre_link-716"><em class="calibre10"><strong class="calibre2">Coloring Pixels</strong></em></h4>
+<p class="noindenta">Line 48 creates a <span class="literal1">pygame.PixelArray</span> object (called a <span class="literal1">PixelArray</span> object for short). The <span class="literal1">PixelArray</span> object is a list of lists of color tuples that represents the <span class="literal1">Surface</span> object you passed it.</p>
+<p class="indent">The <span class="literal1">PixelArray</span> object gives you a high per-pixel level of control, so it’s a good choice if you need to draw very detailed or customized images to the screen instead of just large shapes.</p>
+<p class="indent">We’ll use a <span class="literal1">PixelArray</span> to color one pixel on <span class="literal1">windowSurface</span> black. You can see this pixel on the bottom right of the window when you run <span class="literal1">pygame</span> Hello World.</p>
+<p class="indent">Line 48 passes <span class="literal1">windowSurface</span> to the <span class="literal1">pygame.PixelArray()</span> call, so assigning <span class="literal1">BLACK</span> to <span class="literal1">pixArray[480][380]</span> on line 49 will make the pixel at the coordinates <span class="literal1">(480, 380)</span> black:</p>
+<p class="programs">47. # Get a pixel array of the surface.<br class="calibre7" />48. pixArray = pygame.PixelArray(windowSurface)<br class="calibre7" />49. pixArray[480][380] = BLACK</p>
+<p class="indent">The <span class="literal1">pygame</span> module will automatically modify the <span class="literal1">windowSurface</span> object with this change.</p>
+<p class="indent">The first index in the <span class="literal1">PixelArray</span> object is for the x-coordinate. The second index is for the y-coordinate. <span class="literal1">PixelArray</span> objects make it easy to set individual pixels on a <span class="literal1">Surface</span> object to a specific color.</p>
+<p class="indent">Every time you create a <span class="literal1">PixelArray</span> object from a <span class="literal1">Surface</span> object, that <span class="literal1">Surface</span> object is locked. That means no <span class="literal1">blit()</span> method calls (described next) can be made on that <span class="literal1">Surface</span> object. To unlock the <span class="literal1">Surface</span> object, you must delete the <span class="literal1">PixelArray</span> object with the <span class="literal1">del</span> operator:</p>
+<p class="programs">50. del pixArray</p>
+<p class="indent"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-101"></span>If you forget to do so, you’ll get an error message that says <span class="literal1">pygame.error: Surfaces must not be locked during blit</span>.</p>
+<h3 class="h2" id="calibre_link-717"><strong class="calibre2">The blit() Method for Surface Objects</strong></h3>
+<p class="noindent">The <span class="literal1">blit()</span> method will draw the contents of one <span class="literal1">Surface</span> object onto another <span class="literal1">Surface</span> object. All text objects created by the <span class="literal1">render()</span> method exist on their own <span class="literal1">Surface</span> object. The <span class="literal1">pygame</span> drawing methods can all specify the <span class="literal1">Surface</span> object to draw a shape or a line on, but our text was stored into the <span class="literal1">text</span> variable rather than drawn onto <span class="literal1">windowSurface</span>. In order to draw <span class="literal1">text</span> on the <span class="literal1">Surface</span> we want it to appear on, we must use the <span class="literal1">blit()</span> method:</p>
+<p class="programs">52. # Draw the text onto the surface.<br class="calibre7" />53. windowSurface.blit(text, textRect)</p>
+<p class="indent">Line 53 draws the <span class="literal1">'Hello world!' Surface</span> object in the <span class="literal1">text</span> variable (defined on line 22) onto the <span class="literal1">Surface</span> object stored in the <span class="literal1">windowSurface</span> variable.</p>
+<p class="indent">The second parameter to <span class="literal1">blit()</span> specifies where on <span class="literal1">windowSurface</span> the <span class="literal1">text</span> surface should be drawn. The <span class="literal1">Rect</span> object you got from calling <span class="literal1">text.get_rect()</span> on line 23 is passed for this parameter.</p>
+<h3 class="h2" id="calibre_link-718"><strong class="calibre2">Drawing the Surface Object to the Screen</strong></h3>
+<p class="noindent">Since in <span class="literal1">pygame</span> nothing is actually drawn to the screen until the function <span class="literal1">pygame.display.update()</span> is called, we call it on line 56 to display our updated <span class="literal1">Surface</span> object:</p>
+<p class="programs">55. # Draw the window onto the screen.<br class="calibre7" />56. pygame.display.update()</p>
+<p class="indent">To save memory, you don’t want to update to the screen after every single drawing function; instead, you want to update the screen only once, after all the drawing functions have been called.</p>
+<h3 class="h2" id="calibre_link-100"><strong class="calibre2">Events and the Game Loop</strong></h3>
+<p class="noindent">In our previous games, all of the programs would print everything immediately until they reached an <span class="literal1">input()</span> function call. At that point, the program would stop and wait for the user to type something in and press <small class="calibre11">ENTER</small>. But <span class="literal1">pygame</span> programs are constantly running through a <em class="calibre6">game loop</em>, which executes every line of code in the loop about 100 times a second.</p>
+<p class="indent">The game loop constantly checks for new events, updates the state of the window, and draws the window on the screen. <em class="calibre6">Events</em> are generated by <span class="literal1">pygame</span> <span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-300"></span>whenever the user presses a key, clicks or moves the mouse, or performs some other action recognized by the program that should make something happen in the game. An <span class="literal1">Event</span> is an object of the <span class="literal1">pygame.event.Event</span> data type.</p>
+<p class="indent">Line 59 is the start of the game loop:</p>
+<p class="programs">58. # Run the game loop.<br class="calibre7" />59. while True:</p>
+<p class="indent">The condition for the <span class="literal1">while</span> statement is set to <span class="literal1">True</span> so that it loops forever. The only time the loop will exit is if an event causes the program to terminate.</p>
+<h4 class="h3" id="calibre_link-719"><em class="calibre10"><strong class="calibre2">Getting Event Objects</strong></em></h4>
+<p class="noindenta">The function <span class="literal1">pygame.event.get()</span> checks for any new <span class="literal1">pygame.event.Event</span> objects (called <span class="literal1">Event</span> objects for short) that have been generated since the last call to <span class="literal1">pygame.event.get()</span>. These events are returned as a list of <span class="literal1">Event</span> objects, which the program will then execute to perform some action in response to the event. All <span class="literal1">Event</span> objects have an attribute called <span class="literal1">type</span>, which tell us the type of the event. In this chapter, we only need to use the <span class="literal1">QUIT</span> event type, which tells us when the user quits the program:</p>
+<p class="programs">60.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for event in pygame.event.get():<br class="calibre7" />61.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if event.type == QUIT:</p>
+<p class="indent">In line 60, we use a <span class="literal1">for</span> loop to iterate over each <span class="literal1">Event</span> object in the list returned by <span class="literal1">pygame.event.get()</span>. If the <span class="literal1">type</span> attribute of the event is equal to the constant variable <span class="literal1">QUIT</span>&mdash;which was in the <span class="literal1">pygame.locals</span> module we imported at the start of the program&mdash;then you know the <span class="literal1">QUIT</span> event has been generated.</p>
+<p class="indent">The <span class="literal1">pygame</span> module generates the <span class="literal1">QUIT</span> event when the user closes the program’s window or when the computer shuts down and tries to terminate all the running programs. Next, we’ll tell the program what to do when it detects the <span class="literal1">QUIT</span> event.</p>
+<h4 class="h3" id="calibre_link-720"><em class="calibre10"><strong class="calibre2">Exiting the Program</strong></em></h4>
+<p class="noindenta">If the <span class="literal1">QUIT</span> event has been generated, the program will call both <span class="literal1">pygame.quit()</span> and <span class="literal1">sys.exit()</span>:</p>
+<p class="programs">62.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pygame.quit()<br class="calibre7" />63.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys.exit()</p>
+<p class="indent">The <span class="literal1">pygame.quit()</span> function is sort of the opposite of <span class="literal1">init()</span>. You need to call it before exiting your program. If you forget, you may cause IDLE to hang after your program has ended. Lines 62 and 63 quit <span class="literal1">pygame</span> and end the program.</p>
+<h3 class="h2" id="calibre_link-721"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-924" class="calibre1"></span><strong class="calibre2">Summary</strong></h3>
+<p class="noindent">In this chapter, we’ve covered many new topics that will let us do a lot more than we could with our previous games. Instead of just working with text by calling <span class="literal1">print()</span> and <span class="literal1">input()</span>, a <span class="literal1">pygame</span> program has a blank window&mdash;created by <span class="literal1">pygame.display.set_mode()</span>&mdash;that we can draw on. <span class="literal1">pygame</span>’s drawing functions let you draw shapes in many colors in this window. You can create text of various sizes as well. These drawings can be at any x- and y-coordinate inside the window, unlike the text created by <span class="literal1">print()</span>.</p>
+<p class="indent">Even though the code is more complicated, <span class="literal1">pygame</span> programs can be much more fun than text games. Next, let’s learn how to create games with animated graphics.</p>
+</div>
+
+
+<a href="chapter16.html">Prev: Chapter 16: Reversegam AI Simulation</a> | <a href="chapter18.html">Next: Chapter 18: Animating Graphics</a>
+
+</body></html>

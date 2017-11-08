@@ -1,0 +1,104 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Chapter 12: The Cartesian Coordinate System</title></head><body>
+<script type="text/javascript">
+//<![CDATA[
+
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5459430-3']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
+//]]>
+</script>
+
+
+<a href="chapter11.html">Prev: Chapter 11: The Bagels Deduction Game</a> | <a href="chapter13.html">Next: Chapter 13: Sonar Treasure Hunt</a>
+
+
+<div id="calibre_link-800" class="calibre">
+<h2 class="h1" id="calibre_link-72"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-234" class="calibre1"></span><span class="big"><strong class="calibre2">12</strong></span><br class="calibre9" /><strong class="calibre2">THE CARTESIAN COORDINATE SYSTEM</strong></h2>
+<div class="imagec"><img src="images/00016.jpeg" alt="image" class="calibre3" /></div>
+<p class="noindent">This chapter goes over some simple mathematical concepts you will use in the rest of this book. In two-dimensional (2D) games, the graphics on the screen can move left or right and up or down. These games need a way to translate a place on the screen into integers the program can deal with.</p>
+<p class="indent">This is where the <em class="calibre6">Cartesian coordinate system</em> comes in. <em class="calibre6">Coordinates</em> are numbers that represent a specific point on the screen. These numbers can be stored as integers in your program’s variables.</p>
+<div class="sidebar">
+<p class="sidebart"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-235" class="calibre1"></span><strong class="calibre2">TOPICS COVERED IN THIS CHAPTER</strong></p>
+<p class="bull">• Cartesian coordinate systems</p>
+<p class="bull">• The x-axis and y-axis</p>
+<p class="bull">• Negative numbers</p>
+<p class="bull">• Pixels</p>
+<p class="bull">• The commutative property of addition</p>
+<p class="bull">• Absolute values and the <span class="literal1">abs()</span> function</p>
+</div>
+<h3 class="h2" id="calibre_link-597"><strong class="calibre2">Grids and Cartesian Coordinates</strong></h3>
+<p class="noindent">A common way to refer to specific places on a chessboard is by marking each row and column with letters and numbers. <a href="#calibre_link-801" class="calibre4">Figure 12-1</a> shows a chessboard that has each row and column marked.</p>
+<div class="image"><img src="images/00014.jpeg" alt="image" class="calibre3" /></div>
+<p class="figcap"><a id="calibre_link-801" class="calibre4"></a><em class="calibre6">Figure 12-1: A sample chessboard with a black knight at (a, 4) and a white knight at (e, 6)</em></p>
+<p class="indent">A coordinate for a space on the chessboard is a combination of a row and a column. In chess, the knight piece looks like a horse head. The white knight in <a href="#calibre_link-801" class="calibre4">Figure 12-1</a> is located at the point (e, 6) since it is in column e and row 6, and the black knight is located at point (a, 4) because it is in column a and row 4.</p>
+<p class="indent"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-397"></span>You can think of a chessboard as a Cartesian coordinate system. By using a row label and column label, you can give a coordinate that is for one&mdash;and only one&mdash;space on the board. If you’ve learned about Cartesian coordinate systems in math class, you may know that numbers are used for both the rows and columns. A chessboard using numerical coordinates would look like <a href="#calibre_link-802" class="calibre4">Figure 12-2</a>.</p>
+<p class="indent">The numbers going left and right along the columns are part of the <em class="calibre6">x-axis</em>. The numbers going up and down along the rows are part of the <em class="calibre6">y-axis</em>. Coordinates are always described with the x-coordinate first, followed by the y-coordinate. In <a href="#calibre_link-802" class="calibre4">Figure 12-2</a>, the x-coordinate for the white knight is 5 and the y-coordinate is 6, so the white knight is located at the coordinates (5, 6) and not (6, 5). Similarly, the black knight is located at the coordinate (1, 4), not (4, 1), since the black knight’s x-coordinate is 1 and its y-coordinate is 4.</p>
+<div class="image"><img src="images/00004.jpeg" alt="image" class="calibre3" /></div>
+<p class="figcap"><a id="calibre_link-802" class="calibre4"></a><em class="calibre6">Figure 12-2: The same chessboard but with numeric coordinates for both rows and columns</em></p>
+<p class="indent">Notice that for the black knight to move to the white knight’s position, the black knight must move two spaces up and four spaces to the right. But you don’t need to look at the board to figure this out. If you know the white knight is located at (5, 6) and the black knight is located at (1, 4), you can use subtraction to figure out this information.</p>
+<p class="indent">Subtract the black knight’s x-coordinate from the white knight’s x-coordinate: 5 &ndash; 1 = 4. The black knight has to move along the x-axis by four spaces. Now subtract the black knight’s y-coordinate from the white knight’s y-coordinate: 6 &ndash; 4 = 2. The black knight has to move along the y-axis by two spaces.</p>
+<p class="indent">By doing some math with the coordinate numbers, you can figure out the distances between two coordinates.</p>
+<h3 class="h2" id="calibre_link-598"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-237" class="calibre1"></span><strong class="calibre2">Negative Numbers</strong></h3>
+<p class="noindent">Cartesian coordinates also use <em class="calibre6">negative numbers</em>&mdash;numbers that are less than zero. A minus sign in front of a number shows it is negative: &ndash;1 is less than 0. And &ndash;2 is less than &ndash;1. But 0 itself isn’t positive or negative. In <a href="#calibre_link-803" class="calibre4">Figure 12-3</a>, you can see the positive numbers increasing to the right and the negative numbers decreasing to the left on a number line.</p>
+<div class="image"><img src="images/00068.jpeg" alt="image" class="calibre3" /></div>
+<p class="figcap"><a id="calibre_link-803" class="calibre4"></a><em class="calibre6">Figure 12-3: A number line with positive and negative numbers</em></p>
+<p class="indent">The number line is useful to see subtraction and addition. You can think of the expression 5 + 3 as the white knight starting at position 5 and moving 3 spaces to the right. As you can see in <a href="#calibre_link-804" class="calibre4">Figure 12-4</a>, the white knight ends up at position 8. This makes sense, because 5 + 3 is 8.</p>
+<div class="image"><img src="images/00079.jpeg" alt="image" class="calibre3" /></div>
+<p class="figcap"><a id="calibre_link-804" class="calibre4"></a><em class="calibre6">Figure 12-4: Moving the white knight to the right adds to the coordinate.</em></p>
+<p class="indent">You subtract by moving the white knight to the left. So if the expression is 5 &ndash; 6, the white knight starts at position 5 and moves 6 spaces to the left, as shown in <a href="#calibre_link-805" class="calibre4">Figure 12-5</a>.</p>
+<div class="image"><img src="images/00093.jpeg" alt="image" class="calibre3" /></div>
+<p class="figcap"><a id="calibre_link-805" class="calibre4"></a><em class="calibre6">Figure 12-5: Moving the white knight to the left subtracts from the coordinate.</em></p>
+<p class="indent">The white knight ends up at position &ndash;1. That means 5 &ndash; 6 equals &ndash;1.</p>
+<p class="indent">If you add or subtract a negative number, the white knight moves in the <em class="calibre6">opposite</em> direction than it does with positive numbers. If you add a negative number, the knight moves to the <em class="calibre6">left</em>. If you subtract a negative number, the knight moves to the <em class="calibre6">right</em>. The expression &ndash;1 &ndash; (&ndash;4) would be equal to 3, as shown in <a href="#calibre_link-806" class="calibre4">Figure 12-6</a>. Notice that &ndash;1 &ndash; (&ndash;4) has the same answer as &ndash;1 + 4.</p>
+<div class="image"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-255"></span><img src="images/00101.jpeg" alt="image" class="calibre3" /></div>
+<p class="figcap"><a id="calibre_link-806" class="calibre4"></a><em class="calibre6">Figure 12-6: The knight starts at &ndash;6 and moves to the</em> right <em class="calibre6">by 4 spaces.</em></p>
+<p class="indent">You can think of the x-axis as a number line. Add another number line going up and down for the y-axis. If you put these two number lines together, you have a Cartesian coordinate system like the one in <a href="#calibre_link-807" class="calibre4">Figure 12-7</a>.</p>
+<p class="indent">Adding a positive number (or subtracting a negative number) would move the knight up on the y-axis or to the right on the x-axis, and subtracting a positive number (or adding a negative number) would move the knight down on the y-axis or to the left on the x-axis.</p>
+<p class="indent">The (0, 0) coordinate at the center is called the <em class="calibre6">origin</em>. You may have used a coordinate system like this in your math class. As you’re about to see, coordinate systems like these have a lot of little tricks you can use to make figuring out coordinates easier.</p>
+<div class="image"><img src="images/00012.jpeg" alt="image" class="calibre3" /></div>
+<p class="figcap"><a id="calibre_link-807" class="calibre4"></a><em class="calibre6">Figure 12-7: Putting two number lines together creates a Cartesian coordinate system.</em></p>
+<h3 class="h2" id="calibre_link-599"><strong class="calibre2">The Coordinate System of a Computer Screen</strong></h3>
+<p class="noindent">Your computer screen is made up of <em class="calibre6">pixels</em>, the smallest dot of color a screen can show. It’s common for computer screens to use a coordinate system that has the origin (0, 0) at the top-left corner and that increases going down and to the right. You can see this in <a href="#calibre_link-808" class="calibre4">Figure 12-8</a>, which shows a laptop with a screen resolution that is 1,920 pixels wide and 1,080 pixels tall.</p>
+<p class="indent"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-236"></span>There are no negative coordinates. Most computer graphics use this coordinate system for pixels on the screen, and you will use it in this book’s games. For programming, it’s important to know how coordinate systems work&mdash;both the kind used for mathematics and the kind used for computer screens.</p>
+<div class="image"><img src="images/00013.jpeg" alt="image" class="calibre3" /></div>
+<p class="figcap"><a id="calibre_link-808" class="calibre4"></a><em class="calibre6">Figure 12-8: The Cartesian coordinate system on a computer screen</em></p>
+<h3 class="h2" id="calibre_link-600"><strong class="calibre2">Math Tricks</strong></h3>
+<p class="noindent">Subtracting and adding negative numbers is easy when you have a number line in front of you. It can also be easy without a number line. Here are three tricks to help you add and subtract negative numbers by yourself.</p>
+<h4 class="h3" id="calibre_link-601"><em class="calibre10"><strong class="calibre2">Trick 1: A Minus Eats the Plus Sign on Its Left</strong></em></h4>
+<p class="noindenta">When you see a minus sign with a plus sign on the left, you can replace the plus sign with a minus sign. Imagine the minus sign “eating” the plus sign to its left. The answer is still the same, because adding a negative value is the same as subtracting a positive value. So 4 + &ndash;2 and 4 &ndash; 2 both evaluate to 2, as you can see here:</p>
+<div class="image"><img src="images/00008.jpeg" alt="image" class="calibre3" /></div>
+<h4 class="h3" id="calibre_link-602"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-153" class="calibre1"></span><em class="calibre10"><strong class="calibre2">Trick 2: Two Minuses Combine into a Plus</strong></em></h4>
+<p class="noindenta">When you see the two minus signs next to each other without a number between them, they can combine into a plus sign. The answer is still the same, because subtracting a negative value is the same as adding a positive value:</p>
+<div class="image"><img src="images/00017.jpeg" alt="image" class="calibre3" /></div>
+<h4 class="h3" id="calibre_link-603"><em class="calibre10"><strong class="calibre2">Trick 3: Two Numbers Being Added Can Swap Places</strong></em></h4>
+<p class="noindenta">You can always swap the numbers in addition. This is the <em class="calibre6">commutative property of addition</em>. That means that doing a swap like 6 + 4 to 4 + 6 will not change the answer, as you can see when you count the boxes in <a href="#calibre_link-809" class="calibre4">Figure 12-9</a>.</p>
+<div class="image"><img src="images/00027.jpeg" alt="image" class="calibre3" /></div>
+<p class="figcap"><a id="calibre_link-809" class="calibre4"></a><em class="calibre6">Figure 12-9: The commutative property of addition lets you swap numbers.</em></p>
+<p class="indent">Say you are adding a negative number and a positive number, like &ndash;6 + 8. Because you are adding numbers, you can swap the order of the numbers without changing the answer. This means &ndash;6 + 8 is the same as 8 + &ndash;6. Then when you look at 8 + &ndash;6, you see that the minus sign can eat the plus sign to its left, and the problem becomes 8 &ndash; 6 = 2, as you can see here:</p>
+<div class="image"><img src="images/00037.jpeg" alt="image" class="calibre3" /></div>
+<p class="indent">You’ve rearranged the problem so that it’s easier to solve without using a calculator or computer.</p>
+<h3 class="h2" id="calibre_link-604"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-170" class="calibre1"></span><strong class="calibre2">Absolute Values and the abs() Function</strong></h3>
+<p class="noindent">A number’s <em class="calibre6">absolute value</em> is the number without the minus sign in front of it. Therefore, positive numbers do not change, but negative numbers become positive. For example, the absolute value of &ndash;4 is 4. The absolute value of &ndash;7 is 7. The absolute value of 5 (which is already positive) is just 5.</p>
+<p class="indent">You can figure out the distance between two objects by subtracting their positions and taking the absolute value of the difference. Imagine that the white knight is at position 4 and the black knight is at position &ndash;2. The distance would be 6, since 4 &ndash; &ndash;2 is 6, and the absolute value of 6 is 6.</p>
+<p class="indent">It works no matter what the order of the numbers is. For example, &ndash;2 &ndash; 4 (that is, negative two minus four) is &ndash;6, and the absolute value of &ndash;6 is also 6.</p>
+<p class="indent">Python’s <span class="literal1">abs()</span> function returns the absolute value of an integer. Enter the following into the interactive shell:</p>
+<p class="programs">&gt;&gt;&gt; <span class="codestrong">abs(-5)</span><br class="calibre7" />5<br class="calibre7" />&gt;&gt;&gt; <span class="codestrong">abs(42)</span><br class="calibre7" />42<br class="calibre7" />&gt;&gt;&gt; <span class="codestrong">abs(-10.5)</span><br class="calibre7" />10.5</p>
+<p class="indent">The absolute value of <span class="literal1">-5</span> is <span class="literal1">5</span>. The absolute value of a positive number is just the number, so the absolute value of <span class="literal1">42</span> is <span class="literal1">42</span>. Even numbers with decimals have an absolute value, so the absolute value of <span class="literal1">-10.5</span> is <span class="literal1">10.5</span>.</p>
+<h3 class="h2" id="calibre_link-605"><strong class="calibre2">Summary</strong></h3>
+<p class="noindent">Most programming doesn’t require understanding a lot of math. Up until this chapter, we’ve been getting by with simple addition and multiplication.</p>
+<p class="indent">Cartesian coordinate systems are needed to describe where a certain position is located in a two-dimensional area. Coordinates have two numbers: the x-coordinate and the y-coordinate. The x-axis runs left and right, and the y-axis runs up and down. On a computer screen, the origin is in the top-left corner and the coordinates increase going right and downward.</p>
+<p class="indent">The three math tricks you learned in this chapter make it easy to add positive and negative integers. The first trick is that a minus sign will eat the plus sign on its left. The second trick is that two minuses next to each other will combine into a plus sign. The third trick is that you can swap the position of the numbers you are adding.</p>
+<p class="indent">The rest of the games in this book use these concepts because they have two-dimensional areas in them. All graphical games require understanding how Cartesian coordinates work.</p>
+</div>
+
+
+<a href="chapter11.html">Prev: Chapter 11: The Bagels Deduction Game</a> | <a href="chapter13.html">Next: Chapter 13: Sonar Treasure Hunt</a>
+
+</body></html>

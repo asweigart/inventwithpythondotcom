@@ -17,13 +17,13 @@
 
 <p>After you have purchased a shared hosting plan from Dreamhost, go to <a href="https://panel.dreamhost.com/">https://panel.dreamhost.com/</a> and log into your Dreamhost account. This tutorial assumes you have also registered for a domain name. From the sidebar, click Domains > Manage Domains, then click the Edit link next to the domain name you want to host the Django app. In this tutorial, I will be using <strong>example.turtleappstore.com</strong> for the domain name. Replace this with your domain name in any commands in this tutorial.</p>
 
-<p>You will see the configuration details for this domain name. Make sure that the <strong>Passenger (Ruby/NodeJS/Python apps only)</strong> checkbox is checked. This will also make the web directory end with <code>public</code>, such as <code>/home/username/example.turtleappstore.com/public</code>. The page will look like this:<br /><img src="/blogstatic/djangdreamhost/enable_passenger.png" /></p>
+<p>You will see the configuration details for this domain name. Make sure that the <strong>Passenger (Ruby/NodeJS/Python apps only)</strong> checkbox is checked. This will also make the web directory end with <code>public</code>, such as <code>/home/username/example.turtleappstore.com/public</code>. The page will look like this:<br /><img src="/blogstatic/djangodreamhost/enable_passenger.png" alt="" /></p>
 
 <p>Aside: If you have multiple domain names with Dreamhost, I recommend creating a separate user for each one. (From the sidebar, click Users > Manage Users.) If the account or site is hacked, it will only affect that single domain instead of possibly all of your domains.</p>
 
 <p>The user account that manages this domain name must have "shell access". From the sidebar, click Users > Manage Users, then click the Edit link next to the user. Next to <strong>User Type</strong>, select "Shell user". This will allow you to SSH into the shared hosting server that the web server is running on.</p>
 
-<img src="/blogstatic/djangdreamhost/shell_user.png" /></p>
+<p><img src="/blogstatic/djangodreamhost/shell_user.png" alt="" /></p>
 
 <h2>SSH into the Server</h2>
 
@@ -74,7 +74,7 @@
 <p>Confirm that virtualenv was installed by running the following and checking the output:</p>
 
 <pre>[server]$ which virtualenv
-/home/dh_uz3hk6/opt/python-3.6.0/bin/virtualenv</pre>
+/home/[username]/opt/python-3.6.0/bin/virtualenv</pre>
 
 <p>According to the <a href="https://docs.python.org/3/library/venv.html">venv documentation</a>, in Python 3.6 you don't use <code>virtualenv</code> or <code>pyenv</code> but instead <code>python 3 -m venv</code> to prevent confusion as to which Python interpreter the virtual environment will be based on.</p>
 
@@ -112,14 +112,14 @@ Type "help", "copyright", "credits" or "license" for more information.
 <pre>(tas_venv) [server]$ cd ~/example.turtleappstore.com/
 (tas_venv) [server]$ python3 ~/tas_venv/bin/django-admin.py startproject tasproject</pre>
 
-<h2>Setup Passenger & Django</h2>
+<h2>Setup Passenger &amp; Django</h2>
 
 <p>To finish setting up your site, create a file passenger_wsgi.py in the root of your website directory using a text editor. Add the following to it:</p>
 
 <pre>import sys, os
 cwd = os.getcwd()
 sys.path.append(cwd)
-sys.path.append(cwd + '/my_project')
+sys.path.append(cwd + '/tasproject')
 
 INTERP = os.path.expanduser("~/tas_venv/bin/python3")
 
@@ -139,11 +139,7 @@ application = get_wsgi_application()</pre>
 
 <pre>STATIC_ROOT = os.path.dirname(BASE_DIR) + '/static/'</pre>
 
-<p>(I'm not sure if this is true, but: Note that because Passenger causes Django to handle all web server requests, the <code>public</code> folder is not used for anything. Place images and other static files in the STATIC_ROOT folder.)</p>
-
-<p>Find the <code>ALLOWED_HOSTS = []</code> line and change it to this:</p>
-
-<pre>ALLOWED_HOSTS = ['example.turtleappstore.com']</pre>
+<p>Passenger causes Django to handle web server requests. However, I've been having problems getting static files to work correctly on Dreamhost, so I use the <code>public</code> folder to server all static files by placing a <code>static</code> subfolder under the <code>public</code> folder. I'll update this blog post if I figure out a way to get static files to work properly through Django. Note that Dreamhost will check the <code>public</code> folder first for URL requests, and then check Django's urls.py file next.</p>
 
 <p>Finally, create a restart.txt file to cause Passenger to reload your passenger_wsgi.py script:</p>
 
@@ -151,6 +147,6 @@ application = get_wsgi_application()</pre>
 
 <p>At this point, you should be able to open example.turtleappstore.com in a web browser and see Django's default "It worked!" page. Whenever you make a change, you need to re-touch the restart.txt file for Passenger to pick up the changes. Note that Passenger will handle <em>all</em> requests made to the example.turtleappstore.com. You can now start creating apps and working on your Django project as you normally would.</p>
 
-
+<p><img src="/blogstatic/djangodreamhost/it_worked.png" alt="" /></p>
 
     </body>
