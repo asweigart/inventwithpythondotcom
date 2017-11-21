@@ -1,0 +1,135 @@
+<html>
+    <head>
+        <title>Python Import Tutorial: Rules, Paths, and Pitfalls</title>
+        <meta name="tags" content="" />
+        <meta name="date" content="2017-03-31 12:00" />
+        <meta name="summary" content="" />
+    </head>
+    <body>
+
+    <p><strong>NOTE: This tutorial is still under construction. It is incomplete and the information in it has not been verified.</strong></p>
+
+    <p>My personal knowledge of Python's <code>import</code> statement has always been patchy. I kinda sorta knew how it worked, and could consult Stack Overflow to figure out problems as they came up. But I never sat down to formally sutdy how imports in Python worked. I've written this tutorial to organize my thoughts. The level of the target audeince for this tutorial is for people comfortable with basic Python syntax. Assume the information in this tutorial is for Python 3.6 except when otherwise stated.</p>
+
+    <ul>
+      <li>If you just want to skim this document, the main points are in bullets like this.</li>
+      <li>And this.</li>
+      <li>And this.</li>
+    </ul>
+
+    <h2>Basics of Importing</h2>
+
+    <p>Importing modules from Python's <em>standard library</em> is straight-forward and familiar to anyone who's done basic Python:</p>
+
+<pre>>>> import math
+>>> math.sqrt(25)
+5.0</pre>
+
+    <p>The previous code always works, no matter what the cwd, or <em>current working directory</em>, is or the location of the .py file that runs the above code.</p>
+
+    <p>You can also import other .py files as modules. Imagine the following coffee.py and america.py scripts are both in the same folder:</p>
+
+    <p><em>coffee.py</em></p>
+
+<pre>print('Coffee!')
+
+def shouldDrinkCoffee():
+    return True</pre>
+
+    <p><em>america.py</em></p>
+
+<pre>import coffee
+
+print('I should drink coffee:', coffee.shouldDrinkCoffee())</pre>
+
+    <p>Running america.py produces the following output:</p>
+
+<pre>Coffee!
+I should drink coffee: True</pre>
+
+    <p>The america.py Python script imports coffee.py and calls a function in it. Three things to note:</p>
+
+    <ul>
+      <li>The import statement accepts an identifier, not a string. It's <code>import coffee</code>, not <code>import 'coffee'</code>.</li>
+      <li>You do <strong>not</strong> include the .py: It's <code>import coffee</code>, not <code>import coffee.py</code></li>
+      <li>Note that importing a module runs the code inside of it, hence why <code>print('Coffee!')</code> was executed when coffee.py was imported.</li>
+    </ul>
+
+    <p>If you want to import modules by string, use the
+
+
+    <p>If you import a module a second time, the code the module doesn't run again. The module is cached. If you ran:</p>
+
+<pre>import coffee
+import coffee</pre>
+
+    <p>The <code>print('Coffee!')</code> line is only executed by the first <code>import coffee</code> statement.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+NOTES:
+
+"module search path"
+sys.path is set from PYTHONPATH? (What if I don't have that env var set?)
+
+Changing sys.path direclty is like changing your PYTHONPATH env var.
+
+sys == sys.modules['sys']
+
+sys.modules always has real name of the module, not the "as foo" name.
+
+sys.builtin_module_names doesnt change as you import modules. its a tuple
+
+importlib.import_module() is a wrapper for __import__.
+
+
+>>> __import__('random')
+<module 'random' from 'C:\\Users\\Al\\AppData\\Local\\Programs\\Python\\Python36\\lib\\random.py'>
+>>> random.randint(1, 10)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+NameError: name 'random' is not defined
+
+importlib is new in Python 2.7.
+
+
+
+import statement imports into the current scope
+How does this affect sys.modules
+
+
+importing modules doesn't affect sys.modules. Why not?
+
+A package is just a folder with some Python files in it.
+
+if __name__ best practice
+
+from __future__ import absolute_imports (use on python 2, allows for *explicit* relative imports)
+
+    </body>
+</html>

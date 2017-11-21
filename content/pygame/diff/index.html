@@ -1,5 +1,6 @@
-{% extends "basePygame.html" %}
-{% set title = 'Making Games with Python & Pygame - Diff Tool' %}
+{% extends "base.html" %}
+{% set title = 'Online Diff Tool - Making Games with Python &amp; Pygame' %}
+
 {% block content %}
 
 <script type="text/javascript" src="/dojo.js"></script>
@@ -9,6 +10,7 @@
 <script type="text/javascript" src="/diff/difflib.js"></script>
 
 <script type="text/javascript">
+//<![CDATA[
 var $ = dojo.byId;
 dojo.require("dojo.io");
 var url = window.location.toString().split("#")[0];
@@ -40,54 +42,59 @@ if (!Array.prototype.indexOf)
 
 // Read a page's GET URL variables and return them as an associative array.
 function getUrlVars() {
-	var vars = [], hash;
-	var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+  var vars = [], hash;
+  var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
 
-	for(var i = 0; i < hashes.length; i++) {
-		hash = hashes[i].split('=');
-		vars.push(hash[0]);
-		vars[hash[0]] = hash[1];
-	}
-	return vars;
+  for(var i = 0; i < hashes.length; i++) {
+    hash = hashes[i].split('=');
+    vars.push(hash[0]);
+    vars[hash[0]] = hash[1];
+  }
+  return vars;
 }
 
 function diffUsingJS() {
-	//var base = difflib.stringAsLines($("baseText").value);
-	var base = difflib.stringAsLines(sourceCodesPygame[$('programSelect').value]);
-	var newtxt = difflib.stringAsLines($("newText").value);
-	var sm = new difflib.SequenceMatcher(base, newtxt);
-	var opcodes = sm.get_opcodes();
-	var diffoutputdiv = $("diffoutput");
-	while (diffoutputdiv.firstChild) diffoutputdiv.removeChild(diffoutputdiv.firstChild);
-	//var contextSize = $("contextSize").value;
-	//contextSize = contextSize ? contextSize : null;
-	diffoutputdiv.appendChild(diffview.buildView({ baseTextLines:base,
-												   newTextLines:newtxt,
-												   opcodes:opcodes,
-												   baseTextName:"The Book's Program",
-												   newTextName:"Your Program",
-												   contextSize:null, // I've removed the contextSize field from the form.
-												   viewType: 0 }));
-	window.location = url + "#diff";
+  //var base = difflib.stringAsLines($("baseText").value);
+  var base = difflib.stringAsLines(sourceCodes[$('programSelect').value]);
+  var newtxt = difflib.stringAsLines($("newText").value);
+  var sm = new difflib.SequenceMatcher(base, newtxt);
+  var opcodes = sm.get_opcodes();
+  var diffoutputdiv = $("diffoutput");
+  while (diffoutputdiv.firstChild) diffoutputdiv.removeChild(diffoutputdiv.firstChild);
+  //var contextSize = $("contextSize").value;
+  //contextSize = contextSize ? contextSize : null;
+  diffoutputdiv.appendChild(diffview.buildView({ baseTextLines:base,
+                           newTextLines:newtxt,
+                           opcodes:opcodes,
+                           baseTextName:"The Book's Program",
+                           newTextName:"Your Program",
+                           contextSize:null, // I've removed the contextSize field from the form.
+                           viewType: 0 }));
+  window.location = url + "#diff";
 }
 
 function onPageLoad() {
-	// the optional "p" GET parameter can set the default program selected.
-	var getVars = getUrlVars();
-	var allPrograms = ['blankpygame', 'drawing', 'catanimation', 'memorypuzzle', 'slidepuzzle', 'simulate', 'wormy', 'tetromino', 'squirrel', 'starpusher', 'flippy', 'inkspill', 'fourinarow', 'gemgem'];
+  // the optional "p" GET parameter can set the default program selected.
+  var getVars = getUrlVars();
+  var allPrograms = ['blankpygame', 'drawing', 'catanimation', 'memorypuzzle', 'slidepuzzle', 'simulate', 'wormy', 'tetromino', 'squirrel', 'starpusher', 'flippy', 'inkspill', 'fourinarow', 'gemgem'];
 
-	if ((getVars['p']) && (allPrograms.indexOf(getVars['p']) != -1)) {
-		$('programSelect').value = getVars['p'];
-	}
+  if ((getVars['p']) && (allPrograms.indexOf(getVars['p']) != -1)) {
+    $('programSelect').value = getVars['p'];
+  }
 }
 
 dojo.addOnLoad(onPageLoad);
 </script>
 
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <h2>Online Diff Tool</h2>
 
-<h1>Diff Tool</h1>
+      <p>A <a href="https://en.wikipedia.org/wiki/Diff_utility">diff tool</a> shows you the differences between two pieces of text. If the program you copied from the book isn't working, you can copy/paste it here to see any differences between your code and the code in the book.</p>
 
-<p>The diff tool can help you find typos in your code by showing you the differences between your program and the programs in the book.</p>
+      <p>Common errors include missing commas, unclosed string quotes, or uneven indentation.</p>
+
 
 <table border="0">
     <tr>
@@ -127,5 +134,9 @@ dojo.addOnLoad(onPageLoad);
 <a name="diff"> </a>
 <div id="diffoutput" style="width:100%"> </div>
 
+
+    </div>
+  </div>
+</div>
 
 {% endblock %}

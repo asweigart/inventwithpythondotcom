@@ -1,145 +1,153 @@
-{% extends "basePygame.html" %}
-{% set title = 'Making Games with Python & Pygame - Buggy Programs' %}
+{% extends "base.html" %}
+{% set title = 'Buggy Programs - Making Games with Python &amp; Pygame' %}
+
 {% block content %}
 
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <h1>Buggy Programs</h1>
 
-<h1>Buggy Programs</h1>
+      <p>To get practice debugging programs, download the programs which each have a simple typo bug in them. For <a href="/appendixd.html">Appendix D</a> of "Invent with Python" for a list of common error messages and what they mean, and read <a href="/chapter7.html">Chapter 7</a> of "Invent with Python" to learn how to use the debugger software that comes with IDLE.</p>
 
-<p>To get practice debugging programs, download the programs which each have a simple typo bug in them. For <a href="/appendixd.html">Appendix D</a> of "Invent with Python" for a list of common error messages and what they mean, and read <a href="/chapter7.html">Chapter 7</a> of "Invent with Python" to learn how to use the debugger software that comes with IDLE.</p>
+      <p>You don't <em>need</em> to use the debugger to fix these programs, but it makes debugging much easier.</p>
 
-<p>You don't <em>need</em> to use the debugger to fix these programs, but it makes debugging much easier.</p>
+      <p><a href="/pygame/buggy/buggy_pygame.zip">Download all the buggy programs.</a></p>
 
-<p><span class="bigfont"><a href="/pygame/buggy/buggy_pygame.zip">Download all the buggy programs.</a></span>
+      <p><span class="bigfont"><a href="/pygame/buggy/memorypuzzle_buggy.zip">Download buggy Memory Puzzle programs.</a></span><br />
+      memorypuzzle_buggy1.py - Graphics are messed up.<br />
+      memorypuzzle_buggy2.py - IndexError: list index out of range<br />
+      memorypuzzle_buggy3.py - Box highlight lags<br />
+      memorypuzzle_buggy4.py - icons don't show up<br />
+      memorypuzzle_buggy5.py - NameError: global name 'getRandomizedBoard' is not defined<br />
+      memorypuzzle_buggy6.py - Box hide/reveal animation is very choppy.<br />
+      memorypuzzle_buggy7.py - No gaps are showing up on the board.<br />
+      memorypuzzle_buggy8.py - TypeError: 'NoneType' object is not iterable<br />
+      </p>
 
-<p><span class="bigfont"><a href="/pygame/buggy/memorypuzzle_buggy.zip">Download buggy Memory Puzzle programs.</a></span><br />
-memorypuzzle_buggy1.py - Graphics are messed up.<br />
-memorypuzzle_buggy2.py - IndexError: list index out of range<br />
-memorypuzzle_buggy3.py - Box highlight lags<br />
-memorypuzzle_buggy4.py - icons don't show up<br />
-memorypuzzle_buggy5.py - NameError: global name 'getRandomizedBoard' is not defined<br />
-memorypuzzle_buggy6.py - Box hide/reveal animation is very choppy.<br />
-memorypuzzle_buggy7.py - No gaps are showing up on the board.<br />
-memorypuzzle_buggy8.py - TypeError: 'NoneType' object is not iterable<br />
-</p>
-
-<p><span class="bigfont"><a href="/pygame/buggy/slidepuzzle_buggy.zip">Download buggy Slide Puzzle programs.</a></span><br />
-slidepuzzle_buggy1.py - Clicking reset crashes the game: "NameError: global name 'resetAnimation' is not defined"<br />
-slidepuzzle_buggy2.py - SyntaxError: EOL while scanning string literal<br />
-slidepuzzle_buggy3.py - Sliding down causes the tile to move down-right.<br />
-slidepuzzle_buggy4.py - Clicking Solve twice causes it to make several extra moves the second time.<br />
-slidepuzzle_buggy5.py - Game won't start: "pygame.error: font not initialized"<br />
-slidepuzzle_buggy6.py - SyntaxError: invalid syntax<br />
-slidepuzzle_buggy7.py - Clicking "New Game" causes "IndexError: string index out of range"<br />
-slidepuzzle_buggy8.py - Puzzle starts off with tiles shifted off by 1 space, and there are two blank spots.<br />
-</p>
-
-
-
-<p><span class="bigfont"><a href="/pygame/buggy/simulate_buggy.zip">Download buggy Simulate programs.</a></span><br />
-simulate_buggy1.py - Game crashes for no reason - "NameError: global name 'BRIGHTYELOW' is not defined"<br />
-simulate_buggy2.py - Blue button overlaps the yellow button.<br />
-simulate_buggy3.py - Pressing the "W" key doesn't work.<br />
-simulate_buggy4.py - Game crashes - "NameError: global name 'BEEP4' is not defined"<br />
-simulate_buggy5.py - Window appears too tall.<br />
-simulate_buggy6.py - Yellow button doesn't flash.<br />
-simulate_buggy7.py - Buttons don't flash.<br />
-simulate_buggy8.py - Game doesn't run - "IndentationError: unindent does not match any outer indentation level"<br />
-</p>
+      <p><span class="bigfont"><a href="/pygame/buggy/slidepuzzle_buggy.zip">Download buggy Slide Puzzle programs.</a></span><br />
+      slidepuzzle_buggy1.py - Clicking reset crashes the game: "NameError: global name 'resetAnimation' is not defined"<br />
+      slidepuzzle_buggy2.py - SyntaxError: EOL while scanning string literal<br />
+      slidepuzzle_buggy3.py - Sliding down causes the tile to move down-right.<br />
+      slidepuzzle_buggy4.py - Clicking Solve twice causes it to make several extra moves the second time.<br />
+      slidepuzzle_buggy5.py - Game won't start: "pygame.error: font not initialized"<br />
+      slidepuzzle_buggy6.py - SyntaxError: invalid syntax<br />
+      slidepuzzle_buggy7.py - Clicking "New Game" causes "IndexError: string index out of range"<br />
+      slidepuzzle_buggy8.py - Puzzle starts off with tiles shifted off by 1 space, and there are two blank spots.<br />
+      </p>
 
 
-<p><span class="bigfont"><a href="/pygame/buggy/wormy_buggy.zip">Download buggy Wormy programs.</a></span><br />
-wormy_buggy1.py - Worm sometimes does not appear on the board, and "Game Over" appears a second or two later.<br />
-wormy_buggy2.py - Worm keeps growing.<br />
-wormy_buggy3.py - Pressing down makes the worm go up.<br />
-wormy_buggy4.py - Worm can go off the left and right edges.<br />
-wormy_buggy5.py - Program hangs with a black screen when it first starts.<br />
-wormy_buggy6.py - NameError: global name 'DOWN' is not defined<br />
-wormy_buggy7.py - An invisible vertical wall near the middle causes the player to game over.<br />
-wormy_buggy8.py - Player can't change direction, and pressing the left arrow key causes a game over.<br />
-</p>
+
+      <p><span class="bigfont"><a href="/pygame/buggy/simulate_buggy.zip">Download buggy Simulate programs.</a></span><br />
+      simulate_buggy1.py - Game crashes for no reason - "NameError: global name 'BRIGHTYELOW' is not defined"<br />
+      simulate_buggy2.py - Blue button overlaps the yellow button.<br />
+      simulate_buggy3.py - Pressing the "W" key doesn't work.<br />
+      simulate_buggy4.py - Game crashes - "NameError: global name 'BEEP4' is not defined"<br />
+      simulate_buggy5.py - Window appears too tall.<br />
+      simulate_buggy6.py - Yellow button doesn't flash.<br />
+      simulate_buggy7.py - Buttons don't flash.<br />
+      simulate_buggy8.py - Game doesn't run - "IndentationError: unindent does not match any outer indentation level"<br />
+      </p>
 
 
-<p><span class="bigfont"><a href="/pygame/buggy/tetromino_buggy.zip">Download buggy Tetromino programs.</a></span><br />
-tetromino_buggy1.py - Music keeps going after Game Over<br />
-tetromino_buggy2.py - Game crashes in the middle for no reason - "IndexError: string index out of range"<br />
-tetromino_buggy3.py - "Press a key to play." text isn't in the center.<br />
-tetromino_buggy4.py - Game doesn't run. "NameError: name 'Z_SHAPE_TEMPLATE' is not defined"<br />
-tetromino_buggy5.py - Game crashes when a piece lands ("IndexError: list assignment index out of range"), or pieces change shape after landing.<br />
-tetromino_buggy6.py - Game crashes when a piece lands ("IndexError: list index out of range")<br />
-tetromino_buggy7.py - Complete lines won't clear.<br />
-tetromino_buggy8.py - Game freezes as soon as the player makes a complete line.<br />
-</p>
+      <p><span class="bigfont"><a href="/pygame/buggy/wormy_buggy.zip">Download buggy Wormy programs.</a></span><br />
+      wormy_buggy1.py - Worm sometimes does not appear on the board, and "Game Over" appears a second or two later.<br />
+      wormy_buggy2.py - Worm keeps growing.<br />
+      wormy_buggy3.py - Pressing down makes the worm go up.<br />
+      wormy_buggy4.py - Worm can go off the left and right edges.<br />
+      wormy_buggy5.py - Program hangs with a black screen when it first starts.<br />
+      wormy_buggy6.py - NameError: global name 'DOWN' is not defined<br />
+      wormy_buggy7.py - An invisible vertical wall near the middle causes the player to game over.<br />
+      wormy_buggy8.py - Player can't change direction, and pressing the left arrow key causes a game over.<br />
+      </p>
 
 
-<p><span class="bigfont"><a href="/pygame/buggy/squirrel_buggy.zip">Download buggy Squirrel Eat Squirrel programs.</a></span><br />
-squirrel_buggy1.py - Game doesn't run - "KeyError: 'widht'"<br />
-squirrel_buggy2.py - Game never resets after the first game over.<br />
-squirrel_buggy3.py - First hit causes two damage, and then the player doesn't take damage afterwards.<br />
-squirrel_buggy4.py - Squirrel disappears after moving down.<br />
-squirrel_buggy5.py - Game doesn't run - "NameError: global name 'L_SQUIR_IMG' is not defined"<br />
-squirrel_buggy6.py - Game doesn't run - "TypeError: 'dict' object cannot be interpreted as an integer"<br />
-squirrel_buggy7.py - No squirrels show up.<br />
-squirrel_buggy8.py - When you win the game, "(Press "r" to restart.)" text doesn't appear in the center.<br />
-</p>
+      <p><span class="bigfont"><a href="/pygame/buggy/tetromino_buggy.zip">Download buggy Tetromino programs.</a></span><br />
+      tetromino_buggy1.py - Music keeps going after Game Over<br />
+      tetromino_buggy2.py - Game crashes in the middle for no reason - "IndexError: string index out of range"<br />
+      tetromino_buggy3.py - "Press a key to play." text isn't in the center.<br />
+      tetromino_buggy4.py - Game doesn't run. "NameError: name 'Z_SHAPE_TEMPLATE' is not defined"<br />
+      tetromino_buggy5.py - Game crashes when a piece lands ("IndexError: list assignment index out of range"), or pieces change shape after landing.<br />
+      tetromino_buggy6.py - Game crashes when a piece lands ("IndexError: list index out of range")<br />
+      tetromino_buggy7.py - Complete lines won't clear.<br />
+      tetromino_buggy8.py - Game freezes as soon as the player makes a complete line.<br />
+      </p>
 
 
-<p><span class="bigfont"><a href="/pygame/buggy/starpusher_buggy.zip">Download buggy Star Pusher programs.</a></span><br />
-starpusher_buggy1.py - Error when you first try to move: "TypeError: makeMove() takes exactly 2 positional arguments (3 given)"<br />
-starpusher_buggy2.py - Crashes when you solve a level: "KeyError: 'solve'"<br />
-starpusher_buggy3.py - Level is solved as soon as you make your first move.<br />
-starpusher_buggy4.py - Background is black on the start screen.<br />
-starpusher_buggy5.py - Game crashes at start of first level: "AssertionError: Level 1 (around line 35) in starPusherLevels.txt is missing a "@" or "+" to mark the start point." (But the map file is fine.)<br />
-starpusher_buggy6.py - Game crashes at start of the first level: "IndexError: list index out of range"<br />
-starpusher_buggy7.py - Game crashes at start of the first level: "AttributeError: event member not defined"<br />
-starpusher_buggy8.py - Map appears super skinny.<br />
-</p>
+      <p><span class="bigfont"><a href="/pygame/buggy/squirrel_buggy.zip">Download buggy Squirrel Eat Squirrel programs.</a></span><br />
+      squirrel_buggy1.py - Game doesn't run - "KeyError: 'widht'"<br />
+      squirrel_buggy2.py - Game never resets after the first game over.<br />
+      squirrel_buggy3.py - First hit causes two damage, and then the player doesn't take damage afterwards.<br />
+      squirrel_buggy4.py - Squirrel disappears after moving down.<br />
+      squirrel_buggy5.py - Game doesn't run - "NameError: global name 'L_SQUIR_IMG' is not defined"<br />
+      squirrel_buggy6.py - Game doesn't run - "TypeError: 'dict' object cannot be interpreted as an integer"<br />
+      squirrel_buggy7.py - No squirrels show up.<br />
+      squirrel_buggy8.py - When you win the game, "(Press "r" to restart.)" text doesn't appear in the center.<br />
+      </p>
 
 
-<p><span class="bigfont"><a href="/pygame/buggy/flippy_buggy.zip">Download buggy Flippy programs.</a></span><br />
-flippy_buggy1.py - Black bar appears at the bottom of the screen.<br />
-flippy_buggy2.py - Game crashes on computer's turn - "TypeError: 'NoneType' object is not iterable"<br />
-flippy_buggy3.py - Board appears on right side of the screen.<br />
-flippy_buggy4.py - Computer wins at the start of the game with several pieces on the board.<br />
-flippy_buggy5.py - Game crashes on player's move - "TypeError: 'bool' object is not subscriptable"<br />
-flippy_buggy6.py - Game instantly ends as a tie.<br />
-flippy_buggy7.py - Game instantly ends as a tie.<br />
-flippy_buggy8.py - Player always goes first.<br />
-</p>
+      <p><span class="bigfont"><a href="/pygame/buggy/starpusher_buggy.zip">Download buggy Star Pusher programs.</a></span><br />
+      starpusher_buggy1.py - Error when you first try to move: "TypeError: makeMove() takes exactly 2 positional arguments (3 given)"<br />
+      starpusher_buggy2.py - Crashes when you solve a level: "KeyError: 'solve'"<br />
+      starpusher_buggy3.py - Level is solved as soon as you make your first move.<br />
+      starpusher_buggy4.py - Background is black on the start screen.<br />
+      starpusher_buggy5.py - Game crashes at start of first level: "AssertionError: Level 1 (around line 35) in starPusherLevels.txt is missing a "@" or "+" to mark the start point." (But the map file is fine.)<br />
+      starpusher_buggy6.py - Game crashes at start of the first level: "IndexError: list index out of range"<br />
+      starpusher_buggy7.py - Game crashes at start of the first level: "AttributeError: event member not defined"<br />
+      starpusher_buggy8.py - Map appears super skinny.<br />
+      </p>
 
 
-<p><span class="bigfont"><a href="/pygame/buggy/inkspill_buggy.zip">Download buggy Ink Spill programs.</a></span><br />
-inkspill_buggy1.py - Logo doesn't appear in the upper right<br />
-inkspill_buggy2.py - Can't select small board on settings page.<br />
-inkspill_buggy3.py - Player wins after first move.<br />
-inkspill_buggy4.py - Game doesn't run - "IndexError: list index out of range"<br />
-inkspill_buggy5.py - Game doesn't run - "NameError: name 'random' is not defined"<br />
-inkspill_buggy6.py - First move is always red, and then the player can't make any more moves.<br />
-inkspill_buggy7.py - Game is just a black screen.<br />
-inkspill_buggy8.py - Background is black.<br />
-</p>
+      <p><span class="bigfont"><a href="/pygame/buggy/flippy_buggy.zip">Download buggy Flippy programs.</a></span><br />
+      flippy_buggy1.py - Black bar appears at the bottom of the screen.<br />
+      flippy_buggy2.py - Game crashes on computer's turn - "TypeError: 'NoneType' object is not iterable"<br />
+      flippy_buggy3.py - Board appears on right side of the screen.<br />
+      flippy_buggy4.py - Computer wins at the start of the game with several pieces on the board.<br />
+      flippy_buggy5.py - Game crashes on player's move - "TypeError: 'bool' object is not subscriptable"<br />
+      flippy_buggy6.py - Game instantly ends as a tie.<br />
+      flippy_buggy7.py - Game instantly ends as a tie.<br />
+      flippy_buggy8.py - Player always goes first.<br />
+      </p>
 
 
-<p><span class="bigfont"><a href="/pygame/buggy/fourinarow_buggy.zip">Download buggy Four in a Row programs.</a></span><br />
-fourinarow_buggy1.py - Game won't run - "IndexError: list index out of range"<br />
-fourinarow_buggy2.py - Game won't run - "NameError: global name 'COMPUTER' is not defined"<br />
-fourinarow_buggy3.py - Game won't run - TypeError: 'NoneType' object is not iterable<br />
-fourinarow_buggy4.py - Computer will never move on the rightmost column.
-fourinarow_buggy5.py - If player's first move is not over the board, then the game crashes: "UnboundLocalError: local variable 'column' referenced before assignment"<br />
-fourinarow_buggy6.py - Game won't run - "IndexError: list index out of range"<br />
-fourinarow_buggy7.py - When dropping a token on a tall stack, the token appears to drop past the top token on the stack.<br />
-fourinarow_buggy8.py - Computer's token seems to fly off the screen, and then the program hangs.<br />
-</p>
+      <p><span class="bigfont"><a href="/pygame/buggy/inkspill_buggy.zip">Download buggy Ink Spill programs.</a></span><br />
+      inkspill_buggy1.py - Logo doesn't appear in the upper right<br />
+      inkspill_buggy2.py - Can't select small board on settings page.<br />
+      inkspill_buggy3.py - Player wins after first move.<br />
+      inkspill_buggy4.py - Game doesn't run - "IndexError: list index out of range"<br />
+      inkspill_buggy5.py - Game doesn't run - "NameError: name 'random' is not defined"<br />
+      inkspill_buggy6.py - First move is always red, and then the player can't make any more moves.<br />
+      inkspill_buggy7.py - Game is just a black screen.<br />
+      inkspill_buggy8.py - Background is black.<br />
+      </p>
 
 
-<p><span class="bigfont"><a href="/pygame/buggy/gemgem_buggy.zip">Download buggy Gemgem programs.</a></span><br />
-gemgem_buggy1.py - Game doesn't run, and doesn't display any error message.<br />
-gemgem_buggy2.py - Game crashes at the start. "TypeError: drawBoard() takes exactly 1 positional argument (0 given)"<br />
-gemgem_buggy3.py - Game won't run - "pygame.error: Couldn't open gem8.png"<br />
-gemgem_buggy4.py - Game won't run - "TypeError: list indices must be integers, not str"<br />
-gemgem_buggy5.py - Matching gems gives a negative score, and moving a gem to make a match in a horizontal line doesn't cause two of the gems to disappear<br />
-gemgem_buggy6.py - First match causes other gems to disappear.<br />
-gemgem_buggy7.py - Board has missing rows of gems.<br />
-gemgem_buggy8.py - Game doesn't run - "NameError: global name 'BOARDRECTS' is not defined"<br />
-</p>
+      <p><span class="bigfont"><a href="/pygame/buggy/fourinarow_buggy.zip">Download buggy Four in a Row programs.</a></span><br />
+      fourinarow_buggy1.py - Game won't run - "IndexError: list index out of range"<br />
+      fourinarow_buggy2.py - Game won't run - "NameError: global name 'COMPUTER' is not defined"<br />
+      fourinarow_buggy3.py - Game won't run - TypeError: 'NoneType' object is not iterable<br />
+      fourinarow_buggy4.py - Computer will never move on the rightmost column.
+      fourinarow_buggy5.py - If player's first move is not over the board, then the game crashes: "UnboundLocalError: local variable 'column' referenced before assignment"<br />
+      fourinarow_buggy6.py - Game won't run - "IndexError: list index out of range"<br />
+      fourinarow_buggy7.py - When dropping a token on a tall stack, the token appears to drop past the top token on the stack.<br />
+      fourinarow_buggy8.py - Computer's token seems to fly off the screen, and then the program hangs.<br />
+      </p>
+
+
+      <p><span class="bigfont"><a href="/pygame/buggy/gemgem_buggy.zip">Download buggy Gemgem programs.</a></span><br />
+      gemgem_buggy1.py - Game doesn't run, and doesn't display any error message.<br />
+      gemgem_buggy2.py - Game crashes at the start. "TypeError: drawBoard() takes exactly 1 positional argument (0 given)"<br />
+      gemgem_buggy3.py - Game won't run - "pygame.error: Couldn't open gem8.png"<br />
+      gemgem_buggy4.py - Game won't run - "TypeError: list indices must be integers, not str"<br />
+      gemgem_buggy5.py - Matching gems gives a negative score, and moving a gem to make a match in a horizontal line doesn't cause two of the gems to disappear<br />
+      gemgem_buggy6.py - First match causes other gems to disappear.<br />
+      gemgem_buggy7.py - Board has missing rows of gems.<br />
+      gemgem_buggy8.py - Game doesn't run - "NameError: global name 'BOARDRECTS' is not defined"<br />
+      </p>
+
+
+    </div>
+  </div>
+</div>
 
 {% endblock %}

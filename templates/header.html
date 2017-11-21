@@ -1,14 +1,9 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <!--<base href="{{ base_href }}" />-->
-  <link rel="stylesheet" type="text/css" href="/inventweb_{{name}}.css" />
-  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-  <link rel="icon" href="/favicon.ico" type="image/x-icon">
-
   <title>{{title}}</title>
+
+<!-- Google Analytics -->
   <script type="text/javascript">
 //<![CDATA[
 
@@ -24,49 +19,96 @@
 
   //]]>
   </script>
-  <meta name="author" content="Al Sweigart" />
+
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/css/inventwithpython.css">
+  <!--<link rel="stylesheet" href="/css/tether.min.css">-->
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <script src="/js/jquery-3.2.1.min.js"></script>
+  <!--<script src="/js/tether.min.js"></script>-->
+  <script src="/js/bootstrap.min.js"></script>
+  <style>
+  .testimonial-attribution { text-align: right; }
+  .cover-thumb { height: 250px; margin-left: auto; margin-right: auto; }
+  .testimonial { margin-top: 40px; margin-left: 20px; margin-right: 20px; }
+  .card { border: 0px; }
+  .row { margin-bottom: 20px; }
+  .btn { margin-top: 10px; }
+
+  </style>
 </head>
+<body style="background-color: #caeab7;">
 
-<body>
-  <!-- Facebook like button code -->
-  <div id="fb-root"></div>
-  <script>(function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s); js.id = id;
-    js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";
-    fjs.parentNode.insertBefore(js, fjs);
-  }(document, 'script', 'facebook-jssdk'));</script>
+<nav class="navbar navbar-toggleable-md">
+  <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon text-white">☰</span>
+  </button>
+  <a class="navbar-brand" href="/">Invent with Python</a>
 
-  <div id='headerarea'>
-    <table border="0">
-      <tr>
-        <td rowspan="3"><a href="{{home}}"><img src="/images/header_{{name}}.png" id="headerimage" name="headerimage" alt="header image" /></a></td>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" id="navbarDropdownReadMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Read for Free
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownReadMenuLink">
+          <a class="dropdown-item" href="https://automatetheboringstuff.com">Automate the Boring Stuff with Python</a>
+          <a class="dropdown-item" href="/cracking">Cracking Codes with Python</a>
+          <a class="dropdown-item" href="/invent4thed">Invent Your Own Computer Games with Python</a>
+          <a class="dropdown-item" href="/pygame">Making Games with Python &amp; Pygame</a>
+          <a class="dropdown-item" href="https://inventwithscratch.com">Scratch Programming Playground</a>
+        </div>
+      </li>
 
-        <td colspan="3">
-          <br />
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" id="navbarDropdownBuyMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Buy Books
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownBuyMenuLink">
+          <a class="dropdown-item" href="http://www.amazon.com/gp/product/1593275994/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=1593275994&linkCode=as2&tag=playwithpyth-20&linkId=HDM7V3T6RHC5VVN4">Automate the Boring Stuff with Python</a>
+          <a class="dropdown-item" href="http://www.amazon.com/gp/product/1482614375/ref=as_li_qf_sp_asin_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=1482614375&linkCode=as2&tag=playwithpyth-20">Cracking Codes with Python</a>
+          <a class="dropdown-item" href="https://www.amazon.com/gp/product/1593277954/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=1593277954&linkCode=as2&tag=playwithpyth-20&linkId=18a80d666d24cc13bf52ff57fb72a632">Invent Your Own Computer Games with Python</a>
+          <a class="dropdown-item" href="http://www.amazon.com/Making-Games-Python-Pygame-Sweigart/dp/1469901730?ie=UTF8&tag=playwithpyth-20&linkCode=as2&camp=1789&creative=9325&creativeASIN=0982106017">Making Games with Python &amp; Pygame</a>
+          <a class="dropdown-item" href="https://www.amazon.com/gp/product/1593277628/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=1593277628&linkCode=as2&tag=playwithpyth-20&linkId=29a56275e4a22ffedc2b92282fe0a809">Scratch Programming Playground</a>
+        </div>
+      </li>
 
-          <center style="font-size: 0.75em;">
-            <em>Click to view the other books</em>
-          </center>
-        </td>
-      </tr>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" id="navbarDropdownUdemyMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Udemy Courses
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownUdemyMenuLink">
+          <a class="dropdown-item" href="https://www.udemy.com/automate/?couponCode=INVENT_WITH_PYTHON">Automate the Boring Stuff with Python</a>
+          <a class="dropdown-item" href="https://www.udemy.com/scratch-game-programming/?couponCode=INVENT_WITH_SCRATCH">Scratch Programming Playground</a>
+        </div>
+      </li>
 
-      <tr>
-        <td colspan="3">
-          <a href="https://automatetheboringstuff.com"><img src="/images/otherbooks_automate.jpg" style="margin-left: 20px; padding-right: 0px;" alt="Automate the Boring Stuff with Python cover thumbnail" /></a>
-          <a href="/index.html"><img src="/images/otherbooks_invent.png" style="padding-left: 0px; padding-right: 4px;" alt="Invent with Python cover thumbnail" /></a>
-          <a href="/pygame/index.html"><img src="/images/otherbooks_pygame.png" style="padding-left: 0px;" alt="Making Games cover thumbnail" /></a>
-          <a href="/hacking/index.html"><img src="/images/otherbooks_hacking.png" style="padding-left: 0px;" alt="Hacking Secret Ciphers cover thumbnail" /></a></td>
-      </tr>
+      <li class="nav-item">
+        <a class="nav-link" href="https://www.youtube.com/user/Albert10110">YouTube</a>
+      </li>
 
-      <tr>
-        <td><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://InventWithPython.com" data-text="Learn to code by making games and hacking ciphers! Free books at" data-via="AlSweigart">Tweet</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script></td>
+      <li class="nav-item">
+        <a class="nav-link" href="https://www.reddit.com/r/inventwithpython">Forum</a>
+      </li>
 
-        <td><div class="fb-like" data-href="https://www.facebook.com/pages/Invent-Your-Own-Computer-Games-with-Python/473751562690085" data-layout="button" data-action="like" data-show-faces="false" data-share="true"></div></td>
+      <li class="nav-item">
+        <a class="nav-link" href="/blog">Blog</a>
+      </li>
 
-        <td><a href="//www.stumbleupon.com/submit?url=http%3A%2F%2Finventwithpython.com"><img src="/images/stumbleuponicon.png" alt="Vote up on StumbleUpon.com" /></a></td>
-      </tr>
-    </table>
+      <li class="nav-item">
+        <a class="nav-link" href="/#donate">Donate</a>
+      </li>
+
+    </ul>
+
+    <!--
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="text" placeholder="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+    -->
+
   </div>
+</nav>

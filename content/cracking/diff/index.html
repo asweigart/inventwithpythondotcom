@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% set title = 'Online Diff Tool - Cracking Codes with Python' %}
+
+{% block content %}
+
+<script type="text/javascript" src="/dojo.js"></script>
+<script type="text/javascript" src="/sourceCodesCracking.js"></script>
+<script type="text/javascript" src="/diff/diffview.js"></script>
+<link rel="stylesheet" type="text/css" href="/diff/diffview.css"/>
+<script type="text/javascript" src="/diff/difflib.js"></script>
+
+<script type="text/javascript">
+//<![CDATA[
+var $ = dojo.byId;
+dojo.require("dojo.io");
+var url = window.location.toString().split("#")[0];
+
+// Array.indexOf method
+if (!Array.prototype.indexOf)
+{
+  Array.prototype.indexOf = function(elt /*, from*/)
+  {
+    var len = this.length >>> 0;
+
+    var from = Number(arguments[1]) || 0;
+    from = (from < 0)
+         ? Math.ceil(from)
+         : Math.floor(from);
+    if (from < 0)
+      from += len;
+
+    for (; from < len; from++)
+    {
+      if (from in this &&
+          this[from] === elt)
+        return from;
+    }
+    return -1;
+  };
+}
+
+
+// Read a page's GET URL variables and return them as an associative array.
+function getUrlVars() {
+  var vars = [], hash;
+  var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+
+  for(var i = 0; i < hashes.length; i++) {
+    hash = hashes[i].split('=');
+    vars.push(hash[0]);
+    vars[hash[0]] = hash[1];
+  }
+  return vars;
+}
+
+function diffUsingJS() {
+  //var base = difflib.stringAsLines($("baseText").value);
+  var base = difflib.stringAsLines(sourceCodes[$('programSelect').value]);
+  var newtxt = difflib.stringAsLines($("newText").value);
+  var sm = new difflib.SequenceMatcher(base, newtxt);
+  var opcodes = sm.get_opcodes();
+  var diffoutputdiv = $("diffoutput");
+  while (diffoutputdiv.firstChild) diffoutputdiv.removeChild(diffoutputdiv.firstChild);
+  //var contextSize = $("contextSize").value;
+  //contextSize = contextSize ? contextSize : null;
+  diffoutputdiv.appendChild(diffview.buildView({ baseTextLines:base,
+                           newTextLines:newtxt,
+                           opcodes:opcodes,
+                           baseTextName:"The Book's Program",
+                           newTextName:"Your Program",
+                           contextSize:null, // I've removed the contextSize field from the form.
+                           viewType: 0 }));
+  window.location = url + "#diff";
+}
+
+function onPageLoad() {
+  // the optional "p" GET parameter can set the default program selected.
+  var getVars = getUrlVars();
+  var allPrograms = ["affineCipher", "affineHacker", "affineKeyTest", "caesarCipher", "caesarHacker", "cryptomath", "detectEnglish", "freqAnalysis", "makePublicPrivateKeys", "makeWordPatterns", "primeNum", "publicKeyCipher", "reverseCipher", "simpleSubCipher", "simpleSubHacker", "transpositionDecrypt", "transpositionEncrypt", "transpositionFileCipher"];
+
+  if ((getVars['p']) && (allPrograms.indexOf(getVars['p']) != -1)) {
+    $('programSelect').value = getVars['p'];
+  }
+}
+
+dojo.addOnLoad(onPageLoad);
+</script>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <h2>Online Diff Tool</h2>
+
+      <p>A <a href="https://en.wikipedia.org/wiki/Diff_utility">diff tool</a> shows you the differences between two pieces of text. If the program you copied from the book isn't working, you can copy/paste it here to see any differences between your code and the code in the book.</p>
+
+      <p>Common errors include missing commas, unclosed string quotes, or uneven indentation.</p>
+
+<table border="0">
+    <tr>
+        <td valign="top">
+            <p>Select program:</p>
+
+            <select name='programSelect' id='programSelect' size="16" style="vertical-align: text-top">
+              <option value='affineCipher'>affineCipher.py</option>
+              <option value='affineHacker'>affineHacker.py</option>
+              <option value='affineKeyTest'>affineKeyTest.py</option>
+              <option value='caesarCipher'>caesarCipher.py</option>
+              <option value='caesarHacker'>caesarHacker.py</option>
+              <option value='cryptomath'>cryptomath.py</option>
+              <option value='detectEnglish'>detectEnglish.py</option>
+              <option value='freqAnalysis'>freqAnalysis.py</option>
+              <option value='makePublicPrivateKeys'>makePublicPrivateKeys.py</option>
+              <option value='makeWordPatterns'>makeWordPatterns.py</option>
+              <option value='primeNum'>primeNum.py</option>
+              <option value='publicKeyCipher'>publicKeyCipher.py</option>
+              <option value='reverseCipher'>reverseCipher.py</option>
+              <option value='simpleSubCipher'>simpleSubCipher.py</option>
+              <option value='simpleSubHacker'>simpleSubHacker.py</option>
+              <option value='transpositionDecrypt'>transpositionDecrypt.py</option>
+              <option value='transpositionEncrypt'>transpositionEncrypt.py</option>
+              <option value='transpositionFileCipher'>transpositionFileCipher.py</option>
+            </select>
+        </td>
+        <td width="700">
+            <p>Copy and paste your code here:</p>
+            <textarea id="newText" style="width:100%;height:300px"></textarea><br />
+        </td>
+    </tr>
+    <tr>
+        <td align="right" colspan="2">
+            <input type="button" value="Compare" onclick="javascript:diffUsingJS();"/>
+        </td>
+    </tr>
+</table>
+
+
+
+<a name="diff"> </a>
+<div id="diffoutput" style="width:100%"> </div>
+
+
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}
