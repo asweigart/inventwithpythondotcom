@@ -1,0 +1,73 @@
+<html>
+    <head>
+        <title>Using Generator Expression to Reimplement Python's range() Function</title>
+        <meta name="tags" content="" />
+        <meta name="date" content="2012-08-17 12:00" />
+        <meta name="summary" content="" />
+    </head>
+    <body>
+
+<p>In this blog post, we'll recreate our own implementation of Python's <code>range()</code> function. There's a surprising amount of power and programming concepts behind this familiar function. The <code>range()</code> function is one of the first things beginners learn in Python. It's useful for <code>for</code> loops when you need to run a block of code a certain number of times:</p>
+
+<pre>for i in range(5):
+    print('My name is Johnny Five Times.')</pre>
+
+<p>This will output:</p>
+
+<pre>My name is Johnny Five Times.
+My name is Johnny Five Times.
+My name is Johnny Five Times.
+My name is Johnny Five Times.
+My name is Johnny Five Times.</pre>
+
+<p>This <code>for</code> loop will also set <code>i</code>, the loop variable, to the values 0 to 4 (that is, up to but not including 5). You can provide two arguments to <code>range()</code> to give it a starting value besides 0:</p>
+
+<pre>for i in range(3, 6):
+    print(i)</pre>
+
+<p>...and this code outputs:</p>
+
+<pre>3
+4
+5</pre>
+
+<p>You can also provide three arguments for a start, stop, and "step" value. The <code>i</code> variable ("i" is conventionally used because it is short and often the loop variable acts as an <em>index</em> into a data structure) will increase by two in this loop:</p>
+
+<pre>for i in range(3, 9, 2):
+    print(i)</pre>
+
+<p>...and this code outputs:</p>
+
+<pre>3
+5
+7</pre>
+
+<p>But in Python, <strong>you can use several types of values with for loops</strong>. You can use lists, strings, or <code>dict_items</code> objects returned by the <code>items()</code> dictionary method:</p>
+
+<pre>for char in 'Hello':
+    print(char)
+
+for item in ['cats', 'dogs']:
+    print(item)
+
+for key, value in {'cat': 'Zophie', 'dog': 'Indiana'}.items():
+    print(key, value)</pre>
+
+<p>...and this code outputs:</p>
+
+<pre>H
+e
+l
+l
+o
+cats
+dogs
+cat Zophie
+dog Indiana</pre>
+
+<p><strong>What these values have in common is that their data types are "iterables".</strong> They are values that contain multiple values that can be presented to a <code>for</code> loop one at a time. This even applies to <em>unordered</em> data types like dictionaries. (Dictionaries contain multiple values, but there is no "first" or "last" value like lists have.)</p>
+
+<p>To create our own data type that is an iterable,
+
+    </body>
+</html>
