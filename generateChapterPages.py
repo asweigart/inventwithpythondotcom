@@ -1,5 +1,9 @@
 #!python3
 
+### THIS IS FOR THE OLD WEBSITE.
+
+
+
 # Generates the /chapters, /pygame/chapters, and /hacking/chapters pages from source data.
 
 import os, sys
@@ -124,20 +128,77 @@ hackingData = [{'name': 'Making Paper Cryptography Tools',
              'programs': ['makeRsaKeys.py', 'rsaCipher.py']}
             ]
 
-baseName = {'': 'Invent', 'pygame': 'Pygame', 'hacking': 'Hacking'}
+
+crackingData = [
+            {'name': 'Introduction',
+             'links': [{'name':'Download Python 3', 'url':'https://www.python.org/download'},
+                       {'name':'Download pyperclip.py', 'url':'http://inventwithpython.com/pyperclip.py'}]},
+            {'name': 'Making Paper Cryptography Tools',
+                'links': [{'name':'PDF of the Caesar Cipher Wheel', 'url':'http://inventwithpython.com/cipherwheel/cipherdisk_cutout_page.pdf'},
+                          {'name':'Interactive Virtual Cipher Wheel', 'url':'http://inventwithpython.com/cipherwheel'}]},
+            {'name': 'Programming in the Interactive Shell'},
+            {'name': 'String and Writing Programs',
+             'programs': ['hello.py']},
+            {'name': 'The Reverse Cipher',
+             'programs': ['reverseCipher.py']},
+            {'name': 'The Caesar Cipher',
+             'programs': ['caesarCipher.py', 'caesarCipher2.py', 'password.py', 'password2.py', 'elifeggs.py']},
+            {'name': 'Hacking the Caesar Cipher with Brute-Force',
+             'programs': ['caesarHacker.py']},
+            {'name': 'Encrypting with the Transposition Cipher',
+             'programs': ['transpositionEncrypt.py']},
+            {'name': 'Decrypting with the Transposition Cipher',
+             'programs': ['transpositionDecrypt.py']},
+            {'name': 'Programming a Program to Test Your Program',
+             'programs': ['transpositionTest.py']},
+            {'name': 'Encrypting and Decrypting Files',
+             'programs': ['transpositionFileCipher.py']},
+            {'name': 'Detecting English Programmatically',
+             'programs': ['detectEnglish.py']},
+            {'name': 'Hacking the Transposition Cipher',
+             'programs': ['transpositionHacker.py']},
+            {'name': 'A Modular Arithmetic Module for the Affine Cipher',
+             'programs': ['cryptomath.py']},
+            {'name': 'Programming The Affine Cipher',
+             'programs': ['affineCipher.py', 'affineKeyTest.py']},
+            {'name': 'Hacking the Affine Cipher',
+             'programs': ['affineHacker.py']},
+            {'name': 'Programming the Simple Substitution Cipher',
+             'programs': ['simpleSubCipher.py']},
+            {'name': 'Hacking the Simple Substitution Cipher',
+             'programs': ['makeWordPatterns.py', 'wordPatterns.py', 'simpleSubHacker.py']},
+            {'name': 'Programming the Vigenère Cipher',
+             'programs': ['vigenereCipher.py']},
+            {'name': 'Frequency Analysis',
+             'programs': ['freqAnalysis.py']},
+            {'name': 'Hacking the Vigenère Cipher',
+             'programs': ['vigenereHacker.py', 'vigenereDictionaryHacker.py']},
+            {'name': 'The One-Time Pad Cipher'},
+            {'name': 'Finding and Generating Prime Numbers',
+             'programs': ['primeSieve.py', 'rabinMiller.py']},
+            {'name': 'Generating Keys for the Public Key Cipher',
+             'programs': ['makeRsaKeys.py']},
+            {'name': 'Public Key Cryptography and the Public Key Cipher',
+             'programs': ['publicKeyCipher.py']}
+            ]
+baseName = {'': 'Invent', 'pygame': 'Pygame', 'hacking': 'Hacking', 'cracking': 'Cracking'}
 bookData = {'': inventData,
             'pygame': pygameData,
-            'hacking': hackingData}
+            'hacking': hackingData,
+            'cracking': crackingData}
 bookPDF = {'': '<div><a href="/inventwithpython.pdf">PDF of Invent Your Own Computer Games with Python</a></div><div><a href="/inventwithpython.zip">PDF and All Source Code</a></div><br /><br />',
            'pygame': '<div><a href="/makinggames.pdf">PDF of Making Games with Python & Pygame</a></div><div><a href="/makinggames.zip">PDF and All Source Code</a></div><br /><br />',
-           'hacking': '<div><a href="/hackingciphers.pdf">PDF of Hacking Secret Ciphers with Python</a></div><div><a href="/hackingciphers.zip">PDF and All Source Code</a></div><br /><br />'}
+           'hacking': '<div><a href="/hackingciphers.pdf">PDF of Hacking Secret Ciphers with Python</a></div><div><a href="/hackingciphers.zip">PDF and All Source Code</a></div><br /><br />',
+           'cracking': ''}
 bookTitle = {'': 'Invent Your Own Computer Games with Python',
              'pygame': 'Making Games with Python & Pygame',
-             'hacking': 'Hacking Secret Ciphers with Python',}
+             'hacking': 'Hacking Secret Ciphers with Python',
+             'cracking': 'Cracking Codes with Python'}
 
-for book in bookData.keys():
-      fp = open(os.path.join('content', book, 'chapters', 'index.html'), 'w', encoding='utf-8')
-      fp.write("""{%% extends "base%s.html" %%}
+for book in ['cracking']:#bookData.keys():
+      indexFilename = os.path.join('content', book, 'chapters', 'index.html')
+      indexFileObj = open(indexFilename, 'w', encoding='utf-8')
+      indexFileObj.write("""{%% extends "base%s.html" %%}
 {%% set title = '%s' %%}
 {%% block content %%}
 
@@ -154,23 +215,23 @@ for book in bookData.keys():
             else:
                   chapterStart = ''
 
-            fp.write('<div><a href="%s/chapter%s.html" class="chapterlink">Chapter %s - %s</a><a href="index.html#chapter%s" class="relatedcontentlink"> [related content]</a></div>\n' % (chapterStart, chapterIndex+1, chapterIndex+1, chapterData['name'], chapterIndex+1))
+            indexFileObj.write('<div><a href="%s/chapter%s.html" class="chapterlink">Chapter %s - %s</a><a href="index.html#chapter%s" class="relatedcontentlink"> [related content]</a></div>\n' % (chapterStart, chapterIndex+1, chapterIndex+1, chapterData['name'], chapterIndex+1))
 
-      fp.write('\n\n')
+      indexFileObj.write('\n\n')
 
       for chapterIndex in range(len(bookData[book])):
             chapterData = bookData[book][chapterIndex]
-            fp.write('<a name="chapter%s"><h2>Chapter %s</h2></a>\n' % (chapterIndex+1, chapterIndex+1))
+            indexFileObj.write('<a name="chapter%s"><h2>Chapter %s</h2></a>\n' % (chapterIndex+1, chapterIndex+1))
             if book != '':
                   chapterStart = '/' + book
             else:
                   chapterStart = ''
-            fp.write('<p><span>Read online:</span> <a href="%s/chapter%s.html">Chapter %s - %s</a></p>\n' % (chapterStart, chapterIndex+1, chapterIndex+1, chapterData['name']))
+            indexFileObj.write('<p><span>Read online:</span> <a href="%s/chapter%s.html">Chapter %s - %s</a></p>\n' % (chapterStart, chapterIndex+1, chapterIndex+1, chapterData['name']))
 
             # LIST PROGRAMS
             if 'programs' in chapterData:
                   for program in chapterData['programs']:
-                        fp.write("""<p><span>Download source:</span>  <a href="/%s">%s</a></p>
+                        indexFileObj.write("""<p><span>Download source:</span>  <a href="/%s">%s</a></p>
 
 <p><span>Copy source to clipboard:</span><br />
 <textarea style="width: 100%%; height:200px" id='src_%s'></textarea>
@@ -180,23 +241,23 @@ for book in bookData.keys():
 
             # LIST DOWNLOADS
             if 'downloads' in chapterData:
-                  fp.write('<p>Downloads:<br /><ul>\n')
+                  indexFileObj.write('<p>Downloads:<br /><ul>\n')
                   for download in range(len(chapterData['downloads'])):
-                        fp.write('<li><a href="/%s">%s</a></li>\n' % (chapterData['downloads'][download], chapterData['downloads'][download]))
-                  fp.write('</ul></p>\n\n')
+                        indexFileObj.write('<li><a href="/%s">%s</a></li>\n' % (chapterData['downloads'][download], chapterData['downloads'][download]))
+                  indexFileObj.write('</ul></p>\n\n')
 
             # LIST VIDEOS
             if 'videos' in chapterData:
-                  fp.write('<p>Videos:<br /><ul>\n')
+                  indexFileObj.write('<p>Videos:<br /><ul>\n')
                   for video in range(len(chapterData['videos'])):
-                        fp.write('<li><a href="%s">%s</a></li>\n' % (chapterData['videos'][video]['url'], chapterData['videos'][video]['name']))
-                  fp.write('</ul></p>\n\n')
+                        indexFileObj.write('<li><a href="%s">%s</a></li>\n' % (chapterData['videos'][video]['url'], chapterData['videos'][video]['name']))
+                  indexFileObj.write('</ul></p>\n\n')
 
             # LIST LINKS
             if 'links' in chapterData:
                   for link in range(len(chapterData['links'])):
-                        fp.write('<li><a href="%s">%s</a></li>\n' % (chapterData['links'][link]['url'], chapterData['links'][link]['name']))
-                  fp.write('</ul></p>\n\n')
+                        indexFileObj.write('<li><a href="%s">%s</a></li>\n' % (chapterData['links'][link]['url'], chapterData['links'][link]['name']))
+                  indexFileObj.write('</ul></p>\n\n')
 
-      fp.write("""\n\n{% endblock %}""")
-      fp.close()
+      indexFileObj.write("""\n\n{% endblock %}""")
+      indexFileObj.close()
