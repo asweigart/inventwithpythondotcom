@@ -1,0 +1,334 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style_cracking.css" rel="stylesheet" type="text/css" /><title>Cracking Codes with Python</title></head><body style="background-color: #fffeee;">
+
+
+<div><a target="_blank" href="https://www.amazon.com/gp/product/1593278225/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=1593278225&linkCode=as2&tag=playwithpyth-20&linkId=bf3b22819f0886d277e88b8a653b81ad">
+<img src="images/cover_crackingcodes_thumb.png" /><br />Buy the print or ebook online.</a></div>
+<div><a href="chapter17.html">Previous Chapter - Hacking the Simple Substitution Cipher</a> | <a href="chapter19.html">Next Chapter - Frequency Analysis</a></div>
+<div id="calibre_link-359" class="calibre">
+<h2 class="h2a1" id="calibre_link-31"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-135" class="calibre1"></span><span class="big">18</span><br class="calibre15" />PROGRAMMING THE VIGENÈRE CIPHER</h2>
+<p class="epigraph"><em class="calibre7">“I believed then, and continue to believe now, that the benefits to our security and freedom of widely available cryptography far, far outweigh the inevitable damage that comes from its use by criminals and terrorists.”<br class="calibre9" />&mdash;Matt Blaze, AT&amp;T Labs, September 2001</em></p>
+<div class="image"><img src="images/00078.jpeg" alt="Images" class="calibre4" /></div>
+<p class="noindent">The Italian cryptographer Giovan Battista Bellaso was the first person to describe the Vigenère cipher in 1553, but it was eventually named after the French diplomat Blaise de Vigenère, one of many people who reinvented the cipher in subsequent years. It was known as “le chiffre indéchiffrable,” which means “the indecipherable cipher,” and remained unbroken until British polymath Charles Babbage broke it in the 19th century.</p>
+<p class="indent">Because the Vigenère cipher has too many possible keys to brute-force, even with our English detection module, it’s one of the strongest ciphers discussed so far in this book. It’s even invincible to the word pattern attack you learned in <a href="#calibre_link-63" class="calibre8">Chapter 17</a>.</p>
+<div class="sidebar">
+<p class="sidebart"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-195"></span><strong class="calibre5">TOPICS COVERED IN THIS CHAPTER</strong></p>
+<ul class="calibre10">
+<li class="calibre11"><p class="noindent">Subkeys</p></li>
+<li class="calibre11"><p class="noindent">Building strings using the list-append-join process</p></li>
+</ul>
+</div>
+<h3 class="h1" id="calibre_link-711"><strong class="calibre3">Using Multiple Letter Keys in the Vigenère Cipher</strong></h3>
+<p class="noindent">Unlike the Caesar cipher, the Vigenère cipher has multiple keys. Because it uses more than one set of substitutions, the Vigenère cipher is a <em class="calibre7">polyalphabetic substitution cipher</em>. Unlike with the simple substitution cipher, frequency analysis alone will not defeat the Vigenère cipher. Instead of using a numeric key between 0 and 25 as we did in the Caesar cipher, we use a letter key for the Vigenère.</p>
+<p class="indent">The Vigenère key is a series of letters, such as a single English word, that is split into multiple single-letter subkeys that encrypt letters in the plaintext. For example, if we use a Vigenère key of PIZZA, the first subkey is P, the second subkey is I, the third and fourth subkeys are both Z, and the fifth subkey is A. The first subkey encrypts the first letter of the plaintext, the second subkey encrypts the second letter, and so on. When we get to the sixth letter of the plaintext, we return to the <em class="calibre7">first</em> subkey.</p>
+<p class="indent">Using the Vigenère cipher is the same as using multiple Caesar ciphers, as shown in <a href="#calibre_link-360" class="calibre8">Figure 18-1</a>. Instead of encrypting the whole plaintext with one Caesar cipher, we apply a different Caesar cipher to each letter of the plaintext.</p>
+<div class="image"><img src="images/00023.jpeg" alt="Images" class="calibre4" /></div>
+<p class="figcap"><a id="calibre_link-360" class="calibre8"></a><em class="calibre7">Figure 18-1: Multiple Caesar ciphers combine to make the Vigenère cipher</em></p>
+<p class="indent">Each subkey is converted into an integer and serves as a Caesar cipher key. For example, the letter A corresponds to the Caesar cipher key 0. The letter B corresponds to key 1, and so on up to Z for key 25, as shown in <a href="#calibre_link-361" class="calibre8">Figure 18-2</a>.</p>
+<div class="image"><img src="images/00025.jpeg" alt="Images" class="calibre4" /></div>
+<p class="figcap"><a id="calibre_link-361" class="calibre8"></a><em class="calibre7">Figure 18-2: Caesar cipher keys and their corresponding letters</em></p>
+<p class="indent"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-196"></span>Let’s look at an example. The following is the message COMMON SENSE IS NOT SO COMMON shown alongside the Vigenère key PIZZA. The plaintext is shown with the corresponding subkey that encrypts each letter underneath it.</p>
+<p class="programs1">COMMONSENSEISNOTSOCOMMON<br class="calibre9" />PIZZAPIZZAPIZZAPIZZAPIZZ</p>
+<p class="indent">To encrypt the first C in the plaintext with the subkey P, encrypt it with the Caesar cipher using the subkey’s corresponding numeric key 15, which results in the cipherletter R, and repeat the process for each letter of the plaintext by cycling through the subkeys. <a href="#calibre_link-362" class="calibre8">Table 18-1</a> shows this process. The integer for the plaintext letter and subkey (given in parentheses) are added together to produce the integer for the ciphertext letter.</p>
+<p class="tabcap"><a id="calibre_link-362" class="calibre8"></a><strong class="calibre5">Table 18-1:</strong> Encrypting Letters with Vigenère Subkeys</p>
+<table class="topbot">
+<thead class="calibre16">
+<tr class="table_w">
+<td class="table_th"><p class="table"><strong class="calibre5">Plaintext letter</strong></p></td>
+<td class="table_th"><p class="table"><strong class="calibre5">Subkey</strong></p></td>
+<td class="table_thg"><p class="table"><strong class="calibre5">Ciphertext letter</strong></p></td>
+</tr>
+</thead>
+<tbody class="calibre17">
+<tr class="table_w">
+<td class="calibre18"><p class="table">C (2)</p></td>
+<td class="calibre18"><p class="table">P (15)</p></td>
+<td class="gray"><p class="table">R (17)</p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">O (14)</p></td>
+<td class="calibre18"><p class="table">I (8)</p></td>
+<td class="gray"><p class="table">W (22)</p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">M (12)</p></td>
+<td class="calibre18"><p class="table">Z (25)</p></td>
+<td class="gray"><p class="table">L (11)</p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">M (12)</p></td>
+<td class="calibre18"><p class="table">Z (25)</p></td>
+<td class="gray"><p class="table">L (11)</p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">O (14)</p></td>
+<td class="calibre18"><p class="table">A (0)</p></td>
+<td class="gray"><p class="table">O (14)</p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">N (13)</p></td>
+<td class="calibre18"><p class="table">P (15)</p></td>
+<td class="gray"><p class="table">C (2)</p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">S (18)</p></td>
+<td class="calibre18"><p class="table">I (8)</p></td>
+<td class="gray"><p class="table">A (0)</p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">E (4)</p></td>
+<td class="calibre18"><p class="table">Z (25)</p></td>
+<td class="gray"><p class="table">D (3)</p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">N (13)</p></td>
+<td class="calibre18"><p class="table">Z (25)</p></td>
+<td class="gray"><p class="table">M (12)</p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">S (18)</p></td>
+<td class="calibre18"><p class="table">A (0)</p></td>
+<td class="gray"><p class="table">S (18)</p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">E (4)</p></td>
+<td class="calibre18"><p class="table">P (15)</p></td>
+<td class="gray"><p class="table">T (19)</p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">I (8)</p></td>
+<td class="calibre18"><p class="table">I (8)</p></td>
+<td class="gray"><p class="table">Q (16)</p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">S (18)</p></td>
+<td class="calibre18"><p class="table">Z (25)</p></td>
+<td class="gray"><p class="table">R (17)</p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">N (13)</p></td>
+<td class="calibre18"><p class="table">Z (25)</p></td>
+<td class="gray"><p class="table">M (12)</p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">O (14)</p></td>
+<td class="calibre18"><p class="table">A (0)</p></td>
+<td class="gray"><p class="table">O (14)</p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">T (19)</p></td>
+<td class="calibre18"><p class="table">P (15)</p></td>
+<td class="gray"><p class="table">I (8)</p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">S (18)</p></td>
+<td class="calibre18"><p class="table">I (8)</p></td>
+<td class="gray"><p class="table">A (0)</p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">O (14)</p></td>
+<td class="calibre18"><p class="table">Z (25)</p></td>
+<td class="gray"><p class="table">N (13)</p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">C (2)</p></td>
+<td class="calibre18"><p class="table">Z (25)</p></td>
+<td class="gray"><p class="table">B (1)</p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">O (14)</p></td>
+<td class="calibre18"><p class="table">A (0)</p></td>
+<td class="gray"><p class="table">O (14)</p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">M (12)</p></td>
+<td class="calibre18"><p class="table">P (15)</p></td>
+<td class="gray"><p class="table">B (1)</p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">M (12)</p></td>
+<td class="calibre18"><p class="table">I (8)</p></td>
+<td class="gray"><p class="table">U (20)</p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">O (14)</p></td>
+<td class="calibre18"><p class="table">Z (25)</p></td>
+<td class="gray"><p class="table">N (13)</p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">N (13)</p></td>
+<td class="calibre18"><p class="table">Z (25)</p></td>
+<td class="gray"><p class="table">M (12)</p></td>
+</tr>
+</tbody></table>
+<p class="indent">Using the Vigenère cipher with the key PIZZA (which is made up of the subkeys 15, 8, 25, 25, 0) encrypts the plaintext COMMON SENSE IS NOT SO COMMON into the ciphertext RWLLOC ADMST QR MOI AN BOBUNM.</p>
+<h4 class="h2" id="calibre_link-712"><strong class="calibre3"><em class="calibre12">Longer Vigenère Keys Are More Secure</em></strong></h4>
+<p class="noindent">The more letters in the Vigenère key, the stronger the encrypted message will be against a brute-force attack. PIZZA is a poor choice for a Vigenère key because it has only five letters. A key with five letters has 11,881,376 possible combinations (because 26 letters to the power of 5 is 26<sup class="calibre21">5</sup> = 26 × 26 × 26 × 26 × 26 = 11,881,376). Eleven million keys are far too many for a human to brute-force, but a computer can try them all in just a few hours. <span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-202"></span>It would first try to decrypt the message using the key AAAAA and check whether the resulting decryption was in English. Then it could try AAAAB, then AAAAC, and so on until it got to PIZZA.</p>
+<p class="indent">The good news is that for every additional letter the key has, the number of possible keys multiplies by 26. Once there are quadrillions of possible keys, the cipher would take a computer many years to break. <a href="#calibre_link-363" class="calibre8">Table 18-2</a> shows how many possible keys there are for each key length.</p>
+<p class="tabcap"><a id="calibre_link-363" class="calibre8"></a><strong class="calibre5">Table 18-2:</strong> Number of Possible Keys Based on Vigenère Key Length</p>
+<table class="topbot">
+<thead class="calibre16">
+<tr class="table_w">
+<td class="table_th"><p class="table"><strong class="calibre5">Key length</strong></p></td>
+<td class="table_th"><p class="table"><strong class="calibre5">Equation</strong></p></td>
+<td class="table_th"><p class="table"><strong class="calibre5">Possible keys</strong></p></td>
+</tr>
+</thead>
+<tbody class="calibre17">
+<tr class="table_w">
+<td class="calibre18"><p class="table">1</p></td>
+<td class="calibre18"><p class="table">26</p></td>
+<td class="calibre18"><p class="table">= 26</p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">2</p></td>
+<td class="calibre18"><p class="table">26 × 26</p></td>
+<td class="calibre18"><p class="table">= 676</p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">3</p></td>
+<td class="calibre18"><p class="table">676 × 26</p></td>
+<td class="calibre18"><p class="table">= 17,576</p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">4</p></td>
+<td class="calibre18"><p class="table">17,576 × 26</p></td>
+<td class="calibre18"><p class="table">= 456,976</p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">5</p></td>
+<td class="calibre18"><p class="table">456,976 × 26</p></td>
+<td class="calibre18"><p class="table">= 11,881,376</p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">6</p></td>
+<td class="calibre18"><p class="table">11,881,376 × 26</p></td>
+<td class="calibre18"><p class="table">= 308,915,776</p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">7</p></td>
+<td class="calibre18"><p class="table">308,915,776 × 26</p></td>
+<td class="calibre18"><p class="table">= 8,031,810,176</p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">8</p></td>
+<td class="calibre18"><p class="table">8,031,810,176 × 26</p></td>
+<td class="calibre18"><p class="table">= 208,827,064,576</p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">9</p></td>
+<td class="calibre18"><p class="table">208,827,064,576 × 26</p></td>
+<td class="calibre18"><p class="table">= 5,429,503,678,976</p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">10</p></td>
+<td class="calibre18"><p class="table">5,429,503,678,976 × 26</p></td>
+<td class="calibre18"><p class="table">= 141,167,095,653,376</p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">11</p></td>
+<td class="calibre18"><p class="table">141,167,095,653,376 × 26</p></td>
+<td class="calibre18"><p class="table">= 3,670,344,486,987,776</p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">12</p></td>
+<td class="calibre18"><p class="table">3,670,344,486,987,776 × 26</p></td>
+<td class="calibre18"><p class="table">= 95,428,956,661,682,176</p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">13</p></td>
+<td class="calibre18"><p class="table">95,428,956,661,682,176 × 26</p></td>
+<td class="calibre18"><p class="table">= 2,481,152,873,203,736,576</p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">14</p></td>
+<td class="calibre18"><p class="table">2,481,152,873,203,736,576 × 26</p></td>
+<td class="calibre18"><p class="table">= 64,509,974,703,297,150,976</p></td>
+</tr></tbody></table>
+<p class="indent">With keys that are twelve or more letters long, it becomes impossible for a mere laptop to crack them in a reasonable amount of time.</p>
+<h4 class="h2" id="calibre_link-713"><strong class="calibre3"><em class="calibre12">Choosing a Key That Prevents Dictionary Attacks</em></strong></h4>
+<p class="noindent">A Vigenère key doesn’t have to be a real word like PIZZA. It can be any combination of letters of any length, such as the twelve-letter key DURIWKNMFICK. In fact, not using a word that can be found in the dictionary is best. Even though the word RADIOLOGISTS is also a twelve-letter key that is easier to remember than DURIWKNMFICK, a cryptanalyst might anticipate that the cryptographer is using an English word as a key.</p>
+<p class="indent">Attempting a brute-force attack using every English word in the dictionary is known as a <em class="calibre7">dictionary attack</em>. There are 95,428,956,661,682,176 possible twelve-letter keys, but there are only about 1800 twelve-letter words in our dictionary file. If we use a twelve-letter word from the dictionary as a key, it would be easier to brute-force than a random three-letter key (which has 17,576 possible keys).</p>
+<p class="indent"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-203"></span>Of course, the cryptographer has an advantage in that the cryptanalyst doesn’t know the length of the Vigenère key. But the cryptanalyst could try all one-letter keys, then all two-letter keys, and so on, which would still allow them to find a dictionary word key very quickly.</p>
+<h3 class="h1" id="calibre_link-714"><strong class="calibre3">Source Code for the Vigenère Cipher Program</strong></h3>
+<p class="noindent">Open a new file editor window by selecting <strong class="calibre5">File</strong><span class="ent">▸</span><strong class="calibre5">New File</strong>. Enter the following code into the file editor, save it as <em class="calibre7">vigenereCipher.py</em>, and make sure <em class="calibre7">pyperclip.py</em> is in the same directory. Press F5 to run the program.</p>
+<p class="noindentz"><em class="calibre7">vigenereCipher.py</em></p>
+<p class="programs1">&nbsp;1. # Vigenere Cipher (Polyalphabetic Substitution Cipher)<br class="calibre9" />&nbsp;2. # https://www.nostarch.com/crackingcodes/ (BSD Licensed)<br class="calibre9" />&nbsp;3.<br class="calibre9" />&nbsp;4. import pyperclip<br class="calibre9" />&nbsp;5.<br class="calibre9" />&nbsp;6. LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'<br class="calibre9" />&nbsp;7.<br class="calibre9" />&nbsp;8. def main():<br class="calibre9" />&nbsp;9.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# This text can be downloaded from https://www.nostarch.com/<br class="calibre9" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;crackingcodes/:<br class="calibre9" />10.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;myMessage = """Alan Mathison Turing was a British mathematician,<br class="calibre9" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;logician, cryptanalyst, and computer scientist."""<br class="calibre9" />11.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;myKey = 'ASIMOV'<br class="calibre9" />12.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;myMode = 'encrypt' # Set to either 'encrypt' or 'decrypt'.<br class="calibre9" />13.<br class="calibre9" />14.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if myMode == 'encrypt':<br class="calibre9" />15.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;translated = encryptMessage(myKey, myMessage)<br class="calibre9" />16.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;elif myMode == 'decrypt':<br class="calibre9" />17.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;translated = decryptMessage(myKey, myMessage)<br class="calibre9" />18.<br class="calibre9" />19.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print('%sed message:' % (myMode.title()))<br class="calibre9" />20.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print(translated)<br class="calibre9" />21.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pyperclip.copy(translated)<br class="calibre9" />22.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print()<br class="calibre9" />23.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print('The message has been copied to the clipboard.')<br class="calibre9" />24.<br class="calibre9" />25.<br class="calibre9" />26. def encryptMessage(key, message):<br class="calibre9" />27.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return translateMessage(key, message, 'encrypt')<br class="calibre9" />28.<br class="calibre9" />29.<br class="calibre9" />30. def decryptMessage(key, message):<br class="calibre9" />31.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return translateMessage(key, message, 'decrypt')<br class="calibre9" />32.<br class="calibre9" />33.<br class="calibre9" />34. def translateMessage(key, message, mode):<br class="calibre9" />35.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;translated = [] # Stores the encrypted/decrypted message string.<br class="calibre9" />36.<br class="calibre9" />37.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;keyIndex = 0<br class="calibre9" />38.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;key = key.upper()<br class="calibre9" />39.<br class="calibre9" /><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-289"></span>40.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for symbol in message: # Loop through each symbol in message.<br class="calibre9" />41.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;num = LETTERS.find(symbol.upper())<br class="calibre9" />42.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if num != -1: # -1 means symbol.upper() was not found in LETTERS.<br class="calibre9" />43.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if mode == 'encrypt':<br class="calibre9" />44.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;num += LETTERS.find(key[keyIndex]) # Add if encrypting.<br class="calibre9" />45.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;elif mode == 'decrypt':<br class="calibre9" />46.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;num -= LETTERS.find(key[keyIndex]) # Subtract if<br class="calibre9" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;decrypting.<br class="calibre9" />47.<br class="calibre9" />48.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;num %= len(LETTERS) # Handle any wraparound.<br class="calibre9" />49.<br class="calibre9" />50.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Add the encrypted/decrypted symbol to the end of translated:<br class="calibre9" />51.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if symbol.isupper():<br class="calibre9" />52.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;translated.append(LETTERS[num])<br class="calibre9" />53.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;elif symbol.islower():<br class="calibre9" />54.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;translated.append(LETTERS[num].lower())<br class="calibre9" />55.<br class="calibre9" />56.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;keyIndex += 1 # Move to the next letter in the key.<br class="calibre9" />57.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if keyIndex == len(key):<br class="calibre9" />58.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;keyIndex = 0<br class="calibre9" />59.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else:<br class="calibre9" />60.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Append the symbol without encrypting/decrypting:<br class="calibre9" />61.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;translated.append(symbol)<br class="calibre9" />62.<br class="calibre9" />63.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return ''.join(translated)<br class="calibre9" />64.<br class="calibre9" />65.<br class="calibre9" />66. # If vigenereCipher.py is run (instead of imported as a module), call<br class="calibre9" />67. # the main() function:<br class="calibre9" />68. if __name__ == '__main__':<br class="calibre9" />69.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;main()</p>
+<h3 class="h1" id="calibre_link-715"><strong class="calibre3">Sample Run of the Vigenère Cipher Program</strong></h3>
+<p class="noindent">When you run the program, its output will look like this:</p>
+<p class="programs1">Encrypted message:<br class="calibre9" />Adiz Avtzqeci Tmzubb wsa m Pmilqev halpqavtakuoi, lgouqdaf, kdmktsvmztsl, izr<br class="calibre9" />xoexghzr kkusitaaf.<br class="calibre9" />The message has been copied to the clipboard.</p>
+<p class="indent">The program prints the encrypted message and copies the encrypted text to the clipboard.</p>
+<h3 class="h1" id="calibre_link-716"><strong class="calibre3">Setting Up Modules, Constants, and the main() Function</strong></h3>
+<p class="noindent">The beginning of the program has the usual comments describing the program, an <span class="literal">import</span> statement for the <span class="literal">pyperclip</span> module, and a variable called <span class="literal">LETTERS</span> that holds a string of every uppercase letter. The <span class="literal">main()</span> function for the Vigenère cipher is like the other <span class="literal">main()</span> functions in this book: it starts by defining the variables for <span class="literal">message</span>, <span class="literal">key</span>, and <span class="literal">mode</span>.</p>
+<span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-120"></span>
+<p class="programs1">&nbsp;1. # Vigenere Cipher (Polyalphabetic Substitution Cipher)<br class="calibre9" />&nbsp;2. # https://www.nostarch.com/crackingcodes/ (BSD Licensed)<br class="calibre9" />&nbsp;3.<br class="calibre9" />&nbsp;4. import pyperclip<br class="calibre9" />&nbsp;5.<br class="calibre9" />&nbsp;6. LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'<br class="calibre9" />&nbsp;7.<br class="calibre9" />&nbsp;8. def main():<br class="calibre9" />&nbsp;9.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# This text can be downloaded from https://www.nostarch.com/<br class="calibre9" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;crackingcodes/:<br class="calibre9" />10.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;myMessage = """Alan Mathison Turing was a British mathematician,<br class="calibre9" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;logician, cryptanalyst, and computer scientist."""<br class="calibre9" />11.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;myKey = 'ASIMOV'<br class="calibre9" />12.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;myMode = 'encrypt' # Set to either 'encrypt' or 'decrypt'.<br class="calibre9" />13.<br class="calibre9" />14.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if myMode == 'encrypt':<br class="calibre9" />15.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;translated = encryptMessage(myKey, myMessage)<br class="calibre9" />16.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;elif myMode == 'decrypt':<br class="calibre9" />17.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;translated = decryptMessage(myKey, myMessage)<br class="calibre9" />18.<br class="calibre9" />19.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print('%sed message:' % (myMode.title()))<br class="calibre9" />20.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print(translated)<br class="calibre9" />21.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pyperclip.copy(translated)<br class="calibre9" />22.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print()<br class="calibre9" />23.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print('The message has been copied to the clipboard.')</p>
+<p class="indent">The user sets these variables on lines 10, 11, and 12 before running the program. The encrypted or decrypted message (depending on what <span class="literal">myMode</span> is set to) is stored in a variable named <span class="literal">translated</span> so it can be printed to the screen (line 20) and copied to the clipboard (line 21).</p>
+<h3 class="h1" id="calibre_link-717"><strong class="calibre3">Building Strings with the List-Append-Join Process</strong></h3>
+<p class="noindent">Almost all the programs in this book have built a string with code in some form. That is, the program creates a variable that starts as a blank string and then adds characters using string concatenation. This is what the previous cipher programs have done with the <span class="literal">translated</span> variable. Open the interactive shell and enter the following code:</p>
+<p class="programs1">&gt;&gt;&gt; <span class="codestrong">building = ''</span><br class="calibre9" />&gt;&gt;&gt; <span class="codestrong">for c in 'Hello world!':</span><br class="calibre9" />&gt;&gt;&gt; <span class="codestrong">&nbsp;&nbsp;&nbsp;&nbsp;building += c</span><br class="calibre9" />&gt;&gt;&gt; <span class="codestrong">print(building)</span></p>
+<p class="indent">This code loops through each character in the string <span class="literal">'Hello world!'</span> and concatenates it to the end of the string stored in <span class="literal">building</span>. At the end of the loop, <span class="literal">building</span> holds the complete string.</p>
+<p class="indent">Although string concatenation seems like a straightforward technique, it’s very inefficient in Python. It’s much faster to start with a blank list and then use the <span class="literal">append()</span> list method. When you’re done building the list of <span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-121"></span>strings, you can convert the list to a single string value using the <span class="literal">join()</span> method. The following code does the same thing as the previous example, but faster. Enter the code into the interactive shell:</p>
+<p class="programs1">&gt;&gt;&gt; <span class="codestrong">building = []</span><br class="calibre9" />&gt;&gt;&gt; <span class="codestrong">for c in 'Hello world!':</span><br class="calibre9" />&gt;&gt;&gt; <span class="codestrong">&nbsp;&nbsp;&nbsp;&nbsp;building.append(c)</span><br class="calibre9" />&gt;&gt;&gt; <span class="codestrong">building = ''.join(building)</span><br class="calibre9" />&gt;&gt;&gt; <span class="codestrong">print(building)</span></p>
+<p class="indent">Using this approach to build up strings instead of modifying a string will result in much faster programs. You can see the difference by timing the two approaches using <span class="literal">time.time()</span>. Open a new file editor window and enter the following code:</p>
+<p class="noindentz"><em class="calibre7">stringTest.py</em></p>
+<p class="programs1">import time<br class="calibre9" /><br class="calibre9" />startTime = time.time()<br class="calibre9" />for trial in range(10000):<br class="calibre9" />&nbsp;&nbsp;building = ''<br class="calibre9" />&nbsp;&nbsp;for i in range(10000):<br class="calibre9" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;building += 'x'<br class="calibre9" />print('String concatenation: ', (time.time() - startTime))<br class="calibre9" /><br class="calibre9" />startTime = time.time()<br class="calibre9" />for trial in range(10000):<br class="calibre9" />&nbsp;&nbsp;building = []<br class="calibre9" />&nbsp;&nbsp;for i in range(10000):<br class="calibre9" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;building.append('x')<br class="calibre9" />&nbsp;&nbsp;building = ''.join(building)<br class="calibre9" />print('List appending:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;', (time.time() - startTime))</p>
+<p class="indent">Save this program as <em class="calibre7">stringTest.py</em> and run it. The output will look something like this:</p>
+<p class="programs1">String concatenation:&nbsp;&nbsp;40.317070960998535<br class="calibre9" />List appending:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10.488219022750854</p>
+<p class="indent">The program <em class="calibre7">stringTest.py</em> sets a variable <span class="literal">startTime</span> as the current time, runs code to append 10,000 characters to a string using concatenation, and then prints the time it took to finish the concatenation. Then the program resets <span class="literal">startTime</span> to the current time, runs code to use the list-appending method to build a string of the same length, and then prints the total time it took to finish. On my computer, using string concatenation to build 10,000 strings that are 10,000 characters each took about 40 seconds, but using the list-append-join process to do the same task took only 10 seconds. If your program builds a lot of strings, using lists can make your program much faster.</p>
+<p class="indent">We’ll use the list-append-join process to build strings for the remaining programs in this book.</p>
+<h3 class="h1" id="calibre_link-718"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-960" class="calibre1"></span><strong class="calibre3">Encrypting and Decrypting the Message</strong></h3>
+<p class="noindent">Because the encryption and decryption code is mostly the same, we’ll create two wrapper functions called <span class="literal">encryptMessage()</span> and <span class="literal">decryptMessage()</span> for the function <span class="literal">translateMessage()</span>, which will hold the actual code to encrypt and decrypt.</p>
+<p class="programs1">26. def encryptMessage(key, message):<br class="calibre9" />27.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return translateMessage(key, message, 'encrypt')<br class="calibre9" />28.<br class="calibre9" />29.<br class="calibre9" />30. def decryptMessage(key, message):<br class="calibre9" />31.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return translateMessage(key, message, 'decrypt')</p>
+<p class="indent">The <span class="literal">translateMessage()</span> function builds the encrypted (or decrypted) string one character at a time. The list in <span class="literal">translated</span> stores these characters so they can be joined when the string building is done.</p>
+<p class="programs1">34. def translateMessage(key, message, mode):<br class="calibre9" />35.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;translated = [] # Stores the encrypted/decrypted message string.<br class="calibre9" />36.<br class="calibre9" />37.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;keyIndex = 0<br class="calibre9" />38.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;key = key.upper()</p>
+<p class="indent">Keep in mind that the Vigenère cipher is just the Caesar cipher except a different key is used depending on the position of the letter in the message. The <span class="literal">keyIndex</span> variable, which keeps track of which subkey to use, starts at <span class="literal">0</span> because the letter used to encrypt or decrypt the first character of the message is <span class="literal">key[0]</span>.</p>
+<p class="indent">The program assumes that the key is in all uppercase letters. To make sure the key is valid, line 38 calls <span class="literal">upper()</span> on <span class="literal">key</span>.</p>
+<p class="indent">The rest of the code in <span class="literal">translateMessage()</span> is similar to the Caesar cipher code:</p>
+<p class="programs1">40.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for symbol in message: # Loop through each symbol in message.<br class="calibre9" />41.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;num = LETTERS.find(symbol.upper())<br class="calibre9" />42.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if num != -1: # -1 means symbol.upper() was not found in LETTERS.<br class="calibre9" />43.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if mode == 'encrypt':<br class="calibre9" />44.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;num += LETTERS.find(key[keyIndex]) # Add if encrypting.<br class="calibre9" />45.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;elif mode == 'decrypt':<br class="calibre9" />46.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;num -= LETTERS.find(key[keyIndex]) # Subtract if<br class="calibre9" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;decrypting.</p>
+<p class="indent">The <span class="literal">for</span> loop on line 40 sets the characters in <span class="literal">message</span> to the variable <span class="literal">symbol</span> on each iteration of the loop. Line 41 finds the index of the uppercase version of <span class="literal">symbol</span> in <span class="literal">LETTERS</span>, which is how we translate a letter into a number.</p>
+<p class="indent">If <span class="literal">num</span> isn’t set to <span class="literal">-1</span> on line 41, the uppercase version of <span class="literal">symbol</span> was found in <span class="literal">LETTERS</span> (meaning that <span class="literal">symbol</span> is a letter). The <span class="literal">keyIndex</span> variable keeps track of which subkey to use, and the subkey is always what <span class="literal">key[keyIndex]</span> evaluates to.</p>
+<p class="indent"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-961"></span>Of course, this is just a single letter string. We need to find this letter’s index in <span class="literal">LETTERS</span> to convert the subkey to an integer. This integer is then added (if encrypting) to the symbol’s number on line 44 or subtracted (if decrypting) to the symbol’s number on line 46.</p>
+<p class="indent">In the Caesar cipher code, we checked whether the new value of <span class="literal">num</span> was less than <span class="literal">0</span> (in which case, we added <span class="literal">len(LETTERS)</span> to it) or whether the new value of <span class="literal">num</span> was <span class="literal">len(LETTERS)</span> or greater (in which case, we subtracted <span class="literal">len(LETTERS)</span> from it). These checks handle the wraparound cases.</p>
+<p class="indent">However, there is a simpler way to handle both of these cases. If we mod the integer stored in <span class="literal">num</span> by <span class="literal">len(LETTERS)</span>, we can accomplish the same calculation in a single line of code:</p>
+<p class="programs1">48.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;num %= len(LETTERS) # Handle any wraparound.</p>
+<p class="indent">For example, if <span class="literal">num</span> was <span class="literal">-8</span>, we’d want to add <span class="literal">26</span> (that is, <span class="literal">len(LETTERS)</span>) to it to get <span class="literal">18</span>, and that can be expressed as <span class="literal">-8 % 26</span>, which evaluates to <span class="literal">18</span>. Or if <span class="literal">num</span> was <span class="literal">31</span>, we’d want to subtract <span class="literal">26</span> to get <span class="literal">5</span>, and <span class="literal">31 % 26</span> evaluates to <span class="literal">5</span>. The modular arithmetic on line 48 handles both wraparound cases.</p>
+<p class="indent">The encrypted (or decrypted) character exists at <span class="literal">LETTERS[num]</span>. However, we want the encrypted (or decrypted) character’s case to match the original case of <span class="literal">symbol</span>.</p>
+<p class="programs1">50.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Add the encrypted/decrypted symbol to the end of translated:<br class="calibre9" />51.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if symbol.isupper():<br class="calibre9" />52.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;translated.append(LETTERS[num])<br class="calibre9" />53.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;elif symbol.islower():<br class="calibre9" />54.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;translated.append(LETTERS[num].lower())</p>
+<p class="indent">So if <span class="literal">symbol</span> is an uppercase letter, the condition on line 51 is <span class="literal">True</span>, and line 52 appends the character at <span class="literal">LETTERS[num]</span> to <span class="literal">translated</span> because all the characters in <span class="literal">LETTERS</span> are already in uppercase.</p>
+<p class="indent">However, if <span class="literal">symbol</span> is a lowercase letter, the condition on line 53 is <span class="literal">True</span> instead, and line 54 appends the lowercase form of <span class="literal">LETTERS[num]</span> to <span class="literal">translated</span>. This is how we make the encrypted (or decrypted) message match the original message casing.</p>
+<p class="indent">Now that we’ve translated the symbol, we want to ensure that on the next iteration of the <span class="literal">for</span> loop, we use the next subkey. Line 56 increments <span class="literal">keyIndex</span> by 1, so the next iteration uses the index of the next subkey:</p>
+<p class="programs1">56.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;keyIndex += 1 # Move to the next letter in the key.<br class="calibre9" />57.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if keyIndex == len(key):<br class="calibre9" />58.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;keyIndex = 0</p>
+<p class="indent">However, if we were on the last subkey in the key, <span class="literal">keyIndex</span> would be equal to the length of <span class="literal">key</span>. Line 57 checks for this condition and resets <span class="literal">keyIndex</span> back to <span class="literal">0</span> on line 58 if that’s the case so that <span class="literal">key[keyIndex]</span> points back to the first subkey.</p>
+<p class="indent"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-290"></span>The indentation indicates that the <span class="literal">else</span> statement on line 59 is paired with the <span class="literal">if</span> statement on line 42:</p>
+<p class="programs1">59.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else:<br class="calibre9" />60.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Append the symbol without encrypting/decrypting:<br class="calibre9" />61.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;translated.append(symbol)</p>
+<p class="indent">The code on line 61 executes if the symbol was not found in the <span class="literal">LETTERS</span> string. This happens if <span class="literal">symbol</span> is a number or punctuation mark, such as <span class="literal">'5'</span> or <span class="literal">'?'</span>. In this case, line 61 appends the unmodified symbol to <span class="literal">translated</span>.</p>
+<p class="indent">Now that we’re done building the string in <span class="literal">translated</span>, we call the <span class="literal">join()</span> method on the blank string:</p>
+<p class="programs1">63.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return ''.join(translated)</p>
+<p class="indent">This line makes the function return the whole encrypted or decrypted message when the function is called.</p>
+<h3 class="h1" id="calibre_link-719"><strong class="calibre3">Calling the main() Function</strong></h3>
+<p class="noindent">Lines 68 and 69 finish the program’s code:</p>
+<p class="programs1">68. if __name__ == '__main__':<br class="calibre9" />69.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;main()</p>
+<p class="indent">These lines call the <span class="literal">main()</span> function if the program was run by itself rather than being imported by another program that wants to use its <span class="literal">encryptMessage</span><span class="literal">()</span> and <span class="literal">decryptMessage()</span> functions.</p>
+<h3 class="h1" id="calibre_link-720"><strong class="calibre3">Summary</strong></h3>
+<p class="noindent">You’re close to the end of this book, but notice that the Vigenère cipher isn’t that much more complicated than the Caesar cipher, which was one of the first cipher programs you learned. With just a few changes to the Caesar cipher, we created a cipher that has exponentially more possible keys than can be brute-forced.</p>
+<p class="indent">The Vigenère cipher isn’t vulnerable to the dictionary word pattern attack that the simple substitution hacker program uses. For hundreds of years, the “indecipherable” Vigenère cipher kept messages secret, but this cipher, too, eventually became vulnerable. In <a href="#calibre_link-42" class="calibre8">Chapters 19</a> and <a href="#calibre_link-64" class="calibre8">20</a>, you’ll learn frequency analysis techniques that will enable you to hack the Vigenère cipher.</p>
+<div class="sidebar">
+<p class="sidebart" id="calibre_link-721"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-962"></span><strong class="calibre5">PRACTICE QUESTIONS</strong></p>
+<p class="noindent">Answers to the practice questions can be found on the book’s website at <em class="calibre7"><a href="https://www.nostarch.com/crackingcodes/" class="calibre8">https://www.nostarch.com/crackingcodes/</a></em>.</p>
+<ol class="calibre13">
+<li value="1" class="calibre11"><p class="noindent">Which cipher is the Vigenère cipher similar to, except that the Vigenère cipher uses multiple keys instead of just one key?</p>
+</li>
+<li value="2" class="calibre11"><p class="noindent">How many possible keys are there for a Vigenère key with a key length of 10?</p>
+<ol class="lower-alpha">
+<li value="1" class="calibre11"><p class="noindent">Hundreds</p></li>
+<li value="2" class="calibre11"><p class="noindent">Thousands</p></li>
+<li value="3" class="calibre11"><p class="noindent">Millions</p></li>
+<li value="4" class="calibre11"><p class="noindent">More than a trillion</p></li>
+</ol>
+</li>
+<li value="3" class="calibre11"><p class="noindent">What kind of cipher is the Vigenère cipher?</p></li>
+</ol>
+</div>
+</div>
+<div><a href="chapter17.html">Previous Chapter - Hacking the Simple Substitution Cipher</a> | <a href="chapter19.html">Next Chapter - Frequency Analysis</a></div>
+<div><a target="_blank" href="https://www.amazon.com/gp/product/1593278225/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=1593278225&linkCode=as2&tag=playwithpyth-20&linkId=bf3b22819f0886d277e88b8a653b81ad">
+<img src="images/cover_crackingcodes_thumb.png" /><br />Buy the print or ebook online.</a></div>
