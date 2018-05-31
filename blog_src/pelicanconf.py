@@ -45,5 +45,5 @@ SKIP_COLOPHON = True
 
 
 OUTPUT_PATH = '../static/blog'
-DISQUS_SITENAME = 'inventwithpython'
+#DISQUS_SITENAME = 'inventwithpython'
 GOOGLE_ANALYTICS = 'UA-5459430-3'

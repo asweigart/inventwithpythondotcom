@@ -16,19 +16,19 @@
 <span id="more-500"></span><br />
 <strong>1) PROBLEM: In the shell window, if you click anywhere but on the current line and move the cursor there, the window stops handling key strokes.</strong></p>
 <p>This caused so many problems when I was teaching a dozen teenagers how to program in Python. Someone would accidentally click on the interactive shell window in the wrong place, and then the window would stop making text appear as they type and they have no idea why. I’d have to pause the entire class to figure out what happened, resume, just to have someone else do it ten minutes later.</p>
-<p><img class="alignnone" src="/blogstatic/hateidle_cursor1.png?27f655" alt="" width="460" /></p>
-<p><img class="alignnone" src="/blogstatic/hateidle_cursor2.png?27f655" alt="" width="460" /></p>
+<p><img class="alignnone" src="/blogstatic/hateidle_cursor1.png?27f655" alt="When the cursor is on the last line everything works fine" width="460" /></p>
+<p><img class="alignnone" src="/blogstatic/hateidle_cursor2.png?27f655" alt="When the cursor is not on the last line the keyboard stops working" width="460" /></p>
 <p>What would we lose by getting rid of this “feature”? Well, we wouldn’t be able to highlight text by holding down shift and banging on the arrow keys. That… hasn’t really been something my students and readers really need. The “select all” covers the case for highlighting everything, and the mouse can be used for highlighting small bits of text. The in-between amounts (where holding down shift and pressing PgUp or PgDn) is a special case that isn’t special enough to break this rule.</p>
 <p>Another UI problem that being able to move the cursor back up introduces: When my students' code would raise some exception, they thought they could correct it by scrolling back up, deleting the original code, and then re-typing it out (as if the interactive shell were a word processor). They would move the cursor up, but would be foiled when couldn't change any of the existing text. Getting rid of this misleading cursor stops this issue much earlier in the process and reduces confusion.</p>
 <p><strong>1.1) SUB-PROBLEM: Pressing the Home key moves the cursor before the &gt;&gt;&gt; prompt, which then makes the keyboard unresponsive.</strong> (UPDATE: Fixed in 3.3!)</p>
 <p>If you are typing at the interactive shell prompt, then want to go to the beginning of the line by hitting the Home key, you’ll then have to hit the right arrow key three times to *really* get to the front of the prompt. Until then, typing characters on the keyboard have no effect.</p>
-<p><img class="alignnone" src="/blogstatic/hateidle_cursor3.png?27f655" alt="" width="460" /></p>
+<p><img class="alignnone" src="/blogstatic/hateidle_cursor3.png?27f655" alt="Pressing the home key moves the cursor to the start of the line, causing the keyboard to stop working" width="460" /></p>
 <p><strong>1.2) NEW FEATURE: Auto-Copy-On-Highlight</strong></p>
 <p>Once we get rid of being able to move the cursor off the last line, that opens a new opportunity to implement an automatic copy-on-highlight feature that many terminal and IRC client programs implement. Since this text is read-only, the only reason a person has for highlighting it is to copy it (they can’t delete it.) As soon as the user highlights text in the shell window, it is copied to the clipboard.</p>
 <p><strong>2) PROBLEM: When debugging, the current line of code loses its highlighting when the window loses focus.</strong> (UPDATE: Fixed in 3.3!)</p>
 <p>And the debugger window is a separate window so the file editor is forced to lose focus to operate the debugger.</p>
-<p><img class="alignnone" src="/blogstatic/hateidle_debug_highlight1.png?27f655" alt="" width="460" /></p>
-<p><img class="alignnone" src="/blogstatic/hateidle_debug_highlight2.png?27f655" alt="" width="460" /></p>
+<p><img class="alignnone" src="/blogstatic/hateidle_debug_highlight1.png?27f655" alt="With the file editor in focus, the line highlighting works" width="460" /></p>
+<p><img class="alignnone" src="/blogstatic/hateidle_debug_highlight2.png?27f655" alt="With another window focused, the line highlighting in the file editor stops working" width="460" /></p>
 <p>I’m sure this is due to some sort of tk issue, but it’s annoying.</p>
 <p><strong>3) PROBLEM: There’s no obvious way to stop a running program. (Don’t expect them to know Ctrl-C)</strong></p>
 <p>Beginners won’t know or be able to remember the Ctrl-C trick to interrupt some infinite loop. MIT’s Scratch has a good idea where the program is started by clicking on a green flag and stopped by clicking on the red stop sign next to it. A small red icon with a “Stop the current program” tooltip would be great, or at least having a menu to invoke a keyboard interrupt would be better than expecting them to remember a keyboard combination.</p>
@@ -54,7 +54,7 @@
 <p><strong>14) IMPROVEMENT: Get rid of the Format &gt; “Strip trailing whitespace” option from the menu</strong>, and just have an option where the editor can do this automatically when you save the file.</p>
 <p><strong>15) MODERNIZATION: The Save dialog asks “Do you want to save this untitled document before closing?” and then presents you with Yes, No, and Cancel buttons.</strong> Update this to use verbs instead of yes/no: Use Save, Don't Save, and Cancel.</p>
 <p><strong>16) ANNOYANCE: The Windows shortcuts for IDLE don't have the version in their name.</strong> This wasn't a problem for Windows XP and before, where you just go to the Python shortcut folder (which does have the version info in the name) and select IDLE. But in Windows 7, to launch a program you click Start and simply type "IDLE" to bring up all the IDLE-named shortcuts. Before I changed the shortcut names manually, it was impossible for me to tell which Python version's IDLE I would be starting:</p>
-<p><img class="alignnone" src="/blogstatic/hateidle_shortcutname.png?27f655" alt="" width="424" height="152" /></p>
+<p><img class="alignnone" src="/blogstatic/hateidle_shortcutname.png?27f655" alt="Different versions of Python have identical IDLE shortcut names" width="424" height="152" /></p>
 <p><strong>17) NEW FEATURE: Ctrl-Scroll to change font size.</strong> (UPDATE from 6/4/2013) Much like how holding down Ctrl and scrolling the mouse wheel will zoom in and out, it'd be nice to have IDLE change its font size by doing this.</p>
 <p>One last thing, I think it was a stroke of genius to include a small IDE bundled with the interpreter, especially one that was written in Python itself using the included GUI toolkit. It shows that the Python devs care not just about attracting seasoned developers but also about drawing new people into programming which (as PHP showed us) will turn into remarkable market share later on.</p>
 <p>I also understand why IDLE isn't at the top of the priority list: people code away with it for a while, and then move on to a bigger and better IDE. It's a disposable IDE (though I mean that in the nicest possible way). But a few tweaks would improve its usability in that mode of improvement where people may not notice the quality, they just stop noticing any hangups. "It just works."</p>
@@ -63,7 +63,7 @@
 <p>UPDATE (2014/9/6) - It'd be great if IDLE could detect if the user is trying to run Python 2 code on Python 3 or vice versa. That's about half of the questions I get emailed to me.</p>
 <p>UPDATE (2014/9/7) - Thinking about item 1 more, to better convey that you can't type new instructions while the cursor is off the last line, I'd move the final >>> prompt to a small separate window on its own at the bottom of the interactive shell window. This way, the top area is read-only (though the cursor can be moved there to highlight text) while it is understood that instructions are only entered at the bottom when the cursor is there. Also, I've seen cases with the kids I teach where they think of the interactive shell window as a word processor, and when they make errors they try to move the cursor back up to "correct" their code, rather than just retype it in.</p>
 <p>UPDATE (2015/4/6) - I've outlined a plan for redesigning IDLE as an educational tool in this github wiki: <a href="https://github.com/asweigart/idle-reimagined/wiki" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/idle-reimagined/wiki', 'IDLE Reimagined']);" >IDLE Reimagined</a>.</p>
-					
+
 
     </body>
 </html>

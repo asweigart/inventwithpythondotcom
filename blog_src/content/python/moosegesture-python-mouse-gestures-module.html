@@ -17,9 +17,9 @@ Mouse gestures are a way of dragging with the mouse in order to draw out a certa
 <p><a href="http://coffeeghost.net/src/moosegesture.py" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://coffeeghost.net/src/moosegesture.py', 'moosegesture.py']);" >moosegesture.py</a></p>
 <p><a href="http://coffeeghost.net/src/moosegesturetest.py" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://coffeeghost.net/src/moosegesturetest.py', 'moosegesturetest.py']);" >moosegesturetest.py</a></p>
 <p><a href="http://inventwithpython.com/simongesture.zip?27f655">Simon Gesture</a> - A game that uses the MooseGesture module.</p>
-<p><img src="http://coffeeghost.net/images/moosegesturescreenshot.png" alt="" /></p>
+<p><img src="http://coffeeghost.net/images/moosegesturescreenshot.png" alt="MooseGesture screenshot" /></p>
 <p>(The screenshot above shows the test app after entering a mouse gesture. It correctly identifies the gesture as Down Right Up.)</p>
-<p><img src="http://coffeeghost.net/images/moosegesturescreenshot2.png" alt="" /></p>
+<p><img src="http://coffeeghost.net/images/moosegesturescreenshot2.png" alt="MooseGesture screenshot" /></p>
 <p>(The above screenshot shows a more complicated gesture: Down, Up, Down, Right, Left, Right.)<br />
 <span id="more-272"></span><br />
 Description of the Algorithm</p>
@@ -34,16 +34,16 @@ Description of the Algorithm</p>
 <p>The identification of strokes is based on a simple slope calculation between two points. MooseGesture can identify several strokes in a row in the eight cardinal and diagonal directions (up, down, left, right, and the four diagonals in between). MooseGesture does not recognize two strokes in the same direction performed in succession, but sees it as just one stroke in that direction. So up, up, down, down, left, right, left right would be identified as just up, down, left, right.</p>
 <p>A slope is calculated between two XY coordinates with the basic "rise over run" calculation: (y2 - y1) / (x2 - x1)</p>
 <p>The slope is then categorized into one of the eight directions by checking which "zone" it falls into. Each of the eight zones spans 45 degrees. To make it easier to remember, I've numbered them according to the same directions the numbers on your keyboard's number pads align to:</p>
-<p><img src="http://coffeeghost.net/images/moosegesture_zones.png" alt="" /></p>
+<p><img src="http://coffeeghost.net/images/moosegesture_zones.png" alt="An area radially split into eight zones" /></p>
 <p>The key is to know when one stroke ends and another begins, and to allow for some inaccuracy and imperfection from the user. MooseGesture does this by breaking up the user's gesture into overlapping "segments" and testing for a consistent direction on all point pairs in that segment.</p>
 <p>Here's what I mean. Say the user's gesture (which is just an ordered list of XY points) looks like this:</p>
-<p><img src="http://coffeeghost.net/images/moosegesture_segments.png" alt="" /></p>
+<p><img src="http://coffeeghost.net/images/moosegesture_segments.png" alt="Several dots roughly going left to right" /></p>
 <p>The user intends to just have a simple to-the-right gesture, but because of some natural shaky mouse movement there is a little deviation in it. We want this deviation to be ignored, and not identified as an additional upright stroke. The segment consistency checks in our algorithm will ignore these little bumps.</p>
 <p>A "segment" has a starting point, and then continues to include subsequent points until it meets a minimum segment length (and no longer). (The minimum segment length is adjustable. A smaller minimum segment length lets strokes be shorter but increases the odds of misidentified strokes.) So say the gesture has 10 points (which we'll call 0 to 9) altogether. The first segment starts at point 0 and goes on for some number of points until it is at least the minimum segment length. The second segment starts at point 1. This means that the second segment overlaps the first for a bit. (This depends on the lengths of the segments, which depends on how close together/far apart the points are.)</p>
 <p>The last segment will start at the latest point that we can get a segment that meets the minimum segment length. So if the distance between points 7 to 8 to 9 is less than the minimum segment length, there won't be a segment that starts at point 7 (or, logically, at point 8).</p>
 <p>Note that the length of a segment is the sum of lengths of its point pairs, not the distance between the first and last points in the segment. For example, the distance between points 0 and 1, 1 and 2, and 2 and 3. It would not be the distance between points 0 and 3.</p>
 <p>Here's an animated gif that shows a gesture with 8 points (0 to 7), with the segments highlighted in turn:</p>
-<p><img src="http://coffeeghost.net/images/moosegesture_segments_anim.gif" alt="" /></p>
+<p><img src="http://coffeeghost.net/images/moosegesture_segments_anim.gif" alt="Several partial segments of the rough line" /></p>
 <p>The Algorithm:</p>
 <ol>
 <li>Split up the gesture's points into segments that meet the minimum segment length.</li>
@@ -51,13 +51,13 @@ Description of the Algorithm</p>
 <li>If all of the point pairs in the segment agree on the direction, then this segment is considered consistent and the direction is added to the list of identified strokes. See the animated gif below for an example of consistent/inconsistent segments, the R stands for "right direction point pair" and the UR for "upright direction point pair".</li>
 <li>The list of identified strokes is returned as the identified gesture.</li>
 </ol>
-<p><img src="http://coffeeghost.net/images/moosegesture_segments_anim2.gif" alt="" /></p>
+<p><img src="http://coffeeghost.net/images/moosegesture_segments_anim2.gif" alt="Severla partial segments of the rough line" /></p>
 <p>(There is one exception to adding a consistent segment: if the previously identified stroke is in the same direction as this one, then we don't add the direction. This prevents multiple sequential strokes in the same direction, i.e. up-up-up-left-left is just considering up-left.)</p>
 <p>This algorithm lets us ignore tiny deviations because they will create an inconsistent segment (i.e. a segment wit pair points going in different directions. So we drop that segment from being considered an identified stroke. But there is bound to be some segments before and after it that are consistent.</p>
 <p>One limitation is that MooseGesture can only identify direction. It can't identify lengths or specific shapes. So these two paths are both interpreted as the same gesture by MooseGesture (upright, downright, left):</p>
-<p><img src="http://coffeeghost.net/images/moosegesture_samegesture.png" alt="" /></p>
+<p><img src="http://coffeeghost.net/images/moosegesture_samegesture.png" alt="Two shapes recognized as the same gesture even though their line segments are different lengths" /></p>
 <p>This is just an algorithm that I came up with literally over a weekend. Even for gestures with an absurd number of points in them, it seems to run in a couple milliseconds. It can probably be improved, but will work just fine for most Python games. I'll be converting the module to JavaScript in the future. Email me any questions you might have. Enjoy!</p>
-					
+
 
     </body>
 </html>

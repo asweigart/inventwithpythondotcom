@@ -12,29 +12,29 @@
 <p>The source code of everything in this article can be downloaded here: <a href="/blogstatic/floodfill/floodfill_src.zip?27f655">floodfill_src.zip</a></p>
 <p><span class="Apple-style-span" style="font-size: 20px; font-weight: bold;">Consider the Lazy Zombie</span></p>
 <p>This is a cat:</p>
-<p><img title="cat" src="/blogstatic/floodfill/cat_transparent.png" alt="" width="50" height="50" /></p>
+<p><img title="cat" src="/blogstatic/floodfill/cat_transparent.png" alt="Cat" width="50" height="50" /></p>
 <p>This is a normal human:</p>
-<p><img title=" " src="/blogstatic/floodfill/human_transparent.png" alt="" width="50" height="50" /></p>
+<p><img title=" " src="/blogstatic/floodfill/human_transparent.png" alt="Human" width="50" height="50" /></p>
 <p>This is a normal human who has been turned into an ungodly, flesh-eating zombie of the undead:</p>
-<p><img title=" " src="/blogstatic/floodfill/zombie_transparent.png" alt="" width="50" height="50" /></p>
+<p><img title=" " src="/blogstatic/floodfill/zombie_transparent.png" alt="Zombie" width="50" height="50" /></p>
 <p>Zombies are lazy and will only bite things that are next to them. Humans that are bitten will then turn into zombies:</p>
-<p><img title=" " src="/blogstatic/floodfill/biting.png" alt="" width="250" height="50" /></p>
+<p><img title=" " src="/blogstatic/floodfill/biting.png" alt="Zombie biting human" width="250" height="50" /></p>
 <p>There is an interesting recursive principle here, because the humans that have turned into zombies will start to bite other humans that are next to them, which will make more zombies, who bite more adjacent humans, which will make more zombies, and so on and so on in a chain reaction:</p>
-<p><img src="/blogstatic/floodfill/biting5.png" alt="" width="550" height="50" /></p>
+<p><img src="/blogstatic/floodfill/biting5.png" alt="Zombie biting human who then bites another human" width="550" height="50" /></p>
 <p><span id="more-341"></span>Zombies don’t bite cats though. (Well, they do, but a zombie-bitten cat won’t turn into a zombie.) If you put a zombie next to a cat, you’ll just end up with a zombie and a cat:</p>
-<p><img title=" " src="/blogstatic/floodfill/biting2.png" alt="" width="250" height="50" /></p>
+<p><img title=" " src="/blogstatic/floodfill/biting2.png" alt="Zombie and cat" width="250" height="50" /></p>
 <p>So as long as there is a cat between the human and the lazy zombie, the human is safe:</p>
-<p><img title=" " src="/blogstatic/floodfill/biting3.png" alt="" width="350" height="50" /></p>
+<p><img title=" " src="/blogstatic/floodfill/biting3.png" alt="Cat between zombie and human" width="350" height="50" /></p>
 <p>The same cannot be said of any humans who don’t have a cat between them and a zombie:</p>
-<p><img title=" " src="/blogstatic/floodfill/biting4.png" alt="" width="350" height="50" /></p>
+<p><img title=" " src="/blogstatic/floodfill/biting4.png" alt="Zombie biting human" width="350" height="50" /></p>
 <p>So not only does this simple lazy-zombie principle cause a chain reaction of zombies, it also causes this chain reaction to stop when a cat is encountered. (Public Service Announcement: In the event of a zombie apocalypse, please locate your local crazy cat person for safety and shelter.)</p>
-<p><img src="/blogstatic/floodfill/crazycatlady_scene.png" alt="" width="310" height="296" /></p>
+<p><img src="/blogstatic/floodfill/crazycatlady_scene.png" alt="Lady surrounded by cats" width="310" height="296" /></p>
 <p>Let’s make a two dimensional field of humans, cats, and zombies like this:</p>
-<p><img src="/blogstatic/floodfill/2dzombiefield.png" alt="" width="350" height="300" /></p>
+<p><img src="/blogstatic/floodfill/2dzombiefield.png" alt="2D plane of humans, cats, and zombies" width="350" height="300" /></p>
 <p>All we need is one starting zombie, and you’ll see the infection spread until the entire human population is zombified. But there’s hope. If there is an enclosed ring of cats blocking the initial zombie, then humanity is (slightly) saved. (In our example, zombies don’t bite diagonally.)</p>
-<p><img src="/blogstatic/floodfill/zombie1.gif" alt="" width="350" height="300" /></p>
+<p><img src="/blogstatic/floodfill/zombie1.gif" alt="Zombies biting humans except those surrounded by cats" width="350" height="300" /></p>
 <p>But if there is a gap in the cats, then the entire population is doomed:</p>
-<p><img src="/blogstatic/floodfill/zombie2.gif" alt="" width="350" height="300" /></p>
+<p><img src="/blogstatic/floodfill/zombie2.gif" alt="Zombies biting all humans" width="350" height="300" /></p>
 <p>This whole zombie thing is an elaborate and silly analogy for the flood fill algorithm.</p>
 <h2>The Basics: Recursive Calls and Base Cases</h2>
 <p>A <strong>recursive function</strong> is simply a function that calls itself. Here’s the simplest possible recursive function:</p>
@@ -124,15 +124,15 @@ countdown(10)</pre>
 <p>The iterative function is a little bit longer, but it does the exact same thing as the recursive version and is probably easier to understand. This stupid example doesn’t show the power of recursion very well. Why learn recursion when straightforward iterative approach works just as well? Consider the flood fill problem, which does not have an obvious non-recursive solution...</p>
 <h2>Flood Filling</h2>
 <p><strong>Flood filling</strong> is when you want to change the color of an area of color in an image. It’s available in a lot of graphics programs and usually looks like a paint bucket being tilted over, like this:</p>
-<p><img src="/blogstatic/floodfill/floodicons.png" alt="" /></p>
+<p><img src="/blogstatic/floodfill/floodicons.png" alt="Icons of flood fill tool from various graphics programs" /></p>
 <p>For example, if we flood fill a circle, the change will look like this (the blue dot indicates where the flood filling starts):</p>
-<p><img class="alignnone" title=" " src="/blogstatic/floodfill/floodfill1.png" alt="" /></p>
+<p><img class="alignnone" title=" " src="/blogstatic/floodfill/floodfill1.png" alt="Blue dot in the middle of an arbitrary enclosed shape" /></p>
 <p>The blue flood filling starts at that blue point (which was originally white), so it will keep spreading as long as it finds adjacent white pixels. Imagine it as blue paint pouring on that dot, and it keeps spreading until it hits any non-white colors (like the black circle). If we started the flood filling from the outside of the circle, then the entire outside area would be filled up instead:</p>
-<p><img title=" " src="/blogstatic/floodfill/floodfill3.png" alt="" /></p>
+<p><img title=" " src="/blogstatic/floodfill/floodfill3.png" alt="Blue color filling in the outside an abritrary enclosed shape" /></p>
 <p>Flood filling a circle that is not completely enclosed wouldn’t work the same way. The flood filling color would “leak out” the open space in the circle and then fill up the outside space as well:</p>
-<p><img title=" " src="/blogstatic/floodfill/floodfill2.png" alt="" /></p>
+<p><img title=" " src="/blogstatic/floodfill/floodfill2.png" alt="Blue color filling up the entire area" /></p>
 <p>The really clever thing about flood fill is that it can fill up any arbitrary enclosed shape:</p>
-<p><img title=" " src="/blogstatic/floodfill/floodfill4.png" alt="" /></p>
+<p><img title=" " src="/blogstatic/floodfill/floodfill4.png" alt="Blue color filling up the interior of an arbitrary enclosed shape" /></p>
 <p>The image on your screen is nothing but individual squares of color called pixels. In order to change the color of the pixels, our function will have to calculate the X and Y coordinates of each pixel that needs  to be changed. It isn’t really obvious how to do that. There are so many different possible shapes, so how can we write one function that will handle all the possible shapes there are?</p>
 <p>Let’s write some code that does this. Here’s some simple pseudocode of a flood fill function:</p>
 <pre>def floodfill(x, y, oldColor, newColor):
@@ -274,11 +274,11 @@ ssssssssssssssssssss</pre>
 <h2>Sierpinski Triangles</h2>
 <p>Another example of a recursive function is a function that will draw Sierpinski triangles. A <strong>Sierpinski triangle</strong> simply is a triangle with an upside down triangle inside of it. This forms three other triangles (one on the top center, bottom left, and bottom right). It looks like the Triforce from the Legend of Zelda games.</p>
 <p>Drawing several levels of Sierpinski triangles is a recursive job. First you draw one Sierpinski triangle, and then you draw three more smaller Sierpinkski triangles, one in each of the three sub-triangles. Then you draw three more Sierpinski triangles each of the three sub-triangles in each of the three sub-triangles, and so on. Each level of drawing multiplies the total number of triangles by three. So 4 levels means 3 * 3 * 3 * 3 = 3^4 = 81 triangles. Seven levels of Sierpinski triangles would create 3^7 or 2,187 triangles. Here’s an animation of a new layer of Sierpinski triangles being drawn:</p>
-<p><img class="alignnone" src="/blogstatic/floodfill/sierpinski_animated.gif" alt="" width="320" height="240" /></p>
+<p><img class="alignnone" src="/blogstatic/floodfill/sierpinski_animated.gif" alt="Sierpinski triangle" width="320" height="240" /></p>
 <p>This animation maxes out at the 7<sup>th</sup> recursive level, since by then the sub-triangles become smaller than one pixel and can’t be drawn. (If the triangle looks a little funny, that’s because slight rounding errors happen once the triangles get so tiny.) The program that generates this animation is here: <a href="/blogstatic/floodfill/sierpinski.py">sierpinski.py</a> (this requires Pygame to be installed.)</p>
 <p>A Sierpinski triangle is known as a fractal, which are shapes that are composed of smaller, self-similar shapes. Recursion is naturally suited for making fractal pictures, which look pretty cool. There's a bunch of cool looking examples on the Wikipedia page for fractals: <a href="http://en.wikipedia.org/wiki/Fractal" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://en.wikipedia.org/wiki/Fractal', 'http://en.wikipedia.org/wiki/Fractal']);" >http://en.wikipedia.org/wiki/Fractal</a></p>
 <p>Recursion is at the base of fractals, and fractals are at the base of terrain generation algorithms. Many games don't have programmers design mountains by individually setting each polygon that makes up a mountain or hilly grassland. Instead they use a terrain generation algorithm (which is a bit too detailed to go into in this article. Check out the Wikipedia page: <a href="http://en.wikipedia.org/wiki/Fractal_landscape" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://en.wikipedia.org/wiki/Fractal_landscape', 'http://en.wikipedia.org/wiki/Fractal_landscape']);" >http://en.wikipedia.org/wiki/Fractal_landscape</a> )</p>
-<p><img class="alignnone" src="/blogstatic/floodfill/300px-Animated_fractal_mountain.gif" alt="" width="300" height="147" /></p>
+<p><img class="alignnone" src="/blogstatic/floodfill/300px-Animated_fractal_mountain.gif" alt="Fractal mountain" width="300" height="147" /></p>
 <p><span class="Apple-style-span" style="font-size: 20px; font-weight: bold;">Recursion is Just a Fancy Way of Using a Stack</span></p>
 <p>A stack is just like an array or a list, with one exception: items can only be added or removed from the very end of the stack. (Although when stacks are drawn out, people usually draw them vertically and things are only added or removed from the top of the stack. Think of a stack of plates.) It’s a very basic computer science data structure, and one that the computer actually uses at a low level. Programming languages just add a bunch of fancy features and manipulation of low level data structures (such as Python’s lists, dictionaries, or things like lists that contain lists) so that it is easier to write programs.</p>
 <p>Some detailed info about stacks can be found on the Wikipedia page: <a href="http://en.wikipedia.org/wiki/Stack_(data_structure)" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://en.wikipedia.org/wiki/Stack_(data_structure)', 'http://en.wikipedia.org/wiki/Stack_(data_structure)']);" >http://en.wikipedia.org/wiki/Stack_(data_structure)</a></p>
@@ -294,7 +294,7 @@ def bar():</span>
 
 foo()</pre>
 <p>This program calls foo(), which calls bar(), which then returns back to foo(), which then returns back to the line that called foo(). Every time a function is called, the line calling the function is saved to the stack. When a function returns, the item at the top of the stack is removed. Adding an item to the top of the stack is called “<strong>pushing</strong>” an item onto the stack. Removing an item from the top of the stack is called “<strong>popping</strong>” an item off the stack. If we drew out the “stack”, it would look like this:</p>
-<p><img class="alignnone" src="/blogstatic/floodfill/callstack.png" alt="" width="830" height="216" /></p>
+<p><img class="alignnone" src="/blogstatic/floodfill/callstack.png" alt="Call stack" width="830" height="216" /></p>
 <p>If you called a function that called a function that called a function that called a function, this is how Python keeps track of where to return to whenever a function returns. This stack is called the “<strong>call stack</strong>”. (It’s also sometimes called an execution stack or run-time stack.) The Wikipedia page for call stacks is here: <a href="http://en.wikipedia.org/wiki/Call_stack" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://en.wikipedia.org/wiki/Call_stack', 'http://en.wikipedia.org/wiki/Call_stack']);" >http://en.wikipedia.org/wiki/Call_stack</a></p>
 <p>The call stack is stored in the computer’s memory. It cannot become infinitely large because no computer has an infinite amount of memory. So when a recursive function has a bug and never reaches a base case, eventually the computer runs out of memory and crashes the program. This is called a “<strong>stack overflow</strong>”. In Python, a stack overflow error looks like this: “RuntimeError: maximum recursion depth exceeded”</p>
 <p>Hey, instead of implicitly using the call stack when we have recursive functions, why don’t we just use our own stack structure instead? Then we could implement the flood fill algorithm without this complicated recursion stuff. (This is generally a bad idea. Recursion is really useful once you get used to them, and much easier than making your own data structure. But this example here is just to show how recursion is really just a nifty use of a stack data structure.)</p>

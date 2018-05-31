@@ -17,13 +17,13 @@
 
 <p>After you have purchased a shared hosting plan from Dreamhost, go to <a href="https://panel.dreamhost.com/">https://panel.dreamhost.com/</a> and log into your Dreamhost account. This tutorial assumes you have also registered for a domain name. From the sidebar, click Domains > Manage Domains, then click the Edit link next to the domain name you want to host the Django app. In this tutorial, I will be using <strong>example.turtleappstore.com</strong> for the domain name. Replace this with your domain name in any commands in this tutorial.</p>
 
-<p>You will see the configuration details for this domain name. Make sure that the <strong>Passenger (Ruby/NodeJS/Python apps only)</strong> checkbox is checked. This will also make the web directory end with <code>public</code>, such as <code>/home/username/example.turtleappstore.com/public</code>. The page will look like this:<br /><img src="/blogstatic/djangodreamhost/enable_passenger.png" alt="" /></p>
+<p>You will see the configuration details for this domain name. Make sure that the <strong>Passenger (Ruby/NodeJS/Python apps only)</strong> checkbox is checked. This will also make the web directory end with <code>public</code>, such as <code>/home/username/example.turtleappstore.com/public</code>. The page will look like this:<br /><img src="/blogstatic/djangodreamhost/enable_passenger.png" alt="Screenshot of enabling Passenger in the Dreamhost control panel" /></p>
 
 <p>Aside: If you have multiple domain names with Dreamhost, I recommend creating a separate user for each one. (From the sidebar, click Users > Manage Users.) If the account or site is hacked, it will only affect that single domain instead of possibly all of your domains.</p>
 
 <p>The user account that manages this domain name must have "shell access". From the sidebar, click Users > Manage Users, then click the Edit link next to the user. Next to <strong>User Type</strong>, select "Shell user". This will allow you to SSH into the shared hosting server that the web server is running on.</p>
 
-<p><img src="/blogstatic/djangodreamhost/shell_user.png" alt="" /></p>
+<p><img src="/blogstatic/djangodreamhost/shell_user.png" alt="Screenshot of Dreamhost's user control panel" /></p>
 
 <h2>SSH into the Server</h2>
 
@@ -76,7 +76,7 @@
 <pre>[server]$ which virtualenv
 /home/[username]/opt/python-3.6.0/bin/virtualenv</pre>
 
-<p>According to the <a href="https://docs.python.org/3/library/venv.html">venv documentation</a>, in Python 3.6 you don't use <code>virtualenv</code> or <code>pyenv</code> but instead <code>python 3 -m venv</code> to prevent confusion as to which Python interpreter the virtual environment will be based on.</p>
+<p>According to the <a href="https://docs.python.org/3/library/venv.html">venv documentation</a>, in Python 3.6 you don't use <code>virtualenv</code> or <code>pyenv</code> but instead <code>python3 -m venv</code> to prevent confusion as to which Python interpreter the virtual environment will be based on.</p>
 
 <p>Next, create a virtual environment for your project. I'll call mine <code>tas_venv</code>:</p>
 
@@ -147,6 +147,6 @@ application = get_wsgi_application()</pre>
 
 <p>At this point, you should be able to open example.turtleappstore.com in a web browser and see Django's default "It worked!" page. Whenever you make a change, you need to re-touch the restart.txt file for Passenger to pick up the changes. Note that Passenger will handle <em>all</em> requests made to the example.turtleappstore.com. You can now start creating apps and working on your Django project as you normally would.</p>
 
-<p><img src="/blogstatic/djangodreamhost/it_worked.png" alt="" /></p>
+<p><img src="/blogstatic/djangodreamhost/it_worked.png" alt="Screenshot of Django's It Worked page" /></p>
 
     </body>
