@@ -1,0 +1,233 @@
+<html>
+    <head>
+        <title>Python Tuples are Immutable, Except When They're Mutable</title>
+        <meta name="tags" content="" />
+        <meta name="date" content="2018-02-05 12:00" />
+        <meta name="summary" content="" />
+    </head>
+    <body>
+
+    <h2>Prologue</h2>
+
+    <blockquote><p>'When I use a word,' Humpty Dumpty said, in rather a scornful tone, 'it means just what I choose it to mean — neither more nor less.'</p>
+
+    <p>'The question is,' said Alice, 'whether you can make words mean so many different things.'</p>
+
+    <p>'The question is,' said Humpty Dumpty, 'which is to be master — that's all.'</p></blockquote>
+
+    <h2>Are Tuples Mutable or Immutable?</h2>
+
+    <p>In Python, tuples are immutable, and "immutable" means the value cannot change. These are well-known, basic facts of Python. While tuples are more than just immutable lists (as Chapter 2 of Luciano Ramalho's excellent <a href="https://www.amazon.com/gp/product/1491946008/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=1491946008&linkCode=as2&tag=playwithpyth-20&linkId=f03271c8ba828c5896fa0c029f680117">"Fluent Python"</a> explains), there is a bit of ambiguity here. <a href="https://standupdev.com/wiki/doku.php?id=python_tuples_are_immutable_but_may_change">Luciano has written up a great blog post</a> on this topic as well.</p>
+
+    <p>Before we can get a nuanced answer to <em>"Are tuples mutable or immutable?"</em>, we need some background information.</p>
+
+    <h2>Some Background Information</h2>
+
+    <p>According to the <a href="https://docs.python.org/3/reference/datamodel.html">Python data model</a>, "objects are Python's abstraction for data, and all data in a Python program is represented by objects or by relations between objects". Every value in Python is an object, including integers, floats, and Booleans. In Java, these are "primitive data types" and considered separate from "objects". Not so, in Python. Every value in Python is an object, and Ned Batchelder's fantastic PyCon 2015 talk <a href="https://www.youtube.com/watch?v=_AEJHKGk9ns">Facts and Myths About Python Names and Values"</a> goes into more detail about this.</p>
+
+    <p>So not only is the <code>datetime.datetime(2018, 2, 4, 19, 38, 54, 798338)</code> datetime object an object, but the integer <code>42</code> is an object and the Boolean <code>True</code> is an object.</p>
+
+    <p>All Python objects have three things: a value, a type, and an identity. This is a bit confusing, because we often casually say, for example, "the value <code>42</code>", although <code>42</code> is also called an object which itself has a value. But never mind that, let's continue with our <code>42</code> example. Enter the following into the interactive shell:</p>
+
+<pre>&gt;&gt;&gt; spam = 42
+&gt;&gt;&gt; spam
+42
+&gt;&gt;&gt; type(spam)
+&lt;class 'int'&gt;
+&gt;&gt;&gt; id(spam)
+1594282736</pre>
+
+    <p>The variable <code>spam</code> refers to an object that has a value of <code>42</code>, a type of <code>int</code>, and an identity of <code>1594282736</code>. An identity is a unique integer, created when the object is created, and never changes for the lifetime of the object. An object's type also cannot change. Only the value of an object may change.</p>
+
+    <p>Let's try changing an object's value by entering the following into the interactive shell:</p>
+
+<pre>&gt;&gt;&gt; spam = 42
+&gt;&gt;&gt; spam = 99</pre>
+
+    <p>You may think you've changed the object's value from <code>42</code> to <code>99</code>, but you haven't. All you've done is made <code>spam</code> refer to a new object. You can confirm this by calling the <code>id()</code> function and noticing <code>spam</code> refers to a completely new object:</p>
+
+<pre>&gt;&gt;&gt; spam = 42
+&gt;&gt;&gt; id(spam)
+1594282736
+&gt;&gt;&gt; spam = 99
+&gt;&gt;&gt; id(spam)
+1594284560</pre>
+
+    <p>Integers (and floats, Booleans, strings, frozen sets, and bytes) are immutable; their value doesn't change. Lists (and dictionaries, sets, arrays, and bytearrays), on the other hand, are mutable. This can lead to a common Python gotcha:</p>
+
+<pre>&gt;&gt;&gt; spam = ['dogs', 'cats']
+&gt;&gt;&gt; eggs = spam  # copies the reference, not the list
+
+&gt;&gt;&gt; spam
+['dogs', 'cats']
+&gt;&gt;&gt; eggs
+['dogs', 'cats']
+
+&gt;&gt;&gt; spam.append('moose') # modifies the list referred by spam
+&gt;&gt;&gt; spam
+['dogs', 'cats', 'moose']
+&gt;&gt;&gt; eggs
+['dogs', 'cats', 'moose']</pre>
+
+    <p>The reason <code>eggs</code> has changed even though we only appended a value to <code>spam</code> is because <code>spam</code> and <code>eggs</code> refer to the same object. The <code>eggs = spam</code> line made a copy of the reference, not the object. (You can use the <a href="https://docs.python.org/3/library/copy.html"><code>copy</code> module's <code>copy()</code> or <code>deepcopy()</code> functions</a> if you want to copy a list object.)</p>
+
+    <p>The <a href="https://docs.python.org/3/glossary.html#term-immutable">glossary in Python's official documentation says this about "immutable"</a> (emphasis mine):</p>
+
+    <blockquote>"An object with a fixed value. Immutable objects include numbers, strings and <strong>tuples</strong>. Such an object cannot be altered. <strong>A new object has to be created if a different value has to be stored.</strong>"</blockquote>
+
+    <p>The official Python documentation (and every other book, tutorial, and StackOverflow answer I've found) describes tuples as immutable. Conversely, <a href="https://docs.python.org/3/glossary.html#term-mutable">the glossary says this about "mutable"</a>:</p>
+
+    <blockquote>"Mutable objects can change their value but keep their <code>id()</code>. See also <a href="https://docs.python.org/3/glossary.html#term-immutable">immutable</a>."</blockquote>
+
+    <p>Let's move on to discuss how value and identity affect the <code>==</code> and <code>is</code> operators.</p>
+
+    <h2><code>==</code> vs <code>is</code></h2>
+
+    <p>The <code>==</code> equality operator compares values, while the <code>is</code> operator compares identities. You can consider <code>x is y</code> to be shorthand for <code>id(x) == id(y)</code>. Enter the following into the interactive shell:</p>
+
+<pre>&gt;&gt;&gt; spam = ['dogs', 'cats']
+&gt;&gt;&gt; id(spam)
+41335048
+&gt;&gt;&gt; eggs = spam
+&gt;&gt;&gt; id(eggs)
+41335048
+&gt;&gt;&gt; id(spam) == id(eggs)
+True
+&gt;&gt;&gt; spam is eggs  # spam and eggs are the same object
+True
+&gt;&gt;&gt; spam == eggs  # spam and eggs have the same value, naturally
+True
+&gt;&gt;&gt; spam == spam  # Just like spam and spam are the same object and have the same value, naturally
+True
+
+&gt;&gt;&gt; bacon = ['dogs', 'cats']
+&gt;&gt;&gt; spam == bacon  # spam and bacon have the same value
+True
+&gt;&gt;&gt; id(bacon)
+40654152
+&gt;&gt;&gt; id(spam) == id(bacon)
+False
+&gt;&gt;&gt; spam is bacon  # spam and bacon are different objects
+False</pre>
+
+    <p>Two different objects may share the same value, but they will never share the same identity.</p>
+
+    <h2>Hashability</h2>
+
+    <p>According to the glossary in the official Python documentation, <a href="https://docs.python.org/3/glossary.html#term-hashable"><em>"An object is hashable if it has a hash value which never changes during its lifetime"</em></a>, that is, if the object is immutable. (There are a couple other requirements concerning the <code>__hash__()</code> and <code>__eq__()</code> special methods, but that's beyond the scope of this post.)</p>
+
+    <p>A hash is an integer that depends on an object's value, and objects with the same value <strong>always</strong> have the same hash. (Objects with different values will occasionally have the same hash too. This is called a <a href="https://stackoverflow.com/a/17586126/1893164"><em>hash collision</em></a>.) While <code>id()</code> will return an integer based on an object's identity, the <code>hash()</code> function will return an integer (the object's hash) based on the hashable object's value:</p>
+
+<pre>&gt;&gt;&gt; hash('dogs')
+-4064183437113369969
+
+&gt;&gt;&gt; hash(True)
+1
+
+&gt;&gt;&gt; spam = ('hello', 'goodbye')
+&gt;&gt;&gt; eggs = ('hello', 'goodbye')
+&gt;&gt;&gt; spam == eggs  # spam and eggs have the same value
+True
+&gt;&gt;&gt; spam is eggs  # spam and eggs are different objects with different identities
+False
+&gt;&gt;&gt; hash(spam)
+3746884561951861327
+&gt;&gt;&gt; hash(eggs)
+3746884561951861327
+&gt;&gt;&gt; hash(spam) == hash(eggs)  # spam and eggs have the same hash
+True</pre>
+
+
+        <p><strong>Immutable objects can be hashable, mutable objects can't be hashable.</strong> This is important to know, because (for reasons beyond the scope of this post) <a href="https://stackoverflow.com/questions/17585730/what-does-hash-do-in-python">only hashable objects can be used as keys in a dictionary or as items in a set</a>. Since hashes are based on values and only immutable objects can be hashable, this means that hashes will never change during the object's lifetime.</p>
+
+        <p>In the interactive shell, try to create a dictionary with immutable objects for keys by entering the following:</p>
+
+<pre>&gt;&gt;&gt; spam = {'dogs': 42, True: 'hello', ('a', 'b', 'c'): ['hello']}
+&gt;&gt;&gt; spam.keys()
+dict_keys(['dogs', True, ('a', 'b', 'c')])</pre>
+
+        <p>All the keys in <code>spam</code> are immutable, hashable objects. If you try to call <code>hash()</code> on a mutable object (such as a list), or try to use a mutable object for a dictionary key, you'll get an error:</p>
+
+<pre>&gt;&gt;&gt; spam = {['hello', 'world']: 42}
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+TypeError: unhashable type: 'list'
+
+&gt;&gt;&gt; d = {'a': 1}
+&gt;&gt;&gt; spam = {d: 42}
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+TypeError: unhashable type: 'dict'</pre>
+
+
+    <p>Tuples, being immutable objects, can be used as dictionary keys:</p>
+
+<pre>&gt;&gt;&gt; spam = {('a', 'b', 'c'): 'hello'}</pre>
+
+    <p>...or can they?:</p>
+
+<pre>&gt;&gt;&gt; spam = {('a', 'b', [1, 2, 3]): 'hello'}
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+TypeError: unhashable type: 'list'</pre>
+
+    <p>It seems that if a tuple contains a mutable object, it can't be hashed. (<a href="https://stackoverflow.com/a/9756028/1893164">Raymond Hettinger explains, with lots of context, why immutable tuples can contain mutable values.</a>) This fits with what we know: immutable objects <em>can</em> be hashable, but this doesn't necessarily mean they're <em>always</em> hashable. And remember, the hash is derived from the object's value.</p>
+
+    <p>This is an interesting corner case: a tuple (which should be immutable) that contains a mutable list cannot be hashed. This is because the hash of the tuple depends on the tuple's value, but if that list's value can change, that means the tuple's value can change and therefore the hash can change during the tuple's lifetime. But if we go back to <a href="https://stackoverflow.com/questions/17585730/what-does-hash-do-in-python">the glossary definition of hashable</a>, a hash is never supposed to change during the object's lifetime.</p>
+
+    <p>Does this mean that the value of tuples can change? Are tuples mutable?</p>
+
+
+    <h2>So, Are Tuples Mutable or Immutable?</h2>
+
+    <p>Before we can finally answer this question, we should ask, "Is mutability a property of data types or of objects?"</p>
+
+    <p>(Update: <a href="https://mail.python.org/pipermail/python-dev/2018-February/152117.html">Our BDFL generally thinks it's of data types.</a>)</p>
+
+    <p>Python programmers often say things like "strings are immutable, lists are mutable", which makes us think that mutability is a property of types: all string objects are immutable, all list objects are mutable, etc. And in general, I agree.</p>
+
+    <p>But in the previous section, we saw how <em>some</em> tuples are hashable (implying they're immutable) but <em>some other</em> tuples aren't hashable (implying they're mutable).</p>
+
+    <p>Let's go back to the official Python documentation's definition of immutable and mutable: <a href="https://docs.python.org/3/glossary.html#term-immutable">"An object with a fixed value"</a> and <a href="https://docs.python.org/3/glossary.html#term-mutable">"Mutable objects can change their value"</a>, respectively.</p>
+
+    <p>So perhaps mutability is a property of objects, and some tuples (that contain only immutable objects) are immutable and some other tuples (that contain one or more mutable objects) are mutable. But every Pythonista I've run into says and continues to say that tuples are immutable, even if they're unhashable. Why?</p>
+
+    <p><strong>In one sense,</strong> tuples are immutable because the objects in a tuple cannot be deleted or replaced by new objects. Just like <code>spam = 42; spam = 99</code> doesn't change the <code>42</code> object in spam; it replaces it with an entirely new object, <code>99</code>. If we use the interactive shell to look at a tuple that contains a list:</p>
+
+<pre>&gt;&gt;&gt; spam = ('dogs', 'cats', [1, 2, 3])
+&gt;&gt;&gt; id(spam[0]), id(spam[1]), id(spam[2])
+(41506216, 41355896, 40740488)</pre>
+
+    <p>The same objects will always be in this tuple, and they will always have the same identities in the same order: 41506216, 41355896, and 40740488. <strong><em>Tuples are immutable.</em></strong></p>
+
+    <p><strong>However in another sense,</strong> tuples are mutable because their values can be changed. Enter the following into the interactive shell:</p>
+
+<pre>&gt;&gt;&gt; a = ('dogs', 'cats', [1, 2, 3])
+&gt;&gt;&gt; b = ('dogs', 'cats', [1, 2, 3])
+&gt;&gt;&gt; a == b
+True
+&gt;&gt;&gt; a is b
+False</pre>
+
+    <p>In this example, the tuples referred to by <code>a</code> and <code>b</code> have equal values (according to <code>==</code>) but are different objects (according to <code>is</code>). Let's change the list in <code>a</code>'s tuple:</p>
+
+<pre>&gt;&gt;&gt; a[2].append(99)
+&gt;&gt;&gt; a
+('dogs', 'cats', [1, 2, 3, 99])
+&gt;&gt;&gt; a == b
+False</pre>
+
+    <p>We have changed the <code>a</code>'s value. We must have, because <code>a</code> is no longer equal to <code>b</code> and we didn't change <code>b</code>'s value. <strong><em>Tuples are mutable.</em></strong></p>
+
+    <h2>Epilogue</h2>
+
+    <blockquote><p>'The question is,' said Humpty Dumpty, 'which is to be master — that's all.'</p></blockquote>
+
+    <p>Humans are the masters of words, not the other way around. Words are invented by humans to convey ideas to other humans. Personally, I'm going to continue to say that tuples are immutable, because this is more accurate than not and the most helpful term in most contexts.</p>
+
+    <p>However, at the same time we should also be aware that from our definitions of "mutable" and "value", we can see that tuples' values can sometimes change, i.e. mutate. It isn't technically wrong to say that tuples can be mutable, though it will certainly raise eyebrows and require more explanation.</p>
+
+    <p>Thank you for sitting through my, what turned out to be lengthy, explanation on tuples and mutability. I certainly learned a lot in writing this post, and hope I conveyed it to you as well.</p>
+
+    </body>
+</html>

@@ -1,0 +1,178 @@
+<html>
+    <head>
+        <title>Writing Bots to Play Zombie Dice</title>
+        <meta name="tags" content="" />
+        <meta name="date" content="2018-10-17 12:00" />
+        <meta name="summary" content="" />
+    </head>
+    <body>
+
+<p><em>Note: I'm looking for feedback for my Zombie Dice simulator, as well as for this set of instructions. If there's any part that you feel could be improved, please email me at <a href="mailto:al@inventwithpython.com">al@inventwithpython.com</a>.</em></p>
+
+<p>Zombie Dice is a quick, fun dice game from Steve Jackson Games. The players are zombies trying to eat as many human brains without getting "shotgunned" by the humans. On their turn, a player will randomly pulls three dice from a cup of thirteen dice and roll them. The die faces are brains, footsteps, and shotguns. You get one point per brain, but if you roll a cumulative three shotguns, you’ve been shotgunned and get zero points for your turn. You can then decide to re-roll or pass your turn to the next player. If a die came up as "footsteps", it’s used again if the player decides to re-roll. If they re-roll, the player randomly pulls enough new dice from the cup to have three dice in their hand and rolls these dice. Zombie Dice has a "push your luck" game mechanic: the more times you choose to re-roll the dice, the more brains you can get but the more likely you’ll accrue three shotguns. The game continues until a player reaches 13 brains, and then the rest of the players get one more turn. The dice are colored green (brains are more likely), red (shotguns are more likely), and yellow (brains and shotguns are even).</p>
+
+<p>More complete rules for Zombie Dice can be found here:</p>
+
+<ul>
+    <li><a href="http://www.sjgames.com/dice/zombiedice/img/ZDRules_English.pdf">PDF of the rules in English</a></li>
+    <li><a href="http://www.sjgames.com/dice/zombiedice/demo.html">Animated Flash demo of how to play</a></li>
+    <li><a href="https://www.instructables.com/id/How-to-play-Zombie-Dice/">Instructables article with the rules</a></li>
+    <li><a href="https://www.youtube.com/watch?v=xodehimqCVs">YouTube video of someone explaining the rules</a></li>
+</ul>
+
+<p>More information on the complete rules is at <a href="https://github.com/asweigart/zombiedice">https://github.com/asweigart/zombiedice</a>. Zombie Dice is such a simple game, it’s easy to write a simulation that allows bots, that is, software AI players, to play against each other. This allows you to write code that simulates several gameplay strategies and test them against each other.</p>
+
+<p>To run the simulation, install the <code>zombiedice</code> module by running <code>pip install zombiedice</code> (on Windows) or <code>pip3 install zombiedice</code> (on macOS and Linux). You can then download the <a href="https://github.com/asweigart/zombiedice/blob/master/demo.py">demo.py</a> file from the git repo and run it to see an example of the simulator's web gui:</p>
+
+<p><img src="https://github.com/asweigart/zombiedice/raw/master/screenshot.jpg" /></p>
+
+
+<p>You’ll create bots by writing a class with a <code>turn()</code> method, which is called by the simulator when it’s your bot’s turn. Inside this <code>turn()</code> method, you’ll call the <code>zombiedice.roll()</code> function as often as you want to roll the dice (though you should call it at least once). Classes are beyond the scope of this article, but you can simply change the <code>turn()</code> code in <em>myzombie.py</em>:</p>
+
+<pre>import zombiedice
+
+class MyZombie:
+    def __init__(self, name):
+        self.name = name
+
+    def turn(self, gameState):
+        # gameState is a dict with info about the current state of the game.
+        # You can choose to ignore it in your code.
+
+        diceRollResults = zombiedice.roll() # first roll
+        # roll() returns a dictionary with keys 'brains', 'shotgun', and
+        # 'footsteps' with how many rolls of each type there were.
+        # The 'rolls' key is a list of (color, icon) tuples with the
+        # exact roll result information.
+        # Example of a roll() return value:
+        # {'brains': 1, 'footsteps': 1, 'shotgun': 1,
+        #  'rolls': [('yellow', 'brains'), ('red', 'footsteps'),
+        #            ('green', 'shotgun')]}
+
+        # The code logic for your zombie goes here:
+        brains = 0
+        while diceRollResults is not None:
+            brains += diceRollResults['brains']
+
+            if brains < 2:
+                diceRollResults = zombiedice.roll() # roll again
+            else:
+                break
+
+class AlwaysRollsTwicePerTurn:
+    def __init__(self, name):
+        self.name = name
+
+    def turn(self, gameState):
+        zombiedice.roll()
+        zombiedice.roll()
+
+
+zombies = (
+    zombiedice.examples.RandomCoinFlipZombie(name='Random'),
+    zombiedice.examples.RollsUntilInTheLeadZombie(name='Until Leading'),
+    zombiedice.examples.MinNumShotgunsThenStopsZombie(name='Stop at 2 Shotguns', minShotguns=2),
+    zombiedice.examples.MinNumShotgunsThenStopsZombie(name='Stop at 1 Shotgun', minShotguns=1),
+    MyZombie(name='My Zombie Bot'),
+    AlwaysRollsTwicePerTurn(name='Rolls Twice'),
+    # Add any other zombie players here.
+)
+
+# Uncomment one of the following lines to run in CLI or Web GUI mode:
+#zombiedice.runTournament(zombies=zombies, numGames=1000)
+zombiedice.runWebGui(zombies=zombies, numGames=1000)</pre>
+
+<p>The code in the <code>MyZombie</code> class’s <code>turn()</code> method keeps calling <code>zombiedice.roll()</code> until it has rolled at least two brains. A second bot is implemented in the <code>AlwaysRollsTwicePerTurn</code> class, which has a <code>turn()</code> method that simply rolls the dice twice on every turn. Running this program calls <code>runWebGui()</code> and brings up the web browser as shown in Figure 6-1, ready to run the simulation. You can examine the source code in the zombiedice package’s <em><a href="https://github.com/asweigart/zombiedice/blob/master/src/zombiedice/examples.py">examples.py</a></em> file to see how the other bots work.</p>
+
+<p>Try writing some of your own bots to play Zombie Dice, and see how they compare against the other bots. And if you find yourself playing this game in the real world, you’ll have the benefit of thousands of simulated games telling you that one of the best strategies is to simply stop once you’ve rolled two shotguns. But you could always try pressing your luck...</p>
+
+<h2>Constructing a Bot, Step by Step</h2>
+
+<p>I'll describe the though process of creating the <code>MyZombie</code> class in the previous section. Start with this basic template that imports the <code>zombiedice</code> module, creates a class with a <code>turn()</code> method that calls <code>zombiedice.roll()</code>, and then runs a tournament:</p>
+
+<pre>import zombiedice
+
+class MyZombie:
+    def __init__(self, name):
+        self.name = name
+
+    def turn(self, gameState):
+        zombiedice.roll()
+
+zombies = (
+    zombiedice.examples.RandomCoinFlipZombie(name='Random'),
+    MyZombie(name='My Zombie Bot'),
+)
+
+# Uncomment one of the following lines to run in CLI or Web GUI mode:
+zombiedice.runWebGui(zombies=zombies, numGames=1000)</pre>
+
+<p>The <code>MyZombie</code> so far only rolls the dice one, which is a very conservative strategy that is unlikely to get many points. To decide if it should roll again, we'll need to examine the return value of <code>zombiedice.roll()</code>, which is a dictionary that shows the results of the roll of the three dice. It would look something like this:</p>
+
+<pre>{'brains': 1, 'footsteps': 1, 'shotgun': 1,
+ 'rolls': [('yellow', 'brains'), ('red', 'footsteps'),
+           ('green', 'shotgun')]}</pre>
+
+<p>This dictionary has a <code>'brains'</code>, <code>'footsteps'</code>, and <code>'shotgun'</code> key with values that are the number of that kind of roll. The exact rolls are in the <code>'rolls'</code> key's value: a list of tuples. Each tuple represent a die, composed of a color and the icon that came up.</p>
+
+<p>Let's say we want to program the strategy that our zombie will keep rolling until it has at least two brains rolled. We would need to keep track of how many brains have been rolled so far on this turn (in a <code>brains</code> variable), which starts at <code>0</code>. If a future call to <code>zombiedice.roll()</code> ever returns <code>None</code>, then we know that we've reached or exceeded three shotguns on this turn and will get zero points. Update <code>turn()</code> so that it looks like this:</p>
+
+<pre>    def turn(self, gameState):
+        diceRollResults = zombiedice.roll()
+        brains = 0
+        while diceRollResults is not None:
+            diceRollResults = zombiedice.roll()</pre>
+
+<p>Now the code will keep rolling the dice until it returns <code>None</code>. But at that point, we've reached three shotguns and lost the turn. We need to add in logic so that at some point the method returns before <code>zombiedice.roll()</code> starts returning <code>None</code>. Let's examine <code>diceRollResults</code> to see how many brains were rolled:</p>
+
+<pre>    def turn(self, gameState):
+        diceRollResults = zombiedice.roll()
+        brains = 0
+        while diceRollResults is not None:
+            brains += diceRollResults['brains']
+
+            if brains < 2:
+                diceRollResults = zombiedice.roll()</pre>
+
+<p>That's better, now <code>zombiedice.roll()</code> is only called as long as we've yet to reach two brain rolls on our turn. However, there's no condition where this method changes. It'd just loop forever! Let's add a bit more code:</p>
+
+<pre>    def turn(self, gameState):
+        diceRollResults = zombiedice.roll()
+        brains = 0
+        while diceRollResults is not None:
+            brains += diceRollResults['brains']
+
+            if brains < 2:
+                diceRollResults = zombiedice.roll()
+            else:
+                break</pre>
+
+<p>This new code says that if we've rolled at least two brains, go ahead and break out of the loop and eventually return from the method, which tells the simulator that the bot is done with its turn.</p>
+
+<p>The value passed for the <code>gameState</code> parameter is a dictionary with the following keys:</p>
+
+<ul>
+    <li><code>'CURRENT_ZOMBIE'</code> - string of the zombie whose turn it is currently</li>
+    <li><code>'CURRENT_CUP'</code> - list of dice strings (i.e. 'red', 'yellow', 'green')</li>
+    <li><code>'CURRENT_HAND'</code> - list of dice being rolled (should always be length of three)</li>
+    <li><code>'SHOTGUNS_ROLLED'</code> - number of shotguns rolled this turn</li>
+    <li><code>'BRAINS_ROLLED'</code> - number of brains rolled this turn</li>
+    <li><code>'ROLLED_BRAINS_DETAILS'</code> - list of dice strings for each brain rolled, used in the rare event we run out of brain dice</li>
+    <li><code>'TURN_START_TIME'</code> - time since unix epoch that the current turn began</li>
+</ul>
+
+<h2>Ideas for Other Bots</h2>
+
+<p>There's plenty of strategies you can try in Zombie Dice. Try writing bots that do the following:</p>
+
+<ul>
+    <li>A bot that has a 50% chance of choosing to re-roll. See how this bot compares against a bot with a 25% or 75% chance to re-roll.</li>
+    <li>A bot that stops re-rolling when it reaches two shotguns.</li>
+    <li>A bot that stops re-rolling when it reaches two shotguns, unless it isn't in the lead. (Check the <code>gameState</code> dictionary to find this information.)</li>
+    <li>A bot that rolls as long as there are green dice left in the cup. (Check the <code>gameState</code> dictionary to find this information.)</li>
+</ul>
+
+<p>Be sure to check out the <em><a href="https://github.com/asweigart/zombiedice/blob/master/src/zombiedice/examples.py">examples.py</a></em> file in the module for the code to some bots that have already been made. Then load them up in the simulator and see how they perform!</p>
+
+    </body>
+</html>

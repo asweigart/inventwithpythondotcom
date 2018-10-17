@@ -1,0 +1,367 @@
+<html>
+  <head>
+    <title>An Interesting Thing about the is Operator</title>
+    <meta name="tags" content="" />
+    <meta name="date" content="2012-05-16 12:00" />
+    <meta name="summary" content="" />
+  </head>
+  <body>
+
+<p>Python's packaging ecosystem is contains multitudes. It can be intimidating for new Python developers to try to crack into, especially since the history of Python packaging is a history of rapid evolution. Writing a *helloworld.py* file and running it on your computer is simple, but getting it to run on someone else's computer (and doing this the "right" way) involves a tangle of terms, tools, and techniques. What are wheel files? What is distutils? Do I use distutils or easy_install or pip?</p>
+
+<p>To get to the bottom of this myself, I've compiled a curriculum of PyCon talks, online documentation, and my own personal notes to finally get a complete handle on Python packaging. The following list is my recommended order: start from the beginning, and continue until whatever level of satisfaction you require. I've tried to put the easy/simple/quick resources first, and the rest become progressively more detailed and specialized.</p>
+
+<p>If you have any comments about this curriculum, please <a href="mailto:al@inventwithpython.com">email me</a> or <a href="https://twitter.com/AlSweigart">message me (and follow me!) on Twitter</a>.</p>
+
+<p>NOTE: The information in the <a href="https://docs.python.org/3/distutils/introduction.html">official Python documentation for the distutils module</a> is out of date (note that it says "Legacy version" in the title), as well as the <a href="https://docs.python.org/3/install/index.html">Installing Python Modules (Legacy version)</a> documentation. The latter was replaced by <a href="https://docs.python.org/3/installing/index.html">Installing Python Modules</a>.</p>
+
+<h2>Python Packaging Curriculum</h2>
+
+<p>
+  <ul>
+    <li><a href="https://www.youtube.com/watch?v=AQsZsgJ30AE">Dustin Ingram - Inside the Cheeseshop: How Python Packaging Works - PyCon 2018</a></li>
+    <li><a href="https://www.youtube.com/watch?v=HzYwZMgqFII">Dave Forgac Share Your Code! Python Packaging Without Complication PyCon 2017</a></li>
+    <li><a href="https://blog.ionelmc.ro/2014/05/25/python-packaging/">Packaging a python library - Ionel Cristian Mărieș's Blog</a></li>
+    <li><a href="https://hynek.me/articles/testing-packaging/">Testing & Packaging - Hynek Schlawack's Blog</a></li>
+    <li><a href="https://www.youtube.com/watch?v=UtFHIpNPMPA">Grug make fire! Grug make wheel! by Russell Keith-Magee - PyCon Australia 2014</a></li>
+    <li><a href="https://www.youtube.com/watch?v=5BqAeN-F9Qs">Glyph - Shipping Software To Users With Python - PyCon 2016</a></li>
+    <li><a href="https://www.youtube.com/watch?v=Q3LyPTTb81w">Mahmoud Hashemi - BayPiggies September 2017 at LinkedIn: The Packaging Gradient</a></li>
+    <li><a href="https://www.youtube.com/watch?v=GBQAKldqgZs">Kenneth Reitz - Pipenv: The Future of Python Dependency Management - PyCon 2018</a></li>
+  </ul>
+</p>
+
+<p>These videos were interesting, but are either out of date or only tangentially related:</p>
+
+<p>
+  <ul>
+    <li><a href="https://hynek.me/articles/testing-packaging/">Testing & Packaging - Hynek Schlawack's Blog</a></li>
+    <li><a href="https://www.youtube.com/watch?v=wuCpCkrfeMs">Hynek Schlawack - How to Write Deployment-friendly Applications - PyCon 2018</a></li>
+    <li><a href="https://www.youtube.com/watch?v=eLPiPHr6TVI">Asheesh Laroia: Python packaging simplified, for end users, app developers - PyCon 2014</a></li>
+    <li><a href="https://www.youtube.com/watch?v=W8A2bOKPtJU">Domen Kožar - Rethinking packaging, development and deployment - PyCon 2015</a></li>
+  </ul>
+</p>
+
+
+
+<h3>Dustin Ingram - Inside the Cheeseshop: How Python Packaging Works - PyCon 2018</h3>
+<p><a href="https://www.youtube.com/watch?v=AQsZsgJ30AE">Link to YouTube video.</a></p>
+
+<p><strong>My summary of this talk:</strong> A great history lesson on the Python Package Index (PyPI), it’s previous incarnations, and the distutils/setuptools/easy_install/twine tools for getting your packages on it.</p>
+<p>History: The first package index was a web site called The Vaults of Parnassus, which was a simple, fairly unstructured, GeoCities-looking website.</p>
+<p>Then came distutils (“distribution utilities”) in Python 1.6 gave us <code>python setup.py ...</code> Had a “just use Python code instead of a domain-specific language or anything fancy” attitude; very barebones.</p>
+<p><code>python setup.py build</code> became the standard, makefile-like way to build packages. To package source code for sharing, we used the now-familiar <code>python setup.py sdist</code> (“source distributions”)</p>
+<p><code>python setup.py bdist</code> (“build distributions”) would package up pre-built code for your OS/platform for you.</p>
+<p>The problem was, before running <code>python setup.py bdist</code>, how do you get everything together for the bdist part? This was solved on Linux by package managers like RPM, but not on Windows/macOS/obscure platforms.</p>
+<p>To solve this, the Python Package Index was made as a general Python package manager for all platforms.</p>
+<p>PyPI is “Pie-pea-eye”, not “Pie-pie”. “Cheese shop” was the old name for PyPI.</p>
+<p><code>setuptools</code> was a monkey-patch (bad idea) to distutils to install package dependencies.</p>
+<p><code>easy_install</code> intrduced the “Egg Distribution”. Egg files are just zip files with some metadata files included in them. (Pythons, the snake, lay eggs.)</p>
+<p><code>easy_install</code> couldn’t uninstall stuff or tell you the packages you had installed.</p>
+<p><code>pyinstall</code> was created to solve these problems. You’ve probably never heard of this, because it was soon renamed to <code>pip</code>, which stands for “PIP Installs Packages”.</p>
+<p>Pip ignores eggs, and only handles source distributions. Pip begins to be used to install applications, not just library modules.</p>
+<p>Pip introduces requirements.txt, which contains a list of depended-on packages (and the specific version of the package) that the package depends on: <code>pip install -r requirements.txt</code> is used to install all these dependencies listed in the file.</p>
+<p>Pip mainly depended on installing from whoever was hosting the package from their website. This was a problem; this random person’s website could be slow, or could be hacked so that it spread malware when you installed from it. So PyPI begins hosting modules on its own website.</p>
+<p>There are still problems with source distributions that were solved with built distributions, but the Egg format was poorly defined, so Wheel files becomes the new Egg file: a way to distribute built modules. Wheel files (named after cheese wheels, a reference to cheese shop) are also like Egg files in that they are just zip files but they are more well-defined (see PEP 427) that learned from the mistakes of easy_install and Egg files.</p>
+<p>Twine came out to solve the problem that <code>python setup.py upload</code> doesn’t use HTTPS. The name comes from using twine to bundle up boxes &amp; packages. The name doesn’t really make a lot of sense. Twine doesn’t bundle stuff, so much as just upload already-bundled packages using encrypted HTTPS.</p>
+<p>PyPI was showing its age, and so it was rewritten from scratch. This was the “warehouse” project, started in 2011 and became the new PyPI in 2018. Yay!</p>
+<p>Current problems: Packaging is still kinda hard. There’s tons of tools and history. Read the Python Packaging Guide at <a href="https://packaging.python.org">https://packaging.python.org</a>, and sampleproject at <a href="https://github.com/pypa/sampleproject">https://github.com/pypa/sampleproject</a> (a nice skeleton project that follows best practices).</p>
+<p>Current problems: Packaging is a little too easy; typo squatting and spamming PyPI. Solution: conda, a Python-agnostic packaging tool.</p>
+<p>Current problems: Reproducible environments. Solution: pipfile and pipfile.lock from <a href="https://github.com/pypa/pipfile">https://github.com/pypa/pipfile</a></p>
+<p>Current problem: <a href="http://setup.py">setup.py</a> executes arbitrary code, which is a security/standards/maintenance concern.</p>
+<p>Current problem: The “distutils/setuptools” dance; these are old/hard-to-maintain standard library modules. Updating them is hard to do. PEP 517 and PEP 518 detail solutions, which is where pyproject.toml files come in. These are files that specify dependencies, etc. in an agnostic way: distutils &amp; setuptools can use pyproject.toml files to install dependencies, or some other tool can use them.</p>
+
+
+
+
+
+<h3>Dave Forgac Share Your Code! Python Packaging Without Complication PyCon 2017</h3>
+<p><a href="https://www.youtube.com/watch?v=HzYwZMgqFII">Link to YouTube video.</a></p>
+
+<p><strong>My summary of this talk:</strong> This video goes into detail about <a href="http://setup.py">setup.py</a> files, but otherwise it’s great in listing things that you should go off and learn more about. It also touches on the associated things you need to get together for a package (docs, tests, continuous integration, etc).</p>
+<p>The slides for this talk are available at <a href="http://daveops.com/pycon2017">daveops.com/pycon2017</a></p>
+<p>The things you need to share your code with other people:</p>
+<ul>
+<li>Package the code</li>
+<li>Documentation</li>
+<li>Source Hosting (GitHub, etc.)</li>
+<li>Tests</li>
+<li>Continuous Integration (CI)</li>
+<li>License</li>
+<li>Contributing guide</li>
+</ul>
+<p>This is a lot stuff, but you can just use cookiecutter to make all of this stuff for you.</p>
+<p>Terminology:</p>
+<ul>
+<li>Module (Python code saved in a file)</li>
+<li>Import Package (a folder that stores Python modules)</li>
+<li>Distribution Package (a file that has bundled up your code into a shareable/installable file)</li>
+<li>Source Distribution (source code that is shared with other people, include C source code for C extensions, these are built/compiled when the package is downloaded/installed)</li>
+<li>Built Distribution (eggs and wheel files, wheel is the modern current one, these are pre-compiled so they only need to be unpacked when downloaded/installed)</li>
+</ul>
+<p>Types of wheel files:</p>
+<ul>
+<li>Universal wheels (contains only Python code that works with Python 2 <em>and</em> 3 and can be installed anywhere.)</li>
+<li>Pure Python wheels (contains only Python code, but only for Python 2 <em>or</em> Python 3.)</li>
+<li>Platform wheels (files that contain compiled code for a target platform/OS)</li>
+</ul>
+<p>History (this was covered more in Dustin Ingram’s talk).</p>
+<p>PyPA (Python Packaging Authority) starts creating standards for packaging in the Python ecosystem. PyPUG is the Python Packaging User Guide at <a href="https://packaging.python.org/">https://packaging.python.org/</a></p>
+<p><a href="http://setup.py">setup.py</a> is just a Python file, but don’t do anything clever or add custom logic to it.</p>
+<p>setup.cfg holds wheel settings and various other settings</p>
+<p><a href="http://MANIFEST.in">MANIFEST.in</a> will list any non-Python files (data files, configuration files, documentation, etc.) that need to be packaged up too.</p>
+<p>README.rst is the Restructured Text file (note, not Markdown) that will be used for the package’s PyPI page.</p>
+<p>PEP 440 covers the format to use for version strings.</p>
+<p><a href="http://setup.py">setup.py</a> is a file basically just calls <code>setuptools.setup()</code>.</p>
+<p>(There’s a lot of details about the various keyword arguments in <a href="http://setup.py">setup.py</a>'s setuptools.setup() function call.)</p>
+<p>Use piptools to manage the requirements.txt file.</p>
+<p>Don’t use <a href="http://setup.py">setup.py</a>'s own upload feature, use twine instead.</p>
+<p>Develop Mode (any file changes made to your source won’t have to be reinstalled with pip): <code>pip install -e .</code></p>
+
+
+
+
+<h3>Packaging a python library - Ionel Cristian Mărieș's Blog</h3>
+<p><a href="https://blog.ionelmc.ro/2014/05/25/python-packaging/">Link to the blog post.</a></p>
+
+<p><strong>My summary of this blog post:</strong> This is about packaging libraries for other Python software developers to use in their applications, not on packaging applications. It’s a good list of how to layout all the different parts of a library.</p>
+<p>Put your Python module in <em>/src/packagename</em>, not in <em>/packagename</em>. This gives you “import parity”: it forces you to install the package just like your users would have to. Otherwise, if you run Python from the root of your repo, <code>import packagename</code> would import <em>/src/packagename</em> just fine, but this means you don’t have to go through the install process that your users would and you could miss potential errors they’d face.</p>
+<p>Don’t import your package from your <a href="http://setup.py">setup.py</a> file, i.e. your <a href="http://setup.py">setup.py</a> shouldn’t have <code>import packagename</code> in it. You don’t want to do this, because if your package imports other dependencies, those dependencies might not be installed yet and this causes distribution installation errors.</p>
+<p>Having a <em>/src</em> folder lets you just add <code>graft src</code> to your <a href="http://MANIFEST.in">MANIFEST.in</a> file, which is simple.</p>
+<p>“Flat is better than nested” <strong>but not for data</strong>.</p>
+<p>Don’t put your <em>tests</em> folder inside your <em>src</em> or <em>packagename</em> folder.</p>
+<p>Whenever the <a href="http://setup.py">setup.py</a> file opens a file, it specifies an encoding. Note that for python 2/3 compatibility, it uses <code>io.open()</code> instead of <code>open()</code>, since Python 2’s <code>open()</code> doesn’t have an <code>encoding</code> keyword argument.</p>
+<p>Don’t use <code>python setup.py test</code> to run your tests; that’s outdated. Travis-CI has become the de factor standard for running tests after checking in code. Tox is a good way to run tests locally.</p>
+<p>Ionel has a sample project layout here: <a href="https://github.com/ionelmc/python-nameless">https://github.com/ionelmc/python-nameless</a></p>
+<p>Use <code>cookiecutter</code> to generate these files (tox.ini, MANIFEST.in, etc.)</p>
+
+
+
+
+
+
+
+<h3>Testing & Packaging - Hynek Schlawack's Blog</h3>
+<p><a href="https://hynek.me/articles/testing-packaging/">Link to the blog post.</a></p>
+
+<p><strong>My summary of this blog post:</strong> This blog article sort of assumes you are already familiar with tox and coverage.py. It doesn't really hold your hand with its examples. Though it did introduce me to detox, which is a drop-in replacement (rather, an addition) to tox that lets you run the different tox environment tests in parallel.</p>
+
+Put your modules in a separate src folder. This simplifies what you need in your setup.py:
+
+    setup(
+        ...
+        packages=find_packages(where='src'),
+        package_dir={'': 'src'},
+    )
+
+"Combined coverage" means not just measuring your code coverage with one version of Python, but across all the versions you test with tox. If you have 100% coverage in Python 3, but less with Python 2, then that affects your overall combined coverage percentage.
+
+
+
+
+
+
+
+
+
+
+
+<h3>Grug make fire! Grug make wheel! by Russell Keith-Magee - PyCon Australia 2014</h3>
+<p><a href="https://www.youtube.com/watch?v=UtFHIpNPMPA">Link to YouTube video.</a></p>
+
+<p><strong>My summary of this talk:</strong> Kind of old, being from 2014, but has some good basic information about <a href="http://setup.py">setup.py</a>. He also covers the difference between universal wheels and platform wheels. A good, basic overview of Python packaging, and I think this talk touched on things the other basic Python packaging talks didn’t touch on, so it makes sense to watch this along with other basic packaging talks.</p>
+<p>Wheel files - Contains binary files &amp; compiled code. This is much more ready-to-use than a source distribution (sdist).</p>
+<p>Eggs were intended to be an executable file, not just a distribution file. Wheels are just for distribution, you don’t “execute a wheel file” or “run a wheel file”.</p>
+<p>Russ goes into a project folder layout, which includes: README, LICENSE, package folder, docs folder, tests folder.</p>
+<p>Other tools you might find useful: tox (for running unit tests on different versions of Python all at once), sphinx (for creating documentation, which can then be uploaded to <a href="http://readthedocs.org">readthedocs.org</a>).</p>
+<p>To put your module into a package, you need: <a href="http://setup.py">setup.py</a>, setup.cfg, <a href="http://MANIFEST.in">MANIFEST.in</a>.</p>
+<p>Note: <code>python setup.py bdist_wheel</code> might come up with an error because the bdist_wheel command was used in older versions of pip. I believe <code>python setup.py bdist</code> replaces it, or you can run <code>pip install wheel</code> to get the bdis_wheel command just in case older scripts require it.</p>
+<p>setup.cfg is a config file is optional, but includes options for <a href="http://setup.py">setup.py</a> so you don’t need to specify them as command line arguments.</p>
+<p><a href="http://MANIFEST.in">MANIFEST.in</a> describes what files need to be in the distributable that isn’t a .py file (docs, tests, etc.)</p>
+<p>Use check-manifest can check the <a href="http://MANIFEST.in">MANIFEST.in</a> file.</p>
+<p>Use bumpversion to be sure to update the version number in your file.</p>
+<p>If your code is pure-Python, only runs on Python 2 &amp; 3 and has no C extensions, you can create a “universal wheel” with <code>python setup.py bdist_wheel --universal</code> (or you can have a setup.cfg with universal set to 1 there).</p>
+<p>If you do have C extensions, you need to create a wheel file.</p>
+<p>If all else fails, you can use a source distribution <code>python setup.py sdist</code>, but any C extensions will have be compiled by the user.</p>
+<p>Don’t use <code>python setup.py register</code> because it passes in your username/password unencrypted. Instead, log in to PyPI with your web browser and create it through the website.</p>
+<p>Twine uses encryption, but also lets you test your package that you created with <code>python setup.py</code> before uploading it with Twine.</p>
+<p>Bootstrapping pip: If you don’t have it, then (for pre Python 3.4) you can run <code>python get-pip.py</code> or (for Python 3.4 and later) you can run <code>python -m ensurepip</code>. But pip should automatically be included with Python 3.4 and later.</p>
+<p>Python 3.4 also includes virtualenv.</p>
+
+
+
+
+
+<h3>Glyph - Shipping Software To Users With Python - PyCon 2016</h3>
+<p><a href="https://www.youtube.com/watch?v=5BqAeN-F9Qs">Link to YouTube video.</a></p>
+
+<p><strong>My summary of this talk:</strong> Getting software onto a production server or running on end user’s desktop still requires a few different steps, but the tools for doing this are out there and exist. This talk touches on many of those tools and the issues in using them. This talk also has a great set of “bad practices” that can help you avoid making some common mistakes.</p>
+<p>“Package” in most software senses (like a Redhat Package Manager package) is called a “distribution” in Python (specifically a “distutils distribution”. “Package” in Python refers to those folders that contain a <strong>init</strong>.py and <strong>main</strong>.py and so on. They’re more of a namespace.</p>
+<p>A distutils distribution comes, for example, in a wheel file.</p>
+<p>PYTHONPATH was used in the past, but don’t use it today.</p>
+<p>Don’t use <code>sudo pip install</code>. Don’t install stuff using your operating system’s Python installation (i.e. “System Python”).</p>
+<p>Don’t use <code>python setup.py install</code>, instead use pip. For one, there’s no <code>python setup.py uninstall</code></p>
+<p>Virtualenv creates lightweight Python environments. They’re about a 1/10 of the full Python environment but safely isolated (for the most part).</p>
+<p>Don’t have a C compiler on the server machine, since it’ll compile to different compiled bits in each deployment. The “Ana Karenina Principal” comes from a line in Tolstoy’s novel: “All happy families are alike, but all unhappy families are unhappy in different ways.” Also true of unhappy servers. Having a C compiler can also slow down your deployments. Don’t have build tools on your production server, which means you don’t want to ship source distributions to your servers.</p>
+<p>For library module developers Requirements.txt should have exact versions specified.</p>
+<p>Shipping software to end users is more rocky. (Let’s assume that getting Python is easy to install, and we can get pip. )</p>
+<p>pip install --user can install stuff to the user’s home directory, but now they also have to configure their shell so that Python can find it. This is less than ideal for deploying applications.</p>
+<p>GUI applications in Python: using py2app to get Python GUI applications on Macs. Py2App builds effectively a self-contained Python environment that is an application by itself.</p>
+<p>py2exe and py2installer does the same thing on Windows.</p>
+<p>cx_Freeze is cross-platformed.</p>
+<p>These tools that can distribute GUI desktop applications to users tend to over-optimize: they read the source for import statements so they only include them and not everything. This goes against Python’s dynamic nature; namespace packages (import zope.interface, import flufl.enum) will likely break.</p>
+<p>You <em>can</em> just import all of these modules in your initial script. It’s kind of tedious.</p>
+<p>PyBee’s Briefcase project is good for packaging up stuff for various platforms.</p>
+<p>pynsist is great for making Windows installers.</p>
+<p>My takeaway: The Python packaging ecosystem is large and intimidating, but there’s a lot of really cool tools that have been made for taking on this problem from a variety of angles. It can be hard to know where to start, and there seems to be a “last mile” problem: it’s still not obvious to non-developers how to install Python software.</p>
+
+
+
+
+<h3>Python Packaging User Guide</h3>
+<p><a href="https://packaging.python.org/">Link to documentation.</a></p>
+
+<p><strong>My summary of this website:</strong> This is the official Python packaging documentation, so it has complete information but may be a bit much all at once. I'm going to rate the individual sections here:</p>
+
+<ul>
+  <li><a href="https://packaging.python.org/tutorials/installing-packages/">Installing Packages</a></li>
+</ul>
+
+
+<h4>Installing Packages</h4>
+<p><a href="https://packaging.python.org/tutorials/installing-packages/">Link to documentation.</a></p>
+
+
+
+
+
+
+
+
+
+<h3>Mahmoud Hashemi - BayPiggies September 2017 at LinkedIn: The Packaging Gradient</h3>
+<p><a href="https://www.youtube.com/watch?v=Q3LyPTTb81w">Link to YouTube video.</a></p>
+
+<p><strong>My summary of this talk:</strong> With some humor, Mahmoud covers a lot of the issues devs face when they don’t know about Python’s packaging ecosystem and start reinventing things from scratch. “The Packing Gradient” is his concept of how deep into the packaging ecosystem you need to get depending on how complicated your software is. There’s info about Anaconda &amp; packaging that I didn’t see anywhere else. But in general, not directly related to how to do Python packaging.</p>
+<p><a href="https://speakerdeck.com/mhashemi/the-packaging-gradient-extended-edition">https://speakerdeck.com/mhashemi/the-packaging-gradient-extended-edition</a></p>
+<p>“Packaging” is getting your code into some kind of file to send to other people.</p>
+<p>Packaging is something developers don’t consider until the end of development, but this is a mistake and leads to reinventing existing tools.</p>
+<p>Packaging a standalone Python module (one .py file). “Standalone” means it only imports from the standard library. For example, <a href="http://bottle.py">bottle.py</a> (which inspired Flask (and the name “Flask”)) is a single file. Standalone modules are easy to distribute and integrate, you basically just copy the file.</p>
+<p>“Vendoring” is including software you didn’t write in your software.</p>
+<p>“Artifacts” are the files you want your build process to produce: .dll or .exe for compiled stuff, or a .zip file or .whl file for a Python distribution.</p>
+<p>Packaging a pure-Python package: Note that “package” in Python means a folder with a <em><strong>init</strong>.py</em> file in it. They only have Python files in them. For example: Django, requests. These are easy to install with pip.</p>
+<p>PIP stands for “PIP Installs Packages”</p>
+<p>“Distribution” is a file (like a zip file) that contains zero or more Python packages. (“Distribution” is what Python calls what most package managers like RPM would call a “package”.)</p>
+<p>Distributions are built by setuptools with a <a href="http://setup.py">setup.py</a> file. Making a distribution file is great for pure-Python modules.</p>
+<p>“You can have multiple distributions providing the same package”, for example, PIL and Pillow where someone forked PIL to make Pillow. PIL wasn’t updated and Pillow has PIL’s code but with a new distribution name on PyPI but the same package names. That is, you can run <code>pip install pillow</code> but still use the old <code>from PIL import Image</code> code you’ve always been using before Pillow.</p>
+<p>He mentions the left-pad incident which is a good case study to read on: <a href="https://www.theregister.co.uk/2016/03/23/npm_left_pad_chaos/">https://www.theregister.co.uk/2016/03/23/npm_left_pad_chaos/</a></p>
+<p>“Python is slow” is misleading: One of Python’s strengths is its interoperability: after all, numpy isn’t slow.</p>
+<p>If you distribute sdist (“source distributions”) you’ll be sending out uncompiled C code, which isn’t ready to use on the platform you’re installing to. We have wheel files: they have binary distributions (bdist) for compiled C code. Supports <em>most</em> Windows, Mac, and Linux. The “manylinux 1” tag is used as for generic Linux platform that wheel files target.</p>
+<p>(Wheel files replace egg files, so you can forget about egg files. Egg files are obsolete.)</p>
+<p>Note: He has <code>python setup.py sdist bdist_wheel upload</code> as the modern way to build and upload a Python package, but these days Twine replaces the upload command. (This talk was in September 2017.)</p>
+<p>But wheel files aren’t what you use to install, say, applications on your phone or whatever.</p>
+<p>“PyPI is not an app store” (it’s free for one thing, but also Python is too general purpose for just apps). Installing by pip from PyPI requires a working Python &amp; pip installation, an internet connection, preinstalled system libraries (like lxml requires libxml2), and build tools for target packages (like gcc/clang). But more than anything, pip requires a knowledgeable software developer. Pip isn’t that great for end users who don’t know how to debug pip’s install error messages.</p>
+<p>So how do we ship <strong>applications</strong> like Sublime Text or EVE Online or whatever?</p>
+<p>PEX (Python EXecutable) results in a single runnable file. No setup or install step. You can wget this file and then just run it. It uses Python’s zipimport module. (zipapp is more or less PEX.) PEX is good for distributing standalone Python scripts. A 15-minute lightning talk on PEX: “WTF is PEX?” <a href="https://www.youtube.com/watch?v=NmpnGhRwsu0">https://www.youtube.com/watch?v=NmpnGhRwsu0</a> (The lightning talk is a bit hard to follow, but I did learn about <code>python .</code> runs the <strong>main</strong>.py file in the current folder)</p>
+<p>Anaconda has <code>conda install your_application</code>, for example, you can <code>conda install postgres</code> and <code>conda install nginx</code> or even install other versions of Python! Anaconda is a whole new ecosystem. It’s not just Python-specific.</p>
+<p>Anaconda is a cross-platform, Python-first package management and social app store. It’s like a Python version of Steam, pkgsrc, and Nix/Enlambda.</p>
+<p>Mahmoud likes to recommend <code>conda install</code> over <code>pip install</code> for non-developers.</p>
+<p>Freezers: Provide installers, include Python. Dropbox, EVE Online, Civilization IV, any Kivy apps have a full runtime Python included with the app. Examples: cx_Freeze, PyInstaller, osnap, bbFreee, py2exe, py2app, pynsist, nuitka.</p>
+<p>Freezers represent the best option for consumer software.</p>
+<p>“Enterprise” Freezer like Omnibus. Example: GitLab. Best for shipping applications with multiple components (services, queues, etc)</p>
+<p>Userspace images - include their own environment.</p>
+<p>Containers - like userspace images but also with sandboxing. Example: Flatpak/Snappy, Docker. These only work on Linux, reuire a container runtime, has a “pull” step. Can easily be gigabytes in size.</p>
+<p>Virtual machine - includes an entire OS kernel, along with everything containers have. Can work on any OS, is gigabytes in size. There is no “VM Image” app store, users have to download it directly from your site.</p>
+<p>Hardware - ha! They just ship you the computer: they’re basically appliances that sit on a server rack. Think: routers that let you include your own Python code.</p>
+
+
+
+
+
+
+
+<h3>Kenneth Reitz - Pipenv: The Future of Python Dependency Management - PyCon 2018</h3>
+<p><a href="https://www.youtube.com/watch?v=GBQAKldqgZs">Link to YouTube video.</a></p>
+
+<p>Packaging history: We had the Cheeseshop, which was only an index of packages; you had to host your packages on your own website. Packages were installed with <code>python setup.py install</code> but you couldn’t uninstall them. Easy_install made this process easier, but there was still no uninstall. From 2010 onward, pip &amp; virtualenv &amp; requirements.txt files were the norm.</p>
+<p>Ruby doesn’t have virtual environments because they can have multiple versions of a package installed at the same time, unlike Python.</p>
+<p>Other communities (Node.js’s yarn &amp; npm, PHP’s Composer, Rust’s Cargo, Ruby’s Bundler) all use a lockfile.</p>
+<p>Venv has downsides: it’s hard for new-comers to understand, its a manual process (though virtualenv-wrapper helps with this).</p>
+<p>The requirements.txt file has a problem: it can represent what you want installed, and it can represent what you need installed. (pip-tools was created to ease the pain of installing packages you need.)</p>
+<p><code>pip freeze</code> shows you a pre-flattened list of required packages: it includes the project’s dependencies, but also the dependencies’ dependencies. So it can be hard to see which packages are really required for your project and what packages are installed because they are dependencies of those required packages. (This is what we mean by “pre-flattened”; you can’t tell which is which between dependencies and dependencies’ dependencies.)</p>
+<p>You could just specify the few packages you need, but then you have <strong>non-deterministic builds</strong>: the subdependencies will be whatever latest version is out there. So building one day may have different (that is, newer) subdependency packages installed. This uncertainty and different behavior can cause hard-to-debug bugs.</p>
+<p>The requirements.txt file can be a lockfile and not a lockfile depending on how you use it. We need to split this up into two files.</p>
+<p>The pipfile is a new standard from the PyPA (Python Packaging Authority) (specifically from Donald Stufft) that is replacing the requirements.txt file. It’s written in TOML (an .ini-like language)</p>
+<p>Example pipfile:</p>
+<pre><code>[[source]]
+url = &quot;https://pypi.python.org/simple&quot;
+verify_ssl = true
+name = &quot;pypi&quot;
+
+[packages]
+flask = &quot;*&quot;
+
+[dev-packages]
+pytest = &quot;*&quot;
+</code></pre>
+<p>Pipenv lets you use pipfile &amp; pipfile.lock, it uses virtualenv but hides all the details of it from you. Pipenv mostly replaces virtualenvwrapper. The [dev-packages] section specifies what will be installed when <code>pipenv install --dev</code> is run.</p>
+<p>Demo:</p>
+<pre><code>pipenv install requests (Creates the virtual environment, the pipfile, and the pipfile.lock file.)
+</code></pre>
+<p>Once this virtual environment is created by pipenv, you can run pipenv shell to activate it. The virutal environment exists in HOME/.virtualenvs. Running <code>pipenv -- venv</code> will show you where the virtual environment files are stored.</p>
+<p>The created pipfile file only has the requests library in it, while the pipfile.lock file has all of its subdependencies with exact version numbers (and hashes, in case the package maintainer changes it but reuses the version number) for each one.</p>
+<p>According to <a href="https://github.com/pypa/pipenv/issues/598">https://github.com/pypa/pipenv/issues/598</a> you should commit pipfile.lock to source control.</p>
+<p>Pipenv is very folder-specific. If you move the project folder to a new location, you’ll lose the virtual environment. But that’s okay, because you can just run <code>pipenv install</code> and it will use the existing Pipfile.lock file to install all the modules again.</p>
+<p>Running <code>pipenv graph</code> will give a nice dependency tree.</p>
+<p>Running <code>pipenv check</code> will check for security vulnerabilities.</p>
+<p>Running <code>pipenv install --deploy</code> will do ???. It also checks if Pipfile nad Pipfile.lock are in sync (they must be kept in sync with each other).</p>
+<p>If you have an existing <code>.venv</code> folder in your project folder, than <code>pipenv install</code> will use it instead of the central folder for all virtual environments.</p>
+<p>Running <code>pipenv --three</code> creates a virtual environment with Python 3. You can later run <code>pipenv --two</code> and it destroys the old virtual environment and creates a new one with Python 2.</p>
+<p>Running <code>pipenv lock -r</code> will output a requirements.txt file.</p>
+<p>Running <code>pipenv sync</code> will uninstall any packages you no longer need.</p>
+<p>Pipenv does NOT replace <a href="http://setup.py">setup.py</a>. Pipenv is for applications, while <a href="http://setup.py">setup.py</a> is used for libraries. Kenneth would not check in the lockfile for libraries that could be targetting multiple versions of Python.</p>
+<p>Don’t get pipenv confused with pyenv.</p>
+
+
+
+
+
+
+<h2>Interesting Resources, but Out of Date or Only Tangentially Related</h2>
+
+<h3>Hynek Schlawack - How to Write Deployment-friendly Applications - PyCon 2018</h3>
+
+<p><a href="https://www.youtube.com/watch?v=wuCpCkrfeMs">Link to YouTube video.</a></p>
+
+<p><strong>My summary of this talk:</strong> A good talk on how to arrange your project for creating service apps that run on production servers, but this talk isn't about PyPI or packaging per se.</p>
+
+<p>This talk is on making your Python applications play nicer with other Python code. It’s about platform agility; making your app run the same on your laptop and production servers.</p>
+<p>Write log info to stdout, and let logging software handle it. Don’t log to files directly.</p>
+<p>Use environment variables to pass key-value pairs to other applications. Direnv is a good tool for dealing with this. Envconsul and Etcdenv and Confd, and Consul-Template are other tools.</p>
+<p>Generic network applications should have “HOST” and “PORT” command line args for running the application.</p>
+<p>Don’t use environment variables to store sensitive data like passwords, auth tokens, and “secret” values (ignore The 12 Factor App’s advice on this). It’s really easy for the environment variables to get dumped to log files which are then made public.</p>
+<p>Encode credentials as URLs: “postgresql://user@localhost/db”</p>
+<p>Be sure to handle “sigterm”. Many Python frameworks don’t really handle this. (Really, this is the difference between network applications you make with flask/django and host on heroku or whatever, and my “browser apps” idea.)</p>
+<p>/healthz (Google) and /<strong>heartbeat</strong> (Mozilla) and /-/ready and /-/readiness (gitlab and other people) are used to give application status info about whether it is up and running or not. General heartbeat stuff.</p>
+<p>/<strong>version</strong> and /-/metrics and /-/log-level exposes other information. (The /-/ namespacing is kind of nice.)</p>
+<p>Looking at the source of PyPI is a great example of these best practices.</p>
+
+
+<h3>Asheesh Laroia: Python packaging simplified, for end users, app developers - PyCon 2014</h3>
+
+<p><a href="https://www.youtube.com/watch?v=eLPiPHr6TVI">Link to YouTube video.</a></p>
+
+<p><strong>My summary of this talk:</strong> Since this talk was made in 2014, a number of things are out of date (egg files instead of wheel files, disutils instead of setuptools, <a href="http://setup.py">setup.py</a> upload instead of Twine, etc.). It’s a good talk, but I’d recommend skipping it.</p>
+<p>Asheesh brings up a good point about putting the call to <code>setup()</code> inside a <code>if __name__ == '__main__':</code> wrapper.</p>
+
+
+
+<h3>Domen Kožar - Rethinking packaging, development and deployment - PyCon 2015</h3>
+<p><a href="https://www.youtube.com/watch?v=W8A2bOKPtJU">Link to YouTube video.</a></p>
+
+<p><strong>My summary of this talk:</strong> This talk is about the Nix project, which is a build tool that uses a functional programming approach. Since this talk doesn't cover existing standard tools, I'm not sure I'd include it as necessary to learn about the Python packaging ecosystem.</p>
+
+<p>Nix Package Manager, Nix is a minimalistic functional language and associated tools for building distributions.</p>
+
+
+  </body>
+</html>

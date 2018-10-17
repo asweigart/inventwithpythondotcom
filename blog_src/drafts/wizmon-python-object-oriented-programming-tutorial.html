@@ -1,0 +1,213 @@
+<html>
+    <head>
+        <title>WizMon: An Object-Oriented Programming Tutorial for Python</title>
+        <meta name="tags" content="" />
+        <meta name="date" content="2017-12-20 12:00" />
+        <meta name="summary" content="" />
+    </head>
+    <body>
+
+<p>TODO - explain terms: attribute, class, data type, variable, method, function</p>
+
+<p>Object-oriented programming (OOP) is a way of organizing your code into units called <em>classes</em>. It's a rather abstract concept, and explanations usually are vague, use poor metaphors, or are filled with intimidating jargon like "polymorphism" and "encapsulation".</p>
+
+<p>For example, many tutorials describe a <code>Car</code> class, which in my opinion is a poor vehicle for explanation. (I never apologize for my puns.) After all, a "car" represented by a <code>Car</code> class will be very different depending on what kind of software it's for:</p>
+
+<ul>
+    <li>A racing video game</li>
+    <li>An app for a car dealership</li>
+    <li>A traffic flow simulator</li>
+</ul>
+
+<p>Often, tutorials use overly simplified <code>Car</code> class examples, making it hard to understand what exactly classes are good for. This contributes to creating classes for the sake of creating classes. Object-oriented programming is a fantastic method to make large amounts of code manageable, but is often overkill for small programs. Python's OOP features are optional; you can write lots of code without ever needing to create classes.</p>
+
+<p>Think of OOP as a bureacracy. For large organizations, the mid-level managers, processes, and paperwork of bureacracy are needed to keep things running. But for small organizations, it's can just be red tape that gets in the way of real work.</p>
+
+<p>In this tutorial, we will write Python code for a <code>WizardMoney</code> class in a module named <code>wizmon</code> that manages the currency from the Harry Potter books. In the wizarding world, there are bronze knuts (worth 1 unit of money), silver sickles (worth 29 knuts), and gold galleons (worth 17 sickles or 493 knuts). Think of it as a foreign currency that only has 1-cent, 17-cent, and 493-cent coins. Exchanging these oddly-numbered denominations is difficult, so we'll write some software to help manage it.</p>
+
+<p>A class isn't a complete piece of software on its own, but rather used in an application. Maybe we're creating a Harry Potter video game, or a Harry Potter website that has some currency-exchange feature. Whatever code we write, the <code>WizardMoney</code> class will help us manage these currency-related features of the software.</p>
+
+<p>I highly recommend that you type the code out yourself into IDLE's file editor and interactive shell (or whichever text editor you use). You'll remember much more this way, rather than just reading along. The full <code>WizardMoney</code> class is available in the <code>wizmon</code> module at <a href="https://github.com/asweigart/wizmon">https://github.com/asweigart/wizmon</a>. You can install it with <a href="https://packaging.python.org/tutorials/installing-packages/">pip</a> by running <code>pip install wizmon</code> or <code>pip3 install wizmon</code>.</p>
+
+<p>First, let's begin with a non-OOP example of how we would code this.</p>
+
+<h2>A Non-OOP Example of Wizard Money</h2>
+
+<p>Let's create code to manage these three denominations without using classes. We'll use dictionaries with keys <code>'galleons'</code>, <code>'sickles'</code>, and <code>'knuts'</code> whose values are integers keeping track of how many of each coin there is. These dictionaries represent a certain amount of money in two piles of coins:</p>
+
+<pre>pileA = {'galleons': 2, 'sickles': 10, 'knuts': 5}
+pileB = {'galleons': 0, 'sickles': 0, 'knuts': 25}</pre>
+
+<p>Also, let's make a function that generates these dictionaries for us so we don't end up using a dictionary that has missing/typo keys:</p>
+
+<pre>def makeWizardMoneyDict(galleons=0, sickles=0, knuts=0):
+    return {'galleons': galleons, 'sickles': sickles, 'knuts': knuts}
+
+pileA = makeWizardMoneyDict(2, 10, 5)
+pileB = makeWizardMoneyDict(knuts=25)
+
+pileA['galleons'] += 10 # increase the number of galleons to 12
+print(pileA) # prints {'galleons': 12, 'sickles': 10, 'knuts': 5}
+</pre>
+
+<p>It'd be nice to have some code that makes it easy to convert between the denominations or do basic math. We can't do something like <code>pileA = pileA + pileB</code> or <code>pileA = pileA * 10</code> because the <code>+</code> and <code>*</code> operators don't work with dictionaries. Let's create a couple functions instead:</p>
+
+<pre>def makeWizardMoneyDict(galleons=0, sickles=0, knuts=0):
+    return {'galleons': galleons, 'sickles': sickles, 'knuts': knuts}
+
+def addWizardMoney(a, b):
+    # adding two WizardMoney dictionaries
+    return makeWizardMoneyDict(a['galleons'] + b['galleons'],
+                               a['sickles'] + b['sickles'],
+                               a['knuts'] + b['knuts'])
+
+def multiplyWizardMoney(wizMon, n):
+    return makeWizardMoneyDict(wizMon['galleons'] * n,
+                               wizMon['sickles'] * n,
+                               wizMon['knuts'] * n)
+
+pileA = makeWizardMoneyDict(2, 10, 5)
+pileB = makeWizardMoneyDict(knuts=25)
+
+print(addWizardMoney(pileA, pileB))  # prints {'galleons': 2, 'sickles': 10, 'knuts': 30}
+print(multiplyWizardMoney(pileA, 2)) # prints {'galleons': 4, 'sickles': 20, 'knuts': 10}
+</pre>
+
+<p>Notice that the <code>addWizardMoney()</code> and <code>multiplyWizardMoney()</code> functions return new dictionaries, rather than modify the dictionaries that were passed to them. This means these functions do not modify the dictionaries "in-place".</p>
+
+<p>We could create more functions for subtraction, division, modulus, and other math operations, but let's move on for now.</p>
+
+<p>Next, lets create functions that can take these dictionaries and convert their quantities to galleons, sickles, or knuts. We'll make the decision that our code won't deal with fractional amounts, so converting <code>{'galleons': 0, 'sickles': 0, 'knuts': 35}</code> to sickles will result in <code>{'galleons': 0, 'sickles': 1, 'knuts': 6}</code> and not <code>{'galleons': 0, 'sickles': 1.20689655172413793, 'knuts': 0}</code>.</p>
+
+<p>Let's also add a <code>valueOf()</code> function that returns the number of knuts the dictionary is worth as an integer. Here's the code:</p>
+
+<pre># Some constants for this currency:
+KNUTS_PER_SICKLE= 29
+SICKLES_PER_GALLEON = 17
+KNUTS_PER_GALLEON = SICKLES_PER_GALLEON * KNUTS_PER_SICKLE
+
+def convertToKnuts(wizMon):
+    knuts = (wizMon['galleons'] * KNUTS_PER_GALLEON) + (wizMon['sickles'] * KNUTS_PER_SICKLE) + (wizMon['knuts'])
+    return {'galleons': 0, 'sickles': 0, 'knuts': knuts}
+
+def convertToSickles(wizMon):
+    sickles = (wizMon['galleons'] * SICKLES_PER_GALLEON) + (wizMon['sickles']) + (wizMon['knuts'] // KNUTS_PER_SICKLE)
+    knuts = (wizMon['knuts'] % KNUTS_PER_SICKLE) # These are knuts that weren't converted to sickles.
+    return {'galleons': 0, 'sickles': sickles, 'knuts': knuts}
+
+def convertToGalleons(wizMon):
+    # First convert knuts to sickles so we have the max number of sickles to conver to galleons:
+    sickles = (wizMon['sickles']) + (wizMon['knuts'] // KNUTS_PER_SICKLE)
+    knuts = (wizMon['knuts'] % KNUTS_PER_SICKLE) # these are knuts that weren't converted to sickles
+
+    # Then convert the sickles to galleons:
+    galleons = (wizMon['galleons']) + (sickles // SICKLES_PER_GALLEON)
+    sickles %= SICKLES_PER_GALLEON
+
+    return {'galleons': galleons, 'sickles': sickles, 'knuts': knuts}
+
+def valueOf(wizMon):
+    return convertToKnuts(wizMon)['knuts']
+
+amount = makeWizardMoneyDict(2, 50, 66)
+print(amount) # prints {'galleons': 2, 'sickles': 50, 'knuts': 66}
+print(convertToKnuts(amount))    # prints {'galleons': 0, 'sickles': 0, 'knuts': 2502}
+print(convertToSickles(amount))  # prints {'galleons': 0, 'sickles': 86, 'knuts': 8}
+print(convertToGalleons(amount)) # prints {'galleons': 5, 'sickles': 1, 'knuts': 8}</pre>
+
+<p>We can double-check the math of this to find that it is accurate.</p>
+
+<p>With all of these functions packaged together in a file named <em>winzmon.py</em>, we now have a useful module for dealing with wizard money.</p>
+
+<p>But this code is... less than ideal. It breaks if the dictionaries are missing keys, or the keys have typos. Doing math operations by calling functions is odd; using operators like in <code>spam = 2 + 3</code> is much more readable than calling <code>spam = add(2, 3)</code>.</p>
+
+<p>Of course, for such a small bit of code, <em>these functions are fine and OOP isn't needed</em>. But let's scale up the complexity so that our code can do more.</p>
+
+<h2>What is Object-Oriented Programming?</h2>
+
+<p>OOP is a way of organizing code into <em>classes</em>. A class is a blueprint for making objects, including what data they contain and what methods they have. <em>Objects</em> are values that are created from the class.</p>
+
+<p>Objects can be stored in a variable, passed to function call, or anything else a value can do. You can think of <em>objects as values</em> and <em>classes as data types</em>. The term <em>instance</em> is synonymous for object, and <em>user-defined type</em> is synonymous for class.</p>
+
+<ul>
+    <li>Class == User-Defined Type == Date Type == Type</li>
+    <li>Object == Instance == Value</li>
+</ul>
+
+<p>Objects usually contain multiple values, just like how dictionaries are values that can contain multiple values. Objects can also have functions associated with them, just like string values have methods like <code>lower()</code> or <code>startswith()</code>. In this context, these functions are called <em>methods</em>.</p>
+
+<p>There's many more features to OOP such as polymorphism, inheritance, and encapsulation, but let's ignore them for right now. (In my opinion, these features are overrated.) Lets just focus on making an object-oriented version of our previous wizard money code.</p>
+
+
+<h2>An OOP Example of Wizard Money</h2>
+
+<p>One of the chief strengths of Python is that you don't need to know much about computer science in order to write useful code. You don't <em>need</em> to know about object-oriented programming, but I hope the comparison between the non-OOP and OOP examples illustrates why it's a useful concept.</p>
+
+<p>Let's create a class named <code>WizardMoney</code>. This class will be the blueprint for our WizardMoney objects. (These objects will fulfill the same role as the dictionaries in the previous non-oop example.) Open a file named <em>wizmon.py</em> and enter the following:</p>
+
+<pre>class WizardMoney:
+    pass</pre>
+
+<p>The <code>pass</code> statement in Python literally does nothing. Python expects some indented code after a <code>def</code> statement, so we put <code>pass</code> there so that the Python code is syntactically correct until we come back around to finished it. This code will run, it just won't do anything.</p>
+
+<p>We can play with it in the interactive shell though. By calling the class name as a function, we can create WizardMoney objects from the WizardMoney class. It's representation is a bit ugly though:</p>
+
+<pre>>>> from wizmon import *
+>>> WizardMoney()
+<__main__.WizardMoney object at 0x0000000002BAA860></pre>
+
+<p>Beause of Python's dynamic nature, we can add <em>attributes</em> (called "member variables" in other languages) to these objects even though the class hasn't defined any. But normally we don't write code like this:</p>
+
+<pre>
+>>> x = WizardMoney()
+>>> x.galleons = 5
+>>> x.galleons
+5</pre>
+
+<p>This makes you think that objects are sort of like dictionaries with key-value pairs, except you type <code>x.galleons</code> instead of <code>x['galleons']</code>, but classes offer much more. Instead of adding attributes to individual objects, we can define them in the initializer method <code>__init()__</code> so that all <code>WizardMoney</code> objects have them:</p>
+
+<pre>class WizardMoney:
+    def __init__(self):
+        self.galleons = 0
+        self.sickles = 0
+        self.knuts = 0</pre>
+
+<p>There's a bit to unpack here. Creating an object from a class is done by calling the class name as a function: <code>WizardMoney()</code>. Creating the object calls the initializer method, which in Python is always called <code>__init__()</code>. The <code>__init__()</code> method automatically returns the newly created <code>WizardMoney</code> object, with its values initialized to <code>0</code>. (There's no need to put a <code>return</code> statement in <code>__init__()</code>.) Notice that the <code>def</code> statement must be indented so that it is inside the block following the <code>class</code> statement.</p>
+
+<blockquote>(If you are coming from another programming language, you may think that our term "initializer method" is the same thing as "constructor method" in those other languages. Technically, the constructor method in Python is <code>__new__()</code>, which does the actual object creation and runs <code>__init__()</code> afterwards to initialize any attributes. But 99% of the time you will be writing an <code>__init__()</code> method and not a <code>__new__()</code> method for your classes. <a href="http://spyhce.com/blog/understanding-new-and-init">There's a lot of more to __new__ and __init__ here.</a>)</blockquote>
+
+<p>In code, Python methods always have <code>self</code> as a first parameter. This parameter contains a reference to the individual object on which the method was called. (Technically, it doesn't have to be named "self", but this is the convention in Python.) By having <code>self.galleons = 0</code>, we are saying that the object that the initializer was called on is having it's <code>galleons</code> attribute set to <code>0</code>.</p>
+
+<p>For example, let's add the conversion functions we wrote in the non-OOP example. We'll write them as methods in our <code>WizardMoney</code> class, so their <code>def</code> statements must be indented and inside the <code>class</code> method:</p>
+
+<pre>class WizardMoney:
+    def __init__(self):
+        self.galleons = 0
+        self.sickles = 0
+        self.knuts = 0
+
+    def convertToKnuts(self):
+
+        self._knuts += (self._galleons * KNUTS_PER_GALLEON) + (self._sickles * KNUTS_PER_SICKLE)
+        self._galleons = 0
+        self._sickles = 0
+
+
+    def convertToSickles(self):
+
+        self._sickles += (self._galleons * SICKLES_PER_GALLEON) + (self._knuts // KNUTS_PER_SICKLE)
+        self._knuts %= KNUTS_PER_SICKLE # (some knuts may be remaining as change)
+        self._galleons = 0
+
+
+    def convertToGalleons(self):
+        self._sickles += self._knuts // KNUTS_PER_SICKLE # convert knuts to sickles
+        self._knuts %= KNUTS_PER_SICKLE # (some knuts may be remaining as change)
+
+        self._galleons += self._sickles // SICKLES_PER_GALLEON # convert sickles to galleons
+        self._sickles %= SICKLES_PER_GALLEON # (some sickles may be remaining as change)
+</pre>
+
+
+    </body>
+</html>
