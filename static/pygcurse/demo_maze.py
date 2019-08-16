@@ -14,8 +14,8 @@ GREEN = (0, 255, 0)
 BLACK = (0,0,0)
 RED = (255,0,0)
 
-MAZE_WIDTH  = 41
-MAZE_HEIGHT = 41
+MAZE_WIDTH  = 11
+MAZE_HEIGHT = 11
 FPS = 40
 
 win = pygcurse.PygcurseWindow(MAZE_WIDTH, MAZE_HEIGHT, fullscreen=False)

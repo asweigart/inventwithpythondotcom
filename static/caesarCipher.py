@@ -4,10 +4,10 @@
 import pyperclip
 
 # the string to be encrypted/decrypted
-message = 'This is my secret message.'
+message = 'IMPIETY: Your irreverence toward my deity.'.upper()
 
 # the encryption/decryption key
-key = 13
+key = 21
 
 # tells the program to encrypt or decrypt
 mode = 'encrypt' # set to 'encrypt' or 'decrypt'

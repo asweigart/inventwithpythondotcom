@@ -330,17 +330,17 @@ def generateRandomBoard(width, height, difficulty=MEDIUM):
         # Randomly choose neighbors to change.
         direction = random.randint(0, 3)
         if direction == 0: # change left and up neighbor
-            board[x-1][y] == board[x][y]
-            board[x][y-1] == board[x][y]
+            board[x-1][y] = board[x][y]
+            board[x][y-1] = board[x][y]
         elif direction == 1: # change right and down neighbor
-            board[x+1][y] == board[x][y]
-            board[x][y+1] == board[x][y]
+            board[x+1][y] = board[x][y]
+            board[x][y+1] = board[x][y]
         elif direction == 2: # change right and up neighbor
-            board[x][y-1] == board[x][y]
-            board[x+1][y] == board[x][y]
+            board[x][y-1] = board[x][y]
+            board[x+1][y] = board[x][y]
         else: # change left and down neighbor
-            board[x][y+1] == board[x][y]
-            board[x-1][y] == board[x][y]
+            board[x][y+1] = board[x][y]
+            board[x-1][y] = board[x][y]
     return board
 
 
