@@ -1,0 +1,234 @@
+<html>
+<head>
+<title>Hashable Objects Must Be Immutable</title>
+<meta name="tags" content="" />
+<meta name="date" content="2019-02-01 12:00" />
+<meta name="summary" content="" />
+</head>
+<body>
+
+<p>A recent post to Reddit sparked some comments, so I wanted to clarify: <strong>In Python, hashable objects must be immutable and mutable objects cannot be hashable.</strong> <small>(With one exception.)</small></p>
+
+<p>Before the torches and pitchforks are gathered, let me explain some background.</p>
+
+<!--
+<p>Dictionaries work by creating (effectively) a list, where each position in the list is called a <em>bucket</em>. When a key-value pair is stored in the dictionary, they key and value are stored at a particular index. This index is decided based on the hash of the key.</p>
+
+<p>You can find the hash of objects from Python's built-in types with the <code>hash()</code> function. The hash of an object will be different each time Python runs, but the hash of the object won't change for the lifetime of the object:</p>
+
+<pre>>>> hash('hello')
+-6243439111058758738
+>>> hash('Hello')
+-3096249431554254785
+>>> hash(42)
+42
+>>> hash(3.14)
+322818021289917443</pre>
+
+<p>Note that two different objects might happen to return the same hash by coincidence. This is necessary evil, given that there are more possible values than hashes (which is 2^64, or 18,446,744,073,709,551,616) but is fine.</p>
+-->
+
+<p>If you want to make your classes hashable, you must follow two rules outlined in the <a href="https://docs.python.org/3/glossary.html#term-hashable">Python Glossary for the entry for "hashable"</a>:</p>
+
+<blockquote>An object is hashable if [1] it has a hash value which never changes during its lifetime (it needs a <code>__hash__()</code> method), and can be compared to other objects (it needs an <code>__eq__()</code> method). [2] Hashable objects which compare equal must have the same hash value.</blockquote>
+
+<p>In Python, integers, floats, and bools are all immutable. And because <code>1 == 1.0 == True</code>, then <code>hash(1) == hash(1.0) == hash(True)</code>.</p>
+
+<p>Let's create an immutable Point class, which has read-only <code>x</code> and <code>y</code> attributes, and it reuses the hashes for tuples:</p>
+
+<pre>>>> class ImmutablePoint:
+...   def __init__(self, x, y):
+...     self._x = x
+...     self._y = y
+...   def __eq__(self, other):
+...     if not isinstance(other, ImmutablePoint):
+...       return False
+...     return self._x == other._x and self._y == other._y
+...   def __hash__(self):
+...     return hash((self._x, self._y))
+...   @property
+...   def x(self):
+...     return self._x
+...   @property
+...   def y(self):
+...     return self._y</pre>
+
+<p>We can create <code>ImmutablePoint</code> objects, and they are immutable: we can't change their <code>x</code> or <code>y</code> attributes:</p>
+
+<pre>>>> ip = ImmutablePoint(10, 20)
+
+>>> ip.x, ip.y
+(10, 20)
+
+>>> ip.x = 'changed' # x and y are read-only
+Traceback (most recent call last):
+  File "stdin", line 1, in module
+AttributeError: can't set attribute
+
+>>> ip2 = ImmutablePoint(10, 20)
+
+>>> ip == ip2
+True</pre>
+
+<p>Since they are hashable, we can also use these objects as keys in a dictionary:</p>
+
+<pre>>>> d = {ip: 'hello'}
+
+>>> d[ip]
+'hello'
+
+>>> d[ip2]
+'hello'</pre>
+
+<p>Now, since hashes are based on an object's value and an object's hash never changes (according to the rule from the Python Glossary), this necessarily means that <strong>only immutable objects can be hashable</strong>. Notice that you can't use a mutable list or dictionary as a key in a dictionary, nor do they return anything from <code>hash()</code>:</p>
+
+<pre>>>> {[1, 2, 3]: 'hello'}
+Traceback (most recent call last):
+  File "stdin", line 1, in module
+TypeError: unhashable type: 'list'
+
+>>> hash([1, 2, 3])
+Traceback (most recent call last):
+  File "stdin", line 1, in module
+TypeError: unhashable type: 'list'
+
+>>> hash({1:2, 3:4})
+Traceback (most recent call last):
+  File "stdin", line 1, in module
+TypeError: unhashable type: 'dict'</pre>
+
+<p>But why is this so? What's so bad about making a mutable object hashable? We can just add a <code>__hash__()</code> method to our mutable class, right?</p>
+
+<p>The reason has to do with how hashes are used in dictionaries. This will require some CS background on how dictionaries/hashmaps work (but you can watch Brandon Rhode's PyCon 2010 talk, <a href="https://www.youtube.com/watch?v=C4Kc8xzcA68">The Mighty Dictionary</a>). But the short answer is that if the object's value changes, then the hash must also change since hashes are based on values. However, if the object's value changes after it's used as a key in a dictionary, the hash will no longer refer to the correct bucket in the dictionary for that key. Let's use an example.</p>
+
+
+<p>Here's a subclass of Python's built-in list data type (which is mutable) that we've added a <code>__hash__()</code> function to:</p>
+
+<pre>>>> import collections
+
+>>> class HashableList(collections.UserList):
+...     def __hash__(self):
+...         return hash(tuple(self))</pre>
+
+<p>We can create a hashable list object and put it in a dictionary:</p>
+
+<pre>>>> h = HashableList([1, 2, 3])
+
+>>> d = {h: 'hello'}
+
+>>> d
+{[1, 2, 3]: 'hello'}</pre>
+
+<p>It seems to work. We even make another hashable list with the same value and it seems to work too:</p>
+
+<pre>>>> d[h]
+'hello'
+
+>>> h2 = HashableList([1, 2, 3])
+
+>>> d[h2]
+'hello'</pre>
+
+<p>Now we change <code>h</code>. As expected, it creates a <code>KeyError</code> because <code>[1, 2, 100]</code> isn't a key in the dictionary, only <code>[1, 2, 3]</code> is (this turns out to be wrong, but ignore that for now):</p>
+
+<pre>>>> h[2] = 100
+
+>>> d[h]
+Traceback (most recent call last):
+  File "stdin", line 1, in module
+KeyError: [1, 2, 100]</pre>
+
+<p><strong>But here's the thing.</strong> <code>h2</code> no longer works as a key, even though it is <code>[1, 2, 3]</code>:</p>
+
+<pre>>>> d[h2]
+Traceback (most recent call last):
+  File "stdin", line 1, in module
+KeyError: [1, 2, 3]</pre>
+
+<p>Why is this? Because the key in <code>d</code> <em>isn't a copy of the <code>[1, 2, 3]</code> object, it's a copy of the reference</em>. When we changed <code>h</code>, <strong>we also changed the dictionary key</strong>:</p>
+
+<pre>>>> d
+{[1, 2, 100]: 'hello'}</pre>
+
+<p>So this means the key is now <code>[1, 2, 100]</code>, but it's in the bucket/slot for <code>[1, 2, 3]</code>. But <code>h2</code>'s <code>[1, 2, 3]</code> won't work because the key's value is now <code>[1, 2, 100]</code> and Python just assumes it happens to be a hash collision.</p>
+
+<p>To make things even worse, try setting <code>h[2]</code> to <code>99</code>. By sheer coincidence, <code>[1, 2, 99]</code> hashes to the same bucket/slot as <code>[1, 2, 3]</code>. And the values are the same (because the key has also changed to <code>[1, 2, 99]</code>) so it works perfectly fine even though it should cause a <code>KeyError</code>:</p>
+
+<pre>>>> h[2] = 99 # You might need to find another integer to reproduce this, depending on your Python version.
+
+>>> d[h]
+'hello'</pre>
+
+<p>So this is why it's a Bad Thing to have mutable items be hashable: changing them also changes the key in the dictionary. Sometimes this works even though it should cause a <code>KeyError</code> (when there's a hash collision by coincidence) and other times it'll cause a <code>KeyError</code> when it should work (because the dictionary key has changed when the mutable object has changed).</p>
+
+<p><strong>BUT WAIT, WHAT WAS THE ONE EXCEPTION?</strong> Well, a mutable object can be hashable and used as a dictionary key as long as it's hash and value are the same as its identity (or some other unique, unchanging integer). That is, it must have the following <code>__eq__()</code> and <code>__hash__()</code> implementations:</p>
+
+<pre>>>> class SomeClass:
+...   def __eq__(self, other):
+...     return other is self
+...   def __hash__(self):
+...     return id(self)</pre>
+
+<p>This also happens to be the default implementations for Python classes, so we can shorten our class to just the following:</p>
+
+<pre>>>> class SomeClass:
+...   pass</pre>
+
+<p>In this case, we uphold the two rules for hashability. But we don't really have a useful class, because every object of type <code>SomeClass</code> is only equal to itself, and will always be <code>False</code> when compared to any other object, no matter what its value is.</p>
+
+<pre>>>> sc = SomeClass()
+
+>>> {sc: 'hello'}
+{<__main__.SomeClass object at 0x000001C6CEA57748>: 'hello'}
+
+>>> sc2 = SomeClass()
+
+>>> sc == sc2
+False</pre>
+
+<!--<p>If you try to consider attributes in it's <code>__eq__()</code> method but leave the <code>__hash__()</code> as being based off the object's identity, you'll end up with dictionary keys that don't work:</p>
+
+<pre>>>> class MutablePoint:
+...   def __init__(self, x, y):
+...     self.x = x
+...     self.y = y
+...   def __eq__(self, other):
+...     if not isinstance(other, MutablePoint):
+...       return False
+...     return self.x == other.x and self.y == other.y
+...   def __hash__(self):
+...     return id(self)
+...
+
+>>> mp = MutablePoint(10, 20)
+
+>>> d = {mp: 'hello'} # You can use mp as a key.
+
+>>> d
+{<__main__.MutablePoint object at 0x000001C6CEA57940>: 'hello'}
+
+>>> d[mp] # This works.
+'hello'
+
+>>> mp.x = 9999 # Let's change mp's x attribute.
+
+>>> d[mp] # This should cause a KeyError, but doesn't because the hash is based on the mp's identity, not mp's value, and the identity hasn't changed.
+'hello'
+
+>>> mp2 = MutablePoint(9999, 20)
+
+>>> mp == mp2 # mp and mp2 have the same value.
+True
+
+>>> d[mp2] # But this doesn't work, because the hash is tied to mp's identity, not value, and mp and mp2 have different identities because they are different objects.
+Traceback (most recent call last):
+  File "stdin", line 1, in module
+KeyError: __main__.MutablePoint object at 0x000001C6CEA579E8</pre>
+-->
+<p>So either you can follow Python's two hashability rules for your class, or you can create mutable, hashable objects that don't actually work in dictionaries. The only exception when you can have a mutable, hashable class is when the hash is based on the identity and not the value, which severely restricts its usefulness as a dictionary key. Which means that, effectively, only immutable objects can be hashable and mutable objects can't be hashable.</p>
+
+<p>Fin.</p>
+
+
+</body>
+</html>

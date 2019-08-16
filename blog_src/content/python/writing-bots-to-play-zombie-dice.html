@@ -9,7 +9,26 @@
 
 <p><em>Note: I'm looking for feedback for my Zombie Dice simulator, as well as for this set of instructions. If there's any part that you feel could be improved, please email me at <a href="mailto:al@inventwithpython.com">al@inventwithpython.com</a>.</em></p>
 
-<p>Zombie Dice is a quick, fun dice game from Steve Jackson Games. The players are zombies trying to eat as many human brains without getting "shotgunned" by the humans. On their turn, a player will randomly pulls three dice from a cup of thirteen dice and roll them. The die faces are brains, footsteps, and shotguns. You get one point per brain, but if you roll a cumulative three shotguns, you’ve been shotgunned and get zero points for your turn. You can then decide to re-roll or pass your turn to the next player. If a die came up as "footsteps", it’s used again if the player decides to re-roll. If they re-roll, the player randomly pulls enough new dice from the cup to have three dice in their hand and rolls these dice. Zombie Dice has a "push your luck" game mechanic: the more times you choose to re-roll the dice, the more brains you can get but the more likely you’ll accrue three shotguns. The game continues until a player reaches 13 brains, and then the rest of the players get one more turn. The dice are colored green (brains are more likely), red (shotguns are more likely), and yellow (brains and shotguns are even).</p>
+<p><em>Programming games</em> are a games genre where instead of playing the game directly, players write bot programs to play the game autonomously. I've created a Zombie Dice simulator, allowing programmers to practice their skills while having fun making game-playing AIs. Zombie Dice bots can be simple or incredibly complex, and are great for a class exercise or an individual programming challenge.</p>
+
+<h2>How to Play Zombie Dice</h2>
+
+<p>Zombie Dice is a quick, fun dice game from Steve Jackson Games. The players are zombies trying to eat as many human brains as possible without getting "shotgunned". There is a cup of 13 dice with icons of brains, footsteps, and shotguns on their faces. The dice are colored green (brains are more likely), red (shotguns are more likely), and yellow (evenly split between brains and shotguns).</p>
+
+<p><img src="/images/zombiedice_dice.jpg" /></p>
+
+<p>On their turn:</p>
+
+<ol>
+    <li>The player randomly pulls dice from the cup until they have three in their hand, and rolls them. Players always roll exactly three dice.</li>
+    <li>They set aside any brains (humans whose brains were eaten) and shotguns (humans who fought back).</li>
+    <li>If the player has set aside three shotguns on this turn, their turn ends with zero points.</li>
+    <li>The player keeps any dice that came up footsteps in their hand if they decide to roll again.</li>
+    <li>Otherwise, the player can choose to end their turn, where they'll collect one point per brain and return all dice to the cup for the next player.</li>
+    <li>Or the player can choose to continue their turn and roll again. Go back to step 1, noting any dice already in hand that came up footsteps will be reused.</li>
+</ol>
+
+<p>Zombie Dice has a "push your luck" game mechanic: the more you re-roll the dice, the more brains you can get but the more likely you'll eventually accrue three shotguns and lose everything. Once a player reaches 13 points, the rest of the players get one more turn (to potentially catch up) and the game ends. The player with the most points wins.</p>
 
 <p>More complete rules for Zombie Dice can be found here:</p>
 
@@ -20,14 +39,15 @@
     <li><a href="https://www.youtube.com/watch?v=xodehimqCVs">YouTube video of someone explaining the rules</a></li>
 </ul>
 
-<p>More information on the complete rules is at <a href="https://github.com/asweigart/zombiedice">https://github.com/asweigart/zombiedice</a>. Zombie Dice is such a simple game, it’s easy to write a simulation that allows bots, that is, software AI players, to play against each other. This allows you to write code that simulates several gameplay strategies and test them against each other.</p>
+<h2>Bot Programming Challenge</h2>
 
-<p>To run the simulation, install the <code>zombiedice</code> module by running <code>pip install zombiedice</code> (on Windows) or <code>pip3 install zombiedice</code> (on macOS and Linux). You can then download the <a href="https://github.com/asweigart/zombiedice/blob/master/demo.py">demo.py</a> file from the git repo and run it to see an example of the simulator's web gui:</p>
+<p>To install the simulator with pip, run <code>pip install zombiedice</code> (on Windows) or <code>pip3 install zombiedice</code> (on macOS and Linux). To run a demo with some pre-made bots, run <code>python -m zombiedice</code> (on Windows) or <code>python3 -m zombiedice</code> (on macOS and Linux) to see an example of the simulator's web gui:</p>
 
 <p><img src="https://github.com/asweigart/zombiedice/raw/master/screenshot.jpg" /></p>
 
+<p>The simulator can quickly run hundreds of games, noting how many wins and ties each bot got.</p>
 
-<p>You’ll create bots by writing a class with a <code>turn()</code> method, which is called by the simulator when it’s your bot’s turn. Inside this <code>turn()</code> method, you’ll call the <code>zombiedice.roll()</code> function as often as you want to roll the dice (though you should call it at least once). Classes are beyond the scope of this article, but you can simply change the <code>turn()</code> code in <em>myzombie.py</em>:</p>
+<p>You'll create bots by writing a class with a <code>turn()</code> method, which is called by the simulator when it's your bot's turn. Inside this <code>turn()</code> method, you'll call the <code>zombiedice.roll()</code> function as often as you want to roll the dice (though you should call it at least once on your turn, of course). Classes are beyond the scope of this article, but you can simply change the <code>turn()</code> code in <em>myzombie.py</em>:</p>
 
 <pre>import zombiedice
 
@@ -82,11 +102,11 @@ zombies = (
 #zombiedice.runTournament(zombies=zombies, numGames=1000)
 zombiedice.runWebGui(zombies=zombies, numGames=1000)</pre>
 
-<p>The code in the <code>MyZombie</code> class’s <code>turn()</code> method keeps calling <code>zombiedice.roll()</code> until it has rolled at least two brains. A second bot is implemented in the <code>AlwaysRollsTwicePerTurn</code> class, which has a <code>turn()</code> method that simply rolls the dice twice on every turn. Running this program calls <code>runWebGui()</code> and brings up the web browser as shown in Figure 6-1, ready to run the simulation. You can examine the source code in the zombiedice package’s <em><a href="https://github.com/asweigart/zombiedice/blob/master/src/zombiedice/examples.py">examples.py</a></em> file to see how the other bots work.</p>
+<p>The code in the <code>MyZombie</code> class's <code>turn()</code> method keeps calling <code>zombiedice.roll()</code> until it has rolled at least two brains. A second bot is implemented in the <code>AlwaysRollsTwicePerTurn</code> class, which has a <code>turn()</code> method that simply rolls the dice twice on every turn. Running this program calls <code>runWebGui()</code> and brings up the web browser as shown in Figure 6-1, ready to run the simulation. You can examine the source code in the zombiedice package's <em><a href="https://github.com/asweigart/zombiedice/blob/master/src/zombiedice/examples.py">examples.py</a></em> file to see how the other bots work.</p>
 
-<p>Try writing some of your own bots to play Zombie Dice, and see how they compare against the other bots. And if you find yourself playing this game in the real world, you’ll have the benefit of thousands of simulated games telling you that one of the best strategies is to simply stop once you’ve rolled two shotguns. But you could always try pressing your luck...</p>
+<p>Try writing some of your own bots to play Zombie Dice, and see how they compare against the other bots. And if you find yourself playing this game in the real world, you'll have the benefit of thousands of simulated games telling you that one of the best strategies is to simply stop once you've rolled two shotguns. But you could always try pressing your luck...</p>
 
-<h2>Constructing a Bot, Step by Step</h2>
+<h2>Constructing MyZombie, Step by Step</h2>
 
 <p>I'll describe the though process of creating the <code>MyZombie</code> class in the previous section. Start with this basic template that imports the <code>zombiedice</code> module, creates a class with a <code>turn()</code> method that calls <code>zombiedice.roll()</code>, and then runs a tournament:</p>
 
@@ -153,10 +173,10 @@ zombiedice.runWebGui(zombies=zombies, numGames=1000)</pre>
 
 <ul>
     <li><code>'CURRENT_ZOMBIE'</code> - string of the zombie whose turn it is currently</li>
-    <li><code>'CURRENT_CUP'</code> - list of dice strings (i.e. 'red', 'yellow', 'green')</li>
+    <li><code>'CURRENT_CUP'</code> - list of dice strings (i.e. 'red', 'yellow', 'green') in the cup</li>
     <li><code>'CURRENT_HAND'</code> - list of dice being rolled (should always be length of three)</li>
-    <li><code>'SHOTGUNS_ROLLED'</code> - number of shotguns rolled this turn</li>
-    <li><code>'BRAINS_ROLLED'</code> - number of brains rolled this turn</li>
+    <li><code>'SHOTGUNS_ROLLED'</code> - number of shotguns rolled so far on this turn</li>
+    <li><code>'BRAINS_ROLLED'</code> - number of brains rolled so far on this turn</li>
     <li><code>'ROLLED_BRAINS_DETAILS'</code> - list of dice strings for each brain rolled, used in the rare event we run out of brain dice</li>
     <li><code>'TURN_START_TIME'</code> - time since unix epoch that the current turn began</li>
 </ul>
