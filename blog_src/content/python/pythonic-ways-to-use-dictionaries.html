@@ -1,0 +1,88 @@
+<html>
+    <head>
+        <title>Pythonic Ways to Use Dictionaries</title>
+        <meta name="tags" content="" />
+        <meta name="date" content="2019-06-05 12:00" />
+        <meta name="summary" content="" />
+    </head>
+    <body>
+
+
+<p>Python dictionaries are a useful part of the language. In addition to having the ability to store keys and values, you can also use dictionary methods to manipulate those values, and you can use dictionaries to write more concise code.</p>
+
+<h2>Use <code>get()</code> and <code>setdefault()</code> with Dictionaries</h2>
+
+<p>Trying to access a dictionary key that doesn’t exist will result in a KeyError error, so programmers often will write unpythonic code to avoid the situation like this:</p>
+
+<pre>>>> # Unpythonic Example
+>>> workDetails = {}
+>>> if 'hours' in spam:
+...     hoursWorked = workDetails['hours']
+... else:
+...     hoursWorked = 0 # Default to 0 if the 'hours' key doesn't exist.
+...
+>>> hoursWorked
+0</pre>
+
+<p>This pattern happens so often that dictionaries have a <code>get()</code> method that allows you specify a default value to return when a key doesn’t exist in the dictionary. The following code is equivalent to the previous example, but is pythonic:</p>
+
+<pre>>>> # Pythonic Example
+>>> workDetails = {}
+>>> hoursWorked = spam.get('hours', 0)
+>>> hoursWorked
+0</pre>
+
+<p>If you find yourself writing if statements that check whether a key exists and provide a default value when the key is absent, use the <code>get()</code> method instead.</p>
+
+<p>Conversely, you may want to set a default value if a key doesn’t exist. For example, if the dictionary in <code>workDetails</code> doesn’t have an <code>'hours'</code> key, then the instruction <code>workDetails['hours'] += 10</code> would result in a <code>KeyError</code> error. You may want to add code that checks for the key’s absence and sets a default value:</p>
+
+<pre>>>> # Unpythonic Example
+>>> workDetails = {}
+>>> if 'hoursWorked' not in workDetails:
+...     workDetails['hours'] = 0
+...
+>>> workDetails['hours'] += 10
+>>> workDetails['hours']
+10</pre>
+
+<p>The previous example is unpythonic. Because this pattern is also common, dictionaries have a more pythonic <code>setdefault()</code> method. The following code is equivalent to the previous example:</p>
+
+<pre>>>> # Pythonic Example
+>>> workDetails = {}
+>>> workDetails.setdefault('hours', 0) # Does nothing if 'hours' exists.
+0
+>>> workDetails['hours'] += 10
+>>> workDetails['hours']
+10</pre>
+
+<p>If you find yourself writing <code>if</code> statements that check if a key exists in a dictionary and sets a default value if the key is absent, use the <code>setdefault()</code> method instead.</p>
+
+<h2>Python Uses Dictionaries Instead of a Switch Statement</h2>
+
+<p>Languages such as Java have a <code>switch</code> statement, which is a kind of <code>if-elif-else</code> statement that runs code based on the values of a single variable or expression. Python doesn’t have a <code>switch</code> statement, but a <code>switch</code> statement is similar to the following Python code, which sets the <code>holiday</code> variable based on the value of the <code>month</code> variable:</p>
+
+<pre>>>> # Unpythonic Example
+if season == 'Winter':
+    holiday = 'Christmas'
+elif season == 'Spring':
+    holiday = 'Easter'
+elif season == 'Summer':
+    holiday = 'American Independence Day'
+elif season == 'Fall':
+    holiday = 'Halloween'
+else:
+    holiday = 'Personal day off'</pre>
+
+<p>Handling code by using <code>if</code> statements to mimic <code>switch</code> statements is unpythonic. By default, Java <code>switch</code> statements have “fall-through” that requires each block end with a <code>break</code> statement. Otherwise, the execution continues on the next block. Forgetting to add this <code>break</code> statement is a common source of bugs. However, all the <code>if-elif</code> statements in our Python example are not much better since they can be overly verbose. Some Python programmers prefer to set up a dictionary value instead of using <code>if-elif</code> statements. The following concise and pythonic code is equivalent to the previous example:</p>
+
+<pre>>>> # Pythonic Example
+holiday = {'Winter': 'Christmas',
+           'Spring': 'Easter',
+           'Summer': 'American Independence Day',
+           'Fall':   'Halloween'}.get(season, 'Personal day off')</pre>
+
+<p>This code is just a single assignment statement. The value stored in <code>holiday</code> is the return value of the <code>get()</code> method call, which returns the value for the key that season is set to. If the season key doesn’t exist, then <code>get()</code> returns <code>'Personal day off'</code>. Using a dictionary will result in more concise code, but it can also make your code harder to read. It’s up to you whether to use this convention or not.</p>
+
+
+    </body>
+</html>
