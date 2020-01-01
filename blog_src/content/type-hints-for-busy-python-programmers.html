@@ -1,0 +1,208 @@
+<html>
+    <head>
+        <title>Type Hints for Busy Python Programmers</title>
+        <meta name="tags" content="python" />
+        <meta name="date" content="2019-11-24 12:00" />
+        <meta name="summary" content="" />
+    </head>
+    <body>
+
+
+<h2>Type Hints for Busy Python Programmers</h2>
+
+<p><strong>"Okay, I know that type annotations or type hints or whatever-"</strong></p>
+
+<p>Yes, "type annotation" and "type hint" mean the same thing.</p>
+
+<p><strong>"Right. I know what they are: they let you specify data types for your variables and function parameters & return values, which lets you catch certain kinds of bugs early and save you from lots of debugging and headache. I'm in. How do I use them?"</strong></p>
+
+<p>There's two parts. The first part is you add type hints to your source code. This involves the <code>typing</code> module that's a part of the Python Standard Library as of verison 3.5. The second part is you install the <code>mypy</code> module to do the actual checking.</p>
+
+<p><strong>"Wait, why are there two modules? That sounds complicated."</strong></p>
+
+<p>The first module, <code>typing</code>, lets you specify different data types. But the Python interpreter doesn't care if they're correct. The variable's actual value doesn't have to match the variable's type; the code will still run just fine.</p>
+
+<p><strong>"Doesn't that defeat the purpose?"</strong></p>
+
+<p>Nah, remember that in Python type hints are optional. If you're writing a quick script and don't care, you don't have to use type hints. The Python interpreter itself completely ignores type hints. <em>No type checking happens at runtime.</em> So, technically, type hints aren't "optional static typing" because "static typing" implies that variables always store values of a certain type. Python is still a dynamically typed language even with type hints. Type hints are just <em>hints</em> that third-party tools like Mypy can use to point out potential bugs.</p>
+
+<p>It's the second module, <code>mypy</code>, that is the tool that actually checks that your source code is valid and all the types match. Mypy is made by a third-party, which is why we use two separate modules. You don't have to use Mypy. You could instead use any third-party module that does the checking that Mypy does.</p>
+
+<p><strong>"So what could I use instead of Mypy?"</strong></p>
+
+<p><a href="https://github.com/Microsoft/pyright">Pyright</a>, from Microsoft. <a href="https://github.com/facebook/pyre-check">Pyre</a>, from Facebook. <a href="https://github.com/google/pytype">Pytype</a>, from Google. They're all free and should work the same, but most people seem to use Mypy.</p>
+
+<p><strong>"So <code>typing</code> comes with Python 3.5 and later. How do I install Mypy?"</strong></p>
+
+<p>Run <code>python -m pip install mypy</code>. (Use <code>python3</code> on macOS and Linux.) Add <code>--user</code> if you get error messages about permissions: <code>python -m pip install --user mypy</code>.</p>
+
+<p><strong>If the Python interpreter doesn't care about type hints, then how do I check if my source code matches the declared types?</strong></p>
+
+<p>Mypy installs a command line tool in Python's Scripts folder when you install Mypy. So you run <code>mypy yourProgram.py</code> from the command line (not from the Python interactive shell) and if your code is valid, it prints nothing. If it's not, it will display errors. I generally use the <code>python -m mypy yourProgram.py</code> style of running it.</p>
+
+<p>But even easier is to get a plugin for whatever editor or IDE you use. This way, your editor runs Mypy in the background as you type code and can near-instantly show you any mistakes you make. For example, for Sublime Text, you just install the <a href="http://www.sublimelinter.com/en/stable/installation.html">SublimeLinter</a> and <a href="https://github.com/fredcallaway/SublimeLinter-contrib-mypy">SublimeLinter-contrib-mypy</a> using <a href="https://packagecontrol.io/installation">Package Control</a>. Then, as you type Python code in Sublime Text, it displays any errors that Mypy finds automatically.</p>
+
+<p><strong>"When you say type hints in Python are optional, do you mean half my variables could use type hints and the other half doesn't have to?"</strong></p>
+
+<p>Yes. Python calls this <em>gradual typing</em>. If you want to add type hints to your Python code, you don't have do it all at once. It's like unit test coverage: you could just test some of your functions.</p>
+
+<p><strong>"Okay, I'll install Mypy and set up my editor to use it. Done. So what are all the types I use when writing type hints in my code?"</strong></p>
+
+<p><a href="https://mypy.readthedocs.io/en/latest/cheat_sheet_py3.html">The Mypy site has a great cheat sheet.</a> Basically, you use the same names as those type conversion functions, like <code>int()</code>, <code>str()</code>, and so on. That's because those are technically the class names for integers and strings. Just like you call <code>datetime.date(2025, 10, 31)</code> to create an object of the <code>date</code> class, <code>int("42")</code> creates an integer object of the <code>int</code> class. In Python, "class" and "type" and "data type" are the exact same thing.</p>
+
+<p><strong>"Okay. So how do I write type hints in my code?"</strong></p>
+
+<p>After the variable name, add a semicolon and the type name. Here's an example, with comments explaining each one:</p>
+
+<pre>numberOfTacos: int = 42  # This variable's type int declares it to be an int variable.
+tacosEaten: int  # This declares tacosEaten to be an int variable, but doesn't set an initial value. It's not set to None: using it will result in NameError.
+
+# Type hints without an initial value are handy when there's no one place where an initial value is set, like here:
+if numberOfTacos < 10:
+    tacosEaten = numberOfTacos
+else:
+    tacosEaten = 10
+
+piesEaten: float = 3.14
+myCatsName: str = 'Zophie'
+isBestCat: bool = True
+someBytes: bytes = b'HELLO'
+randomValues: list = ['Zophie', 99, 3.1415]  # Note that the list can contain values of any type.
+goodCats: tuple = ('Zophie', 'Pooka', 'Simon', 'Fat-tail', 'Footfoot')
+fruitCount: dict = {'apples': 5, 'tomatoes': 7}
+barbers: set = set(['Alice', 'Bob', 'Carol'])
+shavers: frozenset = frozenset(['Alice', 'Bob', 'Carol'])</pre>
+
+<p><strong>"Cool. So what happens when I write code that sets a variable to the wrong type of value?"</strong></p>
+
+<p>In Python, nothing. When you run the Python interpreter to run your program, it doesn't care about type hints. It just sets the variable to the value. But, before that point, when you're writing the source code in an editor that runs Mypy in the background, Mypy will report to the editor that there's a problem and the editor will show it to you as you're typing.</p>
+
+<pre>numberOfTacos: int = 42  # The numberOfTacos variable should only have ints.
+numberOfTacos = 'bleventeen'  # Your editor will display a warning on this line. But Pyhton will still run this code just fine.</pre>
+
+<p><strong>"What about the values <em>inside of</em> the list, tuple, dictionary, and other container types? Can I specify type hints for those?"</strong></p>
+
+<p>Yes, and you do this adding square brackets with the item types inside. But <code>cats: list[str] = ['Zophie', 'Pooka']</code> isn't valid Python code. (The reasons why this style couldn't work is too long to go into here.) The solution that the Python core devs came up with is to have analogous classes in the <code>typing</code> module. Here's an example:</p>
+
+<pre>from typing import List, Tuple, Dict, Set, Frozenset
+
+groceryList: List[str] = ['bread', 'eggs', 'tofu']
+cityHall: Tuple[float, float, str] = (37.779, -122.419, 'San Francisco')
+fruitCount: Dict[str, int] = {'apples': 5, 'tomatoes': 7}
+barbers: Set[str] = set(['Alice', 'Bob', 'Carol'])
+shavers: Frozenset[str] = frozenset(['Alice', 'Bob', 'Carol'])</pre>
+
+<p><strong>"What if I want to have a list that can contain multiple types of values for its items?"</strong></p>
+
+<p>Use the <code>Union</code> type from the <code>typing</code> module. For example:</p>
+
+<pre>from typing import Union
+favoriteLettersAndNumbers: List[Union[int, str]] = [42, 'x', 86]</pre>
+
+<p>You can also use <code>Union</code> to specify variables that can have more than one type:</p>
+
+<pre>from typing import Union
+serialNumber: Union[int, str] = 42
+serialNumber = '42b'</pre>
+
+<p><strong>"Okay. So if I have a variable that contains integers, but could also contain <code>None</code>, should I use, uh, <code>Union[int, NoneType]</code>?</strong></p>
+
+<p>You can use <code>Optional</code> instead, which means the same thing. And technically, <code>NoneType</code> isn't a defined type the way <code>int</code> or <code>str</code> are. So you can't say <code>type(None) == NoneType</code> the way you can say <code>type(42) == int</code>. Instead, we'd just use <code>None</code> like in this example:</p>
+
+<pre>from typing import Union, Optional
+
+# These two have the same type hint, but `Optional[int]` is easier to write and read:
+eggs: Union[int, None] = 42
+bacon: Optional[int] = 42</pre>
+
+<p>But here's the thing: you should avoid using "null" values like <code>None</code> at all. Computer scientist and inventer of the null value Tony Hoare called it his <a href="https://en.wikipedia.org/wiki/Tony_Hoare#Apologies_and_retractions">Billion Dollar Mistake</a> because it's often the cause of bugs. I vaguely remember some study that said NullReferenceException was by itself the cause of something like 30% of all Java application crashes. <a href="https://kotlinlang.org/docs/reference/null-safety.html">Kotlin, a language that is a sort of modernized Java, by default doesn't let you set variables to null.</a> You can still use <code>None</code> if you need to, but don't use it without forethought.</p>
+
+<p><strong>"What if I don't care what type of a value a variable has. Should I just not use type hints?"</strong></p>
+
+<p>No, remember that "explicit is better than implicit." You should explicitly use the <code>Any</code> type for variables that can be of any type:</p>
+
+<pre>from typing import Any
+spam: Any = 42
+spam = 'hello'  # This is fine. `spam` can be set to any type.
+</pre>
+
+<p><strong>Can I do more specific checks? Like, specify that a variable should be an int, but never a negative integer?</strong></p>
+
+<p>Nope. Type hints are only for types, not for values. I'd recommend subclass the class or, since you can't subclass <code>int</code>, you create your own non-negative integer class. Anyway, remember that type hints only work before runtime. They don't do runtime checking of values. You should use <code>assert</code> or even just <code>if</code> statements for that.</p>
+
+<p><strong>"What about classes I write or other types like <code>datetime.date</code> or the match objects returned from <code>re.search('[aeiou]', 'hello')</code>?</strong></p>
+
+<p>You just use the class name as the type. Remember, in Python the terms type, data type, and class all mean the same thing. Also note that <code>self</code> isn't written with a type hint:</p>
+
+<pre>class Cat:
+    def __init__(self, name: str, color: str, weightkg: float) -> None:
+        self.name = name
+        self.color = color
+        self.weightkg = weightkg
+
+def getZophieClone() -> Cat:
+    return Cat('Zophie', 'gray', 4.9)</pre>
+
+<p><strong>"What about weird types, like functions or sequences or mappings or iterables?"</strong></p>
+
+<p>The <code>typing</code> module has <code>Callable</code>, <code>Sequence</code>, <code>Mapping</code>, <code>Iterable</code>, and others. You can find them in the <a href="https://docs.python.org/3/library/typing.html">documentation</a>.</p>
+
+<p><strong>"Alright, cool. So how about functions? How do I write type hints for parameters and return values?"</strong></p>
+
+<p>These are all done in the <code>def</code> statement. The return value's type hint is specified after a <code>-></code> arrow. For example:</p>
+
+<pre>from typing import Optional, List
+
+def getVowelsFromWord(word: str, maxVowels: Optional[int] = None) -> List[str]:
+    vowels: List[str] = []
+    for letter in word:
+        if maxVowels is not None and len(vowels) >= maxVowels:
+            break  # Break early since we've reached the maxmimum.
+
+        if letter.upper() in 'AEIOU':
+            vowels.append(letter) # Record this vowel letter.
+    return vowels  # Return all the vowels fown in word.</pre>
+
+<p>In our <code>getVowels()</code> function, it has two parameters, <code>word</code> (which can be a string) and <code>maxVowels</code> (which can be an integer or <code>None</code>). The function itself returns a list of strings. A tool like Mypy can verify that the <code>return</code> statement returns the <code>vowels</code> variable, which has the type hint <code>List[str]</code>, which in turn matches the function's return type hint.</p>
+
+<p><strong>"What about type hints in Python 2? Won't those colons cause syntax errors?"</strong></p>
+
+<p>Yes, but you can put type hints inside comments if you're writing Python 2 compatible code:</p>
+
+<pre>from typing import List # Required even for comment-style type hints.
+
+spam = 42 # type: int
+def sayHello():
+    # type: () -> None
+    """The docstring comes after the type hint comment."""
+    print('Hello!')
+
+def addTwoNumbers(listOfNumbers):
+    # type: (List[float]) -> None
+    listOfNumbers[0] += listOfNumbers.pop()</pre>
+
+<p>Note that you'll still need to import objects from <code>typing</code> even with the comment-style of type hints.</p>
+
+<p><strong>"I've started using type hints, but I've come across a warning that doesn't really apply to my code. How do I get Mypy to ignore that one line?"</strong></p>
+
+<p>You can add a comment <code># type: ignore</code> to the end of that line:</p>
+
+<pre>from typing import Any
+
+def raiseMyCustomException(val: Any):
+    # Some code here...
+    raise Exception('message here: ' + str(val))
+
+def getLengthIfString(val: Any) -> int:
+    # Some code here...
+
+    # This function call always raises an exception, but mypy thinks
+    # gives the error "missing return statement", so we tell mypy to ignore it:
+    raiseMyCustomException(val)  # type: ignore</pre>
+
+<p><strong>"Cool! Now I know enough to get started. Where can I learn more about type hints?"</strong></p>
+
+<p>Check out the <a href="https://docs.python.org/3/library/typing.html">official Python documentation</a> or the <a href="https://mypy.readthedocs.io/en/latest/cheat_sheet_py3.html">Mypy documentation, starting with the cheat sheet</a>. There was also <a href="https://www.youtube.com/watch?v=pMgmKJyWKn8">a well-received talk at PyCon 2019 on type hints by Carl Meyer</a>.</p>
+
+</body>
+</html>
