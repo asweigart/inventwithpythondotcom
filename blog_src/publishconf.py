@@ -13,8 +13,11 @@ from pelicanconf import *
 SITEURL = 'https://inventwithpython.com/blog'
 RELATIVE_URLS = False
 
-FEED_ALL_ATOM = 'feeds/all.atom.xml'
-CATEGORY_FEED_ATOM = 'feeds/%s.atom.xml'
+FEED_ALL_ATOM = 'atom.xml'
+CATEGORY_FEED_ATOM = '%s.atom.xml'
+
+FEED_ALL_RSS = 'rss.xml'
+CATEGORY_FEED_RSS = '%s.rss.xml'
 
 DELETE_OUTPUT_DIRECTORY = True
 
