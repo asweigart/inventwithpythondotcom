@@ -41,6 +41,8 @@ ARTICLE_URL = '{date:%Y}/{date:%m}/{date:%d}/{slug}/'
 ARTICLE_SAVE_AS = '{date:%Y}/{date:%m}/{date:%d}/{slug}/index.html'
 FILENAME_METADATA = '(?P<slug>.*?)\.html'
 
+CUSTOM_ARTICLE_FOOTERS = ('./inventblogfooter.html', )
+
 SKIP_COLOPHON = True
 
 
