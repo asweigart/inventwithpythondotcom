@@ -1,0 +1,372 @@
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-249">
+<section class="toclist">
+<header class="calibre12">
+<h1 class="chaptertitle">
+<span class="partnumber"><span type="pagebreak" title="225" id="calibre_link-560" class="calibre26"></span>13</span><br class="calibre18" />
+<span class="parttitle1">Measuring Performance and Big O Algorithm Analysis</span>
+</h1>
+</header>
+<figure class="opener"><img src="images/000017.png" alt="" class="calibre15" /></figure><p class="chapterintro">For most small programs, performance isn’t all that important. We might spend an hour writing a script to automate a task that needs only a few seconds to run. Even if it takes longer, the program will probably finish by the time we’ve returned to our desk with a cup of coffee.</p>
+<p class="calibre22">Sometimes it’s prudent to invest time in learning how to make a script faster. But we can’t know if our changes improve a program’s speed until we know how to measure program speed. This is where Python’s <code class="calibre9">timeit</code> and <code class="calibre9">cProfile</code> modules come in. These modules not only measure how fast code runs, but also create a <em class="calibre10">profile</em> of which parts of the code are already fast and which parts we could improve.</p>
+<p class="calibre23">In addition to measuring program speed, in this chapter you’ll also learn how to measure the theoretical increases in runtime as the data for your program grows. In computer science, we call this <em class="calibre10">big O notation</em>. Software developers without traditional computer science backgrounds might sometimes feel they have gaps in their knowledge. But although a computer science education is fulfilling, it’s not always directly relevant to <span type="pagebreak" title="226" id="calibre_link-561" class="calibre16"></span>software development. I joke (but only half so) that big O notation makes up about 80 percent of the usefulness of my degree. This chapter provides an introduction to this practical topic.</p>
+<h2 id="calibre_link-250" class="calibre7">The timeit Module</h2>
+<p class="bodyfirst">“Premature optimization is the root of all evil” is a common saying in software development. (It’s often attributed to computer scientist Donald Knuth, who attributes it to computer scientist Tony Hoare. Tony Hoare, in turn, attributes it to Donald Knuth.) <em class="calibre10">Premature optimization</em>, or optimizing before knowing what needs to be optimized, often manifests itself when programmers try to use clever tricks to save memory or write faster code. For example, one of these tricks is using the <em class="calibre10">XOR algorithm</em> to swap two integer values without using a third, temporary variable:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">a, b = 42, 101  # Set up the two variables.</b>
+&gt;&gt;&gt; <b class="calibre25">print(a, b)</b>
+42 101
+&gt;&gt;&gt; # A series of ^ XOR operations will end up swapping their values:
+&gt;&gt;&gt; <b class="calibre25">a = a ^ b</b>
+&gt;&gt;&gt; <b class="calibre25">b = a ^ b</b>
+&gt;&gt;&gt; <b class="calibre25">a = a ^ b</b>
+&gt;&gt;&gt; <b class="calibre25">print(a, b)  # The values are now swapped.</b>
+101 42</code></pre>
+<p class="calibre23">Unless you’re unfamiliar with the XOR algorithm (which uses the <code class="calibre9">^</code> bitwise operator), this code looks cryptic. The problem with using clever programming tricks is that they can produce complicated, unreadable code. Recall that one of the Zen of Python tenets is <em class="calibre10">readability counts</em>.</p>
+<p class="calibre23">Even worse, your clever trick might turn out not to be so clever. You can’t just assume a crafty trick is faster or that the old code it’s replacing was even all that slow to begin with. The only way to find out is by measuring and comparing the <em class="calibre10">runtime</em>: the amount of time it takes to run a program or piece of code. Keep in mind that increasing the runtime means the program is slowing down: the program is taking more time to do the same amount of work. (We also sometimes use the term <em class="calibre10">runtime</em> to refer to the period during which the program is running. <em class="calibre10">This error happened at runtime</em> means the error happened while the program was running as opposed to when the program was being compiled into bytecode.)</p>
+<p class="calibre23">The Python standard library’s <code class="calibre9">timeit</code> module can measure the runtime speed of a small snippet of code by running it thousands or millions of times, letting you determine an average runtime. The <code class="calibre9">timeit</code> module also temporarily disables the automatic garbage collector to ensure more consistent runtimes. If you want to test multiple lines, you can pass a multiline code string or separate the code lines using semicolons:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">import timeit</b>
+&gt;&gt;&gt; <b class="calibre25">timeit.timeit('a, b = 42, 101; a = a ^ b; b = a ^ b; a = a ^ b')</b>
+0.1307766629999998
+&gt;&gt;&gt; <b class="calibre25">timeit.timeit("""a, b = 42, 101</b>
+<span type="pagebreak" title="227" id="calibre_link-562" class="calibre16"></span>... <b class="calibre25">a = a ^ b</b>
+... <b class="calibre25">b = a ^ b</b>
+... <b class="calibre25">a = a ^ b""")</b>
+0.13515726800000039</code></pre>
+<p class="calibre23">On my computer, the XOR algorithm takes roughly one-tenth of a second to run this code. Is this fast? Let’s compare it to some integer swapping code that uses a third temporary variable:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">import timeit</b>
+&gt;&gt;&gt; <b class="calibre25">timeit.timeit('a, b = 42, 101; temp = a; a = b; b = temp')</b>
+0.027540389999998638</code></pre>
+<p class="calibre23">That’s a surprise! Not only is using a third temporary variable more readable, but it’s also twice as fast! The <em class="calibre10">clever</em> XOR trick might save a few bytes of memory but at the expense of speed and code readability. Sacrificing code readability to reduce a few bytes of memory usage or nanoseconds of runtime isn’t worthwhile.</p>
+<p class="calibre23">Better still, you can swap two variables using the <em class="calibre10">multiple assignment trick</em>, also called <em class="calibre10">iterable unpacking</em>, which also runs in a small amount of time:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">timeit.timeit('a, b = 42, 101; a, b = b, a')</b>
+0.024489236000007963</code></pre>
+<p class="calibre23">Not only is this the most readable code, it’s also the quickest. We know this not because we assumed it, but because we objectively measured it.</p>
+<p class="calibre23">The <code class="calibre9">timeit.timeit()</code> function can also take a second string argument of <span class="keycaps">setup</span> code. The setup code runs only once before running the first string’s code. You can also change the default number of trials by passing an integer for the <code class="calibre9">number</code> keyword argument. For example, the following test measures how quickly Python’s <code class="calibre9">random</code> module can generate 10,000,000 random numbers from 1 to 100. (On my machine, it takes about 10 seconds.)</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">timeit.timeit('random.randint(1, 100)', 'import random', number=10000000)</b>
+10.020913950999784</code></pre>
+<p class="calibre23">By default, the code in the string you pass to <code class="calibre9">timeit.timeit()</code> won’t be able to access the variables and the functions in the rest of the program:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">import timeit</b>
+&gt;&gt;&gt; <b class="calibre25">spam = 'hello'  </b><code class="calibre42"># We define the spam variable.</code>
+&gt;&gt;&gt; <b class="calibre25">timeit.timeit('print(spam)', number=1) </b><code class="calibre42"> # We measure printing spam.</code>
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+  File "C:\Users\Al\AppData\Local\Programs\Python\Python37\lib\timeit.py", line 232, in timeit
+    return Timer(stmt, setup, timer, globals).timeit(number)
+  File "C:\Users\Al\AppData\Local\Programs\Python\Python37\lib\timeit.py", line 176, in timeit
+    timing = self.inner(it, self.timer)
+  File "&lt;timeit-src&gt;", line 6, in inner
+NameError: name 'spam' is not defined</code></pre>
+<p class="calibre23"><span type="pagebreak" title="228" id="calibre_link-563" class="calibre16"></span>To fix this, pass the function the return value of <code class="calibre9">globals()</code> for the <code class="calibre9">globals</code> keyword argument:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">timeit.timeit('print(spam)', number=1, globals=globals())</b>
+hello
+0.000994909999462834</code></pre>
+<p class="calibre23">A good rule for writing your code is to first make it work and then make it fast. Only once you have a working program should you focus on making it more efficient.</p>
+<h2 id="calibre_link-251" class="calibre7">The cProfile Profiler</h2>
+<p class="bodyfirst">Although the <code class="calibre9">timeit</code> module is useful for measuring small code snippets, the <code class="calibre9">cProfile</code> module is more effective for analyzing entire functions or programs. <em class="calibre10">Profiling</em> analyzes your program’s speed, memory usage, and other aspects systematically. The <code class="calibre9">cProfile</code> module is Python’s <em class="calibre10">profiler</em>, or software that can measure a program’s runtime as well as build a profile of runtimes for the program’s individual function calls. This information provides substantially more granular measurements of your code.</p>
+<p class="calibre23">To use the <code class="calibre9">cProfile</code> profiler, pass a string of the code you want to measure to <code class="calibre9">cProfile.run()</code>. Let’s look at how <code class="calibre9">cProfiler</code> measures and reports the execution of a short function that sums all the numbers from 1 to 1,000,000:</p>
+<pre class="calibre28"><code class="calibre9">import time, cProfile
+def addUpNumbers():
+    total = 0
+    for i in range(1, 1000001):
+        total += i
+
+cProfile.run('addUpNumbers()')</code></pre>
+<p class="calibre23">When you run this program, the output will look something like this:</p>
+<pre class="calibre28"><code class="calibre9">         4 function calls in 0.064 seconds
+
+   Ordered by: standard name
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.064    0.064 &lt;string&gt;:1(&lt;module&gt;)
+        1    0.064    0.064    0.064    0.064 test1.py:2(addUpNumbers)
+        1    0.000    0.000    0.064    0.064 {built-in method builtins.exec}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}</code></pre>
+<p class="calibre23">Each line represents a different function and the amount of time spent in that function. The columns in <code class="calibre9">cProfile.run()</code>’s output are:</p>
+<ol class="none">
+<li class="calibre11"><span class="runinhead"><var class="calibre35">ncalls</var>  </span>The number of calls made to the function</li>
+<li class="calibre11"><span class="runinhead"><var class="calibre35">tottime</var>  </span>The total time spent in the function, excluding time in subfunctions</li>
+<li class="calibre11"><span type="pagebreak" title="229" id="calibre_link-564" class="calibre16"></span><span class="runinhead"><var class="calibre35">percall</var>  </span>The total time divided by the number of calls</li>
+<li class="calibre11"><span class="runinhead"><var class="calibre35">cumtime</var>  </span>The cumulative time spent in the function and all subfunctions</li>
+<li class="calibre11"><span class="runinhead"><var class="calibre35">percall</var>  </span>The cumulative time divided by the number of calls</li>
+<li class="calibre11"><span class="runinhead"><var class="calibre35">filename:lineno(function)</var>  </span>The file the function is in and at which line number</li>
+</ol>
+<p class="calibre23">For example, download the <em class="calibre10">rsaCipher.py</em> and <em class="calibre10">al_sweigart_pubkey.txt</em> files from <a href="https://nostarch.com/crackingcodes/" class="calibre19">https://nostarch.com/crackingcodes/</a>. This RSA Cipher program was featured in <em class="calibre10">Cracking Codes with Python </em>(No Starch Press, 2018). Enter the following into the interactive shell to profile the <code class="calibre9">encryptAndWriteToFile()</code> function as it encrypts a 300,000-character message created by the <code class="calibre9">'abc' * 100000</code> expression:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">import cProfile, rsaCipher</b>
+&gt;&gt;&gt; <b class="calibre25">cProfile.run("rsaCipher.encryptAndWriteToFile('encrypted_file.txt', 'al_sweigart_pubkey.txt', 'abc'*100000)")</b>
+         11749 function calls in 28.900 seconds
+
+   Ordered by: standard name
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.001    0.001   28.900   28.900 &lt;string&gt;:1(&lt;module&gt;)
+        2    0.000    0.000    0.000    0.000 _bootlocale.py:11(getpreferredencoding)
+<var class="calibre43">--snip--</var>
+        1    0.017    0.017   28.900   28.900 rsaCipher.py:104(encryptAndWriteToFile)
+        1    0.248    0.248    0.249    0.249 rsaCipher.py:36(getBlocksFromText)
+        1    0.006    0.006   28.873   28.873 rsaCipher.py:70(encryptMessage)
+        1    0.000    0.000    0.000    0.000 rsaCipher.py:94(readKeyFile)
+<var class="calibre43">--snip--</var>
+     2347    0.000    0.000    0.000    0.000 {built-in method builtins.len}
+     2344    0.000    0.000    0.000    0.000 {built-in method builtins.min}
+     2344   28.617    0.012   28.617    0.012 {built-in method builtins.pow}
+        2    0.001    0.000    0.001    0.000 {built-in method io.open}
+     4688    0.001    0.000    0.001    0.000 {method 'append' of 'list' objects}
+<var class="calibre43">--snip--</var></code></pre>
+<p class="calibre23">You can see that the code passed to <code class="calibre9">cProfile.run()</code> took 28.9 seconds to complete. Pay attention to the functions with the highest total times; in this case, Python’s built-in <code class="calibre9">pow()</code> function takes up 28.617 seconds. That’s nearly the entire code’s runtime! We can’t change this code (it’s part of Python), but perhaps we could change our code to rely on it less.</p>
+<p class="calibre23">This isn’t possible in this case, because <em class="calibre10">rsaCipher.py</em> is already fairly optimized. Even so, profiling this code has provided us insight that <code class="calibre9">pow()</code> is the main bottleneck. So there’s little sense in trying to improve, say, the <code class="calibre9">readKeyFile()</code> function (which takes so little time to run that <code class="calibre9">cProfile</code> reports its runtime as 0).</p>
+<p class="calibre23">This idea is captured by <em class="calibre10">Amdahl’s Law</em>, a formula that calculates how much the overall program speeds up given an improvement to one of its components. The formula is <em class="calibre10">speed-up of whole task = 1 / ((1 &ndash; p) + (p / s))</em> where <em class="calibre10">s</em> is the speed-up made to a component and <em class="calibre10">p</em> is the portion of that <span type="pagebreak" title="230" id="calibre_link-565" class="calibre16"></span>component of the overall program. So if you double the speed of a component that makes up 90 percent of the program’s total runtime, you’ll get 1 / ((1 &ndash; 0.9) + (0.9 / 2)) = 1.818, or an 82 percent speed-up of the overall program. This is better than, say, tripling the speed of a component that only makes up 25 percent of the total runtime, which would only be a 1 / ((1 &ndash; 0.25) + (0.25 / 2)) = 1.143, or 14 percent overall speed-up. You don’t need to memorize the formula. Just remember that doubling the speed of your code’s slow or lengthy parts is more productive than doubling the speed of an already quick or short part. This is common sense: a 10 percent price discount on an expensive house is better than a 10 percent discount on a cheap pair of shoes.</p>
+<h2 id="calibre_link-252" class="calibre7">Big O Algorithm Analysis</h2>
+<p class="bodyfirst"><em class="calibre10">Big O</em> is a form of algorithm analysis that describes how code will scale. It classifies the code into one of several orders that describes, in general terms, how much longer the code’s runtime will take as the amount of work it has to do increases. Python developer Ned Batchelder describes big O as an analysis of “how code slows as data grows,” which is also the title of his informative PyCon 2018 talk, which is available at <a href="https://youtu.be/duvZ-2UK0fc/" class="calibre19">https://youtu.be/duvZ-2UK0fc/</a>.</p>
+<p class="calibre23">Let’s consider the following scenario. Say you have a certain amount of work that takes an hour to complete. If the workload doubles, how long would it take then? You might be tempted to think it takes twice as long, but actually, the answer depends on the kind of work that’s being done.</p>
+<p class="calibre23">If it takes an hour to read a short book, it will take more or less two hours to read two short books. But if you can alphabetize 500 books in an hour, alphabetizing 1,000 books will most likely take longer than two hours, because you have to find the correct place for each book in a much larger collection of books. On the other hand, if you’re just checking whether or not a bookshelf is empty, it doesn’t matter if there are 0, 10, or 1,000 books on the shelf. One glance and you’ll immediately know the answer. The runtime remains roughly constant no matter how many books there are. Although some people might be faster or slower at reading or alphabetizing books, these general trends remain the same. </p>
+<p class="calibre23">The big O of the algorithm describes these trends. An algorithm can run on a fast or slow computer, but we can still use big O to describe how well an algorithm performs in general, regardless of the actual hardware executing the algorithm. Big O doesn’t use specific units, such as seconds or CPU cycles, to describe an algorithm’s runtime, because these would vary between different computers or programming languages.</p>
+<h2 id="calibre_link-253" class="calibre7">Big O Orders</h2>
+<p class="bodyfirst">Big O notation commonly defines the following orders. These range from the <em class="calibre10">lower</em> orders, which describe code that, as the amount of data grows, <span type="pagebreak" title="231" id="calibre_link-566" class="calibre16"></span>slows down the least, to the <em class="calibre10">higher</em> orders, which describe code that slows down the most:</p>
+<ol class="decimal">
+<li class="calibre11">O(1), Constant Time (the lowest order)</li>
+<li class="calibre11">O(log n), Logarithmic Time</li>
+<li class="calibre11">O(n), Linear Time</li>
+<li value="4" class="calibre11">O(n log n), N-Log-N Time</li>
+<li class="calibre11">O(n<sup class="calibre53">2</sup>), Polynomial Time</li>
+<li class="calibre11">O(2<sup class="calibre53">n</sup>), Exponential Time</li>
+<li class="calibre11">O(n!), Factorial Time (the highest order)</li>
+</ol>
+<p class="calibre23">Notice that big O uses the following notation: a capital O, followed by a pair of parentheses containing a description of the order. The capital O represents <span class="keycaps">order</span> or <span class="keycaps">on the order of</span>. The n represents the size of the input data the code will work on. We pronounce O(n) as “big oh of n” or “big oh n.”</p>
+<p class="calibre23">You don’t need to understand the precise mathematic meanings of words like <span class="keycaps">logarithmic</span> or <span class="keycaps">polynomial</span> to use big O notation. I’ll describe each of these orders in detail in the next section, but here’s an oversimplified explanation of them:</p>
+<ul class="calibre36">
+<li class="calibre11">O(1) and O(log n) algorithms are fast.</li>
+<li class="calibre11">O(n) and O(n log n) algorithms aren’t bad.</li>
+<li class="calibre11">O(n<sup class="calibre53">2</sup>), O(2<sup class="calibre53">n</sup>), and O(n!) algorithms are slow.</li>
+</ul>
+<p class="calibre23">Certainly, you could find counterexamples, but these descriptions are good rules in general. There are more big O orders than the ones listed here, but these are the most common. Let’s look at the kinds of tasks that each of these orders describes.</p>
+<h3 id="calibre_link-254" class="calibre27">A Bookshelf Metaphor for Big O Orders</h3>
+<p class="bodyfirst">In the following big O order examples, I’ll continue using the bookshelf metaphor. The <em class="calibre10">n</em> refers to the number of books on the bookshelf, and the big O ordering describes how the various tasks take longer as the number of books increases.</p>
+<h4 id="calibre_link-756" class="calibre44">O(1), Constant Time</h4>
+<p class="bodyfirst">Finding out “Is the bookshelf empty?” is a constant time operation. It doesn’t matter how many books are on the shelf; one glance tells us whether or not the bookshelf is empty. The number of books can vary, but the runtime remains constant, because as soon as we see one book on the shelf, we can stop looking. The <em class="calibre10">n</em> value is irrelevant to the speed of the task, which is why there is no <em class="calibre10">n</em> in O(1). You might also see constant time written as O(c).</p>
+<h4 id="calibre_link-757" class="calibre44"><span type="pagebreak" title="232" id="calibre_link-567" class="calibre39"></span>O(log n), Logarithmic</h4>
+<p class="bodyfirst"><em class="calibre10">Logarithms</em> are the inverse of exponentiation: the exponent 2<sup class="calibre53">4</sup>, or 2 × 2 × 2 × 2, equals 16, whereas the logarithm log<sub class="calibre54">2</sub>(16) (pronounced “log base 2 of 16”) equals 4. In programming, we often assume base 2 to be the logarithm base, which is why we write O(log n) instead of O(log<sub class="calibre54">2</sub> n).</p>
+<p class="calibre23">Searching for a book on an alphabetized bookshelf is a logarithmic time operation. To find one book, you can check the book in the middle of the shelf. If that is the book you’re searching for, you’re done. Otherwise, you can determine whether the book you’re searching for comes before or after this middle book. By doing so, you’ve effectively reduced the range of books you need to search in half. You can repeat this process again, checking the middle book in the half that you expect to find it. We call this the <em class="calibre10">binary search algorithm</em>, and there’s an example of it in “Big O Analysis Examples” later in this chapter.</p>
+<p class="calibre23">The number of times you can split a set of <em class="calibre10">n</em> books in half is log<sub class="calibre54">2</sub> n. On a shelf of 16 books, it will take at most four steps to find the right one. Because each step reduces the number of books you need to search by one half, a bookshelf with double the number of books takes just one more step to search. If there were 4.2 billion books on the alphabetized bookshelf, it would still only take 32 steps to find a particular book.</p>
+<p class="calibre23">Log <em class="calibre10">n</em> algorithms usually involve a <em class="calibre10">divide and conquer</em> step, which selects half of the <em class="calibre10">n</em> input to work on and then another half from that half, and so on. Log <em class="calibre10">n</em> operations scale nicely: the workload <em class="calibre10">n</em> can double in size, but the runtime increases by only one step.</p>
+<h4 id="calibre_link-758" class="calibre44">O(n), Linear Time</h4>
+<p class="bodyfirst">Reading all the books on a bookshelf is a linear time operation. If the books are roughly the same length and you double the number of books on the shelf, it will take roughly double the amount of time to read all the books. The runtime increases <em class="calibre10">in proportion</em> to the number of books <em class="calibre10">n</em>.</p>
+<h4 id="calibre_link-759" class="calibre44">O(n log n), N-Log-N Time</h4>
+<p class="bodyfirst">Sorting a set of books into alphabetical order is an n-log-n time operation. This order is the runtime of O(n) and O(log n) multiplied together. You can think of a O(n log n) task as a O(log n) task that must be performed <em class="calibre10">n</em> times. Here’s a casual description of why.</p>
+<p class="calibre23">Start with a stack of books to alphabetize and an empty bookshelf. Follow the steps for a binary search algorithm, as detailed in “O(log n), Logarithmic” on page 232, to find where a single book belongs on the shelf. This is an O(log n) operation. With <em class="calibre10">n</em> books to alphabetize, and each book taking log <em class="calibre10">n</em> steps to alphabetize, it takes <em class="calibre10">n</em> × log <em class="calibre10">n</em>, or <em class="calibre10">n</em> log <em class="calibre10">n</em>, steps to alphabetize the entire set of books. Given twice as many books, it takes a bit more than twice as long to alphabetize all of them, so <em class="calibre10">n</em> log <em class="calibre10">n</em> algorithms scale fairly well.</p>
+<p class="calibre23"><span type="pagebreak" title="233" id="calibre_link-568" class="calibre16"></span>In fact, all of the efficient general sorting algorithms are O(n log n): merge sort, quicksort, heapsort, and Timsort. (Timsort, invented by Tim Peters, is the algorithm that Python’s <code class="calibre9">sort()</code> method uses.)</p>
+<h4 id="calibre_link-760" class="calibre44">O(n<sup class="calibre53">2</sup>), Polynomial Time</h4>
+<p class="bodyfirst">Checking for duplicate books on an unsorted bookshelf is a polynomial time operation. If there are 100 books, you could start with the first book and compare it with the 99 other books to see whether they’re the same. Then you take the second book and check whether it’s the same as any of the 99 other books. Checking for a duplicate of a single book is 99 steps (we’ll round this up to 100, which is our <em class="calibre10">n</em> in this example). We have to do this 100 times, once for each book. So the number of steps to check for any duplicate books on the bookshelf is roughly <em class="calibre10">n × n</em>, or <em class="calibre10">n</em><sup class="calibre53">2</sup>. (This approximation to <em class="calibre10">n</em><sup class="calibre53">2</sup> still holds even if we were clever enough not to repeat comparisons.)</p>
+<p class="calibre23">The runtime increases by the increase in books squared. Checking 100 books for duplicates is 100 × 100, or 10,000 steps. But checking twice that amount, 200 books, is 200 × 200, or 40,000 steps: four times as much work.</p>
+<p class="calibre23">In my experience writing code in the real world, I’ve found the most common use of big O analysis is to avoid accidentally writing an O(n<sup class="calibre53">2</sup>) algorithm when an O(n log n) or O(n) algorithm exists. The O(n<sup class="calibre53">2</sup>) order is when algorithms dramatically slow down, so recognizing your code as O(n<sup class="calibre53">2</sup>) or higher should give you pause. Perhaps there’s a different algorithm that can solve the problem faster. In these cases, taking a data structure and algorithms (DSA) course, whether at a university or online, can be helpful.</p>
+<p class="calibre23">We also call O(n<sup class="calibre53">2</sup>) <em class="calibre10">quadratic time</em>. Algorithms could have O(n<sup class="calibre53">3</sup>), or <em class="calibre10">cubic time</em>, which is slower than O(n<sup class="calibre53">2</sup>); O(n<sup class="calibre53">4</sup>), or <em class="calibre10">quartic time</em>, which is slower than O(n<sup class="calibre53">3</sup>); or other polynomial time complexities.</p>
+<h4 id="calibre_link-761" class="calibre44">O(2<sup class="calibre53">n</sup>), Exponential Time</h4>
+<p class="bodyfirst">Taking photos of the shelf with every possible combination of books on it is an exponential time operation. Think of it this way: each book on the shelf can either in be included in the photo or not included. <a id="calibre_link-701" href="#calibre_link-338" class="calibre19">Figure 13-1</a> shows every combination where <em class="calibre10">n</em> is 1, 2, or 3. If <em class="calibre10">n</em> is 1, there are two possible photos: with the book and without. If <em class="calibre10">n</em> is 2, there are four possible photos: both books on the shelf, both books off, the first on and second off, and the second on and first off. When you add a third book, you’ve once again doubled the amount of work you have to do: you need to do every subset of two books that includes the third book (four photos) and every subset of two books that excludes the third book (another four photos, for 2<sup class="calibre53">3</sup> or eight photos). Each additional book doubles the workload. For <em class="calibre10">n</em> books, the number of photos you need to take (that is, the amount of work you need to do) is 2<sup class="calibre53"><em class="calibre10">n</em></sup>.</p>
+<span type="pagebreak" title="234" id="calibre_link-569" class="calibre16"></span><figure class="calibre29">
+<img src="images/000011.png" alt="f13001" class="calibre15" />
+<figcaption class="calibre30"><p class="calibre31"><a id="calibre_link-338" href="#calibre_link-701" class="calibre19">Figure 13-1:</a> Every combination of books on a bookshelf for one, two, or three books</p></figcaption>
+</figure>
+<p class="calibre23">The runtime for exponential tasks increases very quickly. Six books require 2<sup class="calibre53">6</sup> or 32 photos, but 32 books would include 2<sup class="calibre53">32</sup> or more than 4.2 billion photos. O(2<sup class="calibre53">n</sup>), O(3<sup class="calibre53">n</sup>), O(4<sup class="calibre53">n</sup>), and so on are different orders ut all have exponential time complexity.</p>
+<h4 id="calibre_link-762" class="calibre44">O(n!), Factorial Time</h4>
+<p class="bodyfirst">Taking a photo of the books on the shelf in every conceivable order is a factorial time operation<em class="calibre10">.</em> We call every possible order the <em class="calibre10">permutation</em> of <em class="calibre10">n</em> books. This results in <em class="calibre10">n!</em>, or <em class="calibre10">n factorial</em>, orderings. The <em class="calibre10">factorial</em> of a number is the multiplication product of all positive integers up to the number. For example, 3! is 3 × 2 × 1, or 6. <a id="calibre_link-702" href="#calibre_link-339" class="calibre19">Figure 13-2</a> shows every possible permutation of three books.</p>
+<figure class="calibre29">
+<img src="images/000003.png" alt="f13002" class="calibre15" />
+<figcaption class="calibre30"><p class="calibre31"><a id="calibre_link-339" href="#calibre_link-702" class="calibre19">Figure 13-2:</a> All 3! (that is, 6) permutations of three books on a bookshelf</p></figcaption>
+</figure>
+<p class="calibre23">To calculate this yourself, think about how you would come up with every permutation of <em class="calibre10">n</em> books. You have <em class="calibre10">n</em> possible choices for the first book; then <em class="calibre10">n</em> &ndash; 1 possible choices for the second book (that is, every book except the one you picked for the first book); then <em class="calibre10">n</em> &ndash; 2 possible choices <span type="pagebreak" title="235" id="calibre_link-570" class="calibre16"></span>for the third book; and so on. With 6 books, 6! results in 6 × 5 × 4 × 3 × 2 × 1, or 720 photos. Adding just one more book makes this 7!, or 5,040 photos needed. Even for small <em class="calibre10">n</em> values, factorial time algorithms quickly become impossible to complete in a reasonable amount of time. If you had 20 books and could arrange them and take a photo every second, it would still take longer than the universe has existed to get through every possible permutation.</p>
+<p class="calibre23">One well-known O(n!) problem is the traveling salesperson conundrum. A salesperson must visit <em class="calibre10">n</em> cities and wants to calculate the distance travelled for all <em class="calibre10">n!</em> possible orders in which they could visit them. From these calculations, they could determine the order that involves the shortest travel distance. In a region with many cities, this task proves impossible to complete in a timely way. Fortunately, optimized algorithms can find a short (but not guaranteed to be the shortest) route much faster than O(n!).</p>
+<h3 id="calibre_link-255" class="calibre27">Big O Measures the Worst-Case Scenario</h3>
+<p class="bodyfirst">Big O specifically measures the <em class="calibre10">worst-case scenario</em> for any task. For example, finding a particular book on an unorganized bookshelf requires you to start from one end and scan the books until you find it. You might get lucky, and the book you’re looking for might be the first book you check. But you might be unlucky; it could be the last book you check or not on the bookshelf at all. So in a best-case scenario, it wouldn’t matter if there were billions of books you had to search through, because you’ll immediately find the one you’re looking for. But that optimism isn’t useful for algorithm analysis. Big O describes what happens in the unlucky case: if you have <em class="calibre10">n</em> books on the shelf, you’ll have to check all <em class="calibre10">n</em> books. In this example, the runtime increases at the same rate as the number of books.</p>
+<p class="calibre23">Some programmers also use <em class="calibre10">big Omega notation</em>, which describes the best-case scenario for an algorithm. For example, a Ω(n) algorithm performs at linear efficiency at its best. In the worst case, it might perform slower. Some algorithms encounter especially lucky cases where no work has to be done, such as finding driving directions to a destination when you’re already at the destination. </p>
+<p class="calibre23"><em class="calibre10">Big Theta notation</em> describes algorithms that have the same best- and worst-case order. For example, Θ(n) describes an algorithm that has linear efficiency at best <em class="calibre10">and</em> at worst, which is to say, it’s an O(n) and Ω(n) algorithm. These notations aren’t used in software engineering as often as big O, but you should still be aware of their existence.</p>
+<p class="calibre23">It isn’t uncommon for people to talk about the “big O of the average case” when they mean big Theta, or “big O of the best case” when they mean big Omega. This is an oxymoron; big O specifically refers to an algorithm’s worst-case runtime. But even though their wording is technically incorrect, you can understand their meaning irregardless.</p>
+<aside type="sidebar" class="authors">
+<div class="top"><hr class="calibre32" /></div>
+<section class="box">
+<h2 class="calibre38"><span type="pagebreak" title="236" id="calibre_link-571" class="calibre39"></span>More Than Enough Math to Do Big O</h2>
+<p class="boxbodyfirst">If your algebra is rusty, here’s more than enough math to do big O analysis:</p>
+<ol class="none">
+<li class="calibre11"><b class="calibre25">Multiplication</b> Repeated addition. 2 × 4 = 8, just like 2 + 2 + 2 + 2 = 8. With variables, <em class="calibre10">n</em> + <em class="calibre10">n</em> + <em class="calibre10">n</em> is 3 × <em class="calibre10">n</em>.</li>
+<li class="calibre11"><b class="calibre25">Multiplication notation</b> Algebra notation often omits the × sign, so 2 × <em class="calibre10">n</em> is written as 2<em class="calibre10">n</em>. With numbers, 2 × 3 is written as 2(3) or simply 6.</li>
+<li class="calibre11"><b class="calibre25">The multiplicative identity property</b> Multiplying a number by 1 results in that number: 5 × 1 = 5 and 42 × 1 = 42. More generally, <em class="calibre10">n</em> × 1 = <em class="calibre10">n</em>.</li>
+<li class="calibre11"><b class="calibre25">The distributive property of multiplication</b> 2 × (3 + 4) = (2 × 3) + (2 × 4). Both sides of the equation equal 14. More generally, <em class="calibre10">a</em>(<em class="calibre10">b</em> + <em class="calibre10">c</em>) = <em class="calibre10">ab </em>+ <em class="calibre10">ac</em>.</li>
+<li class="calibre11"><b class="calibre25">Exponentiation</b> Repeated multiplication. 2<sup class="calibre55">4</sup> = 16 (pronounced “2 raised to the 4<sup class="calibre55">th</sup> power is 16”), just like 2 × 2 × 2 × 2 = 16. Here, 2 is the <em class="calibre10">base</em> and 4 is the <em class="calibre10">exponent</em>. With variables, <em class="calibre10">n</em> × <em class="calibre10">n</em> × <em class="calibre10">n</em> × <em class="calibre10">n</em> is <em class="calibre10">n</em><sup class="calibre55">4</sup>. In Python, we use the <code class="calibre41">**</code> operator: <code class="calibre41">2 ** 4</code> evaluates to <code class="calibre41">16</code>.</li>
+<li class="calibre11"><b class="calibre25">The 1st power evaluates to the base</b> 2<sup class="calibre55">1</sup> = 2 and 9999<sup class="calibre55">1</sup> = 9999. More generally, <em class="calibre10">n</em><sup class="calibre55">1</sup> = <em class="calibre10">n</em>.</li>
+<li class="calibre11"><b class="calibre25">The 0th power always evaluates to 1</b>  2<sup class="calibre55">0</sup> = 1 and 9999<sup class="calibre55">0</sup> = 1. More generally, <em class="calibre10">n</em><sup class="calibre55">0</sup> = 1.</li>
+<li class="calibre11"><b class="calibre25">Coefficients</b> Multiplicative factors. In 3<em class="calibre10">n</em><sup class="calibre55">2</sup> + 4<em class="calibre10">n</em> + 5, the coefficients are 3, 4, and 5. You can see that 5 is a coefficient because 5 can be rewritten as 5(1) and then rewritten as 5<em class="calibre10">n</em><sup class="calibre55">0</sup>.</li>
+<li class="calibre11"><b class="calibre25">Logarithms</b>  The inverse of exponentiation. Because 2<sup class="calibre55">4</sup> = 16, we know that log<sub class="calibre56">2</sub>(16) = 4. We pronounce this “the log base 2 of 16 is 4.” In Python, we use the <code class="calibre41">math.log(</code><code class="calibre41">)</code> function: <code class="calibre41">math.log(16, 2)</code> evaluates to <code class="calibre41">4.0</code>.</li>
+</ol>
+<p class="calibre40">Calculating big O often involves simplifying equations by combining like terms. A <em class="calibre10">term</em> is some combination of numbers and variables multiplied together: in 3<em class="calibre10">n</em><sup class="calibre55">2</sup> + 4<em class="calibre10">n</em> + 5, the terms are 3<em class="calibre10">n</em><sup class="calibre55">2</sup>, 4<em class="calibre10">n</em>,<em class="calibre10"> </em>and 5. <em class="calibre10">Like terms</em> have the same variables raised to the same exponent. In the expression 3<em class="calibre10">n</em><sup class="calibre55">2</sup> + 4<em class="calibre10">n</em> + 6<em class="calibre10">n</em> + 5, the terms 4<em class="calibre10">n</em> and 6<em class="calibre10">n</em> are like terms. We could simplify and rewrite this as 3<em class="calibre10">n</em><sup class="calibre55">2</sup> + 10<em class="calibre10">n</em> + 5.</p>
+<p class="calibre40">Keep in mind that because <em class="calibre10">n</em> × 1 = <em class="calibre10">n</em>, an expression like 3<em class="calibre10">n</em><sup class="calibre55">2</sup> + 5<em class="calibre10">n</em> + 4 can be thought of as 3<em class="calibre10">n</em><sup class="calibre55">2</sup> + 5<em class="calibre10">n</em> + 4(1). The terms in this expression match with the big O orders O(n<sup class="calibre55">2</sup>), O(n), and O(1). This will come up later when we’re dropping coefficients for our big O calculations.</p>
+<p class="calibre40">These math rule reminders might come in handy when you’re first learning how to figure out the big O of a piece of code. But by the time you finish “Analyzing Big O at a Glance” later in this chapter, you probably won’t need them anymore. Big O is a simple concept and can be useful even if you don’t strictly follow mathematical rules.</p>
+<div class="top"><hr class="calibre32" /></div>
+</section>
+</aside>
+<h2 id="calibre_link-256" class="calibre7"><span type="pagebreak" title="237" id="calibre_link-572" class="calibre20"></span>Determining the Big O Order of Your Code</h2>
+<p class="bodyfirst">To determine the big O order for a piece of code, we must do four tasks: identify what the <em class="calibre10">n</em> is, count the steps in the code, drop the lower orders, and drop the coefficients.</p>
+<p class="calibre23">For example, let’s find the big O of the following <code class="calibre9">readingList()</code> function:</p>
+<pre class="calibre28"><code class="calibre9">def readingList(books):
+    print('Here are the books I will read:')
+    numberOfBooks = 0
+    for book in books:
+        print(book)
+        numberOfBooks += 1
+    print(numberOfBooks, 'books total.')</code></pre>
+<p class="calibre23">Recall that the <em class="calibre10">n</em> represents the size of the input data that the code works on. In functions, the <em class="calibre10">n</em> is almost always based on a parameter. The <code class="calibre9">readingList()</code> function’s only parameter is <code class="calibre9">books</code>, so the size of <code class="calibre9">books</code> seems like a good candidate for <em class="calibre10">n</em>, because the larger <code class="calibre9">books</code> is, the longer the function takes to run.</p>
+<p class="calibre23">Next, let’s count the steps in this code. What counts as a <span class="keycaps">step</span> is somewhat vague, but a line of code is a good rule to follow. Loops will have as many steps as the number of iterations multiplied by the lines of code in the loop. To see what I mean, here are the counts for the code inside the <code class="calibre9">readingList()</code> function:</p>
+<pre class="calibre28"><code class="calibre9">def readingList(books):
+    print('Here are the books I will read:')  # 1 step
+    numberOfBooks = 0                         # 1 step
+    for book in books:                        # n * steps in the loop
+        print(book)                           # 1 step
+        numberOfBooks += 1                    # 1 step
+    print(numberOfBooks, 'books total.')      # 1 step</code></pre>
+<p class="calibre23">We’ll treat each line of code as one step except for the <code class="calibre9">for</code> loop. This line executes once for each item in <code class="calibre9">books</code>, and because the size of <code class="calibre9">books</code> is our <em class="calibre10">n</em>, we say that this executes <em class="calibre10">n</em> steps. Not only that, but it executes all the steps inside the loop <em class="calibre10">n</em> times. Because there are two steps inside the loop, the total is 2 × <em class="calibre10">n</em> steps. We could describe our steps like this:</p>
+<pre class="calibre28"><code class="calibre9">def readingList(books):
+    print('Here are the books I will read:')  # 1 step
+    numberOfBooks = 0                         # 1 step
+    for book in books:                        # n * 2 steps
+        print(book)                           # (already counted)
+        numberOfBooks += 1                    # (already counted)
+    print(numberOfBooks, 'books total.')      # 1 step</code></pre>
+<p class="calibre23">Now when we compute the total number of steps, we get 1 + 1 + (<em class="calibre10">n</em> × 2) + 1. We can rewrite this expression more simply as 2<em class="calibre10">n</em> + 3.</p>
+<p class="calibre23"><span type="pagebreak" title="238" id="calibre_link-573" class="calibre16"></span>Big O doesn’t intend to describe specifics; it’s a general indicator. Therefore, we drop the lower orders from our count. The orders in 2<em class="calibre10">n</em> + 3 are linear (2<em class="calibre10">n</em>) and constant (3). If we keep only the largest of these orders, we’re left with 2<em class="calibre10">n</em>.</p>
+<p class="calibre23">Next, we drop the coefficients from the order. In 2<em class="calibre10">n</em>, the coefficient is 2. After dropping it, we’re left with <em class="calibre10">n</em>. This gives us the final big O of the <code class="calibre9">readingList()</code> function: O(n), or linear time complexity.</p>
+<p class="calibre23">This order should make sense if you think about it. There are several steps in our function, but in general, if the <code class="calibre9">books</code> list increases tenfold in size, the runtime increases about tenfold as well. Increasing <code class="calibre9">books</code> from 10 books to 100 books moves the algorithm from 1 + 1 + (2 × 10) + 1, or 23 steps, to 1 + 1 + (2 × 100) + 1, or 203 steps. The number 203 is roughly 10 times 23, so the runtime increases proportionally with the increase to <em class="calibre10">n</em>.</p>
+<h3 id="calibre_link-257" class="calibre27">Why Lower Orders and Coefficients Don’t Matter</h3>
+<p class="bodyfirst">We drop the lower orders from our step count because they become less significant as <em class="calibre10">n</em> grows in size. If we increased the <code class="calibre9">books</code> list in the previous <code class="calibre9">readingList()</code> function from 10 to 10,000,000,000 (10 billion), the number of steps would increase from 23 to 20,000,000,003. With a large enough <em class="calibre10">n</em>, those extra three steps matter very little.</p>
+<p class="calibre23">When the amount of data increases, a large coefficient for a smaller order won’t make a difference compared to the higher orders. At a certain size <em class="calibre10">n</em>, the higher orders will always be slower than the lower orders. For example, let’s say we have <code class="calibre9">quadraticExample()</code>, which is O(n<sup class="calibre53">2</sup>) and has 3<em class="calibre10">n</em><sup class="calibre53">2</sup> steps. We also have <code class="calibre9">linearExample()</code>, which is O(n) and has 1,000<em class="calibre10">n</em> steps. It doesn’t matter that the 1,000 coefficient is larger than the 3 coefficient; as <em class="calibre10">n</em> increases, eventually an O(n<sup class="calibre53">2</sup>) quadratic operation will become slower than an O(n) linear operation. The actual code doesn’t matter, but we can think of it as something like this:</p>
+<pre class="calibre28"><code class="calibre9">def quadraticExample(someData):  # n is the size of someData
+    for i in someData:           # n steps
+        for j in someData:       # n steps
+            print('Something')   # 1 step
+            print('Something')   # 1 step
+            print('Something')   # 1 step
+
+def linearExample(someData):     # n is the size of someData
+    for i in someData:           # n steps
+        for k in range(1000):    # 1 * 1000 steps
+            print('Something')   # (Already counted)</code></pre>
+<p class="calibre23">The <code class="calibre9">linearExample()</code> function has a large coefficient (1,000) compared to the coefficient (3) of <code class="calibre9">quadraticExample()</code>. If the size of the input <em class="calibre10">n</em> is 10, the O(n<sup class="calibre53">2</sup>) function appears faster with only 300 steps compared to the O(n) function with 10,000 steps.</p>
+<p class="calibre23">But big O notation is chiefly concerned with the algorithm’s performance as the workload scales up. When <em class="calibre10">n</em> reaches the size of 334 or greater, the <code class="calibre9">quadraticExample()</code> function will always be slower than the <code class="calibre9"></code><span type="pagebreak" title="239" id="calibre_link-574" class="calibre16"></span>linearExample() function. Even if <code class="calibre9">linearExample()</code> were 1,000,000<em class="calibre10">n</em> steps, the <code class="calibre9">quadraticExample()</code> function would still become slower once <em class="calibre10">n</em> reached 333,334. At some point, an O(n<sup class="calibre53">2</sup>) operation always becomes slower than an O(n) or lower operation. To see how, look at the big O graph shown in <a id="calibre_link-703" href="#calibre_link-340" class="calibre19">Figure 13-3</a>. This graph features all the major big O notation orders. The x-axis is <em class="calibre10">n</em>, the size of the data, and the y-axis is the runtime needed to carry out the operation.</p>
+<figure class="calibre29">
+<img src="images/000035.png" alt="f13003" class="calibre15" />
+<figcaption class="calibre30"><p class="calibre31"><a id="calibre_link-340" href="#calibre_link-703" class="calibre19">Figure 13-3:</a> The graph of the big O orders</p></figcaption>
+</figure>
+<p class="calibre23">As you can see, the runtime of the higher orders grows at a faster rate than that of the lower orders. Although the lower orders could have large coefficients that make them temporarily larger than the higher orders, the higher orders eventually outpace them.</p>
+<h3 id="calibre_link-258" class="calibre27">Big O Analysis Examples</h3>
+<p class="bodyfirst">Let’s determine the big O orders of some example functions. In these examples, we’ll use a parameter named <code class="calibre9">books</code> that is a list of strings of book titles.</p>
+<p class="calibre23">The <code class="calibre9">countBookPoints()</code> function calculates a score based on the number of <code class="calibre9">books</code> in the books list. Most books are worth one point, and books by a certain author are worth two points:</p>
+<pre class="calibre28"><code class="calibre9">def countBookPoints(books):
+    points = 0          # 1 step
+    for book in books:  # n * steps in the loop
+        points += 1     # 1 step
+
+    for book in books:                # n * steps in the loop
+        if 'by Al Sweigart' in book:  # 1 step
+            points += 1               # 1 step
+    return points                     # 1 step</code></pre>
+<p class="calibre23"><span type="pagebreak" title="240" id="calibre_link-575" class="calibre16"></span>The number of steps comes to 1 + (<em class="calibre10">n</em> × 1) + (<em class="calibre10">n</em> × 2) + 1, which becomes 3<em class="calibre10">n</em> + 2 after combining the like terms. Once we drop the lower orders and coefficients, this becomes O(n), or linear complexity, no matter if we loop through <code class="calibre9">books</code> once, twice, or a billion times.</p>
+<p class="calibre23">So far, all examples that used a single loop have had linear complexity, but notice that these loops iterated <em class="calibre10">n</em> times. As you’ll see in the next example, a loop in your code alone doesn’t imply linear complexity, although a loop that iterates over your data does.</p>
+<p class="calibre23">This <code class="calibre9">iLoveBooks()</code> function prints “I LOVE BOOKS!!!” and “BOOKS ARE GREAT!!!” 10 times:</p>
+<pre class="calibre28"><code class="calibre9">def iLoveBooks(books):
+    for i in range(10):              # 10 * steps in the loop
+        print('I LOVE BOOKS!!!')     # 1 step
+        print('BOOKS ARE GREAT!!!')  # 1 step</code></pre>
+<p class="calibre23">This function has a <code class="calibre9">for</code> loop, but it doesn’t loop over the <code class="calibre9">books</code> list, and it performs 20 steps no matter what the size of <code class="calibre9">books</code> is. We can rewrite this as 20(1). After dropping the 20 coefficient, we are left with O(1), or constant time complexity. This makes sense; the function takes the same amount of time to run, no matter what <em class="calibre10">n</em>, the size of the <code class="calibre9">books</code> list, is.</p>
+<p class="calibre23">Next, we have a <code class="calibre9">cheerForFavoriteBook()</code> function that searches through the <code class="calibre9">books</code> list to look for a favorite book:</p>
+<pre class="calibre28"><code class="calibre9">def cheerForFavoriteBook(books, favorite):
+    for book in books:                            # n * steps in the loop
+        print(book)                               # 1 step
+        if book == favorite:                      # 1 step
+            for i in range(100):                  # 100 * steps in the loop
+                print('THIS IS A GREAT BOOK!!!')  # 1 step</code></pre>
+<p class="calibre23">The <code class="calibre9">for book</code> loop iterates over the <code class="calibre9">books</code> list, which requires <em class="calibre10">n</em> steps multiplied by the steps inside the loop. This loop includes a nested <code class="calibre9">for i</code> loop, which iterates 100 times. This means the <code class="calibre9">for book</code> loop runs 102 × <em class="calibre10">n</em>, or 102<em class="calibre10">n</em> steps. After dropping the coefficient, we find that <code class="calibre9">cheerForFavoriteBook()</code> is still just an O(n) linear operation. This 102 coefficient might seem rather large to just ignore, but consider this: if <code class="calibre9">favorite</code> never appears in the <code class="calibre9">books</code> list, this function would only run 1<em class="calibre10">n</em> steps. The impact of coefficients can vary so wildly that they aren’t very meaningful.</p>
+<p class="calibre23">Next, the <code class="calibre9">findDuplicateBooks()</code> function searches through the <code class="calibre9">books</code> list (a linear operation) once for each book (another linear operation):</p>
+<pre class="calibre28"><code class="calibre9">def findDuplicateBooks(books):
+    for i in range(books):  # n steps
+        for j in range(i + 1, books):          # n steps
+            if books[i] == books[j]:           # 1 step
+                print('Duplicate:', books[i])  # 1 step</code></pre>
+<p class="calibre23">The <code class="calibre9">for i</code> loop iterates over the entire <code class="calibre9">books</code> list, performing the steps inside the loop <em class="calibre10">n</em> times. The <code class="calibre9">for j</code> loop also iterates over a portion of the <code class="calibre9"></code><span type="pagebreak" title="241" id="calibre_link-576" class="calibre16"></span>books list, although because we drop coefficients, this also counts as a linear time operation. This means the <code class="calibre9">for i</code> loop performs <em class="calibre10">n</em> × <em class="calibre10">n</em> operations&mdash;that is, <em class="calibre10">n</em><sup class="calibre53">2</sup>. This makes <code class="calibre9">findDuplicateBooks()</code> an O(n<sup class="calibre53">2</sup>) polynomial time operation.</p>
+<p class="calibre23">Nested loops alone don’t imply a polynomial operation, but nested loops where both loops iterate <em class="calibre10">n</em> times do. These result in <em class="calibre10">n</em><sup class="calibre53">2</sup> steps, implying an O(n<sup class="calibre53">2</sup>) operation.</p>
+<p class="calibre23">Let’s look at a challenging example. The binary search algorithm mentioned earlier works by searching the middle of a sorted list (we’ll call it the <code class="calibre9">haystack</code>) for an item (we’ll call it the <code class="calibre9">needle</code>). If we don’t find the <code class="calibre9">needle</code> there, we’ll proceed to search the previous or latter half of the <code class="calibre9">haystack</code>, depending on which half we expect to find the <code class="calibre9">needle</code> in. We’ll repeat this process, searching smaller and smaller halves until either we find the <code class="calibre9">needle</code> or we conclude it isn’t in the <code class="calibre9">haystack</code>. Note that binary search only works if the items in the <code class="calibre9">haystack</code> are in sorted order.</p>
+<pre class="calibre28"><code class="calibre9">def binarySearch(needle, haystack):
+    if not len(haystack):                        # 1 step
+        return None                              # 1 step
+    startIndex = 0                               # 1 step
+    endIndex = len(haystack) - 1                 # 1 step
+
+    haystack.sort()                              # ??? steps
+
+    while start &lt;= end:  # ??? steps
+        midIndex = (startIndex + endIndex) // 2  # 1 step
+        if haystack[midIndex] == needle:         # 1 step
+            # Found the needle.
+            return midIndex                      # 1 step
+        elif needle &lt; haystack[midIndex]:        # 1 step
+            # Search the previous half.
+            endIndex = midIndex - 1              # 1 step
+        elif needle &gt; haystack[mid]:             # 1 step
+            # Search the latter half.
+            startIndex = midIndex + 1            # 1 step</code></pre>
+<p class="calibre23">Two of the lines in <code class="calibre9">binarySearch()</code> aren’t easy to count. The <code class="calibre9">haystack.sort()</code> method call’s big O order depends on the code inside Python’s <code class="calibre9">sort()</code> method. This code isn’t very easy to find, but you can look up its big O order on the internet to learn that it’s O(n log n). (All general sorting functions are, at best, O(n log n).) We’ll cover the big O order of several common Python functions and methods in “The Big O Order of Common Function Calls” later in this chapter.</p>
+<p class="calibre23">The <code class="calibre9">while</code> loop isn’t as straightforward to analyze as the <code class="calibre9">for</code> loops we’ve seen. We must understand the binary search algorithm to determine how many iterations this loop has. Before the loop, the <code class="calibre9">startIndex</code> and <code class="calibre9">endIndex</code> cover the entire range of <code class="calibre9">haystack</code>, and <code class="calibre9">midIndex</code> is set to the midpoint of this range. On each iteration of the <code class="calibre9">while</code> loop, one of two things happens. If <code class="calibre9">haystack[midIndex] == needle</code>, we know we’ve found the <code class="calibre9">needle</code>, and the function returns the index of  the <code class="calibre9">needle</code> in <code class="calibre9">haystack</code>. If <code class="calibre9">needle &lt; haystack[midIndex]</code> or <code class="calibre9">needle &gt; haystack[midIndex]</code>, the range covered by <code class="calibre9">startIndex</code> and <code class="calibre9">endIndex</code><span type="pagebreak" title="242" id="calibre_link-577" class="calibre16"></span>is halved, either by adjusting <code class="calibre9">startIndex</code> or adjusting <code class="calibre9">endIndex</code>. The number of times we can divide any list of size <em class="calibre10">n</em> in half is log<sub class="calibre54">2</sub>(<em class="calibre10">n</em>). (Unfortunately, this is simply a mathematical fact that you’d be expected to know.) Thus, the <code class="calibre9">while</code> loop has a big O order of O(log n).</p>
+<p class="calibre23">But because the O(n log n) order of the <code class="calibre9">haystack.sort()</code> line is higher than O(log n), we drop the lower O(log n) order, and the big O order of the <em class="calibre10">entire</em><code class="calibre9">binarySearch()</code> function becomes O(n log n). If we can guarantee that <code class="calibre9">binarySearch()</code> will only ever be called with a sorted list for <code class="calibre9">haystack</code>, we can remove the <code class="calibre9">haystack.sort()</code> line and make <code class="calibre9">binarySearch()</code> an O(log n) function. This technically improves the function’s efficiency but doesn’t make the overall program more efficient, because it just moves the required sorting work to some other part of the program. Most binary search implementations leave out the sorting step and therefore the binary search algorithm is said to have O(log n) logarithmic complexity.</p>
+<h3 id="calibre_link-259" class="calibre27">The Big O Order of Common Function Calls</h3>
+<p class="bodyfirst">Your code’s big O analysis must consider the big O order of any functions it calls. If you wrote the function, you can just analyze your own code. But to find the big O order of Python’s built-in functions and methods, you’ll have to consult lists like the following.</p>
+<p class="calibre23">This list contains the big O orders of some common Python operations for sequence types, such as strings, tuples, and lists:</p>
+<ol class="none">
+<li class="calibre11"><span class="runinhead"><code class="bold">s[i] reading and s[i] = value assignment</code>  </span>O(1) operations.</li>
+<li class="calibre11"><span class="runinhead"><code class="bold">s.append(value)  </code></span>An O(1) operation.</li>
+<li class="calibre11"><span class="runinhead"><code class="bold">s.insert(i, value)  </code></span>An O(n) operation. Inserting values into a sequence (especially at the front) requires shifting all the items at indexes above <code class="calibre9">i</code> up by one place in the sequence.</li>
+<li class="calibre11"><span class="runinhead"><code class="bold">s.remove(value)  </code></span>An O(n) operation. Removing values from a sequence (especially at the front) requires shifting all the items at indexes above <code class="calibre9">I</code> down by one place in the sequence.</li>
+<li class="calibre11"><span class="runinhead"><code class="bold">s.reverse()  </code></span>An O(n) operation, because every item in the sequence must be rearranged.</li>
+<li class="calibre11"><span class="runinhead"><code class="bold">s.sort()  </code></span>An O(n log n) operation, because Python’s sorting algorithm is O(n log n).</li>
+<li class="calibre11"><span class="runinhead"><code class="bold">value in s  </code></span>An O(n) operation, because every item must be checked.</li>
+<li class="calibre11"><span class="runinhead"><code class="bold">for value in s:  </code></span>An O(n) operation.</li>
+<li class="calibre11"><span class="runinhead"><code class="bold">len(s)  </code></span>An O(1) operation, because Python keeps track of how many items are in a sequence so it doesn’t need to recount them when passed to <code class="calibre9">len()</code>.</li>
+</ol>
+<p class="calibre23">This list contains the big O orders of some common Python operations for mapping types, such as dictionaries, sets, and frozensets:</p>
+<ol class="none">
+<li class="calibre11"><span class="runinhead"><code class="bold">m[key] reading and m[key] = value assignment  </code></span>O(1) operations.</li>
+<li class="calibre11"><span class="runinhead"><code class="bold">m.add(value)  </code></span>An O(1) operation.</li>
+<li class="calibre11"><span type="pagebreak" title="243" id="calibre_link-578" class="calibre16"></span><span class="runinhead"><code class="bold">value in m   </code></span>An O(1) operation for dictionaries, which is much faster than using <code class="calibre9">in</code> with sequences.</li>
+<li class="calibre11"><span class="runinhead"><code class="bold">for key in m:  </code></span>An O(n) operation.</li>
+<li class="calibre11"><span class="runinhead"><code class="bold">len(m)  </code></span>An O(1) operation, because Python keeps track of how many items are in a mapping, so it doesn’t need to recount them when passed to <code class="calibre9">len()</code>.</li>
+</ol>
+<p class="calibre23">Although a list generally has to search through its items from start to finish, dictionaries use the key to calculate the address, and the time needed to look up the key’s value remains constant. This calculation is called a <span class="keycaps">hashing algorithm</span>, and the address is called a <span class="keycaps">hash</span>. Hashing is beyond the scope of this book, but it’s the reason so many of the mapping operations are O(1) constant time. Sets also use hashing, because sets are essentially dictionaries with keys only instead of key-value pairs.</p>
+<p class="calibre23">But keep in mind that converting a list to a set is an O(n) operation, so you don’t achieve any benefit by converting a list to a set and then accessing the items in the set.</p>
+<h3 id="calibre_link-260" class="calibre27">Analyzing Big O at a Glance</h3>
+<p class="bodyfirst">Once you’ve become familiar with performing big O analysis, you usually won’t need to run through each of the steps. After a while you’ll be able to just look for some telltale features in the code to quickly determine the big O order.</p>
+<p class="calibre23">Keeping in mind that <em class="calibre10">n</em> is the size of the data the code operates on, here are some general rules you can use:</p>
+<ul class="calibre36">
+<li class="calibre11">If the code doesn’t access any of the data, it’s O(1).</li>
+<li class="calibre11">If the code loops over the data, it’s O(n).</li>
+<li class="calibre11">If the code has two nested loops that each iterate over the data, it’s O(n<sup class="calibre53">2</sup>).</li>
+<li class="calibre11">Function calls don’t count as one step but rather the total steps of the code inside the function. See “Big O Order of Common Function Calls” on page 242.</li>
+<li class="calibre11">If the code has a <span class="keycaps">divide and conquer</span> step that repeatedly halves the data, it’s O(log n).</li>
+<li class="calibre11">If the code has a <span class="keycaps">divide and conquer</span> step that is done once per item in the data, it’s an O(n log n).</li>
+<li class="calibre11">If the code goes through every possible combination of values in the <em class="calibre10">n</em> data, it’s O(2<sup class="calibre53">n</sup>), or some other exponential order.</li>
+<li class="calibre11">If the code goes through every possible permutation (that is, ordering) of the values in the data, it’s O(n!).</li>
+<li class="calibre11">If the code involves sorting the data, it will be at least O(n log n).</li>
+</ul>
+<p class="calibre23">These rules are good starting points. But they’re no substitute for actual big O analysis. Keep in mind that big O order isn’t the final <span type="pagebreak" title="244" id="calibre_link-579" class="calibre16"></span>judgment on whether code is slow, fast, or efficient. Consider the following <code class="calibre9">waitAnHour()</code> function:</p>
+<pre class="calibre28"><code class="calibre9">import time
+def waitAnHour():
+    time.sleep(3600)</code></pre>
+<p class="calibre23">Technically, the <code class="calibre9">waitAnHour()</code> function is O(1) constant time. We think of constant time code as fast, yet its runtime is one hour! Does that make this code inefficient? No: it’s hard to see how you could have programmed a <code class="calibre9">waitAnHour()</code> function that runs faster than, well, one hour.</p>
+<p class="calibre23">Big O isn’t a replacement for profiling your code. The point of big O notation is to give you insights as to how the code will perform under increasing amounts of input data.</p>
+<h3 id="calibre_link-261" class="calibre27">Big O Doesn’t Matter When n Is Small, and n Is Usually Small</h3>
+<p class="bodyfirst">Armed with the knowledge of big O notation, you might be eager to analyze every piece of code you write. Before you start using this tool to hammer every nail in sight, keep in mind that big O notation is most useful when there is a large amount of data to process. In real-world cases, the amount of data is usually small.</p>
+<p class="calibre23">In those situations, coming up with elaborate, sophisticated algorithms with lower big O orders might not be worth the effort. Go programming language designer Rob Pike has five rules about programming, one of which is: “Fancy algorithms are slow when ‘n’ is small, and ‘n’ is usually small.” Most software developers won’t be dealing with massive data centers or complex calculations but rather more mundane programs. In these circumstances, running your code under a profiler will yield more concrete information about the code’s performance than big O analysis.</p>
+<h2 id="calibre_link-262" class="calibre7">Summary</h2>
+<p class="bodyfirst">The Python standard library comes with two modules for profiling: <code class="calibre9">timeit</code> and <code class="calibre9">cProfile</code>. The <code class="calibre9">timeit.timeit()</code> function is useful for running small snippets of code to compare the speed difference between them. The <code class="calibre9">cProfile.run()</code> function compiles a detailed report on larger functions and can point out any bottlenecks.</p>
+<p class="calibre23">It’s important to measure the performance of your code rather than make assumptions about it. Clever tricks to speed up your program might actually slow it down. Or you might spend lots of time optimizing what turns out to be an insignificant aspect of your program. Amdahl’s Law captures this mathematically. The formula describes how a speed-up to one component affects the speed-up of the overall program.</p>
+<p class="calibre23">Big O is the most widely used practical concept in computer science for programmers. It requires a bit of math to understand, but the underlying concept of figuring out how code slows as data grows can describe algorithms without requiring significant number crunching.</p>
+<p class="calibre23"><span type="pagebreak" title="245" id="calibre_link-580" class="calibre16"></span>There are seven common orders of big O notation: O(1), or constant time, describes code that doesn’t change as the size of the data <em class="calibre10">n</em> grows; O(log n), or logarithmic time, describes code that increases by one step as the <em class="calibre10">n</em> data doubles in size; O(n), or linear time, describes code that slows in proportion to the <em class="calibre10">n</em> data’s growth; O(n log n), or n-log-n time, describes code that is a bit slower than O(n), and many sorting algorithms have this order.</p>
+<p class="calibre23">The higher orders are slower, because their runtime grows much faster than the size of their input data: O(n<sup class="calibre53">2</sup>), or polynomial time, describes code whose runtime increases by the square of the <em class="calibre10">n</em> input; O(2<sup class="calibre53">n</sup>), or exponential time, and O(n!), or factorial time, orders are uncommon, but come up when combinations or permutations are involved, respectively.</p>
+<p class="calibre23">Keep in mind that although big O is a helpful analysis tool, it isn’t a substitute for running your code under a profiler to find out where any bottlenecks are. But an awareness of big O notation and how code slows as data grows can help you avoid writing code that is orders slower than it needs to be.</p>
+</section>
+</div>
+

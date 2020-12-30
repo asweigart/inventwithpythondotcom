@@ -1,0 +1,475 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Chapter 1: The Interactive Shell</title></head><body style="background-color: #fffeee;">
+
+<script type="text/javascript">
+//<![CDATA[
+
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5459430-3']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
+//]]>
+</script>
+
+
+<div style="background-color: #eeeddd; float: right; height: 310px; font-family: sans-serif;" id="otherbooks">
+  <a href="#" onclick="document.getElementById('otherbooks').outerHTML='';" style="vertical-align: top;">(close)</a><br />
+
+  <a target="_blank" href="https://nostarch.com/automatestuff2" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_automate.link');"><img src="/images/cover_automate2_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/beyond-basic-stuff-python" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_beyond.link');"><img src="/images/cover_beyond_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/inventwithpython" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_invent.link');"><img src="/images/cover_invent4th_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://www.amazon.com/Making-Games-Python-Pygame-Sweigart/dp/1469901730?ie=UTF8&amp;tag=playwithpyth-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1469901730" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_pygame.link');"><img src="/images/cover_makinggames_thumb.png" style="height: 200px; border: solid black 1px; /"></a>
+  <a target="_blank" href="https://nostarch.com/crackingcodes" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_hacking.link');"><img src="/images/cover_crackingcodes_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/scratchplayground"><img src="/images/cover_scratchprogrammingplayground_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/codingwithminecraft"><img src="/images/cover_codingwithminecraft_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <br />
+  <a href="https://inventwithpython.com/automateudemy">Use this link to get 70% off the Automate the Boring Stuff online video course.</a><br />
+  <a href="https://www.patreon.com/AlSweigart">Support me on Patreon</a>
+</div>
+
+<a href="chapter14.html">Prev: Chapter 14 - Practice Projects</a> | <a href="chapter16.html">Next: Chapter 16 - Object-Oriented Programming and Inheritance</a>
+
+
+
+<div type="bodymatter part" class="calibre1" id="calibre_link-22">
+<section class="toclist">
+<header class="calibre12">
+<h1 class="chaptertitle">
+<span class="partnumber"><span type="pagebreak" title="275" id="calibre_link-608" class="calibre26"></span>15</span><br class="calibre18" />
+<span class="parttitle1">Object-Oriented Programming and Classes</span>
+</h1>
+</header>
+<figure class="opener"><img src="images/000017.png" alt="" class="calibre15" /></figure><p class="chapterintro"><em class="calibre10">OOP</em> is a programming language feature that allows you to group variables and functions together into new data types, called <em class="calibre10">classes</em>, from which you can create objects. By organizing your code into classes, you can break down a monolithic program into smaller parts that are easier to understand and debug. </p>
+<p class="calibre22">For small programs, OOP doesn’t add organization so much as it adds bureaucracy. Although some languages, such as Java, require you to organize all your code into classes, Python’s OOP features are optional. Programmers can take advantage of classes if they need them or ignore them if they don’t. Python core developer Jack Diederich’s PyCon 2012 talk, “Stop Writing Classes” (<a href="https://youtu.be/o9pEzgHorH0/" class="calibre19">https://youtu.be/o9pEzgHorH0/</a>), points out many cases where programmers write classes when a simpler function or module would have worked better.</p>
+<p class="calibre23"><span type="pagebreak" title="276" id="calibre_link-609" class="calibre16"></span>That said, as a programmer, you should be familiar with the basics of what classes are and how they work. In this chapter, you’ll learn what classes are, why they’re used in programs, and the syntax and programming concepts behind them. OOP is a broad topic, and this chapter acts only as an introduction.</p>
+<h2 id="calibre_link-274" class="calibre7">Real-World Analogy: Filling Out a Form</h2>
+<p class="bodyfirst">You’ve most likely had to fill out paper or electronic forms numerous times in your life: for doctor’s visits, for online purchases, or to RSVP to a wedding. Forms exist as a uniform way for another person or organization to collect the information they need about you. Different forms ask for different kinds of information. You would report a sensitive medical condition on a doctor’s form, and you would report any guests you’re bringing on a wedding RSVP, but not the other way around.</p>
+<p class="calibre23">In Python, <em class="calibre10">class</em>, <em class="calibre10">type</em>, and <em class="calibre10">data type</em> have the same meaning. Like a paper or electronic form, a <em class="calibre10">class</em> is a blueprint for Python <em class="calibre10">objects</em> (also called <em class="calibre10">instances</em>), which contain the data that represents a noun. This noun could be a doctor’s patient, an ecommerce purchase, or a wedding guest. Classes are like a blank form template, and the objects created from that class are like filled-out forms that contain actual data about the kind of thing the form represents. For example, in <a id="calibre_link-24" href="#calibre_link-23" class="calibre19">Figure 15-1</a>, the RSVP response form is like a class, whereas the filled-out RSVP is like an object.</p>
+<figure class="calibre29">
+<img src="images/000020.png" alt="f15001" class="calibre15" />
+<figcaption class="calibre30"><p class="calibre31"><a id="calibre_link-23" href="#calibre_link-24" class="calibre19">Figure 15-1:</a> Wedding RSVP form templates are like classes, and filled-out forms are like objects.</p></figcaption>
+</figure>
+<p class="calibre23">You can also think of classes and objects as spreadsheets, as in <a id="calibre_link-26" href="#calibre_link-25" class="calibre19">Figure 15-2</a>.</p>
+<span type="pagebreak" title="277" id="calibre_link-610" class="calibre16"></span><figure class="calibre29">
+<img src="images/000008.png" alt="f15002" class="calibre15" />
+<figcaption class="calibre30"><p class="calibre31"><a id="calibre_link-25" href="#calibre_link-26" class="calibre19">Figure 15-2:</a> A spreadsheet of all RSVP data</p></figcaption>
+</figure>
+<p class="calibre23">The column headers would make up the class, and the individual rows would each make up an object.</p>
+<p class="calibre23">Classes and objects are often talked about as data models of items in the real world, but don’t confuse the map for the territory. What goes into the class depends on what the program needs to do. <a id="calibre_link-28" href="#calibre_link-27" class="calibre19">Figure 15-3</a> shows some objects of different classes that represent the same real-world person, and other than the person’s name, they store completely different information.</p>
+<figure class="calibre29">
+<img src="images/000001.png" alt="f15003" class="calibre15" />
+<figcaption class="calibre30"><p class="calibre31"><a id="calibre_link-27" href="#calibre_link-28" class="calibre19">Figure 15-3:</a> Four objects made from different classes that represent the same real-world person, depending on what the software application needs to know about the person</p></figcaption>
+</figure>
+<p class="calibre23"><span type="pagebreak" title="278" id="calibre_link-611" class="calibre16"></span>Also, the information contained in your classes should depend on your program’s needs. Many OOP tutorials use a <code class="calibre9">Car</code> class as their basic example without noting that what goes into a class depends entirely on the kind of software you’re writing. There’s no such thing as a generic <code class="calibre9">Car</code> class that would <em class="calibre10">obviously</em> have a <code class="calibre9">honkHorn()</code> method or a <code class="calibre9">numberOfCupholders</code> attribute just because those are characteristics real-world cars have. Your program might be for a car dealership web app, a car racing video game, or a road traffic simulation. The car dealership web app’s <code class="calibre9">Car</code> class might have <code class="calibre9">milesPerGallon</code> or <code class="calibre9">manufacturersSuggestedRetailPrice</code> attributes (just as a car dealership’s spreadsheets might use these as columns). But the video game and road traffic simulation wouldn’t have these attributes, because this information isn’t relevant to them. The video game’s <code class="calibre9">Car</code> class might have an <code class="calibre9">explodeWithLargeFireball()</code> method, but the car dealership and traffic simulation, hopefully, would not.</p>
+<h2 id="calibre_link-275" class="calibre7">Creating Objects from Classes</h2>
+<p class="bodyfirst">You’ve already used classes and objects in Python, even if you haven’t created classes yourself. Consider the <code class="calibre9">datetime</code> module, which contains a class named <code class="calibre9">date</code>. Objects of the <code class="calibre9">datetime.date</code> class (also simply called <code class="calibre9">datetime.date</code> objects or <code class="calibre9">date</code> objects) represent a specific date. Enter the following in the interactive shell to create an object of the <code class="calibre9">datetime.date</code> class:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">import datetime</b>
+&gt;&gt;&gt; <b class="calibre25">birthday = datetime.date(1999, 10, 31)</b> # Pass the year, month, and day.
+&gt;&gt;&gt; <b class="calibre25">birthday.year</b>
+1999
+&gt;&gt;&gt; <b class="calibre25">birthday.month</b>
+10
+&gt;&gt;&gt; <b class="calibre25">birthday.day</b>
+31
+&gt;&gt;&gt; <b class="calibre25">birthday.weekday()</b> # weekday() is a method; note the parentheses.
+6</code></pre>
+<p class="calibre23"><em class="calibre10">Attributes</em> are variables associated with objects. The call to <code class="calibre9">datetime.date()</code> creates a new <code class="calibre9">date</code> object, initialized with the arguments <code class="calibre9">1999</code>, <code class="calibre9">10</code>, <code class="calibre9">31</code> so the object represents the date October 31, 1999. We assign these arguments as the <code class="calibre9">date</code> class’s <code class="calibre9">year</code>, <code class="calibre9">month</code>, and <code class="calibre9">day</code> attributes, which all <code class="calibre9">date</code> objects have.</p>
+<p class="calibre23">With this information, the class’s <code class="calibre9">weekday()</code> method can calculate the day of the week. In this example, it returns <code class="calibre9">6</code> for Sunday, because according to Python’s online documentation, the return value of <code class="calibre9">weekday()</code> is an integer that starts at <code class="calibre9">0</code> for Monday and goes to <code class="calibre9">6</code> for Sunday. The documentation lists several other methods that objects of the <code class="calibre9">date</code> class have. Even though the <code class="calibre9">date</code> object contains multiple attributes and methods, it’s still a single object that you can store in a variable, such as <code class="calibre9">birthday</code> in this example.</p>
+<h2 id="calibre_link-276" class="calibre7"><span type="pagebreak" title="279" id="calibre_link-612" class="calibre20"></span>Creating a Simple Class: WizCoin</h2>
+<p class="bodyfirst">Let’s create a <code class="calibre9">WizCoin</code> class, which represents a number of coins in a fictional wizard currency. In this currency, the denominations are knuts, sickles (worth 29 knuts), and galleons (worth 17 sickles or 493 knuts). Keep in mind that the objects in the <code class="calibre9">WizCoin</code> class represent a quantity of coins, not an amount of money. For example, it will inform you that you’re holding five quarters and one dime rather than $1.35.</p>
+<p class="calibre23">In a new file named <em class="calibre10">wizcoin.py</em>, enter the following code to create the <code class="calibre9">WizCoin</code> class. Note that the <code class="calibre9">__init__</code> method name has two underscores before and after <code class="calibre9">init </code>(we’ll discuss <code class="calibre9">__init__</code> in “Methods, __init__(), and self” later in this chapter):</p>
+<pre class="calibre28"><code class="calibre9"><span class="codeannotationhang">1</span> class WizCoin:
+<span class="codeannotationhang">2</span>     def __init__(self, galleons, sickles, knuts):
+        """Create a new WizCoin object with galleons, sickles, and knuts."""
+        self.galleons = galleons
+        self.sickles  = sickles
+        self.knuts    = knuts
+        # NOTE: __init__() methods NEVER have a return statement.
+
+<span class="codeannotationhang">3</span>     def value(self):
+        """The value (in knuts) of all the coins in this WizCoin object."""
+        return (self.galleons * 17 * 29) + (self.sickles * 29) + (self.knuts)
+
+<span class="codeannotationhang">4</span>     def weightInGrams(self):
+        """Returns the weight of the coins in grams."""
+        return (self.galleons * 31.103) + (self.sickles * 11.34) + (self.knuts * 5.0)</code></pre>
+<p class="calibre23">This program defines a new class called <code class="calibre9">WizCoin</code> using a <code class="calibre9">class</code> statement <span class="codeannotation">1</span>. Creating a class creates a new type of object. Using a <code class="calibre9">class</code> statement to define a class is similar to <code class="calibre9">def</code> statements that define new functions. Inside the block of code following the <code class="calibre9">class</code> statement are the definitions for three methods: <code class="calibre9">__init__()</code> (short for <em class="calibre10">initializer</em>) <span class="codeannotation">2</span>, <code class="calibre9">value()</code> <span class="codeannotation">3</span>, and <code class="calibre9">weightInGrams()</code> <span class="codeannotation">4</span>. Note that all methods have a first parameter named <code class="calibre9">self</code>, which we’ll explore in the next section.</p>
+<p class="calibre23">As a convention, module names (like <code class="calibre9">wizcoin</code> in our <em class="calibre10">wizcoin.py</em> file) are lowercase, whereas class names (like <code class="calibre9">WizCoin</code>) begin with an uppercase letter. Unfortunately, some classes in the Python Standard Library, such as <code class="calibre9">date</code>, don’t follow this convention.</p>
+<p class="calibre23">To practice creating new objects of the <code class="calibre9">WizCoin</code> class, enter the following source code in a separate file editor window and save the file as <em class="calibre10">wcexample1.py</em> in the same folder as <em class="calibre10">wizcoin.py</em>:</p>
+<pre class="calibre28"><code class="calibre9">import wizcoin
+
+<span class="codeannotationhang">1</span> purse = wizcoin.WizCoin(2, 5, 99) # The ints are passed to __init__().
+print(purse)
+print('G:', purse.galleons, 'S:', purse.sickles, 'K:', purse.knuts)
+print('Total value:', purse.value())
+print('Weight:', purse.weightInGrams(), 'grams')
+<span type="pagebreak" title="280" id="calibre_link-613" class="calibre16"></span>
+print()
+
+<span class="codeannotationhang">2</span> coinJar = wizcoin.WizCoin(13, 0, 0) # The ints are passed to __init__().
+print(coinJar)
+print('G:', coinJar.galleons, 'S:', coinJar.sickles, 'K:', coinJar.knuts)
+print('Total value:', coinJar.value())
+print('Weight:', coinJar.weightInGrams(), 'grams')</code></pre>
+<p class="calibre23">The calls to <code class="calibre9">WizCoin()</code> <span class="codeannotation">1</span> <span class="codeannotation">2</span> create a <code class="calibre9">WizCoin</code> object and run the code in the <code class="calibre9">__init__()</code> method for them. We pass in three integers as arguments to <code class="calibre9">WizCoin()</code>, which are forwarded to the parameters of <code class="calibre9">__init__()</code>. These arguments are assigned to the object’s <code class="calibre9">self.galleons</code>, <code class="calibre9">self.sickles</code>, and <code class="calibre9">self.knuts</code> attributes. Note that, just as the <code class="calibre9">time.sleep()</code> function requires you to first import the <code class="calibre9">time</code> module and put <code class="calibre9">time.</code> before the function name, we must also import <code class="calibre9">wizcoin</code> and put <code class="calibre9">wizcoin.</code> before the <code class="calibre9">WizCoin()</code> function name.</p>
+<p class="calibre23">When you run this program, the output will look something like this:</p>
+<pre class="calibre28"><code class="calibre9">&lt;wizcoin.WizCoin object at 0x000002136F138080&gt;
+G: 2 S: 5 K: 99
+Total value: 1230
+Weight: 613.906 grams
+
+&lt;wizcoin.WizCoin object at 0x000002136F138128&gt;
+G: 13 S: 0 K: 0
+Total value: 6409
+Weight: 404.339 grams</code></pre>
+<p class="calibre23">If you get an error message, such as <code class="calibre9">ModuleNotFoundError: No module named 'wizcoin'</code>, check to make sure that your file is named <em class="calibre10">wizcoin.py</em> and that it’s in the same folder as <em class="calibre10">wcexample1.py</em>.</p>
+<p class="calibre23">The <code class="calibre9">WizCoin</code> objects don’t have useful string representations, so printing <code class="calibre9">purse</code> and <code class="calibre9">coinJar</code> displays a memory address in between angle brackets. (You’ll learn how to change this in Chapter 17.)</p>
+<p class="calibre23">Just as we can call the <code class="calibre9">lower()</code> string method on a string object, we can call the <code class="calibre9">value()</code> and <code class="calibre9">weightInGrams()</code> methods on the <code class="calibre9">WizCoin</code> objects we’ve assigned to the <code class="calibre9">purse</code> and <code class="calibre9">coinJar</code> variables. These methods calculate values based on the object’s <code class="calibre9">galleons</code>, <code class="calibre9">sickles</code>, and <code class="calibre9">knuts</code> attributes.</p>
+<p class="calibre23">Classes and OOP can lead to more <em class="calibre10">maintainable</em> code&mdash;that is, code that is easier to read, modify, and extend in the future. Let’s explore this class’s methods and attributes in more detail.</p>
+<h3 id="calibre_link-277" class="calibre27">Methods, __init__(), and self</h3>
+<p class="bodyfirst"><em class="calibre10">Methods</em> are functions associated with objects of a particular class. Recall that <code class="calibre9">lower()</code> is a string method, meaning that it’s called on string objects. You can call <code class="calibre9">lower()</code> on a string, as in <code class="calibre9">'Hello'.lower()</code>, but you can’t call it on a list, such as <code class="calibre9">['dog', 'cat'].lower()</code>. Also, notice that methods come after the object: the correct code is <code class="calibre9">'Hello'.lower()</code>, not <code class="calibre9">lower('Hello')</code>. Unlike <span type="pagebreak" title="281" id="calibre_link-614" class="calibre16"></span>a method like <code class="calibre9">lower()</code>, a function like <code class="calibre9">len()</code> is not associated with a single data type; you can pass strings, lists, dictionaries, and many other types of objects to <code class="calibre9">len()</code>.</p>
+<p class="calibre23">As you saw in the previous section, we create objects by calling the class name as a function. This function is referred to as a <em class="calibre10">constructor function</em> (or <em class="calibre10">constructor</em>, or abbreviated as <em class="calibre10">ctor</em>, pronounced “see-tore”) because it constructs a new object. We also say the constructor <em class="calibre10">instantiates</em> a new instance of the class.</p>
+<p class="calibre23">Calling the constructor causes Python to create the new object and then run the <code class="calibre9">__init__()</code> method. Classes aren’t required to have an <code class="calibre9">__init__()</code> method, but they almost always do. The <code class="calibre9">__init__()</code> method is where you commonly set the initial values of attributes. For example, recall that the <code class="calibre9">__init__()</code> method of <code class="calibre9">WizCoin</code> looks like the following:</p>
+<pre class="calibre28"><code class="calibre9">    def __init__(self, galleons, sickles, knuts):
+        """Create a new WizCoin object with galleons, sickles, and knuts."""
+        self.galleons = galleons
+        self.sickles  = sickles
+        self.knuts    = knuts
+        # NOTE: __init__() methods NEVER have a return statement.</code></pre>
+<p class="calibre23">When the <em class="calibre10">wcexample1.py</em> program calls <code class="calibre9">WizCoin(2, 5, 99)</code>, Python creates a new <code class="calibre9">WizCoin</code> object and then passes three arguments (<code class="calibre9">2</code>, <code class="calibre9">5</code>, and <code class="calibre9">99</code>) to an <code class="calibre9">__init__()</code> call. But the <code class="calibre9">__init__()</code> method has four parameters: <code class="calibre9">self</code>, <code class="calibre9">galleons</code>, <code class="calibre9">sickles</code>, and <code class="calibre9">knuts</code>. The reason is that all methods have a first parameter named <code class="calibre9">self</code>. When a method is called on an object, the object is automatically passed in for the <code class="calibre9">self</code> parameter. The rest of the arguments are assigned to parameters normally. If you see an error message, such as <code class="calibre9">TypeError: __init__() takes 3 positional arguments but 4 were given</code>, you’ve probably forgotten to add the <code class="calibre9">self</code> parameter to the method’s <code class="calibre9">def</code> statement.</p>
+<p class="calibre23">You don’t have to name a method’s first parameter <code class="calibre9">self</code>; you can name it anything. But using <code class="calibre9">self</code> is conventional, and choosing a different name will make your code less readable to other Python programmers. When you’re reading code, the presence of <code class="calibre9">self</code> as the first parameter is the quickest way you can distinguish methods from functions. Similarly, if your method’s code never needs to use the <code class="calibre9">self</code> parameter, it’s a sign that your method should probably just be a function.</p>
+<p class="calibre23">The <code class="calibre9">2</code>, <code class="calibre9">5</code>, and <code class="calibre9">99</code> arguments of <code class="calibre9">WizCoin(2, 5, 99)</code> aren’t automatically assigned to the new object’s attributes; we need the three assignment statements in <code class="calibre9">__init__()</code> to do this. Often, the <code class="calibre9">__init__()</code> parameters are named the same as the attributes, but the presence of <code class="calibre9">self</code> in <code class="calibre9">self.galleons</code> indicates that it’s an attribute of the object, whereas <code class="calibre9">galleons</code> is a parameter. This storing of the constructor’s arguments in the object’s attributes is a common task for a class’s <code class="calibre9">__init__()</code> method. The <code class="calibre9">datetime.date()</code> call in the previous section did a similar task except the three arguments we passed were for the newly created <code class="calibre9">date</code> object’s <code class="calibre9">year</code>, <code class="calibre9">month</code>, and <code class="calibre9">day</code> attributes.</p>
+<p class="calibre23">You’ve previously called the <code class="calibre9">int()</code>, <code class="calibre9">str()</code>, <code class="calibre9">float()</code>, and <code class="calibre9">bool()</code> functions to convert between data types, such as <code class="calibre9">str(3.1415)</code> returning the string value <code class="calibre9">'3.1415'</code> based on the float value <code class="calibre9">3.1415</code>. Previously, we described these as <span type="pagebreak" title="282" id="calibre_link-615" class="calibre16"></span>functions, but <code class="calibre9">int</code>, <code class="calibre9">str</code>, <code class="calibre9">float</code>, and <code class="calibre9">bool</code> are actually classes, and the <code class="calibre9">int()</code>, <code class="calibre9">str()</code>, <code class="calibre9">float()</code>, and <code class="calibre9">bool()</code> functions are constructor functions that return new integer, string, float, and Boolean objects. Python’s style guide recommends using capitalized camelcase for your class names (like <code class="calibre9">WizCoin</code>), although many of Python’s built-in classes don’t follow this convention.</p>
+<p class="calibre23">Note that calling the <code class="calibre9">WizCoin()</code> construction function returns the new <code class="calibre9">WizCoin</code> object, but the <code class="calibre9">__init__()</code> method never has a <code class="calibre9">return</code> statement with a return value. Adding a return value causes this error: <code class="calibre9">TypeError: __init__() should return None</code>.</p>
+<h3 id="calibre_link-278" class="calibre27">Attributes</h3>
+<p class="bodyfirst"><em class="calibre10">Attributes</em> are variables associated with an object. The Python documentation describes attributes as “any name following a dot.” For example, consider the <code class="calibre9">birthday.year</code> expression in the previous section. The <code class="calibre9">year</code> attribute is a name following a dot.</p>
+<p class="calibre23">Every object has its own set of attributes. When the <em class="calibre10">wcexample1.py</em> program created two <code class="calibre9">WizCoin</code> objects and stored them in the <code class="calibre9">purse</code> and <code class="calibre9">coinJar</code> variables, their attributes had different values. You can access and set these attributes just like any variable. To practice setting attributes, open a new file editor window and enter the following code, saving it as <em class="calibre10">wcexample2.py</em> in the same folder as the <em class="calibre10">wizcoin.py</em> file:</p>
+<pre class="calibre28"><code class="calibre9">import wizcoin
+
+change = wizcoin.WizCoin(9, 7, 20)
+print(change.sickles) # Prints 7.
+change.sickles += 10
+print(change.sickles) # Prints 17.
+
+pile = wizcoin.WizCoin(2, 3, 31)
+print(pile.sickles) # Prints 3.
+pile.someNewAttribute = 'a new attr' # A new attribute is created.
+print(pile.someNewAttribute)</code></pre>
+<p class="calibre23">When you run this program, the output looks like this:</p>
+<pre class="calibre28"><code class="calibre9">7
+17
+3
+a new attr</code></pre>
+<p class="calibre23">You can think of an object’s attributes as similar to a dictionary’s keys. You can read and modify their associated values and assign an object new attributes. Technically, methods are considered attributes of a class, as well.</p>
+<h3 id="calibre_link-279" class="calibre27">Private Attributes and Private Methods</h3>
+<p class="bodyfirst">In languages such as C++ or Java, attributes can be marked as having <em class="calibre10">private access</em>, which means the compiler or interpreter only lets code inside the class’s methods access or modify the attributes of objects of that class. But <span type="pagebreak" title="283" id="calibre_link-616" class="calibre16"></span>in Python, this enforcement doesn’t exist. All attributes and methods are effectively <em class="calibre10">public access</em>: code outside of the class can access and modify any attribute in any object of that class.</p>
+<p class="calibre23">But private access is useful. For example, objects of a <code class="calibre9">BankAccount</code> class could have a <code class="calibre9">balance</code> attribute that only methods of the <code class="calibre9">BankAccount</code> class should have access to.  For those reasons, Python’s convention is to start<em class="calibre10"> private </em>attribute or method names with a single underscore. Technically, there is nothing to stop code outside the class from accessing private attributes and methods, but it’s a best practice to let only the class’s methods access them.</p>
+<p class="calibre23">Open a new file editor window, enter the following code, and save it as <em class="calibre10">privateExample.py</em>. In it, objects of a <code class="calibre9">BankAccount</code> class have private <code class="calibre9">_name</code> and <code class="calibre9">_balance</code> attributes that only the <code class="calibre9">deposit()</code> and <code class="calibre9">withdraw()</code> methods should directly access:</p>
+<pre class="calibre28"><code class="calibre9">class BankAccount:
+    def __init__(self, accountHolder):
+        # BankAccount methods can access self._balance, but code outside of
+        # this class should not:
+<span class="codeannotationhang">1</span>         self._balance = 0
+<span class="codeannotationhang">2</span>         self._name = accountHolder
+        with open(self._name + 'Ledger.txt', 'w') as ledgerFile:
+            ledgerFile.write('Balance is 0\n')
+
+    def deposit(self, amount):
+<span class="codeannotationhang">3 </span>        if amount &lt;= 0:
+            return # Don't allow negative "deposits".
+        self._balance += amount
+<span class="codeannotationhang">4</span>         with open(self._name + 'Ledger.txt', 'a') as ledgerFile:
+            ledgerFile.write('Deposit ' + str(amount) + '\n')
+            ledgerFile.write('Balance is ' + str(self._balance) + '\n')
+
+    def withdraw(self, amount):
+<span class="codeannotationhang">5</span>         if self._balance &lt; amount or amount &lt; 0:
+            return # Not enough in account, or withdraw is negative.
+        self._balance -= amount
+<span class="codeannotationhang">6</span>         with open(self._name + 'Ledger.txt', 'a') as ledgerFile:
+            ledgerFile.write('Withdraw ' + str(amount) + '\n')
+            ledgerFile.write('Balance is ' + str(self._balance) + '\n')
+
+acct = BankAccount('Alice') # We create an account for Alice.
+acct.deposit(120) # _balance can be affected through deposit()
+acct.withdraw(40) # _balance can be affected through withdraw()
+
+# Changing _name or _balance outside of BankAccount is impolite, but allowed:
+<span class="codeannotationhang">7</span> acct._balance = 1000000000
+acct.withdraw(1000)
+
+<span class="codeannotationhang">8</span> acct._name = 'Bob' # Now we're modifying Bob's account ledger!
+acct.withdraw(1000) # This withdrawal is recorded in BobLedger.txt!</code></pre>
+<p class="calibre23"><span type="pagebreak" title="284" id="calibre_link-617" class="calibre16"></span>When you run <em class="calibre10">privateExample.py</em>, the ledger files it creates are inaccurate because we modified the <code class="calibre9">_balance</code> and <code class="calibre9">_name</code> outside the class, which resulted in invalid states. <em class="calibre10">AliceLedger.txt</em> inexplicably has a lot of money in it:</p>
+<pre class="calibre28"><code class="calibre9">Balance is 0
+Deposit 120
+Balance is 120
+Withdraw 40
+Balance is 80
+Withdraw 1000
+Balance is 999999000</code></pre>
+<p class="calibre23">Now there’s a <em class="calibre10">BobLedger.txt</em> file with an inexplicable account balance, even though we never created a <code class="calibre9">BankAccount</code> object for Bob:</p>
+<pre class="calibre28"><code class="calibre9">Withdraw 1000
+Balance is 999998000</code></pre>
+<p class="calibre23">Well-designed classes will be mostly self-contained, providing methods to adjust the attributes to valid values. The <code class="calibre9">_balance</code> and <code class="calibre9">_name</code> attributes are marked as private <span class="codeannotation">1</span> <span class="codeannotation">2</span>, and the only valid way of adjusting the <code class="calibre9">BankAccount</code> class’s value is through the <code class="calibre9">deposit()</code> and <code class="calibre9">withdraw()</code> methods. These two methods have checks <span class="codeannotation">3</span> <span class="codeannotation">5</span> to make sure <code class="calibre9">_balance</code> isn’t put into an invalid state (such as a negative integer value). These methods also record each transaction to account for the current balance <span class="codeannotation">4</span><em class="calibre10"> </em><span class="codeannotation">6</span>.</p>
+<p class="calibre23">Code outside the class that modifies these attributes, such as <code class="calibre9">acct._balance = 1000000000</code> <span class="codeannotation">7</span> or <code class="calibre9">acct._name =  'Bob'</code> <span class="codeannotation">8</span> instructions, can put the object into an invalid state and introduce bugs (and audits from the bank examiner). By following the underscore prefix convention for private access, you make debugging easier. The reason is that you know the cause of the bug will be in the code in the class instead of anywhere in the entire program.</p>
+<p class="calibre23">Note that unlike Java and other languages, Python has no need for public <code class="calibre9">getter</code> and <code class="calibre9">setter</code> methods for private attributes. Instead Python uses properties, as explained in <span class="calibre" itemid="xref_target_Chapter 17">Chapter 17</span>. </p>
+<h2 id="calibre_link-280" class="calibre7">The type() Function and __qualname__ Attribute</h2>
+<p class="bodyfirst">Passing an object to the built-in <code class="calibre9">type()</code> function tells us the object’s data type through its return value. The objects returned from the <code class="calibre9">type()</code> function are type objects, also called <em class="calibre10">class </em>objects. Recall that the terms <em class="calibre10">type</em>, <em class="calibre10">data type</em>, and <em class="calibre10">class</em> all have the same meaning in Python. To see what the <code class="calibre9">type()</code> function returns for various values, enter the following into the interactive shell:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">type(42)</b>  # The object 42 has a type of int.
+&lt;class 'int'&gt;
+&gt;&gt;&gt; <b class="calibre25">int</b> # int is a type object for the integer data type.
+&lt;class 'int'&gt;
+&gt;&gt;&gt; <b class="calibre25">type(42) == int</b>  # Type check 42 to see if it is an integer.
+<span type="pagebreak" title="285" id="calibre_link-618" class="calibre16"></span>True
+&gt;&gt;&gt; <b class="calibre25">type('Hello') == int</b>  # Type check 'Hello' against int.
+False
+&gt;&gt;&gt; <b class="calibre25">import wizcoin</b>
+&gt;&gt;&gt; <b class="calibre25">type(42) == wizcoin.WizCoin</b>  # Type check 42 against WizCoin.
+False
+&gt;&gt;&gt; <b class="calibre25">purse = wizcoin.WizCoin(2, 5, 10)</b>
+&gt;&gt;&gt; <b class="calibre25">type(purse) == wizcoin.WizCoin</b> # Type check purse against WizCoin.
+True</code></pre>
+<p class="calibre23">Note that <code class="calibre9">int</code> is a type object and is the same kind of object as what <code class="calibre9">type(42)</code> returns, but it can also be called as the <code class="calibre9">int()</code> constructor function: the <code class="calibre9">int('42')</code> function doesn’t convert the <code class="calibre9">'42'</code> string argument; instead, it returns an integer object based on the argument.</p>
+<p class="calibre23">Say you need to log some information about the variables in your program to help you debug them later. You can only write strings to a logfile, but passing the type object to <code class="calibre9">str()</code> will return a rather messy-looking string. Instead, use the <code class="calibre9">__qualname__</code> attribute, which all type objects have, to write a simpler, human-readable string:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">str(type(42))</b>  # Passing the type object to str() returns a messy string.
+"&lt;class 'int'&gt;"
+&gt;&gt;&gt; <b class="calibre25">type(42).__qualname__</b> # The __qualname__ attribute is nicer looking.
+'int'</code></pre>
+<p class="calibre23">The <code class="calibre9">__qualname__</code> attribute is most often used for overriding the  <code class="calibre9">__repr__()</code> method, which is explained in more detail in Chapter 17.</p>
+<h2 id="calibre_link-281" class="calibre7">Non-OOP vs. OOP Examples: Tic-Tac-Toe</h2>
+<p class="bodyfirst">At first, it can be difficult to see how to use classes in your programs. Let’s look at an example of a short tic-tac-toe program that doesn’t use classes, and then rewrite it so it does.</p>
+<p class="calibre23">Open a new file editor window and enter the following program; then save it as <em class="calibre10">tictactoe.py</em>:</p>
+<pre class="calibre28"><code class="calibre9"># tictactoe.py, A non-OOP tic-tac-toe game.
+
+ALL_SPACES = list('123456789')  # The keys for a TTT board dictionary.
+X, O, BLANK = 'X', 'O', ' '  # Constants for string values.
+
+def main():
+    """Runs a game of tic-tac-toe."""
+    print('Welcome to tic-tac-toe!')
+    gameBoard = getBlankBoard()  # Create a TTT board dictionary.
+    currentPlayer, nextPlayer = X, O  # X goes first, O goes next.
+
+    while True:
+        print(getBoardStr(gameBoard))  # Display the board on the screen.
+
+        # Keep asking the player until they enter a number 1-9:
+<span type="pagebreak" title="286" id="calibre_link-619" class="calibre16"></span>        move = None
+        while not isValidSpace(gameBoard, move):
+            print(f'What is {currentPlayer}\'s move? (1-9)')
+            move = input()
+        updateBoard(gameBoard, move, currentPlayer)  # Make the move.
+
+        # Check if the game is over:
+        if isWinner(gameBoard, currentPlayer):  # First check for victory.
+            print(getBoardStr(gameBoard))
+            print(currentPlayer + ' has won the game!')
+            break
+        elif isBoardFull(gameBoard):  # Next check for a tie.
+            print(getBoardStr(gameBoard))
+            print('The game is a tie!')
+            break
+        currentPlayer, nextPlayer = nextPlayer, currentPlayer  # Swap turns.
+    print('Thanks for playing!')
+
+def getBlankBoard():
+    """Create a new, blank tic-tac-toe board."""
+    board = {} # The board is represented as a Python dictionary.
+    for space in ALL_SPACES:
+        board[space] = BLANK  # All spaces start as blank.
+    return board
+
+def getBoardStr(board):
+    """Return a text-representation of the board."""
+    return f'''
+      {board['1']}|{board['2']}|{board['3']}  1 2 3
+      -+-+-
+      {board['4']}|{board['5']}|{board['6']}  4 5 6
+      -+-+-
+      {board['7']}|{board['8']}|{board['9']}  7 8 9'''
+
+def isValidSpace(board, space):
+    """Returns True if the space on the board is a valid space number
+    and the space is blank."""
+    return space in ALL_SPACES or board[space] == BLANK
+
+def isWinner(board, player):
+    """Return True if player is a winner on this TTTBoard."""
+    b, p = board, player # Shorter names as "syntactic sugar".
+    # Check for 3 marks across the 3 rows, 3 columns, and 2 diagonals.
+    return ((b['1'] == b['2'] == b['3'] == p) or # Across the top
+            (b['4'] == b['5'] == b['6'] == p) or # Across the middle
+            (b['7'] == b['8'] == b['9'] == p) or # Across the bottom
+            (b['1'] == b['4'] == b['7'] == p) or # Down the left
+            (b['2'] == b['5'] == b['8'] == p) or # Down the middle
+            (b['3'] == b['6'] == b['9'] == p) or # Down the right
+            (b['3'] == b['5'] == b['7'] == p) or # Diagonal
+            (b['1'] == b['5'] == b['9'] == p))   # Diagonal
+
+def isBoardFull(board):
+    """Return True if every space on the board has been taken."""
+<span type="pagebreak" title="287" id="calibre_link-620" class="calibre16"></span>    for space in ALL_SPACES:
+        if board[space] == BLANK:
+            return False  # If a single space is blank, return False.
+    return True  # No spaces are blank, so return True.
+
+def updateBoard(board, space, mark):
+    """Sets the space on the board to mark."""
+    board[space] = mark
+
+if __name__ == '__main__':
+    main() # Call main() if this module is run, but not when imported.</code></pre>
+<p class="calibre23">When you run this program, the output will look something like this:</p>
+<pre class="calibre28"><code class="calibre9">Welcome to tic-tac-toe!
+
+       | |   1 2 3
+      -+-+-
+       | |   4 5 6
+      -+-+-
+       | |   7 8 9
+What is X's move? (1-9)
+1
+
+      X| |   1 2 3
+      -+-+-
+       | |   4 5 6
+      -+-+-
+       | |   7 8 9
+What is O's move? (1-9)
+<var class="calibre43">--snip--</var>
+      X| |O  1 2 3
+      -+-+-
+       |O|   4 5 6
+      -+-+-
+      X|O|X  7 8 9
+What is X's move? (1-9)
+4
+
+      X| |O  1 2 3
+      -+-+-
+      X|O|   4 5 6
+      -+-+-
+      X|O|X  7 8 9
+X has won the game!
+Thanks for playing!</code></pre>
+<p class="calibre23">Briefly, this program works by using a dictionary object to represent the nine spaces on a tic-tac-toe board. The dictionary’s keys are the strings <code class="calibre9">'1'</code> through <code class="calibre9">'9'</code>, and its values are the strings <code class="calibre9">'X'</code>, <code class="calibre9">'O'</code>, or <code class="calibre9">' '</code>. The numbered spaces are in the same arrangement as a phone’s keypad.</p>
+<p class="calibre23"><span type="pagebreak" title="288" id="calibre_link-621" class="calibre16"></span>The functions in <em class="calibre10">tictactoe.py</em> do the following:</p>
+<ul class="calibre36">
+<li class="calibre11">The <code class="calibre9">main()</code> function contains the code that creates a new board data structure (stored in the <code class="calibre9">gameBoard</code> variable) and calls other functions in the program.</li>
+<li class="calibre11">The <code class="calibre9">getBlankBoard()</code> function returns a dictionary with the nine spaces set to <code class="calibre9">' '</code> for a blank board.</li>
+<li class="calibre11">The <code class="calibre9">getBoardStr()</code> function accepts a dictionary representing the board and returns a multiline string representation of the board that can be printed to the screen. This is what renders the tic-tac-toe board’s text that the game displays.</li>
+<li class="calibre11">The <code class="calibre9">isValidSpace()</code> function returns <code class="calibre9">True</code> if it’s passed a valid space number and that space is blank.</li>
+<li class="calibre11">The <code class="calibre9">isWinner()</code> function’s parameters accept a board dictionary and either <code class="calibre9">'X'</code> or <code class="calibre9">'O'</code> to determine whether that player has three marks in a row on the board.</li>
+<li class="calibre11">The <code class="calibre9">isBoardFull()</code> function determines whether the board has no blank spaces, meaning the game has ended. The <code class="calibre9">updateBoard()</code> function’s parameters accept a board dictionary, a space, and a player’s X or O mark and updates the dictionary.</li>
+</ul>
+<p class="calibre23">Notice that many of the functions accept the variable <code class="calibre9">board</code> as their first parameter. That means these functions are related to each other in that they all operate on a common data structure.</p>
+<p class="calibre23">When several functions in the code all operate on the same data structure, it’s usually best to group them together as the methods and attributes of a class. Let’s redesign this in the <em class="calibre10">tictactoe.py</em> program to use a <code class="calibre9">TTTBoard</code> class that will store the <code class="calibre9">board</code> dictionary in an attribute named <code class="calibre9">spaces</code>. The functions that had <code class="calibre9">board</code> as a parameter will become methods of our <code class="calibre9">TTTBoard</code> class and use the <code class="calibre9">self</code> parameter instead of a <code class="calibre9">board</code> parameter.</p>
+<p class="calibre23">Open a new file editor window, enter the following code, and save it as <em class="calibre10">tictactoe_oop.py</em>:</p>
+<pre class="calibre28"><code class="calibre9"># tictactoe_oop.py, an object-oriented tic-tac-toe game.
+
+ALL_SPACES = list('123456789')  # The keys for a TTT board.
+X, O, BLANK = 'X', 'O', ' '  # Constants for string values.
+
+def main():
+    """Runs a game of tic-tac-toe."""
+    print('Welcome to tic-tac-toe!')
+    gameBoard = TTTBoard()  # Create a TTT board object.
+    currentPlayer, nextPlayer = X, O # X goes first, O goes next.
+
+    while True:
+        print(gameBoard.getBoardStr())  # Display the board on the screen.
+
+        # Keep asking the player until they enter a number 1-9:
+        move = None
+<span type="pagebreak" title="289" id="calibre_link-622" class="calibre16"></span>        while not gameBoard.isValidSpace(move):
+            print(f'What is {currentPlayer}\'s move? (1-9)')
+            move = input()
+        gameBoard.updateBoard(move, currentPlayer)  # Make the move.
+
+        # Check if the game is over:
+        if gameBoard.isWinner(currentPlayer):  # First check for victory.
+            print(gameBoard.getBoardStr())
+            print(currentPlayer + ' has won the game!')
+            break
+        elif gameBoard.isBoardFull():  # Next check for a tie.
+            print(gameBoard.getBoardStr())
+            print('The game is a tie!')
+            break
+        currentPlayer, nextPlayer = nextPlayer, currentPlayer  # Swap turns.
+    print('Thanks for playing!')
+
+class TTTBoard:
+    def __init__(self, usePrettyBoard=False, useLogging=False):
+        """Create a new, blank tic tac toe board."""
+        self._spaces = {}  # The board is represented as a Python dictionary.
+        for space in ALL_SPACES:
+            self._spaces[space] = BLANK  # All spaces start as blank.
+
+    def getBoardStr(self):
+        """Return a text-representation of the board."""
+        return f'''
+      {self._spaces['1']}|{self._spaces['2']}|{self._spaces['3']}  1 2 3
+      -+-+-
+      {self._spaces['4']}|{self._spaces['5']}|{self._spaces['6']}  4 5 6
+      -+-+-
+      {self._spaces['7']}|{self._spaces['8']}|{self._spaces['9']}  7 8 9'''
+
+    def isValidSpace(self, space):
+        """Returns True if the space on the board is a valid space number
+        and the space is blank."""
+        return space in ALL_SPACES and self._spaces[space] == BLANK
+
+    def isWinner(self, player):
+        """Return True if player is a winner on this TTTBoard."""
+        s, p = self._spaces, player # Shorter names as "syntactic sugar".
+        # Check for 3 marks across the 3 rows, 3 columns, and 2 diagonals.
+        return ((s['1'] == s['2'] == s['3'] == p) or # Across the top
+                (s['4'] == s['5'] == s['6'] == p) or # Across the middle
+                (s['7'] == s['8'] == s['9'] == p) or # Across the bottom
+                (s['1'] == s['4'] == s['7'] == p) or # Down the left
+                (s['2'] == s['5'] == s['8'] == p) or # Down the middle
+                (s['3'] == s['6'] == s['9'] == p) or # Down the right
+                (s['3'] == s['5'] == s['7'] == p) or # Diagonal
+                (s['1'] == s['5'] == s['9'] == p))   # Diagonal
+
+    def isBoardFull(self):
+        """Return True if every space on the board has been taken."""
+<span type="pagebreak" title="290" id="calibre_link-623" class="calibre16"></span>        for space in ALL_SPACES:
+            if self._spaces[space] == BLANK:
+                return False  # If a single space is blank, return False.
+        return True  # No spaces are blank, so return True.
+
+    def updateBoard(self, space, player):
+        """Sets the space on the board to player."""
+        self._spaces[space] = player
+
+if __name__ == '__main__':
+    main() # Call main() if this module is run, but not when imported.</code></pre>
+<p class="calibre23">Functionally, this program is the same as the non-OOP tic-tac-toe program. The output looks identical. We’ve moved the code that used to be in <code class="calibre9">getBlankBoard()</code> to the <code class="calibre9">TTTBoard</code> class’s <code class="calibre9">__init__()</code> method, because they perform the same task of preparing the board data structure. We converted the other functions into methods, with the <code class="calibre9">self</code> parameter replacing the old <code class="calibre9">board</code> parameter, because they also serve a similar purpose: they’re both blocks of code that operate on a tic-tac-toe board data structure.</p>
+<p class="calibre23">When the code in these methods needs to change the dictionary stored in the <code class="calibre9">_spaces</code> attribute, the code uses <code class="calibre9">self._spaces</code>. When the code in these methods need to call other methods, the calls would also be preceded by <code class="calibre9">self</code> and a period. This is similar to how <code class="calibre9">coinJars.values()</code> in “Creating a Simple Class: WizCoin” had an object in the <code class="calibre9">coinJars</code> variable. In this example, the object that has the method to call is in a <code class="calibre9">self</code> variable.</p>
+<p class="calibre23">Also, notice that the <code class="calibre9">_spaces</code> attribute begins with an underscore, meaning that only code inside the methods of <code class="calibre9">TTTBoard</code> should access or modify it. Code outside the class should only be able to modify <code class="calibre9">_spaces</code> indirectly by calling methods that modify it.</p>
+<p class="calibre23">It can be helpful to compare the source code of the two tic-tac-toe programs. You can compare the code in this book or view a side-by-side comparison at <a href="https://autbor.com/compareoop/" class="calibre19">https://autbor.com/compareoop/</a>.</p>
+<p class="calibre23">Tic-tac-toe is a small program, so it doesn’t take much effort to understand. But what if this program were tens of thousands of lines long with hundreds of different functions? A program with a few dozen classes would be easier to understand than a program with several hundred disparate functions. OOP breaks down a complicated program into easier-to-understand chunks.</p>
+<h2 id="calibre_link-282" class="calibre7">Designing Classes for the Real World Is Hard</h2>
+<p class="bodyfirst">Designing a class, just like designing a paper form, seems deceptively straightforward. Forms and classes are, by their nature, simplifications of the real-world objects they represent. The question is, how should we simplify these objects? For example, if we’re creating a <code class="calibre9">Customer</code> class, the customer should have a <code class="calibre9">firstName</code> and <code class="calibre9">lastName</code> attribute, right? But actually creating classes to model real-world objects can be tricky. In most Western countries, a person’s last name is their family name, but in China, the family name is first. If we don’t want to exclude more than one billion potential <span type="pagebreak" title="291" id="calibre_link-624" class="calibre16"></span>customers, how should we change our <code class="calibre9">Customer</code> class? Should we change <code class="calibre9">firstName</code> and <code class="calibre9">lastName</code> to <code class="calibre9">givenName</code> and <code class="calibre9">familyName</code>? But some cultures don’t use family names. For example, former UN Secretary General U Thant, who is Burmese, has no family name: Thant is his given name and U is an initialization of his father’s given name. We might want to record the customer’s age, but an <code class="calibre9">age</code> attribute would soon become out of date; instead, it’s best to calculate the age each time you need it using a <code class="calibre9">birthdate</code> attribute.</p>
+<p class="calibre23">The real world is complicated, and designing forms and classes to capture this complexity in a uniform structure on which our programs can operate is difficult. Phone number formats vary between countries. ZIP codes don’t apply to addresses outside the United States. Setting a maximum number of characters for city names could be a problem for the German hamlet of Schmedeswurtherwesterdeich. In Australia and New Zealand, your legally recognized gender can be X. A platypus is a mammal that lays eggs. A peanut is not a nut. A hotdog might or might not be a sandwich, depending on who you ask. As a programmer writing programs for use in the real world, you’ll have to navigate this complexity.</p>
+<p class="calibre23">To learn more about this topic, I recommend the PyCon 2015 talk “Schemas for the Real World” by Carina C. Zona at <a href="https://youtu.be/PYYfVqtcWQY/" class="calibre19">https://youtu.be/PYYfVqtcWQY/</a> and the North Bay Python 2018 talk “Hi! My name is . . .” by James Bennett at <a href="https://youtu.be/NIebelIpdYk/" class="calibre19">https://youtu.be/NIebelIpdYk/</a>. There are also popular “Falsehoods Programmers Believe” blog posts, such as “Falsehoods Programmers Believe About Names” and “Falsehoods Programmers Believe About Time Zones.” These blog posts also cover topics like maps, email addresses, and many more kinds of data that programmers often poorly represent. You’ll find a collection of links to these articles at <a href="https://github.com/kdeldycke/awesome-falsehood/" class="calibre19">https://github.com/kdeldycke/awesome-falsehood/</a>. Additionally, you’ll find a good example of a poorly executed method of capturing real-world complexity in CGP Grey’s video, “Social Security Cards Explained,” at <a href="https://youtu.be/Erp8IAUouus/" class="calibre19">https://youtu.be/Erp8IAUouus/</a>.</p>
+<h2 id="calibre_link-283" class="calibre7">Summary</h2>
+<p class="bodyfirst">OOP is a useful feature for organizing your code. Classes allow you to group together data and code into new data types. You can also create objects from these classes by calling their constructors (the class’s name called as a function), which in turn, calls the class’s <code class="calibre9">__init__()</code> method. Methods are functions associated with objects, and attributes are variables associated with objects. All methods have a <code class="calibre9">self</code> parameter as their first parameter, which is assigned the object when the method is called. This allows the methods to read or set the object’s attributes and call its methods.</p>
+<p class="calibre23">Although Python doesn’t allow you to specify private or public access for attributes, it does have a convention of using an underscore prefix for any methods or attributes that should only be called or accessed from the class’s own methods. By following this convention, you can avoid misusing the class <span type="pagebreak" title="292" id="calibre_link-625" class="calibre16"></span>and setting it into an invalid state that could cause bugs. Calling <code class="calibre9">type(obj)</code> will return the <code class="calibre9">obj</code> type’s class object. Class objects have a <code class="calibre9">__qualname___</code> attribute, which contains a string with a human-readable form of the class’s name.</p>
+<p class="calibre23">At this point, you might be thinking, why we should bother using classes, attributes, and methods when we could do the same task with functions? OOP is a useful way to organize your code into more than just a <em class="calibre10">.py</em> file with 100 functions in it. By breaking up your program into several well-designed classes, you can focus on each class separately.</p>
+<p class="calibre23">OOP is an approach that focuses on data structures and the methods to handle those data structures. This approach isn’t mandatory for every program, and it’s certainly possible to overuse OOP. But OOP provides opportunities to use many advanced features that we’ll explore in the next two chapters. The first of these features is inheritance, which we’ll delve into in the next chapter.</p>
+</section>
+</div>
+
+
+
+
+<a href="chapter14.html">Prev: Chapter 14 - Practice Projects</a> | <a href="chapter16.html">Next: Chapter 16 - Object-Oriented Programming and Inheritance</a>
+</body></html>

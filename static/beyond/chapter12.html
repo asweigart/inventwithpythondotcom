@@ -1,0 +1,565 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Chapter 1: The Interactive Shell</title></head><body style="background-color: #fffeee;">
+
+<script type="text/javascript">
+//<![CDATA[
+
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5459430-3']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
+//]]>
+</script>
+
+
+<div style="background-color: #eeeddd; float: right; height: 310px; font-family: sans-serif;" id="otherbooks">
+  <a href="#" onclick="document.getElementById('otherbooks').outerHTML='';" style="vertical-align: top;">(close)</a><br />
+
+  <a target="_blank" href="https://nostarch.com/automatestuff2" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_automate.link');"><img src="/images/cover_automate2_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/beyond-basic-stuff-python" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_beyond.link');"><img src="/images/cover_beyond_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/inventwithpython" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_invent.link');"><img src="/images/cover_invent4th_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://www.amazon.com/Making-Games-Python-Pygame-Sweigart/dp/1469901730?ie=UTF8&amp;tag=playwithpyth-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1469901730" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_pygame.link');"><img src="/images/cover_makinggames_thumb.png" style="height: 200px; border: solid black 1px; /"></a>
+  <a target="_blank" href="https://nostarch.com/crackingcodes" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_hacking.link');"><img src="/images/cover_crackingcodes_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/scratchplayground"><img src="/images/cover_scratchprogrammingplayground_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/codingwithminecraft"><img src="/images/cover_codingwithminecraft_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <br />
+  <a href="https://inventwithpython.com/automateudemy">Use this link to get 70% off the Automate the Boring Stuff online video course.</a><br />
+  <a href="https://www.patreon.com/AlSweigart">Support me on Patreon</a>
+</div>
+
+<a href="chapter11.html">Prev: Chapter 11 - Comments, Docstrings, and Type Hints</a> | <a href="chapter13.html">Next: Chapter 13 - Measuring Performance and Big O Algorithm Analysis</a>
+
+
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-223">
+<section class="toclist">
+<header class="calibre12">
+<h1 class="chaptertitle">
+<span class="partnumber"><span type="pagebreak" title="199" id="calibre_link-536" class="calibre26"></span>12</span><br class="calibre18" />
+<span class="parttitle1">Organizing Your Code Projects with Git</span>
+</h1>
+</header>
+<figure class="opener"><img src="images/000017.png" alt="" class="calibre15" /></figure><p class="chapterintro"><em class="calibre10">Version control systems</em> are tools that record all source code changes and make it easy to retrieve older versions of the code. Think of these tools as sophisticated <em class="calibre10">undo</em> features. For example, if you replace a function and then later decide you liked the old one better, you can restore your code to the original version. Or if you discover a new bug, you can go back to earlier versions to identify when it first appeared and which code change caused it.</p>
+<p class="calibre22">A version control system manages files as you make changes to them. This is preferable to, say, making a copy of your <em class="calibre10">myProject</em> folder and naming it <em class="calibre10">myProject-copy</em>. If you keep making changes, you’ll eventually have to make another copy named <em class="calibre10">myProject-copy2</em>, then <em class="calibre10">myProject-copy3</em>, <em class="calibre10">myProject-copy3b</em>, <em class="calibre10">myProject-copyAsOfWednesday</em>, and so on. Copying folders might be <span type="pagebreak" title="200" id="calibre_link-537" class="calibre16"></span>simple, but the approach doesn’t scale. Learning to use a version control system saves you time and headaches in the long run.</p>
+<p class="calibre23">Git, Mercurial, and Subversion are popular version control applications, although Git is by far the most popular. In this chapter, you’ll learn how to set up files for code projects and use Git to track their changes.</p>
+<h2 id="calibre_link-224" class="calibre7">Git Commits and Repos</h2>
+<p class="bodyfirst">Git allows you to save the state of your project files, called <em class="calibre10">snapshots</em> or <em class="calibre10">commits</em>, as you make changes to them. That way, you can roll back to any previous snapshot if you ever need to. Commit is a noun and a verb; programmers commit (or save) their commits (or snapshots). <em class="calibre10">Check-in</em> is also a less popular term for commits.</p>
+<p class="calibre23">Version control systems also make it easy for a software developer team to remain in sync with each other while they make changes to a project’s source code. As each programmer commits their changes, other programmers can pull these updates onto their computers. The version control system tracks what commits were made, who made them, and when they made them, along with the developers’ comments describing the changes.</p>
+<p class="calibre23">Version control manages a project’s source code in a folder called a repository, or <em class="calibre10">repo</em>. In general, you should keep a separate Git repo for each project you’re working on. This chapter assumes you’re mostly working on your own and don’t need the advanced Git features, such as branching and merging, that help programmers collaborate. But even if you’re working alone, there is no programming project too small to benefit from version control.</p>
+<h2 id="calibre_link-225" class="calibre7">Using Cookiecutter to Create New Python Projects</h2>
+<p class="bodyfirst">We call the folder that contains all the source code, documentation, tests, and other files related to a project the <em class="calibre10">working directory</em> or <em class="calibre10">working tree</em> in Git parlance, and <em class="calibre10">project folder</em> more generally. The files in the working directory are collectively called the <em class="calibre10">working copy</em>. Before we create our Git repo, let’s create the files for a Python project.</p>
+<p class="calibre23">Every programmer has a preferred method for doing so. Even so, Python projects follow conventions for folder names and hierarchies. Your simpler programs might consist of a single <em class="calibre10">.py</em> file. But as you tackle more sophisticated projects, you’ll start to include additional <em class="calibre10">.py</em> files, data files, documentation, unit tests, and more. Typically, the root of the project folder contains a <em class="calibre10">src</em> folder for the <em class="calibre10">.py</em> source code files, a <em class="calibre10">tests</em> folder for unit tests, and a <em class="calibre10">docs</em> folder for any documentation (such as those generated by the Sphinx documentation tool). Other files contain project information and tool configuration: <em class="calibre10">README.md</em> for general information, <em class="calibre10">.coveragerc</em> for code coverage configuration, <em class="calibre10">LICENSE.txt</em> for the project’s software license, and so on. These tools and files are beyond the scope of this book, but they’re worth investigating. As you gain more coding experience, re-creating the same basic files for new programming projects becomes tedious. To speed <span type="pagebreak" title="201" id="calibre_link-538" class="calibre16"></span>up your coding tasks, you can use the <code class="calibre9">cookiecutter</code> Python module to create these files and folders automatically. You’ll find the full documentation for both the module and the Cookiecutter command line program at <a href="https://cookiecutter.readthedocs.io/" class="calibre19">https://cookiecutter.readthedocs.io/</a>.</p>
+<p class="calibre23">To install Cookiecutter, run <code class="calibre9">pip install --user cookiecutter</code> (on Windows) or <code class="calibre9">pip3 install --user cookiecutter</code> (on macOS and Linux). This installation includes the Cookiecutter command line program and the <code class="calibre9">cookiecutter</code> Python module. The output might warn you that the command line program is installed to a folder not listed in the <code class="calibre9">PATH</code> environment variable:</p>
+<pre class="calibre28"><code class="calibre9">Installing collected packages: cookiecutter
+  WARNING: The script cookiecutter.exe is installed in 'C:\Users\Al\AppData\Roaming\Python\Python38\Scripts' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.</code></pre>
+<p class="calibre23">Consider adding the folder (<em class="calibre10">C:\Users\Al\AppData\Roaming\Python\Python38\Scripts</em> in this case) to the <code class="calibre9">PATH </code>environment variable by following the instructions in “Environment Variables and PATH” on page 35. Otherwise, you’ll have to run Cookiecutter as a Python module by entering <code class="calibre9">python -m cookiecutter</code> (on Windows) or <code class="calibre9">python3 &ndash;m cookiecutter</code> (on macOS and Linux) instead of simply <code class="calibre9">cookiecutter</code>.</p>
+<p class="calibre23">In this chapter, we’ll create a repo for a module named <code class="calibre9">wizcoin</code>, which handles the galleon, sickle, and knut coins of a fictional wizarding currency. The <code class="calibre9">cookiecutter</code> module uses templates to create the starting files for several different kinds of projects. Often, the template is simply a <em class="calibre10">GitHub.com </em>link. For example, from a <em class="calibre10">C:\Users\Al</em> folder, you could enter the following in a Terminal window to create a <em class="calibre10">C:\Users\Al\wizcoin</em> folder with the boilerplate files for a basic Python project. The <code class="calibre9">cookiecutter</code> module downloads the template from GitHub and asks you a series of questions about the project you want to create:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al&gt;<b class="calibre25">cookiecutter gh:asweigart/cookiecutter-basicpythonproject</b>
+project_name [Basic Python Project]: <b class="calibre25">WizCoin</b>
+module_name [basicpythonproject]: <b class="calibre25">wizcoin</b>
+author_name [Susie Softwaredeveloper]: <b class="calibre25">Al Sweigart</b>
+author_email [susie@example.com]: <b class="calibre25">al@inventwithpython.com</b>
+github_username [susieexample]: <b class="calibre25">asweigart</b>
+project_version [0.1.0]:
+project_short_description [A basic Python project.]: <b class="calibre25">A Python module to represent the galleon, sickle, and knut coins of wizard currency.</b></code></pre>
+<p class="calibre23">If you get an error, you can also run <code class="calibre9">python -m cookiecutter</code> instead of <code class="calibre9">cookiecutter</code>. This command downloads a template I’ve created from <a href="https://github.com/asweigart/cookiecutter-basicpythonproject" class="calibre19">https://github.com/asweigart/cookiecutter-basicpythonproject</a>. You’ll find templates for many programming languages at <a href="https://github.com/cookiecutter/cookiecutter" class="calibre19">https://github.com/cookiecutter/cookiecutter</a>. Because Cookiecutter templates are often hosted on GitHub, you could also enter <code class="calibre9">gh:</code> as a shortcut for <code class="calibre9">https://github.com/</code> in the command line argument.</p>
+<p class="calibre23">As Cookiecutter asks you questions, you can either enter a response or simply press <span class="keycaps">Enter</span> to use the default response shown in between <span type="pagebreak" title="202" id="calibre_link-539" class="calibre16"></span>square brackets. For example, <code class="calibre9">project_name [Basic Python Project]:</code> asks you to name your project. If you enter nothing, Cookiecutter will use “Basic Python Project” as the project name. These defaults also hint at what sort of response is expected. The <code class="calibre9">project_name [Basic Python Project]:</code> prompt shows you a capitalized project name that includes spaces, whereas the <code class="calibre9">module_name [basicpythonproject]:</code> prompt shows you that the module name is lowercase and has no spaces. We didn’t enter a response for the <code class="calibre9">project_version [0.1.0]:</code> prompt, so the response defaults to “0.1.0.”</p>
+<p class="calibre23">After answering the questions, Cookiecutter creates a <em class="calibre10">wizcoin</em> folder in the current working directory with the basic files you’ll need for a Python project, as shown in <a id="calibre_link-713" href="#calibre_link-332" class="calibre19">Figure 12-1</a>.</p>
+<figure class="calibre29">
+<img src="images/000024.png" alt="f12001" class="calibre15" />
+<figcaption class="calibre30"><p class="calibre31"><a id="calibre_link-332" href="#calibre_link-713" class="calibre19">Figure 12-1:</a> The files in the <em class="calibre10">wizcoin</em> folder created by Cookiecutter</p></figcaption>
+</figure>
+<p class="calibre23">It’s okay if you don’t understand the purpose of these files. A full explanation of each is beyond the scope of this book, but <a href="https://github.com/asweigart/cookiecutter-basicpythonproject" class="calibre19">https://github.com/asweigart/cookiecutter-basicpythonproject</a> has links and descriptions for further reading. Now that we have our starting files, let’s keep track of them using Git.</p>
+<h2 id="calibre_link-226" class="calibre7">Installing Git</h2>
+<p class="bodyfirst">Git might already be installed on your computer. To find out, run <code class="calibre9">git --version</code> from the command line. If you see a message like <code class="calibre9">git version 2.29.0.windows.1</code>, you already have Git. If you see a “command not found” error message, you must install Git. On Windows, go to <a href="https://git-scm.com/download" class="calibre19">https://git-scm.com/download</a>, and then download and run the Git installer. On macOS Mavericks (10.9) and later, simply run <code class="calibre9">git --version</code> from the terminal and you’ll be prompted to install Git, as shown in <a id="calibre_link-714" href="#calibre_link-333" class="calibre19">Figure 12-2</a>.</p>
+<p class="calibre23">On Ubuntu or Debian Linux, run <code class="calibre9">sudo apt install git-all</code> from the terminal. On Red Hat Linux, run <code class="calibre9">sudo dnf install git-all</code> from the terminal. Find instructions for other Linux distributions at <a href="https://git-scm.com/download/linux" class="calibre19">https://git-scm.com/download/linux</a>. Confirm that the install worked by running <code class="calibre9">git --version</code>.</p>
+<span type="pagebreak" title="203" id="calibre_link-540" class="calibre16"></span><figure class="calibre29">
+<img src="images/000013.png" alt="f12002" class="calibre15" />
+<figcaption class="calibre30"><p class="calibre31"><a id="calibre_link-333" href="#calibre_link-714" class="calibre19">Figure 12-2:</a> The first time you run <code class="calibre41">git --version</code> on macOS 10.9 or later, you’ll be prompted to install Git.</p></figcaption>
+</figure>
+<h3 id="calibre_link-227" class="calibre27">Configuring Your Git Username and Email</h3>
+<p class="bodyfirst">After installing Git, you need to configure your name and email so your commits include your author information. From a terminal, run the following <code class="calibre9">git config</code> commands using your name and email information:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al&gt;<b class="calibre25">git config --global user.name "Al Sweigart"</b>
+C:\Users\Al&gt;<b class="calibre25">git config --global user.email al@inventwithpython.com</b></code></pre>
+<p class="calibre23">This configuration information is stored in a <em class="calibre10">.gitconfig</em> file in your home folder (such as <em class="calibre10">C:\Users\Al</em> on my Windows laptop). You’ll never need to edit this text file directly. Instead, you can change it by running the <code class="calibre9">git config</code> command. You can list the current Git configuration settings using the <code class="calibre9">git config --list</code> command.</p>
+<h3 id="calibre_link-228" class="calibre27">Installing GUI Git Tools</h3>
+<p class="bodyfirst">This chapter focuses on the Git command line tool, but installing software that adds a GUI for Git can help you with day-to-day tasks. Even professional software developers who know the CLI Git commands often use GUI Git tools. The web page at <a href="https://git-scm.com/downloads/guis" class="calibre19">https://git-scm.com/downloads/guis</a> suggests several of these tools, such as TortoiseGit for Windows, GitHub Desktop for macOS, and GitExtensions for Linux.</p>
+<p class="calibre23">For example, <a id="calibre_link-715" href="#calibre_link-334" class="calibre19">Figure 12-3</a> shows how TortoiseGit on Windows adds overlays to File Explorer’s icons based on their status: green for unmodified repo files, red for modified repo files (or folders containing modified files), and no icon for untracked files. Checking these overlays is certainly more convenient than constantly entering commands into a terminal for this information. TortoiseGit also adds a context menu for running Git commands, as shown in Figure 12-3.</p>
+<p class="calibre23">Using GUI Git tools is convenient, but it’s not a substitute for learning the command line commands featured in this chapter. Keep in mind that you might need to one day use Git on a computer that doesn’t have these GUI tools installed.</p>
+<span type="pagebreak" title="204" id="calibre_link-541" class="calibre16"></span><figure class="calibre29">
+<img src="images/000006.png" alt="f12003" class="calibre15" />
+<figcaption class="calibre30"><p class="calibre31"><a id="calibre_link-334" href="#calibre_link-715" class="calibre19">Figure 12-3:</a> TortoiseGit for Windows adds a GUI to run Git commands from File Explorer.</p></figcaption>
+</figure>
+<h2 id="calibre_link-229" class="calibre7">The Git Workflow</h2>
+<p class="bodyfirst">Using a Git repo involves the following steps. First, you create the Git repo by running the <code class="calibre9">git init</code> or <code class="calibre9">git clone</code> command. Second, you add files with the <code class="calibre9">git add </code><var class="calibre35">&lt;filename&gt;</var> command for the repo to track. Third, once you’ve added files, you can commit them with the <code class="calibre9">git commit -am "<var class="calibre43">&lt;descriptive commit message&gt;</var>"</code> command. At this point, you’re ready to make more changes to your code.</p>
+<p class="calibre23">You can view the help file for each of these commands by running <code class="calibre9">git help </code><var class="calibre35">&lt;command&gt;</var>, such as <code class="calibre9">git help init</code> or <code class="calibre9">git help add</code>. These help pages are handy for reference, although they’re too dry and technical to use as tutorials. You’ll learn more details about each of these commands later, but first, you need to understand a few Git concepts to make the rest of this chapter easier to digest.</p>
+<h3 id="calibre_link-230" class="calibre27">How Git Keeps Track of File Status</h3>
+<p class="bodyfirst">All files in a working directory are either tracked or untracked by Git. <em class="calibre10">Tracked files</em> are the files that have been added and committed to the repo, whereas every other file is <em class="calibre10">untracked</em>. To the Git repo, untracked files in the working copy might as well not exist. On the other hand, the tracked files exist in one of three other states:</p>
+<ul class="calibre36">
+<li class="calibre11">The <em class="calibre10">committed state</em> is when a file in the working copy is identical to the repo’s most recent commit. (This is also sometimes called the <em class="calibre10">unmodified state</em> or <em class="calibre10">clean state</em>.)</li>
+<li class="calibre11">The <em class="calibre10">modified state</em> is when a file in the working copy is different than the repo’s most recent commit.</li>
+<li class="calibre11"><span type="pagebreak" title="205" id="calibre_link-542" class="calibre16"></span>The <em class="calibre10">staged state</em> is when a file has been modified and marked to be included in the next commit. We say that the file is <em class="calibre10">staged</em> or <em class="calibre10">in the staging area</em>. (The staging area is also known as the <em class="calibre10">index</em> or <em class="calibre10">cache</em>.)</li>
+</ul>
+<p class="calibre23"><a id="calibre_link-716" href="#calibre_link-335" class="calibre19">Figure 12-4</a> contains a diagram of how a file moves between these four states. You can add an untracked file to the Git repo, in which case it becomes tracked and staged. You can then commit staged files to put them into the committed state. You don’t need any Git command to put a file into the modified state; once you make changes to a committed file, it’s automatically labeled as modified. </p>
+<figure class="calibre29">
+<img src="images/000019.png" alt="f12004" class="calibre15" />
+<figcaption class="calibre30"><p class="calibre31"><a id="calibre_link-335" href="#calibre_link-716" class="calibre19">Figure 12-4:</a> The possible states of a file in a Git repo and the transitions between them</p></figcaption>
+</figure>
+<p class="calibre23">At any step after you’ve created the repo, run <code class="calibre9">git status</code> to view the current status of the repo and its files’ states. You’ll frequently run this command as you work in Git. In the following example, I’ve set up files in different states. Notice how these four files appear in the output of <code class="calibre9">git status</code>:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al\ExampleRepo&gt;<b class="calibre25">git status</b>
+On branch master
+Changes to be committed:
+  (use "git restore --staged &lt;file&gt;..." to unstage)
+       <span class="codeannotation">1</span> new file:   new_file.py
+       <span class="codeannotation">2</span> modified:   staged_file.py
+
+Changes not staged for commit:
+  (use "git add &lt;file&gt;..." to update what will be committed)
+  (use "git restore &lt;file&gt;..." to discard changes in working directory)
+       <span class="codeannotation">3</span> modified:   modified_file.py
+
+Untracked files:
+  (use "git add &lt;file&gt;..." to include in what will be committed)
+       <span class="codeannotation">4</span> untracked_file.py</code></pre>
+<p class="calibre23"><span type="pagebreak" title="206" id="calibre_link-543" class="calibre16"></span>In this working copy, there’s a <em class="calibre10">new_file.py</em> <span class="codeannotation">1</span>, which has recently been added to the repo and is therefore in the staged state. There are also two tracked files, <em class="calibre10">staged_file.py</em> <span class="codeannotation">2</span> and <em class="calibre10">modified_file.py</em> <span class="codeannotation">3</span>, which are in the staged and modified states, respectively. Then there’s an untracked file named <em class="calibre10">untracked_file.py</em> <span class="codeannotation">4</span>. The output of <code class="calibre9">git status</code> also has reminders for the Git commands that move the files to other states. </p>
+<h3 id="calibre_link-231" class="calibre27">Why Stage Files?</h3>
+<p class="bodyfirst">You might wonder what the point of the staged state is. Why not just go between <em class="calibre10">modified</em> and <em class="calibre10">committed</em> without staging files? Dealing with the staging area is full of thorny special cases and a large source of confusion for Git beginners. For instance, a file can be modified after it has been staged, leading to files existing in both the modified and staged states, as described in the previous section. Technically, the staging area doesn’t contain files so much as changes, because parts of a single modified file can be staged and other parts unstaged. Cases like these are why Git has a reputation for being complex, and many sources of information on how Git works are often imprecise at best and misleading at worst.</p>
+<p class="calibre23">But we can avoid most of this complexity. In this chapter, I recommend avoiding it by using the <code class="calibre9">git commit &ndash;am</code> command to stage and commit modified files in a single step. This way they’ll move directly from the modified state to the clean state. Also, I recommend always immediately committing files after adding, renaming, or removing them in your repo. Additionally, using GUI Git tools (explained later) rather than the command line can help you avoid these tricky cases.</p>
+<h2 id="calibre_link-232" class="calibre7">Creating a Git Repo on Your Computer</h2>
+<p class="bodyfirst">Git is a <em class="calibre10">distributed version control system</em>, which means it stores all of its snapshots and repo metadata locally on your computer in a folder named <em class="calibre10">.git</em>. Unlike a centralized version control system, Git doesn’t need to connect to a server over the internet to make commits. This makes Git fast and available to work with when you’re offline.</p>
+<p class="calibre23">From a terminal, run the following commands to create the <em class="calibre10">.git</em> folder. (On macOS and Linux, you’ll need to run <code class="calibre9">mkdir</code> instead of <code class="calibre9">md</code>.)</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al&gt;<b class="calibre25">md wizcoin</b>
+C:\Users\Al&gt;<b class="calibre25">cd wizcoin</b>
+C:\Users\Al\wizcoin&gt;<b class="calibre25">git init</b>
+Initialized empty Git repository in C:/Users/Al/wizcoin/.git/ </code></pre>
+<p class="calibre23">When you convert a folder into a Git repo by running <code class="calibre9">git init</code>, all the files in it start as untracked. For our <em class="calibre10">wizcoin</em> folder, the <code class="calibre9">git init</code> command creates the <em class="calibre10">wizcoin/.git</em> folder, which contains the Git repo metadata. The presence of this <em class="calibre10">.git</em> folder makes a folder a Git repository; without it, you simply have a collection of source code files in an ordinary folder. You’ll <span type="pagebreak" title="207" id="calibre_link-544" class="calibre16"></span>never have to directly modify the files in <em class="calibre10">.git</em>, so just ignore this folder. In fact, it’s named <em class="calibre10">.git</em> because most operating systems automatically hide folders and files whose names begin with a period. </p>
+<p class="calibre23">Now you have a repo in your <em class="calibre10">C:\Users\Al\wizcoin</em> working directory. A repo on your computer is known as a <em class="calibre10">local repo</em>; a repo located on someone else’s computer is known as a <em class="calibre10">remote repo</em>. This distinction is important, because you’ll often have to share commits between local and remote repos so you can work with other developers on the same project.</p>
+<p class="calibre23">You can now use the <code class="calibre9">git</code> command to add files and track changes within the working directory. If you run <code class="calibre9">git status</code> in your newly created repo, you’ll see the following:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al\wizcoin&gt;<b class="calibre25">git status</b>
+On branch master
+
+No commits yet
+
+nothing to commit (create/copy files and use "git add" to track)</code></pre>
+<p class="calibre23">The output from this command informs you that you have no commits yet in this repo.</p>
+<aside type="sidebar" class="authors">
+<div class="top"><hr class="calibre32" /></div>
+<section class="box">
+<h2 class="calibre38">Running git status with the watch Command</h2>
+<p class="boxbodyfirst">While using the Git command line tool, you’ll often run <code class="calibre41">git status</code> to see your repo’s status. Instead of entering this command manually, you can use the <code class="calibre41">watch</code> command to run it for you. The <code class="calibre41">watch</code> command runs a given command repeatedly every two seconds, refreshing the screen with its latest output.</p>
+<p class="calibre40">On Windows, you can obtain the <code class="calibre41">watch </code>command by downloading <a href="https://inventwithpython.com/watch.exe" class="calibre19">https://inventwithpython.com/watch.exe</a> and placing this file into a <code class="calibre41">PATH </code>folder, such as <em class="calibre10">C:\Windows</em>. On macOS, you can go to <a href="https://www.macports.org/" class="calibre19">https://www.macports.org/</a> to download and install MacPorts, and then run <code class="calibre41">sudo ports install watch</code>. On Linux, the <code class="calibre41">watch </code>command is already installed. Once it’s installed, open a new Command Prompt or Terminal window, run <code class="bold2">cd</code> to change directory to your Git repo’s project folder, and run <code class="bold2">watch "git status"</code>. The <code class="calibre41">watch</code> command will run <code class="calibre41">git status</code> every two seconds, displaying the latest results onscreen. You can leave this window open while you use the Git command line tool in a different Terminal window to see how your repo’s status changes in real time. You can open another Terminal window and run <code class="calibre41">watch "git log &ndash;online"</code> to view a summary of the commits you make, also updated in real time. This information helps remove the guesswork as to what the Git commands you enter are doing to your repo.</p>
+<div class="top"><hr class="calibre32" /></div>
+</section>
+</aside>
+<h3 id="calibre_link-233" class="calibre27"><span type="pagebreak" title="208" id="calibre_link-545" class="calibre37"></span>Adding Files for Git to Track</h3>
+<p class="bodyfirst">Only tracked files can be committed, rolled back, or otherwise interacted with through the <code class="calibre9">git</code> command. Run <code class="bold">git status</code> to see the status of the files in the project folder:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al\wizcoin&gt;<b class="calibre25">git status</b>
+On branch master
+
+No commits yet
+
+<span class="codeannotationhang">1</span> Untracked files:
+  (use "git add &lt;file&gt;..." to include in what will be committed)
+
+        .coveragerc
+        .gitignore
+        LICENSE.txt
+        README.md
+<var class="calibre43">--snip--</var>
+        tox.ini
+
+nothing added to commit but untracked files present (use "git add" to track)</code></pre>
+<p class="calibre23">All the files in the <em class="calibre10">wizcoin</em> folder are currently untracked <span class="codeannotation">1</span>. We can track them by doing an initial commit of these files, which takes two steps: running <code class="calibre9">git add</code> for each file to be committed, and then running <code class="calibre9">git commit</code> to create a commit of all these files. Once you’ve committed a file, Git tracks it. </p>
+<p class="calibre23">The <code class="calibre9">git add</code> command moves files from the untracked state or modified state to the staged state. We could run <code class="calibre9">git add</code> for every file we plan to stage (for example, <code class="calibre9">git add .coveragerc</code>, <code class="calibre9">git add .gitignore</code>, <code class="calibre9">git add LICENSE.txt</code>, and so on), but that’s tedious. Instead, let’s use the <code class="calibre9">*</code> wildcard to add several files at once. For example, <code class="calibre9">git add *.py</code> adds all <em class="calibre10">.py</em> files in the current working directory and its subdirectories. To add every untracked file, use a single period (<code class="calibre9">.</code>) to tell Git to match all files:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al\wizcoin&gt;<b class="calibre25">git add .</b></code></pre>
+<p class="calibre23">Run <code class="calibre9">git status</code> to see the files you’ve staged:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al\wizcoin&gt;<b class="calibre25">git status</b>
+On branch master
+
+No commits yet
+
+<span class="codeannotationhang">1</span> Changes to be committed:
+  (use "git rm --cached &lt;file&gt;..." to unstage)
+
+     <span class="codeannotation">2</span> new file:   .coveragerc
+        new file:   .gitignore
+<var class="calibre43">--snip--</var>
+        new file:   tox.ini</code></pre>
+<p class="calibre23"><span type="pagebreak" title="209" id="calibre_link-546" class="calibre16"></span>The output of <code class="calibre9">git status</code> tells you which files are staged to be committed the next time you run <code class="calibre9">git commit</code> <span class="codeannotation">1</span>. It also tells you that these are new files added to the repo <span class="codeannotation">2</span> rather than existing files in the repo that have been modified.</p>
+<p class="calibre23">After running <code class="calibre9">git add</code> to select the files to add to the repo, run <code class="calibre9">git commit &ndash;m "Adding new files to the repo."</code> (or a similar commit message) and <code class="calibre9">git status</code> again to view the repo status:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al\wizcoin&gt;<b class="calibre25">git commit -m "Adding new files to the repo."</b>
+[master (root-commit) 65f3b4d] Adding new files to the repo.
+ 15 files changed, 597 insertions(+)
+ create mode 100644 .coveragerc
+ create mode 100644 .gitignore
+<var class="calibre43">--snip--</var>
+ create mode 100644 tox.ini
+
+C:\Users\Al\wizcoin&gt;<b class="calibre25">git status</b>
+On branch master
+nothing to commit, working tree clean</code></pre>
+<p class="calibre23">Note that any files listed in the <em class="calibre10">.gitignore</em> file won’t be added to staging, as I explain in the next section.</p>
+<h3 id="calibre_link-234" class="calibre27">Ignoring Files in the Repo</h3>
+<p class="bodyfirst">Files not tracked by Git appear as untracked when you run <code class="calibre9">git status</code>. But in the course of writing your code, you might want to exclude certain files from version control completely so you don’t accidentally track them. These include:</p>
+<ul class="calibre36">
+<li class="calibre11">Temporary files in the project folder</li>
+<li class="calibre11">The <em class="calibre10">.pyc</em>, .<em class="calibre10">pyo</em>, and <em class="calibre10">.pyd</em> files that the Python interpreter generates when it runs <em class="calibre10">.py</em> programs</li>
+<li class="calibre11">The <em class="calibre10">.tox</em>, <em class="calibre10">htmlcov</em>, and other folders that various software development tools generate <em class="calibre10">docs/_build</em></li>
+<li class="calibre11">Any other compiled or generated files that could be regenerated (because the repo is for source files, not the products created from source files)</li>
+<li class="calibre11">Source code files that contain database passwords, authentication tokens, credit card numbers, or other sensitive information</li>
+</ul>
+<p class="calibre23">To avoid including these files, create a text file named <em class="calibre10">.gitignore</em> that lists the folders and files that Git should never track. Git will automatically exclude these from <code class="calibre9">git add</code> or <code class="calibre9">git commit</code> commands, and they won’t appear when you run <code class="calibre9">git status</code>.</p>
+<p class="calibre23"><span type="pagebreak" title="210" id="calibre_link-547" class="calibre16"></span>The <em class="calibre10">.gitignore</em> file that the <code class="calibre9">cookiecutter-basicpythonproject</code> template creates looks like this:</p>
+<pre class="calibre28"><code class="calibre9"># Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+<var class="calibre43">--snip--</var></code></pre>
+<p class="calibre23">The <em class="calibre10">.gitignore</em> file uses <code class="calibre9">*</code> for wildcards and <code class="calibre9">#</code> for comments. You can read more about it in the online documentation at <a href="https://git-scm.com/docs/gitignore" class="calibre19">https://git-scm.com/docs/gitignore</a>.</p>
+<p class="calibre23">You should add the actual <em class="calibre10">.gitignore</em> file to the Git repo so other programmers have it if they clone your repo. If you want to see which files in your working directory are being ignored based on the settings in <em class="calibre10">.gitignore</em>, run the <code class="calibre9">git ls-files --other --ignored --exclude-standard</code> command.</p>
+<h3 id="calibre_link-235" class="calibre27">Committing Changes</h3>
+<p class="bodyfirst">After adding new files to the repo, you can continue writing code for your project. When you want to create another snapshot, you can run <code class="calibre9">git add .</code> to stage all modified files and <code class="calibre9">git commit &ndash;m </code><var class="calibre35">&lt;commit message&gt;</var> to commit all staged files. But doing so is easier with the single <code class="calibre9">git commit &ndash;am </code><var class="calibre35">&lt;commit message&gt;</var> command: </p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al\wizcoin&gt;<b class="calibre25">git commit -am "Fixed the currency conversion bug."</b>
+[master (root-commit) e1ae3a3] Fixed the currency conversion bug.
+ 1 file changed, 12 insertions(+)</code></pre>
+<p class="calibre23">If you want to commit only certain modified files instead of every modified file, you can omit the <code class="calibre9">&ndash;a</code> option from <code class="calibre9">&ndash;am</code> and specify the files after the commit message, such as <code class="calibre9">git commit &ndash;m </code><var class="calibre35">&lt;commit message&gt;</var><code class="calibre9"> file1.py file2.py</code>.</p>
+<p class="calibre23">The commit message provides a hint for future use: it’s a reminder about what changes we made in this commit. It might be tempting to write a short, generic message, such as “Updated code,” or “Fixed a few bugs,” or even just “x” (because blank commit messages aren’t allowed). But three weeks from now, when you need to roll back to an earlier version of your code, detailed commit messages will save you a lot of grief in determining exactly how far back you need to go.</p>
+<p class="calibre23">If you forget to add the <code class="calibre9">-m "</code><var class="calibre35">&lt;message&gt;</var><code class="calibre9">"</code> command line argument, Git will open the Vim text editor in the Terminal window. Vim is beyond the scope of this book, so press the <span class="keycaps">Esc</span> key and enter <code class="calibre9">qa!</code> to safely exit Vim and cancel the commit. Then enter the <code class="calibre9">git commit</code> command again, this time with the <code class="calibre9">-m "</code><var class="calibre35">&lt;message&gt;</var><code class="calibre9">"</code> command line argument.</p>
+<p class="calibre23">For examples of what professional commit messages look like, check out the commit history for the Django web framework at <a href="https://github.com/django/django/commits/master" class="calibre19">https://github.com/django/django/commits/master</a>. Because Django is a large, open source project, the commits occur frequently and are formal commit messages. Infrequent commits with vague commit messages might work well enough for your small, personal <span type="pagebreak" title="211" id="calibre_link-548" class="calibre16"></span>programming projects, but Django has more than 1,000 contributors. Poor commit messages from any of them becomes a problem for all of them.</p>
+<p class="calibre23">The files are now safely committed to the Git repo. Run <code class="calibre9">git status</code> one more time to view their status:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al\wizcoin&gt;<b class="calibre25">git status</b>
+On branch master
+nothing to commit, working tree clean</code></pre>
+<p class="calibre23">By committing the staged files, you’ve moved them back to the committed state, and Git tells us that the working tree is clean; in other words, there are no modified or staged files. To recap, when we added files to the Git repo, the files went from untracked to staged and then to committed. The files are now ready for future modifications.</p>
+<p class="calibre23">Note that you can’t commit folders to a Git repo. Git automatically includes folders in the repo when a file in them is committed, but you can’t commit an empty folder.</p>
+<p class="calibre23">If you made a typo in the most recent commit message, you can rewrite it using the <code class="calibre9">git commit --amend -m "</code><var class="calibre35">&lt;new commit message&gt;</var><code class="calibre9">"</code> command.</p>
+<h4 id="calibre_link-753" class="calibre44">Using git diff to View Changes Before Committing</h4>
+<p class="bodyfirst">Before you commit code, you should quickly review the changes you’ll commit when you run <code class="calibre9">git commit</code>. You can view the differences between the code currently in your working copy and the code in the latest commit using the <code class="calibre9">git diff</code> command.</p>
+<p class="calibre23">Let’s walk through an example of using <code class="calibre9">git diff</code>. Open <em class="calibre10">README.md</em> in a text editor or IDE. (You should have created this file when you ran Cookiecutter. If it doesn’t exist, create a blank text file and save it as <em class="calibre10">README.md</em>.) This is a Markdown-formatted file, but like Python scripts, it’s written in plaintext. Change the <code class="calibre9">TODO - fill this in later</code> text in the <code class="calibre9">Quickstart Guide</code> section to the following (keep the <code class="calibre9">xample</code> typo in it for now; we’ll fix it later):</p>
+<pre class="calibre28"><code class="calibre9">Quickstart Guide
+----------------
+
+Here's some xample code demonstrating how this module is used:
+
+    &gt;&gt;&gt; import wizcoin
+    &gt;&gt;&gt; coin = wizcoin.WizCoin(2, 5, 10)
+    &gt;&gt;&gt; str(coin)
+    '2g, 5s, 10k'
+    &gt;&gt;&gt; coin.value()
+    1141</code></pre>
+<p class="calibre23">Before we add and commit <em class="calibre10">README.md</em>, run the <code class="calibre9">git diff</code> command to see the changes we’ve made:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al\wizcoin&gt;<b class="calibre25">git diff</b>
+diff --git a/README.md b/README.md
+<span type="pagebreak" title="212" id="calibre_link-549" class="calibre16"></span>index 76b5814..3be49c3 100644
+--- a/README.md
++++ b/README.md
+@@ -13,7 +13,14 @@ To install with pip, run:
+ Quickstart Guide
+ ----------------
+
+-TODO - fill this in later
++Here's some xample code demonstrating how this module is used:
++
++    &gt;&gt;&gt; import wizcoin
++    &gt;&gt;&gt; coin = wizcoin.WizCoin(2, 5, 10)
++    &gt;&gt;&gt; str(coin)
++    '2g, 5s, 10k'
++    &gt;&gt;&gt; coin.value()
++    1141
+
+ Contribute
+ ----------</code></pre>
+<p class="calibre23">The output shows that <em class="calibre10">README.md</em> in your working copy has changed from the <em class="calibre10">README.md</em> as it exists in the latest commit of the repo. The lines that begin with a minus sign<code class="calibre9"> &ndash;</code> have been removed; the lines that begin with a plus sign <code class="calibre9">+</code> have been added.</p>
+<p class="calibre23">While reviewing the changes, you’ll also notice that we made a typo by writing <code class="calibre9">xample</code> instead of <code class="calibre9">example</code>. We shouldn’t check in this typo. Let’s correct it. Then run <code class="calibre9">git diff</code> again to inspect the change and add and commit it to the repo:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al\wizcoin&gt;<b class="calibre25">git diff</b>
+diff --git a/README.md b/README.md
+index 76b5814..3be49c3 100644
+--- a/README.md
++++ b/README.md
+@@ -13,7 +13,14 @@ To install with pip, run:
+ Quickstart Guide
+ ----------------
+
+-TODO - fill this in later
++Here's some example code demonstrating how this module is used:
+<var class="calibre43">--snip--</var>
+C:\Users\Al\wizcoin&gt;<b class="calibre25">git add README.md</b>
+
+C:\Users\Al\wizcoin&gt;<b class="calibre25">git commit -m "Added example code to README.md"</b>
+[master 2a4c5b8] Added example code to README.md
+ 1 file changed, 8 insertions(+), 1 deletion(-)</code></pre>
+<p class="calibre23">The correction is now safely committed to the repo.</p>
+<h4 id="calibre_link-754" class="calibre44">Using git difftool to View Changes with a GUI Application</h4>
+<p class="bodyfirst">It’s easier to see changes with a diff program that uses a GUI. On Windows, you can download WinMerge (<a href="https://winmerge.org/" class="calibre19">https://winmerge.org/</a>), a free, open source diff <span type="pagebreak" title="213" id="calibre_link-550" class="calibre16"></span>program, and then install it. On Linux, you can install either Meld by using the <code class="calibre9">sudo apt-get install meld</code> command or Kompare by using the <code class="calibre9">sudo apt-get install kompare</code> command. On macOS, you can install tkdiff by using commands that first install and configure Homebrew (a package manager that installs software) and then using Homebrew to install tkdiff:</p>
+<pre class="calibre28"><code class="calibre9">/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+brew install tkdiff</code></pre>
+<p class="calibre23">You can configure Git to use these tools by running <code class="calibre9">git config diff.tool </code><var class="calibre35">&lt;tool_name&gt;</var>, where <var class="calibre35">&lt;tool_name&gt;</var> is <code class="calibre9">winmerge</code>, <code class="calibre9">tkdiff</code>, <code class="calibre9">meld</code>, or <code class="calibre9">kompare</code>. Then run <code class="calibre9">git difftool </code><var class="calibre35">&lt;filename&gt;</var> to view the changes made to a file in the tool’s GUI, as shown in <a id="calibre_link-717" href="#calibre_link-336" class="calibre19">Figure 12-5</a>.</p>
+<figure class="calibre29">
+<img src="images/000028.png" alt="f12005" class="calibre15" />
+<figcaption class="calibre30"><p class="calibre31"><a id="calibre_link-336" href="#calibre_link-717" class="calibre19">Figure 12-5:</a> A GUI diff tool, in this case WinMerge, is more readable than the text output of git diff.</p></figcaption>
+</figure>
+<p class="calibre23">Additionally, run <code class="calibre9">git config --global difftool.prompt false</code> so Git doesn’t ask for confirmation each time you want to open the diff tool. If you installed a GUI Git client, you can also configure it to use these tools (or it might come with a visual diff tool of its own).</p>
+<h4 id="calibre_link-755" class="calibre44">How Often Should I Commit Changes?</h4>
+<p class="bodyfirst">Even though version control allows you to roll back your files to an earlier commit, you might wonder how often you should make commits. If you commit too frequently, you’ll have trouble sorting through a large number of insignificant commits to find the version of the code you’re looking for. <span type="pagebreak" title="214" id="calibre_link-551" class="calibre16"></span>If you commit too infrequently, each commit will contain a large number of changes, and reverting to a particular commit will undo more changes than you want to. In general, programmers tend to commit less frequently than they should.</p>
+<p class="calibre23">You should commit code when you’ve completed an entire piece of functionality, such as a feature, class, or bug fix. Don’t commit any code that contains syntax errors or is obviously broken. Commits can consist of a few lines of changed code or several hundred, but either way, you should be able to jump back to any earlier commit and still have a working program. You should always run any unit tests before committing. Ideally, all your tests should pass (and if they don’t pass, mention this in the commit message).</p>
+<h3 id="calibre_link-236" class="calibre27">Deleting Files from the Repo</h3>
+<p class="bodyfirst">If you no longer need Git to track a file, you can’t simply delete the file from the filesystem. You must delete it through Git using the <code class="calibre9">git rm</code> command, which also tells Git to untrack the file. To practice doing so, run the <code class="calibre9">echo "Test file" &gt; deleteme.txt</code> command to create a small file named <em class="calibre10">deleteme.txt</em> with the contents <code class="calibre9">"Test file"</code>. Then commit it to the repo by running the following commands:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al\wizcoin&gt;<b class="calibre25">echo "Test file" &gt; deleteme.txt</b>
+C:\Users\Al\wizcoin&gt;<b class="calibre25">git add deleteme.txt</b>
+C:\Users\Al\wizcoin&gt;<b class="calibre25">git commit -m "Adding a file to test Git deletion."</b>
+[master 441556a] Adding a file to test Git deletion.
+ 1 file changed, 1 insertion(+)
+ create mode 100644 deleteme.txt
+C:\Users\Al\wizcoin&gt;<b class="calibre25">git status</b>
+On branch master
+nothing to commit, working tree clean</code></pre>
+<p class="calibre23">Don’t delete the file using the <code class="calibre9">del</code> command on Windows or <code class="calibre9">rm</code> command on macOS and Linux. (If you do, you can run <code class="calibre9">git restore </code><var class="calibre35">&lt;filename&gt;</var> to recover it or simply continue with the <code class="calibre9">git rm</code> command to remove it from the repo.) Instead, use the <code class="calibre9">git rm</code> command to delete and stage the <em class="calibre10">deleteme.txt</em> file such as in this example:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al\wizcoin&gt;<b class="calibre25">git rm deleteme.txt</b>
+rm deleteme.txt'</code></pre>
+<p class="calibre23">The <code class="calibre9">git rm</code> command deletes the file from your working copy, but you’re not done yet. Like <code class="calibre9">git add</code>, the <code class="calibre9">git rm</code> command stages the file. You need to commit file deletion just like any other change:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al\wizcoin&gt;<b class="calibre25">git status</b>
+On branch master
+Changes to be committed:
+ <span class="codeannotation">1</span> (use "git reset HEAD &lt;file&gt;..." to unstage)
+
+        deleted:    deleteme.txt
+
+<span type="pagebreak" title="215" id="calibre_link-552" class="calibre16"></span>C:\Users\Al\wizcoin&gt;<b class="calibre25">git commit -m "Deleting deleteme.txt from the repo to finish the deletion test."</b>
+[master 369de78] Deleting deleteme.txt from the repo to finish the deletion test.
+ 1 file changed, 1 deletion(-)
+ delete mode 100644 deleteme.txt
+C:\Users\Al\Desktop\wizcoin&gt;<b class="calibre25">git status</b>
+On branch master
+nothing to commit, working tree clean</code></pre>
+<p class="calibre23">Even though you’ve deleted <em class="calibre10">deleteme.txt</em> from your working copy, it still exists in the repo’s history. The “Recovering Old Changes” section later in this chapter describes how to recover a deleted file or undo a change.</p>
+<p class="calibre23">The <code class="calibre9">git rm</code> command only works on files that are in the clean, committed state, without any modifications. Otherwise, Git asks you to commit the changes or revert them with the <code class="calibre9">git reset HEAD &lt;</code><var class="calibre35">filename</var><code class="calibre9">&gt;</code> command. (The output of <code class="calibre9">git status</code> reminds you of this command <span class="codeannotation">1</span>.) This procedure prevents you from accidentally deleting uncommitted changes.</p>
+<h3 id="calibre_link-237" class="calibre27">Renaming and Moving Files in the Repo</h3>
+<p class="bodyfirst">Similar to deleting a file, you shouldn’t rename or move a file in a repo unless you use Git. If you try to do so without using Git, it will think you deleted a file and then created a new file that just happens to have the same content. Instead, use the <code class="calibre9">git mv</code> command, followed by <code class="calibre9">git commit</code>. Let’s rename the <em class="calibre10">README.md</em> file to <em class="calibre10">README.txt</em> by running the following commands:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al\wizcoin&gt;<b class="calibre25">git mv README.md README.txt</b>
+C:\Users\Al\wizcoin&gt;<b class="calibre25">git status</b>
+On branch master
+Changes to be committed:
+  (use "git reset HEAD &lt;file&gt;..." to unstage)
+
+        renamed:    README.md -&gt; README.txt
+
+
+C:\Users\Al\wizcoin&gt;<b class="calibre25">git commit -m "Testing the renaming of files in Git."</b>
+[master 3fee6a6] Testing the renaming of files in Git.
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ rename README.md =&gt; README.txt (100%)</code></pre>
+<p class="calibre23">This way, the history of changes to <em class="calibre10">README.txt</em> also includes the history of <em class="calibre10">README.md</em>. </p>
+<p class="calibre23">We can also use the <code class="calibre9">git mv</code> command to move a file to a new folder. Enter the following commands to create a new folder called <em class="calibre10">movetest</em> and move the <em class="calibre10">README.txt</em> into it:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al\wizcoin&gt;<b class="calibre25">mkdir movetest</b>
+C:\Users\Al\wizcoin&gt;<b class="calibre25">git mv README.txt movetest/README.txt</b>
+C:\Users\Al\wizcoin&gt;<b class="calibre25">git status</b>
+On branch master
+<span type="pagebreak" title="216" id="calibre_link-553" class="calibre16"></span>Changes to be committed:
+  (use "git reset HEAD &lt;file&gt;..." to unstage)
+
+        renamed:    README.txt -&gt; movetest/README.txt
+
+C:\Users\Al\wizcoin&gt;<b class="calibre25">git commit -m "Testing the moving of files in Git."</b>
+[master 3ed22ed] Testing the moving of files in Git.
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ rename README.txt =&gt; movetest/README.txt (100%)</code></pre>
+<p class="calibre23">You can also rename and move a file at the same time by passing <code class="calibre9">git mv</code> a new name and location. Let’s move the <em class="calibre10">README.txt</em> back to its original place at the root of the working directory and give it its original name:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al\wizcoin&gt;<b class="calibre25">git mv movetest/README.txt README.md</b>
+C:\Users\Al\wizcoin&gt;<b class="calibre25">git status</b>
+On branch master
+Changes to be committed:
+  (use "git reset HEAD &lt;file&gt;..." to unstage)
+
+        renamed:    movetest/README.txt -&gt; README.md
+
+C:\Users\Al\wizcoin&gt;<b class="calibre25">git commit -m "Moving the README file back to its original place and name."</b>
+[master 962a8ba] Moving the README file back to its original place and name.
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ rename movetest/README.txt =&gt; README.md (100%)</code></pre>
+<p class="calibre23">Note that even though the <em class="calibre10">README.md</em> file is back in its original folder and has its original name, the Git repo remembers the moves and name changes. You can see this history using the <code class="calibre9">git log</code> command, described in the next section.</p>
+<h2 id="calibre_link-238" class="calibre7">Viewing the Commit Log</h2>
+<p class="bodyfirst">The <code class="calibre9">git log</code> command outputs a list of all commits:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al\wizcoin&gt;git log
+commit 962a8baa29e452c74d40075d92b00897b02668fb (HEAD -&gt; master)
+Author: Al Sweigart &lt;al@inventwithpython.com&gt;
+Date:   Wed Sep 1 10:38:23 2021 -0700
+
+    Moving the README file back to its original place and name.
+
+commit 3ed22ed7ae26220bbd4c4f6bc52f4700dbb7c1f1
+Author: Al Sweigart &lt;al@inventwithpython.com&gt;
+Date:   Wed Sep 1 10:36:29 2021 -0700
+
+    Testing the moving of files in Git.
+
+<var class="calibre43">--snip&mdash;</var></code></pre>
+<p class="calibre23"><span type="pagebreak" title="217" id="calibre_link-554" class="calibre16"></span>This command can display a large amount of text. If the log won’t fit in your Terminal window, it’ll let you scroll up or down using the up and down arrow keys. To quit, press the <b class="calibre25">q</b> key.</p>
+<p class="calibre23">If you want to set your files to a commit that’s earlier than the latest one, you need to first find the <em class="calibre10">commit hash</em>, a 40-character string of hexadecimal digits (composed of numbers and the letters A to F), which works as a unique identifier for a commit. For example, the full hash for the most recent commit in our repo is 962a8baa29e452c74d40075d92b00897b02668fb. But it’s common to use only the first seven digits: 962a8ba.</p>
+<p class="calibre23">Over time, the log can get very lengthy. The <code class="calibre9">--oneline</code> option trims the output to abbreviated commit hashes and the first line of each commit message. Enter <code class="calibre9">git log --oneline</code> into the command line:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al\wizcoin&gt;<b class="calibre25">git log --oneline</b>
+962a8ba (HEAD -&gt; master) Moving the README file back to its original place and name.
+3ed22ed Testing the moving of files in Git.
+15734e5 Deleting deleteme.txt from the repo to finish the deletion test.
+441556a Adding a file to test Git deletion.
+2a4c5b8 Added example code to README.md
+e1ae3a3 An initial add of the project files.</code></pre>
+<p class="calibre23">If this log is still too long, you can use <code class="calibre9">-n</code> to limit the output to the most recent commits. Try entering <code class="calibre9">git log --oneline &ndash;n 3</code> to view only the last three commits:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al\wizcoin&gt;<b class="calibre25">git log --oneline -n 3</b>
+962a8ba (HEAD -&gt; master) Moving the README file back to its original place and name.
+3ed22ed Testing the moving of files in Git.
+15734e5 Deleting deleteme.txt from the repo to finish the deletion test.</code></pre>
+<p class="calibre23">To display the contents of a file as it was at a particular commit, you can run the <code class="calibre9">git show </code><var class="calibre35">&lt;hash&gt;</var><code class="calibre9">:</code><var class="calibre35">&lt;filename&gt;</var> command. But GUI Git tools will provide a more convenient interface for examining the repo log than the command line Git tool provides.</p>
+<h2 id="calibre_link-239" class="calibre7">Recovering Old Changes</h2>
+<p class="bodyfirst">Let’s say you want to work with an earlier version of your source code because you’ve introduced a bug, or perhaps you accidentally deleted a file. A version control system lets you undo, or <em class="calibre10">roll back</em>, your working copy to the content of an earlier commit. The exact command you’ll use depends on the state of the files in the working copy.</p>
+<p class="calibre23">Keep in mind that version control systems only add information. Even when you delete a file from a repo, Git will remember it so you can restore it later. Rolling back a change actually adds a new change that sets a file’s content to its state in a previous commit. You’ll find detailed information on various kinds of rollbacks at <a href="https://github.blog/2015-06-08-how-to-undo-almost-anything-with-git/" class="calibre19">https://github.blog/2015-06-08-how-to-undo-almost-anything-with-git/</a>.</p>
+<h3 id="calibre_link-240" class="calibre27"><span type="pagebreak" title="218" id="calibre_link-555" class="calibre37"></span>Undoing Uncommitted Local Changes</h3>
+<p class="bodyfirst">If you’ve made uncommitted changes to a file but want to revert it to the version in the latest commit, you can run <code class="calibre9">git restore </code><var class="calibre35">&lt;filename&gt;</var>. In the following example, we modify the <em class="calibre10">README.md</em> file but don’t yet stage or commit it:</p>
+<pre class="calibre28"><code class="calibre9"> C:\Users\Al\wizcoin&gt;<b class="calibre25">git status </b>
+On branch master
+
+Changes not staged for commit:
+  (use "git add &lt;file&gt;..." to update what will be committed)
+  (use "git restore &lt;file&gt;..." to discard changes in working directory)
+        modified:   README.md
+
+no changes added to commit (use "git add" and/or "git commit -a")
+C:\Users\Al\wizcoin&gt;<b class="calibre25">git restore README.md</b>
+C:\Users\Al\wizcoin&gt;<b class="calibre25">git status</b>
+On branch master
+Your branch is up to date with 'origin/master'.
+
+nothing to commit, working tree clean</code></pre>
+<p class="calibre23">After you’ve run the <code class="calibre9">git restore README.md</code> command, the content of <em class="calibre10">README.md</em> reverts to that of the last commit. This is effectively an <em class="calibre10">undo</em> for the changes you’ve made to the file (but haven’t yet staged or committed). But be careful: you can’t undo this “undo” to get those changes back.</p>
+<p class="calibre23">You can also run <code class="calibre9">git checkout .</code> to revert all changes you’ve made to every file in your working copy.</p>
+<h3 id="calibre_link-241" class="calibre27">Unstaging a Staged File</h3>
+<p class="bodyfirst">If you’ve staged a modified file by running the <code class="calibre9">git add</code> command on it but now want to remove it from staging so it won’t be included in the next commit, run <code class="calibre9">git restore --staged &lt;</code><var class="calibre35">filename</var><code class="calibre9">&gt;</code> to unstage it:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al&gt;<b class="calibre25">git restore --staged README.md</b>
+Unstaged changes after reset:
+M   spam.txt</code></pre>
+<p class="calibre23"><em class="calibre10">README.md</em> remains modified as it was before <code class="calibre9">git add</code> staged the file, but the file is no longer in the staged state.</p>
+<h3 id="calibre_link-242" class="calibre27">Rolling Back the Most Recent Commits</h3>
+<p class="bodyfirst">Suppose you’ve made several unhelpful commits and you want to start over from a previous commit. To undo a specific number of the most recent commits, say, three, use the <code class="calibre9">git revert -n HEAD~3..HEAD</code> command. You can replace the <code class="calibre9">3</code> with any number of commits. For example, let’s say you tracked the changes to a mystery novel you were writing and have the following Git log of all your commits and commit messages.</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al\novel&gt;<b class="calibre25">git log --oneline</b>
+de24642 (HEAD -&gt; master) Changed the setting to outer space.
+2be4163 Added a whacky sidekick.
+97c655e Renamed the detective to 'Snuggles'.
+8aa5222 Added an exciting plot twist.
+2590860 Finished chapter 1.
+2dece36 Started my novel.</code></pre>
+<p class="calibre23">Later you decide you want to start over again from the exciting plot twist at hash <code class="calibre9">8aa5222</code>. This means you should undo the changes from the last three commits: <code class="calibre9">de24642</code>, <code class="calibre9">2be4163</code>, and <code class="calibre9">97c655e</code>. Run <code class="calibre9">git revert -n HEAD~3..HEAD</code> to undo these changes, and then run <code class="calibre9">git add .</code> and <code class="calibre9">git commit -m "</code><var class="calibre35">&lt;commit message&gt;</var><code class="calibre9">"</code> to commit this content, just as you would with any other change:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al\novel&gt;<b class="calibre25">git revert -n HEAD~3..HEAD</b>
+
+C:\Users\Al\novel&gt;<b class="calibre25">git add .</b>
+
+C:\Users\Al\novel&gt;<b class="calibre25">git commit -m "Starting over from the plot twist."</b>
+[master faec20e] Starting over from the plot twist.
+ 1 file changed, 34 deletions(-)
+
+C:\Users\Al\novel&gt;<b class="calibre25">git log --oneline</b>
+faec20e (HEAD -&gt; master) Starting over from the plot twist.
+de24642 Changed the setting to outer space.
+2be4163 Added a whacky sidekick.
+97c655e Renamed the detective to 'Snuggles'.
+8aa5222 Added an exciting plot twist.
+2590860 Finished chapter 1.
+2dece36 Started my novel.</code></pre>
+<p class="calibre23">Git repos generally only add information, so undoing these commits still leaves them in the commit history. If you ever want to undo this “undo,” you can roll it back using <code class="calibre9">git revert</code> again.</p>
+<h3 id="calibre_link-243" class="calibre27">Rolling Back to a Specific Commit for a Single File</h3>
+<p class="bodyfirst">Because commits capture the state of the entire repo instead of individual files, you’ll need a different command if you want to roll back changes for a single file. For example, let’s say I had a Git repo for a small software project. I’ve created an <em class="calibre10">eggs.py</em> file and added functions <code class="calibre9">spam()</code> and <code class="calibre9">bacon()</code>, and then renamed <code class="calibre9">bacon()</code> to <code class="calibre9">cheese()</code>. The log for this repo would look something like this:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al\myproject&gt;<b class="calibre25">git log --oneline</b>
+895d220 (HEAD -&gt; master) Adding email support to cheese().
+df617da Renaming bacon() to cheese().
+ef1e4bb Refactoring bacon().
+ac27c9e Adding bacon() function.
+009b7c0 Adding better documentation to spam().
+0657588 Creating spam() function.
+d811971 Initial add.</code></pre>
+<p class="calibre23"><span type="pagebreak" title="220" id="calibre_link-556" class="calibre16"></span>But I’ve decided I want to revert the file back to before I added <code class="calibre9">bacon()</code> without changing any other files in the repo. I can use the <code class="calibre9">git show </code><var class="calibre35">&lt;hash&gt;</var><code class="calibre9">:</code><var class="calibre35">&lt;filename&gt;</var> command to display this file as it was after a specific commit. The command would look something like this:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al\myproject&gt;<b class="calibre25">git show 009b7c0:eggs.py</b>
+<var class="calibre43">&lt;contents of eggs.py as it was at the 009b7c0 commit&gt;</var></code></pre>
+<p class="calibre23">Using the<em class="calibre10"> </em><code class="calibre9">git checkout </code><var class="calibre35">&lt;hash&gt;</var><code class="calibre9"> -- </code><var class="calibre35">&lt;filename&gt;</var>, I could set the contents of <em class="calibre10">eggs.py</em> to this version and commit the changed file as normal. The <code class="calibre9">git checkout</code> command only changes the working copy. You’ll still need to stage and commit these changes like any other change:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al\myproject&gt;<b class="calibre25">git checkout 009b7c0 -- eggs.py</b>
+
+C:\Users\Al\myproject&gt;<b class="calibre25">git add eggs.py</b>
+
+C:\Users\Al\myproject&gt;<b class="calibre25">git commit -m "Rolled back eggs.py to 009b7c0"</b>
+[master d41e595] Rolled back eggs.py to 009b7c0
+ 1 file changed, 47 deletions(-)
+
+C:\Users\Al\myproject&gt;<b class="calibre25">git log --oneline</b>
+d41e595 (HEAD -&gt; master) Rolled back eggs.py to 009b7c0
+895d220 Adding email support to cheese().
+df617da Renaming bacon() to cheese().
+ef1e4bb Refactoring bacon().
+ac27c9e Adding bacon() function.
+009b7c0 Adding better documentation to spam().
+0657588 Creating spam() function.
+d811971 Initial add.</code></pre>
+<p class="calibre23">The <em class="calibre10">eggs.py</em> file has been rolled back, and the rest of the repo remains the same.</p>
+<h3 id="calibre_link-244" class="calibre27">Rewriting the Commit History</h3>
+<p class="bodyfirst">If you’ve accidentally committed a file that contains sensitive information, such as passwords, API keys, or credit card numbers, it’s not enough to edit that information out and make a new commit. Anyone with access to the repo, either on your computer or cloned remotely, could roll back to the commit that includes this info.</p>
+<p class="calibre23">Actually removing this information from your repo so it’s unrecoverable is tricky but possible. The exact steps are beyond the scope of this book, but you can use either the <code class="calibre9">git filter-branch</code> command or, preferably, the BFG Repo-Cleaner tool. You can read about both at <a href="https://help.github.com/en/articles/removing-sensitive-data-from-a-repository" class="calibre19">https://help.github.com/en/articles/removing-sensitive-data-from-a-repository</a>.</p>
+<p class="calibre23">The easiest preventative measure for this problem is to have a <em class="calibre10">secrets.txt</em>, <em class="calibre10">confidential.py</em>, or similarly named file where you place sensitive, private information, and add it to <em class="calibre10">.gitignore</em> so you’ll never accidentally commit it to the repo. Your program can read this file for the sensitive info instead of having the sensitive info directly in its source code.</p>
+<h2 id="calibre_link-245" class="calibre7"><span type="pagebreak" title="221" id="calibre_link-557" class="calibre20"></span>GitHub and the git push Command</h2>
+<p class="bodyfirst">Although Git repos can exist entirely on your computer, many free websites can host clones of your repo online, letting others easily download and contribute to your projects. The largest of these sites is GitHub. If you keep a clone of your project online, others can add to your code, even if the computer from which you develop is turned off. The clone also acts as an effective backup. </p>
+<aside type="sidebar" class="authors">
+<div class="top"><hr class="calibre32" /></div>
+<section class="note">
+<h2 class="calibre33"><span class="notehead">NOTE</span></h2>
+<p class="calibre34">Although the terms can cause confusion, <em class="calibre10">Git</em> is version control software that maintains a repo and includes the <code class="calibre9">git</code> command, whereas <em class="calibre10">GitHub</em> is a website that hosts Git repos online.</p>
+<div class="top"><hr class="calibre32" /></div>
+</section>
+</aside>
+<p class="calibre23">Go to <a href="https://github.com" class="calibre19">https://github.com</a> and sign up for a free account. From the GitHub home page or your profile page’s Repositories tab, click the <b class="calibre25">New</b> button to start a new project. Enter <b class="calibre25">wizcoin</b> for the repository name and the same project description that we gave Cookiecutter in “Using Cookiecutter to Create New Python Projects” on page 200, as shown in <a id="calibre_link-718" href="#calibre_link-337" class="calibre19">Figure 12-6</a>. Mark the repo as <b class="calibre25">Public</b> and deselect the <b class="calibre25">Initialize this repository with a README</b> checkbox, because we’ll import an existing repository. Then click <b class="calibre25">Create repository</b>. These steps are effectively like running <code class="calibre9">git init</code> on the GitHub website.</p>
+<figure class="calibre29">
+<img src="images/000022.png" alt="f12006" class="calibre15" />
+<figcaption class="calibre30"><p class="calibre31"><a id="calibre_link-337" href="#calibre_link-718" class="calibre19">Figure 12-6:</a> Creating a new repo on GitHub</p></figcaption>
+</figure>
+<p class="calibre23">You’ll find the web page for your repos at <em class="calibre10">https://github.com/&lt;username&gt;/&lt;repo_name&gt;</em>. In my case, my <code class="calibre9">wizcoin</code><em class="calibre10"> </em>repo is hosted at <a href="https://github.com/asweigart/wizcoin" class="calibre19">https://github.com/asweigart/wizcoin</a>. </p>
+<h3 id="calibre_link-246" class="calibre27"><span type="pagebreak" title="222" id="calibre_link-558" class="calibre37"></span>Pushing an Existing Repository to GitHub</h3>
+<p class="bodyfirst">To push an existing repository from the command line, enter the following:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al\wizcoin&gt;<b class="calibre25">git remote add origin https://github.com/</b><var class="calibre43">&lt;github_username&gt;</var><b class="calibre25">/wizcoin.git</b>
+C:\Users\Al\wizcoin&gt;<b class="calibre25">git push -u origin master</b>
+Username for 'https://github.com': <var class="calibre43">&lt;github_username&gt;</var>
+Password for 'https://<var class="calibre43">&lt;github_username&gt;</var>@github.com': <var class="calibre43">&lt;github_password&gt;</var>
+Counting objects: 3, done.
+Writing objects: 100% (3/3), 213 bytes | 106.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0)
+To https://github.com/<var class="calibre43">&lt;your github&gt;</var>/wizcoin.git
+ * [new branch]      master -&gt; master
+Branch 'master' set up to track remote branch 'master' from 'origin'.</code></pre>
+<p class="calibre23">The <code class="calibre9">git remote add origin https://github.com/</code><var class="calibre35">&lt;github_username&gt;</var><code class="calibre9">/wizcoin.git</code> command adds GitHub as a remote repo corresponding to your local repo. You then push any commits you’ve made on your local repo to the remote repo using the <code class="calibre9">git push -u origin master</code> command. After this first push, you can push all future commits from your local repo by simply running <code class="calibre9">git push</code>. Pushing your commits to GitHub after every commit is a good idea to ensure the remote repo on GitHub is up to date with your local repo, but it’s not strictly necessary. </p>
+<p class="calibre23">When you reload the repo’s web page on GitHub, you should see the files and commits displayed on the site. There’s a lot more to learn about GitHub, including how you can accept other people’s contributions to your repos through <em class="calibre10">pull requests</em>. These, along with GitHub’s other advanced features, are beyond the scope of this book.</p>
+<h3 id="calibre_link-247" class="calibre27">Cloning a Repo from an Existing GitHub Repo</h3>
+<p class="bodyfirst">It’s also possible to do the opposite: create a new repo on GitHub and clone it to your computer. Create a new repo on the GitHub website, but this time, select the <b class="calibre25">Initialize this repository with a README</b> checkbox.</p>
+<p class="calibre23">To clone this repo to your local computer, go to the repo’s page on GitHub and click the <b class="calibre25">Clone</b> or <b class="calibre25">download </b>button to open a window whose URL should look something like <em class="calibre10">https://github.com/&lt;github_username&gt;/wizcoin.git</em>. Use your repo’s URL with the <code class="calibre9">git clone</code> command to download it to your computer:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al&gt;<b class="calibre25">git clone https://github.com/</b><var class="calibre43">&lt;github_username&gt;</var><b class="calibre25">/wizcoin.git</b>
+Cloning into 'wizcoin'...
+remote: Enumerating objects: 5, done.
+remote: Counting objects: 100% (5/5), done.
+remote: Compressing objects: 100% (3/3), done.
+remote: Total 5 (delta 0), reused 5 (delta 0), pack-reused 0
+Unpacking objects: 100% (5/5), done.</code></pre>
+<p class="calibre23">You can now commit and push changes using this Git repo just as you would if you had run <code class="calibre9">git init</code> to create the repo.</p>
+<p class="calibre23"><span type="pagebreak" title="223" id="calibre_link-559" class="calibre16"></span>The <code class="calibre9">git clone</code> command is also useful in case your local repo gets into a state that you don’t know how to undo. Although it’s less than ideal, you can always save a copy of the files in your working directory, delete the local repo, and use <code class="calibre9">git clone</code> to re-create the repo. This scenario happens so often, even to experienced software developers, that it’s the basis of the joke at <a href="https://xkcd.com/1597/" class="calibre19">https://xkcd.com/1597/</a>.</p>
+<h2 id="calibre_link-248" class="calibre7">Summary</h2>
+<p class="bodyfirst">Version control systems are lifesavers for programmers. Committing snapshots of your code makes it easy to review your progress and, in certain cases, roll back changes you don’t need. Learning the basics of a version control system like Git certainly saves you time in the long run.</p>
+<p class="calibre23">Python projects typically have several standard files and folders, and the <code class="calibre9">cookiecutter</code> module helps you create the starting boilerplate for many of these files. These files make up the first files you commit to your local Git repo. We call the folder containing all of this content the <em class="calibre10">working directory</em> or <em class="calibre10">project folder</em>.</p>
+<p class="calibre23">Git tracks the files in your working directory, all of which can exist in one of three states: committed (also called unmodified or clean), modified, or staged. The Git command line tool has several commands, such as <code class="calibre9">git status</code> or <code class="calibre9">git log</code>, that let you view this information, but you can also install several third-party GUI Git tools.</p>
+<p class="calibre23">The <code class="calibre9">git init</code> command creates a new, empty repo on your local computer. The <code class="calibre9">git clone</code> command copies a repo from a remote server, such as the popular GitHub website. Either way, once you have a repo, you can use <code class="calibre9">git add</code> and <code class="calibre9">git commit</code> to commit changes to your repo, and use <code class="calibre9">git push</code> to push these commits to a remote GitHub repo. Several commands were also described in this chapter to undo the commits you’ve made. Performing an undo allows you to roll back to an earlier version of your files.</p>
+<p class="calibre23">Git is a extensive tool with many features, and this chapter covers only the basics of the version control system. Many resources are available to you to learn more about Git’s advanced features. I recommend two free books that you can find online: <em class="calibre10">Pro Git</em> by Scott Charcon at <a href="https://git-scm.com/book/en/v2" class="calibre19">https://git-scm.com/book/en/v2</a> and <em class="calibre10">Version Control by Example</em> by Eric Sink at <a href="https://ericsink.com/vcbe/index.html" class="calibre19">https://ericsink.com/vcbe/index.html</a>.</p>
+</section>
+</div>
+
+
+
+<a href="chapter11.html">Prev: Chapter 11 - Comments, Docstrings, and Type Hints</a> | <a href="chapter13.html">Next: Chapter 13 - Measuring Performance and Big O Algorithm Analysis</a>
+</body></html>

@@ -1,0 +1,399 @@
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-171">
+<section class="toclist">
+<header class="calibre12">
+<h1 class="chaptertitle">
+<span class="partnumber"><span type="pagebreak" title="133" id="calibre_link-477" class="calibre26"></span>8</span><br class="calibre18" />
+<span class="parttitle1">Common Python Gotchas</span>
+</h1>
+</header>
+<figure class="opener"><img src="images/000017.png" alt="" class="calibre15" /></figure><p class="chapterintro">Although Python is my favorite programming language, it isn’t without flaws. Every language has warts (some more than others), and Python is no exception. New Python programmers must learn to avoid some common “gotchas.” Programmers learn this kind of knowledge randomly, from experience, but this chapter collects it in one place. Knowing the programming lore behind these gotchas can help you understand why Python behaves strangely sometimes.</p>
+<p class="calibre22"><span type="pagebreak" title="134" id="calibre_link-478" class="calibre16"></span>This chapter explains how mutable objects, such as lists and dictionaries, can behave unexpectedly when you modify their contents. You’ll learn how the <code class="calibre9">sort()</code> method doesn’t sort items in an exact alphabetical order and how floating-point numbers can have rounding errors. The inequality operator <code class="calibre9">!=</code> has unusual behavior when you chain them together. And you must use a trailing comma when you write tuples that contain a single item. This chapter informs you how to avoid these common gotchas.</p>
+<h2 id="calibre_link-172" class="calibre7">Don’t Add or Delete Items from a List While Looping Over It</h2>
+<p class="bodyfirst">Adding or deleting items from a list while looping (that is, <em class="calibre10">iterating</em>) over it with a <code class="calibre9">for</code> or <code class="calibre9">while</code> loop will most likely cause bugs. Consider this scenario: you want to iterate over a list of strings that describe items of clothing and ensure that there is an even number of socks by inserting a matching sock each time a sock is found in the list. The task seems straightforward: iterate over the list’s strings, and when you find <code class="calibre9">'sock'</code> in a string, such as <code class="calibre9">'red sock'</code>, append another <code class="calibre9">'red sock'</code> string to the list.</p>
+<p class="calibre23">But this code won’t work. It gets caught in an infinite loop, and you’ll have to press <span class="keycaps">Ctrl-</span>C<span class="keycaps"></span>to interrupt it:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">clothes = ['skirt', 'red sock']</b>
+&gt;&gt;&gt; <b class="calibre25">for clothing in clothes:</b>  # Iterate over the list.
+...     <b class="calibre25">if 'sock' in clothing:</b>  # Find strings with 'sock'.
+...         <b class="calibre25">clothes.append(clothing)</b>  # Add the sock's pair.
+...         <b class="calibre25">print('Added a sock:', clothing)</b>  # Inform the user.
+...
+Added a sock: red sock
+Added a sock: red sock
+Added a sock: red sock
+<var class="calibre43">--snip--</var>
+Added a sock: red sock
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 3, in &lt;module&gt;
+KeyboardInterrupt</code></pre>
+<p class="calibre23">You’ll find a visualization of the execution of this code at <a href="https://autbor.com/addingloop/" class="calibre19">https://autbor.com/addingloop/</a><em class="calibre10">.</em></p>
+<p class="calibre23">The problem is that when you append <code class="calibre9">'red sock'</code> to the <code class="calibre9">clothes</code> list, the list now has a new, third item that it must iterate over: <code class="calibre9">['skirt', 'red sock', 'red sock']</code>. The <code class="calibre9">for</code> loop reaches the second <code class="calibre9">'red sock'</code> on the next iteration, so it appends <em class="calibre10">another</em><code class="calibre9">'red sock'</code> string. This makes the list <code class="calibre9">['skirt', 'red sock', 'red sock', 'red sock']</code>, giving the list another string for Python to iterate over. This will continue happening, as shown in <a id="calibre_link-690" href="#calibre_link-328" class="calibre19">Figure 8-1</a>, which is why we see the never-ending stream of <code class="calibre9">'Added a sock.'</code> messages. The loop only stops once the computer runs out of memory and crashes the Python program or until you interrupt it by pressing <span class="keycaps">Ctrl</span>-C.</p>
+<span type="pagebreak" title="135" id="calibre_link-479" class="calibre16"></span><figure class="calibre29">
+<img src="images/000000.png" alt="f08001" class="calibre15" />
+<figcaption class="calibre30"><p class="calibre31"><a id="calibre_link-328" href="#calibre_link-690" class="calibre19">Figure 8-1:</a> On each iteration of the <code class="calibre41">for</code> loop, a new <code class="calibre41">'red sock'</code> is appended to the list, which <code class="calibre41">clothing</code> refers to on the next iteration. This cycle repeats forever.</p></figcaption>
+</figure>
+<p class="calibre23">The takeaway is don’t add items to a list while you’re iterating over that list<em class="calibre10">.</em> Instead, use a separate list for the contents of the new, modified list, such as <code class="calibre9">newClothes</code> in this example:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">clothes = ['skirt', 'red sock', 'blue sock']</b>
+&gt;&gt;&gt; <b class="calibre25">newClothes = []</b>
+&gt;&gt;&gt; <b class="calibre25">for clothing in clothes:</b>
+...     <b class="calibre25">if 'sock' in clothing:</b>
+...         <b class="calibre25">print('Appending:', clothing)</b>
+...         <b class="calibre25">newClothes.append(clothing)  </b># We change the newClothes list, not clothes.
+...
+Appending: red sock
+Appending: blue sock
+&gt;&gt;&gt; <b class="calibre25">print(newClothes)</b>
+['red sock', 'blue sock']
+&gt;&gt;&gt; <b class="calibre25">clothes.extend(newClothes)</b>  # Appends the items in newClothes to clothes.
+&gt;&gt;&gt; <b class="calibre25">print(clothes)</b>
+['skirt', 'red sock', 'blue sock', 'red sock', 'blue sock']</code></pre>
+<p class="calibre23">A visualization of the execution of this code is at <a href="https://autbor.com/addingloopfixed/" class="calibre19">https://autbor.com/addingloopfixed/</a>.</p>
+<p class="calibre23"><span type="pagebreak" title="136" id="calibre_link-480" class="calibre16"></span>Our <code class="calibre9">for</code> loop iterated over the items in the <code class="calibre9">clothes</code> list but didn’t modify <code class="calibre9">clothes</code> inside the loop. Instead, it changed a separate list, <code class="calibre9">newClothes</code>. Then, after the loop, we modify <code class="calibre9">clothes</code> by extending it with the contents of <code class="calibre9">newClothes</code>. You now have a <code class="calibre9">clothes</code> list with matching socks.</p>
+<p class="calibre23">Similarly, you shouldn’t delete items from a list while iterating over it. Consider code in which we want to remove any string that isn’t <code class="calibre9">'hello'</code> from a list. The naive approach is to iterate over the list, deleting the items that don’t match <code class="calibre9">'hello'</code>:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">greetings = ['hello', 'hello', 'mello', 'yello', 'hello']</b>
+&gt;&gt;&gt; <b class="calibre25">for i, word in enumerate(greetings):</b>
+...     <b class="calibre25">if word != 'hello':</b>  # Remove everything that isn't 'hello'.
+...         <b class="calibre25">del greetings[i]</b>
+...
+&gt;&gt;&gt; <b class="calibre25">print(greetings)</b>
+['hello', 'hello', 'yello', 'hello']</code></pre>
+<p class="calibre23">A visualization of the execution of this code is at <a href="https://autbor.com/deletingloop/" class="calibre19">https://autbor.com/deletingloop/</a>.</p>
+<p class="calibre23">It seems that <code class="calibre9">'yello'</code> is left in the list. The reason is that when the <code class="calibre9">for</code> loop was examining index <code class="calibre9">2</code>, it deleted <code class="calibre9">'mello'</code> from the list. But this shifted all the remaining items in the list down one index, moving <code class="calibre9">'yello'</code> from index <code class="calibre9">3</code> to index <code class="calibre9">2</code>. The next iteration of the loop examines index <code class="calibre9">3</code>, which is now the last <code class="calibre9">'hello'</code>, as in <a id="calibre_link-691" href="#calibre_link-329" class="calibre19">Figure 8-2</a>. The <code class="calibre9">'yello'</code> string slipped by unexamined! <em class="calibre10">Don’t </em>remove items from a list while you’re iterating over that list<em class="calibre10">.</em></p>
+<figure class="calibre29">
+<img src="images/000032.png" alt="f08002" class="calibre15" />
+<figcaption class="calibre30"><p class="calibre31"><a id="calibre_link-329" href="#calibre_link-691" class="calibre19">Figure 8-2:</a> When the loop removes <code class="calibre41">'mello'</code>, the items in the list shift down one index, causing <code class="calibre41">i</code> to skip over <code class="calibre41">'yello'</code>.</p></figcaption>
+</figure>
+<p class="calibre23">Instead, create a new list that copies all the items except the ones you want to delete, and then replace the original list. For a bug-free equivalent of the previous example, enter the following code into the interactive shell.</p>
+<span type="pagebreak" title="137" id="calibre_link-712" class="calibre16"></span><pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">greetings = ['hello', 'hello', 'mello', 'yello', 'hello']</b>
+&gt;&gt;&gt; <b class="calibre25">newGreetings = []</b>
+&gt;&gt;&gt; <b class="calibre25">for word in greetings:</b>
+...     <b class="calibre25">if word == 'hello':</b>  # Copy everything that is 'hello'.
+...         <b class="calibre25">newGreetings.append(word)</b>
+...
+&gt;&gt;&gt; <b class="calibre25">greetings = newGreetings</b>  # Replace the original list.
+&gt;&gt;&gt; <b class="calibre25">print(greetings)</b>
+['hello', 'hello', 'hello']</code></pre>
+<p class="calibre23">A visualization of the execution of this code is at <a href="https://autbor.com/deletingloopfixed/" class="calibre19">https://autbor.com/deletingloopfixed/</a>.</p>
+<p class="calibre23">Remember that because this code is just a simple loop that creates a list, you can replace it with a list comprehension. The list comprehension doesn’t run faster or use less memory, but it’s shorter to type without losing much readability. Enter the following into the interactive shell, which is equivalent to the code in the previous example:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">greetings = ['hello', 'hello', 'mello', 'yello', 'hello']</b>
+&gt;&gt;&gt; <b class="calibre25">greetings = [word for word in greetings if word == 'hello']</b>
+&gt;&gt;&gt; <b class="calibre25">print(greetings)</b>
+['hello', 'hello', 'hello']</code></pre>
+<p class="calibre23">Not only is the list comprehension more succinct, it also avoids the gotcha that occurs when changing a list while iterating over it.</p>
+<aside type="sidebar" class="authors">
+<div class="top"><hr class="calibre32" /></div>
+<section class="box">
+<h2 class="calibre38">References, Memory Usage, and sys.getsizeof()</h2>
+<p class="boxbodyfirst">It might seem like creating a new list instead of modifying the original one wastes memory. But remember that, just as variables technically contain references to values instead of the actual values, lists also contain references to values. The <code class="calibre41">newGreetings.append(word)</code> line shown earlier isn’t making a copy of the string in the <code class="calibre41">word</code> variable, just a copy of the reference to the string, which is much smaller.</p>
+<p class="calibre40">You can see this by using the <code class="calibre41">sys.getsizeof</code><code class="calibre41">()</code> function, which returns the number of bytes that the object passed to it takes up in memory. In this interactive shell example, we can see that the short string <code class="calibre41">'cat'</code> takes up 52 bytes, whereas a longer string takes up 85 bytes:</p>
+<pre class="calibre28"><code class="calibre41">&gt;&gt;&gt; <b class="calibre25">import sys</b>
+&gt;&gt;&gt; <b class="calibre25">sys.getsizeof('cat')</b>
+52
+&gt;&gt;&gt; <b class="calibre25">sys.getsizeof('a much longer string than just "cat"')</b>
+85</code></pre>
+<p class="calibre40"><span type="pagebreak" title="138" id="calibre_link-481" class="calibre16"></span>(In the Python version I use, the overhead for the string object takes up 49 bytes, whereas each actual character in the string takes up 1 byte.) But a list containing either of these strings takes up 72 bytes, no matter how long the string is:</p>
+<pre class="calibre28"><code class="calibre41">&gt;&gt;&gt; <b class="calibre25">sys.getsizeof(['cat'])</b>
+72
+&gt;&gt;&gt; <b class="calibre25">sys.getsizeof(['a much longer string than just "cat"'])</b>
+72</code></pre>
+<p class="calibre40">The reason is that a list technically doesn’t contain the strings, but rather just a reference to the strings, and a reference is the same size no matter the size of the referred data. Code like <code class="calibre41">newGreetings.append(word)</code> isn’t copying the string in <code class="calibre41">word</code>, but the reference to the string. If you want to find out how much memory an object, and all the objects it refers to, take up, Python core developer Raymond Hettinger has written a function for this, which you can access at <a href="https://code.activestate.com/recipes/577504-compute-memory-footprint-of-an-object-and-its-cont/" class="calibre19">https://code.activestate.com/recipes/577504-compute-memory-footprint-of-an-object-and-its-cont/</a>.</p>
+<p class="calibre40">So you shouldn’t feel like you’re wasting memory by creating a new list rather than modifying the original list while iterating over it. Even if your list-modifying code seemingly works, it can be the source of subtle bugs that take a long time to discover and fix. Wasting a programmer’s time is far more expensive than wasting a computer’s memory.</p>
+<div class="top"><hr class="calibre32" /></div>
+</section>
+</aside>
+<p class="calibre23">Although you shouldn’t add or remove items from a list (or any iterable object) while iterating over it, it’s fine to modify the list’s contents. For example, say we have a list of numbers as strings: <code class="calibre9">['1', '2', '3', '4', '5']</code>. We can convert this list of strings into a list of integers <code class="calibre9">[1, 2, 3, 4, 5]</code> while iterating over the list:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">numbers = ['1', '2', '3', '4', '5']  </b>
+&gt;&gt;&gt; <b class="calibre25">for i, number in enumerate(numbers):</b>
+...     <b class="calibre25">numbers[i] = int(number)</b>
+...
+&gt;&gt;&gt; <b class="calibre25">numbers  </b>
+[1, 2, 3, 4, 5]</code></pre>
+<p class="calibre23">A visualization of the execution of this code is at <a href="https://autbor.com/covertstringnumbers" class="calibre19">https://autbor.com/covertstringnumbers</a>. Modifying the items in the list is fine; it’s changing the number of items in the list that is bug prone.</p>
+<p class="calibre23">Another possible way to add or delete items in a list safely is by iterating backward from the end of the list to the beginning. This way, you can delete items from the list as you iterate over it, or add items to the list as long as you add them to the end of the list. For example, enter the following code, which removes even integers from the <code class="calibre9">someInts</code> list.</p>
+<span type="pagebreak" title="139" id="calibre_link-711" class="calibre16"></span><pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">someInts = [1, 7, 4, 5]</b>
+&gt;&gt;&gt; <b class="calibre25">for i in range(len(someInts)):</b>
+...
+...     <b class="calibre25">if someInts[i] % 2 == 0:</b>
+...         <b class="calibre25">del someInts[i]</b>
+...
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 2, in &lt;module&gt;
+IndexError: list index out of range
+&gt;&gt;&gt; <b class="calibre25">someInts = [1, 7, 4, 5]</b>
+&gt;&gt;&gt; <b class="calibre25">for i in range(len(someInts) - 1, -1, -1):</b>
+...     <b class="calibre25">if someInts[i] % 2 == 0:</b>
+...         <b class="calibre25">del someInts[i]</b>
+...
+&gt;&gt;&gt; <b class="calibre25">someInts</b>
+[1, 7, 5]</code></pre>
+<p class="calibre23">This code works because none of the items that the loop will iterate over in the future ever have their index changed. But the repeated shifting up of values after the deleted value makes this technique inefficient for long lists. A visualization of the execution of this code is at <a href="https://autbor.com/iteratebackwards1" class="calibre19">https://autbor.com/iteratebackwards1</a>. You can see the difference between iterating forward and backward in <a id="calibre_link-692" href="#calibre_link-330" class="calibre19">Figure 8-3</a>.</p>
+<figure class="calibre29">
+<img src="images/000025.png" alt="f08003" class="calibre15" />
+<figcaption class="calibre30"><p class="calibre31"><a id="calibre_link-330" href="#calibre_link-692" class="calibre19">Figure 8-3:</a> Removing even numbers from a list while iterating forward (left) and backward (right)</p></figcaption>
+</figure>
+<p class="calibre23">Similarly, you can add items to the end of the list as you iterate backward over it. Enter the following into the interactive shell, which appends a copy of any even integers in the <code class="calibre9">someInts</code> list to the end of the list:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">someInts = [1, 7, 4, 5]</b>
+&gt;&gt;&gt; <b class="calibre25">for i in range(len(someInts) - 1, -1, -1):</b>
+<span type="pagebreak" title="140" id="calibre_link-482" class="calibre16"></span>...     <b class="calibre25">if someInts[i] % 2 == 0:</b>
+...         <b class="calibre25">someInts.append(someInts[i])</b>
+...
+&gt;&gt;&gt; <b class="calibre25">someInts</b>
+[1, 7, 4, 5, 4]</code></pre>
+<p class="calibre23">A visualization of the execution of this code is at <a href="https://autbor.com/iteratebackwards2" class="calibre19">https://autbor.com/iteratebackwards2</a>. By iterating backward, we can append items to or remove items from the list. But this can be tricky to do correctly because slight changes to this basic technique could end up introducing bugs. It’s much simpler to create a new list rather than modifying the original list. As Python core developer Raymond Hettinger put it:</p>
+<ol class="none">
+<li class="calibre11"><b class="calibre25">Q.</b> What are the best practices for modifying a list while looping over it?</li>
+<li class="calibre11"><b class="calibre25">A.</b> Don’t.</li>
+</ol>
+<h2 id="calibre_link-173" class="calibre7">Don’t Copy Mutable Values Without copy.copy() and copy.deepcopy()</h2>
+<p class="bodyfirst">It’s better to think of variables as labels or name tags that refer to objects rather than as boxes that contain objects. This mental model is especially useful when it comes to modifying <em class="calibre10">mutable</em> objects: objects such as lists, dictionaries, and sets whose value can mutate (that is, change). A common gotcha occurs when copying one variable that refers to a mutable object to another variable and thinking that the actual object is being copied. In Python, assignment statements never copy objects; they only copy the references to an object. (Python developer Ned Batchelder has a great PyCon 2015 talk on this idea titled, “Facts and Myths about Python Names and Values.” Watch it at <a href="https://youtu.be/_AEJHKGk9ns" class="calibre19">https://youtu.be/_AEJHKGk9ns</a>.)</p>
+<p class="calibre23">For example, enter the following code into the interactive shell, and note that even though we change the <code class="calibre9">spam</code> variable only, the <code class="calibre9">cheese</code> variable changes as well:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">spam = ['cat', 'dog', 'eel']</b>
+&gt;&gt;&gt; <b class="calibre25">cheese = spam</b>
+&gt;&gt;&gt; <b class="calibre25">spam  </b>
+['cat', 'dog', 'eel']
+&gt;&gt;&gt; <b class="calibre25">cheese  </b>
+['cat', 'dog', 'eel']
+&gt;&gt;&gt; <b class="calibre25">spam[2] = 'MOOSE'</b>
+&gt;&gt;&gt; <b class="calibre25">spam  </b>
+['cat', 'dog', 'MOOSE']
+&gt;&gt;&gt; <b class="calibre25">cheese</b>
+['cat', 'dog', 'MOOSE']
+&gt;&gt;&gt; <b class="calibre25">id(cheese), id(spam)</b>
+2356896337288, 2356896337288</code></pre>
+<p class="calibre23">A visualization of the execution of this code is at <a href="https://autbor.com/listcopygotcha1" class="calibre19">https://autbor.com/listcopygotcha1</a>. If you think that <code class="calibre9">cheese = spam</code> copied the list object, you might be surprised that <code class="calibre9">cheese</code> seems to have changed even though we only <span type="pagebreak" title="141" id="calibre_link-483" class="calibre16"></span>modified <code class="calibre9">spam</code>. But assignment statements<em class="calibre10"> never copy objects</em>, only references to objects<em class="calibre10">.</em> The assignment statement <code class="calibre9">cheese = spam</code> makes <code class="calibre9">cheese</code><em class="calibre10">refer</em> to the same list object in the computer’s memory as <code class="calibre9">spam</code>. It doesn’t <em class="calibre10">duplicate</em> the list object. This is why changing <code class="calibre9">spam</code> also changes <code class="calibre9">cheese</code>: both variables refer to the same list object.</p>
+<p class="calibre23">The same principle applies to mutable objects passed to a function call. Enter the following into the interactive shell, and note that the global variable <code class="calibre9">spam</code> and the local parameter (remember, parameters are variables defined in the function’s <code class="calibre9">def</code> statement) <code class="calibre9">theList</code> both refer to the same object:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">def printIdOfParam(theList):</b>
+...     <b class="calibre25">print(id(theList))</b>
+...
+&gt;&gt;&gt; <b class="calibre25">eggs = ['cat', 'dog', 'eel']</b>
+&gt;&gt;&gt; <b class="calibre25">print(id(eggs))</b>
+2356893256136
+&gt;&gt;&gt; <b class="calibre25">printIdOfParam(eggs)</b>
+2356893256136</code></pre>
+<p class="calibre23">A visualization of the execution of this code is at <a href="https://autbor.com/listcopygotcha2" class="calibre19">https://autbor.com/listcopygotcha2</a>. Notice that the identities returned by <code class="calibre9">id()</code> for <code class="calibre9">eggs</code> and <code class="calibre9">theList</code> are the same, meaning these variables refer to the same list object. The <code class="calibre9">eggs</code> variable’s list object wasn’t copied to <code class="calibre9">theList</code>; rather, the reference was copied, which is why both variables refer to the same list. A reference is only a few bytes in size, but imagine if Python copied the entire list instead of just the reference. If <code class="calibre9">eggs</code> contained a billion items instead of just three, passing it to the <code class="calibre9">printIdOfParam()</code> function would require copying this giant list. This would eat up gigabytes of memory just to do a simple function call! That’s why Python assignment only copies references and never copies objects.</p>
+<p class="calibre23">One way to prevent this gotcha is to make a copy of the list object (not just the reference) with the <code class="calibre9">copy.copy()</code> function. Enter the following into the interactive shell:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">import copy</b>
+&gt;&gt;&gt; <b class="calibre25">bacon = [2, 4, 8, 16]</b>
+&gt;&gt;&gt; <b class="calibre25">ham = copy.copy(bacon)</b>
+&gt;&gt;&gt; <b class="calibre25">id(bacon), id(ham)</b>
+(2356896337352, 2356896337480)
+&gt;&gt;&gt; <b class="calibre25">bacon[0] = 'CHANGED'</b>
+&gt;&gt;&gt; <b class="calibre25">bacon</b>
+['CHANGED', 4, 8, 16]
+&gt;&gt;&gt; <b class="calibre25">ham</b>
+[2, 4, 8, 16]
+&gt;&gt;&gt; <b class="calibre25">id(bacon), id(ham)</b>
+(2356896337352, 2356896337480)</code></pre>
+<p class="calibre23">A visualization of the execution of this code is at <a href="https://autbor.com/copycopy1" class="calibre19">https://autbor.com/copycopy1</a>. The <code class="calibre9">ham</code> variable refers to a copied list object rather than the original list object referred to by <code class="calibre9">bacon</code>, so it doesn’t suffer from this gotcha.</p>
+<p class="calibre23">But just as variables are like labels or name tags rather than boxes that contain objects, lists also contain labels or name tags that refer to objects <span type="pagebreak" title="142" id="calibre_link-484" class="calibre16"></span>rather than the actual objects. If your list contains other lists, <code class="calibre9">copy.copy()</code> only copies the references to these inner lists. Enter the following into the interactive shell to see this problem:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">import copy</b>
+&gt;&gt;&gt; <b class="calibre25">bacon = [[1, 2], [3, 4]]</b>
+&gt;&gt;&gt; <b class="calibre25">ham = copy.copy(bacon)</b>
+&gt;&gt;&gt; <b class="calibre25">id(bacon), id(ham)</b>
+(2356896466248, 2356896375368)
+&gt;&gt;&gt; <b class="calibre25">bacon.append('APPENDED')</b>
+&gt;&gt;&gt; <b class="calibre25">bacon</b>
+[[1, 2], [3, 4], 'APPENDED']
+&gt;&gt;&gt; <b class="calibre25">ham</b>
+[[1, 2], [3, 4]]
+&gt;&gt;&gt; <b class="calibre25">bacon[0][0] = 'CHANGED'</b>
+&gt;&gt;&gt; <b class="calibre25">bacon</b>
+[['CHANGED', 2], [3, 4], 'APPENDED']
+&gt;&gt;&gt; <b class="calibre25">ham</b>
+[['CHANGED', 2], [3, 4]]
+&gt;&gt;&gt; <b class="calibre25">id(bacon[0]), id(ham[0])</b>
+(2356896337480, 2356896337480)</code></pre>
+<p class="calibre23">A visualization of the execution of this code is at <a href="https://autbor.com/copycopy2" class="calibre19">https://autbor.com/copycopy2</a>. Although <code class="calibre9">bacon</code> and <code class="calibre9">ham</code> are two different list objects, they refer to the same <code class="calibre9">[1, 2]</code> and <code class="calibre9">[3, 4]</code> inner lists, so changes to these inner lists get reflected in both variables, even though we used <code class="calibre9">copy.copy()</code>. The solution is to use <code class="calibre9">copy.deepcopy()</code>, which will make copies of any list objects inside the list object being copied (and any list objects in those list objects, and so on). Enter the following into the interactive shell:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">import copy</b>
+&gt;&gt;&gt; <b class="calibre25">bacon = [[1, 2], [3, 4]]</b>
+&gt;&gt;&gt; <b class="calibre25">ham = copy.deepcopy(bacon)</b>
+&gt;&gt;&gt; <b class="calibre25">id(bacon[0]), id(ham[0])</b>
+(2356896337352, 2356896466184)
+&gt;&gt;&gt; <b class="calibre25">bacon[0][0] = 'CHANGED'</b>
+&gt;&gt;&gt; <b class="calibre25">bacon</b>
+[['CHANGED', 2], [3, 4]]
+&gt;&gt;&gt; <b class="calibre25">ham</b>
+[[1, 2], [3, 4]]</code></pre>
+<p class="calibre23">A visualization of the execution of this code is at <a href="https://autbor.com/copydeepcopy" class="calibre19">https://autbor.com/copydeepcopy</a>. Although <code class="calibre9">copy.deepcopy()</code> is slightly slower than <code class="calibre9">copy.copy()</code>, it’s safer to use if you don’t know whether the list being copied contains other lists (or other mutable objects like dictionaries or sets). My general advice is to always use <code class="calibre9">copy.deepcopy()</code>: it might prevent subtle bugs, and the slowdown in your code probably won’t be noticeable.</p>
+<h2 id="calibre_link-174" class="calibre7"><span type="pagebreak" title="143" id="calibre_link-485" class="calibre20"></span>Don’t Use Mutable Values for Default Arguments</h2>
+<p class="bodyfirst">Python allows you to set <em class="calibre10">default arguments</em> for parameters in the functions you define. If a user doesn’t explicitly set a parameter, the function will execute using the default argument. This is useful when most calls to the function use the same argument, because default arguments make the parameter optional. For example, passing <code class="calibre9">None</code> for the <code class="calibre9">split()</code> method makes it split on whitespace characters, but <code class="calibre9">None</code> is also the default argument: calling <code class="calibre9">'cat dog'.split()</code> does the same thing as calling <code class="calibre9">'cat dog'.split(None)</code>. The function uses the default argument for the parameter’s argument unless the caller passes one in.</p>
+<p class="calibre23">But you should never set a <em class="calibre10">mutable</em> object, such as a list or dictionary, as a default argument. To see how this causes bugs, look at the following example, which defines an <code class="calibre9">addIngredient()</code> function that adds an ingredient string to a list that represents a sandwich. Because the first and last items of this list are often <code class="calibre9">'bread'</code>, the mutable list <code class="calibre9">['bread', 'bread']</code> is used as a default argument:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">def addIngredient(ingredient, sandwich=['bread', 'bread']):</b>
+...     <b class="calibre25">sandwich.insert(1, ingredient)</b>
+...     <b class="calibre25">return sandwich</b>
+...
+&gt;&gt;&gt; <b class="calibre25">mySandwich = addIngredient('avocado')</b>
+&gt;&gt;&gt; <b class="calibre25">mySandwich</b>
+['bread', 'avocado', 'bread']</code></pre>
+<p class="calibre23">But using a mutable object, such as a list like <code class="calibre9">['bread', 'bread']</code>, for the default argument has a subtle problem: the list is created when the function’s <code class="calibre9">def </code>statement executes, not each time the function is called. This means that only one <code class="calibre9">['bread', 'bread']</code> list object gets created, because we only <em class="calibre10">define</em> the <code class="calibre9">addIngredient()</code> function once. But each function <em class="calibre10">call</em> to <code class="calibre9">addIngredient()</code> will be reusing this list. This leads to unexpected behavior, like the following:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">mySandwich = addIngredient('avocado')</b>
+&gt;&gt;&gt; <b class="calibre25">mySandwich</b>
+['bread', 'avocado', 'bread']
+&gt;&gt;&gt; <b class="calibre25">anotherSandwich = addIngredient('lettuce')</b>
+&gt;&gt;&gt; <b class="calibre25">anotherSandwich</b>
+['bread', 'lettuce', 'avocado', 'bread']</code></pre>
+<p class="calibre23">Because <code class="calibre9">addIngredient('lettuce')</code> ends up using the same default argument list as the previous calls, which already had <code class="calibre9">'avocado'</code> added to it, instead of <code class="calibre9">['bread', 'lettuce', 'bread']</code> the function returns <code class="calibre9">['bread', 'lettuce', 'avocado', 'bread']</code>. The <code class="calibre9">'avocado'</code> string appears again because the list for the <code class="calibre9">sandwich</code> parameter is the same as the last function call. Only one <code class="calibre9">['bread', 'bread']</code> list was created, because the function’s <code class="calibre9">def</code> statement only executes once, not each time the function is called. A visualization of the execution of this code is at <a href="https://autbor.com/sandwich" class="calibre19">https://autbor.com/sandwich</a>.</p>
+<p class="calibre23"><span type="pagebreak" title="144" id="calibre_link-486" class="calibre16"></span>If you need to use a list or dictionary as a default argument, the pythonic solution is to set the default argument to <code class="calibre9">None</code>. Then have code that checks for this and supplies a new list or dictionary whenever the function is called. This ensures that the function creates a new mutable object <em class="calibre10">each time </em>the function is called instead of <em class="calibre10">just once</em> when the function is defined, such as in the following example:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">def addIngredient(ingredient, sandwich=None):</b>
+...     <b class="calibre25">if sandwich is None:</b>
+...         <b class="calibre25">sandwich = ['bread', 'bread']</b>
+...     <b class="calibre25">sandwich.insert(1, ingredient)</b>
+...     <b class="calibre25">return sandwich</b>
+...
+&gt;&gt;&gt; <b class="calibre25">firstSandwich = addIngredient('cranberries')</b>
+&gt;&gt;&gt; <b class="calibre25">firstSandwich</b>
+['bread', 'cranberries', 'bread']
+&gt;&gt;&gt; <b class="calibre25">secondSandwich = addIngredient('lettuce')</b>
+&gt;&gt;&gt; <b class="calibre25">secondSandwich</b>
+['bread', 'lettuce', 'bread']
+&gt;&gt;&gt; <b class="calibre25">id(firstSandwich) == id(secondSandwich)</b>
+<span class="codeannotationhang">1</span> False</code></pre>
+<p class="calibre23">Notice that <code class="calibre9">firstSandwich</code> and <code class="calibre9">secondSandwich</code> don’t share the same list reference <span class="codeannotation">1</span> because <code class="calibre9">sandwich = ['bread', 'bread']</code> creates a new list object each time <code class="calibre9">addIngredient()</code> is called, not just once when <code class="calibre9">addIngredient()</code> is defined.</p>
+<p class="calibre23">Mutable data types include lists, dictionaries, sets, and objects made from the <code class="calibre9">class</code> statement. <em class="calibre10">Don’t</em> put objects of these types as default arguments in a <code class="calibre9">def</code> statement.</p>
+<h2 id="calibre_link-175" class="calibre7">Don’t Build Strings with String Concatenation</h2>
+<p class="bodyfirst">In Python, strings are <em class="calibre10">immutable</em> objects. This means that string values can’t change, and any code that seems to modify the string is actually creating a new string object. For example, each of the following operations changes the content of the <code class="calibre9">spam</code> variable, not by changing the string value, but by replacing it with a new string value that has a new identity:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">spam = 'Hello'</b>
+&gt;&gt;&gt; <b class="calibre25">id(spam), spam</b>
+(38330864, 'Hello')
+&gt;&gt;&gt; <b class="calibre25">spam = spam + ' world!'</b>
+&gt;&gt;&gt; <b class="calibre25">id(spam), spam</b>
+(38329712, 'Hello world!')
+&gt;&gt;&gt; <b class="calibre25">spam = spam.upper()</b>
+&gt;&gt;&gt; <b class="calibre25">id(spam), spam</b>
+(38329648, 'HELLO WORLD!')
+&gt;&gt;&gt; <b class="calibre25">spam = 'Hi'</b>
+&gt;&gt;&gt; <b class="calibre25">id(spam), spam</b>
+(38395568, 'Hi')
+&gt;&gt;&gt; <b class="calibre25">spam = f'{spam} world!'</b>
+<span type="pagebreak" title="145" id="calibre_link-487" class="calibre16"></span>&gt;&gt;&gt; <b class="calibre25">id(spam), spam</b>
+(38330864, 'Hi world!')</code></pre>
+<p class="calibre23">Notice that each call to <code class="calibre9">id(spam)</code> returns a different identity, because the string object in <code class="calibre9">spam</code> isn’t being changed: it’s being replaced by a whole new string object with a different identity. Creating new strings by using f-strings, the <code class="calibre9">format()</code> string method, or the <code class="calibre9">%s</code> format specifiers also creates new string objects, just like string concatenation. Normally, this technical detail doesn’t matter. Python is a high-level language that handles many of these details for you so you can focus on creating your program.</p>
+<p class="calibre23">But building a string through a large number of string concatenations can slow down your programs. Each iteration of the loop creates a new string object and discards the old string object: in code, this looks like concatenations inside a <code class="calibre9">for</code> or <code class="calibre9">while</code> loop, as in the following:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">finalString = ''</b>
+&gt;&gt;&gt; <b class="calibre25">for i in range(100000):</b>
+...     <b class="calibre25">finalString += 'spam '</b>
+...
+&gt;&gt;&gt; <b class="calibre25">finalString</b>
+spam spam spam spam spam spam spam spam spam spam spam spam <var class="calibre43">--snip--</var></code></pre>
+<p class="calibre23">Because the <code class="calibre9">finalString += 'spam '</code> happens 100,000 times inside the loop, Python is performing 100,000 string concatenations. The CPU has to create these intermediate string values by concatenating the current <code class="calibre9">finalString</code> with <code class="calibre9">'spam '</code>, put them into memory, and then almost immediately discard them on the next iteration. This is a lot of wasted effort, because we only care about the final string.</p>
+<p class="calibre23">The pythonic way to build strings is to append the smaller strings to a list and then join the list together into one string. This method still creates 100,000 string objects, but it only performs one string concatenation, when it calls <code class="calibre9">join()</code>. For example, the following code produces the equivalent <code class="calibre9">finalString</code> but without the intermediate string concatenations:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">finalString = []</b>
+&gt;&gt;&gt; <b class="calibre25">for i in range(100000):</b>
+...     <b class="calibre25">finalString.append('spam ')</b>
+...
+&gt;&gt;&gt; <b class="calibre25">finalString = ''.join(finalString)</b>
+&gt;&gt;&gt; <b class="calibre25">finalString</b>
+spam spam spam spam spam spam spam spam spam spam spam spam <em class="calibre10">--</em><em class="calibre10">snip</em><em class="calibre10">--</em></code></pre>
+<p class="calibre23">When I measure the runtime of these two pieces of code on my machine, the list appending approach is<em class="calibre10"> 10 times faster </em>than the string concatenation approach. (<span class="calibre" itemid="xref_target_Chapter 13">Chapter 13</span> describes how to measure how fast your programs run.) This difference becomes greater the more iterations the <code class="calibre9">for</code> loop makes. But when you change <code class="calibre9">range(100000)</code> to <code class="calibre9">range(100)</code>, although concatenation remains slower than list appending, the speed difference is negligible. You don’t need to obsessively avoid string concatenation, f-strings, <span type="pagebreak" title="146" id="calibre_link-488" class="calibre16"></span>the <code class="calibre9">format()</code> string method, or <code class="calibre9">%s</code> format specifiers in every case. The speed only significantly improves when you’re performing large numbers of string concatenations.</p>
+<p class="calibre23">Python frees you from having to think about many underlying details. This allows programmers to write software quickly, and as mentioned earlier, programmer time is more valuable than CPU time. But there are cases when it’s good to understand details, such as the difference between immutable strings and mutable lists, to avoid tripping on a gotcha, like building strings through concatenation.</p>
+<h2 id="calibre_link-176" class="calibre7">Don’t Expect sort() to Sort Alphabetically</h2>
+<p class="bodyfirst">Understanding sorting algorithms&mdash;algorithms that systematically arrange values by some established order&mdash;is an important foundation for a computer science education. But this isn’t a computer science book; we don’t need to know these algorithms, because we can just call Python’s <code class="calibre9">sort()</code> method. However, you’ll notice that <code class="calibre9">sort()</code> has some odd sorting behavior that puts a capital <em class="calibre10">Z</em> before a lowercase <em class="calibre10">a</em>:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">letters = ['z', 'A', 'a', 'Z']</b>
+&gt;&gt;&gt; <b class="calibre25">letters.sort()</b>
+&gt;&gt;&gt; <b class="calibre25">letters</b>
+['A', 'Z', 'a', 'z']</code></pre>
+<p class="calibre23">The American Standard Code for Information Interchange (ASCII, pronounced “ask-ee”) is a mapping between numeric codes (called <em class="calibre10">code points</em> or <em class="calibre10">ordinals</em>) and text characters. The <code class="calibre9">sort()</code> method uses <em class="calibre10">ASCII-betical</em> sorting (a general term meaning sorted by ordinal number) rather than alphabetical sorting. In the ASCII system, <em class="calibre10">A</em> is represented by code point 65, <em class="calibre10">B</em> by 66, and so on, up to <em class="calibre10">Z</em> by 90. The lowercase <em class="calibre10">a</em> is represented by code point 97, <em class="calibre10">b</em> by 98, and so on, up to <em class="calibre10">z</em> by 122. When sorting by ASCII, uppercase <em class="calibre10">Z</em> (code point 90) comes before lowercase <em class="calibre10">a</em> (code point 97).</p>
+<p class="calibre23">Although it was almost universal in Western computing prior to and throughout the 1990s, ASCII is an American standard only: there’s a code point for the dollar sign, $ (code point 36), but there is no code point for the British pound sign, £. ASCII has largely been replaced by Unicode, because Unicode contains all of ASCII’s code points and more than 100,000 other code points.</p>
+<p class="calibre23">You can get the code point, or ordinal, of a character by passing it to the <code class="calibre9">ord()</code> function. You can do the reverse by passing an ordinal integer to the <code class="calibre9">chr()</code> function, which returns a string of the character. For example, enter the following into the interactive shell:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">ord('a')</b>
+97
+&gt;&gt;&gt; <b class="calibre25">chr(97)</b>
+'a'</code></pre>
+<p class="calibre23"><span type="pagebreak" title="147" id="calibre_link-489" class="calibre16"></span>If you want to make an alphabetical sort, pass the <code class="calibre9">str.lower</code> method to the <code class="calibre9">key</code> parameter. This sorts the list as if the values had the <code class="calibre9">lower()</code> string method called on them:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">letters = ['z', 'A', 'a', 'Z']</b>
+&gt;&gt;&gt; <b class="calibre25">letters.sort(key=str.lower)</b>
+&gt;&gt;&gt; <b class="calibre25">letters</b>
+['A', 'a', 'z', 'Z']</code></pre>
+<p class="calibre23">Note that the actual strings in the list aren’t converted to lowercase; they’re only sorted as if they were. Ned Batchelder provides more information about Unicode and code points in his talk “Pragmatic Unicode, or, How Do I Stop the Pain?” at <a href="https://nedbatchelder.com/text/unipain.html" class="calibre19">https://nedbatchelder.com/text/unipain.html</a>.</p>
+<p class="calibre23">Incidentally, the sorting algorithm that Python’s <code class="calibre9">sort()</code> method uses is Timsort, which was designed by Python core developer and “Zen of Python” author Tim Peters. It’s a hybrid of the merge sort and insertion sort algorithms, and is described at <a href="https://en.wikipedia.org/wiki/Timsort" class="calibre19">https://en.wikipedia.org/wiki/Timsort</a>.</p>
+<h2 id="calibre_link-177" class="calibre7">Don’t Assume Floating-Point Numbers Are Perfectly Accurate</h2>
+<p class="bodyfirst">Computers can only store the digits of the binary number system, which are 1 and 0. To represent the decimal numbers we’re familiar with, we need to translate a number like <code class="calibre9">3.14</code> into a series of binary ones and zeros. Computers do this according to the IEEE 754 standard, published by the Institute of Electrical and Electronics Engineers (IEEE, pronounced “eye-triple-ee”). For simplicity, these details are hidden from the programmer, allowing you to type numbers with decimal points and ignore the decimal-to-binary conversion process:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">0.3</b>
+0.3</code></pre>
+<p class="calibre23">Although the details of specific cases are beyond the scope of this book, the IEEE 754 representation of a floating-point number won’t always exactly match the decimal number. One well-known example is <code class="calibre9">0.1</code>:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">0.1 + 0.1 + 0.1</b>
+0.30000000000000004
+&gt;&gt;&gt; <b class="calibre25">0.3 == (0.1 + 0.1 + 0.1)</b>
+False</code></pre>
+<p class="calibre23">This bizarre, slightly inaccurate sum is the result of <em class="calibre10">rounding errors</em> caused by how computers represent and process floating-point numbers. This isn’t a <em class="calibre10">Python</em> gotcha; the IEEE 754 standard is a <em class="calibre10">hardware</em> standard implemented directly into a CPU’s floating-point circuits. You’ll get the same results in C++, JavaScript, and every other language that runs on a CPU that uses IEEE 754 (which is effectively every CPU in the world).</p>
+<p class="calibre23"><span type="pagebreak" title="148" id="calibre_link-490" class="calibre16"></span>The IEEE 754 standard, again for technical reasons beyond the scope of this book, also cannot represent all whole number values greater than 2<sup class="calibre53">53</sup>. For example, 2<sup class="calibre53">53</sup> and 2<sup class="calibre53">53</sup> + 1, as float values, both round to <code class="calibre9">9007199254740992.0</code>:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">float(2**53) == float(2**53) + 1</b>
+True</code></pre>
+<p class="calibre23">As long as you use the floating-point data type, there’s no workaround for these rounding errors. But don’t worry. Unless you’re writing software for a bank, a nuclear reactor, or a bank’s nuclear reactor, rounding errors are small enough that they’ll likely not be an important issue for your program. Often, you can resolve them by using integers with smaller denominations: for example, <code class="calibre9">133</code> cents instead of <code class="calibre9">1.33</code> dollars or <code class="calibre9">200</code> milliseconds instead of <code class="calibre9">0.2</code> seconds. This way, <code class="calibre9">10 + 10 + 10</code> adds up to <code class="calibre9">30</code> cents or milliseconds rather than <code class="calibre9">0.1 + 0.1 + 0.1</code> adding up to <code class="calibre9">0.30000000000000004</code> dollars or seconds.</p>
+<p class="calibre23">But if you need exact precision, say for scientific or financial calculations, use Python’s built-in <code class="calibre9">decimal</code> module, which is documented at <a href="https://docs.python.org/3/library/decimal.html" class="calibre19">https://docs.python.org/3/library/decimal.html</a>. Although they’re slower, <code class="calibre9">Decimal</code> objects are precise replacements for float values. For example, <code class="calibre9">decimal.Decimal('0.1')</code> creates an object that represents the exact number 0.1 without the imprecision that a <code class="calibre9">0.1</code> float value would have.</p>
+<p class="calibre23">Passing the float value <code class="calibre9">0.1</code> to <code class="calibre9">decimal.Decimal()</code> creates a <code class="calibre9">Decimal</code> object that has the same imprecision as a float value, which is why the resulting <code class="calibre9">Decimal</code> object isn’t exactly <code class="calibre9">Decimal('0.1')</code>. Instead, pass a string of the float value to <code class="calibre9">decimal.Decimal()</code>. To illustrate this point, enter the following into the interactive shell:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">import decimal</b>
+&gt;&gt;&gt; <b class="calibre25">d = decimal.Decimal(0.1)</b>
+&gt;&gt;&gt; <b class="calibre25">d</b>
+Decimal('0.1000000000000000055511151231257827021181583404541015625')
+&gt;&gt;&gt; <b class="calibre25">d = decimal.Decimal('0.1')</b>
+&gt;&gt;&gt; <b class="calibre25">d</b>
+Decimal('0.1')
+&gt;&gt;&gt; <b class="calibre25">d + d + d</b>
+Decimal('0.3')</code></pre>
+<p class="calibre23">Integers don’t have rounding errors, so it’s always safe to pass them to <code class="calibre9">decimal.Decimal()</code>. Enter the following into the interactive shell:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">10 + d</b>
+Decimal('10.1')
+&gt;&gt;&gt; <b class="calibre25">d * 3</b>
+Decimal('0.3')
+&gt;&gt;&gt; <b class="calibre25">1 - d</b>
+Decimal('0.9')
+&gt;&gt;&gt; <b class="calibre25">d + 0.1</b>
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+TypeError: unsupported operand type(s) for +: 'decimal.Decimal' and 'float'</code></pre>
+<p class="calibre23"><span type="pagebreak" title="149" id="calibre_link-491" class="calibre16"></span>But <code class="calibre9">Decimal</code> objects don’t have unlimited precision; they simply have a predictable, well-established level of precision. For example, consider the following operations:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">import decimal</b>
+&gt;&gt;&gt; <b class="calibre25">d = decimal.Decimal(1) / 3</b>
+&gt;&gt;&gt; <b class="calibre25">d</b>
+Decimal('0.3333333333333333333333333333')
+&gt;&gt;&gt; <b class="calibre25">d * 3</b>
+Decimal('0.9999999999999999999999999999')
+&gt;&gt;&gt; <b class="calibre25">(d * 3) == 1 # d is not exactly 1/3</b>
+False</code></pre>
+<p class="calibre23">The expression <code class="calibre9">decimal.Decimal(1) / 3</code> evaluates to a value that isn’t exactly one-third. But by default, it’ll be precise to 28 significant digits. You can find out how many significant digits the <code class="calibre9">decimal</code> module uses by accessing the <code class="calibre9">decimal.getcontext().prec</code> attribute. (Technically, <code class="calibre9">prec</code> is an attribute of the <code class="calibre9">Context</code> object returned by <code class="calibre9">getcontext()</code>, but it’s convenient to put it on one line.) You can change this attribute so that all <code class="calibre9">Decimal</code> objects created afterward use this new level of precision. The following interactive shell example lowers the precision from the original 28 significant digits to 2:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">import decimal</b>
+&gt;&gt;&gt; <b class="calibre25">decimal.getcontext().prec</b>
+28
+&gt;&gt;&gt; <b class="calibre25">decimal.getcontext().prec = 2</b>
+&gt;&gt;&gt; <b class="calibre25">decimal.Decimal(1) / 3</b>
+Decimal('0.33')</code></pre>
+<p class="calibre23">The <code class="calibre9">decimal </code>module provides you with fine control over how numbers interact with each other. The <code class="calibre9">decimal</code> module is documented in full at <a href="https://docs.python.org/3/library/decimal.html" class="calibre19">https://docs.python.org/3/library/decimal.html</a>.</p>
+<h2 id="calibre_link-178" class="calibre7">Don’t Chain Inequality != Operators</h2>
+<p class="bodyfirst">Chaining comparison operators like <code class="calibre9">18 &lt; age &lt; 35</code> or chaining assignment operators like <code class="calibre9">six = halfDozen = 6</code> are handy shortcuts for <code class="calibre9">(18 &lt; age) and (age &lt; 35)</code> and <code class="calibre9">six = 6; halfDozen = 6</code>, respectively.</p>
+<p class="calibre23">But don’t chain the <code class="calibre9">!=</code> comparison operator. You might think the following code checks whether all three variables have different values from each other, because the following expression evaluates to <code class="calibre9">True</code>:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">a = 'cat'</b>
+&gt;&gt;&gt; <b class="calibre25">b = 'dog'</b>
+&gt;&gt;&gt; <b class="calibre25">c = 'moose'</b>
+&gt;&gt;&gt; <b class="calibre25">a != b != c</b>
+True</code></pre>
+<p class="calibre23"><span type="pagebreak" title="150" id="calibre_link-492" class="calibre16"></span>But this chain is actually equivalent to <code class="calibre9">(a != b) and (b != c)</code>. This means that <code class="calibre9">a</code> could still be the same as <code class="calibre9">c</code> and the <code class="calibre9">a != b != c</code> expression would still be <code class="calibre9">True</code>:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">a = 'cat'</b>
+&gt;&gt;&gt; <b class="calibre25">b = 'dog'</b>
+&gt;&gt;&gt; <b class="calibre25">c = 'cat'</b>
+&gt;&gt;&gt; <b class="calibre25">a != b != c</b>
+True</code></pre>
+<p class="calibre23">This bug is subtle and the code is misleading, so it’s best to avoid using chained <code class="calibre9">!=</code> operators altogether.</p>
+<h2 id="calibre_link-179" class="calibre7">Don’t Forget the Comma in Single-Item Tuples</h2>
+<p class="bodyfirst">When writing tuple values in your code, keep in mind that you’ll still need a trailing comma even if the tuple only contains a single item. Although the value <code class="calibre9">(42, )</code> is a tuple that contains the integer <code class="calibre9">42</code>, the value <code class="calibre9">(42) </code>is simply the integer <code class="calibre9">42</code>. The parentheses in<code class="calibre9"> (42) </code>are similar to those used in the expression <code class="calibre9">(20 + 1) * 2</code>, which evaluates to the integer value <code class="calibre9">42</code>. Forgetting the comma can lead to this: </p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">spam = ('cat', 'dog', 'moose')</b>
+&gt;&gt;&gt; <b class="calibre25">spam[0]</b>
+'cat'
+&gt;&gt;&gt; <b class="calibre25">spam = ('cat')</b>
+<span class="codeannotationhang">1</span> &gt;&gt;&gt; <b class="calibre25">spam[0]</b>
+'c'
+<span class="codeannotationhang">2</span> &gt;&gt;&gt; <b class="calibre25">spam = ('cat', )</b>
+&gt;&gt;&gt; <b class="calibre25">spam[0]</b>
+'cat'</code></pre>
+<p class="calibre23">Without a comma, <code class="calibre9">('cat')</code> evaluates to the string value, which is why <code class="calibre9">spam[0]</code> evaluates to the first character of the string, <code class="calibre9">'c'</code><span class="codeannotation">1</span>. The trailing comma is required for the parentheses to be recognized as a tuple value <span class="codeannotation">2</span>. In Python, the commas make a tuple more than the parentheses.</p>
+<h2 id="calibre_link-180" class="calibre7">Summary</h2>
+<p class="bodyfirst">Miscommunication happens in every language, even in programming languages. Python has a few gotchas that can trap the unwary. Even if they rarely come up, it’s best to know about them so you can quickly recognize and debug the problems they can cause.</p>
+<p class="calibre23">Although it’s possible to add or remove items from a list while iterating over that list, it’s a potential source of bugs. It’s much safer to iterate over a copy of the list and then make changes to the original. When you do make copies of a list (or any other mutable object), remember that assignment <span type="pagebreak" title="151" id="calibre_link-493" class="calibre16"></span>statements copy only the reference to the object, not the actual object. You can use the <code class="calibre9">copy.deepcopy()</code> function to make copies of the object (and copies of any objects it references).</p>
+<p class="calibre23">You shouldn’t use mutable objects in <code class="calibre9">def</code> statements for default arguments, because they’re created once when the <code class="calibre9">def</code> statement is run rather than each time the function is called. A better idea is to make the default argument <code class="calibre9">None</code>, and then add code that checks for <code class="calibre9">None</code> and creates a mutable object when the function is called.</p>
+<p class="calibre23">A subtle gotcha is the string concatenation of several smaller strings with the <code class="calibre9">+</code> operator in a loop. For small numbers of iteration, this syntax is fine. But under the hood, Python is constantly creating and destroying string objects on each iteration. A better approach is to append the smaller strings into a list and then call the <code class="calibre9">join()</code> operator to create the final string.</p>
+<p class="calibre23">The <code class="calibre9">sort()</code> method sorts by numeric code points, which isn’t the same as alphabetical order: uppercase Z is sorted before lowercase a. To fix this issue, you can call <code class="calibre9">sort(key=str.lower)</code>.</p>
+<p class="calibre23">Floating-point numbers have slight rounding errors as a side effect of how they represent numbers. For most programs, this isn’t important. But if it does matter for your program, you can use Python’s <code class="calibre9">decimal</code> module.</p>
+<p class="calibre23">Never chain together <code class="calibre9">!=</code> operators, because expressions like <code class="calibre9">'cat' != 'dog' != 'cat'</code> will, confusingly, evaluate to <code class="calibre9">True</code>. </p>
+<p class="calibre23">Although this chapter described the Python gotchas that you’re most likely to encounter, they don’t occur daily in most real-world code. Python does a great job of minimizing the surprises you might find in your programs. In the next chapter, we’ll cover some gotchas that are even rarer and downright bizarre. It’s almost impossible that you’ll ever encounter these Python language oddities if you aren’t searching for them, but it’ll be fun to explore the reasons they exist.</p>
+</section>
+</div>

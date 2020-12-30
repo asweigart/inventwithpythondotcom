@@ -1,0 +1,341 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Chapter 1: The Interactive Shell</title></head><body style="background-color: #fffeee;">
+
+<script type="text/javascript">
+//<![CDATA[
+
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5459430-3']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
+//]]>
+</script>
+
+
+<div style="background-color: #eeeddd; float: right; height: 310px; font-family: sans-serif;" id="otherbooks">
+  <a href="#" onclick="document.getElementById('otherbooks').outerHTML='';" style="vertical-align: top;">(close)</a><br />
+
+  <a target="_blank" href="https://nostarch.com/automatestuff2" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_automate.link');"><img src="/images/cover_automate2_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/beyond-basic-stuff-python" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_beyond.link');"><img src="/images/cover_beyond_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/inventwithpython" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_invent.link');"><img src="/images/cover_invent4th_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://www.amazon.com/Making-Games-Python-Pygame-Sweigart/dp/1469901730?ie=UTF8&amp;tag=playwithpyth-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1469901730" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_pygame.link');"><img src="/images/cover_makinggames_thumb.png" style="height: 200px; border: solid black 1px; /"></a>
+  <a target="_blank" href="https://nostarch.com/crackingcodes" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_hacking.link');"><img src="/images/cover_crackingcodes_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/scratchplayground"><img src="/images/cover_scratchprogrammingplayground_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/codingwithminecraft"><img src="/images/cover_codingwithminecraft_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <br />
+  <a href="https://inventwithpython.com/automateudemy">Use this link to get 70% off the Automate the Boring Stuff online video course.</a><br />
+  <a href="https://www.patreon.com/AlSweigart">Support me on Patreon</a>
+</div>
+
+<a href="chapter10.html">Prev: Chapter 10 - Writing Effective Functions</a> | <a href="chapter12.html">Next: Chapter 12 - Organizing You Code Projects with Git</a>
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-10">
+<section class="toclist">
+<header class="calibre12">
+<h1 class="chaptertitle">
+<span class="partnumber"><span type="pagebreak" title="181" id="calibre_link-519" class="calibre26"></span>11</span><br class="calibre18" />
+<span class="parttitle1">Comments, Docstrings, and Type Hints</span>
+</h1>
+</header>
+<figure class="opener"><img src="images/000017.png" alt="" class="calibre15" /></figure><p class="chapterintro">The comments and documentation in your source code can be just as important as the code. The reason is that software is never finished; you’ll always need to make changes, whether you’re adding new features or fixing bugs. But you can’t change code unless you understand it, so it’s important that you keep it in a readable state. As computer scientists Harold Abelson, Gerald Jay Sussman, and Julie Sussman once wrote, “Programs must be written for people to read, and only incidentally for machines to execute.” </p>
+<p class="calibre22"><em class="calibre10">Comments</em>, <em class="calibre10">docstrings</em>, and <em class="calibre10">type hints</em> help you maintain your code’s legibility. Comments are short, plain-English explanations that you write directly in the source code and the computer ignores them. Comments offer helpful notes, warnings, and reminders to others who didn’t write the code, or <span type="pagebreak" title="182" id="calibre_link-520" class="calibre16"></span>sometimes even to the code’s programmer in the future. Almost every programmer has asked themselves, “Who wrote this unreadable mess?” only to find the answer is, “I did.”</p>
+<p class="calibre23"><em class="calibre10">Docstrings</em> are a Python-specific form of documentation for your functions, methods, and modules. When you specify comments in the docstring format, automated tools, such as documentation generators or Python’s built-in <code class="calibre9">help()</code> module, make it easy for developers to find information about your code.</p>
+<p class="calibre23"><em class="calibre10">Type hints</em> are directives you can add to your Python source code to specify the data types of variables, parameters, and return values. This allows static code analysis tools to verify that your code won’t generate any exceptions due to incorrectly typed values. Type hints first appeared in Python 3.5, but because they’re based on comments, you can use them in any Python version.</p>
+<p class="calibre23">This chapter focuses on the aforementioned three techniques for embedding documentation inside your code to make it more readable. External documentation, such as user manuals, online tutorials, and reference materials, are important but not covered in this book. If you want to learn more about external documentation, check out the Sphinx documentation generator at <a href="https://www.sphinx-doc.org/" class="calibre19">https://www.sphinx-doc.org/</a>.</p>
+<h2 id="calibre_link-206" class="calibre7">Comments</h2>
+<p class="bodyfirst">Like most programming languages, Python supports single-line comments and multiline comments. Any text that appears between the number sign <code class="calibre9">#</code> and the end of the line is a single-line comment. Although Python doesn’t have a dedicated syntax for multiline comments, a triple-quotes multiline string can serve as one. After all, a string value by itself doesn’t cause the Python interpreter to do anything. Look at this example:</p>
+<pre class="calibre28"><code class="calibre9"># This is a single-line comment.
+
+"""This is a
+multiline string that
+also works as a multiline comment. """</code></pre>
+<p class="calibre23">If your comment spans multiple lines, it’s better to use a single multiline comment than several consecutive single-line comments, which are harder to read, as you can see here:</p>
+<pre class="calibre28"><code class="calibre9">"""This is a good way
+to write a comment
+that spans multiple lines. """
+# This is not a good way
+# to write a comment
+# that spans multiple lines.</code></pre>
+<p class="calibre23"><span type="pagebreak" title="183" id="calibre_link-521" class="calibre16"></span>Comments and documentation are often afterthoughts in the programming process or are even considered by some to do more harm than good. But as “Myth: Comments Are Unnecessary” on page 83 explained, comments are not optional if you want to write professional, readable code. In this section, we’ll write useful comments that inform the reader without detracting from the program’s readability.</p>
+<h3 id="calibre_link-207" class="calibre27">Comment Style</h3>
+<p class="bodyfirst">Let’s look at some comments that follow good style practices:</p>
+<pre class="calibre28"><code class="calibre9"><span class="codeannotationhang">1</span> # Here is a comment about this code:
+someCode()
+
+<span class="codeannotationhang">2</span> # Here is a lengthier block comment that spans multiple lines using
+# several single-line comments in a row.
+<span class="codeannotationhang">3</span> #
+# These are known as block comments.
+
+if someCondition:
+<span class="codeannotation">4</span> # Here is a comment about some other code:
+<span class="codeannotation">5</span> someOtherCode()  # Here is an inline comment.</code></pre>
+<p class="calibre23">Comments should generally exist on their own line rather than at the end of a line of code. Most of the time, they should be complete sentences with appropriate capitalization and punctuation rather than phrases or single words <span class="codeannotation">1</span>. The exception is that comments should obey the same line-length limits that the source code does. Comments that span multiple lines <span class="codeannotation">2</span> can use multiple single-line comments in a row, known as <em class="calibre10">block comments</em>. We separate paragraphs in block comments using a blank, single-line comment <span class="codeannotation">3</span>. Comments should have the same level of indentation as the code they’re commenting <span class="codeannotation">4</span>. Comments that follow a line of code are called <em class="calibre10">inline comments</em><span class="codeannotation">5</span> and at least two spaces should separate the code from the comment.</p>
+<p class="calibre23">Single-line comments should have one space after the <code class="calibre9">#</code> sign:</p>
+<pre class="calibre28"><code class="calibre9">#Don't write comments immediately after the # sign.</code></pre>
+<p class="calibre23">Comments can include links to URLs with related information, but links should never replace comments because linked content could disappear from the internet at any time:</p>
+<pre class="calibre28"><code class="calibre9"># Here is a detailed explanation about some aspect of the code
+# that is supplemented by a URL. More info at https://example.com</code></pre>
+<p class="calibre23">The aforementioned conventions are matters of style rather than content, but they contribute to the comments’ readability. The more readable your comments are, the more likely programmers will pay attention to them, and comments are only useful if programmers read them.</p>
+<h3 id="calibre_link-208" class="calibre27"><span type="pagebreak" title="184" id="calibre_link-522" class="calibre37"></span>Inline Comments</h3>
+<p class="bodyfirst">Inline comments come at the end of a line of code, as in the following case:</p>
+<pre class="calibre28"><code class="calibre9">    while True:  # Keep asking player until they enter a valid move.</code></pre>
+<p class="calibre23">Inline comments are brief so they fit within the line-length limits set by the program’s style guide. This means they can easily end up being too short to provide enough information. If you do decide to use inline comments, make sure the comment describes only the line of code it immediately follows. If your inline comment requires more space or describes additional lines of code, put it on its own line.</p>
+<p class="calibre23">One common and appropriate use of inline comments is to explain the purpose of a variable or give some other kind of context for it. These inline comments are written on the assignment statement that creates the variable:</p>
+<pre class="calibre28"><code class="calibre9">TOTAL_DISKS = 5  # More disks means a more difficult puzzle.</code></pre>
+<p class="calibre23">Another common use of inline comments is to add context about the values of variables when you create them:</p>
+<pre class="calibre28"><code class="calibre9">month = 2  # Months range from 0 (Jan) to 11 (Dec).
+catWeight = 4.9  # Weight is in kilograms.
+website = 'inventwithpython.com'  # Don't include "https://" at front.</code></pre>
+<p class="calibre23">Inline comments should not specify the variable’s data type, because this is obvious from the assignment statement, unless it’s done in the comment form of a type hint, as described in “Backporting Type Hints with Comments” later in this chapter.</p>
+<h3 id="calibre_link-209" class="calibre27">Explanatory Comments</h3>
+<p class="bodyfirst">In general, comments should explain why code is written the way it is rather than what the code does or how it does what it does. Even with the proper code style and useful naming conventions covered in Chapters 3 and 4, the actual code can’t explain the original programmer’s intentions. If you wrote the code, you might even forget details about it after a few weeks. Present You should write informative code comments to prevent Future You from cursing Past You.</p>
+<p class="calibre23">For example, here’s an unhelpful comment that explains what the code is doing. Rather than hinting at the motivation for this code, it states the obvious:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">currentWeekWages *= 1.5</b>  # Multiply the current week's wages by 1.5</code></pre>
+<p class="calibre23">This comment is worse than useless. It’s obvious from the code that the <code class="calibre9">currentWeekWages</code> variable is being multiplied by <code class="calibre9">1.5</code>, so omitting the comment entirely would simplify your code. The following would be a much better comment:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">currentWeekWages *= 1.5</b>  # Account for time-and-a-half wage rate.</code></pre>
+<p class="calibre23"><span type="pagebreak" title="185" id="calibre_link-523" class="calibre16"></span>This comment explains the intention behind this line of code rather than repeating how the code works. It provides context that even well-written code cannot.</p>
+<h3 id="calibre_link-210" class="calibre27">Summary Comments</h3>
+<p class="bodyfirst">Explaining the programmer’s intent isn’t the only way comments can be useful. Brief comments that summarize several lines of code allow the reader to skim the source code and get a general idea of what it does. Programmers often use a blank space to separate “paragraphs” of code from each other, and the summarizing comments usually occupy one line at the start of these paragraphs. Unlike one-line comments that explain single lines of code, the summarizing comments describe what the code does at a higher level of abstraction.</p>
+<p class="calibre23">For example, you can tell from reading these four lines of code that they set the <code class="calibre9">playerTurn</code> variable to a value representing the opposite player. But the short, single-line comment spares the reader from having to read and reason about the code to understand the purpose of doing this:</p>
+<pre class="calibre28"><code class="calibre9"># Switch turns to other player:
+if playerTurn == PLAYER_X:
+    playerTurn = PLAYER_O
+elif playerTurn == PLAYER_O:
+    playerTurn = PLAYER_X</code></pre>
+<p class="calibre23">A scattering of these summary comments throughout your program makes it much easier to skim. The programmer can then take a closer look at any particular points of interest. Summary comments can also prevent programmers from developing a misleading idea about what the code does. A brief, summarizing comment can confirm that the developer properly understood how the code works.</p>
+<h3 id="calibre_link-211" class="calibre27">“Lessons Learned” Comments</h3>
+<p class="bodyfirst">When I worked at a software company, I was once asked to adapt a graph library so it could handle the real-time updates of millions of data points in a chart. The library we were using could either update graphs in real time <em class="calibre10">or</em> support graphs with millions of data points, but not both. I thought I could finish the task in a few days. By the third week, I was still convinced that I could finish in a few days. Each day, the solution seemed to be just around the corner, and during the fifth week I had a working prototype. </p>
+<p class="calibre23">During this entire process, I learned a lot of details about how the graphing library worked and what its capabilities and limitations were. I then spent a few hours writing up these details into a page-long comment that I placed in the source code. I knew that anyone else who needed to make changes to my code later would encounter all the same, seemingly simple issues I had, and that the documentation I was writing would save them literally weeks of effort. </p>
+<p class="calibre23"><span type="pagebreak" title="186" id="calibre_link-524" class="calibre16"></span>These <em class="calibre10">lessons-learned</em> comments, as I call them, might span several paragraphs, making them seem out of place in a source code file. But the information they contain is gold for anyone who needs to maintain this code. Don’t be afraid to write lengthy, detailed comments in your source code file to explain how something works. To other programmers, many of these details will be unknown, misunderstood, or easily overlooked. Software developers who don’t need them can easily skip past them, but developers who do need them will be grateful for them. Remember that, as with other comments, a lessons-learned comment is not the same as module or function documentation (which docstrings handle). It also isn’t a tutorial or how-to guide aimed at users of the software. Instead, lessons-learned comments are for developers reading the source code.</p>
+<p class="calibre23">Because my lessons-learned comment concerned an open source graph library and could be useful to others, I took a moment to post it as an answer to the public question-and-answer site <a href="https://stackoverflow.org" class="calibre19">https://stackoverflow.org</a>, where others in a similar situation could find it.</p>
+<h3 id="calibre_link-212" class="calibre27">Legal Comments</h3>
+<p class="bodyfirst">Some software companies or open source projects have a policy of including copyright, software license, and authorship information in comments at the top of each source code file for legal reasons. These annotations should consist of a few lines at most and look something like this:</p>
+<pre class="calibre28"><code class="calibre9">"""Cat Herder 3.0 Copyright (C) 2021 Al Sweigart. All rights reserved.
+See license.txt for the full text."""</code></pre>
+<p class="calibre23">If possible, refer to an external document or website that contains the full text of the license rather than including the entire lengthy license at the top of every source code file. It’s tiring to have to scroll past several screen lengths of text whenever you open a source code file, and including the full license doesn’t provide additional legal protection.</p>
+<h3 id="calibre_link-213" class="calibre27">Professional Comments</h3>
+<p class="bodyfirst">At my first software job, a senior co-worker I greatly respected took me aside and explained that because we sometimes released our products’ source code to clients, it was important that the comments maintain a professional tone. Apparently, I had written “WTF” in one of the comments for an especially frustrating part of the code. I felt embarrassed, immediately apologized, and edited the comment. Since that moment, I’ve kept my code, even for personal projects, at a certain level of professionalism.</p>
+<p class="calibre23">You might be tempted to add levity or vent your frustrations in your program’s comments, but make it a habit to avoid doing so. You don’t know who will read your code in the future, and it’s easy to misinterpret the tone of a text. As explained in “Avoid Jokes, Puns, and Cultural References” on page 64, the best policy is to write your comments in a polite, direct, and humorless tone.</p>
+<h3 id="calibre_link-214" class="calibre27"><span type="pagebreak" title="187" id="calibre_link-525" class="calibre37"></span>Codetags and TODO Comments</h3>
+<p class="bodyfirst">Programmers sometimes leave short comments to remind themselves about work that remains to be done. This usually takes the form of a <em class="calibre10">codetag</em>: a comment with an all-uppercase label, such as <code class="calibre9">TODO</code>, followed by a short description. Ideally, you would use project management tools to track these sorts of issues rather than burying them deep in the source code. But for smaller, personal projects that aren’t using such tools, the occasional <code class="calibre9">TODO</code> comment can serve as a helpful reminder. Here’s an example:</p>
+<pre class="calibre28"><code class="calibre9">_chargeIonFluxStream()  # TODO: Investigate why this fails every Tuesday.</code></pre>
+<p class="calibre23">You can use a few different codetags for these reminders:</p>
+<ol class="none">
+<li class="calibre11"><code class="bold">TODO</code> Introduces a general reminder about work that needs to be done</li>
+<li class="calibre11"><code class="bold">FIXME</code> Introduces a reminder that this part of the code doesn’t entirely work</li>
+<li class="calibre11"><code class="bold">HACK</code> Introduces a reminder that this part of the code works, perhaps barely, but that the code should be improved</li>
+<li class="calibre11"><code class="bold">XXX</code> Introduces a general warning, often of high severity</li>
+</ol>
+<p class="calibre23">You should follow these always-uppercase labels with more specific descriptions of the task or problem at hand. Later, you can search the source code for the labels to find the code that needs fixing. The downside is that you can easily forget about these reminders unless you happen to be reading the section of your code that they’re in. Codetags shouldn’t replace a formal issue tracker or bug reporter tool. If you do use a codetag in your code, I recommend keeping it simple:<b class="calibre25"> </b>use only <code class="calibre9">TODO</code> and forgo the others.</p>
+<h3 id="calibre_link-215" class="calibre27">Magic Comments and Source File Encoding</h3>
+<p class="bodyfirst">You might have seen <em class="calibre10">.py</em> source files with something like the following lines at the top:</p>
+<pre class="calibre28"><code class="calibre9"><span class="codeannotationhang">1</span> #!/usr/bin/env python3
+<span class="codeannotationhang">2</span> # -*- coding: utf-8 -*-</code></pre>
+<p class="calibre23">These <em class="calibre10">magic comments</em>, which always appear at the top of the file, provide interpreter or encoding information. The shebang line <span class="codeannotation">1</span> (introduced in Chapter 2) tells your operating system which interpreter to use to run the instructions in the file. </p>
+<p class="calibre23">The second magic comment is an <em class="calibre10">encoding definition</em> line <span class="codeannotation">2</span>. In this case, the line defines UTF-8 as the Unicode encoding scheme to use for the source file. You almost never need to include this line, because most editors and IDEs already save source code files in the UTF-8 encoding, and Python versions starting with Python 3.0 treat UTF-8 as the defined encoding by default. Files encoded in UTF-8 can contain any character, so your <em class="calibre10">.py</em> source file will be just fine whether it includes English, Chinese, or Arabic letters. <span type="pagebreak" title="188" id="calibre_link-526" class="calibre16"></span>For an introduction to Unicode and string encodings, I highly recommend Ned Batchelder’s blog post, “Pragmatic Unicode” at <a href="https://nedbatchelder.com/text/unipain.html" class="calibre19">https://nedbatchelder.com/text/unipain.html</a>.</p>
+<h2 id="calibre_link-216" class="calibre7">Docstrings</h2>
+<p class="bodyfirst">Docstrings are multiline comments that appear either at the top of a module’s <em class="calibre10">.py</em> source code file or directly following a <code class="calibre9">class</code> or <code class="calibre9">def</code> statement. They provide documentation about the module, class, function, or method being defined. Automated documentation generator tools use these docstrings to generate external documentation files, such as help files or web pages.</p>
+<p class="calibre23">Docstrings must use triple-quoted, multiline comments rather than single-line comments that begin with a hash mark, <code class="calibre9">#</code>. Docstrings should always use three double quotes for its triple-quoted strings rather than three single quotes. For example, here is an excerpt from the <em class="calibre10">sessions.py</em> file in the popular <code class="calibre9">requests</code> module:</p>
+<pre class="calibre28"><code class="calibre9"><span class="codeannotationhang">1</span> # -*- coding: utf-8 -*-
+
+<span class="codeannotationhang">2</span> <b class="calibre25">"""</b>
+requests.session
+~~~~~~~~~~~~~~~~
+
+This module provides a Session object to manage and persist settings across
+requests (cookies, auth, proxies).
+"""
+import os
+import sys
+<em class="calibre10">--snip&mdash;</em>
+class Session(SessionRedirectMixin):
+   <span class="codeannotation">3</span> """A Requests session.
+
+    Provides cookie persistence, connection-pooling, and configuration.
+
+    Basic Usage::
+
+      &gt;&gt;&gt; import requests
+      &gt;&gt;&gt; s = requests.Session()
+      &gt;&gt;&gt; s.get('https://httpbin.org/get')
+      &lt;Response [200]&gt;
+<em class="calibre10">--snip--</em>
+
+    def get(self, url, **kwargs):
+       <span class="codeannotation">4</span> r"""Sends a GET request. Returns :class:`Response` object.
+
+        :param url: URL for the new :class:`Request` object.
+        :param \*\*kwargs: Optional arguments that ``request`` takes.
+        :rtype: requests.Response
+<b class="calibre25">        """</b>
+<var class="calibre43">--snip--</var></code></pre>
+<p class="calibre23"><span type="pagebreak" title="189" id="calibre_link-527" class="calibre16"></span>The <em class="calibre10">sessions.py</em> file’s <code class="calibre9">request</code> contains docstrings for the module <span class="codeannotation">2</span>, the <code class="calibre9">Session</code> class <span class="codeannotation">3</span>, and the <code class="calibre9">Session</code> class’s <code class="calibre9">get()</code> method <span class="codeannotation">4</span>. Note that although the module’s docstring must be the first string to appear in the module, it should come after any magic comments, such as the shebang line or encoding definition <span class="codeannotation">1</span>. </p>
+<p class="calibre23">Later, you can retrieve the docstring for a module, class, function, or method by checking the respective object’s <code class="calibre9">__doc__</code> attribute. For example, here we examine the docstrings to find out more about the <code class="calibre9">sessions</code> module, the <code class="calibre9">Session</code> class, and the <code class="calibre9">get()</code> method:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">from requests import sessions</b>
+&gt;&gt;&gt; <b class="calibre25">sessions.__doc__</b>
+'\nrequests.session\n~~~~~~~~~~~~~~~~\n\nThis module provides a Session object to manage and persist settings across\nrequests (cookies, auth, proxies).\n'
+&gt;&gt;&gt; <b class="calibre25">sessions.Session.__doc__</b>
+"A Requests session.\n\n    Provides cookie persistence, connection-pooling, and configuration.\n\n    Basic Usage::\n\n      &gt;&gt;&gt; import requests\n
+<var class="calibre43">--snip--</var>
+&gt;&gt;&gt; <b class="calibre25">sessions.Session.get.__doc__</b>
+'Sends a GET request. Returns :class:`Response` object.\n\n        :param url: URL for the new :class:`Request` object.\n        :param \\*\\*kwargs:
+<var class="calibre43">--snip--</var></code></pre>
+<p class="calibre23">Automated documentation tools can take advantage of docstrings to provide context-appropriate information. One of these tools is Python’s built-in <code class="calibre9">help()</code> function, which displays the docstring of the object you pass it in a more readable format than the raw <code class="calibre9">__doc__</code> string directly. This is useful when you’re experimenting in the interactive shell, because you can immediately pull up information on any modules, classes, or functions you’re trying to use:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">from requests import sessions</b>
+&gt;&gt;&gt; <b class="calibre25">help(sessions)</b>
+Help on module requests.sessions in requests:
+
+NAME
+    requests.sessions
+
+DESCRIPTION
+    requests.session
+    ~~~~~~~~~~~~~~~~
+
+    This module provides a Session object to manage and persist settings
+-- More  --                  </code></pre>
+<p class="calibre23">If the docstring is too large to fit onscreen, Python displays <code class="calibre9">-- More --</code> at the bottom of the window. You can press <span class="keycaps">Enter</span> to scroll to the next line, press the spacebar to scroll to the next page, or press <span class="keycaps">Q</span> to quit viewing the docstring.</p>
+<p class="calibre23">Generally speaking, a docstring should contain a single line that summarizes the module, class, or function, followed by a blank line and more detailed information. For functions and methods, this can include <span type="pagebreak" title="190" id="calibre_link-528" class="calibre16"></span>information about their parameters, return value, and side effects. We write docstrings for other programmers rather than users of the software, so they should contain technical information, not tutorials.</p>
+<p class="calibre23">Docstrings provide a second key benefit because they integrate documentation into the source code. When you write documentation separate from code, you can often forget about it entirely. Instead, when you place docstrings at the top of the modules, classes, and functions, the information remains easy to review and update. </p>
+<p class="calibre23">You might not always immediately be able to write docstrings if you’re still working on the code it’s meant to describe. In that case, include a <code class="calibre9">TODO</code> comment in the docstring as a reminder to fill in the rest of the details. For example, the following fictional <code class="calibre9">reverseCatPolarity()</code> function has a poor docstring that states the obvious:</p>
+<pre class="calibre28"><code class="calibre9">def reverseCatPolarity(catId, catQuantumPhase, catVoltage):
+    """Reverses the polarity of a cat.
+
+    TODO Finish this docstring."""
+<var class="calibre43">--snip--</var></code></pre>
+<p class="calibre23">Because every class, function, and method should have a docstring, you might be tempted to write only the minimal amount of documentation and move on. Without a <code class="calibre9">TODO</code> comment, it’s easy to forget that this docstring will eventually need rewriting.</p>
+<p class="calibre23">PEP 257 contains further documentation on docstrings at <a href="https://www.python.org/dev/peps/pep-0257/" class="calibre19">https://www.python.org/dev/peps/pep-0257/</a>.</p>
+<h2 id="calibre_link-217" class="calibre7">Type Hints</h2>
+<p class="bodyfirst">Many programming languages have <em class="calibre10">static typing</em>, meaning that programmers must declare the data types of all variables, parameters, and return values in the source code. This allows the interpreter or compiler to check that the code uses all objects correctly before the program runs. Python has <em class="calibre10">dynamic typing</em>: variables, parameters, and return values can be of any data type or even change data types while the program runs. Dynamic languages are often easier to program with because they require less formal specification, but they lack the bug-preventing advantages that static languages have. If you write a line of Python code, such as <code class="calibre9">round('forty two')</code>, you might not realize that you’re passing a string to a function that accepts only <code class="calibre9">int</code> or <code class="calibre9">float </code>arguments until you run the code and it causes an error. A statically typed language gives you an early warning when you assign a value or pass an argument of the wrong type.</p>
+<p class="calibre23">Python’s <em class="calibre10">type hints</em> offer optional static typing. In the following example, the type hints are in bold:</p>
+<pre class="calibre28"><code class="calibre9">def describeNumber(number<b class="calibre25">: int</b>) <b class="calibre25">-&gt; str</b>:
+    if number % 2 == 1:
+        return 'An odd number. '
+<span type="pagebreak" title="191" id="calibre_link-529" class="calibre16"></span>    elif number == 42:
+        return 'The answer. '
+    else:
+        return 'Yes, that is a number. '
+
+myLuckyNumber<b class="calibre25">: int</b> = 42
+print(describeNumber(myLuckyNumber))</code></pre>
+<p class="calibre23">As you can see, for parameters or variables, the type hint uses a colon to separate the name from the type, whereas for return values, the type hint uses an arrow ( <code class="calibre9">-&gt;</code>) to separate the <code class="calibre9">def</code> statement’s closing parentheses from the type. The <code class="calibre9">describeNumber()</code> function’s type hints show that it takes an integer value for its <code class="calibre9">number</code> parameter and returns a string value. </p>
+<p class="calibre23">If you use type hints, you don’t have to apply them to every bit of data in your program. Instead, you could use a <em class="calibre10">gradual typing</em> approach, which is a compromise between the flexibility of dynamic typing and the safety of static typing in which you include type hints for only certain variables, parameters, and return values. But the more type hinted your program is, the more information the static code analysis tool has to spot potential bugs in your program. </p>
+<p class="calibre23">Notice in the preceding example that the names of the specified types match the names of the <code class="calibre9">int()</code> and <code class="calibre9">str()</code> constructor functions. In Python, <em class="calibre10">class</em>, <em class="calibre10">type</em>, and <em class="calibre10">data type</em> have the same meaning. For any instances made from classes, you should use the class name as the type:</p>
+<pre class="calibre28"><code class="calibre9">import datetime
+<span class="codeannotationhang">1</span> noon<b class="calibre25">: datetime.time</b> = datetime.time(12, 0, 0)
+
+class CatTail:
+    def __init__(self, length<b class="calibre25">: int</b>, color<b class="calibre25">: str</b>) <b class="calibre25">-&gt; None:</b>
+        self.length = length
+        self.color = color
+
+<span class="codeannotationhang">2</span> zophieTail<b class="calibre25">: CatTail</b> = CatTail(29, 'grey')</code></pre>
+<p class="calibre23">The <code class="calibre9">noon</code> variable has the type hint <code class="calibre9">datetime.time</code><span class="codeannotation">1</span> because it’s a <code class="calibre9">time</code> object (which is defined in the <code class="calibre9">datetime</code> module). Likewise, the <code class="calibre9">zophieTail </code>object has the <code class="calibre9">CatTail</code> type hint <span class="codeannotation">2</span> because it’s an object of the <code class="calibre9">CatTail </code>class we created with a <code class="calibre9">class</code> statement. Type hints automatically apply to all subclasses of the specified type. For example, a variable with the type hint <code class="calibre9">dict</code> could be set to any dictionary value but also to any <code class="calibre9">collections.OrderedDict</code> and <code class="calibre9">collections.defaultdict</code> values, because these classes are subclasses of <code class="calibre9">dict</code>. Chapter 16 covers subclasses in more detail.</p>
+<p class="calibre23">Static type-checking tools don’t necessarily need type hints for variables. The reason is that static type-checking tools do <em class="calibre10">type inference</em>, inferring the type from the variable’s first assignment statement. For example, from the line <code class="calibre9">spam = 42</code>, the type checker can infer that spam is supposed to have a type hint of <code class="calibre9">int</code>. But I recommend setting a type hint anyway. A future change to a <code class="calibre9">float</code>, as in <code class="calibre9">spam = 42.0</code>, would also change the inferred type, which might not be your intention. It’s better to force the programmer <span type="pagebreak" title="192" id="calibre_link-530" class="calibre16"></span>to change the type hint when changing the value to confirm that they’ve made an intentional rather than incidental change.</p>
+<h3 id="calibre_link-218" class="calibre27">Using Static Analyzers</h3>
+<p class="bodyfirst">Although Python supports syntax for type hints, the Python interpreter completely ignores them. If you run a Python program that passes an invalidly typed variable to a function, Python will behave as though the type hints don’t exist. In other words, type hints don’t cause the Python interpreter to do any runtime type checking. They exist only for the benefit of static type-checking tools, which analyze the code before the program runs, not while the program is running. </p>
+<p class="calibre23">We call these tools <em class="calibre10">static analysis</em> tools because they analyze the source code before the program runs, whereas runtime analysis or dynamic analysis tools analyze running programs. (Confusingly, <em class="calibre10">static </em>and <em class="calibre10">dynamic</em> in this case refer to whether the program is running, but <em class="calibre10">static typing</em> and <em class="calibre10">dynamic typing</em> refer to how we declare the data types of variables and functions. Python is a dynamically typed language that has static analysis tools, such as Mypy, written for it.)</p>
+<h4 id="calibre_link-751" class="calibre44">Installing and Running Mypy</h4>
+<p class="bodyfirst">Although Python doesn’t have an official type-checker tool, Mypy is currently the most popular third-party type checker. You can install Mypy with <code class="calibre9">pip</code> by running this command:</p>
+<pre class="calibre28"><code class="calibre9"><code class="calibre42">python &ndash;m pip install &ndash;user mypy</code> </code></pre>
+<p class="calibre23">Run <code class="calibre9">python3</code> instead of <code class="calibre9">python</code> on macOS and Linux. Other well-known type checkers include Microsoft’s Pyright, Facebook’s Pyre, and Google’s Pytype.</p>
+<p class="calibre23">To run the type checker, open a Command Prompt or Terminal window and run the <code class="calibre9">python &ndash;m mypy</code> command (to run the module as an application), passing it the filename of the Python code to check. In this example, I’m checking the code for an example program I created in a file named <em class="calibre10">example.py</em>:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al\Desktop&gt;python &ndash;m mypy example.py
+Incompatible types in assignment (expression has type "float", variable has type "int")
+Found 1 error in 1 file (checked 1 source file)</code></pre>
+<p class="calibre23">The type checker outputs nothing if there are no problems and prints error messages if there are. In this <em class="calibre10">example.py</em> file, there’s a problem on line 171, because a variable named <code class="calibre9">spam</code> has a type hint of <code class="calibre9">int</code> but is being assigned a <code class="calibre9">float</code> value. This could possibly cause a failure and should be investigated. Some error messages might be hard to understand at first reading. Mypy can report a large number of possible errors, too many to list here. The easiest way to find out what the error means is to search for it on the web. In this case, you might search for something like “Mypy incompatible types in assignment.”</p>
+<p class="calibre23"><span type="pagebreak" title="193" id="calibre_link-531" class="calibre16"></span>Running Mypy from the command line every time you change your code is rather inefficient. To make better use of a type checker, you’ll need to configure your IDE or text editor to run it in the background. This way, the editor will constantly run Mypy as you type your code and then display any errors in the editor. <a id="calibre_link-12" href="#calibre_link-11" class="calibre19">Figure 11-1</a> shows the error from the previous example in the Sublime Text text editor.</p>
+<figure class="calibre29">
+<img src="images/000030.png" alt="f11001" class="calibre15" />
+<figcaption class="calibre30"><p class="calibre31"><a id="calibre_link-11" href="#calibre_link-12" class="calibre19">Figure 11-1:</a> The Sublime Text text editor displaying errors from Mypy</p></figcaption>
+</figure>
+<p class="calibre23">The steps to configure your IDE or text editor to work with Mypy differ depending on which IDE or text editor you’re using. You can find instructions online by searching for “<em class="calibre10">&lt;your IDE&gt;</em> Mypy configure,” “<em class="calibre10">&lt;your IDE&gt; </em>type hints setup,” or something similar. If all else fails, you can always run Mypy from the Command Prompt or Terminal window.</p>
+<h4 id="calibre_link-752" class="calibre44">Telling Mypy to Ignore Code</h4>
+<p class="bodyfirst">You might write code that for whatever reason you don’t want to receive type hint warnings about. To the static analysis tool, the line might appear to use the incorrect type, but it’s actually fine when the program runs. You can suppress any type hint warnings by adding a <code class="calibre9"># type: ignore</code> comment to the end of the line. Here is an example:</p>
+<pre class="calibre28"><code class="calibre9">def removeThreesAndFives(number: int) -&gt; int:
+    number = str(number)  <b class="calibre25"># type: ignore</b>
+    number = number.replace('3', '').replace('5', '')  <b class="calibre25"># type: ignore</b>
+    return int(number)</code></pre>
+<p class="calibre23">To remove all the <code class="calibre9">3</code> and <code class="calibre9">5</code> digits from the integer passed to <code class="calibre9">removeThreesAndFives()</code>, we temporarily set the integer number variable to a string. This causes the type checker to warn us about the first two lines in the function, so we add the <code class="calibre9"># type: ignore</code> type hints to these lines to suppress the type checker’s warnings.</p>
+<p class="calibre23">Use <code class="calibre9"># type: ignore</code> sparingly. Ignoring warnings from the type checker provides an opening for bugs to sneak into your code. You can almost certainly rewrite your code so the warnings don’t occur. For example, if we create a new variable with <code class="calibre9">numberAsStr = str(number)</code> or replace all three lines with a single <code class="calibre9">return int(str(number.replace('3', '').replace('5', '')))</code> line of <span type="pagebreak" title="194" id="calibre_link-532" class="calibre16"></span>code, we can avoid reusing the <code class="calibre9">number</code> variable for multiple types. We wouldn’t want to suppress the warning by changing the type hint for the parameter to <code class="calibre9">Union[int, str]</code>, because the parameter is meant to allow integers only.</p>
+<h3 id="calibre_link-219" class="calibre27">Setting Type Hints for Multiple Types</h3>
+<p class="bodyfirst">Python’s variables, parameters, and return values can have multiple data types. To accommodate this, you can specify type hints with multiple types by importing <code class="calibre9">Union</code> from the built-in <code class="calibre9">typing </code>module. Specify a range of types inside square brackets following the <code class="calibre9">Union</code> class name:</p>
+<pre class="calibre28"><code class="calibre9">from typing import Union
+spam: Union[int, str, float] = 42
+spam = 'hello'
+spam = 3.14</code></pre>
+<p class="calibre23">In this example, the <code class="calibre9">Union[int, str, float]</code> type hint specifies that you can set <code class="calibre9">spam</code> to an integer, string, or floating-point number. Note that it’s preferable to use the <code class="calibre9">from typing import <var class="calibre43">X</var></code> form of the <code class="calibre9">import</code> statement rather than the <code class="calibre9">import typing</code> form and then consistently use the verbose <code class="calibre9">typing.<var class="calibre43">X</var></code> for type hints throughout your program.</p>
+<p class="calibre23">You might specify multiple data types in situations where a variable or return value could have the <code class="calibre9">None</code> value in addition to another type. To include <code class="calibre9">NoneType</code>, which is the type of the <code class="calibre9">None</code> value, in the type hint, place <code class="calibre9">None</code> inside the square brackets rather than <code class="calibre9">NoneType</code>. (Technically, <code class="calibre9">NoneType</code> isn’t a built-in identifier the way <code class="calibre9">int</code> or <code class="calibre9">str</code> is.)</p>
+<p class="calibre23">Better yet, instead of using, say, <code class="calibre9">Union[str, None]</code>, you can import <code class="calibre9">Optional</code> from the <code class="calibre9">typing</code> module and use<code class="calibre9"> Optional[str]</code>. This type hint means that the function or method could return <code class="calibre9">None</code> rather than a value of the expected type. Here’s an example:</p>
+<pre class="calibre28"><code class="calibre9">from typing import Optional
+lastName: <b class="calibre25">Optional[str]</b> = None
+lastName = 'Sweigart'</code></pre>
+<p class="calibre23">In this example, you could set the <code class="calibre9">lastName</code> variable to <code class="calibre9">None</code> or a <code class="calibre9">str</code> value. But it’s best to make sparing use of <code class="calibre9">Union</code> and <code class="calibre9">Optional</code>. The fewer types your variables and functions allow, the simpler your code will be, and simple code is less bug prone than complicated code. Remember the Zen of Python maxim that simple is better than complex. For functions that return <code class="calibre9">None</code> to indicate an error, consider raising an exception instead. See “Raising Exceptions vs. Returning Error Codes” on page 178.</p>
+<p class="calibre23">You can use the <code class="calibre9">Any</code> type hint (also from the <code class="calibre9">typing</code> module) to specify that a variable, parameter, or return value can be of any data type:</p>
+<pre class="calibre28"><code class="calibre9">from typing import Any
+import datetime
+spam: Any = 42
+spam = datetime.date.today()
+spam = True</code></pre>
+<p class="calibre23"><span type="pagebreak" title="195" id="calibre_link-533" class="calibre16"></span>In this example, the <code class="calibre9">Any</code> type hint allows you to set the <code class="calibre9">spam</code> variable to a value of any data type, such as <code class="calibre9">int</code>, <code class="calibre9">datetime.date</code>, or <code class="calibre9">bool</code>. You can also use <code class="calibre9">object</code> as the type hint, because this is the base class for all data types in Python. But <code class="calibre9">Any</code> is a more readily understandable type hint than <code class="calibre9">object</code>.</p>
+<p class="calibre23">As you should with <code class="calibre9">Union</code> and <code class="calibre9">Optional</code>, use <code class="calibre9">Any</code> sparingly. If you set all of your variables, parameters, and return values to the <code class="calibre9">Any</code> type hint, you’d lose the type-checking benefits of static typing. The difference between specifying the <code class="calibre9">Any</code> type hint and specifying no type hint is that <code class="calibre9">Any</code> explicitly states that the variable or function accepts values of any type, whereas an absent type hint indicates that the variable or function has yet to be type hinted. </p>
+<h3 id="calibre_link-220" class="calibre27">Setting Type Hints for Lists, Dictionaries, and More</h3>
+<p class="bodyfirst">Lists, dictionaries, tuples, sets, and other container data types can hold other values. If you specify <code class="calibre9">list</code> as the type hint for a variable, that variable must contain a list, but the list could contain values of any type. The following code won’t cause any complaints from a type checker:</p>
+<pre class="calibre28"><code class="calibre9">spam: list = [42, 'hello', 3.14, True]</code></pre>
+<p class="calibre23">To specifically declare the data types of the values inside the list, you must use the <code class="calibre9">typing</code> module’s <code class="calibre9">List</code> type hint. Note that <code class="calibre9">List</code> has a capital <em class="calibre10">L</em>, distinguishing it from the <code class="calibre9">list</code> data type:</p>
+<pre class="calibre28"><code class="calibre9">from typing import List, Union
+<span class="codeannotationhang">1</span> catNames: <b class="calibre25">List[str]</b> = ['Zophie', 'Simon', 'Pooka', 'Theodore']
+<span class="codeannotationhang">2</span> numbers: <b class="calibre25">List[Union[int, float]]</b> = [42, 3.14, 99.9, 86]</code></pre>
+<p class="calibre23">In this example, the <code class="calibre9">catNames</code> variable contains a list of strings, so after importing <code class="calibre9">List</code> from the <code class="calibre9">typing</code> module, we set the type hint to <code class="calibre9">List[str]</code><span class="codeannotation">1</span>. The type checker catches any call to the <code class="calibre9">append()</code> or <code class="calibre9">insert()</code> method, or any other code that puts a nonstring value into the list. If the list should contain multiple types, we can set the type hint using <code class="calibre9">Union</code>. For example, the <code class="calibre9">numbers</code> list can contain integer and float values, so we set its type hint to <code class="calibre9">List[Union[int, float]]</code><span class="codeannotation">2</span>.</p>
+<p class="calibre23">The <code class="calibre9">typing</code> module has a separate <em class="calibre10">type alias</em> for each container type. Here’s a list of the type aliases for common container types in Python:</p>
+<ol class="none">
+<li class="calibre11"><code class="bold">List</code> is for the <code class="calibre9">list</code> data type.</li>
+<li class="calibre11"><code class="bold">Tuple</code> is for the <code class="calibre9">tuple</code> data type.</li>
+<li class="calibre11"><code class="bold">Dict</code> is for the dictionary (<code class="calibre9">dict</code>) data type.</li>
+<li class="calibre11"><code class="bold">Set</code> is for the <code class="calibre9">set</code> data type.</li>
+<li class="calibre11"><code class="bold">FrozenSet</code> is for the <code class="calibre9">frozenset</code> data type.</li>
+<li class="calibre11"><code class="bold">Sequence</code> is for the <code class="calibre9">list</code>, <code class="calibre9">tuple</code>, and any other sequence data type.</li>
+<li class="calibre11"><code class="bold">Mapping</code> is for the dictionary (<code class="calibre9">dict</code>), <code class="calibre9">set</code>, <code class="calibre9">frozenset</code>, and any other mapping data type.</li>
+<li class="calibre11"><code class="bold">ByteString</code> is for the <code class="calibre9">bytes</code>, <code class="calibre9">bytearray</code>, and <code class="calibre9">memoryview</code> types.</li>
+</ol>
+<p class="calibre23"><span type="pagebreak" title="196" id="calibre_link-534" class="calibre16"></span>You’ll find the full list of these types online at <a href="https://docs.python.org/3/library/typing.html#classes-functions-and-decorators" class="calibre19">https://docs.python.org/3/library/typing.html#classes-functions-and-decorators</a>.</p>
+<h3 id="calibre_link-221" class="calibre27">Backporting Type Hints with Comments</h3>
+<p class="bodyfirst"><em class="calibre10">Backporting</em> is the process of taking features from a new version of software and <em class="calibre10">porting</em> (that is, adapting and adding) them to an earlier version. Python’s type hints feature is new to version 3.5. But in Python code that might be run by interpreter versions earlier than 3.5, you can still use type hints by putting the type information in comments. For variables, use an inline comment after the assignment statement. For functions and methods, write the type hint on the line following the <code class="calibre9">def</code> statement. Begin the comment with <code class="calibre9">type:</code>, followed by the data type. Here’s an example of some code with type hints in the comments:</p>
+<pre class="calibre28"><code class="calibre9"><span class="codeannotationhang">1</span> <b class="calibre25">from typing import List</b>
+
+<span class="codeannotationhang">2</span> spam = 42  <b class="calibre25"># type: int</b>
+def sayHello():
+   <span class="codeannotation">3</span> <b class="calibre25"># type: () -&gt; None</b>
+    """The docstring comes after the type hint comment."""
+    print('Hello!')
+
+def addTwoNumbers(listOfNumbers, doubleTheSum):
+   <span class="codeannotation">4</span> <b class="calibre25"># type: (List[float], bool) -&gt; float</b>
+    total = listOfNumbers[0] + listOfNumbers[1]
+    if doubleTheSum:
+        total *= 2
+    return total</code></pre>
+<p class="calibre23">Note that even if you’re using the comment type hint style, you still need to import the <code class="calibre9">typing</code> module <span class="codeannotation">1</span>, as well as any type aliases that you use in the comments. Versions earlier than 3.5 won’t have a <code class="calibre9">typing</code> module in their standard library, so you must install <code class="calibre9">typing</code> separately by running this command:</p>
+<pre class="calibre28"><code class="calibre9"><code class="calibre42">python &ndash;m pip install --user typing</code> </code></pre>
+<p class="calibre23">Run <code class="calibre9">python3</code> instead of <code class="calibre9">python</code> on macOS and Linux.</p>
+<p class="calibre23">To set the <code class="calibre9">spam</code> variable to an integer, we add <code class="calibre9"># type: int</code> as the end-of-line comment <span class="codeannotation">2</span>. For functions, the comment should include parentheses with a comma-separated list of type hints in the same order as the parameters. Functions with zero parameters would have an empty set of parentheses <span class="codeannotation">3</span>. If there are multiple parameters, separate them inside the parentheses with commas <span class="codeannotation">4</span>. </p>
+<p class="calibre23">The comment type hint style is a bit less readable than the normal style, so use it only for code that might be run by versions of Python earlier than 3.5.</p>
+<h2 id="calibre_link-222" class="calibre7"><span type="pagebreak" title="197" id="calibre_link-535" class="calibre20"></span>Summary</h2>
+<p class="bodyfirst">Programmers often forget about documenting their code. But by taking a little time to add comments, docstrings, and type hints to your code, you can avoid wasting time later. Well-documented code is also easier to maintain.</p>
+<p class="calibre23">It’s tempting to adopt the opinion that comments and documentation don’t matter or are even a disadvantage when writing software. (Conveniently, this view allows programmers to avoid the work of writing documentation.) Don’t be fooled; well-written documentation consistently saves you far more time and effort than it takes to write it. It’s more common for programmers to stare at a screen of inscrutable, uncommented code than to have too much helpful information.</p>
+<p class="calibre23">Good comments offer concise, useful, and accurate information to programmers who need to read the code at a later time and understand what it does. These comments should explain the original programmer’s intent and summarize small sections of code rather than state the obvious about what a single line of code does. Comments sometimes offer detailed accounts of lessons the programmer learned while writing the code. This valuable information might spare future maintainers from having to relearn these lessons the hard way.</p>
+<p class="calibre23">Docstrings, a Python-specific kind of comment, are multiline strings that appear immediately after the <code class="calibre9">class</code> or <code class="calibre9">def</code> statement, or at the top of the module. Documentation tools, such as Python’s built-in <code class="calibre9">help()</code> function, can extract docstrings to provide specific information about the purpose of the class, function, or module.</p>
+<p class="calibre23">Introduced in Python 3.5, type hints bring gradual typing to Python code. Gradual typing allows the programmer to apply the bug-detection benefits of static typing while maintaining the flexibility of dynamic typing. The Python interpreter ignores type hints, because Python doesn’t have runtime type checking. Even so, static type-checking tools use type hints to analyze the source code when it isn’t running. Type checkers, such as Mypy, can ensure that you aren’t assigning invalid values to the variables you pass to functions. This saves you time and effort by preventing a broad category of bugs.</p>
+</section>
+</div>
+
+
+<a href="chapter10.html">Prev: Chapter 10 - Writing Effective Functions</a> | <a href="chapter12.html">Next: Chapter 12 - Organizing You Code Projects with Git</a>
+</body></html>

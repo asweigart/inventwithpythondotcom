@@ -1,0 +1,583 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Chapter 1: The Interactive Shell</title></head><body style="background-color: #fffeee;">
+
+<script type="text/javascript">
+//<![CDATA[
+
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5459430-3']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
+//]]>
+</script>
+
+
+<div style="background-color: #eeeddd; float: right; height: 310px; font-family: sans-serif;" id="otherbooks">
+  <a href="#" onclick="document.getElementById('otherbooks').outerHTML='';" style="vertical-align: top;">(close)</a><br />
+
+  <a target="_blank" href="https://nostarch.com/automatestuff2" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_automate.link');"><img src="/images/cover_automate2_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/beyond-basic-stuff-python" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_beyond.link');"><img src="/images/cover_beyond_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/inventwithpython" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_invent.link');"><img src="/images/cover_invent4th_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://www.amazon.com/Making-Games-Python-Pygame-Sweigart/dp/1469901730?ie=UTF8&amp;tag=playwithpyth-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1469901730" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_pygame.link');"><img src="/images/cover_makinggames_thumb.png" style="height: 200px; border: solid black 1px; /"></a>
+  <a target="_blank" href="https://nostarch.com/crackingcodes" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_hacking.link');"><img src="/images/cover_crackingcodes_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/scratchplayground"><img src="/images/cover_scratchprogrammingplayground_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/codingwithminecraft"><img src="/images/cover_codingwithminecraft_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <br />
+  <a href="https://inventwithpython.com/automateudemy">Use this link to get 70% off the Automate the Boring Stuff online video course.</a><br />
+  <a href="https://www.patreon.com/AlSweigart">Support me on Patreon</a>
+</div>
+
+<a href="chapter6.html">Prev: Chapter 6 - Writing Pythonic Code</a> | <a href="chapter8.html">Next: Chapter 8 - Common Python Gotchas</a>
+
+
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-142">
+<section class="toclist">
+<header class="calibre12">
+<h1 class="chaptertitle">
+<span class="partnumber"><span type="pagebreak" title="107" id="calibre_link-453" class="calibre26"></span>7</span><br class="calibre18" />
+<span class="parttitle1">Programming Jargon</span>
+</h1>
+</header>
+<figure class="opener"><img src="images/000017.png" alt="" class="calibre15" /></figure><p class="chapterintro">In the XKCD comic “Up Goer Five” (<a href="https://xkcd.com/1133/" class="calibre19">https://xkcd.com/1133/</a>), the webcomic’s artist Randall Munroe created a technical schematic for the Saturn V rocket using only the 1,000 most common English words. The comic breaks down all the technical jargon into sentences a young child could understand. But it also highlights why we can’t explain everything using simple terms: The explanation “Thing to help people escape really fast if there’s a problem and everything is on fire so they decide not to go to space” might be easier to understand for a lay audience than “Launch Escape System.” But it’s too verbose for NASA engineers to say in their day-to-day work. Even then, they’d probably rather use the acronym LES.</p>
+<p class="calibre22"><span type="pagebreak" title="108" id="calibre_link-454" class="calibre16"></span>Although computer jargon can be confusing and intimidating for new programmers, it’s a necessary shorthand. Several terms in Python and software development have subtle differences in meaning, and even experienced developers sometimes carelessly use them interchangeably. The technical definitions for these terms can vary between programming languages, but this chapter covers the terms as they relate to Python. You’ll get a broad, albeit not deep, understanding of the programming language concepts behind them.</p>
+<p class="calibre23">This chapter assumes you aren’t yet familiar with classes and object-oriented programming (OOP). I’ve limited the explanations for classes and other OOP jargon here, but the jargon is explained in more detail in <span class="calibre" itemid="xref_target_Chapters 15">Chapters 15</span> to <span class="calibre" itemid="xref_target_17">17</span>.</p>
+<h2 id="calibre_link-143" class="calibre7">Definitions</h2>
+<p class="bodyfirst">As the number of programmers in a room approaches two, the likelihood of an argument about semantics approaches 100 percent. Language is fluid and humans are the masters of words rather than the other way around. Some developers might use terms slightly differently, but becoming familiar with these terms is still useful. This chapter explores these terms and how they compare with each other. If you need a glossary of terms in alphabetical order, you can rely on the official Python glossary at <a href="https://docs.python.org/3/glossary.html" class="calibre19">https://docs.python.org/3/glossary.html</a> to provide canonical definitions.</p>
+<p class="calibre23">No doubt, some programmers will read the definitions in this chapter and bring up special cases or exceptions that can be endlessly nitpicked. Rather than being a definitive guide, this chapter is intended to give you accessible definitions, even if they’re not comprehensive. As with everything in programming, there’s always more to learn.</p>
+<h3 id="calibre_link-144" class="calibre27">Python the Language and Python the Interpreter</h3>
+<p class="bodyfirst">The word <em class="calibre10">python</em> can have multiple meanings. The Python programming language gets its name from the British comedy group Monty Python, rather than the snake (although Python tutorials and documentation use both Monty Python and snake references). Similarly, <em class="calibre10">Python</em> can have two meanings in regard to computer programming. </p>
+<p class="calibre23">When we say, “Python runs a program” or “Python will raise an exception,” we’re talking about the <em class="calibre10">Python interpreter</em>&mdash;the actual software that reads the text of a <em class="calibre10">.py</em> file and carries out its instructions. When we say, “the Python interpreter,” we’re almost always talking about <em class="calibre10">CPython,</em> the Python interpreter maintained by the Python Software Foundation, available at <a href="https://www.python.org" class="calibre19">https://www.python.org</a>. CPython is an <em class="calibre10">implementation</em> of the Python language&mdash;that is, software created to follow a specification&mdash;but there are others. Although CPython is written in the C programming language, <em class="calibre10">Jython</em> is written in Java for running Python scripts that are interoperable with Java programs. <em class="calibre10">PyPy</em>, a <em class="calibre10">just-in-time compiler</em> for Python that compiles as programs execute, is written in Python.</p>
+<p class="calibre23"><span type="pagebreak" title="109" id="calibre_link-455" class="calibre16"></span>All of these implementations run source code written in the<em class="calibre10"> Python programming language</em>, which is what we mean when we say, “This is a Python program” or “I’m learning Python.” Ideally, any Python interpreter can run any source code written in the Python language; however, in the real world there’ll be some slight incompatibilities and differences between interpreters. CPython is called the Python language’s <em class="calibre10">reference implementation</em> because if there’s a difference between how CPython and another interpreter interpret Python code, CPython’s behavior is considered canonical and correct.</p>
+<h3 id="calibre_link-145" class="calibre27">Garbage Collection</h3>
+<p class="bodyfirst">In many early programming languages, a programmer had to instruct the program to allocate and then deallocate, or free, memory for data structures as needed. Manual memory allocation was the source of numerous bugs, such as <em class="calibre10">memory leaks</em> (where programmers forgot to free memory) or <em class="calibre10">double-free bugs</em> (where programmers freed the same memory twice, leading to data corruption).</p>
+<p class="calibre23">To avoid these bugs, Python has <em class="calibre10">garbage collection</em>, a form of automatic memory management that tracks when to allocate and free memory so the programmer doesn’t have to. You can think of garbage collection as memory recycling, because it makes memory available for new data. For example, enter the following into the interactive shell:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">def someFunction():</b>
+...     <b class="calibre25">print('someFunction() called.')</b>
+...     <b class="calibre25">spam = ['cat', 'dog', 'moose']</b>
+...
+&gt;&gt;&gt; <b class="calibre25">someFunction()</b>
+someFunction() called.</code></pre>
+<p class="calibre23">When <code class="calibre9">someFunction()</code> is called, Python allocates memory for the list <code class="calibre9">['cat', 'dog', 'moose']</code>. The programmer doesn’t need to figure out how many bytes of memory to request because Python manages this automatically. Python’s garbage collector will free the local variables when the function call returns to make that memory available for other data. Garbage collection makes programming much easier and less bug-prone.</p>
+<h3 id="calibre_link-146" class="calibre27">Literals</h3>
+<p class="bodyfirst">A <em class="calibre10">literal</em> is text in the source code for a fixed, typed-out value. In the following code example</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">age = 42 + len('Zophie')</b></code></pre>
+<p class="bodyfirst">the <code class="calibre9">42</code> and <code class="calibre9">'Zophie'</code> text are integer and string literals. Think of a literal as a value that literally appears in source code text. Only the built-in data types can have literal values in Python source code, so the variable <code class="calibre9">age</code> isn’t a literal value. <a id="calibre_link-693" href="#calibre_link-314" class="calibre19">Table 7-1</a> lists some example Python literals.</p>
+<figure class="calibre29">
+<figcaption class="calibre30"><p class="calibre31"><a id="calibre_link-314" href="#calibre_link-693" class="calibre19">Table 7-1:</a> Examples of Literals in Python<span type="pagebreak" title="110" id="calibre_link-456" class="calibre16"></span></p></figcaption>
+<table id="calibre_link-748" border="1" class="calibre45">
+<thead class="calibre46">
+<tr class="calibre47">
+<td class="calibre48"><b class="calibre25">Literal</b></td><td class="calibre48"><b class="calibre25">Data type </b></td></tr>
+</thead>
+<tbody class="calibre49">
+<tr class="calibre50">
+<td class="calibre48"><code class="calibre41">42</code></td><td class="calibre48">Integer</td></tr>
+<tr class="calibre51">
+<td class="calibre48"><code class="calibre41">3.14</code></td><td class="calibre48">Float</td></tr>
+<tr class="calibre50">
+<td class="calibre48"><code class="calibre41">1.4886191506362924e+36</code></td><td class="calibre48">Float</td></tr>
+<tr class="calibre51">
+<td class="calibre48"><code class="calibre41">"""Howdy!"""</code></td><td class="calibre48">String</td></tr>
+<tr class="calibre50">
+<td class="calibre48"><code class="calibre41">r'Green\Blue'</code></td><td class="calibre48">String</td></tr>
+<tr class="calibre51">
+<td class="calibre48"><code class="calibre41">[]</code></td><td class="calibre48">List</td></tr>
+<tr class="calibre50">
+<td class="calibre48"><code class="calibre41">{'name': 'Zophie'}</code></td><td class="calibre48">Dictionary</td></tr>
+<tr class="calibre51">
+<td class="calibre48"><code class="calibre41">b'\x41'</code></td><td class="calibre48">Bytes</td></tr>
+<tr class="calibre50">
+<td class="calibre48"><code class="calibre41">True</code></td><td class="calibre48">Boolean</td></tr>
+<tr class="calibre51">
+<td class="calibre48"><code class="calibre41">None</code></td><td class="calibre48">NoneType</td></tr>
+</tbody>
+</table>
+</figure>
+<p class="calibre23">Nitpickers will argue that some of my choices aren’t literals based on the official Python language documentation. Technically, <code class="calibre9">-5</code> isn’t a literal in Python because the language defines the negative symbol (<code class="calibre9">-</code>) as an operator that operates on the <code class="calibre9">5</code> literal. In addition, <code class="calibre9">True</code>, <code class="calibre9">False</code>, and <code class="calibre9">None</code> are considered Python keywords rather than literals, whereas <code class="calibre9">[]</code> and <code class="calibre9">{}</code> are called <em class="calibre10">displays</em> or <em class="calibre10">atoms</em> depending on what part of the official documentation you’re looking at. Regardless, literal is a common term that software professionals will use for all of these examples.</p>
+<h3 id="calibre_link-147" class="calibre27">Keywords</h3>
+<p class="bodyfirst">Every programming language has its own <em class="calibre10">keywords</em>. The Python keywords are a set of names reserved for use as part of the language and cannot be used as variable names (that is, as identifiers). For example, you cannot have a variable named <code class="calibre9">while</code> because <code class="calibre9">while</code> is a keyword reserved for use in <code class="calibre9">while</code> loops. The following are the Python keywords as of Python 3.9.</p>
+<table id="calibre_link-749" border="1" class="calibre45">
+<tbody class="calibre49">
+<tr class="calibre50">
+<td class="calibre48"><code class="calibre41">and</code></td><td class="calibre48"><code class="calibre41">continue</code></td><td class="calibre48"><code class="calibre41">finally</code></td><td class="calibre48"><code class="calibre41">is</code></td><td class="calibre48"><code class="calibre41">raise</code></td></tr>
+<tr class="calibre51">
+<td class="calibre48"><code class="calibre41">as</code></td><td class="calibre48"><code class="calibre41">def</code></td><td class="calibre48"><code class="calibre41">for</code></td><td class="calibre48"><code class="calibre41">lambda</code></td><td class="calibre48"><code class="calibre41">return</code></td></tr>
+<tr class="calibre50">
+<td class="calibre48"><code class="calibre41">assert</code></td><td class="calibre48"><code class="calibre41">del</code></td><td class="calibre48"><code class="calibre41">from</code></td><td class="calibre48"><code class="calibre41">None</code></td><td class="calibre48"><code class="calibre41">True</code></td></tr>
+<tr class="calibre51">
+<td class="calibre48"><code class="calibre41">async</code></td><td class="calibre48"><code class="calibre41">elif</code></td><td class="calibre48"><code class="calibre41">global</code></td><td class="calibre48"><code class="calibre41">nonlocal</code></td><td class="calibre48"><code class="calibre41">try</code></td></tr>
+<tr class="calibre50">
+<td class="calibre48"><code class="calibre41">await</code></td><td class="calibre48"><code class="calibre41">else</code></td><td class="calibre48"><code class="calibre41">if</code></td><td class="calibre48"><code class="calibre41">not</code></td><td class="calibre48"><code class="calibre41">while</code></td></tr>
+<tr class="calibre51">
+<td class="calibre48"><code class="calibre41">break</code></td><td class="calibre48"><code class="calibre41">except</code></td><td class="calibre48"><code class="calibre41">import</code></td><td class="calibre48"><code class="calibre41">or</code></td><td class="calibre48"><code class="calibre41">with</code></td></tr>
+<tr class="calibre50">
+<td class="calibre48"><code class="calibre41">class</code></td><td class="calibre48"><code class="calibre41">False</code></td><td class="calibre48"><code class="calibre41">in</code></td><td class="calibre48"><code class="calibre41">pass</code></td><td class="calibre48"><code class="calibre41">yield</code></td></tr>
+</tbody>
+</table>
+<p class="calibre23">Note that the Python keywords are always in English and aren’t available in alternative languages. For example, the following function has identifiers written in Spanish, but the <code class="calibre9">def</code> and <code class="calibre9">return</code> keywords remain in English.</p>
+<span type="pagebreak" title="111" id="calibre_link-710" class="calibre16"></span><pre class="calibre28"><code class="calibre9">def agregarDosNúmeros(primerNúmero, segundoNúmero):
+    return primerNúmero + segundoNúmero</code></pre>
+<p class="calibre23">Unfortunately for the 6.5 billion people who don’t speak it, English dominates the programming field.</p>
+<h3 id="calibre_link-148" class="calibre27">Objects, Values, Instances, and Identities</h3>
+<p class="bodyfirst">An <em class="calibre10">object</em> is a representation of a piece of data, such as a number, some text, or a more complicated data structure, such as a list or dictionary. All objects can be stored in variables, passed as arguments to function calls, and returned from function calls.</p>
+<p class="calibre23">All objects have a value, identity, and data type. The <em class="calibre10">value</em> is the data the object represents, such as the integer <code class="calibre9">42</code> or the string <code class="calibre9">'hello'</code>. Although somewhat confusing, some programmers use the term value as a synonym for <em class="calibre10">object,</em> especially for simple data types like integers or strings. For example, a variable that contains <code class="calibre9">42</code> is a variable that contains an integer value, but we can also say it’s a variable that contains an integer object with a value of <code class="calibre9">42</code>.</p>
+<p class="calibre23">An object is created with an <em class="calibre10">identity</em> that is a unique integer you can view by calling the <code class="calibre9">id()</code> function. For example, enter the following code into the interactive shell:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">spam = ['cat', 'dog', 'moose']</b>
+&gt;&gt;&gt; <b class="calibre25">id(spam)</b>
+33805656</code></pre>
+<p class="calibre23">The variable <code class="calibre9">spam</code> stores an object of the list data type. Its value is <code class="calibre9">['cat', 'dog', 'moose']</code>. Its identity is <code class="calibre9">33805656</code>, although the integer ID varies each time a program runs so you’ll likely get a different ID on your computer. Once created, an object’s identity won’t change for as long as the program runs. Although the data type and the object’s identity will never change, an object’s value can change, as we’ll see in this example:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">spam.append('snake')</b>
+&gt;&gt;&gt; <b class="calibre25">spam</b>
+['cat', 'dog', 'moose', 'snake']
+&gt;&gt;&gt; <b class="calibre25">id(spam)</b>
+33805656</code></pre>
+<p class="calibre23">Now the list also contains <code class="calibre9">'snake'</code>. But as you can see from the <code class="calibre9">id(spam)</code> call, its identity hasn’t changed and it’s still the same list. But let’s see what happens when you enter this code:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">spam = [1, 2, 3]</b>
+&gt;&gt;&gt; <b class="calibre25">id(spam)</b>
+33838544</code></pre>
+<p class="calibre23"><span type="pagebreak" title="112" id="calibre_link-457" class="calibre16"></span>The value in <code class="calibre9">spam</code> has been overwritten by a new list object with a new identity: <code class="calibre9">33838544</code> instead of <code class="calibre9">33805656</code>. An <em class="calibre10">identifier</em> like <code class="calibre9">spam</code> isn’t the same as an <em class="calibre10">identity</em> because multiple identifiers can refer to the same object, as is the case in this example of two variables that are assigned to the same dictionary:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">spam = {'name': 'Zophie'}</b>
+&gt;&gt;&gt; <b class="calibre25">id(spam)</b>
+33861824
+&gt;&gt;&gt; <b class="calibre25">eggs = spam</b>
+&gt;&gt;&gt; <b class="calibre25">id(eggs)</b>
+33861824</code></pre>
+<p class="calibre23">The identities of the <code class="calibre9">spam</code> and <code class="calibre9">eggs</code> identifiers are both <code class="calibre9">33861824</code> because they refer to the same dictionary object. Now change the value of <code class="calibre9">spam</code> in the interactive shell:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">spam = {'name': 'Zophie'}</b>
+&gt;&gt;&gt; <b class="calibre25">eggs = spam</b>
+<span class="codeannotationhang">1</span> &gt;&gt;&gt; <b class="calibre25">spam['name'] = 'Al'  </b>
+&gt;&gt;&gt; <b class="calibre25">spam</b>
+{'name': 'Al'}
+&gt;&gt;&gt; <b class="calibre25">eggs  </b>
+<span class="codeannotationhang">2</span> {'name': 'Al'}</code></pre>
+<p class="calibre23">You’ll see that changes to <code class="calibre9">spam</code><span class="codeannotation">1</span> mysteriously also appear in <code class="calibre9">eggs</code><span class="codeannotation">2</span>. The reason is that they both refer to the same object.</p>
+<aside type="sidebar" class="authors">
+<div class="top"><hr class="calibre32" /></div>
+<section class="box">
+<h2 class="calibre38">Variable Metaphors: Box vs. Label</h2>
+<p class="boxbodyfirst">Many introductory books use boxes as a metaphor for variables, which is an oversimplification. It’s easy to think of variables as a box that a value is stored in, as in <a id="calibre_link-694" href="#calibre_link-325" class="calibre19">Figure 7-1</a>, but this metaphor falls apart when it comes to references. The previous <code class="calibre41">spam</code> and <code class="calibre41">eggs</code> variables don’t store separate dictionaries; rather, they store <em class="calibre10">references</em> to the same dictionary in the computer’s memory.</p>
+<figure class="calibre29">
+<img src="images/000018.png" alt="f07001" class="calibre15" />
+<figcaption class="calibre30"><p class="calibre52"><a id="calibre_link-325" href="#calibre_link-694" class="calibre19">Figure 7-1:</a> Many books say you can think of a variable as a box that contains a value.</p></figcaption>
+</figure>
+<p class="calibre40"><span type="pagebreak" title="113" id="calibre_link-458" class="calibre16"></span>In Python, all variables are technically references, not containers of values, regardless of their data type. The box metaphor is simple but also flawed. Instead of thinking of variables as boxes, you can think of variables as labels for objects in memory. <a id="calibre_link-695" href="#calibre_link-326" class="calibre19">Figure 7-2</a> shows labels on the previous <code class="calibre41">spam</code> and <code class="calibre41">eggs</code> examples.</p>
+<figure class="calibre29">
+<img src="images/000010.png" alt="f07002" class="calibre15" />
+<figcaption class="calibre30"><p class="calibre52"><a id="calibre_link-326" href="#calibre_link-695" class="calibre19">Figure 7-2:</a> Variables can also be thought of as labels on values.</p></figcaption>
+</figure>
+<p class="calibre40">Because multiple variables can refer to the same object, that object can be “stored” in multiple variables. Multiple boxes can’t store the same object, so it might be easier for you to use the label metaphor instead. Ned Batchelder’s PyCon 2015 talk, “Facts and Myths about Python Names and Values” has more information on this topic at <a href="https://youtu.be/_AEJHKGk9ns" class="calibre19">https://youtu.be/_AEJHKGk9ns</a>.</p>
+<div class="top"><hr class="calibre32" /></div>
+</section>
+</aside>
+<p class="calibre23">Without understanding that the <code class="calibre9">=</code> assignment operator always copies the reference, not the object, you might introduce bugs by thinking that you’re making a duplicate copy of an object when really you’re copying the reference to the original object. Fortunately, this isn’t an issue for immutable values like integers, strings, and tuples for reasons that I’ll explain in “Mutable and Immutable” on page 114.</p>
+<p class="calibre23">You can use the <code class="calibre9">is</code> operator to compare whether two objects have the same identity. In contrast, the <code class="calibre9">==</code> operator checks only whether object values are the same. You can consider <code class="calibre9">x is y</code> to be shorthand for <code class="calibre9">id(x) == id(y)</code>. Enter the following into the interactive shell to see the difference:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">spam = {'name': 'Zophie'}  </b>
+<span class="codeannotationhang">1</span> &gt;&gt;&gt; <b class="calibre25">eggs = spam</b>
+&gt;&gt;&gt; <b class="calibre25">spam is eggs  </b>
+True
+&gt;&gt;&gt; <b class="calibre25">spam == eggs  </b>
+True
+<span class="codeannotationhang">2</span> &gt;&gt;&gt; <b class="calibre25">bacon = {'name': 'Zophie'}  </b>
+&gt;&gt;&gt; <b class="calibre25">spam == bacon  </b>
+True
+&gt;&gt;&gt; <b class="calibre25">spam is bacon  </b>
+False</code></pre>
+<p class="calibre23"><span type="pagebreak" title="114" id="calibre_link-459" class="calibre16"></span>The variables <code class="calibre9">spam</code> and <code class="calibre9">eggs</code> refer to the same dictionary object <span class="codeannotation">1</span>, so their identities and values are the same. But <code class="calibre9">bacon</code> refers to a separate dictionary object <span class="codeannotation">2</span>, even though it contains data identical to <code class="calibre9">spam</code> and <code class="calibre9">eggs</code>. The identical data means <code class="calibre9">bacon</code> has the same value as <code class="calibre9">spam</code> and <code class="calibre9">eggs</code>, but they’re two different objects with two different identities.</p>
+<h3 id="calibre_link-149" class="calibre27">Items</h3>
+<p class="bodyfirst">In Python, an object that is inside a container object, like a list or dictionary, is also called an <em class="calibre10">item</em> or an <em class="calibre10">element</em>. For example, the strings in the list <code class="calibre9">['dog', 'cat', 'moose']</code> are objects but are also called items.</p>
+<h3 id="calibre_link-150" class="calibre27">Mutable and Immutable</h3>
+<p class="bodyfirst">As noted earlier, all objects in Python have a value, data type, and identity, and of these only the value can change. If you can change the object’s value, it’s a <em class="calibre10">mutable</em> object. If you can’t change its value, it’s an <em class="calibre10">immutable</em> object. <a id="calibre_link-696" href="#calibre_link-315" class="calibre19">Table 7-2</a> lists some mutable and immutable data types in Python.</p>
+<figure class="calibre29">
+<figcaption class="calibre30"><p class="calibre31"><a id="calibre_link-315" href="#calibre_link-696" class="calibre19">Table 7-2:</a> Some of Python’s Mutable and Immutable Data Types</p></figcaption>
+<table id="calibre_link-750" border="1" class="calibre45">
+<thead class="calibre46">
+<tr class="calibre47">
+<td class="calibre48"><b class="calibre25">Mutable data types</b></td><td class="calibre48"><b class="calibre25">Immutable data types</b></td></tr>
+</thead>
+<tbody class="calibre49">
+<tr class="calibre50">
+<td class="calibre48">List</td><td class="calibre48">Integer</td></tr>
+<tr class="calibre51">
+<td class="calibre48">Dictionaries</td><td class="calibre48">Floating-point number</td></tr>
+<tr class="calibre50">
+<td class="calibre48">Sets</td><td class="calibre48">Boolean</td></tr>
+<tr class="calibre51">
+<td class="calibre48">Bytearray</td><td class="calibre48">String</td></tr>
+<tr class="calibre50">
+<td class="calibre48">Array</td><td class="calibre48">Frozen set</td></tr>
+<tr class="calibre51">
+<td class="calibre48"></td><td class="calibre48">Bytes</td></tr>
+<tr class="calibre50">
+<td class="calibre48"></td><td class="calibre48">Tuple</td></tr>
+</tbody>
+</table>
+</figure>
+<p class="calibre23">When you overwrite a variable, it might look like you’re changing the object’s value, as in this interactive shell example:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">spam = 'hello'</b>
+&gt;&gt;&gt; <b class="calibre25">spam</b>
+'hello'
+&gt;&gt;&gt; <b class="calibre25">spam = 'goodbye'</b>
+&gt;&gt;&gt; <b class="calibre25">spam</b>
+'goodbye'</code></pre>
+<p class="calibre23">But in this code, you haven’t changed the <code class="calibre9">'hello'</code> object’s value from <code class="calibre9">'hello'</code> to <code class="calibre9">'goodbye'</code>. They’re two separate objects. You’ve only switched <code class="calibre9">spam</code> from referring to the <code class="calibre9">'hello'</code> object to the <code class="calibre9">'goodbye'</code> object. You can check whether this is true by using the <code class="calibre9">id()</code> function to show the two objects’ identities:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">spam = 'hello'</b>
+&gt;&gt;&gt; <b class="calibre25">id(spam)</b>
+<span type="pagebreak" title="115" id="calibre_link-460" class="calibre16"></span>40718944
+&gt;&gt;&gt; <b class="calibre25">spam = 'goodbye'</b>
+&gt;&gt;&gt; <b class="calibre25">id(spam)</b>
+40719224</code></pre>
+<p class="calibre23">These two string objects have different identities (40718944 and 40719224) because they’re different objects. But variables that refer to mutable objects can have their values modified <em class="calibre10">in-place</em>. For example, enter the following into the interactive shell:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">spam = ['cat', 'dog']</b>
+&gt;&gt;&gt; <b class="calibre25">id(spam)</b>
+33805576
+<span class="codeannotationhang">1</span> &gt;&gt;&gt; <b class="calibre25">spam.append('moose')</b>
+<span class="codeannotationhang">2</span> &gt;&gt;&gt; <b class="calibre25">spam[0] = 'snake'</b>
+&gt;&gt;&gt; <b class="calibre25">spam</b>
+['snake', 'dog', 'moose']
+&gt;&gt;&gt; <b class="calibre25">id(spam)</b>
+33805576</code></pre>
+<p class="calibre23">The <code class="calibre9">append()</code> method <span class="codeannotation">1</span> and item assignment by indexing <span class="codeannotation">2</span> both modify the value of the list in-place. Even though the list’s <em class="calibre10">value</em> has changed, its <em class="calibre10">identity</em> remains the same (33805576). But when you concatenate a list using the <code class="calibre9">+</code> operator, you create a new object (with a new identity) that overwrites the old list:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">spam = spam + ['rat']</b>
+&gt;&gt;&gt; <b class="calibre25">spam</b>
+['snake', 'dog', 'moose', 'rat']
+&gt;&gt;&gt; <b class="calibre25">id(spam)</b>
+33840064</code></pre>
+<p class="calibre23">List concatenation creates a new list with a new identity. When this happens, the old list will eventually be freed from memory by the garbage collector. You’ll have to consult the Python documentation to see which methods and operations modify objects in-place and which overwrite objects. A good rule to keep in mind is that if you see a literal in the source code, such as <code class="calibre9">['rat']</code> in the previous example, Python will most likely create a new object. A method that is called on the object, such as <code class="calibre9">append()</code>, often modifies the object in-place.</p>
+<p class="calibre23">Assignment is simpler for objects of immutable data types like integers, strings, or tuples. For example, enter the following into the interactive shell:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">bacon = 'Goodbye'</b>
+&gt;&gt;&gt; <b class="calibre25">id(bacon)</b>
+33827584
+<span class="codeannotationhang">1</span> &gt;&gt;&gt; <b class="calibre25">bacon = 'Hello'</b>
+&gt;&gt;&gt; <b class="calibre25">id(bacon)</b>
+33863820
+<span class="codeannotationhang">2</span> &gt;&gt;&gt; <b class="calibre25">bacon = bacon + ', world!'</b>
+&gt;&gt;&gt; <b class="calibre25">bacon</b>
+'Hello, world!'
+<span type="pagebreak" title="116" id="calibre_link-461" class="calibre16"></span>&gt;&gt;&gt; <b class="calibre25">id(bacon)</b>
+33870056
+<span class="codeannotationhang">3</span> &gt;&gt;&gt; <b class="calibre25">bacon[0] = 'J'</b>
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+TypeError: 'str' object does not support item assignment</code></pre>
+<p class="calibre23">Strings are immutable, so you cannot change their value. Although it looks like the string’s value in <code class="calibre9">bacon</code> is being changed from <code class="calibre9">'Goodbye'</code> to <code class="calibre9">'Hello'</code><span class="codeannotation">1</span>, it’s actually being overwritten by a new string object with a new identity. Similarly, an expression using string concatenation creates a new string object <span class="codeannotation">2</span> with a new identity. Attempting to modify the string in-place with item assignment isn’t allowed in Python <span class="codeannotation">3</span>.</p>
+<p class="calibre23">A tuple’s value is defined as the objects it contains and the order of those objects. <em class="calibre10">Tuples</em> are immutable sequence objects that enclose values in parentheses. This means that items in a tuple can’t be overwritten:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">eggs = ('cat', 'dog', [2, 4, 6])</b>
+&gt;&gt;&gt; <b class="calibre25">id(eggs)   </b>
+39560896
+&gt;&gt;&gt; <b class="calibre25">id(eggs[2]) </b>
+40654152
+&gt;&gt;&gt; <b class="calibre25">eggs[2] = eggs[2] + [8, 10]</b>
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+TypeError: 'tuple' object does not support item assignment</code></pre>
+<p class="calibre23">But a mutable list inside an immutable tuple can still be modified in-place:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">eggs[2].append(8)</b>
+&gt;&gt;&gt; <b class="calibre25">eggs[2].append(10)</b>
+&gt;&gt;&gt; <b class="calibre25">eggs</b>
+('cat', 'dog', [2, 4, 6, 8, 10])
+&gt;&gt;&gt; <b class="calibre25">id(eggs)    </b>
+39560896
+&gt;&gt;&gt; <b class="calibre25">id(eggs[2]) </b>
+40654152</code></pre>
+<p class="calibre23">Although this is an obscure special case, it’s important to keep in mind. The tuple still refers to the same objects, as depicted in <a id="calibre_link-697" href="#calibre_link-327" class="calibre19">Figure 7-3</a>. But if a tuple contains a mutable object and that object changes its value&mdash;that is, if the object mutates&mdash;the value of the tuple also changes.</p>
+<p class="calibre23">I, and almost every Pythonista, call tuples immutable. But whether some tuples can be called mutable depends on your definition. I explore this topic more in my PyCascades 2019 talk, “The Amazing Mutable, Immutable Tuple” at <a href="https://invpy.com/amazingtuple/" class="calibre19">https://invpy.com/amazingtuple/</a>. You can also read Luciano Ramalho’s explanation in Chapter 2 of <em class="calibre10">Fluent Python</em>. (O’Reilly Media, 2015)</p>
+<span type="pagebreak" title="117" id="calibre_link-462" class="calibre16"></span><figure class="calibre29">
+<img src="images/000002.png" alt="f07003" class="calibre15" />
+<figcaption class="calibre30"><p class="calibre31"><a id="calibre_link-327" href="#calibre_link-697" class="calibre19">Figure 7-3:</a> Although the set of objects in a tuple is immutable, the objects can be mutable.</p></figcaption>
+</figure>
+<h3 id="calibre_link-151" class="calibre27">Indexes, Keys, and Hashes</h3>
+<p class="bodyfirst">Python lists and dictionaries are values that can contain multiple other values. To access these values, you use an <em class="calibre10">index operator</em>, which is composed of a pair of square brackets (<code class="calibre9">[</code><code class="calibre9">]</code>) and an integer called an <em class="calibre10">index</em> to specify which value you want to access. Enter the following into the interactive shell to see how indexing works with lists:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">spam = ['cat', 'dog', 'moose']</b>
+&gt;&gt;&gt; <b class="calibre25">spam[0]</b>
+'cat'
+&gt;&gt;&gt; <b class="calibre25">spam[-2]</b>
+'dog'</code></pre>
+<p class="calibre23">In this example, <code class="calibre9">0</code> is an index. The first index is <code class="calibre9">0</code>, not <code class="calibre9">1</code>, because Python (as most languages do) uses <em class="calibre10">zero-based indexing</em>. Languages that use one-based indexing are rare: Lua and R are the most predominant. Python also supports negative indexes, where <code class="calibre9">-1</code> refers to the last item in a list, <code class="calibre9">-2</code> refers to the second-to-last item, and so on. You can think of a negative index <code class="calibre9">spam[&ndash;n]</code> as being the same as <code class="calibre9">spam[len(spam) &ndash; n]</code>.</p>
+<aside type="sidebar" class="authors">
+<div class="top"><hr class="calibre32" /></div>
+<section class="note">
+<h2 class="calibre33"><span class="notehead">NOTE</span></h2>
+<p class="calibre34">Computer scientist and singer-songwriter Stan Kelly-Bootle once joked, “Should array indices start at 0 or 1? My compromise of 0.5 was rejected without, I thought, proper consideration.”</p>
+<div class="top"><hr class="calibre32" /></div>
+</section>
+</aside>
+<p class="calibre23">You can also use the index operator on a list literal, although all those square brackets can look confusing and unnecessary in real-world code:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">['cat', 'dog', 'moose'][2]</b>
+'moose'</code></pre>
+<p class="calibre23"><span type="pagebreak" title="118" id="calibre_link-463" class="calibre16"></span>Indexing can also be used for values other than lists, such as on a string to obtain individual characters:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">'Hello, world'[0]</b>
+'H'</code></pre>
+<p class="calibre23">Python dictionaries are organized into <em class="calibre10">key-value pairs</em>:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">spam = {'name': 'Zophie'}</b>
+&gt;&gt;&gt; <b class="calibre25">spam['name']</b>
+'Zophie'</code></pre>
+<p class="calibre23">Although list indexes are limited to integers, a Python dictionary’s index operator is a <em class="calibre10">key</em> and can be any hashable object. A <em class="calibre10">hash</em> is an integer that acts as a sort of fingerprint for a value. An object’s hash never changes for the lifetime of the object, and objects with the same value must have the same hash. The string <code class="calibre9">'name'</code> in this instance is the key for the value <code class="calibre9">'Zophie'</code>. The <code class="calibre9">hash()</code> function will return an object’s hash if the object is <em class="calibre10">hashable</em>. Immutable objects, such as strings, integers, floats, and tuples, can be hashable. Lists (as well as other mutable objects) aren’t hashable. Enter the following into the interactive shell:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">hash('hello')</b>
+-1734230105925061914
+&gt;&gt;&gt; <b class="calibre25">hash(42)</b>
+42
+&gt;&gt;&gt; <b class="calibre25">hash(3.14)</b>
+322818021289917443
+&gt;&gt;&gt; <b class="calibre25">hash((1, 2, 3))</b>
+2528502973977326415
+&gt;&gt;&gt; <b class="calibre25">hash([1, 2, 3])</b>
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+TypeError: unhashable type: 'list'</code></pre>
+<p class="calibre23">Although the details are beyond the scope of this book, the key’s hash is used to find items stored in a dictionary and set data structures. That’s why you can’t use a mutable list for a dictionary’s keys:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">d = {}</b>
+&gt;&gt;&gt; <b class="calibre25">d[[1, 2, 3]] = 'some value'</b>
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+TypeError: unhashable type: 'list'</code></pre>
+<p class="calibre23">A hash is different from an identity. Two different objects with the same value will have different identities but the same hash. For example, enter the following into the interactive shell:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">a = ('cat', 'dog', 'moose')</b>
+&gt;&gt;&gt; <b class="calibre25">b = ('cat', 'dog', 'moose')</b>
+&gt;&gt;&gt; <b class="calibre25">id(a), id(b)</b>
+<span type="pagebreak" title="119" id="calibre_link-464" class="calibre16"></span>(37111992, 37112136)
+<span class="codeannotationhang">1</span> &gt;&gt;&gt; <b class="calibre25">id(a) == id(b)</b>
+False
+&gt;&gt;&gt; <b class="calibre25">hash(a), hash(b)</b>
+(-3478972040190420094, -3478972040190420094)
+<span class="codeannotationhang">2</span> &gt;&gt;&gt; <b class="calibre25">hash(a) == hash(b)</b>
+True</code></pre>
+<p class="calibre23">The tuples referred to by <code class="calibre9">a</code> and <code class="calibre9">b</code> have different identities <span class="codeannotation">1</span>, but their identical values mean they’ll have identical hashes <span class="codeannotation">2</span>. Note that a tuple is hashable if it contains only hashable items. Because you can use only hashable items as keys in a dictionary, you can’t use a tuple that contains an unhashable list as a key. Enter the following into the interactive shell:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">tuple1 = ('cat', 'dog')</b>
+&gt;&gt;&gt; <b class="calibre25">tuple2 = ('cat', ['apple', 'orange']) </b>
+&gt;&gt;&gt; <b class="calibre25">spam = {}</b>
+<span class="codeannotationhang">1</span> &gt;&gt;&gt; <b class="calibre25">spam[tuple1] = 'a value'</b>
+<span class="codeannotationhang">2</span> &gt;&gt;&gt; <b class="calibre25">spam[tuple2] = 'another value'</b>
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+TypeError: unhashable type: 'list'</code></pre>
+<p class="calibre23">Notice that <code class="calibre9">tuple1</code> is hashable <span class="codeannotation">1</span>, but <code class="calibre9">tuple2</code> contains an unhashable list <span class="codeannotation">2</span> and so is also unhashable.</p>
+<h3 id="calibre_link-152" class="calibre27">Containers, Sequences, Mapping, and Set Types</h3>
+<p class="bodyfirst">The words <em class="calibre10">container, sequence,</em> and <em class="calibre10">mapping</em> have meanings in Python that don’t necessarily apply to other programming languages. In Python, a <em class="calibre10">container</em> is an object of any data type that can contain multiple other objects. Lists and dictionaries are common container types used in Python.</p>
+<p class="calibre23">A <em class="calibre10">sequence</em> is an object of any container data type with ordered values accessible through integer indexes. Strings, tuples, lists, and bytes objects are sequence data types. Objects of these types can access values using integer indexes in the index operator (the <code class="calibre9">[</code> and <code class="calibre9">]</code> brackets) and can also be passed to the <code class="calibre9">len()</code> function. By “ordered,” we mean that there is a first value, second value, and so on in the sequence. For example, the following two list values aren’t considered equal because their values are ordered differently:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">[1, 2, 3] == [3, 2, 1]</b>
+False</code></pre>
+<p class="calibre23">A <em class="calibre10">mapping</em> is an object of any container data type that uses keys instead of an index. A mapping can be ordered or unordered. Dictionaries in Python 3.4 and earlier are unordered because there is no first or last key-value pair in a dictionary:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">spam = {'a': 1, 'b': 2, 'c': 3, 'd': 4}  # This is run from CPython 3.5.</b>
+&gt;&gt;&gt; <b class="calibre25">list(spam.keys())</b>
+['a', 'c', 'd', 'b']
+&gt;&gt;&gt; <b class="calibre25">spam['e'] = 5</b>
+<span type="pagebreak" title="120" id="calibre_link-465" class="calibre16"></span>&gt;&gt;&gt; <b class="calibre25">list(spam.keys())</b>
+['e', 'a', 'c', 'd', 'b']</code></pre>
+<p class="calibre23">You have no guarantee of getting items in a consistent order from dictionaries in early versions of Python. As a result of dictionaries’ unordered nature, two dictionary literals written with different orders for their key-value pairs are still considered equal:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">{'a': 1, 'b': 2, 'c': 3} == {'c': 3, 'a': 1, 'b': 2}</b>
+True</code></pre>
+<p class="calibre23">But starting in CPython 3.6, dictionaries do retain the insertion order of their key-value pairs:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">spam = {'a': 1, 'b': 2, 'c': 3, 'd': 4}  # This is run from CPython 3.6.</b>
+&gt;&gt;&gt; <b class="calibre25">list(spam)</b>
+['a', 'b', 'c', 'd']
+&gt;&gt;&gt; <b class="calibre25">spam['e'] = 5</b>
+&gt;&gt;&gt; <b class="calibre25">list(spam)</b>
+['a', 'b', 'c', 'd', 'e']</code></pre>
+<p class="calibre23">This is a feature in the CPython 3.6 interpreter but not in other interpreters for Python 3.6. All Python 3.7 interpreters support ordered dictionaries, which became standard in the Python language in 3.7. But just because a dictionary is ordered doesn’t mean that its items are accessible through integer indexes: <code class="calibre9">spam[0]</code> won’t evaluate to the first item in an ordered dictionary (unless by coincidence there is a key <code class="calibre9">0</code> for the first item). Ordered dictionaries are also considered the same if they contain the same key-value pairs, even if the key-value pairs are in a different order in each dictionary.</p>
+<p class="calibre23">The <code class="calibre9">collections</code> module contains many other mapping types, including <code class="calibre9">OrderedDict</code>, <code class="calibre9">ChainMap</code>, <code class="calibre9">Counter</code>, and <code class="calibre9">UserDict</code>, which are described in the online documentation at <a href="https://docs.python.org/3/library/collections.html" class="calibre19">https://docs.python.org/3/library/collections.html</a>.</p>
+<h3 id="calibre_link-153" class="calibre27">Dunder Methods and Magic Methods</h3>
+<p class="bodyfirst"><em class="calibre10">Dunder methods</em>, also called <em class="calibre10">magic methods</em>, are special methods in Python whose names begin and end with two underscores. These methods are used for operator overloading. <em class="calibre10">Dunder</em> is short for double underscore. The most familiar dunder method is <code class="calibre9">__init__()</code> (pronounced “dunder init dunder,” or simply “init”), which initializes objects. Python has a few dozen dunder methods, and <span class="calibre" itemid="xref_target_Chapter 17">Chapter 17</span> explains them in detail.</p>
+<h3 id="calibre_link-154" class="calibre27">Modules and Packages</h3>
+<p class="bodyfirst">A <em class="calibre10">module</em> is a Python program that other Python programs can import so they can use the module’s code. The modules that come with Python are collectively called the <em class="calibre10">Python Standard Library</em>, but you can create your own <span type="pagebreak" title="121" id="calibre_link-466" class="calibre16"></span>modules as well. If you save a Python program as, for example, <em class="calibre10">spam.py</em>, other programs can run <code class="calibre9">import spam</code> to access the <em class="calibre10">spam.py</em> program’s functions, classes, and top-level variables.</p>
+<p class="calibre23">A <em class="calibre10">package</em> is a collection of modules that you form by placing a file named <em class="calibre10">__init__.py</em> inside a folder. You use the folder’s name as the name of the package. Packages can contain multiple modules (that is, <em class="calibre10">.py</em> files) or other packages (other folders containing <em class="calibre10">__init__.py</em> files).</p>
+<p class="calibre23">For more explanation and detail about modules and packages, check out the official Python documentation at <a href="https://docs.python.org/3/tutorial/modules.html" class="calibre19">https://docs.python.org/3/tutorial/modules.html</a>.</p>
+<h3 id="calibre_link-155" class="calibre27">Callables and First-Class Objects</h3>
+<p class="bodyfirst">Functions and methods aren’t the only things that you can call in Python. Any object that implements the <em class="calibre10">callable operator</em>&mdash;the two parentheses <code class="calibre9">()</code>&mdash;is a <em class="calibre10">callable</em> object. For example, if you have a <code class="calibre9">def hello():</code> statement, you can think of the code as a variable named <code class="calibre9">hello</code> that contains a function object. Using the callable operator on this variable calls the function in the variable: <code class="calibre9">hello()</code>. </p>
+<p class="calibre23">Classes are an OOP concept, and a class is an example of a callable object that isn’t a function or method. For example, the <code class="calibre9">date</code> class in the <code class="calibre9">datetime</code> module is called using the callable operator, as in the code <code class="calibre9">datetime.date(2020, 1, 1)</code>. When the class object is called, the code inside the class’s <code class="calibre9">__init__()</code> method is run. <span class="calibre" itemid="xref_target_Chapter 15">Chapter 15</span> has more details about classes.</p>
+<p class="calibre23">Functions are <em class="calibre10">first-class objects</em> in Python, meaning you can store them in variables, pass them as arguments in function calls, return them from function calls, and do anything else you can do with an object. Think of a <code class="calibre9">def</code> statement as assigning a function object to a variable. For example, you could create a <code class="calibre9">spam()</code> function that you can then call:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">def spam():</b>
+...     <b class="calibre25">print('Spam! Spam! Spam!')</b>
+...
+&gt;&gt;&gt; <b class="calibre25">spam()</b>
+Spam! Spam! Spam!</code></pre>
+<p class="calibre23">You can also assign the <code class="calibre9">spam()</code> function object to other variables. When you call the variable you’ve assigned the function object to, Python executes the function:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">eggs = spam</b>
+&gt;&gt;&gt; <b class="calibre25">eggs()</b>
+Spam! Spam! Spam!</code></pre>
+<p class="calibre23">These are called <em class="calibre10">aliases</em>, which are different names for existing functions. They’re often used if you need to rename a function. But a large amount of existing code uses the old name, and it would be too much work to change it.</p>
+<p class="calibre23"><span type="pagebreak" title="122" id="calibre_link-467" class="calibre16"></span>The most common use of first-class functions is so you can pass functions to other functions. For example, we can define a <code class="calibre9">callTwice()</code> function, which can be passed a function that needs to be called twice:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; def callTwice(func):
+...     func()
+...     func()
+...
+&gt;&gt;&gt; callTwice(spam)
+Spam! Spam! Spam!
+Spam! Spam! Spam!</code></pre>
+<p class="calibre23">You could just write <code class="calibre9">spam()</code> twice in your source code. But you can pass the <code class="calibre9">callTwice()</code> function to any function at runtime rather than having to type the function call twice into the source code beforehand.</p>
+<h2 id="calibre_link-156" class="calibre7">Commonly Confused Terms</h2>
+<p class="bodyfirst">Technical jargon is confusing enough, especially for terms that have related but distinct definitions. To make matters worse, languages, operating systems, and fields in computing might use different terms to mean the same thing or the same terms to mean different things. To communicate clearly with other programmers, you’ll need to learn the difference between the following terms.</p>
+<h3 id="calibre_link-157" class="calibre27">Statements vs. Expressions</h3>
+<p class="bodyfirst"><em class="calibre10">Expressions</em> are the instructions made up of operators and values that evaluate to a single value. A value can be a variable (which contains a value) or a function call (which returns a value). So, <code class="calibre9">2 + 2</code> is an expression that evaluates down to the single value of <code class="calibre9">4</code>. But <code class="calibre9">len(myName) &gt; 4</code> and <code class="calibre9">myName.isupper() or myName == 'Zophie'</code> are expressions as well. A value by itself is also an expression that evaluates to itself.</p>
+<p class="calibre23"><em class="calibre10">Statements</em> are, effectively, all other instructions in Python. These include <code class="calibre9">if</code> statements, <code class="calibre9">for</code> statements, <code class="calibre9">def</code> statements, <code class="calibre9">return</code> statements, and so on. Statements do <em class="calibre10">not</em> evaluate to a value. Some statements can include expressions, such as an assignment statement like <code class="calibre9">spam = 2 + 2</code> or an <code class="calibre9">if</code> statement like <code class="calibre9">if myName == 'Zophie':</code>.</p>
+<p class="calibre23">Although Python 3 uses a <code class="calibre9">print()</code> function, Python 2 instead has a <code class="calibre9">print</code> statement. The difference might seem like just the introduction of parentheses, but it’s important to note that the Python 3 <code class="calibre9">print()</code> function has a return value (which is always <code class="calibre9">None</code>), can be passed as an argument to other functions, and can be assigned to a variable. None of these actions are possible with statements. However, you can still use the parentheses in Python 2, as in the following interactive shell example:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">print 'Hello, world!' # run in Python 2</b>
+Hello, world!
+<span class="codeannotationhang">1</span> &gt;&gt;&gt; <b class="calibre25">print('Hello, world!') # run in Python 2</b>
+Hello, world!</code></pre>
+<p class="calibre23"><span type="pagebreak" title="123" id="calibre_link-468" class="calibre16"></span>Although this looks like a function call <span class="codeannotation">1</span>, it’s actually a <code class="calibre9">print</code> statement with a string value wrapped in parentheses, the same way assigning <code class="calibre9">spam = (2 + 2)</code> is equivalent to <code class="calibre9">spam = 2 + 2</code>. In Python 2 and 3, you can pass multiple values to the <code class="calibre9">print</code> statement or <code class="calibre9">print()</code> function, respectively. In Python 3, this would look like the following:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">print('Hello', 'world') # run in Python 3</b>
+Hello world</code></pre>
+<p class="calibre23">But using this same code in Python 2 would be interpreted as passing a tuple of two string values in a <code class="calibre9">print</code> statement, producing this output:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">print('Hello', 'world') # run in Python 2</b>
+('Hello', 'world')</code></pre>
+<p class="calibre23">A statement and an expression composed of a function call have subtle but real differences.</p>
+<h3 id="calibre_link-158" class="calibre27">Block vs. Clause vs. Body</h3>
+<p class="bodyfirst">The terms <em class="calibre10">block, clause,</em> and <em class="calibre10">body</em> are often used interchangeably to refer to a group of Python instructions. A <em class="calibre10">block</em> begins with indentation and ends when that indentation returns to the previous indent level. For example, the code that follows an <code class="calibre9">if</code> or <code class="calibre9">for</code> statement is called the statement’s block. A new block is required following statements that end with a colon, such as <code class="calibre9">if</code>, <code class="calibre9">else</code>, <code class="calibre9">for</code>, <code class="calibre9">while</code>, <code class="calibre9">def</code>, <code class="calibre9">class</code>, and so on.</p>
+<p class="calibre23">But Python does allow one-line blocks. This is valid, although not recommended, Python syntax:</p>
+<pre class="calibre28"><code class="calibre9">if name == 'Zophie': print('Hello, kitty!')</code></pre>
+<p class="calibre23">By using the semicolon, you can also have multiple instructions in the <code class="calibre9">if</code> statement’s block:</p>
+<pre class="calibre28"><code class="calibre9">if name == 'Zophie': print('Hello, kitty!'); print('Do you want a treat?')</code></pre>
+<p class="calibre23">But you can’t have one-liners with other statements that require new blocks. The following isn’t valid Python code:</p>
+<pre class="calibre28"><code class="calibre9">if name == 'Zophie': if age &lt; 2: print('Hello, kitten!')</code></pre>
+<p class="calibre23">This is invalid because if an <code class="calibre9">else</code> statement is on the next line, it would be ambiguous as to which <code class="calibre9">if</code> statement the <code class="calibre9">else</code> statement would refer to.</p>
+<p class="calibre23">The official Python documentation prefers the term <em class="calibre10">clause</em> rather than block (<a href="https://docs.python.org/3/reference/compound_stmts.html" class="calibre19">https://docs.python.org/3/reference/compound_stmts.html</a>). The following code is a clause:</p>
+<pre class="calibre28"><code class="calibre9">if name == 'Zophie':
+    print('Hello, kitty!')
+    print('Do you want a treat?')</code></pre>
+<p class="calibre23"><span type="pagebreak" title="124" id="calibre_link-469" class="calibre16"></span>The <code class="calibre9">if</code> statement is the <em class="calibre10">clause header</em>, and the two <code class="calibre9">print()</code> calls nested in the <code class="calibre9">if</code> are the <em class="calibre10">clause suite</em> or <em class="calibre10">body</em>. The official Python documentation uses <em class="calibre10">block</em> to refer to a piece of Python code that executes as a unit, such as a module, a function, or a class definition (<a href="https://docs.python.org/3/reference/executionmodel.html" class="calibre19">https://docs.python.org/3/reference/executionmodel.html</a>).</p>
+<h3 id="calibre_link-159" class="calibre27">Variable vs. Attribute</h3>
+<p class="bodyfirst"><em class="calibre10">Variables</em> are simply names that refer to objects. <em class="calibre10">Attributes</em> are, to quote the official documentation, “any name following a dot” (<a href="https://docs.python.org/3/tutorial/classes.html#python-scopes-and-namespaces" class="calibre19">https://docs.python.org/3/tutorial/classes.html#python-scopes-and-namespaces</a>). Attributes are associated with objects (the name before the dot/period). For example, enter the following into the interactive shell:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">import datetime</b>
+&gt;&gt;&gt; <b class="calibre25">spam = datetime.datetime.now()</b>
+&gt;&gt;&gt; <b class="calibre25">spam.year</b>
+2018
+&gt;&gt;&gt; <b class="calibre25">spam.month</b>
+1</code></pre>
+<p class="calibre23">In this code example, <code class="calibre9">spam</code> is a variable that contains a <code class="calibre9">datetime</code> object (returned from <code class="calibre9">datetime.datetime.now()</code>), and <code class="calibre9">year</code> and <code class="calibre9">month</code> are attributes of that object. Even in the case of, say, <code class="calibre9">sys.exit()</code>, the <code class="calibre9">exit()</code> function is considered an attribute of the <code class="calibre9">sys</code> module object.</p>
+<p class="calibre23">Other languages call attributes <em class="calibre10">fields</em>, <em class="calibre10">properties</em>, or <em class="calibre10">member variables</em>.</p>
+<h3 id="calibre_link-160" class="calibre27">Function vs. Method</h3>
+<p class="bodyfirst">A <em class="calibre10">function</em> is a collection of code that runs when called. A <em class="calibre10">method</em> is a function (or a <em class="calibre10">callable</em>, described in the next section) that is associated with a class, just as an attribute is a variable associated with an object. Functions include built-in functions or functions associated with a module. For example, enter the following into the interactive shell:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">len('Hello')</b>
+5
+&gt;&gt;&gt; <b class="calibre25">'Hello'.upper()</b>
+'HELLO'
+&gt;&gt;&gt; <b class="calibre25">import math</b>
+&gt;&gt;&gt; <b class="calibre25">math.sqrt(25)</b>
+5.0</code></pre>
+<p class="calibre23">In this example, <code class="calibre9">len()</code> is a function and <code class="calibre9">upper()</code> is a string method. Methods are also considered attributes of the objects they’re associated with. Note that a period doesn’t necessarily mean you’re dealing with a method instead of a function. The <code class="calibre9">sqrt()</code> function is associated with <code class="calibre9">math</code>, which is a module, not a class.</p>
+<h3 id="calibre_link-161" class="calibre27"><span type="pagebreak" title="125" id="calibre_link-470" class="calibre37"></span>Iterable vs. Iterator</h3>
+<p class="bodyfirst">Python’s <code class="calibre9">for</code> loops are versatile. The statement <code class="calibre9">for i in range(3):</code> will run a block of code three times. The <code class="calibre9">range(3)</code> call isn’t just Python’s way of telling a <code class="calibre9">for</code> loop, “repeat some code three times.” Calling <code class="calibre9">range(3)</code> returns a range object, just like calling <code class="calibre9">list('cat')</code> returns a list object. Both of these objects are examples of <em class="calibre10">iterable</em><em class="calibre10">objects</em> (or simply, <em class="calibre10">iterables</em>). </p>
+<p class="calibre23">You use iterables in <code class="calibre9">for</code> loops. Enter the following into the interactive shell to see a <code class="calibre9">for</code> loop iterate over a range object and a list object:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">for i in range(3):</b>
+...   <b class="calibre25">print(i) </b># body of the for loop
+...
+0
+1
+2
+&gt;&gt;&gt; <b class="calibre25">for i in ['c', 'a', 't']:</b>
+...   <b class="calibre25">print(i) </b># body of the for loop
+...
+c
+a
+t</code></pre>
+<p class="calibre23">Iterables also include all sequence types, such as range, list, tuple, and string objects, but also some container objects, such as dictionary, set, and file objects.</p>
+<p class="calibre23">However, more is going on under the hood in these <code class="calibre9">for</code> loop examples. Behind the scenes, Python is calling the built-in <code class="calibre9">iter()</code> and <code class="calibre9">next()</code> functions for the <code class="calibre9">for</code> loop. When used in a <code class="calibre9">for</code> loop, iter<em class="calibre10">able</em> objects are passed to the built-in <code class="calibre9">iter()</code> function, which returns iter<em class="calibre10">ator</em> objects. Although the iterable object contains the items, the iterator object keeps track of which item is next to be used in a loop. On each iteration of the loop, the iterator object is passed to the built-in <code class="calibre9">next()</code> function to return the next item in the iterable. We can call the <code class="calibre9">iter()</code> and <code class="calibre9">next()</code> functions manually to directly see how <code class="calibre9">for</code> loops work. Enter the following into the interactive shell to perform the same instructions as the previous loop example:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">iterableObj = range(3)</b>
+&gt;&gt;&gt; <b class="calibre25">iterableObj</b>
+range(0, 3)
+&gt;&gt;&gt; <b class="calibre25">iteratorObj = iter(iterableObj)</b>
+&gt;&gt;&gt; <b class="calibre25">i = next(iteratorObj)</b>
+&gt;&gt;&gt; <b class="calibre25">print(i) </b># body of the for loop
+0
+&gt;&gt;&gt; <b class="calibre25">i = next(iteratorObj)</b>
+&gt;&gt;&gt; <b class="calibre25">print(i) </b># body of the for loop
+1
+&gt;&gt;&gt; <b class="calibre25">i = next(iteratorObj)</b>
+&gt;&gt;&gt; <b class="calibre25">print(i) </b># body of the for loop
+<span type="pagebreak" title="126" id="calibre_link-471" class="calibre16"></span>2
+&gt;&gt;&gt; <b class="calibre25">i = next(iteratorObj)</b>
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+<span class="codeannotationhang">1</span> StopIteration</code></pre>
+<p class="calibre23">Notice that if you call <code class="calibre9">next()</code> after the last item in the iterable has been returned, Python raises a <code class="calibre9">StopIteration</code> exception <span class="codeannotation">1</span>. Instead of crashing your programs with this error message, Python’s <code class="calibre9">for</code> loops catch this exception to know when they should stop looping.</p>
+<p class="calibre23">An iterator can only iterate over the items in an iterable once. This is similar to how you can only use <code class="calibre9">open()</code> and <code class="calibre9">readlines()</code> to read the contents of a file once before having to reopen the file to read its contents again. If you want to iterate over the iterable again, you must call <code class="calibre9">iter()</code> again to create another iterator object. You can create as many iterator objects as you want; each will independently track the next item it should return. Enter the following into the interactive shell to see how this works:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">iterableObj = list('cat')</b>
+&gt;&gt;&gt; <b class="calibre25">iterableObj</b>
+['c', 'a', 't']
+&gt;&gt;&gt; <b class="calibre25">iteratorObj1 = iter(iterableObj)</b>
+&gt;&gt;&gt; <b class="calibre25">iteratorObj2 = iter(iterableObj)</b>
+&gt;&gt;&gt; <b class="calibre25">next(iteratorObj1)</b>
+'c'
+&gt;&gt;&gt; <b class="calibre25">next(iteratorObj1)</b>
+'a'
+&gt;&gt;&gt; <b class="calibre25">next(iteratorObj2)</b>
+'c'</code></pre>
+<p class="calibre23">Remember that iterable objects are passed as an argument to the <code class="calibre9">iter()</code> function, whereas the object returned from <code class="calibre9">iter()</code> calls is an iterator object. Iterator objects are passed to the <code class="calibre9">next()</code> function. When you create your own data types with <code class="calibre9">class</code> statements, you can implement the <code class="calibre9">__iter__()</code> and <code class="calibre9">__next__()</code> special methods to use your objects in <code class="calibre9">for</code> loops.</p>
+<h3 id="calibre_link-162" class="calibre27">Syntax vs. Runtime vs. Semantic Errors</h3>
+<p class="bodyfirst">There are many ways to categorize bugs. But at a high level you could divide programming errors into three types: syntax errors, runtime errors, and semantic errors.</p>
+<p class="calibre23"><em class="calibre10">Syntax</em> is the set of rules for the valid instructions in a given programming language. A <em class="calibre10">syntax error</em>, such as a missing parenthesis, a period instead of a comma, or some other typo will immediately generate a <code class="calibre9">SyntaxError</code>. Syntax errors are also known as <em class="calibre10">parsing errors</em>, which occur when the Python interpreter can’t parse the text of the source code into valid instructions. In English, this error would be the equivalent of having incorrect grammar or a string of nonsense words like, “by uncontaminated cheese certainly it’s.” Computers require specific instructions and can’t read the programmer’s mind to determine what the program should do, so a program with a syntax error won’t even run.</p>
+<p class="calibre23"><span type="pagebreak" title="127" id="calibre_link-472" class="calibre16"></span>A <em class="calibre10">runtime error</em> is when a running program fails to perform some task, such as trying to open a file that doesn’t exist or dividing a number by zero. In English, a runtime error is the equivalent of giving an impossible instruction like, “Draw a square with three sides.” If a runtime error isn’t addressed, the program will crash and display a traceback. But you can catch runtime errors using <code class="calibre9">try</code>-<code class="calibre9">except</code> statements that run error handling code. For example, enter the following into the interactive shell:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">slices = 8</b>
+&gt;&gt;&gt; <b class="calibre25">eaters = 0</b>
+&gt;&gt;&gt; <b class="calibre25">print('Each person eats', slices / eaters, 'slices.')</b></code></pre>
+<p class="calibre23">This code will display this traceback when you run it:</p>
+<pre class="calibre28"><code class="calibre9">Traceback (most recent call last):
+  File "&lt;pyshell#4&gt;", line 1, in &lt;module&gt;
+    print('Each person eats', slices / eaters, 'slices.')
+ZeroDivisionError: division by zero</code></pre>
+<p class="calibre23">It’s helpful to remember that the line number the traceback mentions is only the point at which the Python interpreter detected an error. The true cause of the error might be on the previous line of code or even much earlier in the program.</p>
+<p class="calibre23">Syntax errors in the source code are caught by the interpreter before the program runs, but syntax errors can also happen at runtime. The <code class="calibre9">eval()</code> function can take a string of Python code and run it, which might produce a <code class="calibre9">SyntaxError</code> at runtime. For example, <code class="calibre9">eval('print("Hello, world)')</code> is missing a closing double quote, which the program won’t encounter until the code calls <code class="calibre9">eval()</code>.</p>
+<p class="calibre23">A <em class="calibre10">semantic error</em> (also called a <em class="calibre10">logical error</em>) is a more subtle bug. Semantic errors won’t cause error messages or crashes, but the computer carries out instructions in a way the programmer didn’t intend. In English, the equivalent of a semantic error would be telling the computer, “Buy a carton of milk from the store and if they have eggs, buy a dozen.” The computer would then buy 13 cartons of milk because the store had eggs. For better or worse, computers do exactly what you tell them to. For example, enter the following into the interactive shell:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">print('The sum of 4 and 2 is', '4' + '2')</b></code></pre>
+<p class="calibre23">You would get the following output:</p>
+<pre class="calibre28"><code class="calibre9">The sum of 4 and 2 is 42</code></pre>
+<p class="calibre23">Obviously, 42 isn’t the answer. But notice that the program didn’t crash. Because Python’s <code class="calibre9">+</code> operator adds integer values and concatenates string values, mistakenly using the string values <code class="calibre9">'4'</code> and <code class="calibre9">'2'</code> instead of integers caused unintended behavior.</p>
+<h3 id="calibre_link-163" class="calibre27"><span type="pagebreak" title="128" id="calibre_link-473" class="calibre37"></span>Parameters vs. Arguments</h3>
+<p class="bodyfirst"><em class="calibre10">Parameters</em> are the variable names between the parentheses in a <code class="calibre9">def</code> statement. <em class="calibre10">Arguments</em> are the values passed in a function call, which are then assigned to the parameters. For example, enter the following into the interactive shell:</p>
+<pre class="calibre28"><code class="calibre9"><span class="codeannotationhang">1</span> &gt;&gt;&gt; <b class="calibre25">def greeting(name, species):</b>
+...     <b class="calibre25">print(name + ' is a ' + species)</b>
+...
+<span class="codeannotationhang">2</span> &gt;&gt;&gt; <b class="calibre25">greeting('Zophie', 'cat')</b>
+Zophie is a cat</code></pre>
+<p class="calibre23">In the <code class="calibre9">def</code> statement, <code class="calibre9">name</code> and <code class="calibre9">species</code> are parameters <span class="codeannotation">1</span>. In the function call, <code class="calibre9">'Zophie'</code> and <code class="calibre9">'cat'</code> are arguments <span class="codeannotation">2</span>. These two terms are often confused with each other. Remember that parameters and arguments are just other names for variables and values, respectively, when they are used in this context.</p>
+<h3 id="calibre_link-164" class="calibre27">Type Coercion vs. Type Casting</h3>
+<p class="bodyfirst">You can convert an object of one type to an object of another type. For example, <code class="calibre9">int('42')</code> converts a string <code class="calibre9">'42'</code> to an integer <code class="calibre9">42</code>. In actuality, the string object <code class="calibre9">'42'</code> isn’t converted so much as the <code class="calibre9">int()</code> function creates a new integer object based on the original object. When conversion is done <em class="calibre10">explicitly</em> like this, we’re <em class="calibre10">casting</em> the object, although programmers often still refer to this process as converting the object.</p>
+<p class="calibre23">Python will often implicitly do a type conversion, such as when evaluating the expression <code class="calibre9">2 + 3.0</code> to <code class="calibre9">5.0</code>. Values, such as the <code class="calibre9">2</code> and <code class="calibre9">3.0</code>, are coerced to a common data type that the operator can work with. This conversion, which is done <em class="calibre10">implicitly</em>, is called type <em class="calibre10">coercion</em>.</p>
+<p class="calibre23">Coercion can sometimes lead to surprising results. The Boolean <code class="calibre9">True</code> and <code class="calibre9">False</code> values in Python can be coerced to the integer values <code class="calibre9">1</code> and <code class="calibre9">0</code>, respectively. Although you’d never write Booleans as those values in real-world code, this means that the expression <code class="calibre9">True + False + True</code> is the equivalent of <code class="calibre9">1 + 0 + 1</code> and evaluates to <code class="calibre9">2</code>. After learning this, you might think that passing a list of Booleans to <code class="calibre9">sum()</code> would be a good way to count the number of <code class="calibre9">True</code> values in a list. But it turns out that calling the <code class="calibre9">count()</code> list method is faster.</p>
+<h3 id="calibre_link-165" class="calibre27">Properties vs. Attributes</h3>
+<p class="bodyfirst">In many languages, the terms <em class="calibre10">property</em> and <em class="calibre10">attribute</em> are used synonymously, but in Python these words have distinct meanings. An attribute, explained in “Variable vs. Attribute” on page 124, is a name associated with an object. Attributes include the object’s member variables and methods.</p>
+<p class="calibre23">Other languages, such as Java, have <code class="calibre9">getter</code> and <code class="calibre9">setter</code> methods for classes. Instead of being able to directly assign an attribute a (potentially invalid) value, a program must call the <code class="calibre9">setter </code>method for that attribute. <span type="pagebreak" title="129" id="calibre_link-474" class="calibre16"></span>The code inside the <code class="calibre9">setter</code> method can ensure that the member variable only has a valid value assigned to it. The <code class="calibre9">getter</code> method reads an attribute’s value. If an attribute is named, say, <code class="calibre9">accountBalance</code>, the <code class="calibre9">setter</code> and <code class="calibre9">getter</code> methods are usually named <code class="calibre9">setAccountBalance()</code> and <code class="calibre9">getAccountBalance()</code>, respectively.</p>
+<p class="calibre23">In Python, <em class="calibre10">properties</em> allow programmers to use getters and setters with much cleaner syntax. <span class="calibre" itemid="xref_target_Chapter 17">Chapter 17</span> explores Python properties in more detail.</p>
+<h3 id="calibre_link-166" class="calibre27">Bytecode vs. Machine Code</h3>
+<p class="bodyfirst">Source code is compiled into a form of instructions called <em class="calibre10">machine code</em> that the CPU directly carries out. Machine code is composed of instructions from the CPU’s <em class="calibre10">instruction set</em>, the computer’s built-in set of commands. A compiled program composed of machine code is called a <em class="calibre10">binary</em>. A venerable language like C has compiler software that can compile C source code into binaries for almost every CPU available. But if a language such as Python wants to run on the same set of CPUs, a large amount of work would have to go into writing Python compilers for each of them.</p>
+<p class="calibre23">There is another way of turning source code into machine-usable code. Instead of creating machine code that is carried out directly by CPU hardware, you could create <em class="calibre10">bytecode</em>. Also called <em class="calibre10">portable code</em> or <em class="calibre10">p-code</em>, bytecode is carried out by a software interpreter program instead of directly by the CPU. Python bytecode is composed of instructions from an instruction set, although no real-world hardware CPU carries out these instructions. Instead, the software interpreter executes the bytecode. Python bytecode is stored in the <em class="calibre10">.pyc</em> files you sometimes see alongside your <em class="calibre10">.py</em> source files. The CPython interpreter, which is written in C, can compile Python source code into Python bytecode and then carry out the instructions. (The same goes for the Java Virtual Machine [JVM] software, which carries out Java bytecode.) Because it’s written in C, CPython has a Python interpreter and can be compiled for any CPU that C already has a compiler for.</p>
+<p class="calibre23">The PyCon 2016 talk, “Playing with Python Bytecode” by Scott Sanderson and Joe Jevnik, is an excellent resource to learn more about this topic (<a href="https://youtu.be/mxjv9KqzwjI" class="calibre19">https://youtu.be/mxjv9KqzwjI</a>).</p>
+<h3 id="calibre_link-167" class="calibre27">Script vs. Program, Scripting Language vs. Programming Language</h3>
+<p class="bodyfirst">The differences between a script and a program, or even a scripting language and a programming language, are vague and arbitrary. It’s fair to say that all scripts are programs and all scripting languages are programming languages. But scripting languages are sometimes regarded as easier or “not real” programming languages.</p>
+<p class="calibre23">One way to distinguish scripts from programs is by how the code executes. <em class="calibre10">Scripts</em> written in <em class="calibre10">scripting languages</em> are interpreted directly from the source code, whereas <em class="calibre10">programs</em> written in <em class="calibre10">programming languages</em> are compiled into binaries. But Python is commonly thought of as a scripting language, even though there is a compilation step to bytecode when a Python program is run. Meanwhile, Java isn’t commonly thought of as a scripting language, even though it produces bytecode instead of machine <span type="pagebreak" title="130" id="calibre_link-475" class="calibre16"></span>code binaries, just like Python. Technically, <em class="calibre10">languages</em> aren’t compiled or interpreted; rather, there are compiler or interpreter <em class="calibre10">implementations</em> of a language, and it’s possible to create a compiler or interpreter for any language.</p>
+<p class="calibre23">The differences can be argued but ultimately aren’t very important. Scripting languages aren’t necessarily less powerful, nor are compiled programming languages more difficult to work with.</p>
+<h3 id="calibre_link-168" class="calibre27">Library vs. Framework vs. SDK vs. Engine vs. API</h3>
+<p class="bodyfirst">Using other people’s code is a great time-saver. You can often find code to use packaged as libraries, frameworks, SDKs, engines, or APIs. The differences between these entities are subtle but important.</p>
+<p class="calibre23">A <em class="calibre10">library</em> is a generic term for a collection of code made by a third party. A library can contain functions, classes, or other pieces of code for a developer to use. A Python library might take the form of a package, a set of packages, or even just a single module. Libraries are often specific to a particular language. The developer doesn’t need to know how the library code works; they only need to know how to call or interface with the code in a library. A <em class="calibre10">standard library</em>, such as the Python standard library, is a code library that is assumed to be available to all implementations of a programming language. </p>
+<p class="calibre23">A <em class="calibre10">framework</em> is a collection of code that operates with <em class="calibre10">inversion of control</em>; the developer creates functions that the framework will call as needed, as opposed to the developer’s code calling functions in the framework. Inversion of control is often described as “don’t call us, we’ll call you.” For example, writing code for a web app framework involves creating functions for the web pages that the framework will call when a web request comes in.</p>
+<p class="calibre23">A <em class="calibre10">software development kit </em>(<em class="calibre10">SDK</em>) includes code libraries, documentation, and software tools to assist in creating applications for a particular operating system or platform. For example, the Android SDK and iOS SDK are used to create mobile apps for Android and iOS, respectively. The Java Development Kit (JDK) is an SDK for creating applications for the JVM.</p>
+<p class="calibre23">An <em class="calibre10">engine</em> is a large, self-contained system that can be externally controlled by the developer’s software. Developers usually call functions in an engine to perform a large, complex task. Examples of engines include game engines, physics engines, recommendation engines, database engines, chess engines, and search engines.</p>
+<p class="calibre23">An <em class="calibre10">application programming interface</em> (<em class="calibre10">API</em>) is the public-facing interface for a library, SDK, framework, or engine. The API specifies how to call the functions or make requests of the library to access resources. The library creators will (hopefully) make documentation for the API available. Many popular social networks and websites make an HTTP API available for programs to access their services rather than a human with a web browser. Using these APIs allows you to write programs that can, for example, automatically post on Facebook or read Twitter timelines.</p>
+<h2 id="calibre_link-169" class="calibre7"><span type="pagebreak" title="131" id="calibre_link-476" class="calibre20"></span>Summary</h2>
+<p class="bodyfirst">It’s easy to program for years and still be unfamiliar with certain programming terms. But most major software applications are created by teams of software developers, not individuals. So being able to communicate unambiguously is important when you’re working with a team.</p>
+<p class="calibre23">This chapter explained that Python programs are made up of identifiers, variables, literals, keywords, and objects, and that all Python objects have a value, data type, and identity. Although every object has a data type, there are also several broad categories of types, such as container, sequence, mapping, set, built-in, and user-defined.</p>
+
+Some terms, like values, variables, and functions, have different names in specific contexts, such as items, parameters, arguments, and methods.﻿
+Several terms are also easy to confuse with each other. It’s not a big deal to confuse some of these terms in day-to-day programming: for example, property versus attribute, block versus body, exception versus error, or the subtle differences between library, framework, SDK, engine, and API. Other misunderstandings won’t make the code you write wrong but might make you look unprofessional: for example, statement and expression, function and method, and parameter and argument are commonly used interchangeably by beginners.
+<p class="calibre23">But other terms, such as iterable versus iterator, syntax error versus semantic error, and bytecode versus machine code, have distinct meanings that you should never confuse with each other unless you want to confuse your colleagues.</p>
+<p class="calibre23">You’ll still find that the use of terms varies from language to language and even programmer to programmer. You’ll become more familiar with jargon with experience (and frequent web searches) in time.</p>
+<h2 id="calibre_link-170" class="calibre7">Further Reading</h2>
+<p class="bodyfirst">The official Python glossary at<a href="https://docs.python.org/3/glossary.html" class="calibre19"> https://docs.python.org/3/glossary.html</a> lists short but helpful definitions the Python ecosystem uses. The official Python documentation at <a href="https://docs.python.org/3/reference/datamodel.html" class="calibre19">https://docs.python.org/3/reference/datamodel.html</a> describes Python objects in greater detail.</p>
+<p class="calibre23">Nina Zakharenko’s PyCon 2016 talk, “Memory Management in Python&mdash;The Basics,” at <a href="https://youtu.be/F6u5rhUQ6dU" class="calibre19">https://youtu.be/F6u5rhUQ6dU</a>, explains many details about how Python’s garbage collector works. The official Python documentation at <a href="https://docs.python.org/3/library/gc.html" class="calibre19">https://docs.python.org/3/library/gc.html</a> has more information about the garbage collector.</p>
+<p class="calibre23">The Python mailing list discussion about making dictionaries ordered in Python 3.6 makes for good reading as well and is at <a href="https://mail.python.org/pipermail/python-dev/2016-September/146327.html" class="calibre19">https://mail.python.org/pipermail/python-dev/2016-September/146327.html</a>.</p>
+</section>
+</div>
+
+
+
+
+<a href="chapter6.html">Prev: Chapter 6 - Writing Pythonic Code</a> | <a href="chapter8.html">Next: Chapter 8 - Common Python Gotchas</a>
+</body></html>

@@ -1,0 +1,522 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Chapter 1: The Interactive Shell</title></head><body style="background-color: #fffeee;">
+
+<script type="text/javascript">
+//<![CDATA[
+
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5459430-3']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
+//]]>
+</script>
+
+
+<div style="background-color: #eeeddd; float: right; height: 310px; font-family: sans-serif;" id="otherbooks">
+  <a href="#" onclick="document.getElementById('otherbooks').outerHTML='';" style="vertical-align: top;">(close)</a><br />
+
+  <a target="_blank" href="https://nostarch.com/automatestuff2" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_automate.link');"><img src="/images/cover_automate2_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/beyond-basic-stuff-python" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_beyond.link');"><img src="/images/cover_beyond_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/inventwithpython" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_invent.link');"><img src="/images/cover_invent4th_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://www.amazon.com/Making-Games-Python-Pygame-Sweigart/dp/1469901730?ie=UTF8&amp;tag=playwithpyth-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1469901730" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_pygame.link');"><img src="/images/cover_makinggames_thumb.png" style="height: 200px; border: solid black 1px; /"></a>
+  <a target="_blank" href="https://nostarch.com/crackingcodes" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_hacking.link');"><img src="/images/cover_crackingcodes_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/scratchplayground"><img src="/images/cover_scratchprogrammingplayground_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/codingwithminecraft"><img src="/images/cover_codingwithminecraft_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <br />
+  <a href="https://inventwithpython.com/automateudemy">Use this link to get 70% off the Automate the Boring Stuff online video course.</a><br />
+  <a href="https://www.patreon.com/AlSweigart">Support me on Patreon</a>
+</div>
+
+<a href="chapter1.html">Prev: Chapter 1 - Dealing with Errors and Asking for Help</a> | <a href="chapter3.html">Next: Chapter 3 - Code Formatting with Black</a>
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-53">
+<section class="toclist">
+<header class="calibre12">
+<h1 class="chaptertitle">
+<span class="partnumber"><span type="pagebreak" title="17" id="calibre_link-368" class="calibre26"></span>2</span><br class="calibre18" />
+<span class="parttitle1">Environment Setup and the Command Line</span>
+</h1>
+</header>
+<figure class="opener"><img src="images/000017.png" alt="" class="calibre15" /></figure><p class="chapterintro"><em class="calibre10">Environment setup</em> is the process of organizing your computer so you can write code. This involves installing any necessary tools, configuring them, and handling any hiccups during the setup. There is no single setup process because everyone has a different computer with a different operating system, version of the operating system, and version of the Python interpreter. Even so, this chapter describes some basic concepts to help you administer your own computer using the command line, environment variables, and filesystem.</p>
+<p class="calibre22">Learning these concepts and tools might seem like a headache. You want to write code, not poke around configuration settings or understand inscrutable console commands. But these skills will save you time in the long run. Ignoring error messages or randomly changing configuration settings to get your system working well enough might hide problems, but it won’t fix them. By taking the time to understand these issues now, you can prevent them from reoccurring.</p>
+<h2 id="calibre_link-54" class="calibre7"><span type="pagebreak" title="18" id="calibre_link-369" class="calibre20"></span>The Filesystem</h2>
+<p class="bodyfirst">The <em class="calibre10">filesystem</em> is how your operating system organizes data to be stored and retrieved. A file has two key properties: a <em class="calibre10">filename</em> (usually written as one word) and a <em class="calibre10">path</em>. The path specifies the location of a file on the computer. For example, a file on my Windows 10 laptop has the filename <em class="calibre10">project.docx</em> in the path <em class="calibre10">C:\Users\Al\Documents</em>. The part of the filename after the last period is the file’s <em class="calibre10">extension</em> and tells you a file’s type. The filename <em class="calibre10">project.docx</em> is a Word document, and <em class="calibre10">Users</em>, <em class="calibre10">Al</em>, and <em class="calibre10">Documents</em> all refer to <em class="calibre10">folders</em> (also called <em class="calibre10">directories</em>). Folders can contain files and other folders. For example, <em class="calibre10">project.docx</em> is in the <em class="calibre10">Documents</em> folder, which is in the <em class="calibre10">Al</em> folder, which is in the <em class="calibre10">Users</em> folder. <a id="calibre_link-683" href="#calibre_link-318" class="calibre19">Figure 2-1</a> shows this folder organization.</p>
+<figure class="calibre29">
+<img src="images/000014.png" alt="f02001" class="calibre15" />
+<figcaption class="calibre30"><p class="calibre31"><a id="calibre_link-318" href="#calibre_link-683" class="calibre19">Figure 2-1:</a> A file in a hierarchy of folders</p></figcaption>
+</figure>
+<p class="calibre23">The <em class="calibre10">C:\</em> part of the path is the <em class="calibre10">root folder</em>, which contains all other folders. On Windows, the root folder is named <em class="calibre10">C:\</em> and is also called the <em class="calibre10">C:</em> drive. On macOS and Linux, the root folder is <em class="calibre10">/</em>. In this book, I’ll use the Windows-style root folder, <em class="calibre10">C:\</em>. If you’re entering the interactive shell examples on macOS or Linux, enter <em class="calibre10">/</em> instead.</p>
+<p class="calibre23">Additional volumes, such as a DVD drive or USB flash drive, will appear differently on different operating systems. On Windows, they appear as new, lettered root drives, such as <em class="calibre10">D:\</em> or <em class="calibre10">E:\</em>. On macOS, they appear as new folders within the <em class="calibre10">/Volumes</em> folder. On Linux, they appear as new folders within the <em class="calibre10">/mnt</em> (“mount”) folder. Note that folder names and filenames are not case sensitive on Windows and macOS, but they’re case sensitive on Linux.</p>
+<h3 id="calibre_link-55" class="calibre27">Paths in Python</h3>
+<p class="bodyfirst">On Windows, the backslash (\) separates folders and filenames, but on macOS and Linux, the  forward slash (/) separates them. Instead of writing code both ways to make your Python scripts cross-platform compatible, you can use the <code class="calibre9">pathlib</code> module and <code class="calibre9">/</code> operator instead.</p>
+<p class="calibre23">The typical way to import <code class="calibre9">pathlib</code> is with the statement <code class="calibre9">from pathlib import Path</code>. Because the <code class="calibre9">Path</code> class is the most frequently used class in <code class="calibre9"></code><span type="pagebreak" title="19" id="calibre_link-370" class="calibre16"></span>pathlib, this form lets you type <code class="calibre9">Path</code> instead of <code class="calibre9">pathlib.Path</code>. You can pass a string of a folder or filename to <code class="calibre9">Path()</code> to create a <code class="calibre9">Path</code> object of that folder or filename. As long as the leftmost object in an expression is a <code class="calibre9">Path</code> object, you can use the <code class="calibre9">/</code> operator to join together <code class="calibre9">Path</code> objects or strings. Enter the following into the interactive shell:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">from pathlib import Path</b>
+&gt;&gt;&gt; <b class="calibre25">Path('spam') / 'bacon' / 'eggs'</b>
+WindowsPath('spam/bacon/eggs')
+&gt;&gt;&gt; <b class="calibre25">Path('spam') / Path('bacon/eggs')</b>
+WindowsPath('spam/bacon/eggs')
+&gt;&gt;&gt; <b class="calibre25">Path('spam') / Path('bacon', 'eggs')</b>
+WindowsPath('spam/bacon/eggs')</code></pre>
+<p class="calibre23">Note that because I ran this code on a Windows machine, <code class="calibre9">Path()</code> returns <code class="calibre9">WindowsPath</code> objects. On macOS and Linux, a <code class="calibre9">PosixPath</code> object is returned. (POSIX is a set of standards for Unix-like operating systems and is beyond the scope of this book.) For our purposes, there’s no difference between these two types.</p>
+<p class="calibre23">You can pass a <code class="calibre9">Path</code> object to any function in the Python standard library that expects a filename. For example, the function call <code class="calibre9">open(Path('C:\\') / 'Users' / 'Al' / 'Desktop' / 'spam.py')</code> is equivalent to <code class="calibre9">open(r'C:\Users\Al\Desktop\spam.py')</code>.</p>
+<h3 id="calibre_link-56" class="calibre27">The Home Directory</h3>
+<p class="bodyfirst">All users have a folder called the <em class="calibre10">home folder</em> or <em class="calibre10">home directory</em> for their own files on the computer. You can get a <code class="calibre9">Path</code> object of the home folder by calling <code class="calibre9">Path.home()</code>:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">Path.home()</b>
+WindowsPath('C:/Users/Al')</code></pre>
+<p class="calibre23">The home directories are located in a set place depending on your operating system:</p>
+<ul class="calibre36">
+<li class="calibre11">On Windows, home directories are in <em class="calibre10">C:\Users</em>.</li>
+<li class="calibre11">On Mac, home directories are in <em class="calibre10">/Users</em>.</li>
+<li class="calibre11">On Linux, home directories are often in <em class="calibre10">/home</em>.</li>
+</ul>
+<p class="calibre23">Your scripts will almost certainly have permissions to read from and write to the files in your home directory, so it’s an ideal place to store the files that your Python programs will work with.</p>
+<h3 id="calibre_link-57" class="calibre27">The Current Working Directory</h3>
+<p class="bodyfirst">Every program that runs on your computer has a <em class="calibre10">current working directory</em> (<em class="calibre10">cwd</em>). Any filenames or paths that don’t begin with the root folder you can assume are in the cwd. Although “folder” is the more modern name for a <span type="pagebreak" title="20" id="calibre_link-371" class="calibre16"></span>directory, note that cwd (or just working directory) is the standard term, not “current working folder.”</p>
+<p class="calibre23">You can get the cwd as a <code class="calibre9">Path</code> object using the <code class="calibre9">Path.cwd()</code> function and change it using <code class="calibre9">os.chdir()</code>. Enter the following into the interactive shell:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">from pathlib import Path</b>
+&gt;&gt;&gt; <b class="calibre25">import os</b>
+<span class="codeannotationhang">1</span> &gt;&gt;&gt; <b class="calibre25">Path.cwd()</b>
+WindowsPath('C:/Users/Al/AppData/Local/Programs/Python/Python38')
+<span class="codeannotationhang">2</span> &gt;&gt;&gt; <b class="calibre25">os.chdir('C:\\Windows\\System32')</b>
+&gt;&gt;&gt; <b class="calibre25">Path.cwd()</b>
+WindowsPath('C:/Windows/System32')</code></pre>
+<p class="calibre23">Here, the cwd was set to <em class="calibre10">C:\Users\Al\AppData\Local\Programs\Python\Python38</em><span class="codeannotation">1</span>, so the filename <em class="calibre10">project.docx</em> would refer to <em class="calibre10">C:\Users\Al\AppData\Local\Programs\Python\Python38\project.docx</em>. When we change the cwd to <em class="calibre10">C:\Windows\System32</em><span class="codeannotation">2</span>, the filename <em class="calibre10">project.docx</em> would refer to <em class="calibre10">C:\Windows\System32\project.docx</em>.</p>
+<p class="calibre23">Python displays an error if you try to change to a directory that doesn’t exist:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">os.chdir('C:/ThisFolderDoesNotExist')</b>
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+FileNotFoundError: [WinError 2] The system cannot find the file specified:
+'C:/ThisFolderDoesNotExist'</code></pre>
+<p class="calibre23">The <code class="calibre9">os.getcwd()</code> function in the <code class="calibre9">os</code> module is a former way of getting the cwd as a string.</p>
+<h3 id="calibre_link-58" class="calibre27">Absolute vs. Relative Paths</h3>
+<p class="bodyfirst">There are two ways to specify a file path:</p>
+<ul class="calibre36">
+<li class="calibre11">An absolute path, which always begins with the root folder</li>
+<li class="calibre11">A relative path, which is relative to the program’s cwd</li>
+</ul>
+<p class="calibre23">There are also the <em class="calibre10">dot</em> (.) and <em class="calibre10">dot-dot</em> (..) folders. These are not real folders but special names that you can use in a path. A single period (.) for a folder name is shorthand for “this directory.” Two periods (..) means “the parent folder.”</p>
+<p class="calibre23"><a id="calibre_link-684" href="#calibre_link-319" class="calibre19">Figure 2-2</a> shows an example of some folders and files. When the cwd is set to <em class="calibre10">C:\bacon</em>, the relative paths for the other folders and files are set as they are in the figure.</p>
+<p class="calibre23">The <em class="calibre10">.\</em> at the start of a relative path is optional. For example, <em class="calibre10">.\spam.txt</em> and <em class="calibre10">spam.txt</em> refer to the same file.</p>
+<span type="pagebreak" title="21" id="calibre_link-372" class="calibre16"></span><figure class="calibre29">
+<img src="images/000029.png" alt="f02002" class="calibre15" />
+<figcaption class="calibre30"><p class="calibre31"><a id="calibre_link-319" href="#calibre_link-684" class="calibre19">Figure 2-2:</a> The relative paths for folders and files in the working directory <em class="calibre10">C:\bacon</em></p></figcaption>
+</figure>
+<h2 id="calibre_link-59" class="calibre7">Programs and Processes</h2>
+<p class="bodyfirst">A <em class="calibre10">program</em> is any software application that you can run, such as a web browser, spreadsheet application, or word processor. A <em class="calibre10">process</em> is a running instance of a program. For example, <a id="calibre_link-685" href="#calibre_link-320" class="calibre19">Figure 2-3</a> shows five running processes of the same calculator program.</p>
+<figure class="calibre29">
+<img src="images/000021.png" alt="f02003" class="calibre15" />
+<figcaption class="calibre30"><p class="calibre31"><a id="calibre_link-320" href="#calibre_link-685" class="calibre19">Figure 2-3:</a> One calculator program running multiple times as multiple, separate processes</p></figcaption>
+</figure>
+<p class="calibre23"><span type="pagebreak" title="22" id="calibre_link-373" class="calibre16"></span>Processes remain separate from each other, even when running the same program. For example, if you ran several instances of a Python program at the same time, each process might have separate variable values. Every process, even processes running the same program, has its own cwd and environment variable settings. Generally speaking, a command line will run only one process at a time (although you can have multiple command lines open simultaneously). </p>
+<p class="calibre23">Each operating system has a way of viewing a list of running processes. On Windows, you can press <span class="keycaps">Ctrl</span>-<span class="keycaps">Shift</span>-<span class="keycaps">Esc</span> to bring up the Task Manager application. On macOS, you can run Applications<span class="menuarrow">▶</span>Utilities<span class="menuarrow">▶</span>Activity Monitor. On Ubuntu Linux, you can press <span class="keycaps">Ctrl</span>-<span class="keycaps">Alt</span>-<span class="keycaps">Del</span> to open an application also called the Task Manager. These task managers can force a running process to terminate if it’s unresponsive.</p>
+<h2 id="calibre_link-60" class="calibre7">The Command Line</h2>
+<p class="bodyfirst">The <em class="calibre10">command line</em> is a text-based program that lets you enter commands to interact with the operating system and run programs. You might also hear it called the command line interface (CLI, which rhymes with “fly”), command prompt, terminal, shell, or console. It provides an alternative to a <em class="calibre10">graphical user interface</em> (<em class="calibre10">GUI</em>, pronounced “gooey”), which allows the user to interact with the computer through more than just a text-based interface. A GUI presents visual information to a user to guide them through tasks more easily than the command line does. Most computer users treat the command line as an advanced feature and never touch it. Part of the intimidation factor is due to the complete lack of hints of how to use it; although a GUI might display a button showing you where to click, a blank terminal window doesn’t remind you what to type. </p>
+<p class="calibre23">But there are good reasons for becoming adept at using the command line. For one, setting up your environment often requires you to use the command line rather than the graphical windows. For another, entering commands can be much faster than clicking graphical windows with the mouse. Text-based commands are also less ambiguous than dragging an icon to some other icon. This lends them to automation better, because you can combine multiple specific commands into scripts to perform sophisticated operations. </p>
+<p class="calibre23">The command line program exists in an executable file on your computer. In this context, we often call it a shell or shell program. Running the shell program makes the terminal window appear:</p>
+<ul class="calibre36">
+<li class="calibre11">On Windows, the shell program is at <em class="calibre10">C:\Windows\System32\cmd.exe</em>.</li>
+<li class="calibre11">On macOS, the shell program is at <em class="calibre10">/bin/bash</em>.</li>
+<li class="calibre11">On Ubuntu Linux, the shell program is at <em class="calibre10">/bin/bash</em>.</li>
+</ul>
+<p class="calibre23">Over the years, programmers have created many shell programs for the Unix operating system, such as the Bourne Shell (in an executable file named <em class="calibre10">sh</em>) and later the Bourne-Again Shell (in an executable file named <em class="calibre10">Bash</em>). Linux uses Bash by default, whereas macOS uses the similar <span type="pagebreak" title="23" id="calibre_link-374" class="calibre16"></span>Zsh or Z shell in Catalina and later versions. Due to its different development history, Windows uses a shell named Command Prompt. All these programs do the same thing: they present a terminal window with a text-based CLI into which the user enters commands and runs programs.</p>
+<p class="calibre23">In this section, you’ll learn some of the command line’s general concepts and common commands. You could master a large number of cryptic commands to become a real sorcerer, but you only need to know about a dozen or so to solve most problems. The exact command names might vary slightly on different operating systems, but the underlying concepts are the same.</p>
+<h3 id="calibre_link-61" class="calibre27">Opening a Terminal Window</h3>
+<p class="bodyfirst">To open a terminal window, do the following:</p>
+<ul class="calibre36">
+<li class="calibre11">On Windows, click the Start button, type <code class="bold">Command Prompt</code>, and then press <span class="keycaps">Enter</span>.</li>
+<li class="calibre11">On macOS, click the <code class="bold">Spotlight</code> icon in the upper-right corner, type <code class="bold">Terminal</code>, and then press <span class="keycaps">Enter</span>.</li>
+<li class="calibre11">On Ubuntu Linux, press the <span class="keycaps">Win</span> key to bring up Dash, type <code class="bold">Terminal</code>, and press <span class="keycaps">Enter</span>. Alternatively, use the keyboard shortcut <span class="keycaps">Ctrl</span>-<span class="keycaps">Alt</span>-T.</li>
+</ul>
+<p class="calibre23">Like the interactive shell, which displays a <code class="calibre9">&gt;&gt;&gt;</code> prompt, the terminal displays a <em class="calibre10">shell prompt</em> at which you can enter commands. On Windows, the prompt will be the full path to the current folder you are in:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al&gt;<b class="calibre25">your commands go here</b></code></pre>
+<p class="calibre23">On macOS, the prompt shows your computer’s name, a colon, and the cwd with your home folder represented as a tilde (<code class="calibre9">~</code>). After this is your username followed by a dollar sign (<code class="calibre9">$</code>):</p>
+<pre class="calibre28"><code class="calibre9">Als-MacBook-Pro:~ al$ <b class="calibre25">your commands go here</b></code></pre>
+<p class="calibre23">On Ubuntu Linux, the prompt is similar to the macOS prompt except it begins with the username and an at (<code class="calibre9">@</code>) symbol:</p>
+<pre class="calibre28"><code class="calibre9">al@al-VirtualBox:~$ <b class="calibre25">your commands go here</b></code></pre>
+<p class="calibre23">Many books and tutorials represent the command line prompt as just <code class="calibre9">$</code> to simplify their examples. It’s possible to customize these prompts, but doing so is beyond the scope of this book. </p>
+<h3 id="calibre_link-62" class="calibre27">Running Programs from the Command Line</h3>
+<p class="bodyfirst">To run a program or command, enter its name into the command line. Let’s run the default calculator program that comes with the operating system. Enter the following into the command line:</p>
+<ul class="calibre36">
+<li class="calibre11">On Windows, enter <code class="bold">calc.exe</code>.</li>
+<li class="calibre11"><span type="pagebreak" title="24" id="calibre_link-375" class="calibre16"></span>On macOS, enter <code class="bold">open -a Calculator</code>. (Technically, this runs the <code class="calibre9">open</code> program, which then runs the Calculator program.)</li>
+<li class="calibre11">On Linux, enter <code class="bold">gnome-calculator</code>.</li>
+</ul>
+<p class="calibre23">Program names and commands are case sensitive on Linux but case insensitive on Windows and macOS. This means that even though you must type <code class="calibre9">gnome-calculator</code> on Linux, you could type <code class="calibre9">Calc.exe </code>on Windows and <code class="calibre9">OPEN &ndash;a Calculator </code>on macOS.</p>
+<p class="calibre23">Entering these calculator program names into the command line is equivalent to running the Calculator program from the Start menu, Finder, or Dash. These calculator program names work as commands because the <em class="calibre10">calc.exe</em>, <em class="calibre10">open</em>, and <em class="calibre10">gnome-calculator</em> programs exist in folders that are included in the <code class="calibre9">PATH</code> environment variables. “Environment Variables and PATH” on page 35 explains this further. But suffice it to say that when you enter a program name on the command line, the shell checks whether a program with that name exists in one of the folders listed in <code class="calibre9">PATH</code>. On Windows, the shell looks for the program in the cwd (which you can see in the prompt) before checking the folders in <code class="calibre9">PATH</code>. To tell the command line on macOS and Linux to first check the cwd, you must enter <code class="calibre9">./</code> before the filename.</p>
+<p class="calibre23">If the program isn’t in a folder listed in <code class="calibre9">PATH</code>, you have two options:</p>
+<ul class="calibre36">
+<li class="calibre11">Use the <code class="calibre9">cd</code> command to change the cwd to the folder that contains the program, and then enter the program name. For example, you could enter the following two commands:
+<pre class="calibre28"><code class="calibre9"><code class="calibre42">cd C:\Windows\System32</code>
+<code class="calibre42">calc.exe</code></code></pre>
+</li>
+<li class="calibre11">Enter the full file path for the executable program file. For example, instead of entering <code class="calibre9">calc.exe</code>, you could enter <code class="calibre9">C:\Windows\System32\calc.exe</code>.</li>
+</ul>
+<p class="calibre23">On Windows, if a program ends with the file extension <em class="calibre10">.exe</em> or <em class="calibre10">.bat</em>, including the extension is optional: entering <code class="calibre9">calc</code> does the same thing as entering <code class="calibre9">calc.exe</code>. Executable programs in macOS and Linux often don’t have file extensions marking them as executable; rather, they have the executable permission set. “Running Python Programs Without the Command Line” on page 39 has more information.</p>
+<h3 id="calibre_link-63" class="calibre27">Using Command Line Arguments</h3>
+<p class="bodyfirst"><em class="calibre10">Command line arguments</em> are bits of text you enter after the command name. Like the arguments passed to a Python function call, they provide the command with specific options or additional directions. For example, when you run the command <code class="calibre9">cd C:\Users</code>, the <code class="calibre9">C:\Users</code> part is an argument to the <code class="calibre9">cd</code> command that tells <code class="calibre9">cd</code> to which folder to change the cwd. Or, when you run a Python script from a terminal window with the <code class="calibre9">python yourScript.py </code>command, the <code class="calibre9">yourScript.py</code> part is an argument telling the <code class="calibre9">python</code> program what file to look in for the instructions it should carry out.</p>
+<p class="calibre23"><span type="pagebreak" title="25" id="calibre_link-376" class="calibre16"></span><em class="calibre10">Command line options</em> (also called flags, switches, or simply options) are a single-letter or short-word command line arguments. On Windows, command line options often begin with a forward slash (<code class="calibre9">/</code>); on macOS and Linux, they begin with a single dash (<code class="calibre9">&ndash;</code>) or double dash (<code class="calibre9">--</code>). You already used the <code class="calibre9">&ndash;a</code> option when running the macOS command <code class="calibre9">open &ndash;a Calculator</code>. Command line options are often case sensitive on macOS and Linux but are case insensitive on Windows, and we separate multiple command line options with spaces.</p>
+<p class="calibre23">Folders and filenames are common command line arguments. If the folder or filename has a space as part of its name, enclose the name in double quotes to avoid confusing the command line. For example, if you want to change directories to a folder called <em class="calibre10">Vacation Photos</em>, entering <code class="calibre9">cd Vacation Photos</code> would make the command line think you were passing two arguments, <code class="calibre9">Vacation</code> and <code class="calibre9">Photos</code>. Instead, you enter <code class="calibre9">cd "Vacation Photos"</code>:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al&gt;<b class="calibre25">cd "Vacation Photos"</b>
+
+C:\Users\Al\Vacation Photos&gt;</code></pre>
+<p class="calibre23">Another common argument for many commands is <code class="calibre9">--help</code> on macOS and Linux and <code class="calibre9">/?</code> on Windows. These bring up information associated with the command. For example, if you run <code class="calibre9">cd /?</code> on Windows, the shell tells you what the <code class="calibre9">cd</code> command does and lists other command line arguments for it:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al&gt;<b class="calibre25">cd /?</b>
+Displays the name of or changes the current directory.
+
+CHDIR [/D] [drive:][path]
+CHDIR [..]
+CD [/D] [drive:][path]
+CD [..]
+
+  ..   Specifies that you want to change to the parent directory.
+
+Type CD drive: to display the current directory in the specified drive.
+Type CD without parameters to display the current drive and directory.
+
+Use the /D switch to change current drive in addition to changing current
+directory for a drive.
+<var class="calibre43">--snip&mdash;</var></code></pre>
+<p class="calibre23">This help information tells us that the Windows <code class="calibre9">cd</code> command also goes by the name <code class="calibre9">chdir</code>. (Most people won’t type <code class="calibre9">chdir</code> when the shorter <code class="calibre9">cd</code> command does the same thing.) The square brackets contain optional arguments. For example, <code class="calibre9">CD [/D] [drive:][path]</code> tells you that you could specify a drive or path using the <code class="calibre9">/D</code> option.</p>
+<p class="calibre23">Unfortunately, although the <code class="calibre9">/?</code> and <code class="calibre9">--help</code> information for commands provides reminders for experienced users, the explanations can often be cryptic. They’re not good resources for beginners. You’re better off using a <span type="pagebreak" title="26" id="calibre_link-377" class="calibre16"></span>book or web tutorial instead, such as <em class="calibre10">The Linux Command Line,</em> 2nd Edition (2019) by William Shotts, <em class="calibre10">Linux Basics for Hackers</em> (2018) by OccupyTheWeb, or <em class="calibre10">PowerShell for Sysadmins </em>(2020) by Adam Bertram, all from No Starch Press.</p>
+<h3 id="calibre_link-64" class="calibre27">Running Python Code from the Command Line with -c</h3>
+<p class="bodyfirst">If you need to run a small amount of throwaway Python code that you run once and then discard, pass the <code class="calibre9">&ndash;c</code> switch to <code class="calibre9">python.exe</code> on Windows or <code class="calibre9">python3</code> on macOS and Linux. The code to run should come after the <code class="calibre9">&ndash;c</code> switch, enclosed in double quotes. For example, enter the following into the terminal window:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al&gt;<b class="calibre25">python -c "print('Hello, world')"</b>
+Hello, world</code></pre>
+<p class="calibre23">The <code class="calibre9">&ndash;c</code> switch is handy when you want to see the results of a single Python instruction and don’t want to waste time entering the interactive shell. For example, you could quickly display the output of the <code class="calibre9">help()</code> function and then return to the command line:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al&gt;<b class="calibre25">python -c "help(len)"</b>
+Help on built-in function len in module builtins:
+
+len(obj, /)
+    Return the number of items in a container.
+
+C:\Users\Al&gt;</code></pre>
+<h3 id="calibre_link-65" class="calibre27">Running Python Programs from the Command Line</h3>
+<p class="bodyfirst">Python programs are text files that have the <em class="calibre10">.py</em> file extension. They’re not executable files; rather, the Python interpreter reads these files and carries out the Python instructions in them. On Windows, the interpreter’s executable file is <em class="calibre10">python.exe</em>. On macOS and Linux, it’s <em class="calibre10">python3</em> (the original <em class="calibre10">python</em> file contains the Python version 2 interpreter). Running the commands <code class="calibre9">python yourScript.py</code> or <code class="calibre9">python3 yourScript.py</code> will run the Python instructions saved in a file named <em class="calibre10">yourScript.py</em>.</p>
+<h3 id="calibre_link-66" class="calibre27">Running the py.exe Program</h3>
+<p class="bodyfirst">On Windows, Python installs a <em class="calibre10">py.exe</em> program in the <em class="calibre10">C:\Windows</em> folder. This program is identical to <em class="calibre10">python.exe</em> but accepts an additional command line argument that lets you run any Python version installed on your computer. You can run the <code class="calibre9">py</code> command from any folder, because the <em class="calibre10">C:\Windows</em> folder is included in the <code class="calibre9">PATH</code> environment variable. If you have multiple Python versions installed, running <code class="calibre9">py</code> automatically runs the latest version installed on your computer. You can also pass a <code class="calibre9">-3</code> or <code class="calibre9">-2</code> command line argument to run the latest Python version 3 or version 2 installed, respectively. Or you could enter a more specific version number, such as <code class="calibre9">-3.6</code> or <code class="calibre9">-2.7</code>, to run that <span type="pagebreak" title="27" id="calibre_link-378" class="calibre16"></span>particular Python installation. After the version switch, you can pass all the same command line arguments to <em class="calibre10">py.exe</em> as you do to <em class="calibre10">python.exe</em>. Run the following from the Windows command line:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al&gt;<b class="calibre25">py -3.6 -c "import sys;print(sys.version)"</b>
+3.6.6 (v3.6.6:4cf1f54eb7, Jun 27 2018, 03:37:03) [MSC v.1900 64 bit (AMD64)]
+
+C:\Users\Al&gt;<b class="calibre25">py -2.7</b>
+Python 2.7.14 (v2.7.14:84471935ed, Sep 16 2017, 20:25:58) [MSC v.1500 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+&gt;&gt;&gt;</code></pre>
+<p class="calibre23">The <em class="calibre10">py.exe</em> program is helpful when you have multiple Python versions installed on your Windows machine and need to run a specific version.</p>
+<h3 id="calibre_link-67" class="calibre27">Running Commands from a Python Program</h3>
+<p class="bodyfirst">Python’s <code class="calibre9">subprocess.run()</code> function, found in the <code class="calibre9">subprocess</code> module, can run shell commands within your Python program and then present the command output as a string. For example, the following code runs the <code class="calibre9">ls &ndash;al</code> command:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">import subprocess, locale</b>
+<span class="codeannotationhang">1</span> &gt;&gt;&gt; <b class="calibre25">procObj = subprocess.run(['ls', '-al'], stdout=subprocess.PIPE)</b>
+<span class="codeannotationhang">2</span> &gt;&gt;&gt; <b class="calibre25">outputStr = procObj.stdout.decode(locale.getdefaultlocale()[1])</b>
+&gt;&gt;&gt; <b class="calibre25">print(outputStr)</b>
+total 8
+drwxr-xr-x  2 al al 4096 Aug  6 21:37 .
+drwxr-xr-x 17 al al 4096 Aug  6 21:37 ..
+-rw-r--r--  1 al al    0 Aug  5 15:59 spam.py</code></pre>
+<p class="calibre23">We pass the <code class="calibre9">['ls', '-al']</code> list to <code class="calibre9">subprocess.run()</code><span class="codeannotation">1</span>. This list contains the command name <code class="calibre9">ls</code>, followed by its arguments, as individual strings. Note that passing <code class="calibre9">['ls &ndash;al'] </code>wouldn’t work. We store the command’s output as a string in <code class="calibre9">outputStr</code><span class="codeannotation">2</span>. Online documentation for <code class="calibre9">subprocess.run()</code> and <code class="calibre9">locale.getdefaultlocale()</code> will give you a better idea of how these functions work, but they make the code work on any operating system running Python.</p>
+<h3 id="calibre_link-68" class="calibre27">Minimizing Typing with Tab Completion</h3>
+<p class="bodyfirst">Because advanced users enter commands into computers for hours a day, modern command lines offer features to minimize the amount of typing necessary. The <em class="calibre10">tab completion</em> feature (also called command line completion or autocomplete) lets a user type the first few characters of a folder or filename and then press the <span class="keycaps">Tab</span> key to have the shell fill in the rest of the name.</p>
+<p class="calibre23">For example, when you type <code class="calibre9">cd c:\u</code> and press <span class="keycaps">Tab </span>on Windows, the current command checks which folders or files in <em class="calibre10">C:\</em> begin with <em class="calibre10">u</em> and tab completes to <code class="calibre9">c:\Users</code>. It corrects the lowercase <em class="calibre10">u</em> to <em class="calibre10">U</em> as well. (On macOS and Linux, tab completion doesn’t correct the casing.) If multiple folders <span type="pagebreak" title="28" id="calibre_link-379" class="calibre16"></span>or filenames begin with <em class="calibre10">U</em> in the <em class="calibre10">C:\</em> folder, you can continue to press <span class="keycaps">Tab</span> to cycle through all of them. To narrow down the number of matches, you could also type <code class="calibre9">cd c:\us</code>, which filters the possibilities to folders and filenames that begin with <em class="calibre10">us</em>. </p>
+<p class="calibre23">Pressing the <span class="keycaps">Tab</span> key multiple times works on macOS and Linux as well. In the following example, the user typed <code class="calibre9">cd D</code>, followed by <span class="keycaps">Tab</span> twice:</p>
+<pre class="calibre28"><code class="calibre9">al@al-VirtualBox:~$ <b class="calibre25">cd D</b>
+Desktop/   Documents/ Downloads/
+al@al-VirtualBox:~$ cd D</code></pre>
+<p class="calibre23">Pressing <span class="keycaps">Tab</span> twice after typing the <code class="calibre9">D</code> causes the shell to display all the possible matches. The shell gives you a new prompt with the command as you’ve typed it so far. At this point, you could type, say, <code class="calibre9">e</code> and then press <span class="keycaps">Tab</span> to have the shell complete the <code class="calibre9">cd Desktop/</code> command.</p>
+<p class="calibre23">Tab completion is so useful that many GUI IDEs and text editors include this feature as well. Unlike command lines, these GUI programs usually display a small menu under your words as you type them, letting you select one to autocomplete the rest of the command.</p>
+<h3 id="calibre_link-69" class="calibre27">Viewing the Command History</h3>
+<p class="bodyfirst">In their <em class="calibre10">command history</em>, modern shells also remember the commands you’ve entered. Pressing the up arrow key in the terminal fills the command line with the last command you entered. You can continue to press the up arrow key to find earlier commands, or press the down arrow key to return to more recent commands. If you want to cancel the command currently in the prompt and start from a fresh prompt, press <span class="keycaps">Ctrl</span>-C.</p>
+<p class="calibre23">On Windows, you can view the command history by running <code class="calibre9">doskey /history</code>. (The oddly named <em class="calibre10">doskey</em> program goes back to Microsoft’s pre-Windows operating system, MS-DOS.) On macOS and Linux, you can view the command history by running the <code class="calibre9">history</code> command.</p>
+<h3 id="calibre_link-70" class="calibre27">Working with Common Commands</h3>
+<p class="bodyfirst">This section contains a short list of the common commands you’ll use in the command line. There are far more commands and arguments than listed here, but you can treat these as the bare minimum you’ll need to navigate the command line. </p>
+<p class="calibre23">Command line arguments for the commands in this section appear between square brackets. For example, <code class="calibre9">cd </code><var class="calibre35">[destination folder]</var> means you should enter <code class="calibre9">cd</code>, followed by the name of a new folder. </p>
+<h4 id="calibre_link-725" class="calibre44">Match Folder and Filenames with Wildcard Characters</h4>
+<p class="bodyfirst">Many commands accept folder and filenames as command line arguments. Often, these commands also accept names with the wildcard characters <code class="calibre9">*</code> and <code class="calibre9">?</code>, allowing you to specify multiple matching files. The <code class="calibre9">*</code> character <span type="pagebreak" title="29" id="calibre_link-380" class="calibre16"></span>matches any number of characters, whereas the <code class="calibre9">?</code> character matches any single character. We call expressions that use the <code class="calibre9">*</code> and <code class="calibre9">?</code> wildcard characters <em class="calibre10">glob patterns</em> (short for “global patterns”). </p>
+<p class="calibre23">Glob patterns let you specify patterns of filenames. For example, you could run the <code class="calibre9">dir</code> or <code class="calibre9">ls</code> command to display all the files and folders in the cwd. But if you wanted to see just the Python files, <code class="calibre9">dir *.py</code> or <code class="calibre9">ls *.py</code> would display only the files that end in <em class="calibre10">.py</em>. The glob pattern <code class="calibre9">*.py</code> means “any group of characters, followed by <code class="calibre9">.py</code>”:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al&gt;<b class="calibre25">dir *.py</b>
+ Volume in drive C is Windows
+ Volume Serial Number is DFF3-8658
+
+ Directory of C:\Users\Al
+
+03/24/2019  10:45 PM             8,399 conwaygameoflife.py
+03/24/2019  11:00 PM             7,896 test1.py
+10/29/2019  08:18 PM            21,254 wizcoin.py
+               3 File(s)         37,549 bytes
+               0 Dir(s)  506,300,776,448 bytes free</code></pre>
+<p class="calibre23">The glob pattern <code class="calibre9">records201?.txt</code> means “<code class="calibre9">records201</code>, followed by any single character, followed by <code class="calibre9">.txt</code>.” This would match record files for the years <em class="calibre10">records2010.txt</em> to <em class="calibre10">records2019.txt</em> (as well as filenames, such as <em class="calibre10">records201X.txt</em>). The glob pattern <code class="calibre9">records20??.txt</code> would match any two characters, such as <em class="calibre10">records2021.txt</em> or <em class="calibre10">records20AB.txt</em>.</p>
+<h4 id="calibre_link-726" class="calibre44">Change Directories with cd</h4>
+<p class="bodyfirst">Running <code class="calibre9">cd </code><var class="calibre35">[destination folder]</var> changes the shell’s cwd to the destination folder:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al&gt;<b class="calibre25">cd Desktop</b>
+
+C:\Users\Al\Desktop&gt;</code></pre>
+<p class="calibre23">The shell displays the cwd as part of its prompt, and any folders or files used in commands will be interpreted relative to this directory. </p>
+<p class="calibre23">If the folder has spaces in its name, enclose the name in double quotes. To change the cwd to the user’s home folder, enter <code class="bold">cd ~</code> on macOS and Linux, and <code class="bold">cd %USERPROFILE%</code> on Windows.</p>
+<p class="calibre23">On Windows, if you also want to change the current drive, you’ll first need to enter the drive name as a separate command:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al&gt;<b class="calibre25">d:</b>
+
+D:\&gt;<b class="calibre25">cd BackupFiles</b>
+
+D:\BackupFiles&gt;</code></pre>
+<p class="calibre23"><span type="pagebreak" title="30" id="calibre_link-381" class="calibre16"></span>To change to the parent directory of the cwd, use the <code class="calibre9">..</code> folder name:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al&gt;<b class="calibre25">cd ..</b>
+
+C:\Users&gt;</code></pre>
+<h4 id="calibre_link-727" class="calibre44">List Folder Contents with dir and ls</h4>
+<p class="bodyfirst">On Windows, the <code class="calibre9">dir</code> command displays the folders and files in the cwd. The <code class="calibre9">ls</code> command does the same thing on macOS and Linux. You can display the contents of another folder by running <code class="calibre9">dir </code><var class="calibre35">[another folder]</var> or <code class="calibre9">ls </code><var class="calibre35">[another folder]</var>. </p>
+<p class="calibre23">The <code class="calibre9">-l </code>and <code class="calibre9">-a</code> switches are useful arguments for the <code class="calibre9">ls</code> command. By default, <code class="calibre9">ls</code> displays only the names of files and folders. To display a long listing format that includes file size, permissions, last modification timestamps, and other information, use <code class="calibre9">&ndash;l</code>. By convention, the macOS and Linux operating systems treat files beginning with a period as configuration files and keep them hidden from normal commands. You can use <code class="calibre9">-a</code> to make <code class="calibre9">ls</code> display all files, including hidden ones. To display both the long listing format and all files, combine the switches as <code class="calibre9">ls -al</code>. Here’s an example in a macOS or Linux terminal window:</p>
+<pre class="calibre28"><code class="calibre9">al@ubuntu:~$ <b class="calibre25">ls</b>
+Desktop    Downloads         mu_code  Pictures  snap       Videos
+Documents  examples.desktop  Music    Public    Templates
+al@ubuntu:~$ <b class="calibre25">ls -al</b>
+total 112
+drwxr-xr-x 18 al   al   4096 Aug  4 18:47 .
+drwxr-xr-x  3 root root 4096 Jun 17 18:11 ..
+-rw-------  1 al   al   5157 Aug  2 20:43 .bash_history
+-rw-r--r--  1 al   al    220 Jun 17 18:11 .bash_logout
+-rw-r--r--  1 al   al   3771 Jun 17 18:11 .bashrc
+drwx------ 17 al   al   4096 Jul 30 10:16 .cache
+drwx------ 14 al   al   4096 Jun 19 15:04 .config
+drwxr-xr-x  2 al   al   4096 Aug  4 17:33 Desktop
+<var class="calibre43">--snip--</var></code></pre>
+<p class="calibre23">The Windows analog to <code class="calibre9">ls &ndash;al</code> is the <code class="calibre9">dir</code> command. Here’s an example in a Windows terminal window:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al&gt;<b class="calibre25">dir</b>
+ Volume in drive C is Windows
+ Volume Serial Number is DFF3-8658
+
+ Directory of C:\Users\Al
+
+06/12/2019  05:18 PM    &lt;DIR&gt;          .
+06/12/2019  05:18 PM    &lt;DIR&gt;          ..
+12/04/2018  07:16 PM    &lt;DIR&gt;          .android
+<var class="calibre43">--snip--</var>
+08/31/2018  12:47 AM            14,618 projectz.ipynb
+10/29/2014  04:34 PM           121,474 foo.jpg</code></pre>
+<h4 id="calibre_link-728" class="calibre44"><span type="pagebreak" title="31" id="calibre_link-382" class="calibre39"></span>List Subfolder Contents with dir /s and find</h4>
+<p class="bodyfirst">On Windows, running <code class="calibre9">dir /s</code> displays the cwd’s folders and their subfolders. For example, the following command displays every <em class="calibre10">.py</em> file in my <em class="calibre10">C:\github\ezgmail</em> folder and all of its subfolders:</p>
+<pre class="calibre28"><code class="calibre9">C:\github\ezgmail&gt;<b class="calibre25">dir /s *.py</b>
+ Volume in drive C is Windows
+ Volume Serial Number is DEE0-8982
+
+ Directory of C:\github\ezgmail
+
+06/17/2019  06:58 AM             1,396 setup.py
+               1 File(s)          1,396 bytes
+
+ Directory of C:\github\ezgmail\docs
+
+12/07/2018  09:43 PM             5,504 conf.py
+               1 File(s)          5,504 bytes
+
+ Directory of C:\github\ezgmail\src\ezgmail
+
+06/23/2019  07:45 PM            23,565 __init__.py
+12/07/2018  09:43 PM                56 __main__.py
+               2 File(s)         23,621 bytes
+
+     Total Files Listed:
+               4 File(s)         30,521 bytes
+               0 Dir(s)  505,407,283,200 bytes free</code></pre>
+<p class="calibre23">The <code class="calibre9">find . &ndash;name</code> command does the same thing on macOS and Linux: </p>
+<pre class="calibre28"><code class="calibre9">al@ubuntu:~/Desktop$ <b class="calibre25">find . -name "*.py"</b>
+./someSubFolder/eggs.py
+./someSubFolder/bacon.py
+./spam.py</code></pre>
+<p class="calibre23">The <code class="calibre9">. </code>tells <code class="calibre9">find</code> to start searching in the cwd. The <code class="calibre9">&ndash;name</code> option tells <code class="calibre9">find</code> to find folders and filenames by name. The <code class="calibre9">"*.py"</code> tells <code class="calibre9">find</code> to display folders and files with names that match the <code class="calibre9">*.py</code> pattern. Note that the <code class="calibre9">find</code> command requires the argument after <code class="calibre9">&ndash;name</code> to be enclosed in double quotes.</p>
+<h4 id="calibre_link-729" class="calibre44">Copy Files and Folders with copy and cp</h4>
+<p class="bodyfirst">To create a duplicate of a file or folder in a different directory, run <code class="bold">copy </code><var class="calibre35">[source file or folder]</var><code class="bold"></code><var class="calibre35">[destination folder]</var> or <code class="bold">cp </code><var class="calibre35">[source file or folder] [destination folder]</var>. Here’s an example in a Linux terminal window:</p>
+<pre class="calibre28"><code class="calibre9">al@ubuntu:~/someFolder$ <b class="calibre25">ls</b>
+hello.py  someSubFolder
+al@ubuntu:~/someFolder$ <b class="calibre25">cp hello.py someSubFolder</b>
+al@ubuntu:~/someFolder$ <b class="calibre25">cd someSubFolder</b>
+al@ubuntu:~/someFolder/someSubFolder$ <b class="calibre25">ls</b>
+hello.py</code></pre>
+<aside type="sidebar" class="authors">
+<div class="top"><hr class="calibre32" /></div>
+<section class="box">
+<h2 class="calibre38"><span type="pagebreak" title="32" id="calibre_link-383" class="calibre39"></span>Short Command Names</h2>
+<p class="boxbodyfirst">When I started learning the Linux operating system, I was surprised to find that the Windows <code class="calibre41">copy</code> command I knew well was named <code class="calibre41">cp</code> on Linux. The name “copy” was much more readable than “cp.” Was a terse, cryptic name really worth saving two characters’ worth of typing?</p>
+<p class="calibre40">As I gained more experienced in the command line, I realized the answer is a firm “yes.” We read source code more often than we write it, so using verbose names for variables and functions helps. But we type commands into the command line more often than we read them, so in this case, the opposite is true: short command names make the command line easier to use and reduce strain on your wrists.</p>
+<div class="top"><hr class="calibre32" /></div>
+</section>
+</aside>
+<h4 id="calibre_link-730" class="calibre44">Move Files and Folders with move and mv</h4>
+<p class="bodyfirst">On Windows, you can move a source file or folder to a destination folder by running <code class="calibre9">move </code><var class="calibre35">[source file or folder] [destination folder]</var>. The <code class="calibre9">mv </code><var class="calibre35">[source file or folder]</var><code class="calibre9"></code><var class="calibre35">[destination folder]</var> command does the same thing on macOS and Linux. </p>
+<p class="calibre23">Here’s an example in a Linux terminal window:</p>
+<pre class="calibre28"><code class="calibre9">al@ubuntu:~/someFolder$ <b class="calibre25">ls</b>
+hello.py  someSubFolder
+al@ubuntu:~/someFolder$ <b class="calibre25">mv hello.py someSubFolder</b>
+al@ubuntu:~/someFolder$ <b class="calibre25">ls</b>
+someSubFolder
+al@ubuntu:~/someFolder$ <b class="calibre25">cd someSubFolder/</b>
+al@ubuntu:~/someFolder/someSubFolder$ <b class="calibre25">ls</b>
+hello.py</code></pre>
+<p class="calibre23">The <em class="calibre10">hello.py</em> file has moved from <em class="calibre10">~/someFolder</em> to <em class="calibre10">~/someFolder/someSubFolder</em> and no longer appears in its original location.</p>
+<h4 id="calibre_link-731" class="calibre44">Rename Files and Folders with ren and mv</h4>
+<p class="bodyfirst">Running <code class="calibre9">ren </code><var class="calibre35">[file or folder] [new name]</var> renames the file or folder on Windows, and <code class="calibre9">mv </code><var class="calibre35">[file or folder] [new name]</var> does so on macOS and Linux. Note that you can use the <code class="calibre9">mv</code> command on macOS and Linux for moving <em class="calibre10">and</em> renaming a file. If you supply the name of an existing folder for the second argument, the <code class="calibre9">mv</code> command moves the file or folder there. If you supply a name that doesn’t match an existing file or folder, the <code class="calibre9">mv</code> command renames the file or folder. Here’s an example in a Linux terminal window:</p>
+<pre class="calibre28"><code class="calibre9">al@ubuntu:~/someFolder$ <b class="calibre25">ls</b>
+hello.py  someSubFolder
+<span type="pagebreak" title="33" id="calibre_link-384" class="calibre16"></span>al@ubuntu:~/someFolder$ <b class="calibre25">mv hello.py goodbye.py</b>
+al@ubuntu:~/someFolder$ <b class="calibre25">ls</b>
+goodbye.py  someSubFolder</code></pre>
+<p class="calibre23">The <em class="calibre10">hello.py</em> file now has the name <em class="calibre10">goodbye.py</em>.</p>
+<h4 id="calibre_link-732" class="calibre44">Delete Files and Folders with del and rm</h4>
+<p class="bodyfirst">To delete a file or folder on Windows, run <code class="calibre9">del </code><var class="calibre35">[file or folder]</var>. To do so on macOS and Linux, run <code class="bold">rm </code><var class="calibre35">[file]</var> (<code class="bold">rm</code> is short for, remove). </p>
+<p class="calibre23">These two delete commands have some slight differences. On Windows, running <code class="calibre9">del</code> on a folder deletes all of its files, but not its subfolders. The <code class="calibre9">del</code> command also won’t delete the source folder; you must do so with the <code class="calibre9">rd</code> or <code class="calibre9">rmdir</code> commands, which I’ll explain in “Delete Folders with rd and rmdir” on page 34. Additionally, running <code class="calibre9">del </code><var class="calibre35">[folder]</var> won’t delete any files inside the subfolders of the source folder. You can delete the files by running <code class="calibre9">del /s /q </code><var class="calibre35">[folder]</var>. The <code class="calibre9">/s</code> runs the <code class="calibre9">del </code>command on the subfolders, and the <code class="calibre9">/q</code> essentially means “be quiet and don’t ask me for confirmation.” <a id="calibre_link-686" href="#calibre_link-321" class="calibre19">Figure 2-4</a> illustrates this difference.</p>
+<figure class="calibre29">
+<img src="images/000012.png" alt="f02004" class="calibre15" />
+<figcaption class="calibre30"><p class="calibre31"><a id="calibre_link-321" href="#calibre_link-686" class="calibre19">Figure 2-4:</a> The files are deleted in these example folders when you run <code class="calibre41">del delicious</code> (left) or <code class="calibre41">del /s /q</code> delicious (right).</p></figcaption>
+</figure>
+<p class="calibre23">On macOS and Linux, you can’t use the <code class="calibre9">rm</code> command to delete folders. But you can run <code class="calibre9">rm &ndash;r </code><var class="calibre35">[folder]</var> to delete a folder and all of its contents. On Windows, <code class="calibre9">rd /s /q <var class="calibre43">[folder]</var></code> will do the same thing. <a id="calibre_link-687" href="#calibre_link-322" class="calibre19">Figure 2-5</a> illustrates this task.</p>
+<span type="pagebreak" title="34" id="calibre_link-385" class="calibre16"></span><figure class="calibre29">
+<img src="images/000005.png" alt="f02005" class="calibre15" />
+<figcaption class="calibre30"><p class="calibre31"><a id="calibre_link-322" href="#calibre_link-687" class="calibre19">Figure 2-5:</a> The files are deleted in these example folders when you run <code class="calibre41">rd /s /q delicious</code> or <code class="calibre41">rm &ndash;r delicious</code>.</p></figcaption>
+</figure>
+<h4 id="calibre_link-733" class="calibre44">Make Folders with md and mkdir</h4>
+<p class="bodyfirst">Running <code class="calibre9">md </code><var class="calibre35">[new folder]</var> creates a new, empty folder on Windows, and running <code class="calibre9">mkdir </code><var class="calibre35">[new folder]</var> does so on macOS and Linux. The <code class="calibre9">mkdir</code> command also works on Windows, but <code class="calibre9">md</code> is easier to type.</p>
+<p class="calibre23">Here’s an example in a Linux terminal window:</p>
+<pre class="calibre28"><code class="calibre9">al@ubuntu:~/Desktop$ <b class="calibre25">mkdir yourScripts</b>
+al@ubuntu:~/Desktop$ <b class="calibre25">cd yourScripts</b>
+<span class="codeannotationhang">1</span> al@ubuntu:~/Desktop/yourScripts$ ls
+al@ubuntu:~/Desktop/yourScripts$</code></pre>
+<p class="calibre23">Notice that the newly created <em class="calibre10">yourScripts</em> folder is empty; nothing appears when we run the <code class="calibre9">ls</code> command to list the folder’s contents <span class="codeannotation">1</span>.</p>
+<h4 id="calibre_link-734" class="calibre44">Delete Folders with rd and rmdir</h4>
+<p class="bodyfirst">Running <code class="calibre9">rd </code><var class="calibre35">[source folder]</var> deletes the source folder on Windows, and <code class="calibre9">rmdir </code><var class="calibre35">[source folder]</var> deletes the source folder on macOS and Linux. Like <code class="calibre9">mkdir</code>, the <code class="calibre9">rmdir</code> command also works on Windows, but <code class="calibre9">rd</code> is easier to type. The folder must be empty before you can remove it.</p>
+<p class="calibre23">Here’s an example in a Linux terminal window:</p>
+<pre class="calibre28"><code class="calibre9">al@ubuntu:~/Desktop$ <b class="calibre25">mkdir yourScripts</b>
+al@ubuntu:~/Desktop$ <b class="calibre25">ls</b>
+yourScripts
+<span type="pagebreak" title="35" id="calibre_link-386" class="calibre16"></span>al@ubuntu:~/Desktop$ <b class="calibre25">rmdir yourScripts</b>
+al@ubuntu:~/Desktop$ <b class="calibre25">ls</b>
+al@ubuntu:~/Desktop$</code></pre>
+<p class="calibre23">In this example, we created an empty folder named <em class="calibre10">yourScripts</em> and then removed it.</p>
+<p class="calibre23">To delete nonempty folders (along with all the folders and files it contains), run <code class="bold">rd /s/q <var class="calibre43">[source folder]</var></code>on Windows or <code class="bold">rm &ndash;rf </code><var class="calibre35">[source folder]</var> on macOS and Linux.</p>
+<h4 id="calibre_link-735" class="calibre44">Find Programs with where and which</h4>
+<p class="bodyfirst">Running <code class="calibre9">where </code><var class="calibre35">[program]</var> on Windows or <code class="calibre9">which </code><var class="calibre35">[program]</var> on macOS and Linux tells you the exact location of the program. When you enter a command on the command line, your computer checks for the program in the folders listed in the <code class="calibre9">PATH</code> environment variable (although Windows checks the cwd first).</p>
+<p class="calibre23">These commands can tell you which executable Python program is run when you enter <code class="calibre9">python</code> in the shell. If you have multiple Python versions installed, your computer might have several executable programs of the same name. The one that is run depends on the order of folders in your <code class="calibre9">PATH</code> environment variable, and the <code class="calibre9">where</code> and <code class="calibre9">which </code>commands will output it:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al&gt;<b class="calibre25">where python</b>
+C:\Users\Al\AppData\Local\Programs\Python\Python38\python.exe</code></pre>
+<p class="calibre23">In this example, the folder name indicates that the Python version run from the shell is located at <em class="calibre10">C:\Users\Al\AppData\Local\Programs\Python\Python38\</em>.</p>
+<h4 id="calibre_link-736" class="calibre44">Clear the Terminal with cls and clear</h4>
+<p class="bodyfirst">Running <code class="calibre9">cls</code> on Windows or <code class="calibre9">clear</code> on macOS and Linux will clear all the text in the terminal window. This is useful if you simply want to start with a fresh-looking terminal window.</p>
+<h2 id="calibre_link-71" class="calibre7">Environment Variables and PATH</h2>
+<p class="bodyfirst">All running processes of a program, no matter the language in which it’s written, have a set of variables called <em class="calibre10">environment variables</em> that can store a string. Environment variables often hold systemwide settings that every program would find useful. For example, the <code class="calibre9">TEMP</code> environment variable holds the file path where any program can store temporary files. When the operating system runs a program (such as a command line), the newly created process receives its own copy of the operating system’s environment variables and values. You can change a process’s environment variables independently of the operating system’s set of environment variables. But those changes apply only to the process, not to the operating system or any other process. </p>
+<p class="calibre23"><span type="pagebreak" title="36" id="calibre_link-387" class="calibre16"></span>I discuss environment variables in this chapter because one such variable, <code class="calibre9">PATH</code>, can help you run your programs from the command line.</p>
+<h3 id="calibre_link-72" class="calibre27">Viewing Environment Variables</h3>
+<p class="bodyfirst">You can see a list of the terminal window’s environment variables by running <code class="calibre9">set</code> (on Windows) or <code class="calibre9">env</code> (on macOS and Linux) from the command line:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al&gt;<b class="calibre25">set</b>
+ALLUSERSPROFILE=C:\ProgramData
+APPDATA=C:\Users\Al\AppData\Roaming
+CommonProgramFiles=C:\Program Files\Common Files
+<var class="calibre43">--snip--</var>
+USERPROFILE=C:\Users\Al
+VBOX_MSI_INSTALL_PATH=C:\Program Files\Oracle\VirtualBox\
+windir=C:\WINDOWS</code></pre>
+<p class="calibre23">The text on the left side of the equal sign (<code class="calibre9">=</code>) is the environment variable name, and the text on the right side is the string value. Every process has its own set of environment variables, so different command lines can have different values for their environment variables.</p>
+<p class="calibre23">You can also view the value of a single environment variable with the <code class="calibre9">echo</code> command. Run <code class="calibre9"><code class="bold1">echo %HOMEPATH</code>%</code> on Windows or <code class="bold">echo $HOME</code> on macOS and Linux to view the value of the <code class="calibre9">HOMEPATH</code> or <code class="calibre9">HOME</code> environment variables, respectively, which contain the current user’s home folder. On Windows, it looks like this:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al&gt;<b class="calibre25">echo %HOMEPATH%</b>
+\Users\Al</code></pre>
+<p class="calibre23">On macOS or Linux, it looks like this:</p>
+<pre class="calibre28"><code class="calibre9">al@al-VirtualBox:~$ <b class="calibre25">echo $HOME</b>
+/home/al</code></pre>
+<p class="calibre23">If that process creates another process (such as when a command line runs the Python interpreter), that child process receives its own copy of the parent process’s environment variables. The child process can change the values of its environment variables without affecting the parent process’s environment variables, and vice versa. </p>
+<p class="calibre23">You can think of the operating system’s set of environment variables as the “master copy” from which a process copies its environment variables. The operating system’s environment variables change less frequently than a Python program’s. In fact, most users never directly touch their environment variable settings. </p>
+<h3 id="calibre_link-73" class="calibre27">Working with the PATH Environment Variable</h3>
+<p class="bodyfirst">When you enter a command, like <code class="calibre9">python</code> on Windows or <code class="calibre9">python3</code> on macOS and Linux, the terminal checks for a program with that name in the folder <span type="pagebreak" title="37" id="calibre_link-388" class="calibre16"></span>you’re currently in. If it doesn’t find it there, it will check the folders listed in the <code class="calibre9">PATH</code> environment variable.</p>
+<p class="calibre23">For example, on my Windows computer, the <em class="calibre10">python.exe</em> program file is located in the <em class="calibre10">C:\Users\Al\AppData\Local\Programs\Python\Python38</em> folder. To run it, I have to enter <code class="calibre9">C:\Users\Al\AppData\Local\Programs\Python\Python38\python.exe</code>, or switch to that folder first and then enter <code class="calibre9">python.exe</code>.</p>
+<p class="calibre23">This lengthy pathname requires a lot of typing, so instead I add this folder to the <code class="calibre9">PATH</code> environment variable. Then, when I enter <code class="calibre9">python.exe</code>, the command line searches for a program with this name in the folders listed in <code class="calibre9">PATH</code>, saving me from having to type the entire file path.</p>
+<p class="calibre23">Because environment variables can contain only a single string value, adding multiple folder names to the <code class="calibre9">PATH</code> environment variable requires using a special format. On Windows, semicolons separate the folder names. You can view the current <code class="calibre9">PATH</code> value with the <code class="calibre9">path</code> command:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al&gt;<b class="calibre25">path</b>
+C:\Path;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;
+<var class="calibre43">--snip--</var>
+C:\Users\Al\AppData\Local\Microsoft\WindowsApps</code></pre>
+<p class="calibre23">On macOS and Linux, colons separate the folder names:</p>
+<pre class="calibre28"><code class="calibre9">al@ubuntu:~$ <b class="calibre25">echo $PATH</b>
+/home/al/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin</code></pre>
+<p class="calibre23">The order of the folder names is important. If I have two files named <em class="calibre10">someProgram.exe</em> in <em class="calibre10">C:\WINDOWS\system32</em> and <em class="calibre10">C:\WINDOWS</em>, entering <code class="calibre9">someProgram.exe</code> will run the program in <em class="calibre10">C:\WINDOWS\system32</em> because that folder appears first in the <code class="calibre9">PATH</code> environment variable.</p>
+<p class="calibre23">If a program or command you enter doesn’t exist in the cwd or any of the directories listed in <code class="calibre9">PATH</code>, the command line will give you an error, such as <code class="calibre9">command not found</code> or <code class="calibre9">not recognized as an internal or external command</code>. If you didn’t make a typo, check which folder contains the program and see if it appears in the <code class="calibre9">PATH</code> environment variable.</p>
+<h3 id="calibre_link-74" class="calibre27">Changing the Command Line’s PATH Environment Variable</h3>
+<p class="bodyfirst">You can change the current terminal window’s <code class="calibre9">PATH</code> environment variable to include additional folders. The process for adding folders to <code class="calibre9">PATH</code> varies slightly between Windows and macOS/Linux. On Windows, you can run the <code class="calibre9">path</code> command to add a new folder to the current <code class="calibre9">PATH</code> value:</p>
+<pre class="calibre28"><code class="calibre9"><span class="codeannotationhang">1</span> C:\Users\Al&gt;path C:\newFolder;%PATH%
+
+<span class="codeannotationhang">2</span> C:\Users\Al&gt;path
+C:\newFolder;C:\Path;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;
+<var class="calibre43">--snip--</var>
+C:\Users\Al\AppData\Local\Microsoft\WindowsApps</code></pre>
+<p class="calibre23"><span type="pagebreak" title="38" id="calibre_link-389" class="calibre16"></span>The <code class="calibre9">%PATH%</code> part <span class="codeannotation">1</span> expands to the current value of the <code class="calibre9">PATH</code> environment variable, so you’re adding the new folder and a semicolon to the beginning of the existing <code class="calibre9">PATH</code> value. You can run the <code class="calibre9">path</code> command again to see the new value of <code class="calibre9">PATH</code><span class="codeannotation">2</span>.</p>
+<p class="calibre23">On macOS and Linux, you can set the <code class="calibre9">PATH</code> environment variable with syntax similar to an assignment statement in Python:</p>
+<pre class="calibre28"><code class="calibre9"><span class="codeannotationhang">1</span> al@al-VirtualBox:~$ PATH=/newFolder:$PATH
+<span class="codeannotationhang">2</span> al@al-VirtualBox:~$ echo $PATH
+/newFolder:/home/al/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin</code></pre>
+<p class="calibre23">The <code class="calibre9">$PATH</code> part <span class="codeannotation">1</span> expands to the current value of the <code class="calibre9">PATH</code> environment variable, so you’re adding the new folder and a colon to the existing <code class="calibre9">PATH</code> value. You can run the <code class="calibre9">echo $PATH</code> command again to see the new value of <code class="calibre9">PATH</code><span class="codeannotation">2</span>.</p>
+<p class="calibre23">But the previous two methods for adding folders to <code class="calibre9">PATH</code> apply only to the current terminal window and any programs run from it after the addition. If you open a new terminal window, it won’t have your changes. Permanently adding folders requires changing the operating system’s set of environment variables.</p>
+<h3 id="calibre_link-75" class="calibre27">Permanently Adding Folders to PATH on Windows</h3>
+<p class="bodyfirst">Windows has two sets of environment variables: <em class="calibre10">system environment variables</em> (which apply to all users) and <em class="calibre10">user environment variables</em> (which override the system environment variable but apply to the current user only). To edit them, click the Start menu and then enter <code class="bold">Edit environment variables for your account</code>, which opens the Environment Variables window, as shown in <a id="calibre_link-688" href="#calibre_link-323" class="calibre19">Figure 2-6</a>.</p>
+<p class="calibre23">Select <b class="calibre25">Path</b> from the user variable list (not the system variable list), click <b class="calibre25">Edit</b>, add the new folder name in the text field that appears (don’t forget the semicolon separator), and click <b class="calibre25">OK</b>.</p>
+<p class="calibre23">This interface isn’t the easiest to work with, so if you’re frequently editing environment variables on Windows, I recommend installing the free Rapid Environment Editor software from <a href="https://www.rapidee.com/" class="calibre19">https://www.rapidee.com/</a>. Note that after installing it, you must run this software as the administrator to edit system environment variables. Click the Start menu, type <code class="bold">Rapid Environment Editor</code>, right-click the software’s icon, and click <b class="calibre25">Run as administrator</b>.</p>
+<p class="calibre23">From the Command Prompt, you can permanently modify the system <code class="calibre9">PATH</code> variable using the <code class="calibre9">setx</code> command:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al&gt;<b class="calibre25">setx /M PATH "C:\newFolder;%PATH%"</b></code></pre>
+<p class="calibre23">You’ll need to run the Command Prompt as the administrator to run the <code class="calibre9">setx</code> command.</p>
+<span type="pagebreak" title="39" id="calibre_link-390" class="calibre16"></span><figure class="calibre29">
+<img src="images/000034.png" alt="f02006" class="calibre15" />
+<figcaption class="calibre30"><p class="calibre31"><a id="calibre_link-323" href="#calibre_link-688" class="calibre19">Figure 2-6:</a> The Environment Variables window on Windows</p></figcaption>
+</figure>
+<h3 id="calibre_link-76" class="calibre27">Permanently Adding Folders to PATH on macOS and Linux</h3>
+<p class="bodyfirst">To add folders to the <code class="calibre9">PATH</code> environment variables for all terminal windows on macOS and Linux, you’ll need to modify the <em class="calibre10">.bashrc</em> text file in your home folder and add the following line:</p>
+<pre class="calibre28"><code class="calibre9">export PATH=/newFolder:$PATH</code></pre>
+<p class="calibre23">This line modifies <code class="calibre9">PATH</code> for all future terminal windows. On macOS Catalina and later versions, the default shell program has changed from Bash to Z Shell, so you’ll need to modify <em class="calibre10">.zshrc</em> in the home folder instead.</p>
+<h2 id="calibre_link-77" class="calibre7">Running Python Programs Without the Command Line</h2>
+<p class="bodyfirst">You probably already know how to run programs from whatever launcher your operating system provides. Windows has the Start menu, macOS has the Finder and Dock, and Ubuntu Linux has Dash. Programs will add themselves to these launchers when you install them. You can also double-click a program’s icon in a file explorer app (such as File Explorer on Windows, Finder on macOS, and Files on Ubuntu Linux) to run them.</p>
+<p class="calibre23"><span type="pagebreak" title="40" id="calibre_link-391" class="calibre16"></span>But these methods don’t apply to your Python programs. Often, double-clicking a <em class="calibre10">.py</em> file will open the Python program in an editor or IDE instead of running it. And if you try running Python directly, you’ll just open the Python interactive shell. The most common way of running a Python program is opening it in an IDE and clicking the Run menu option or executing it in the command line. Both methods are tedious if you simply want to launch a Python program.</p>
+<p class="calibre23">Instead, you can set up your Python programs to easily run them from your operating system’s launcher, just like other applications you’ve installed. The following sections detail how to do this for your particular operating system.</p>
+<h3 id="calibre_link-78" class="calibre27">Running Python Programs on Windows</h3>
+<p class="bodyfirst">On Windows, you can run Python programs in a few other ways. Instead of opening a terminal window, you can press <span class="keycaps">win</span>-R to open the Run dialog and enter <code class="bold">py</code><var class="calibre35"> C:\path\to\yourScript.py</var>, as shown in <a id="calibre_link-689" href="#calibre_link-324" class="calibre19">Figure 2-7</a>. The <em class="calibre10">py.exe</em> program is installed at <em class="calibre10">C:\Windows\py.exe</em>, which is already in the <code class="calibre9">PATH</code> environment variable, and the <em class="calibre10">.exe</em> file extension is optional when you are running programs.</p>
+<figure class="calibre29">
+<img src="images/000027.png" alt="f02007" class="calibre15" />
+<figcaption class="calibre30"><p class="calibre31"><a id="calibre_link-324" href="#calibre_link-689" class="calibre19">Figure 2-7:</a> The Run dialog on Windows</p></figcaption>
+</figure>
+<p class="calibre23">Still, this method requires you to enter your script’s full path. Also, the terminal window that displays the program’s output will automatically close when the program ends, and you might miss some output. </p>
+<p class="calibre23">You can solve these problems by creating a <em class="calibre10">batch script</em>, which is a small text file with the <em class="calibre10">.bat</em> file extension that can run multiple terminal commands at once, much like a shell script in macOS and Linux. You can use a text editor, such as Notepad, to create these files. Make a new text file containing the following two lines:</p>
+<pre class="calibre28"><code class="calibre9">@py.exe <var class="calibre43">C:\path\to\yourScript.py</var> %*
+@pause</code></pre>
+<p class="calibre23"><span type="pagebreak" title="41" id="calibre_link-392" class="calibre16"></span>Replace this path with the absolute path to your program, and save this file with a <em class="calibre10">.bat</em> file extension (for example, <em class="calibre10">yourScript.bat</em>). The <code class="calibre9">@</code> sign at the start of each command prevents it from being displayed in the terminal window, and the <code class="calibre9">%*</code> forwards any command line arguments entered after the batch filename to the Python script. The Python script, in turn, reads the command line arguments in the <code class="calibre9">sys.argv</code> list. This batch file will spare you from having to type the Python program’s full absolute path every time you want to run it. The <code class="calibre9">@pause</code> command adds <code class="calibre9">Press any key to continue...</code> to the end of the Python script to prevent the program’s window from disappearing too quickly. </p>
+<p class="calibre23">I recommend you place all of your batch and <em class="calibre10">.py</em> files in a single folder that already exists in the <code class="calibre9">PATH</code> environment variable, such as your home folder at <em class="calibre10">C:\Users\&lt;USERNAME&gt;</em>. With a batch file set up, you can run your Python script by simply pressing <span class="keycaps">win</span>-R, entering the name of your batch file (entering the <em class="calibre10">.bat</em> file extension is optional), and pressing <span class="keycaps">Enter</span>.</p>
+<h3 id="calibre_link-79" class="calibre27">Running Python Programs on macOS</h3>
+<p class="bodyfirst">On macOS, you can create a shell script to run your Python scripts by creating a text file with the <em class="calibre10">.command</em> file extension. Make one in a text editor, such as TextEdit, and add the following content:</p>
+<pre class="calibre28"><code class="calibre9">#!/usr/bin/env bash
+python3 <var class="calibre43">/path/to/yourScript.py</var></code></pre>
+<p class="calibre23">Save this file in your home folder. In a terminal window, make this shell script executable by running <code class="calibre9">chmod u+x </code><var class="calibre35">yourScript.command</var>. Now you should be able to click the Spotlight icon (or press <span class="keycaps">Command</span>-<span class="keycaps">Space</span>) and enter the name of your shell script to run it. The shell script, in turn, will run your Python script.</p>
+<h3 id="calibre_link-80" class="calibre27">Running Python Programs on Ubuntu Linux</h3>
+<p class="bodyfirst">There isn’t a quick way to run your Python scripts on Ubuntu Linux like there is in Windows and macOS, although you can shorten some of the steps involved. First, make sure your <em class="calibre10">.py</em> file is in your home folder. Second, add this line as the first line of your <em class="calibre10">.py</em> file:</p>
+<pre class="calibre28"><code class="calibre9">#!/usr/bin/env python3</code></pre>
+<p class="calibre23">This is called a <em class="calibre10">shebang line</em>, and it tells Ubuntu that when you run this file, you want to use <code class="calibre9">python3</code> to run it. Third, add the execute permission to this file by running the <code class="calibre9">chmod</code> command from the terminal:</p>
+<pre class="calibre28"><code class="calibre9">al@al-VirtualBox:~$ <b class="calibre25">chmod u+x yourScript.py</b></code></pre>
+<p class="calibre23">Now whenever you want to quickly run your Python script, you can press <span class="keycaps">Ctrl-Alt-</span>T to open a new terminal window. This terminal will be <span type="pagebreak" title="42" id="calibre_link-393" class="calibre16"></span>set to the home folder, so you can simply enter <code class="calibre9">./yourScript.py</code> to run this script. The <code class="calibre9">./</code> is required because it tells Ubuntu that <em class="calibre10">yourScript.py</em> exists in the cwd (the home folder, in this case).</p>
+<h2 id="calibre_link-81" class="calibre7">Summary</h2>
+<p class="bodyfirst">Environment setup involves all the steps necessary to get your computer into a state where you can easily run your programs. It requires you to know several low-level concepts about how your computer works, such as the filesystem, file paths, processes, the command line, and environment variables.</p>
+<p class="calibre23">The filesystem is how your computer organizes all the files on your computer. A file is a complete, absolute file path or a file path relative to the cwd. You’ll navigate the filesystem through the command line. The command line has several other names, such as terminal, shell, and console, but they all refer to the same thing: the text-based program that lets you enter commands. Although the command line and the names of common commands are slightly different between Windows and macOS/Linux, they effectively perform the same tasks.</p>
+<p class="calibre23">When you enter a command or program name, the command line checks the folders listed in the <code class="calibre9">PATH</code> environment variable for the name. This is important to understand to figure out any <code class="calibre9">command not found</code> errors you might encounter. The steps for adding new folders to the <code class="calibre9">PATH</code> environment variable are also slightly different between Windows and macOS/Linux.</p>
+<p class="calibre23">Becoming comfortable with the command line takes time because there are so many commands and command line arguments to learn. Don’t worry if you spend a lot of time searching for help online; this is what experienced software developers do every day.</p>
+</section>
+</div>
+
+
+<div type="bodymatter part" class="calibre1" id="calibre_link-82">
+<section class="toclist">
+<header class="calibre12">
+<h1 class="parttitle">
+<span class="partnumber"><span type="pagebreak" title="43" id="calibre_link-394" class="calibre26"></span>Part 2</span><br class="calibre18" />
+<span class="parttitle1">Best Practices, Tools, and Techniques</span>
+</h1>
+</header>
+</section>
+</div>
+
+
+
+<a href="chapter1.html">Prev: Chapter 1 - Dealing with Errors and Asking for Help</a> | <a href="chapter3.html">Next: Chapter 3 - Code Formatting with Black</a>
+</body></html>

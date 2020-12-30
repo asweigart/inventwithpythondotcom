@@ -1,0 +1,824 @@
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-263">
+<section class="toclist">
+<header class="calibre12">
+<h1 class="chaptertitle">
+<span class="partnumber"><span type="pagebreak" title="247" id="calibre_link-581" class="calibre26"></span>14</span><br class="calibre18" />
+<span class="parttitle1">Practice Projects</span>
+</h1>
+</header>
+<figure class="opener"><img src="images/000017.png" alt="" class="calibre15" /></figure><p class="chapterintro">So far, this book has taught you techniques for writing readable, Pythonic code. Let’s put these techniques into practice by looking at the source code for two command line games: the Tower of Hanoi and Four-in-a-Row. </p>
+<p class="calibre22">These projects are short and text-based to keep their scope small, but they demonstrate the principles this book outlines so far. I formatted the code using the Black tool described in “Black: The Uncompromising Code Formatter” on page 53. I chose the variable names according to the guidelines in Chapter 4. I wrote the code in a Pythonic style, as described in Chapter 6. In addition, I wrote comments and docstrings as described in Chapter 11. Because the programs are small and we haven’t yet covered object-oriented programming (OOP), I wrote these two projects without the classes you’ll learn more about in Chapters 15 to 17.</p>
+<p class="calibre23">This chapter presents the full source code for these two projects along with a detailed breakdown of the code. These explanations aren’t so much for <em class="calibre10">how</em> the code works (a basic understanding of Python syntax is all that’s needed for that), but <em class="calibre10">why</em> the code was written the way it was. Still, different <span type="pagebreak" title="248" id="calibre_link-582" class="calibre16"></span>software developers have different opinions on how to write code and what they deem as <em class="calibre10">Pythonic</em>. You’re certainly welcome to question and critique the source code in these projects.</p>
+<p class="calibre23">After reading through a project in this book, I recommend typing the code yourself and running the programs a few times to understand how they work. Then try to reimplement the programs from scratch. Your code doesn’t have to match the code in this chapter, but rewriting the code will give you a sense of the decision making and design trade-offs that programming requires.</p>
+<h2 id="calibre_link-264" class="calibre7">The Tower of Hanoi</h2>
+<p class="bodyfirst">The Tower of Hanoi puzzle uses a stack of disks of different sizes. The disks have holes in their centers, so you can place them over one of three poles (<a id="calibre_link-700" href="#calibre_link-341" class="calibre19">Figure 14-1</a>). To solve the puzzle, the player must move the stack of disks to one of the other poles. There are three restrictions:</p>
+<ol class="decimal">
+<li value="1" class="calibre11">The player can move only one disk at a time.</li>
+<li value="2" class="calibre11">The player can only move disks to and from the top of a tower.</li>
+<li value="3" class="calibre11">The player can never place a larger disk on top of a smaller disk.</li>
+</ol>
+<figure class="calibre29">
+<img src="images/000026.png" alt="f14001" class="calibre15" />
+<figcaption class="calibre30"><p class="calibre31"><a id="calibre_link-341" href="#calibre_link-700" class="calibre19">Figure 14-1:</a> A physical Tower of Hanoi puzzle set</p></figcaption>
+</figure>
+<p class="calibre23">Solving this puzzle is a common computer science problem used for teaching recursive algorithms. Our program won’t solve this puzzle; rather, it will present the puzzle to a human player to solve. You’ll find more information about the Tower of Hanoi at <a href="https://en.wikipedia.org/wiki/Tower_of_Hanoi" class="calibre19">https://en.wikipedia.org/wiki/Tower_of_Hanoi</a>.</p>
+<h3 id="calibre_link-265" class="calibre27"><span type="pagebreak" title="249" id="calibre_link-583" class="calibre37"></span>The Output </h3>
+<p class="bodyfirst">The Tower of Hanoi program displays the towers as ASCII art by using text characters to represent the disks. It might look primitive compared to modern apps, but this approach keeps the implementation simple, because we only need <code class="calibre9">print()</code> and <code class="calibre9">input()</code> calls to interact with the user. When you run the program, the output will look something like the following. The text the player enters is in bold.</p>
+<pre class="calibre28"><code class="calibre9">THE TOWER OF HANOI, by Al Sweigart al@inventwithpython.com
+
+Move the tower of disks, one disk at a time, to another tower. Larger
+disks cannot rest on top of a smaller disk.
+
+More info at https://en.wikipedia.org/wiki/Tower_of_Hanoi
+
+     ||          ||          ||
+    @_1@         ||          ||
+   @@_2@@        ||          ||
+  @@@_3@@@       ||          ||
+ @@@@_4@@@@      ||          ||
+@@@@@_5@@@@@     ||          ||
+      A           B           C
+
+Enter the letters of "from" and "to" towers, or QUIT.
+(e.g., AB to moves a disk from tower A to tower B.)
+
+&gt; <b class="calibre25">AC</b>
+     ||          ||          ||
+     ||          ||          ||
+   @@_2@@        ||          ||
+  @@@_3@@@       ||          ||
+ @@@@_4@@@@      ||          ||
+@@@@@_5@@@@@     ||         @_1@
+      A           B           C
+
+Enter the letters of "from" and "to" towers, or QUIT.
+(e.g., AB to moves a disk from tower A to tower B.)
+
+<var class="calibre43">--snip--</var>
+
+     ||          ||          ||
+     ||          ||         @_1@
+     ||          ||        @@_2@@
+     ||          ||       @@@_3@@@
+     ||          ||      @@@@_4@@@@
+     ||          ||     @@@@@_5@@@@@
+      A           B           C
+
+You have solved the puzzle! Well done!</code></pre>
+<p class="calibre23">For <em class="calibre10">n</em> disks, it takes a minimum of 2<em class="calibre10">n</em><sup class="calibre53"></sup> &ndash; 1 moves to solve the Tower of Hanoi. So this five-disk tower requires 31 steps: AC, AB, CB, AC, BA, BC, AC, AB, CB, CA, BA, CB, AC, AB, CB, AC, BA, BC, AC, BA, CB, CA, BA, <span type="pagebreak" title="250" id="calibre_link-584" class="calibre16"></span>BC, AC, AB, CB, AC, BA, BC, and finally AC. If you want a greater challenge to solve on your own, you can increase the <code class="calibre9">TOTAL_DISKS</code> variable in the program from <code class="calibre9">5</code> to <code class="calibre9">6</code>.</p>
+<h3 id="calibre_link-266" class="calibre27">The Source Code</h3>
+<p class="bodyfirst">Open a new file in your editor or IDE, and enter the following code. Save it as <em class="calibre10">towerofhanoi.py</em>.</p>
+<pre class="calibre28"><code class="calibre9">"""THE TOWER OF HANOI, by Al Sweigart al@inventwithpython.com
+A stack-moving puzzle game."""
+
+import copy
+import sys
+
+TOTAL_DISKS = 5  # More disks means a more difficult puzzle.
+
+# Start with all disks on tower A:
+SOLVED_TOWER = list(range(TOTAL_DISKS, 0, -1))
+
+
+def main():
+    """Runs a single game of The Tower of Hanoi."""
+    print(
+        """THE TOWER OF HANOI, by Al Sweigart al@inventwithpython.com
+
+Move the tower of disks, one disk at a time, to another tower. Larger
+disks cannot rest on top of a smaller disk.
+
+More info at https://en.wikipedia.org/wiki/Tower_of_Hanoi
+"""
+    )
+
+    """The towers dictionary has keys <code class="calibre42">"</code>A<code class="calibre42">"</code>, <code class="calibre42">"</code>B<code class="calibre42">"</code>, and <code class="calibre42">"</code>C<code class="calibre42">"</code> and values
+    that are lists representing a tower of disks. The list contains
+    integers representing disks of different sizes, and the start of
+    the list is the bottom of the tower. For a game with 5 disks,
+    the list [5, 4, 3, 2, 1] represents a completed tower. The blank
+    list [] represents a tower of no disks. The list [1, 3] has a
+    larger disk on top of a smaller disk and is an invalid
+    configuration. The list [3, 1] is allowed since smaller disks
+    can go on top of larger ones."""
+    towers = {"A": copy.copy(SOLVED_TOWER), "B": [], "C": []}
+
+    while True:  # Run a single turn on each iteration of this loop.
+        # Display the towers and disks:
+        displayTowers(towers)
+
+        # Ask the user for a move:
+        fromTower, toTower = getPlayerMove(towers)
+
+        # Move the top disk from fromTower to toTower:
+        disk = towers[fromTower].pop()
+        towers[toTower].append(disk)
+
+<span type="pagebreak" title="251" id="calibre_link-585" class="calibre16"></span>        # Check if the user has solved the puzzle:
+        if SOLVED_TOWER in (towers["B"], towers["C"]):
+            displayTowers(towers)  # Display the towers one last time.
+            print("You have solved the puzzle! Well done!")
+            sys.exit()
+
+
+def getPlayerMove(towers):
+    """Asks the player for a move. Returns (fromTower, toTower)."""
+
+    while True:  # Keep asking player until they enter a valid move.
+        print('Enter the letters of "from" and "to" towers, or QUIT.')
+        print("(e.g., AB to moves a disk from tower A to tower B.)")
+        print()
+        response = input("&gt; ").upper().strip()
+
+        if response == "QUIT":
+            print("Thanks for playing!")
+            sys.exit()
+
+        # Make sure the user entered valid tower letters:
+        if response not in ("AB", "AC", "BA", "BC", "CA", "CB"):
+            print("Enter one of AB, AC, BA, BC, CA, or CB.")
+            continue  # Ask player again for their move.
+
+        # Use more descriptive variable names:
+        fromTower, toTower = response[0], response[1]
+
+        if len(towers[fromTower]) == 0:
+            # The "from" tower cannot be an empty tower:
+            print("You selected a tower with no disks.")
+            continue  # Ask player again for their move.
+        elif len(towers[toTower]) == 0:
+            # Any disk can be moved onto an empty "to" tower:
+            return fromTower, toTower
+        elif towers[toTower][-1] &lt; towers[fromTower][-1]:
+            print("Can't put larger disks on top of smaller ones.")
+            continue  # Ask player again for their move.
+        else:
+            # This is a valid move, so return the selected towers:
+            return fromTower, toTower
+
+
+def displayTowers(towers):
+    """Display the three towers with their disks."""
+
+    # Display the three towers:
+    for level in range(TOTAL_DISKS, -1, -1):
+        for tower in (towers["A"], towers["B"], towers["C"]):
+            if level &gt;= len(tower):
+                displayDisk(0)  # Display the bare pole with no disk.
+            else:
+                displayDisk(tower[level])  # Display the disk.
+        print()
+
+<span type="pagebreak" title="252" id="calibre_link-586" class="calibre16"></span>    # Display the tower labels A, B, and C:
+    emptySpace = " " * (TOTAL_DISKS)
+    print("{0} A{0}{0} B{0}{0} C\n".format(emptySpace))
+
+
+def displayDisk(width):
+    """Display a disk of the given width. A width of 0 means no disk."""
+    emptySpace = " " * (TOTAL_DISKS - width)
+
+    if width == 0:
+        # Display a pole segment without a disk:
+        print(f"{emptySpace}||{emptySpace}", end="")
+    else:
+        # Display the disk:
+        disk = "@" * width
+        numLabel = str(width).rjust(2, "_")
+        print(f"{emptySpace}{disk}{numLabel}{disk}{emptySpace}", end="")
+
+
+# If this program was run (instead of imported), run the game:
+if __name__ == "__main__":
+    main()</code></pre>
+<p class="calibre23">Run this program and play a few games to get an idea of what this program does before reading the explanation of the source code. To check for typos, copy and paste it to the online diff tool at <a href="https://inventwithpython.com/beyond/diff/" class="calibre19">https://inventwithpython.com/beyond/diff/</a>.</p>
+<h3 id="calibre_link-267" class="calibre27">Writing the Code</h3>
+<p class="bodyfirst">Let’s take a closer look at the source code to see how it follows the best practices and patterns described in this book. </p>
+<p class="calibre23">We’ll begin at the top of the program:</p>
+<pre class="calibre28"><code class="calibre9">"""THE TOWER OF HANOI, by Al Sweigart al@inventwithpython.com
+A stack-moving puzzle game."""</code></pre>
+<p class="calibre23">The program starts with a multiline comment that serves as a docstring for the <code class="calibre9">towerofhanoi</code> module. The built-in <code class="calibre9">help()</code> function will use this information to describe the module:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">import towerofhanoi</b>
+&gt;&gt;&gt; <b class="calibre25">help(towerofhanoi)</b>
+Help on module towerofhanoi:
+
+NAME
+    towerofhanoi
+
+DESCRIPTION
+    THE TOWER OF HANOI, by Al Sweigart al@inventwithpython.com
+    A stack-moving puzzle game.
+
+<span type="pagebreak" title="253" id="calibre_link-587" class="calibre16"></span>FUNCTIONS
+    displayDisk(width)
+        Display a single disk of the given width.
+<var class="calibre43">--snip--</var></code></pre>
+<p class="calibre23">You can add more words, even paragraphs of information, to the module’s docstring if you need to. I’ve written only a small amount here because the program is so simple. </p>
+<p class="calibre23">After the module docstring are the <code class="calibre9">import</code> statements:</p>
+<pre class="calibre28"><code class="calibre9">import copy
+import sys</code></pre>
+<p class="calibre23">Black formats these as separate statements rather than a single one, such as <code class="calibre9">import copy, sys</code>. This makes the addition or removal of imported modules easier to see in version control systems, such as Git, that track changes programmers make.</p>
+<p class="calibre23">Next, we define the constants this program will need:</p>
+<pre class="calibre28"><code class="calibre9">TOTAL_DISKS = 5  # More disks means a more difficult puzzle.
+
+# Start with all disks on tower A:
+SOLVED_TOWER = list(range(TOTAL_DISKS, 0, -1))</code></pre>
+<p class="calibre23">We define these near the top of the file to group them together and make them global variables. We’ve written their names in capitalized <code class="calibre9">snake_case</code> to mark them as constants.</p>
+<p class="calibre23">The <code class="calibre9">TOTAL_DISKS</code> constant indicates how many disks the puzzle has. The <code class="calibre9">SOLVED_TOWER</code> variable is an example of a list that contains a solved tower: it contains every disk with the largest at the bottom and the smallest at the top. We generate this value from the <code class="calibre9">TOTAL_DISKS</code> value, and for five disks it’s <code class="calibre9">[5, 4, 3, 2, 1]</code>.</p>
+<p class="calibre23">Notice that there are no type hints in this file. The reason is that we can infer the types of all variables, parameters, and return values from the code. For example, we’ve assigned the <code class="calibre9">TOTAL_DISKS</code> constant the integer value <code class="calibre9">5</code>. From this, type checkers, such as Mypy, would infer that <code class="calibre9">TOTAL_DISKS</code> should contain integers only.</p>
+<p class="calibre23">We define a <code class="calibre9">main()</code> function, which the program calls near the bottom of the file:</p>
+<pre class="calibre28"><code class="calibre9">def main():
+    """Runs a single game of The Tower of Hanoi."""
+    print(
+        """THE TOWER OF HANOI, by Al Sweigart al@inventwithpython.com
+
+Move the tower of disks, one disk at a time, to another tower. Larger
+disks cannot rest on top of a smaller disk.
+
+More info at https://en.wikipedia.org/wiki/Tower_of_Hanoi
+"""
+    )</code></pre>
+<p class="calibre23"><span type="pagebreak" title="254" id="calibre_link-588" class="calibre16"></span>Functions can have docstrings, too. Notice the docstring for <code class="calibre9">main()</code> below the <code class="calibre9">def</code> statement. You can view this docstring by running <code class="calibre9">import towerofhanoi</code> and <code class="calibre9">help(towerofhanoi.main)</code> from the interactive shell.</p>
+<p class="calibre23">Next, we write a comment that extensively describes the data structure we use to represent the tower, because it forms the core of how this program works: </p>
+<pre class="calibre28"><code class="calibre9">    """The towers dictionary has keys <code class="calibre42">"</code>A<code class="calibre42">"</code>, <code class="calibre42">"</code>B<code class="calibre42">"</code>, and <code class="calibre42">"</code>C<code class="calibre42">"</code> and values
+    that are lists representing a tower of disks. The list contains
+    integers representing disks of different sizes, and the start of
+    the list is the bottom of the tower. For a game with 5 disks,
+    the list [5, 4, 3, 2, 1] represents a completed tower. The blank
+    list [] represents a tower of no disks. The list [1, 3] has a
+    larger disk on top of a smaller disk and is an invalid
+    configuration. The list [3, 1] is allowed since smaller disks
+    can go on top of larger ones."""
+    towers = {"A": copy.copy(SOLVED_TOWER), "B": [], "C": []}</code></pre>
+<p class="calibre23">We use the <code class="calibre9">SOLVED_TOWER</code> list as a <em class="calibre10">stack</em>, one of the simplest data structures in software development. A stack is an ordered list of values altered only through adding (also called <em class="calibre10">pushing</em>) or removing (also called <em class="calibre10">popping</em>) values from the <em class="calibre10">top</em> of the stack. This data structure perfectly represents the tower in our program. We can turn a Python list into a stack if we use the <code class="calibre9">append()</code> method for pushing and the <code class="calibre9">pop()</code> method for popping, and avoid altering the list in any other way. We’ll treat the end of the list as the top of the stack. </p>
+<p class="calibre23">Each integer in the <code class="calibre9">towers</code> list represents a single disk of a certain size. For example, in a game with five disks, the list <code class="calibre9">[5, 4, 3, 2, 1]</code> would represent a full stack of disks from the largest (<code class="calibre9">5</code>) at the bottom to the smallest (<code class="calibre9">1</code>) at the top. </p>
+<p class="calibre23">Notice that our comment also provides examples of a valid and invalid tower stack.</p>
+<p class="calibre23">Inside the <code class="calibre9">main()</code> function, we write an infinite loop that runs a single turn of our puzzle game:</p>
+<pre class="calibre28"><code class="calibre9">    while True:  # Run a single turn on each iteration of this loop.
+        # Display the towers and disks:
+        displayTowers(towers)
+
+        # Ask the user for a move:
+        fromTower, toTower = getPlayerMove(towers)
+
+        # Move the top disk from fromTower to toTower:
+        disk = towers[fromTower].pop()
+        towers[toTower].append(disk)</code></pre>
+<p class="calibre23">In a single turn, the player views the current state of the towers and enters a move. The program then updates the <code class="calibre9">towers</code> data structure. We’ve hid the details of these tasks in the <code class="calibre9">displayTowers()</code> and <code class="calibre9">getPlayerMove()</code> functions. These descriptive function names allow the <code class="calibre9">main()</code> function to provide a general overview of what the program does.</p>
+<p class="calibre23"><span type="pagebreak" title="255" id="calibre_link-589" class="calibre16"></span>The next lines check whether the player has solved the puzzle by comparing the complete tower in <code class="calibre9">SOLVED_TOWER</code> to <code class="calibre9">towers["B"]</code> and <code class="calibre9">towers["C"]</code>:</p>
+<pre class="calibre28"><code class="calibre9">        # Check if the user has solved the puzzle:
+        if SOLVED_TOWER in (towers["B"], towers["C"]):
+            displayTowers(towers)  # Display the towers one last time.
+            print("You have solved the puzzle! Well done!")
+            sys.exit()</code></pre>
+<p class="calibre23">We don’t compare it to <code class="calibre9">towers["A"]</code>, because that pole begins with an already complete tower; a player needs to form the tower on the B or C poles to solve the puzzle. Note that we reuse <code class="calibre9">SOLVED_TOWER</code> to make the starting towers and check whether the player solved the puzzle. Because <code class="calibre9">SOLVED_TOWER</code> is a constant, we can trust that it will always have the value we assigned to it at the beginning of the source code.</p>
+<p class="calibre23">The condition we use is equivalent to but shorter than <code class="calibre9">SOLVED_TOWER == towers["B"] or SOLVED_TOWER == towers["C"]</code>, a Python idiom we covered in Chapter 6. If this condition is <code class="calibre9">True</code>, the player has solved the puzzle, and we end the program. Otherwise, we loop back for another turn.</p>
+<p class="calibre23">The <code class="calibre9">getPlayerMove()</code> function asks the player for a disk move and validates the move against the game rules:</p>
+<pre class="calibre28"><code class="calibre9">def getPlayerMove(towers):
+    """Asks the player for a move. Returns (fromTower, toTower)."""
+    while True:  # Keep asking player until they enter a valid move.
+        print('Enter the letters of "from" and "to" towers, or QUIT.')
+        print(<code class="calibre42">"</code>(e.g., AB to moves a disk from tower A to tower B.)<code class="calibre42">"</code>)
+        print()
+        response = input(<code class="calibre42">"</code>&gt; <code class="calibre42">"</code>).upper().strip()</code></pre>
+<p class="calibre23">We start an infinite loop that continues looping until either a <code class="calibre9">return</code> statement causes the execution to leave the loop and function or a <code class="calibre9">sys.exit()</code> call terminates the program. The first part of the loop asks the player to enter a move by specifying <em class="calibre10">from</em> and <em class="calibre10">to</em> towers.</p>
+<p class="calibre23">Notice the <code class="calibre9">input("&gt; ").upper().strip()</code> instruction that receives keyboard input from the player. The <code class="calibre9">input("&gt; ")</code> call accepts text input from the player by presenting a <code class="calibre9">&gt;</code> prompt. This symbol indicates that the player should enter something. If the program didn’t present a prompt, the player might momentarily think the program had frozen. </p>
+<p class="calibre23">We call the <code class="calibre9">upper()</code> method on the string returned from <code class="calibre9">input()</code> so it returns an uppercase form of the string. This allows the player to enter either uppercase or lowercase tower labels, such as <code class="calibre9">'a'</code> or <code class="calibre9">'A'</code> for tower A. In turn, the uppercase string’s <code class="calibre9">strip()</code> method is called, returning a string without any whitespace on either side in case the user accidentally added a space when entering their move. This user friendliness makes our program slightly easier for players to use.</p>
+<p class="calibre23">Still in the <code class="calibre9">getPlayerMove()</code> function, we check the input the user enters:</p>
+<pre class="calibre28"><code class="calibre9">        if response == "QUIT":
+            print("Thanks for playing!")
+<span type="pagebreak" title="256" id="calibre_link-590" class="calibre16"></span>            sys.exit()
+
+        # Make sure the user entered valid tower letters:
+        if response not in ("AB", "AC", "BA", "BC", "CA", "CB"):
+            print("Enter one of AB, AC, BA, BC, CA, or CB.")
+            continue  # Ask player again for their move.</code></pre>
+<p class="calibre23">If the user enters <code class="calibre9">'QUIT'</code> (in any case, or even with spaces at the beginning or end of the string, due to the calls to <code class="calibre9">upper()</code> and <code class="calibre9">strip()</code>), the program terminates. We could have made <code class="calibre9">getPlayerMove()</code> return <code class="calibre9">'QUIT'</code> to indicate to the caller that it should call <code class="calibre9">sys.exit()</code>, rather than have <code class="calibre9">getPlayerMove()</code> call <code class="calibre9">sys.exit()</code>. But this would complicate the return value of <code class="calibre9">getPlayerMove()</code>: it would return either a tuple of two strings (for the player’s move) or a single <code class="calibre9">'QUIT'</code> string. A function that returns values of a single data type is easier to understand than a function that can return values of many possible types. I discussed this in “Return Values Should Always Have the Same Data Type” on page 177.</p>
+<p class="calibre23">Between the three towers, only six to-from tower combinations are possible. Despite the fact that we hardcoded all six values in the condition that checks the move, the code is much easier to read than something like <code class="calibre9">len(response) != 2 or response[0] not in 'ABC' or response[1] not in 'ABC'</code><code class="calibre9">or response[0] == response[1]</code>. Given these circumstances, the hardcoding approach is the most straightforward.</p>
+<p class="calibre23">Generally, it’s considered bad practice to hardcode values such as <code class="calibre9">"AB"</code>, <code class="calibre9">"AC"</code>, and other values as magic values, which are valid only as long as the program has three poles. But although we might want to adjust the number of disks by changing the <code class="calibre9">TOTAL_DISKS</code> constant, it’s highly unlikely that we’ll add more poles to the game. Writing out every possible pole move on this line is fine.</p>
+<p class="calibre23">We create two new variables, <code class="calibre9">fromTower</code> and <code class="calibre9">toTower</code>, as descriptive names for the data. They don’t serve a functional purpose, but they make the code easier to read than <code class="calibre9">response[0]</code> and <code class="calibre9">response[1]</code>:</p>
+<pre class="calibre28"><code class="calibre9">        # Use more descriptive variable names:
+        fromTower, toTower = response[0], response[1]</code></pre>
+<p class="calibre23">Next, we check whether or not the selected towers constitute a legal move:</p>
+<pre class="calibre28"><code class="calibre9">        if len(towers[fromTower]) == 0:
+            # The "from" tower cannot be an empty tower:
+            print("You selected a tower with no disks.")
+            continue  # Ask player again for their move.
+        elif len(towers[toTower]) == 0:
+            # Any disk can be moved onto an empty "to" tower:
+            return fromTower, toTower
+        elif towers[toTower][-1] &lt; towers[fromTower][-1]:
+            print("Can't put larger disks on top of smaller ones.")
+            continue  # Ask player again for their move.</code></pre>
+<p class="calibre23"><span type="pagebreak" title="257" id="calibre_link-591" class="calibre16"></span>If not, a <code class="calibre9">continue</code> statement causes the execution to move back to the beginning of the loop, which asks the player to enter their move again. Note that we check whether <code class="calibre9">toTower</code> is empty; if it is, we return <code class="calibre9">fromTower, toTower</code> to emphasize that the move was valid, because you can always put a disk on an empty pole. These first two conditions ensure that by the time the third condition is checked, <code class="calibre9">towers[toTower]</code> and <code class="calibre9">towers[fromTower]</code> won’t be empty or cause an <code class="calibre9">IndexError</code>. We’ve ordered these conditions in such a way to prevent <code class="calibre9">IndexError</code> or additional checking.</p>
+<p class="calibre23">It’s important that your programs handle any invalid input from the user or potential error cases. Users might not know what to enter, or they might make typos. Similarly, files could unexpectedly go missing, or databases could crash. Your programs need to be resilient to the exceptional cases; otherwise, they’ll crash unexpectedly or cause subtle bugs later on.</p>
+<p class="calibre23">If none of the previous conditions are <code class="calibre9">True</code>, <code class="calibre9">getPlayerMove()</code> returns <code class="calibre9">fromTower, toTower</code>:</p>
+<pre class="calibre28"><code class="calibre9">        else:
+            # This is a valid move, so return the selected towers:
+            return fromTower, toTower</code></pre>
+<p class="calibre23">In Python, <code class="calibre9">return</code> statements always return a single value. Although this <code class="calibre9">return</code> statement looks like it returns two values, Python actually returns a single tuple of two values, which is equivalent to <code class="calibre9">return (fromTower, toTower)</code>. Python programmers often omit the parentheses in this context. The parentheses don’t define a tuple as much as the commas do.</p>
+<p class="calibre23">Notice that the program calls the <code class="calibre9">getPlayerMove()</code> function only once from the <code class="calibre9">main()</code> function. The function doesn’t save us from duplicate code, which is the most common purpose for using one. There’s no reason we couldn’t put all the code in <code class="calibre9">getPlayerMove()</code> in the <code class="calibre9">main()</code> function. But we can also use functions as a way to organize code into separate units, which is how we’re using <code class="calibre9">getPlayerMove()</code>. Doing so prevents the <code class="calibre9">main()</code> function from becoming too long and unwieldy. </p>
+<p class="calibre23">The <code class="calibre9">displayTowers()</code> function displays the disks on towers A, B, and C in the <code class="calibre9">towers</code> argument:</p>
+<pre class="calibre28"><code class="calibre9">def displayTowers(towers):
+    """Display the three towers with their disks."""
+
+    # Display the three towers:
+    for level in range(TOTAL_DISKS, -1, -1):
+        for tower in (towers["A"], towers["B"], towers["C"]):
+            if level &gt;= len(tower):
+                displayDisk(0)  # Display the bare pole with no disk.
+            else:
+                displayDisk(tower[level])  # Display the disk.
+        print()</code></pre>
+<p class="calibre23">It relies on the <code class="calibre9">displayDisk()</code> function, which we’ll cover next, to display each disk in the tower. The <code class="calibre9">for level</code> loop checks every possible disk for a tower, and the <code class="calibre9">for tower</code> loop checks towers A, B, and C.</p>
+<p class="calibre23"><span type="pagebreak" title="258" id="calibre_link-592" class="calibre16"></span>The <code class="calibre9">displayTowers()</code> function calls <code class="calibre9">displayDisk()</code> to display each disk at a specific width, or if <code class="calibre9">0</code> is passed, the pole with no disk:</p>
+<pre class="calibre28"><code class="calibre9">    # Display the tower labels A, B, and C:
+    emptySpace = ' ' * (TOTAL_DISKS)
+    print('{0} A{0}{0} B{0}{0} C\n'.format(emptySpace))</code></pre>
+<p class="calibre23">We display the A, B, and C labels onscreen. The player needs this information to distinguish between the towers and to reinforce that the towers are labeled A, B, and C rather than 1, 2, and 3 or Left, Middle, and Right. I chose not to use 1, 2, and 3 for the tower labels to prevent players from confusing these numbers with the numbers used for the disks’ sizes.</p>
+<p class="calibre23">We set the <code class="calibre9">emptySpace</code> variable to the number of spaces to place in between each label, which in turn is based on <code class="calibre9">TOTAL_DISKS</code>, because the more disks in the game, the wider apart the poles are. Rather than use an f-string, as in <code class="calibre9">print(f'{emptySpace} A{emptySpace}{emptySpace} B{emptySpace}{emptySpace} C\n')</code>, we use the <code class="calibre9">format()</code> string method. This allows us to use the same <code class="calibre9">emptySpace</code> argument wherever <code class="calibre9">{0}</code> appears in the associated string, producing shorter and more readable code than the f-string version.</p>
+<p class="calibre23">The <code class="calibre9">displayDisk()</code> function displays a single disk along with its width. If no disk is present, it displays just the pole:</p>
+<pre class="calibre28"><code class="calibre9">def displayDisk(width):
+    """Display a disk of the given width. A width of 0 means no disk."""
+    emptySpace = ' ' * (TOTAL_DISKS - width)
+    if width == 0:
+        # Display a pole segment without a disk:
+        print(f'{emptySpace}||{emptySpace}', end='')
+    else:
+        # Display the disk:
+        disk = '@' * width
+        numLabel = str(width).rjust(2, '_')
+        print(f"{emptySpace}{disk}{numLabel}{disk}{emptySpace}", end='')</code></pre>
+<p class="calibre23">We represent a disk using a leading empty space, a number of <code class="calibre9">@</code> characters equal to the disk width, two characters for the width (including an underscore if the width is a single digit), another series of <code class="calibre9">@</code> characters, and then the trailing empty space. To display just the empty pole, all we need are the leading empty space, two pipe characters, and trailing empty space. As a result, we’ll need six calls to <code class="calibre9">displayDisk()</code> with six different arguments for <code class="calibre9">width</code> to display the following tower:</p>
+<pre class="calibre28"><code class="calibre9">     ||
+    @_1@
+   @@_2@@
+  @@@_3@@@
+ @@@@_4@@@@
+@@@@@_5@@@@@</code></pre>
+<p class="calibre23">Notice how the<code class="calibre9"> displayTowers()</code> and <code class="calibre9">displayDisk()</code> functions split the responsibility of displaying the towers. Although <code class="calibre9">displayTowers()</code> decides <span type="pagebreak" title="259" id="calibre_link-593" class="calibre16"></span>how to interpret the data structures that represent each tower, it relies on <code class="calibre9">displayDisk()</code> to actually display each disk of the tower. Breaking your program into smaller functions like this makes each part easier to test. If the program displays the disks incorrectly, the problem is likely in <code class="calibre9">displayDisk()</code>. If the disks appear in the wrong order, the problem is likely in <code class="calibre9">displayTowers()</code>. Either way, the section of code you’ll have to debug will be much smaller. </p>
+<p class="calibre23">To call the <code class="calibre9">main()</code> function, we use a common Python idiom:</p>
+<pre class="calibre28"><code class="calibre9"># If this program was run (instead of imported), run the game:
+if __name__ == '__main__':
+    main()</code></pre>
+<p class="calibre23">Python automatically sets the <code class="calibre9">__name__</code> variable to <code class="calibre9">'__main__'</code> if a player runs the <em class="calibre10">towerofhanoi.py</em> program directly. But if someone imports the program as a module using <code class="calibre9">import towerofhanoi</code>, then <code class="calibre9">__name__</code> would be set to <code class="calibre9">'towerofhanoi'</code>. The <code class="calibre9">if __name__ == '__main__':</code> line will call the <code class="calibre9">main()</code> function if someone runs our program, starting a game of Tower of Hanoi. But if we simply want to import the program as a module so we could, say, call the individual functions in it for unit testing, this condition will be <code class="calibre9">False</code> and <code class="calibre9">main()</code> won’t be called.</p>
+<h2 id="calibre_link-268" class="calibre7">Four-in-a-Row</h2>
+<p class="bodyfirst">Four-in-a-Row is a two-player, tile-dropping game. Each player tries to create a row of four of their tiles, whether horizontally, vertically, or diagonally. It’s similar to the board games <em class="calibre10">Connect Four</em> and <em class="calibre10">Four Up</em>. The game uses a 7 by 6 stand-up board, and tiles drop to the lowest unoccupied space in a column. In our Four-in-a-Row game, two human players, X and O, will play against each other, as opposed to one human player against the computer.</p>
+<h3 id="calibre_link-269" class="calibre27">The Output</h3>
+<p class="bodyfirst">When you run the Four-in-a-Row program in this chapter, the output will look like this:</p>
+<pre class="calibre28"><code class="calibre9">Four-in-a-Row, by Al Sweigart al@inventwithpython.com
+
+Two players take turns dropping tiles into one of seven columns, trying
+to make four in a row horizontally, vertically, or diagonally.
+
+
+     1234567
+    +-------+
+    |.......|
+    |.......|
+    |.......|
+    |.......|
+    |.......|
+    |.......|
+    +-------+
+<span type="pagebreak" title="260" id="calibre_link-594" class="calibre16"></span>Player X, enter 1 to 7 or QUIT:
+&gt; <b class="calibre25">1</b>
+
+     1234567
+    +-------+
+    |.......|
+    |.......|
+    |.......|
+    |.......|
+    |.......|
+    |X......|
+    +-------+
+Player O, enter 1 to 7 or QUIT:
+<var class="calibre43">--snip--</var>
+Player O, enter 1 to 7 or QUIT:
+&gt; <b class="calibre25">4</b>
+
+     1234567
+    +-------+
+    |.......|
+    |.......|
+    |...O...|
+    |X.OO...|
+    |X.XO...|
+    |XOXO..X|
+    +-------+
+Player O has won!</code></pre>
+<p class="calibre23">Try to figure out the many subtle strategies you can use to get four tiles in a row while blocking your opponent from doing the same.</p>
+<h3 id="calibre_link-270" class="calibre27">The Source Code </h3>
+<p class="bodyfirst">Open a new file in your editor or IDE, enter the following code, and save it as <em class="calibre10">fourinarow.py</em>:</p>
+<pre class="calibre28"><code class="calibre9">"""Four-in-a-Row, by Al Sweigart al@inventwithpython.com
+A tile-dropping game to get four-in-a-row, similar to Connect Four."""
+
+import sys
+
+# Constants used for displaying the board:
+EMPTY_SPACE = "."  # A period is easier to count than a space.
+PLAYER_X = "X"
+PLAYER_O = "O"
+
+# Note: Update BOARD_TEMPLATE &amp; COLUMN_LABELS if BOARD_WIDTH is changed.
+BOARD_WIDTH = 7
+BOARD_HEIGHT = 6
+COLUMN_LABELS = ("1", "2", "3", "4", "5", "6", "7")
+assert len(COLUMN_LABELS) == BOARD_WIDTH
+
+# The template string for displaying the board:
+BOARD_TEMPLATE = """
+<span type="pagebreak" title="261" id="calibre_link-595" class="calibre16"></span>     1234567
+    +-------+
+    |{}{}{}{}{}{}{}|
+    |{}{}{}{}{}{}{}|
+    |{}{}{}{}{}{}{}|
+    |{}{}{}{}{}{}{}|
+    |{}{}{}{}{}{}{}|
+    |{}{}{}{}{}{}{}|
+    +-------+"""
+
+
+def main():
+    """Runs a single game of Four-in-a-Row."""
+    print(
+        """Four-in-a-Row, by Al Sweigart al@inventwithpython.com
+
+Two players take turns dropping tiles into one of seven columns, trying
+to make Four-in-a-Row horizontally, vertically, or diagonally.
+"""
+    )
+
+    # Set up a new game:
+    gameBoard = getNewBoard()
+    playerTurn = PLAYER_X
+
+    while True:  # Run a player's turn.
+        # Display the board and get player's move:
+        displayBoard(gameBoard)
+        playerMove = getPlayerMove(playerTurn, gameBoard)
+        gameBoard[playerMove] = playerTurn
+
+        # Check for a win or tie:
+        if isWinner(playerTurn, gameBoard):
+            displayBoard(gameBoard)  # Display the board one last time.
+            print("Player {} has won!".format(playerTurn))
+            sys.exit()
+        elif isFull(gameBoard):
+            displayBoard(gameBoard)  # Display the board one last time.
+            print("There is a tie!")
+            sys.exit()
+
+        # Switch turns to other player:
+        if playerTurn == PLAYER_X:
+            playerTurn = PLAYER_O
+        elif playerTurn == PLAYER_O:
+            playerTurn = PLAYER_X
+
+
+def getNewBoard():
+    """Returns a dictionary that represents a Four-in-a-Row board.
+
+    The keys are (columnIndex, rowIndex) tuples of two integers, and the
+    values are one of the "X", "O" or "." (empty space) strings."""
+    board = {}
+<span type="pagebreak" title="262" id="calibre_link-596" class="calibre16"></span>    for rowIndex in range(BOARD_HEIGHT):
+        for columnIndex in range(BOARD_WIDTH):
+            board[(columnIndex, rowIndex)] = EMPTY_SPACE
+    return board
+
+
+def displayBoard(board):
+    """Display the board and its tiles on the screen."""
+
+    # Prepare a list to pass to the format() string method for the board
+    # template. The list holds all of the board's tiles (and empty
+    # spaces) going left to right, top to bottom:
+    tileChars = []
+    for rowIndex in range(BOARD_HEIGHT):
+        for columnIndex in range(BOARD_WIDTH):
+            tileChars.append(board[(columnIndex, rowIndex)])
+
+    # Display the board:
+    print(BOARD_TEMPLATE.format(*tileChars))
+
+
+def getPlayerMove(playerTile, board):
+    """Let a player select a column on the board to drop a tile into.
+
+    Returns a tuple of the (column, row) that the tile falls into."""
+    while True:  # Keep asking player until they enter a valid move.
+        print(f"Player {playerTile}, enter 1 to {BOARD_WIDTH} or QUIT:")
+        response = input("&gt; ").upper().strip()
+
+        if response == "QUIT":
+            print("Thanks for playing!")
+            sys.exit()
+
+        if response not in COLUMN_LABELS:
+            print(f"Enter a number from 1 to {BOARD_WIDTH}.")
+            continue  # Ask player again for their move.
+
+        columnIndex = int(response) - 1  # -1 for 0-based column indexes.
+
+        # If the column is full, ask for a move again:
+        if board[(columnIndex, 0)] != EMPTY_SPACE:
+            print("That column is full, select another one.")
+            continue  # Ask player again for their move.
+
+        # Starting from the bottom, find the first empty space.
+        for rowIndex in range(BOARD_HEIGHT - 1, -1, -1):
+            if board[(columnIndex, rowIndex)] == EMPTY_SPACE:
+                return (columnIndex, rowIndex)
+
+
+def isFull(board):
+    """Returns True if the `board` has no empty spaces, otherwise
+    returns False."""
+    for rowIndex in range(BOARD_HEIGHT):
+        for columnIndex in range(BOARD_WIDTH):
+<span type="pagebreak" title="263" id="calibre_link-597" class="calibre16"></span>            if board[(columnIndex, rowIndex)] == EMPTY_SPACE:
+                return False  # Found an empty space, so return False.
+    return True  # All spaces are full.
+
+
+def isWinner(playerTile, board):
+    """Returns True if `playerTile` has four tiles in a row on `board`,
+    otherwise returns False."""
+
+    # Go through the entire board, checking for four-in-a-row:
+    for columnIndex in range(BOARD_WIDTH - 3):
+        for rowIndex in range(BOARD_HEIGHT):
+            # Check for four-in-a-row going across to the right:
+            tile1 = board[(columnIndex, rowIndex)]
+            tile2 = board[(columnIndex + 1, rowIndex)]
+            tile3 = board[(columnIndex + 2, rowIndex)]
+            tile4 = board[(columnIndex + 3, rowIndex)]
+            if tile1 == tile2 == tile3 == tile4 == playerTile:
+                return True
+
+    for columnIndex in range(BOARD_WIDTH):
+        for rowIndex in range(BOARD_HEIGHT - 3):
+            # Check for four-in-a-row going down:
+            tile1 = board[(columnIndex, rowIndex)]
+            tile2 = board[(columnIndex, rowIndex + 1)]
+            tile3 = board[(columnIndex, rowIndex + 2)]
+            tile4 = board[(columnIndex, rowIndex + 3)]
+            if tile1 == tile2 == tile3 == tile4 == playerTile:
+                return True
+
+    for columnIndex in range(BOARD_WIDTH - 3):
+        for rowIndex in range(BOARD_HEIGHT - 3):
+            # Check for four-in-a-row going right-down diagonal:
+            tile1 = board[(columnIndex, rowIndex)]
+            tile2 = board[(columnIndex + 1, rowIndex + 1)]
+            tile3 = board[(columnIndex + 2, rowIndex + 2)]
+            tile4 = board[(columnIndex + 3, rowIndex + 3)]
+            if tile1 == tile2 == tile3 == tile4 == playerTile:
+                return True
+
+            # Check for four-in-a-row going left-down diagonal:
+            tile1 = board[(columnIndex + 3, rowIndex)]
+            tile2 = board[(columnIndex + 2, rowIndex + 1)]
+            tile3 = board[(columnIndex + 1, rowIndex + 2)]
+            tile4 = board[(columnIndex, rowIndex + 3)]
+            if tile1 == tile2 == tile3 == tile4 == playerTile:
+                return True
+    return False
+
+
+# If this program was run (instead of imported), run the game:
+if __name__ == "__main__":
+    main()</code></pre>
+<p class="calibre23"><span type="pagebreak" title="264" id="calibre_link-598" class="calibre16"></span>Run this program and play a few games to get an idea of what this program does before reading the explanation of the source code. To check for typos, copy and paste it to the online diff tool at <a href="https://inventwithpython.com/beyond/diff/" class="calibre19">https://inventwithpython.com/beyond/diff/</a>.</p>
+<h3 id="calibre_link-271" class="calibre27">Writing the Code</h3>
+<p class="bodyfirst">Let’s look at the program’s source code, as we did for the Tower of Hanoi program. Once again, I formatted this code using Black with a line limit of 75 characters.</p>
+<p class="calibre23">We’ll begin at the top of the program:</p>
+<pre class="calibre28"><code class="calibre9">"""Four-in-a-Row, by Al Sweigart al@inventwithpython.com
+A tile-dropping game to get four-in-a-row, similar to Connect Four."""
+
+import sys
+
+# Constants used for displaying the board:
+EMPTY_SPACE = "."  # A period is easier to count than a space.
+PLAYER_X = "X"
+PLAYER_O = "O"</code></pre>
+<p class="calibre23">We start the program with a docstring, module imports, and constant assignments, as we did in the Tower of Hanoi program. We define the <code class="calibre9">PLAYER_X</code> and <code class="calibre9">PLAYER_O</code> constants so we don’t have to use the strings <code class="calibre9">"X"</code> and <code class="calibre9">"O"</code> throughout the program, making errors easier to catch. If we enter a typo while using the constants, such as <code class="calibre9">PLAYER_XX</code>, Python will raise <code class="calibre9">NameError</code>, instantly pointing out the problem. But if we make a typo with the <code class="calibre9">"X"</code> character, such as <code class="calibre9">"XX"</code> or <code class="calibre9">"Z"</code>, the resulting bug might not be immediately obvious. As explained in “Magic Numbers” on page 71, using constants instead of the string value directly provides not just a description, but also an early warning for any typos in your source code.</p>
+<p class="calibre23">Constants shouldn’t change while the program runs. But the programmer can update their values in future versions of the program. For this reason, we make a note telling programmers that they should update the <code class="calibre9">BOARD_TEMPLATE</code> and <code class="calibre9">COLUMN_LABELS</code> constants, described later, if they change the value of <code class="calibre9">BOARD_WIDTH</code>:</p>
+<pre class="calibre28"><code class="calibre9"># Note: Update BOARD_TEMPLATE &amp; COLUMN_LABELS if BOARD_WIDTH is changed.
+BOARD_WIDTH = 7
+BOARD_HEIGHT = 6</code></pre>
+<p class="calibre23">Next, we create the <code class="calibre9">COLUMN_LABELS</code> constant: </p>
+<pre class="calibre28"><code class="calibre9">COLUMN_LABELS = ("1", "2", "3", "4", "5", "6", "7")
+assert len(COLUMN_LABELS) == BOARD_WIDTH</code></pre>
+<p class="calibre23">We’ll use this constant later to ensure the player selects a valid column. Note that if we ever set <code class="calibre9">BOARD_WIDTH</code> to a value other than <code class="calibre9">7</code>, we’ll have to add labels to or remove labels from the <code class="calibre9">COLUMN_LABELS</code> tuple. I could have avoided this by generating the value of <code class="calibre9">COLUMN_LABELS</code> based on <code class="calibre9">BOARD_WIDTH</code> with code <span type="pagebreak" title="265" id="calibre_link-599" class="calibre16"></span>like this: <code class="calibre9">COLUMN_LABELS = tuple([str(n) for n in range(1, BOARD_WIDTH + 1)])</code>. But <code class="calibre9">COLUMN_LABELS</code> is unlikely to change in the future, because the standard Four-in-a-Row game is played on a 7 by 6 board, so I decided to write out an explicit tuple value.</p>
+<p class="calibre23">Sure, this hardcoding is a code smell, as described in “Magic Numbers” on page 71, but it’s more readable than the alternative. Also, the <code class="calibre9">assert</code> statement warns us about changing <code class="calibre9">BOARD_WIDTH</code> without updating <code class="calibre9">COLUMN_LABELS</code>.</p>
+<p class="calibre23">As with Tower of Hanoi, the Four-in-a-Row program uses ASCII art to <em class="calibre10">draw</em> the game board. The following lines are a single assignment statement with a multiline string:</p>
+<pre class="calibre28"><code class="calibre9"># The template string for displaying the board:
+BOARD_TEMPLATE = """
+     1234567
+    +-------+
+    |{}{}{}{}{}{}{}|
+    |{}{}{}{}{}{}{}|
+    |{}{}{}{}{}{}{}|
+    |{}{}{}{}{}{}{}|
+    |{}{}{}{}{}{}{}|
+    |{}{}{}{}{}{}{}|
+    +-------+"""</code></pre>
+<p class="calibre23">This string contains braces (<code class="calibre9">{}</code>) that the <code class="calibre9">format()</code> string method will replace with the board’s contents. (The <code class="calibre9">displayBoard()</code> function, explained later, will handle this.) Because the board consists of seven columns and six rows, we use seven brace pairs <code class="calibre9">{}</code> in each of the six rows to represent every slot. Note that just like <code class="calibre9">COLUMN_LABELS</code>, we’re technically hardcoding the board to create a set number of columns and rows. If we ever change <code class="calibre9">BOARD_WIDTH</code> or <code class="calibre9">BOARD_HEIGHT</code> to new integers, we’ll have to update the multiline string in <code class="calibre9">BOARD_TEMPLATE</code> as well.</p>
+<p class="calibre23">We could have written code to generate <code class="calibre9">BOARD_TEMPLATE</code> based on the <code class="calibre9">BOARD_WIDTH</code> and <code class="calibre9">BOARD_HEIGHT</code> constants, like so:</p>
+<pre class="calibre28"><code class="calibre9">BOARD_EDGE = "    +" + ("-" * BOARD_WIDTH) + "+"
+BOARD_ROW = "    |" + ("{}" * BOARD_WIDTH) + "|\n"
+BOARD_TEMPLATE = "\n     " + "".join(COLUMN_LABELS) + "\n" + BOARD_EDGE + "\n" + (BOARD_ROW * BOARD_WIDTH) + BOARD_EDGE</code></pre>
+<p class="calibre23">But this code is not as readable as a simple multiline string, and we’re unlikely to change the game board’s size anyway, so we’ll use the simple multiline string.</p>
+<p class="calibre23">We begin writing the <code class="calibre9">main()</code> function, which will call all the other functions we’ve made for this game:</p>
+<pre class="calibre28"><code class="calibre9">def main():
+    """Runs a single game of Four-in-a-Row."""
+    print(
+        """Four-in-a-Row, by Al Sweigart al@inventwithpython.com
+
+<span type="pagebreak" title="266" id="calibre_link-600" class="calibre16"></span>Two players take turns dropping tiles into one of seven columns, trying
+to make four-in-a-row horizontally, vertically, or diagonally.
+"""
+    )
+
+    # Set up a new game:
+    gameBoard = getNewBoard()
+    playerTurn = PLAYER_X</code></pre>
+<p class="calibre23">We give the <code class="calibre9">main()</code> function a docstring, viewable with the built-in <code class="calibre9">help()</code> function. The <code class="calibre9">main()</code> function also prepares the game board for a new game and chooses the first player.</p>
+<p class="calibre23">Inside the <code class="calibre9">main()</code> function is an infinite loop:</p>
+<pre class="calibre28"><code class="calibre9">    while True:  # Run a player's turn.
+        # Display the board and get player's move:
+        displayBoard(gameBoard)
+        playerMove = getPlayerMove(playerTurn, gameBoard)
+        gameBoard[playerMove] = playerTurn</code></pre>
+<p class="calibre23">Each iteration of this loop consists of a single turn. First, we display the game board to the player. Second, the player selects a column to drop a tile in, and third, we update the game board data structure.</p>
+<p class="calibre23">Next, we evaluate the results of the player’s move:</p>
+<pre class="calibre28"><code class="calibre9">        # Check for a win or tie:
+        if isWinner(playerTurn, gameBoard):
+            displayBoard(gameBoard)  # Display the board one last time.
+            print("Player {} has won!".format(playerTurn))
+            sys.exit()
+        elif isFull(gameBoard):
+            displayBoard(gameBoard)  # Display the board one last time.
+            print("There is a tie!")
+            sys.exit()</code></pre>
+<p class="calibre23">If the player made a winning move, <code class="calibre9">isWinner()</code> returns <code class="calibre9">True</code> and the game ends. If the player filled the board and there is no winner, <code class="calibre9">isFull()</code> returns <code class="calibre9">True</code> and the game ends. Note that instead of calling <code class="calibre9">sys.exit()</code>, we could have used a simple <code class="calibre9">break</code> statement. This would have caused the execution to break out of the <code class="calibre9">while</code> loop, and because there is no code in the <code class="calibre9">main()</code> function after this loop, the function would return to the <code class="calibre9">main()</code> call at the bottom of the program, causing the program to end. But I opted to use <code class="calibre9">sys.exit()</code> to make it clear to programmers reading the code that the program will immediately terminate.</p>
+<p class="calibre23">If the game hasn’t ended, the following lines set <code class="calibre9">playerTurn</code> to the other player:</p>
+<pre class="calibre28"><code class="calibre9">        # Switch turns to other player:
+        if playerTurn == PLAYER_X:
+            playerTurn = PLAYER_O
+        elif playerTurn == PLAYER_O:
+            playerTurn = PLAYER_X</code></pre>
+<p class="calibre23"><span type="pagebreak" title="267" id="calibre_link-601" class="calibre16"></span>Notice that I could have made the <code class="calibre9">elif</code> statement into a simple <code class="calibre9">else</code> statement without a condition. But recall the Zen of Python tenet that <em class="calibre10">explicit is better than implicit</em>. This code <em class="calibre10">explicitly </em>says that if it’s player O’s turn now, it will be player X’s turn next. The alternative would have just said that if it’s not player X’s turn now, it will be player X’s turn next. Even though <code class="calibre9">if</code> and <code class="calibre9">else</code> statements are a natural fit with Boolean conditions, the <code class="calibre9">PLAYER_X</code> and <code class="calibre9">PLAYER_O</code> values aren’t the same as <code class="calibre9">True</code>, and <code class="calibre9">False</code>: <code class="calibre9">not PLAYER_X</code> is not the same as <code class="calibre9">PLAYER_O</code>. Therefore, it’s helpful to be direct when checking the value of <code class="calibre9">playerTurn</code>.</p>
+<p class="calibre23">Alternatively, I could have performed the same actions in a one-liner:</p>
+<pre class="calibre28"><code class="calibre9">playerTurn = {PLAYER_X: PLAYER_O, PLAYER_O: PLAYER_X}[ playerTurn]</code></pre>
+<p class="calibre23">This line uses the dictionary trick mentioned in “Use Dictionaries Instead of a <code class="calibre9">switch</code> Statement” on page 101. But like many one-liners, it’s not as readable as a direct <code class="calibre9">if</code> and <code class="calibre9">elif</code> statement.</p>
+<p class="calibre23">Next, we define the <code class="calibre9">getNewBoard()</code> function:</p>
+<pre class="calibre28"><code class="calibre9">def getNewBoard():
+    """Returns a dictionary that represents a Four-in-a-Row board.
+
+    The keys are (columnIndex, rowIndex) tuples of two integers, and the
+    values are one of the "X", "O" or "." (empty space) strings."""
+    board = {}
+    for rowIndex in range(BOARD_HEIGHT):
+        for columnIndex in range(BOARD_WIDTH):
+            board[(columnIndex, rowIndex)] = EMPTY_SPACE
+    return board</code></pre>
+<p class="calibre23">This function returns a dictionary that represents a Four-in-a-Row board. It has <code class="calibre9">(columnIndex, rowIndex)</code> tuples for keys (where <code class="calibre9">columnIndex</code> and <code class="calibre9">rowIndex</code> are integers), and the <code class="calibre9">'X'</code>, <code class="calibre9">'O'</code>, or <code class="calibre9">'.'</code> character for the tile at each place on the board. We store these strings in <code class="calibre9">PLAYER_X</code>, <code class="calibre9">PLAYER_O</code>, and <code class="calibre9">EMPTY_SPACE</code>, respectively.</p>
+<p class="calibre23">Our Four-in-a-Row game is rather simple, so using a dictionary to represent the game board is a suitable technique. Still, we could have used an OOP approach instead. We’ll explore OOP in Chapters 15 through 17.</p>
+<p class="calibre23">The <code class="calibre9">displayBoard()</code> function takes a game board data structure for the <code class="calibre9">board</code> argument and displays the board onscreen using the <code class="calibre9">BOARD_TEMPLATE</code> constant:</p>
+<pre class="calibre28"><code class="calibre9">def displayBoard(board):
+    """Display the board and its tiles on the screen."""
+
+    # Prepare a list to pass to the format() string method for the board
+    # template. The list holds all of the board's tiles (and empty
+    # spaces) going left to right, top to bottom:
+    tileChars = []</code></pre>
+<p class="calibre23"><span type="pagebreak" title="268" id="calibre_link-602" class="calibre16"></span>Recall that the <code class="calibre9">BOARD_TEMPLATE</code> is a multiline string with several brace pairs. When we call the <code class="calibre9">format()</code> method on <code class="calibre9">BOARD_TEMPLATE</code>, these braces will be replaced by the arguments passed to <code class="calibre9">format()</code>.</p>
+<p class="calibre23">The <code class="calibre9">tileChars</code> variable will contain a list of these arguments. We start by assigning it a blank list. The first value in <code class="calibre9">tileChars</code> will replace the first pair of braces in <code class="calibre9">BOARD_TEMPLATE</code>, the second value will replace the second pair, and so on. Essentially, we’re creating a list of the values from the <code class="calibre9">board</code> dictionary:</p>
+<pre class="calibre28"><code class="calibre9">    for rowIndex in range(BOARD_HEIGHT):
+        for columnIndex in range(BOARD_WIDTH):
+            tileChars.append(board[(columnIndex, rowIndex)])
+
+    # Display the board:
+    print(BOARD_TEMPLATE.format(*tileChars))</code></pre>
+<p class="calibre23">These nested <code class="calibre9">for</code> loops iterate over every possible row and column on the board, appending them to the list in <code class="calibre9">tileChars</code>. Once these loops have finished, we pass the values in the <code class="calibre9">tileChars</code> list as individual arguments to the <code class="calibre9">format()</code> method using the star <code class="calibre9">*</code> prefix. “Using <code class="calibre9">*</code> to Create Variadic Functions” section on page 167 explained how to use this syntax to treat the values in a list as separate function arguments: the code <code class="calibre9">print(*['cat', 'dog', 'rat'])</code> is equivalent to <code class="calibre9">print('cat', 'dog', 'rat')</code>. We need the star because the <code class="calibre9">format()</code> method expects one argument for every brace pair, not a single list argument.</p>
+<p class="calibre23">Next, we write the <code class="calibre9">getPlayerMove()</code> function:</p>
+<pre class="calibre28"><code class="calibre9">def getPlayerMove(playerTile, board):
+    """Let a player select a column on the board to drop a tile into.
+
+    Returns a tuple of the (column, row) that the tile falls into."""
+    while True:  # Keep asking player until they enter a valid move.
+        print(f"Player {playerTile}, enter 1 to {BOARD_WIDTH} or QUIT:")
+        response = input("&gt; ").upper().strip()
+
+        if response == "QUIT":
+            print("Thanks for playing!")
+            sys.exit()</code></pre>
+<p class="calibre23">The function begins with an infinite loop that waits for the player to enter a valid move. This code resembles the <code class="calibre9">getPlayerMove()</code> function in the Tower of Hanoi program. Note that the <code class="calibre9">print()</code> call at the start of the <code class="calibre9">while</code> loop uses an f-string so we don’t have to change the message if we update <code class="calibre9">BOARD_WIDTH</code>.</p>
+<p class="calibre23">We check that the player’s response is a column; if it isn’t, the <code class="calibre9">continue</code> statement moves the execution back to the start of the loop to ask the player for a valid move:</p>
+<pre class="calibre28"><code class="calibre9">        if response not in COLUMN_LABELS:
+            print(f"Enter a number from 1 to {BOARD_WIDTH}.")
+            continue  # Ask player again for their move.</code></pre>
+<p class="calibre23"><span type="pagebreak" title="269" id="calibre_link-603" class="calibre16"></span>We could have written this input validation condition as <code class="calibre9">not response.isdecimal() or spam &lt; 1 or spam &gt; BOARD_WIDTH</code>, but it’s simpler to just use <code class="calibre9">response not in COLUMN_LABELS</code>.</p>
+<p class="calibre23">Next, we need to find out which row a tile dropped in the player’s selected column would land on:</p>
+<pre class="calibre28"><code class="calibre9">        columnIndex = int(response) - 1  # -1 for 0-based column indexes.
+
+        # If the column is full, ask for a move again:
+        if board[(columnIndex, 0)] != EMPTY_SPACE:
+            print("That column is full, select another one.")
+            continue  # Ask player again for their move.</code></pre>
+<p class="calibre23">The board displays the column labels <code class="calibre9">1</code> to <code class="calibre9">7</code> onscreen. But the <code class="calibre9">(columnIndex, rowIndex)</code> indexes on the board use 0-based indexing, so they range from 0 to 6. To solve this discrepancy, we convert the string values <code class="calibre9">'1'</code> to <code class="calibre9">'7'</code> to the integer values <code class="calibre9">0</code> to <code class="calibre9">6</code>.</p>
+<p class="calibre23">The row indexes start at <code class="calibre9">0</code> at the top of the board and increase to <code class="calibre9">6</code> at the bottom of the board. We check the top row in the selected column to see whether it’s occupied. If so, this column is completely full and the <code class="calibre9">continue</code> statement moves the execution back to the start of the loop to ask the player for another move. </p>
+<p class="calibre23">If the column isn’t full, we need to find the lowest unoccupied space for the tile to land on:</p>
+<pre class="calibre28"><code class="calibre9">        # Starting from the bottom, find the first empty space.
+        for rowIndex in range(BOARD_HEIGHT - 1, -1, -1):
+            if board[(columnIndex, rowIndex)] == EMPTY_SPACE:
+                return (columnIndex, rowIndex)</code></pre>
+<p class="calibre23">This <code class="calibre9">for</code> loop starts at the bottom row index, <code class="calibre9">BOARD_HEIGHT - 1</code> or <code class="calibre9">6</code>, and moves up until it finds the first empty space. The function then returns the indexes of the lowest empty space.</p>
+<p class="calibre23"> Anytime the board is full, the game ends in a tie:</p>
+<pre class="calibre28"><code class="calibre9">def isFull(board):
+    """Returns True if the `board` has no empty spaces, otherwise
+    returns False."""
+    for rowIndex in range(BOARD_HEIGHT):
+        for columnIndex in range(BOARD_WIDTH):
+            if board[(columnIndex, rowIndex)] == EMPTY_SPACE:
+                return False  # Found an empty space, so return False.
+    return True  # All spaces are full.</code></pre>
+<p class="calibre23">The <code class="calibre9">isFull()</code> function uses a pair of nested <code class="calibre9">for</code> loops to iterate over every place on the board. If it finds a single empty space, the board isn’t full, and the function returns <code class="calibre9">False</code>. If the execution makes it through both loops, the <code class="calibre9">isFull()</code> function found no empty space, so it returns <code class="calibre9">True</code>.</p>
+<p class="calibre23"><span type="pagebreak" title="270" id="calibre_link-604" class="calibre16"></span>The <code class="calibre9">isWinner()</code> function checks whether a player has won the game:</p>
+<pre class="calibre28"><code class="calibre9">def isWinner(playerTile, board):
+    """Returns True if `playerTile` has four tiles in a row on `board`,
+    otherwise returns False."""
+
+    # Go through the entire board, checking for four-in-a-row:
+    for columnIndex in range(BOARD_WIDTH - 3):
+        for rowIndex in range(BOARD_HEIGHT):
+            # Check for four-in-a-row going across to the right:
+            tile1 = board[(columnIndex, rowIndex)]
+            tile2 = board[(columnIndex + 1, rowIndex)]
+            tile3 = board[(columnIndex + 2, rowIndex)]
+            tile4 = board[(columnIndex + 3, rowIndex)]
+            if tile1 == tile2 == tile3 == tile4 == playerTile:
+                return True</code></pre>
+<p class="calibre23">This function returns <code class="calibre9">True</code> if <code class="calibre9">playerTile</code> appears four times in a row horizontally, vertically, or diagonally. To figure out whether the condition is met, we have to check every set of four adjacent spaces on the board. We’ll use a series of nested <code class="calibre9">for</code> loops to do this.</p>
+<p class="calibre23">The <code class="calibre9">(columnIndex, rowIndex)</code> tuple represents a starting point. We check the starting point and the three spaces to the right of it for the <code class="calibre9">playerTile</code> string. If the starting space is <code class="calibre9">(columnIndex, rowIndex)</code>, the space to its right will be <code class="calibre9">(columnIndex + 1, rowIndex)</code>, and so on. We’ll save the tiles in these four spaces to the variables <code class="calibre9">tile1</code>, <code class="calibre9">tile2</code>, <code class="calibre9">tile3</code>, and <code class="calibre9">tile4</code>. If all of these variables have the same value as <code class="calibre9">playerTile</code>, we’ve found a four-in-a-row, and the <code class="calibre9">isWinner()</code> function returns <code class="calibre9">True</code>.</p>
+<p class="calibre23">In “Variables with Numeric Suffixes” on page 76, I mentioned that variable names with sequential numeric suffixes (like <code class="calibre9">tile1</code> through <code class="calibre9">tile4 </code>in this game) are often a code smell that indicates you should use a single list instead. But in this context, these variable names are fine. We don’t need to replace them with a list, because the Four-in-a-Row program will always require exactly four of these tile variables. Remember that a code smell doesn’t necessarily indicate a problem; it only means we should take a second look and confirm that we’ve written our code in the most readable way. In this case, using a list would make our code more complicated, and it wouldn’t add any benefit, so we’ll stick to using <code class="calibre9">tile1</code>, <code class="calibre9">tile2</code>, <code class="calibre9">tile3</code>, and <code class="calibre9">tile4</code>.</p>
+<p class="calibre23">We use a similar process to check for vertical four-in-a-row tiles:</p>
+<pre class="calibre28"><code class="calibre9">    for columnIndex in range(BOARD_WIDTH):
+        for rowIndex in range(BOARD_HEIGHT - 3):
+            # Check for four-in-a-row going down:
+            tile1 = board[(columnIndex, rowIndex)]
+            tile2 = board[(columnIndex, rowIndex + 1)]
+            tile3 = board[(columnIndex, rowIndex + 2)]
+            tile4 = board[(columnIndex, rowIndex + 3)]
+            if tile1 == tile2 == tile3 == tile4 == playerTile:
+                return True</code></pre>
+<p class="calibre23"><span type="pagebreak" title="271" id="calibre_link-605" class="calibre16"></span>Next, we check for four-in-a-row tiles in a diagonal pattern going down and to the right; then we check for four-in-a-row tiles in a diagonal pattern going down and to the left: </p>
+<pre class="calibre28"><code class="calibre9">    for columnIndex in range(BOARD_WIDTH - 3):
+        for rowIndex in range(BOARD_HEIGHT - 3):
+            # Check for four-in-a-row going right-down diagonal:
+            tile1 = board[(columnIndex, rowIndex)]
+            tile2 = board[(columnIndex + 1, rowIndex + 1)]
+            tile3 = board[(columnIndex + 2, rowIndex + 2)]
+            tile4 = board[(columnIndex + 3, rowIndex + 3)]
+            if tile1 == tile2 == tile3 == tile4 == playerTile:
+                return True
+
+            # Check for four-in-a-row going left-down diagonal:
+            tile1 = board[(columnIndex + 3, rowIndex)]
+            tile2 = board[(columnIndex + 2, rowIndex + 1)]
+            tile3 = board[(columnIndex + 1, rowIndex + 2)]
+            tile4 = board[(columnIndex, rowIndex + 3)]
+            if tile1 == tile2 == tile3 == tile4 == playerTile:
+                return True</code></pre>
+<p class="calibre23">This code is similar to the horizontal four-in-a-row checks, so I won’t repeat the explanation here. If all the checks for four-in-a-row tiles fail to find any, the function returns <code class="calibre9">False</code> to indicate that <code class="calibre9">playerTile</code> is not a winner on this board:</p>
+<pre class="calibre28"><code class="calibre9">    return False</code></pre>
+<p class="calibre23">The only task left is to call the <code class="calibre9">main()</code> function:</p>
+<pre class="calibre28"><code class="calibre9"># If this program was run (instead of imported), run the game:
+if __name__ == '__main__':
+    main()</code></pre>
+<p class="calibre23">Once again, we use a common Python idiom that will call <code class="calibre9">main()</code> if <em class="calibre10">fourinarow.py</em> is run directly but not if <em class="calibre10">fourinarow.py</em> is imported as a module.</p>
+<h2 id="calibre_link-272" class="calibre7">Summary</h2>
+<p class="bodyfirst">The Tower of Hanoi puzzle game and Four-in-a-Row game are short programs, but by following the practices in this book, you can ensure that their code is readable and easy to debug. These programs follow several good practices: they’ve been automatically formatted with Black, use docstrings to describe the module and functions, and place the constants near the top of the file. They limit the variables, function parameters, and function return values to a single data type so type hinting, although a beneficial form of additional documentation, is unnecessary.</p>
+<p class="calibre23">In the Tower of Hanoi, we represent the three towers as a dictionary with keys <code class="calibre9">'A'</code>, <code class="calibre9">'B'</code>, and <code class="calibre9">'C'</code> whose values are lists of integers. This works, but if our program were any larger or more complicated, it would be a <span type="pagebreak" title="272" id="calibre_link-606" class="calibre16"></span>good idea to represent this data using a class. Classes and OOP techniques weren’t used in this chapter because I don’t cover OOP until Chapters 15 through 17. But keep in mind that it’s perfectly valid to use a class for this data structure. The towers render as ASCII art onscreen, using text characters to show each disk of the towers.</p>
+<p class="calibre23">The Four-in-a-Row game uses ASCII art to display a representation of the game board. We display this using a multiline string stored in the <code class="calibre9">BOARD_TEMPLATE</code> constant. This string has 42 brace pairs <code class="calibre9">{}</code> to display each space on the 7 by 6 board. We use braces so the <code class="calibre9">format()</code> string method can replace them with the tile at that space. This way, it’s more obvious how the <code class="calibre9">BOARD_TEMPLATE</code> string produces the game board as it appears onscreen.</p>
+<p class="calibre23">Although their data structures differ, these two programs share many similarities. They both render their data structures onscreen, ask the player for input, validate that input, and then use it to update their data structures before looping back to the beginning. But there are many different ways we could have written code to carry out these actions. What makes code readable is ultimately a subjective opinion rather than an objective measure of how closely it adheres to some list of rules. The source code in this chapter shows that although we should always give any code smells a second look, not all code smells indicate a problem that we need to fix. Code readability is more important than mindlessly following a “zero code smells” policy for your programs.</p>
+</section>
+</div>
+
+
+<div type="bodymatter part" class="calibre1" id="calibre_link-273">
+<section class="toclist">
+<header class="calibre12">
+<h1 class="parttitle">
+<span class="partnumber"><span type="pagebreak" title="273" id="calibre_link-607" class="calibre26"></span>Part 3</span><br class="calibre18" />
+<span class="parttitle1">Object-Oriented Python </span>
+</h1>
+</header>
+</section>
+</div>
+

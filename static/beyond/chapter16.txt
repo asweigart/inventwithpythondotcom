@@ -1,0 +1,470 @@
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-16">
+<section class="toclist">
+<header class="calibre12">
+<h1 class="chaptertitle">
+<span class="partnumber"><span type="pagebreak" title="293" id="calibre_link-626" class="calibre26"></span>16</span><br class="calibre18" />
+<span class="parttitle1">Object-Oriented Programming and Inheritance</span>
+</h1>
+</header>
+<figure class="opener"><img src="images/000017.png" alt="" class="calibre15" /></figure><p class="chapterintro">Defining a function and calling it from several places saves you from having to copy and paste source code. Not duplicating code is a good practice, because if you need to change it (either for a bug fix or to add new features), you only need to change it in one place. Without duplicate code, the program is also shorter and easier to read. </p>
+<p class="calibre22">Similar to functions, <em class="calibre10">inheritance</em> is a code reuse technique that you can apply to classes. It’s the act of putting classes into parent-child relationships in which the child class inherits a copy of the parent class’s methods, freeing you from duplicating a method in multiple classes. </p>
+<p class="calibre23">Many programmers think inheritance is overrated or even dangerous because of the added complexity that large webs of inherited classes add to a program. Blog posts with titles like “Inheritance Is Evil” are not entirely off the mark; inheritance is certainly easy to overuse. But limited use of this technique can be a huge time-saver when it comes to organizing your code.</p>
+<h2 id="calibre_link-284" class="calibre7"><span type="pagebreak" title="294" id="calibre_link-627" class="calibre20"></span>How Inheritance Works</h2>
+<p class="bodyfirst">To create a new child class, you put the name of the existing parent class in between parentheses in the <code class="calibre9">class</code> statement. To practice creating a child class, open a new file editor window and enter the following code; save it as <em class="calibre10">inheritanceExample.py</em>:</p>
+<pre class="calibre28"><code class="calibre9"><span class="codeannotationhang">1</span> class ParentClass:
+<span class="codeannotationhang">2</span>     def printHello(self):
+        print('Hello, world!')
+
+<span class="codeannotationhang">3</span> class ChildClass(ParentClass):
+    def someNewMethod(self):
+        print('ParentClass objects don't have this method.')
+
+<span class="codeannotationhang">4</span> class GrandchildClass(ChildClass):
+    def anotherNewMethod(self):
+        print('Only GrandchildClass objects have this method.')
+
+print('Create a ParentClass object and call its methods:')
+parent = ParentClass()
+parent.printHello()
+
+print('Create a ChildClass object and call its methods:')
+child = ChildClass()
+child.printHello()
+child.someNewMethod()
+
+print('Create a GrandchildClass object and call its methods:')
+grandchild = GrandchildClass()
+grandchild.printHello()
+grandchild.someNewMethod()
+grandchild.anotherNewMethod()
+
+print('An error:')
+parent.someNewMethod()</code></pre>
+<p class="calibre23">When you run this program, the output should look like this:</p>
+<pre class="calibre28"><code class="calibre9">Create a ParentClass object and call its methods:
+Hello, world!
+Create a ChildClass object and call its methods:
+Hello, world!
+ParentClass objects don't have this method.
+Create a GrandchildClass object and call its methods:
+Hello, world!
+ParentClass objects don't have this method.
+Only GrandchildClass objects have this method.
+An error:
+Traceback (most recent call last):
+  File "inheritanceExample.py", line 35, in &lt;module&gt;
+    parent.someNewMethod() # ParentClass objects don't have this method.
+AttributeError: 'ParentClass' object has no attribute 'someNewMethod'</code></pre>
+<p class="calibre23"><span type="pagebreak" title="295" id="calibre_link-628" class="calibre16"></span>We’ve created three classes named <code class="calibre9">ParentClass</code> <span class="codeannotation">1</span>, <code class="calibre9">ChildClass</code> <span class="codeannotation">3</span>, and <code class="calibre9">GrandchildClass</code> <span class="codeannotation">4</span>. The <code class="calibre9">ChildClass</code><em class="calibre10">subclasses</em><code class="calibre9">ParentClass</code>, meaning that <code class="calibre9">ChildClass</code> will have all the same methods as <code class="calibre9">ParentClass</code>. We say that <code class="calibre9">ChildClass</code><em class="calibre10">inherits</em> methods from <code class="calibre9">ParentClass</code>. Also, <code class="calibre9">GrandchildClass</code> subclasses <code class="calibre9">ChildClass</code>, so it has all the same methods as <code class="calibre9">ChildClass</code> and its parent, <code class="calibre9">ParentClass</code>. </p>
+<p class="calibre23">Using this technique, we’ve effectively copied and pasted the code for the <code class="calibre9">printHello()</code> method <span class="codeannotation">2</span> into the <code class="calibre9">ChildClass</code> and <code class="calibre9">GrandchildClass</code> classes. Any changes we make to the code in <code class="calibre9">printHello()</code> update not only <code class="calibre9">ParentClass</code>, but also <code class="calibre9">ChildClass</code> and <code class="calibre9">GrandchildClass</code>. This is the same as changing the code in a function updates all of its function calls. You can see this relationship in <a id="calibre_link-18" href="#calibre_link-17" class="calibre19">Figure 16-1</a>. Notice that in class diagrams, the arrow is drawn from the subclass pointing to the base class. This reflects the fact that a class will always know its base class but won’t know its subclasses.</p>
+<figure class="calibre29">
+<img src="images/000033.png" alt="f16001" class="calibre15" />
+<figcaption class="calibre30"><p class="calibre31"><a id="calibre_link-17" href="#calibre_link-18" class="calibre19">Figure 16-1:</a> A hierarchical diagram (left) and Venn diagram (right) showing the relationships between the three classes and the methods they have</p></figcaption>
+</figure>
+<p class="calibre23">It’s common to say that parent-child classes represent “is a” relationships. A <code class="calibre9">ChildClass</code> object is a <code class="calibre9">ParentClass</code> object because it has all the same methods that a <code class="calibre9">ParentClass</code> object has, including some additional methods it defines. This relationship is one way: a <code class="calibre9">ParentClass</code> object is not a <code class="calibre9">ChildClass</code> object. If a <code class="calibre9">ParentClass</code> object tries to call <code class="calibre9">someNewMethod()</code>, which only exists for <code class="calibre9">ChildClass</code> objects (and the subclasses of<code class="calibre9"> ChildClass</code>), Python raises an <code class="calibre9">AttributeError</code>.</p>
+<p class="calibre23">Programmers often think of related classes as having to fit into some real-world “is a” hierarchy. OOP tutorials commonly have parent, child, and grandchild classes of <code class="calibre9">Vehicle</code><span class="menuarrow">▶</span><code class="calibre9">FourWheelVehicle<span class="menuarrow">▶</span></code><code class="calibre9">Car</code>, <code class="calibre9">Animal</code><span class="menuarrow">▶</span><code class="calibre9">Bird</code><span class="menuarrow">▶</span><code class="calibre9">Sparrow</code>, or <code class="calibre9">Shape</code><span class="menuarrow">▶</span><code class="calibre9">Rectangle</code><span class="menuarrow">▶</span><code class="calibre9">Square</code>. But remember that the primary purpose of inheritance is code reuse. If your program needs a class with a set of methods that is a complete superset of some other class’s methods, inheritance allows you to avoid copying and pasting code.</p>
+<p class="calibre23"><span type="pagebreak" title="296" id="calibre_link-629" class="calibre16"></span>We also sometimes call a child class a <em class="calibre10">subclass</em> or <em class="calibre10">derived class</em> and call a parent class the <em class="calibre10">super class</em> or <em class="calibre10">base class</em>. </p>
+<h3 id="calibre_link-285" class="calibre27">Overriding Methods</h3>
+<p class="bodyfirst">Child classes inherit all the methods of their parent classes. But a child class can override an inherited method by providing its own method with its own code. The child class’s overriding method will have the same name as the parent class’s method.</p>
+<p class="calibre23">To illustrate this concept, let’s return to the tic-tac-toe game we created in the previous chapter. This time, we’ll create a new class, <code class="calibre9">MiniBoard</code>, that subclasses <code class="calibre9">TTTBoard</code> and overrides <code class="calibre9">getBoardStr()</code> to provide a smaller drawing of the tic-tac-toe board. The program will ask the player which board style to use. We don’t need to copy and paste the rest of the <code class="calibre9">TTTBoard</code> methods because <code class="calibre9">MiniBoard</code> will inherit them. </p>
+<p class="calibre23">Add the following to the end of your <em class="calibre10">tictactoe_oop.py</em> file to create a child class of the original <code class="calibre9">TTTBoard</code> class and then override the <code class="calibre9">getBoardStr()</code> method:</p>
+<pre class="calibre28"><code class="calibre9">class MiniBoard(TTTBoard):
+    def getBoardStr(self):
+        """Return a tiny text-representation of the board."""
+        # Change blank spaces to a '.'
+        for space in ALL_SPACES:
+            if self._spaces[space] == BLANK:
+                self._spaces[space] = '.'
+
+        boardStr = f'''
+          {self._spaces['1']}{self._spaces['2']}{self._spaces['3']} 123
+          {self._spaces['4']}{self._spaces['5']}{self._spaces['6']} 456
+          {self._spaces['7']}{self._spaces['8']}{self._spaces['9']} 789'''
+
+        # Change '.' back to blank spaces.
+        for space in ALL_SPACES:
+            if self._spaces[space] == '.':
+                self._spaces[space] = BLANK
+        return boardStr</code></pre>
+<p class="calibre23">As with the <code class="calibre9">getBoardStr()</code> method for the <code class="calibre9">TTTBoard</code> class, the <code class="calibre9">getBoardStr()</code> method for <code class="calibre9">MiniBoard</code> creates a multiline string of a tic-tac-toe board to display when passed to the <code class="calibre9">print()</code> function. But this string is much smaller, forgoing the lines between the X and O marks and using periods to indicate blank spaces.</p>
+<p class="calibre23">Change the line in <code class="calibre9">main()</code> so it instantiates a <code class="calibre9">MiniBoard</code> object instead of a <code class="calibre9">TTTBoard</code> object:</p>
+<pre class="calibre28"><code class="calibre9">    if input('Use mini board? Y/N: ').lower().startswith('y'):
+        gameBoard = MiniBoard() # Create a MiniBoard object.
+    else:
+        gameBoard = TTTBoard() # Create a TTTBoard object.</code></pre>
+<p class="calibre23"><span type="pagebreak" title="297" id="calibre_link-630" class="calibre16"></span>Other than this one line change to <code class="calibre9">main()</code>, the rest of the program works the same as before. When you run the program now, the output will look something like this:</p>
+<pre class="calibre28"><code class="calibre9">Welcome to Tic-Tac-Toe!
+Use mini board? Y/N: <b class="calibre25">y</b>
+
+          ... 123
+          ... 456
+          ... 789
+What is X's move? (1-9)
+<b class="calibre25">1</b>
+
+          X.. 123
+          ... 456
+          ... 789
+What is O's move? (1-9)
+<var class="calibre43">--snip--</var>
+          XXX 123
+          .OO 456
+          O.X 789
+X has won the game!
+Thanks for playing!</code></pre>
+<p class="calibre23">Your program can now easily have both implementations of these tic-tac-toe board classes. Of course, if you <em class="calibre10">only</em> want the mini version of the board, you could simply replace the code in the <code class="calibre9">getBoardStr()</code> method for<code class="calibre9"> TTTBoard</code>. But if you need <em class="calibre10">both</em>, inheritance lets you easily create two classes by reusing their common code.</p>
+<p class="calibre23">If we didn’t use inheritance, we could have, say, added a new attribute to <code class="calibre9">TTTBoard</code> called <code class="calibre9">useMiniBoard</code> and put an <code class="calibre9">if</code>-<code class="calibre9">else</code> statement inside <code class="calibre9">getBoardStr()</code> to decide when to show the regular board or the mini one. This would work well for such a simple change. But what if the <code class="calibre9">MiniBoard</code> subclass needed to override 2, 3, or even 100 methods? What if we wanted to create several different subclasses of <code class="calibre9">TTTBoard</code>? Not using inheritance would cause an explosion of <code class="calibre9">if</code>-<code class="calibre9">else</code> statements inside our methods and a large increase in our code’s complexity. By using subclasses and overriding methods, we can better organize our code into separate classes to handle these different use cases.</p>
+<h3 id="calibre_link-286" class="calibre27">The super() Function</h3>
+<p class="bodyfirst">A child class’s overridden method is often similar to the parent class’s method. Even though inheritance is a code reuse technique, overriding a method might cause you to rewrite the same code from the parent class’s method as part of the child class’s method. To prevent this duplicate code, the built-in <code class="calibre9">super()</code> function allows an overriding method to call the original method in the parent class.</p>
+<p class="calibre23">For example, let’s create a new class called <code class="calibre9">HintBoard</code> that subclasses <code class="calibre9">TTTBoard</code>. The new class overrides <code class="calibre9">getBoardStr()</code>, so after drawing the tic-tac-toe board, it also adds a hint if either X or O could win on their next move. This means that the <code class="calibre9">HintBoard</code> class’s <code class="calibre9">getBoardStr()</code> method has to do <span type="pagebreak" title="298" id="calibre_link-631" class="calibre16"></span>all the same tasks that the <code class="calibre9">TTTBoard</code> class’s <code class="calibre9">getBoardStr()</code> method does to draw the tic-tac-toe board. Instead of repeating the code to do this, we can use <code class="calibre9">super()</code> to call the <code class="calibre9">TTTBoard</code> class’s <code class="calibre9">getBoardStr()</code> method from the <code class="calibre9">HintBoard</code> class’s <code class="calibre9">getBoardStr()</code> method. Add the following to the end of your <em class="calibre10">tictactoe_oop.py</em> file: </p>
+<pre class="calibre28"><code class="calibre9">class HintBoard(TTTBoard):
+    def getBoardStr(self):
+        """Return a text-representation of the board with hints."""
+<span class="codeannotationhang">1</span>         boardStr = super().getBoardStr() # Call getBoardStr() in TTTBoard.
+
+        xCanWin = False
+        oCanWin = False
+<span class="codeannotationhang">2</span>         originalSpaces = self._spaces # Backup _spaces.
+        for space in ALL_SPACES: # Check each space:
+            # Simulate X moving on this space:
+            self._spaces = copy.copy(originalSpaces)
+            if self._spaces[space] == BLANK:
+                self._spaces[space] = X
+            if self.isWinner(X):
+                xCanWin = True
+            # Simulate O moving on this space:
+<span class="codeannotationhang">3</span>             self._spaces = copy.copy(originalSpaces)
+            if self._spaces[space] == BLANK:
+                self._spaces[space] = O
+            if self.isWinner(O):
+                oCanWin = True
+        if xCanWin:
+            boardStr += '\nX can win in one more move.'
+        if oCanWin:
+            boardStr += '\nO can win in one more move.'
+        self._spaces = originalSpaces
+        return boardStr</code></pre>
+<p class="calibre23">First, <code class="calibre9">super().getBoardStr()</code> <span class="codeannotation">1</span> runs the code inside the parent <code class="calibre9">TTTBoard</code> class’s <code class="calibre9">getBoardStr()</code>, which returns a string of the tic-tac-toe board. We save this string in a variable named <code class="calibre9">boardStr</code> for now. With the board string created by reusing <code class="calibre9">TTTBoard</code> class’s <code class="calibre9">getBoardStr()</code>, the rest of the code in this method handles generating the hint. The <code class="calibre9">getBoardStr()</code> method then sets <code class="calibre9">xCanWin</code> and <code class="calibre9">oCanWin</code> variables to <code class="calibre9">False</code>, and backs up the <code class="calibre9">self._spaces</code> dictionary to an <code class="calibre9">originalSpaces</code> variable <span class="codeannotation">2</span>. Then a <code class="calibre9">for</code> loop loops over all board spaces from <code class="calibre9">'1'</code> to <code class="calibre9">'9'</code>. Inside the loop, the <code class="calibre9">self._spaces</code> attribute is set to a copy of the <code class="calibre9">originalSpaces</code> dictionary, and if the current space being looped on is blank, an X is placed there. This simulates X moving on this blank space for its next move. A call to <code class="calibre9">self.isWinner()</code> will determine if this would be a winning move, and if so, <code class="calibre9">xCanWin</code> is set to <code class="calibre9">True</code>. Then these steps are repeated for O to see whether O could win by moving on this space <span class="codeannotation">3</span>. This method uses the <code class="calibre9">copy</code> module to make a copy of the dictionary in <code class="calibre9">self._spaces</code>, so add the following line to the top of <em class="calibre10">tictactoe.py</em>:</p>
+<pre class="calibre28"><code class="calibre9">import copy</code></pre>
+<p class="calibre23"><span type="pagebreak" title="299" id="calibre_link-632" class="calibre16"></span>Next, change the line in <code class="calibre9">main()</code> so it instantiates a <code class="calibre9">HintBoard</code> object instead of a <code class="calibre9">TTTBoard</code> object:</p>
+<pre class="calibre28"><code class="calibre9">    gameBoard = HintBoard() # Create a TTT board object.</code></pre>
+<p class="calibre23">Other than this one line change to <code class="calibre9">main()</code>, the rest of the program works exactly as before. When you run the program now, the output will look something like this:</p>
+<pre class="calibre28"><code class="calibre9">Welcome to Tic-Tac-Toe!
+<var class="calibre43">--snip--</var>
+      X| |   1 2 3
+      -+-+-
+       | |O  4 5 6
+      -+-+-
+       | |X  7 8 9
+X can win in one more move.
+What is O's move? (1-9)
+<b class="calibre25">5</b>
+
+      X| |   1 2 3
+      -+-+-
+       |O|O  4 5 6
+      -+-+-
+       | |X  7 8 9
+O can win in one more move.
+<var class="calibre43">--snip--</var>
+The game is a tie!
+Thanks for playing!</code></pre>
+<p class="calibre23">At the end of the method, if <code class="calibre9">xCanWin</code> or <code class="calibre9">oCanWin</code> is <code class="calibre9">True</code>, an additional message stating so is added to the <code class="calibre9">boardStr</code> string. Finally, <code class="calibre9">boardStr</code> is returned.</p>
+<p class="calibre23">Not every overridden method needs to use <code class="calibre9">super()</code>! If a class’s overriding method does something completely different from the overridden method in the parent class, there’s no need to call the overridden method using <code class="calibre9">super()</code>. The <code class="calibre9">super()</code> function is especially useful when a class has more than one parent method, as explained in “Multiple Inheritance” later in this chapter.</p>
+<h3 id="calibre_link-287" class="calibre27">Favor Composition Over Inheritance</h3>
+<p class="bodyfirst">Inheritance is a great technique for code reuse, and you might want to start using it immediately in all your classes. But you might not always want the base and subclasses to be so tightly coupled. Creating multiple levels of inheritance doesn’t add organization so much as bureaucracy to your code.</p>
+<p class="calibre23">Although you can use inheritance for classes with “is a” relationships (in other words, when the child class is a kind of the parent class), it’s often favorable to use a technique called <em class="calibre10">composition</em> for classes with “has a” relationships. Composition is the class design technique of including objects in your class rather than inheriting those objects’ class. This is what we do when we add <span type="pagebreak" title="300" id="calibre_link-633" class="calibre16"></span>attributes to our classes. When designing your classes using inheritance, favor composition instead of inheritance. This is what we’ve been doing with all the examples in this and the previous chapter, as described in the following list:</p>
+<ul class="calibre36">
+<li class="calibre11">A <code class="calibre9">WizCoin</code> object “has an” amount of galleon, sickle, and knut coins.</li>
+<li class="calibre11">A <code class="calibre9">TTTBoard</code> object “has a” set of nine spaces.</li>
+<li class="calibre11">A <code class="calibre9">MiniBoard</code> object “is a” <code class="calibre9">TTTBoard</code> object, so it also “has a” set of nine spaces.</li>
+<li class="calibre11">A <code class="calibre9">HintBoard</code> object “is a” <code class="calibre9">TTTBoard</code> object, so it also “has a” set of nine spaces.</li>
+</ul>
+<p class="calibre23">Let’s return to our <code class="calibre9">WizCoin</code> class from the previous chapter. If we created a new <code class="calibre9">WizardCustomer</code> class to represent customers in the wizarding world, those customers would be carrying an amount of money, which we could represent through the <code class="calibre9">WizCoin</code> class. But there is no “is a” relationship between the two classes; a <code class="calibre9">WizardCustomer</code> object is not a kind of <code class="calibre9">WizCoin</code> object. If we used inheritance, it could create some awkward code:</p>
+<pre class="calibre28"><code class="calibre9">import wizcoin
+
+<span class="codeannotationhang">1</span> class WizardCustomer(wizcoin.WizCoin):
+    def __init__(self, name):
+        self.name = name
+        super().__init__(0, 0, 0)
+
+wizard = WizardCustomer('Alice')
+print(f'{wizard.name} has {wizard.value()} knuts worth of money.')
+print(f'{wizard.name}\'s coins weigh {wizard.weightInGrams()} grams.')</code></pre>
+<p class="calibre23">In this example, <code class="calibre9">WizardCustomer</code> inherits the methods of a <code class="calibre9">WizCoin</code><span class="codeannotation">1</span> object, such as <code class="calibre9">value()</code> and <code class="calibre9">weightInGrams()</code>. Technically, a <code class="calibre9">WizardCustomer</code> that inherits from <code class="calibre9">WizCoin</code> can do all the same tasks that a <code class="calibre9">WizardCustomer</code> that includes a <code class="calibre9">WizCoin</code> object as an attribute can. But the <code class="calibre9">wizard.value()</code> and <code class="calibre9">wizard.weightInGrams()</code> method names are misleading: it seems like they would return the wizard’s value and weight rather than the value and weight of the wizard’s coins. In addition, if we later wanted to add a <code class="calibre9">weightInGrams()</code> method for the wizard’s weight, that method name would already be taken.</p>
+<p class="calibre23">It’s much better to have a <code class="calibre9">WizCoin</code> object as an attribute, because a wizard customer “has a” quantity of wizard coins:</p>
+<pre class="calibre28"><code class="calibre9">import wizcoin
+
+class WizardCustomer:
+    def __init__(self, name):
+        self.name = name
+<span class="codeannotationhang">1</span>         self.purse = wizcoin.WizCoin(0, 0, 0)
+
+wizard = WizardCustomer('Alice')
+print(f'{wizard.name} has {wizard.purse.value()} knuts worth of money.')
+print(f'{wizard.name}\'s coins weigh {wizard.purse.weightInGrams()} grams.')</code></pre>
+<p class="calibre23"><span type="pagebreak" title="301" id="calibre_link-634" class="calibre16"></span>Instead of making the <code class="calibre9">WizardCustomer</code> class inherit methods from <code class="calibre9">WizCoin</code>, we give the <code class="calibre9">WizardCustomer</code> class a <code class="calibre9">purse</code> attribute <span class="codeannotation">1</span>, which contains a <code class="calibre9">WizCoin</code> object. When you use composition, any changes to the <code class="calibre9">WizCoin</code> class’s methods won’t change the <code class="calibre9">WizardCustomer</code> class’s methods. This technique offers more flexibility in future design changes for both classes and leads to more maintainable code.</p>
+<h3 id="calibre_link-288" class="calibre27">Inheritance’s Downside</h3>
+<p class="bodyfirst">The primary downside of inheritance is that any future changes you make to parent classes are necessarily inherited by all its child classes. In most cases, this tight coupling is exactly what you want. But in some instances, your code requirements won’t easily fit your inheritance model.</p>
+<p class="calibre23">For example, let’s say we have <code class="calibre9">Car</code>, <code class="calibre9">Motorcycle</code>, and <code class="calibre9">LunarRover</code> classes in a vehicle simulation program. They all need similar methods, such as <code class="calibre9">startIgnition()</code> and <code class="calibre9">changeTire()</code>. Instead of copying and pasting this code into each class, we can create a parent <code class="calibre9">Vehicle</code> class and have <code class="calibre9">Car</code>, <code class="calibre9">Motorcycle</code>, and <code class="calibre9">LunarRover</code> inherit it. Now if we need to fix a bug in, say, the <code class="calibre9">changeTire()</code> method, there’s only one place we need to make the change. This is especially helpful if we have dozens of different vehicle-related classes inheriting from <code class="calibre9">Vehicle</code>. The code for these classes would look like this:</p>
+<pre class="calibre28"><code class="calibre9">class Vehicle:
+    def __init__(self):
+        print('Vehicle created.')
+    def startIgnition(self):
+        pass  # Ignition starting code goes here.
+    def changeTire(self):
+        pass  # Tire changing code goes here.
+
+class Car(Vehicle):
+    def __init__(self):
+        print('Car created.')
+
+class Motorcycle(Vehicle):
+    def __init__(self):
+        print('Motorcycle created.')
+
+class LunarRover(Vehicle):
+    def __init__(self):
+        print('LunarRover created.')</code></pre>
+<p class="calibre23">But all future changes to <code class="calibre9">Vehicle</code> will affect these subclasses as well. What happens if we need a <code class="calibre9">changeSparkPlug()</code> method? Cars and motorcycles have combustion engines with spark plugs, but lunar rovers don’t. By favoring composition over inheritance, we can create separate <code class="calibre9">CombustionEngine</code> and <code class="calibre9">ElectricEngine</code> classes. Then we design the <code class="calibre9">Vehicle</code> class so it “has an” <code class="calibre9"></code><span type="pagebreak" title="302" id="calibre_link-635" class="calibre16"></span>engine attribute, either a <code class="calibre9">CombustionEngine</code> or <code class="calibre9">ElectricEngine</code> object, with the appropriate methods:</p>
+<pre class="calibre28"><code class="calibre9">class CombustionEngine:
+    def __init__(self):
+        print('Combustion engine created.')
+    def changeSparkPlug(self):
+        pass  # Spark plug changing code goes here.
+
+class ElectricEngine:
+    def __init__(self):
+        print('Electric engine created.')
+
+class Vehicle:
+    def __init__(self):
+        print('Vehicle created.')
+        self.engine = CombustionEngine()  # Use this engine by default.
+<var class="calibre43">--snip--</var>
+
+class LunarRover(Vehicle):
+    def __init__(self):
+        print('LunarRover created.')
+        self.engine = ElectricEngine()</code></pre>
+<p class="calibre23">This could require rewriting large amounts of code, particularly if you have several classes that inherit from a preexisting <code class="calibre9">Vehicle</code> class: all the <code class="calibre9">vehicleObj.changeSparkPlug()</code> calls would need to become <code class="calibre9">vehicleObj.engine.changeSparkPlug()</code> for every object of the <code class="calibre9">Vehicle</code> class or its subclasses. Because such a sizeable change could introduce bugs, you might want to simply have the <code class="calibre9">changeSparkPlug()</code> method for <code class="calibre9">LunarVehicle</code> do nothing. In this case, the Pythonic way is to set <code class="calibre9">changeSparkPlug</code> to <code class="calibre9">None</code> inside the <code class="calibre9">LunarVehicle </code>class:</p>
+<pre class="calibre28"><code class="calibre9">class LunarRover(Vehicle):
+    changeSparkPlug = None
+    def __init__(self):
+        print('LunarRover created.')</code></pre>
+<p class="calibre23">The <code class="calibre9">changeSparkPlug = None</code> line follows the syntax described in “Class Attributes” later in this chapter. This overrides the <code class="calibre9">changeSparkPlug()</code> method inherited from <code class="calibre9">Vehicle</code>, so calling it with a <code class="calibre9">LunarRover</code> object causes an error:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">myVehicle = LunarRover()</b>
+LunarRover created.
+&gt;&gt;&gt; <b class="calibre25">myVehicle.changeSparkPlug()</b>
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+TypeError: 'NoneType' object is not callable</code></pre>
+<p class="calibre23">This error allows us to fail fast and immediately see a problem if we try to call this inappropriate method with a <code class="calibre9">LunarRover</code> object. Any child classes of <code class="calibre9">LunarRover</code> also inherit this <code class="calibre9">None</code> value for <code class="calibre9">changeSparkPlug()</code>. The <code class="calibre9">TypeError: 'NoneType' object is not callable</code> error message tells us that the programmer <span type="pagebreak" title="303" id="calibre_link-636" class="calibre16"></span>of the <code class="calibre9">LunarRover</code> class intentionally set the <code class="calibre9">changeSparkPlug()</code> method to <code class="calibre9">None</code>. If no such method existed in the first place, we would have received a <code class="calibre9">NameError: name 'changeSparkPlug' is not defined</code> error message.</p>
+<p class="calibre23">Inheritance can create classes with complexity and contradiction. It’s often favorable to use composition instead.</p>
+<h2 id="calibre_link-289" class="calibre7">The isinstance() and issubclass() Functions</h2>
+<p class="bodyfirst">When we need to know the type of an object, we can pass the object to the built-in <code class="calibre9">type()</code> function, as described in the previous chapter. But if we’re doing a type check of an object, it’s a better idea to use the more flexible <code class="calibre9">isinstance()</code> built-in function. The <code class="calibre9">isinstance()</code> function will return <code class="calibre9">True</code> if the object is of the given class <em class="calibre10">or a subclass of the given class</em>. Enter the following into the interactive shell:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">class ParentClass:</b>
+...     <b class="calibre25">pass</b>
+...
+&gt;&gt;&gt; <b class="calibre25">class ChildClass(ParentClass):</b>
+...     <b class="calibre25">pass</b>
+...
+&gt;&gt;&gt; <b class="calibre25">parent = ParentClass()</b> # Create a ParentClass object.
+&gt;&gt;&gt; <b class="calibre25">child = ChildClass()</b> # Create a ChildClass object.
+&gt;&gt;&gt; <b class="calibre25">isinstance(parent, ParentClass)</b>
+True
+&gt;&gt;&gt; <b class="calibre25">isinstance(parent, ChildClass)</b>
+False
+<span class="codeannotationhang">1</span> &gt;&gt;&gt; <b class="calibre25">isinstance(child, ChildClass)</b>
+True
+<span class="codeannotationhang">2</span> &gt;&gt;&gt; <b class="calibre25">isinstance(child, ParentClass)</b>
+True</code></pre>
+<p class="calibre23">Notice that <code class="calibre9">isinstance()</code> indicates that the <code class="calibre9">ChildClass</code> object in <code class="calibre9">child</code> is an instance of <code class="calibre9">ChildClass </code><span class="codeannotation">1</span> and an instance of <code class="calibre9">ParentClass </code><span class="codeannotation">2</span>. This makes sense, because a <code class="calibre9">ChildClass</code> object “is a” kind of <code class="calibre9">ParentClass</code> object.</p>
+<p class="calibre23">You can also pass a tuple of class objects as the second argument to see whether the first argument is one of any of the classes in the tuple:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">isinstance(42, (int, str, bool))</b> # True if 42 is an int, str, or bool.
+True</code></pre>
+<p class="calibre23">The less commonly used <code class="calibre9">issubclass()</code> built-in function can identify whether the class object passed for the first argument is a subclass of (or the same class as) the class object passed for the second argument:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">issubclass(ChildClass, ParentClass) </b># ChildClass subclasses ParentClass.
+True
+&gt;&gt;&gt; <b class="calibre25">issubclass(ChildClass, str) </b># ChildClass doesn't subclass str.
+False
+&gt;&gt;&gt; <b class="calibre25">issubclass(ChildClass, ChildClass) </b># ChildClass is ChildClass.
+True</code></pre>
+<p class="calibre23"><span type="pagebreak" title="304" id="calibre_link-637" class="calibre16"></span>As you can with <code class="calibre9">isinstance()</code>, you can pass a tuple of class objects as the second argument to <code class="calibre9">issubclass()</code> to see whether the first argument is a subclass of any of the classes in the tuple. The key difference between <code class="calibre9">isinstance()</code> and <code class="calibre9">issubclass()</code> is that <code class="calibre9">issubclass()</code> is passed two class objects, whereas <code class="calibre9">isinstance()</code> is passed an object and a class object.</p>
+<h2 id="calibre_link-290" class="calibre7">Class Methods</h2>
+<p class="bodyfirst"><em class="calibre10">Class methods</em> are associated with a class rather than with individual objects, like regular methods are. You can recognize a class method in code when you see two markers: the <code class="calibre9">@classmethod</code> decorator before the method’s <code class="calibre9">def</code> statement and the use of <code class="calibre9">cls</code> as the first parameter, as shown in the following example.</p>
+<pre class="calibre28"><code class="calibre9">class ExampleClass:
+    def exampleRegularMethod(self):
+        print('This is a regular method.')
+
+    @classmethod
+    def exampleClassMethod(cls):
+        print('This is a class method.')
+
+# Call the class method without instantiating an object:
+ExampleClass.exampleClassMethod()
+
+obj = ExampleClass()
+# Given the above line, these two lines are equivalent:
+obj.exampleClassMethod()
+obj.__class__.exampleClassMethod()</code></pre>
+<p class="calibre23">The <code class="calibre9">cls</code> parameter acts like <code class="calibre9">self</code> except <code class="calibre9">self</code> refers to an object, but the <code class="calibre9">cls</code> parameter refers to an object’s class. This means that the code in a class method cannot access an individual object’s attributes or call an object’s regular methods. Class methods can only call other class methods or access class attributes. We use the name <code class="calibre9">cls</code> because <code class="calibre9">class</code> is a Python keyword, and just like other keywords, such as <code class="calibre9">if</code>, <code class="calibre9">while</code>, or <code class="calibre9">import</code>, we can’t use it for parameter names. We often call class attributes through the class object, as in <code class="calibre9">ExampleClass.exampleClassMethod()</code>. But we can also call them through any object of the class, as in <code class="calibre9">obj.exampleClassMethod()</code>.</p>
+<p class="calibre23">Class methods aren’t commonly used. The most frequent use case is to provide alternative constructor methods besides <code class="calibre9">__init__()</code>. For example, what if a constructor function could accept either a string of data the new object needs or a string of a filename that contains the data the new object needs? We don’t want the list of the <code class="calibre9">__init__()</code> method’s parameters to be lengthy and confusing. Instead let’s use class methods to return a new object.</p>
+<p class="calibre23">For example, let’s create an <code class="calibre9">AsciiArt</code> class. As you saw in Chapter 14, ASCII art uses text characters to form an image. </p>
+<span type="pagebreak" title="305" id="calibre_link-705" class="calibre16"></span><pre class="calibre28"><code class="calibre9">class AsciiArt:
+    def __init__(self, characters):
+        self._characters = characters
+
+    @classmethod
+    def fromFile(cls, filename):
+        with open(filename) as fileObj:
+            characters = fileObj.read()
+            return cls(characters)
+
+    def display(self):
+        print(self._characters)
+
+    # Other AsciiArt methods would go here...
+
+face1 = AsciiArt(' _______\n' +
+                 '|  . .  |\n' +
+                 '| \\___/ |\n' +
+                 '|_______|')
+face1.display()
+
+face2 = AsciiArt.fromFile('face.txt')
+face2.display()</code></pre>
+<p class="calibre23">The <code class="calibre9">AsciiArt</code> class has an <code class="calibre9">__init__()</code> method that can be passed the text characters of the image as a string. It also has a <code class="calibre9">fromFile()</code> class method that can be passed the filename string of a text file containing the ASCII art. Both methods create <code class="calibre9">AsciiArt</code> objects.</p>
+<p class="calibre23">When you run this program and there is a <em class="calibre10">face.txt</em> file that contains the ASCII art face, the output will look something like this:</p>
+<pre class="calibre28"><code class="calibre9"> _______
+|  . .  |
+| \___/ |
+|_______|
+ _______
+|  . .  |
+| \___/ |
+|_______|</code></pre>
+<p class="calibre23">The <code class="calibre9">fromFile()</code> class method makes your code a bit easier to read, compared to having <code class="calibre9">__init__()</code> do everything.</p>
+<p class="calibre23">Another benefit of class methods is that a subclass of <code class="calibre9">AsciiArt</code> can inherit its <code class="calibre9">fromFile()</code> method (and override it if necessary). This is why we call <code class="calibre9">cls</code><code class="calibre9">(characters)</code> in the <code class="calibre9">AsciiArt</code> class’s <code class="calibre9">fromFile()</code> method instead of <code class="calibre9">AsciiArt(characters)</code>. The <code class="calibre9">cls()</code> call will also work in subclasses of <code class="calibre9">AsciiArt</code> without modification because the <code class="calibre9">AsciiArt</code> class isn’t hardcoded into the method. But an <code class="calibre9">AsciiArt()</code> call would always call <code class="calibre9">AsciiArt</code> class’s <code class="calibre9">__init__()</code> instead of the subclass’s <code class="calibre9">__init__()</code>. You can think of <code class="calibre9">cls</code> as meaning “an object representing this class.”</p>
+<p class="calibre23"><span type="pagebreak" title="306" id="calibre_link-638" class="calibre16"></span>Keep in mind that just as regular methods should always use their <code class="calibre9">self </code>parameter somewhere in their code, a class method should always use its <code class="calibre9">cls</code> parameter. If your class method’s code<em class="calibre10"> never </em>uses the<em class="calibre10"> </em><code class="calibre9">cls<em class="calibre10"> </em></code>parameter, it’s a sign that your class method should probably just be a function.</p>
+<h2 id="calibre_link-291" class="calibre7">Class Attributes</h2>
+<p class="bodyfirst">A class attribute is a variable that belongs to the class rather than to an object. We create class attributes inside the class but outside all methods, just like we create global variables in a <em class="calibre10">.py</em> file but outside all functions. Here’s an example of a class attribute named <code class="calibre9">count</code>, which keeps track of how many <code class="calibre9">CreateCounter</code> objects have been created:</p>
+<pre class="calibre28"><code class="calibre9">class CreateCounter:
+    count = 0 # This is a class attribute.
+
+    def __init__(self):
+        CreateCounter.count += 1
+
+print('Objects created:', CreateCounter.count)  # Prints 0.
+a = CreateCounter()
+b = CreateCounter()
+c = CreateCounter()
+print('Objects created:', CreateCounter.count)  # Prints 3.</code></pre>
+<p class="calibre23">The <code class="calibre9">CreateCounter</code> class has a single class attribute named <code class="calibre9">count</code>. All <code class="calibre9">CreateCounter</code> objects share this attribute rather than having their own separate <code class="calibre9">count</code> attributes. This is why the <code class="calibre9">CreateCounter.count += 1</code> line in the constructor function can keep count of every <code class="calibre9">CreateCounter</code> object created. When you run this program, the output will look like this:</p>
+<pre class="calibre28"><code class="calibre9">Objects created: 0
+Objects created: 3</code></pre>
+<p class="calibre23">We rarely use class attributes. Even this “count how many <code class="calibre9">CreateCounter</code> objects have been created” example can be done more simply by using a global variable instead of a class attribute. </p>
+<h2 id="calibre_link-292" class="calibre7">Static Methods</h2>
+<p class="bodyfirst">A <em class="calibre10">static method</em> doesn’t have a <code class="calibre9">self</code> or <code class="calibre9">cls</code> parameter. Static methods are effectively just functions, because they can’t access the attributes or methods of the class or its objects. Rarely, if ever, do you need to use static methods in Python. If you do decide to use one, you should strongly consider just creating a regular function instead. </p>
+<p class="calibre23">We define static methods by placing the <code class="calibre9">@staticmethod</code> decorator before their <code class="calibre9">def</code> statements. Here is an example of a static method. </p>
+<span type="pagebreak" title="307" id="calibre_link-708" class="calibre16"></span><pre class="calibre28"><code class="calibre9">class ExampleClassWithStaticMethod:
+    @staticmethod
+    def sayHello():
+        print('Hello!')
+
+# Note that no object is created, the class name precedes sayHello():
+ExampleClassWithStaticMethod.sayHello()</code></pre>
+<p class="calibre23">There would be almost no difference between the <code class="calibre9">sayHello()</code> static method in the <code class="calibre9">ExampleClassWithStaticMethod</code> class and a <code class="calibre9">sayHello()</code> function. In fact, you might prefer to use a function, because you can call it without having to enter the class name beforehand. </p>
+<p class="calibre23">Static methods are more common in other languages that don’t have Python’s flexible language features. Python’s inclusion of static methods imitates the features of other languages but doesn’t offer much practical value.</p>
+<h2 id="calibre_link-293" class="calibre7">When to Use Class and Static Object-Oriented Features</h2>
+<p class="bodyfirst">You’ll rarely need class methods, class attributes, and static methods. They’re also prone to overuse. If you’re thinking, “Why can’t I just use a function or global variable instead?” this is a hint that you probably don’t need to use a class method, class attribute, or static method. The only reason this intermediate-level book covers them is so you can recognize them when you encounter them in code, but I’m not encouraging you to use them. They can be useful if you’re creating your own framework with an elaborate family of classes that are, in turn, expected to be subclassed by programmers using the framework. But you most likely won’t need them when you’re writing straightforward Python applications.</p>
+<p class="calibre23">For more discussion on these features and why you do or don’t need them, read Phillip J. Eby’s post “Python Is Not Java” at <a href="https://dirtsimple.org/2004/12/python-is-not-java.html" class="calibre19">https://dirtsimple.org/2004/12/python-is-not-java.html</a> and Ryan Tomayko’s “The Static Method Thing” at <a href="https://tomayko.com/blog/2004/the-static-method-thing" class="calibre19">https://tomayko.com/blog/2004/the-static-method-thing</a>.</p>
+<h2 id="calibre_link-294" class="calibre7">Object-Oriented Buzzwords</h2>
+<p class="bodyfirst">Explanations of OOP often begin with a lot of jargon, such as inheritance, encapsulation, and polymorphism. The importance of knowing these terms is overrated, but you should have at least a basic understanding of them. I already covered inheritance, so I’ll describe the other concepts here.</p>
+<h3 id="calibre_link-295" class="calibre27">Encapsulation</h3>
+<p class="bodyfirst">The word <em class="calibre10">encapsulation</em> has two common but related definitions. The first definition is that encapsulation is the bundling of related data and code into a single unit. To encapsulate means to <em class="calibre10">box up</em>. This is essentially what <span type="pagebreak" title="308" id="calibre_link-639" class="calibre16"></span>classes do: they combine related attributes and methods. For example, our <code class="calibre9">WizCoin</code> class encapsulates three integers for knuts, sickles, and galleons into a single <code class="calibre9">WizCoin</code> object.</p>
+<p class="calibre23">The second definition is that encapsulation is an <em class="calibre10">information hiding</em> technique that lets objects hide complex implementation details about how the object works. You saw this in “Private Attributes and Private Methods” on page 282, where <code class="calibre9">BankAccount</code> objects present <code class="calibre9">deposit()</code> and <code class="calibre9">withdraw()</code> methods to hide the details of how their <code class="calibre9">_balance</code> attributes are handled. Functions serve a similar <em class="calibre10">black box</em> purpose: how the <code class="calibre9">math.sqrt()</code> function calculates the square root of a number is hidden. All you need to know is that the function returns the square root of the number you passed it.</p>
+<h3 id="calibre_link-296" class="calibre27">Polymorphism</h3>
+<p class="bodyfirst"><em class="calibre10">Polymorphism</em> allows objects of one type to be treated as objects of another type. For example, the <code class="calibre9">len()</code> function returns the length of the argument passed to it. You can pass a string to <code class="calibre9">len()</code> to see how many characters it has, but you can also pass a list or dictionary to <code class="calibre9">len()</code> to see how many items or key-value pairs it has, respectively. This form of polymorphism is called <em class="calibre10">generic functions</em> or <em class="calibre10">parametric polymorphism</em>, because it can handle objects of many different types.</p>
+<p class="calibre23">Polymorphism also refers to <em class="calibre10">ad hoc polymorphism</em> or <em class="calibre10">operator overloading</em>, where operators (such as <code class="calibre9">+</code> or <code class="calibre9">*</code>) can have different behavior based on the type of objects they’re operating on. For example, the <code class="calibre9">+</code> operator does mathematical addition when operating on two integer or float values, but it does string concatenation when operating on two strings. Operator overloading is covered in Chapter 17.</p>
+<h2 id="calibre_link-297" class="calibre7">When Not to Use Inheritance</h2>
+<p class="bodyfirst">It’s easy to overengineer your classes using inheritance. As Luciano Ramalho states, “Placing objects in a neat hierarchy appeals to our sense of order; programmers do it just for fun.” We’ll create classes, subclasses, and sub-subclasses when a single class, or a couple of functions in a module, would achieve the same effect. But recall the Zen of Python tenet in Chapter 6 that <em class="calibre10">simple is better than complex</em>.</p>
+<p class="calibre23">Using OOP allows you to organize your code into smaller units (in this case, classes) that are easier to reason about than one large <em class="calibre10">.py</em> file with hundreds of functions defined in no particular order. Inheritance is useful if you have several functions that all operate on the same dictionary or list data structure. In that case, it’s beneficial to organize them into a class. </p>
+<p class="calibre23">But here are some examples of when you don’t need to create a class or use inheritance:</p>
+<ul class="calibre36">
+<li class="calibre11">If your class consists of methods that never use the <code class="calibre9">self</code> or <code class="calibre9">cls</code> parameter, delete the class and use functions in place of the methods.</li>
+<li class="calibre11"><span type="pagebreak" title="309" id="calibre_link-640" class="calibre16"></span>If you’ve created a parent with only a single child class but never create objects of the parent class, you can combine them into a single class.</li>
+<li class="calibre11">If you create more than three or four levels of subclasses, you’re probably using inheritance unnecessarily. Combine those subclasses into fewer classes.</li>
+</ul>
+<p class="calibre23">As the non-OOP and OOP versions of the tic-tac-toe program in the previous chapter illustrate, it’s certainly possible to not use classes and still have a working, bug-free program. Don’t feel that you have to design your program as some complex web of classes. A simple solution that works is better than a complicated solution that doesn’t. Joel Spolsky writes about this in his blog post, “Don’t Let the Astronaut Architects Scare You” at <a href="https://www.joelonsoftware.com/2001/04/21/dont-let-architecture-astronauts-scare-you/" class="calibre19">https://www.joelonsoftware.com/2001/04/21/dont-let-architecture-astronauts-scare-you/</a>.</p>
+<p class="calibre23">You should know how object-oriented concepts like inheritance work, because they can help you organize your code and make development and debugging easier. Due to Python’s flexibility, the language not only offers OOP features, but also doesn’t require you to use them when they aren’t suited for your program’s needs.</p>
+<h2 id="calibre_link-298" class="calibre7">Multiple Inheritance</h2>
+<p class="bodyfirst">Many programming languages limit classes to at most one parent class. Python supports multiple parent classes by offering a feature called <em class="calibre10">multiple inheritance</em>. For example, we can have an <code class="calibre9">Airplane</code> class with a <code class="calibre9">flyInTheAir()</code> method and a <code class="calibre9">Ship</code> class with a <code class="calibre9">floatOnWater()</code> method. We could then create a <code class="calibre9">FlyingBoat</code> class that inherits from both <code class="calibre9">Airplane</code> and <code class="calibre9">Ship</code> by listing both in the <code class="calibre9">class</code> statement, separated by commas. Open a new file editor window and save the following as <em class="calibre10">flyingboat.py</em>:</p>
+<pre class="calibre28"><code class="calibre9">class Airplane:
+    def flyInTheAir(self):
+        print('Flying...')
+
+class Ship:
+    def floatOnWater(self):
+        print('Floating...')
+
+class FlyingBoat(Airplane, Ship):
+    pass</code></pre>
+<p class="calibre23">The <code class="calibre9">FlyingBoat</code> objects we create will inherit the <code class="calibre9">flyInTheAir()</code> and <code class="calibre9">floatOnWater()</code> methods, as you can see in the interactive shell:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">from flyingboat import *</b>
+&gt;&gt;&gt; <b class="calibre25">seaDuck = FlyingBoat()</b>
+&gt;&gt;&gt; <b class="calibre25">seaDuck.flyInTheAir()</b>
+Flying...
+&gt;&gt;&gt; <b class="calibre25">seaDuck.floatOnWater()</b>
+Floating...</code></pre>
+<p class="calibre23"><span type="pagebreak" title="310" id="calibre_link-641" class="calibre16"></span>Multiple inheritance is straightforward as long as the parent classes’ method names are distinct and don’t overlap. These sorts of classes are called <em class="calibre10">mixins</em>. (This is just a general term for a kind of class; Python has no <code class="calibre9">mixin</code> keyword.) But what happens when we inherit from multiple complicated classes that do share method names?</p>
+<p class="calibre23">For example, consider the <code class="calibre9">MiniBoard</code> and <code class="calibre9">HintTTTBoard</code> tic-tac-toe board classes from earlier in this chapter. What if we want a class that displays a miniature tic-tac-toe board and also provides hints? With multiple inheritance, we can reuse these existing classes. Add the following to the end of your <em class="calibre10">tictactoe_oop.py</em> file but before the <code class="calibre9">if</code> statement that calls the <code class="calibre9">main()</code> function:</p>
+<pre class="calibre28"><code class="calibre9">class HybridBoard(HintBoard, MiniBoard):
+    pass</code></pre>
+<p class="calibre23">This class has nothing in it. It reuses code by inheriting from <code class="calibre9">HintBoard</code> and <code class="calibre9">MiniBoard</code>. Next, change the code in the <code class="calibre9">main()</code> function so it creates a <code class="calibre9">HybridBoard</code> object:</p>
+<pre class="calibre28"><code class="calibre9">gameBoard = HybridBoard() # Create a TTT board object.</code></pre>
+<p class="calibre23">Both parent classes, <code class="calibre9">MiniBoard</code> and <code class="calibre9">HintBoard</code>, have a method named <code class="calibre9">getBoardStr()</code>, so which one does <code class="calibre9">HybridBoard</code> inherit? When you run this program, the output displays a miniature tic-tac-toe board but also provides hints:</p>
+<pre class="calibre28"><code class="calibre9"><var class="calibre43">--snip--</var>
+          X.. 123
+          .O. 456
+          X.. 789
+X can win in one more move.</code></pre>
+<p class="calibre23">Python seems to have magically merged the <code class="calibre9">MiniBoard</code> class’s <code class="calibre9">getBoardStr()</code> method and the <code class="calibre9">HintBoard</code> class’s <code class="calibre9">getBoardStr()</code> method to do both! But this is because I’ve written them to work with each other. In fact, if you switch the order of the classes in the <code class="calibre9">HybridBoard</code> class’s <code class="calibre9">class</code> statement so it looks like this: </p>
+<pre class="calibre28"><code class="calibre9"><code class="calibre42">class HybridBoard(MiniBoard, HintBoard):</code> </code></pre>
+<p class="calibre23">you lose the hints altogether:</p>
+<pre class="calibre28"><code class="calibre9"><var class="calibre43">--snip--</var>
+          X.. 123
+          .O. 456
+          X.. 789</code></pre>
+<p class="calibre23">To understand why this happens, you need to understand Python’s <em class="calibre10">method resolution order</em> (<em class="calibre10">MRO</em>) and how the <code class="calibre9">super()</code> function actually works.</p>
+<h2 id="calibre_link-299" class="calibre7"><span type="pagebreak" title="311" id="calibre_link-642" class="calibre20"></span>Method Resolution Order</h2>
+<p class="bodyfirst">Our tic-tac-toe program now has four classes to represent boards, three with defined <code class="calibre9">getBoardStr()</code> methods and one with an inherited <code class="calibre9">getBoardStr()</code> method, as shown in <a id="calibre_link-20" href="#calibre_link-19" class="calibre19">Figure 16-2</a>.</p>
+<figure class="calibre29">
+<img src="images/000031.png" alt="f16002" class="calibre15" />
+<figcaption class="calibre30"><p class="calibre31"><a id="calibre_link-19" href="#calibre_link-20" class="calibre19">Figure 16-2:</a> The four classes in our tic-tac-toe board program</p></figcaption>
+</figure>
+<p class="calibre23">When we call <code class="calibre9">getBoardStr()</code> on a <code class="calibre9">HybridBoard</code> object, Python knows that the <code class="calibre9">HybridBoard</code> class doesn’t have a method with this name, so it checks its parent class. But the class has two parent classes, both of which have a <code class="calibre9">getBoardStr()</code> method. Which one gets called?</p>
+<p class="calibre23">You can find out by checking the <code class="calibre9">HybridBoard</code> class’s MRO, which is the ordered list of classes that Python checks when inheriting methods or when a method calls the <code class="calibre9">super()</code> function. You can see the <code class="calibre9">HybridBoard</code> class’s MRO by calling its <code class="calibre9">mro()</code> method in the interactive shell:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">from tictactoe_oop import *</b>
+&gt;&gt;&gt; <b class="calibre25">HybridBoard.mro()</b>
+[&lt;class 'tictactoe_oop.HybridBoard'&gt;, &lt;class 'tictactoe_oop.HintBoard'&gt;, &lt;class 'tictactoe_oop.MiniBoard'&gt;, &lt;class 'tictactoe_oop.TTTBoard'&gt;, &lt;class 'object'&gt;]</code></pre>
+<p class="calibre23">From this return value, you can see that when a method is called on <code class="calibre9">HybridBoard</code>, Python first checks for it in the <code class="calibre9">HybridBoard</code> class. If it’s not there, Python checks the <code class="calibre9">HintBoard</code> class, then the <code class="calibre9">MiniBoard</code> class, and finally the <code class="calibre9">TTTBoard</code> class. At the end of every MRO list is the built-in <code class="calibre9">object</code> class, which is the parent class of all classes in Python.</p>
+<p class="calibre23">For single inheritance, determining the MRO is easy: just make a chain of parent classes. For multiple inheritance, it’s trickier. Python’s MRO follows the C3 algorithm, whose details are beyond the scope of this book. But you can determine the MRO by remembering two rules:</p>
+<ul class="calibre36">
+<li class="calibre11">Python checks child classes before parent classes.</li>
+<li class="calibre11">Python checks inherited classes listed left to right in the <code class="calibre9">class</code> statement.</li>
+</ul>
+<p class="calibre23"><span type="pagebreak" title="312" id="calibre_link-643" class="calibre16"></span>If we call <code class="calibre9">getBoardStr()</code> on a <code class="calibre9">HybridBoard</code> object, Python checks the <code class="calibre9">HybridBoard</code> class first. Then, because the class’s parents from left to right are <code class="calibre9">HintBoard</code> and <code class="calibre9">MiniBoard</code>, Python checks <code class="calibre9">HintBoard</code>. This parent class has a <code class="calibre9">getBoardStr()</code> method, so <code class="calibre9">HybridBoard</code> inherits and calls it.</p>
+<p class="calibre23">But it doesn’t end there: next, this method calls <code class="calibre9">super().getBoardStr()</code>. <em class="calibre10">Super</em> is a somewhat misleading name for Python’s <code class="calibre9">super()</code> function, because it doesn’t return the parent class but rather the next class in the MRO. This means that when we call <code class="calibre9">getBoardStr()</code> on a <code class="calibre9">HybridBoard</code> object, the next class in its MRO, after <code class="calibre9">HintBoard</code>, is <code class="calibre9">MiniBoard</code>, not the parent class <code class="calibre9">TTTBoard</code>. So the call to <code class="calibre9">super().getBoardStr()</code> calls the <code class="calibre9">MiniBoard</code> class’s <code class="calibre9">getBoardStr()</code> method, which returns the miniature tic-tac-toe board string. The remaining code in the <code class="calibre9">HintBoard</code> class’s <code class="calibre9">getBoardStr()</code> after this <code class="calibre9">super()</code> call appends the hint text to this string.</p>
+<p class="calibre23">If we change the <code class="calibre9">HybridBoard</code> class’s <code class="calibre9">class</code> statement so it lists <code class="calibre9">MiniBoard</code> first and <code class="calibre9">HintBoard</code> second, its MRO will put <code class="calibre9">MiniBoard</code> before <code class="calibre9">HintBoard</code>. This means <code class="calibre9">HybridBoard</code> inherits <code class="calibre9">getBoardStr()</code> from <code class="calibre9">MiniBoard</code>, which doesn’t have a call to <code class="calibre9">super()</code>. This ordering is what caused the bug that made the miniature tic-tac-toe board display without hints: without a <code class="calibre9">super()</code> call, the <code class="calibre9">MiniBoard</code> class’s <code class="calibre9">getBoardStr()</code> method never calls the <code class="calibre9">HintBoard</code> class’s <code class="calibre9">getBoardStr()</code> method.</p>
+<p class="calibre23">Multiple inheritance allows you to create a lot of functionality in a small amount of code but easily leads to overengineered, hard-to-understand code. Favor single inheritance, mixin classes, or no inheritance. These techniques are often more than capable of carrying out your program’s tasks.</p>
+<h2 id="calibre_link-300" class="calibre7">Summary</h2>
+<p class="bodyfirst">Inheritance is a technique for code reuse. It lets you create child classes that inherit the methods of their parent classes. You can override the methods to provide new code for them but also use the <code class="calibre9">super()</code> function to call the original methods in the parent class. A child class has an “is a” relationship with its parent class, because an object of the child class is a kind of object of the parent class.</p>
+<p class="calibre23">In Python, using classes and inheritance is optional. Some programmers see the complexity that heavy use of inheritance creates as not worth its benefits. It’s often more flexible to use composition instead of inheritance, because it implements a “has a” relationship with an object of one class and objects of other classes rather than inheriting methods directly from those other classes. This means that objects of one class can have an object of another class. For example, a <code class="calibre9">Customer</code> object could have a <code class="calibre9">birthdate</code> method that is assigned a <code class="calibre9">Date</code> object rather than the <code class="calibre9">Customer</code> class subclassing <code class="calibre9">Date</code>.</p>
+<p class="calibre23">Just as <code class="calibre9">type()</code> can return the type of the object passed to it, the <code class="calibre9">isinstance()</code> and <code class="calibre9">issubclass()</code> functions return type and inheritance information about the object passed to them.</p>
+<p class="calibre23"><span type="pagebreak" title="313" id="calibre_link-644" class="calibre16"></span>Classes can have object methods and attributes, but they can also have class methods, class attributes, and static methods. Although these are rarely used, they can enable other object-oriented techniques that global variables and functions can’t provide.</p>
+<p class="calibre23">Python lets classes inherit from multiple parents, although this can lead to code that is difficult to understand. The <code class="calibre9">super()</code> function and a class’s methods figure out how to inherit methods based on the MRO. You can view a class’s MRO in the interactive shell by calling the <code class="calibre9">mro()</code> method on the class.</p>
+<p class="calibre23">This chapter and the previous one covered general OOP concepts. In the next chapter, we’ll explore Python-specific OOP techniques.</p>
+</section>
+</div>

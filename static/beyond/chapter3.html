@@ -1,0 +1,308 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Chapter 1: The Interactive Shell</title></head><body style="background-color: #fffeee;">
+
+<script type="text/javascript">
+//<![CDATA[
+
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5459430-3']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
+//]]>
+</script>
+
+
+<div style="background-color: #eeeddd; float: right; height: 310px; font-family: sans-serif;" id="otherbooks">
+  <a href="#" onclick="document.getElementById('otherbooks').outerHTML='';" style="vertical-align: top;">(close)</a><br />
+
+  <a target="_blank" href="https://nostarch.com/automatestuff2" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_automate.link');"><img src="/images/cover_automate2_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/beyond-basic-stuff-python" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_beyond.link');"><img src="/images/cover_beyond_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/inventwithpython" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_invent.link');"><img src="/images/cover_invent4th_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://www.amazon.com/Making-Games-Python-Pygame-Sweigart/dp/1469901730?ie=UTF8&amp;tag=playwithpyth-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1469901730" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_pygame.link');"><img src="/images/cover_makinggames_thumb.png" style="height: 200px; border: solid black 1px; /"></a>
+  <a target="_blank" href="https://nostarch.com/crackingcodes" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_hacking.link');"><img src="/images/cover_crackingcodes_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/scratchplayground"><img src="/images/cover_scratchprogrammingplayground_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/codingwithminecraft"><img src="/images/cover_codingwithminecraft_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <br />
+  <a href="https://inventwithpython.com/automateudemy">Use this link to get 70% off the Automate the Boring Stuff online video course.</a><br />
+  <a href="https://www.patreon.com/AlSweigart">Support me on Patreon</a>
+</div>
+
+<a href="chapter2.html">Prev: Chapter 2 - Environment Setup and the Command Line</a> | <a href="chapter4.html">Next: Chapter 4 - Choosing Understandable Names</a>
+
+
+<div type="bodymatter part" class="calibre1" id="calibre_link-15">
+<section class="toclist">
+<header class="calibre12">
+<h1 class="chaptertitle">
+<span class="partnumber"><span type="pagebreak" title="45" id="calibre_link-395" class="calibre26"></span>3</span><br class="calibre18" />
+<span class="parttitle1">Code Formatting with Black</span>
+</h1>
+</header>
+<figure class="opener"><img src="images/000017.png" alt="" class="calibre15" /></figure><p class="chapterintro">Code formatting is applying a set of rules to source code to give it a certain appearance. Although unimportant to the computer parsing your program, code formatting is vital for readability, which is necessary for maintaining your code. If your code is difficult for humans (whether it’s you or a co-worker) to understand, it will be hard to fix bugs or add new features. Formatting code isn’t a mere cosmetic issue. Python’s readability is a critical reason for the language’s popularity.</p>
+<p class="calibre22">This chapter introduces you to Black, a code formatting tool that can automatically format your source code into a consistent, readable style without changing your program’s behavior. Black is useful, because it’s tedious to manually format your code in a text editor or IDE. You’ll first learn about the rationalization for the code style choices Black makes. Then you’ll learn how to install, use, and customize the tool.</p>
+<h2 id="calibre_link-83" class="calibre7"><span type="pagebreak" title="46" id="calibre_link-396" class="calibre20"></span>How to Lose Friends and Alienate Co-Workers</h2>
+<p class="bodyfirst">We can write code in many ways that result in identical behavior. For example, we can write a list with a single space after each comma and use one kind of quote character consistently:</p>
+<pre class="calibre28"><code class="calibre9">spam = ['dog', 'cat', 'moose']</code></pre>
+<p class="calibre23">But even if we wrote the list with a varying number of spaces and quote styles, we’d still have syntactically valid Python code:</p>
+<pre class="calibre28"><code class="calibre9">spam= [ 'dog'  ,'cat',"moose"]</code></pre>
+<p class="calibre23">Programmers who prefer the former approach might like the visual separation that the spaces add and the uniformity of the quote characters. But programmers sometimes choose the latter, because they don’t want to worry about details that have no impact on whether the program works correctly. </p>
+<p class="calibre23">Beginners often ignore code formatting because they’re focused on programming concepts and language syntax. But it’s valuable for beginners to establish good code formatting habits. Programming is difficult enough, and writing understandable code for others (or for yourself in the future) can minimize this problem. </p>
+<p class="calibre23">Although you might start out coding on your own, programming is often a collaborative activity. If several programmers working on the same source code files write in their own style, the code can become an inconsistent mess, even if it runs without error. Or worse, the programmers will constantly be reformatting each other’s code to their own style, wasting time and causing arguments. Deciding whether to, say, put one or zero spaces after a comma is a matter of personal preference. These style choices can be much like deciding which side of the road to drive on; it doesn’t matter whether people drive on the right side of the road or the left side, as long as everyone consistently drives on the same side.</p>
+<h2 id="calibre_link-84" class="calibre7">Style Guides and PEP 8</h2>
+<p class="bodyfirst">An easy way to write readable code is to follow a <em class="calibre10">style guide</em>, a document that outlines a set of formatting rules a software project should follow. The <em class="calibre10">Python Enhancement Proposal 8</em> (<em class="calibre10">PEP 8</em>) is one such style guide written by the Python core development team. But some software companies have established their own style guides as well.</p>
+<p class="calibre23">You can find PEP 8 online at <a href="https://www.python.org/dev/peps/pep-0008/" class="calibre19">https://www.python.org/dev/peps/pep-0008/</a>. Many Python programmers view PEP 8 as an authoritative set of rules, although the PEP 8 creators argue otherwise. The “A Foolish Consistency Is the Hobgoblin of Little Minds” section of the guide reminds the reader that maintaining consistency and readability within a project, rather than <span type="pagebreak" title="47" id="calibre_link-397" class="calibre16"></span>adhering to any individual formatting rule, is the prime reason for enforcing style guides.</p>
+<p class="calibre23">PEP 8 even includes the following advice: “Know when to be inconsistent&mdash;sometimes style guide recommendations just aren’t applicable. When in doubt, use your best judgment.” Whether you follow all of it, some of it, or none of it, it’s worthwhile to read the PEP 8 document.</p>
+<p class="calibre23">Because we’re using the Black code formatter, our code will follow Black’s style guide, which is adapted from PEP 8’s style guide. You should learn these code formatting guidelines, because you might not always have Black conveniently at hand. The Python code guidelines you learn in this chapter also generally apply to other languages, which might not have automatic formatters available. </p>
+<p class="calibre23">I don’t like everything about how Black formats code, but I take that as the sign of a good compromise. Black uses formatting rules that programmers can live with, letting us spend less time arguing and more time programming.</p>
+<h2 id="calibre_link-85" class="calibre7">Horizontal Spacing</h2>
+<p class="bodyfirst">Empty space is just as important for readability as the code you write. These spaces help separate distinct parts of code from each other, making them easier to identify. This section explains <em class="calibre10">horizontal spacing</em>&mdash;that is, the placement of blank space within a single line of code, including the indentation at the front of the line.</p>
+<h3 id="calibre_link-86" class="calibre27">Use Space Characters for Indentation</h3>
+<p class="bodyfirst"><em class="calibre10">Indentation</em> is the whitespace at the beginning of a code line. You can use one of two whitespace characters, a space or a tab, to indent your code. Although either character works, the best practice is to use spaces instead of tabs for indentation. </p>
+<p class="calibre23">The reason is that these two characters behave differently. A space character is always rendered on the screen as a string value with a single space, like this <code class="calibre9">' '</code>. But a tab character, which is rendered as a string value containing an escape character, or <code class="calibre9">'\t'</code>, is more ambiguous. Tabs often, but not always, render as a variable amount of spacing so the following text begins at the next tab stop. The tab stop are positioned every eight spaces across the width of a text file. You can see this variation in the following interactive shell example, which first separates words with space characters and then with tab characters:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">print('Hello there, friend!\nHow are you?')</b>
+Hello there, friend!
+How are you?
+&gt;&gt;&gt; <b class="calibre25">print('Hello\tthere,\tfriend!\nHow\tare\tyou?')</b>
+Hello   there,  friend!
+How     are     you?</code></pre>
+<p class="calibre23"><span type="pagebreak" title="48" id="calibre_link-398" class="calibre16"></span>Because tabs represent a varying width of whitespace, you should avoid using them in your source code. Most code editors and IDEs will automatically insert four or eight space characters when you press the <span class="keycaps">Tab</span> key instead of one tab character.</p>
+<p class="calibre23">You also can’t use tabs <em class="calibre10">and</em> spaces for indentation in the same block of code. Using both for indentation was such a source of tedious bugs in earlier Python programs that Python 3 won’t even run code indented like this; it raises a <code class="calibre9">TabError: inconsistent use of tabs and spaces in indentation</code> exception instead. Black automatically converts any tab characters you use for indentation into four space characters.</p>
+<p class="calibre23">As for the length of each indentation level, the common practice in Python code is four spaces per level of indentation. The space characters in the following example have been marked with periods to make them visible:</p>
+<pre class="calibre28"><code class="calibre9">def getCatAmount():
+....numCats = input('How many cats do you have?')
+
+....if int(numCats) &lt; 6:
+
+........print('You should get more cats.')</code></pre>
+<p class="calibre23">The four-space standard has practical benefits compared to the alternatives; using eight spaces per level of indentation results in code that quickly runs up against line length limits, whereas using two space characters per level of indentation can make the differences in indentation hard to see. Programmers often don’t consider other amounts, such as three or six spaces, because they, and binary computing in general, have a bias for numbers that are powers of two: 2, 4, 8, 16, and so on.</p>
+<h3 id="calibre_link-87" class="calibre27">Spacing Within a Line</h3>
+<p class="bodyfirst">Horizontal spacing has more to it than just the indentation. Spaces are important for making different parts of a code line appear visually distinct. If you never use space characters, your line can end up dense and hard to parse. The following subsections provide some spacing rules to follow.</p>
+<h4 id="calibre_link-737" class="calibre44">Put a Single Space Between Operators and Identifiers</h4>
+<p class="bodyfirst">If you don’t leave spaces between operators and identifiers, your code will appear to run together. For example, this line has spaces separating operators and variables:</p>
+<pre class="calibre28"><code class="calibre9"><b class="calibre25">YES:</b> blanks = blanks[:i] + secretWord[i] + blanks[i + 1 :]</code></pre>
+<p class="calibre23">This line removes all spacing:</p>
+<pre class="calibre28"><code class="calibre9"><b class="calibre25">NO:</b>  blanks=blanks[:i]+secretWord[i]+blanks[i+1:]</code></pre>
+<p class="calibre23">In both cases, the code uses the <code class="calibre9">+</code> operator to add three values, but without spacing, the <code class="calibre9">+</code> in <code class="calibre9">blanks[i+1:]</code> can appear to be adding a fourth value. The spaces make it more obvious that this <code class="calibre9">+</code> is part of a slice for the value in <code class="calibre9">blanks</code>. </p>
+<h4 id="calibre_link-738" class="calibre44"><span type="pagebreak" title="49" id="calibre_link-399" class="calibre39"></span>Put No Spaces Before Separators and a Single Space After Separators</h4>
+<p class="bodyfirst">We separate the items lists and dictionaries, as well as the parameters in function <code class="calibre9">def</code> statements, using comma characters. You should place no spaces before these commas and a single space after them, as in this example:</p>
+<pre class="calibre28"><code class="calibre9"><b class="calibre25">YES:</b> def spam(eggs, bacon, ham):
+<b class="calibre25">YES:</b>     weights = [42.0, 3.1415, 2.718]</code></pre>
+<p class="calibre23">Otherwise, you’ll end up with “bunched up” code that is harder to read:</p>
+<pre class="calibre28"><code class="calibre9"><b class="calibre25">NO:</b>  def spam(eggs,bacon,ham):
+<b class="calibre25">NO:</b>      weights = [42.0,3.1415,2.718]</code></pre>
+<p class="calibre23">Don’t add spaces before the separator, because that unnecessarily draws the eye to the separator character:</p>
+<pre class="calibre28"><code class="calibre9"><b class="calibre25">NO:</b>  def spam(eggs , bacon , ham):
+<b class="calibre25">NO:</b>      weights = [42.0 , 3.1415 , 2.718]</code></pre>
+<p class="calibre23">Black automatically inserts a space after commas and removes spaces before them.</p>
+<h4 id="calibre_link-739" class="calibre44">Don’t Put Spaces Before or After Periods</h4>
+<p class="bodyfirst">Python allows you to insert spaces before and after the periods marking the beginning of a Python attribute, but you should avoid doing so. By not placing spaces there, you emphasize the connection between the object and its attribute, as in this example:</p>
+<pre class="calibre28"><code class="calibre9"><b class="calibre25">YES:</b> 'Hello, world'.upper()</code></pre>
+<p class="calibre23">If you put spaces before or after the period, the object and attribute look like they’re unrelated to each other:</p>
+<pre class="calibre28"><code class="calibre9"><b class="calibre25">NO:</b>  'Hello, world' . upper()</code></pre>
+<p class="calibre23">Black automatically removes spaces surrounding periods.</p>
+<h4 id="calibre_link-740" class="calibre44">Don’t Put Spaces After a Function, Method, or Container Name</h4>
+<p class="bodyfirst">We can readily identify function and method names because they’re followed by a set of parentheses, so don’t put a space between the name and the opening parenthesis. We would normally write a function call like this:</p>
+<pre class="calibre28"><code class="calibre9"><b class="calibre25">YES:</b> print('Hello, world!')</code></pre>
+<p class="calibre23">But adding a space makes this singular function call look like it’s two separate things:</p>
+<pre class="calibre28"><code class="calibre9"><b class="calibre25">NO:</b>  print ('Hello, world!')</code></pre>
+<p class="calibre23"><span type="pagebreak" title="50" id="calibre_link-400" class="calibre16"></span>Black removes any spaces between a function or method name and its opening parenthesis.</p>
+<p class="calibre23">Similarly, don’t put spaces before the opening square bracket for an index, slice, or key. We normally access items inside a container type (such as a list, dictionary, or tuple) without adding spaces between the variable name and opening square bracket, like this:</p>
+<pre class="calibre28"><code class="calibre9"><b class="calibre25">YES:</b> spam[2]
+<b class="calibre25">YES:</b> spam[0:3]
+<b class="calibre25">YES:</b> pet['name']</code></pre>
+<p class="calibre23">Adding a space once again makes the code look like two separate things:</p>
+<pre class="calibre28"><code class="calibre9"><b class="calibre25">NO:</b>  spam [2]
+<b class="calibre25">NO:</b>  spam    [0:3]
+<b class="calibre25">NO:</b>  pet ['name']</code></pre>
+<p class="calibre23">Black removes any spaces between the variable name and opening square bracket.</p>
+<h4 id="calibre_link-741" class="calibre44">Don’t Put Spaces After Opening Brackets or Before Closing Brackets</h4>
+<p class="bodyfirst">There should be no spaces separating parentheses, square brackets, or braces and their contents. For example, the parameters in a <code class="calibre9">def</code> statement or values in a list should start and end immediately after and before their parentheses and square brackets:</p>
+<pre class="calibre28"><code class="calibre9"><b class="calibre25">YES:</b> def spam(eggs, bacon, ham):
+<b class="calibre25">YES:</b>     weights = [42.0, 3.1415, 2.718]</code></pre>
+<p class="calibre23">You should not put a space after an opening or before a closing parentheses or square brackets:</p>
+<pre class="calibre28"><code class="calibre9"><b class="calibre25">NO:</b>  def spam( eggs, bacon, ham ):
+<b class="calibre25">NO:</b>      weights = [ 42.0, 3.1415, 2.718 ]</code></pre>
+<p class="calibre23">Adding these spaces doesn’t improve the code’s readability, so it’s unnecessary. Black removes these spaces if they exist in your code.</p>
+<h4 id="calibre_link-742" class="calibre44">Put Two Spaces Before End-of-Line Comments</h4>
+<p class="bodyfirst">If you add comments to the end of a code line, put two spaces after the end of the code and before the <code class="calibre9">#</code> character that begins the comment:</p>
+<pre class="calibre28"><code class="calibre9"><b class="calibre25">YES:</b> print('Hello, world!')  # Display a greeting.</code></pre>
+<p class="calibre23">The two spaces make it easier to distinguish the code from the comment. A single space, or worse, no space, makes it more difficult to notice this separation:</p>
+<pre class="calibre28"><code class="calibre9"><b class="calibre25">NO:</b>  print('Hello, world!') # Display a greeting.
+<b class="calibre25">NO:</b>  print('Hello, world!')# Display a greeting.</code></pre>
+<p class="calibre23"><span type="pagebreak" title="51" id="calibre_link-401" class="calibre16"></span>Black puts two spaces between the end of the code and the start of the comment.</p>
+<p class="calibre23">In general, I advise against putting comments at the end of a code line, because they can make the line too lengthy to read onscreen.</p>
+<h2 id="calibre_link-88" class="calibre7">Vertical Spacing</h2>
+<p class="bodyfirst"><em class="calibre10">Vertical spacing</em> is the placement of blank lines between lines of code. Just as a new paragraph in a book keeps sentences from forming a wall of text, vertical spacing can group certain lines of code together and separate those groups from one another. </p>
+<p class="calibre23">PEP 8 has several guidelines for inserting blank lines in code: it states that you should separate functions with two blank lines, classes with two blank lines, and methods within a class with one blank line. Black automatically follows these rules by inserting or removing blank lines in your code, turning this code:</p>
+<pre class="calibre28"><code class="calibre9"><b class="calibre25">NO:</b>  class ExampleClass:
+         def exampleMethod1():
+             pass
+         def exampleMethod2():
+             pass
+     def exampleFunction():
+         pass</code></pre>
+<p class="calibre23">. . . into this code:</p>
+<pre class="calibre28"><code class="calibre9"><b class="calibre25">YES:</b> class ExampleClass:
+         def exampleMethod1():
+             pass
+
+         def exampleMethod2():
+             pass
+
+
+     def exampleFunction():
+         pass</code></pre>
+<h3 id="calibre_link-89" class="calibre27">A Vertical Spacing Example</h3>
+<p class="bodyfirst">What Black <em class="calibre10">can’t</em> do is decide where blank lines within your functions, methods, or global scope should go. Which of those lines to group together is a subjective decision that is up to the programmer.</p>
+<p class="calibre23">For example, let’s look at the <code class="calibre9">EmailValidator</code> class in <em class="calibre10">validators.py</em> in the Django web app framework. It’s not necessary for you to understand how <span type="pagebreak" title="52" id="calibre_link-402" class="calibre16"></span>this code works. But pay attention to how blank lines separate the <code class="calibre9">__call__()</code> method’s code into four groups:</p>
+<pre class="calibre28"><code class="calibre9"><var class="calibre43">--snip--</var>
+    def __call__(self, value):
+    <span class="codeannotation">1</span> if not value or '@' not in value:
+            raise ValidationError(self.message, code=self.code)
+
+    <span class="codeannotation">2</span> user_part, domain_part = value.rsplit('@', 1)
+
+    <span class="codeannotation">3</span> if not self.user_regex.match(user_part):
+            raise ValidationError(self.message, code=self.code)
+
+    <span class="codeannotation">4</span> if (domain_part not in self.domain_whitelist and
+                not self.validate_domain_part(domain_part)):
+            # Try for possible IDN domain-part
+            try:
+                domain_part = punycode(domain_part)
+            except UnicodeError:
+                pass
+            else:
+                if self.validate_domain_part(domain_part):
+                    return
+            raise ValidationError(self.message, code=self.code)
+<var class="calibre43">--snip--</var></code></pre>
+<p class="calibre23">Even though there are no comments to describe this part of the code, the blank lines indicate that the groups are conceptually distinct from each other. The first group <span class="codeannotation">1</span> checks for an <code class="calibre9">@</code> symbol in the <code class="calibre9">value</code> parameter. This task is different from that of the second group <span class="codeannotation">2</span>, which splits the email address string in <code class="calibre9">value</code> into two new variables, <code class="calibre9">user_part</code> and <code class="calibre9">domain_part</code>. The third <span class="codeannotation">3</span> and fourth <span class="codeannotation">4</span> groups use these variables to validate the user and domain parts of the email address, respectively.</p>
+<p class="calibre23">Although the fourth group has 11 lines, far more than the other groups, they’re all related to the same task of validating the domain of the email address. If you felt that this task was really composed of multiple subtasks, you could insert blank lines to separate them.</p>
+<p class="calibre23">The programmer for this part of Django decided that the domain validation lines should all belong to one group, but other programmers might disagree. Because it’s subjective, Black won’t modify the vertical spacing within functions or methods.</p>
+<h3 id="calibre_link-90" class="calibre27">Vertical Spacing Best Practices</h3>
+<p class="bodyfirst">One of Python’s lesser-known features is that you can use a semicolon to separate multiple statements on a single line. This means that the following two lines:</p>
+<pre class="calibre28"><code class="calibre9">print('What is your name?')
+name = input()</code></pre>
+<p class="calibre23"><span type="pagebreak" title="53" id="calibre_link-403" class="calibre16"></span>. . . can be written on the same line if separated by a semicolon:</p>
+<pre class="calibre28"><code class="calibre9">print('What is your name?'); name = input()</code></pre>
+<p class="calibre23">As you do when using commas, you should put no space before the semicolon and one space after it.</p>
+<p class="calibre23">For statements that end with a colon, such as <code class="calibre9">if</code>, <code class="calibre9">while</code>, <code class="calibre9">for</code>, <code class="calibre9">def</code>, or <code class="calibre9">class</code> statements, a single-line block, like the call to <code class="calibre9">print()</code> in this example: </p>
+<pre class="calibre28"><code class="calibre9">if name == 'Alice':
+    print('Hello, Alice!')</code></pre>
+<p class="calibre23">. . . can be written on the same line as its <code class="calibre9">if</code> statement:</p>
+<pre class="calibre28"><code class="calibre9">if name == 'Alice': print('Hello, Alice!')</code></pre>
+<p class="calibre23">But just because Python allows you to include multiple statements on the same line doesn’t make it a good practice. It results in overly wide lines of code and too much content to read on a single line. Black splits these statements into separate lines.</p>
+<p class="calibre23">Similarly, you can import multiple modules with a single <code class="calibre9">import</code> statement:</p>
+<pre class="calibre28"><code class="calibre9">import math, os, sys</code></pre>
+<p class="calibre23">Even so, PEP 8 recommends that you split this statement into one <code class="calibre9">import</code> statement per module:</p>
+<pre class="calibre28"><code class="calibre9">import math
+import os
+import sys</code></pre>
+<p class="calibre23">If you write separate lines for imports, you’ll have an easier time spotting any additions or removals of imported modules when you’re comparing changes in a version control system’s diff tool. (Version control systems, such as Git, are covered in Chapter 12.) </p>
+<p class="calibre23">PEP 8 also recommends grouping <code class="calibre9">import</code> statements into the following three groups in this order:</p>
+<ol class="decimal">
+<li value="1" class="calibre11">Modules in the Python standard library, like <code class="calibre9">math</code>, <code class="calibre9">os</code>, and <code class="calibre9">sys</code></li>
+<li value="2" class="calibre11">Third-party modules, like Selenium, Requests, or Django</li>
+<li value="3" class="calibre11">Local modules that are a part of the program</li>
+</ol>
+<p class="calibre23">These guidelines are optional, and Black won’t change the formatting of your code’s <code class="calibre9">import</code> statements.</p>
+<h2 id="calibre_link-91" class="calibre7">Black: The Uncompromising Code Formatter</h2>
+<p class="bodyfirst">Black automatically formats the code inside your <em class="calibre10">.py</em> files. Although you should understand the formatting rules covered in this chapter, Black can <span type="pagebreak" title="54" id="calibre_link-404" class="calibre16"></span>do all the actual styling for you. If you’re working on a coding project with others, you can instantly settle many arguments on how to format code by just letting Black decide. </p>
+<p class="calibre23">You can’t change many of the rules that Black follows, which is why it’s described as “the uncompromising code formatter.” Indeed, the tool’s name comes from Henry Ford’s quote about the automobile colors choices he offered his customers: “You can have any color you want, as long as it’s black.”</p>
+<p class="calibre23">I’ve just described the exact styles that Black uses; you can find Black’s full style guide at <a href="https://black.readthedocs.io/en/stable/the_black_code_style.html" class="calibre19">https://black.readthedocs.io/en/stable/the_black_code_style.html</a>.</p>
+<h3 id="calibre_link-92" class="calibre27">Installing Black</h3>
+<p class="bodyfirst">Install Black using the <code class="calibre9">pip</code> tool that comes with Python. In Windows, do this by opening a Command Prompt window and entering the following:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al\&gt;<b class="calibre25">python -m pip install --user black</b></code></pre>
+<p class="calibre23">On macOS and Linux, open a Terminal window and enter <code class="bold">python3</code> rather than <code class="calibre9">python</code> (you should do this for all the instructions in this book that use <code class="calibre9">python</code>):</p>
+<pre class="calibre28"><code class="calibre9">Als-MacBook-Pro:~ al$ <b class="calibre25">python3 -m pip install --user black</b></code></pre>
+<p class="calibre23">The <code class="calibre9">-m</code> option tells Python to run the <code class="calibre9">pip</code> module as an application, which some Python modules are set up to do. Test that the installation was successful by running <code class="bold">python -m black</code>. You should see the message <code class="calibre9">No paths given. Nothing to do.</code> rather than <code class="calibre9">No module named black.</code></p>
+<h3 id="calibre_link-93" class="calibre27">Running Black from the Command Line</h3>
+<p class="bodyfirst">You can run Black for any Python file from the Command Prompt or Terminal window. In addition, your IDE or code editor can run Black in the background. You’ll find instructions for getting Black to work with Jupyter Notebook, Visual Studio Code, PyCharm, and other editors on Black’s home page at <a href="https://github.com/psf/black/" class="calibre19">https://github.com/psf/black/</a>. </p>
+<p class="calibre23">Let’s say that you want to format a file called <em class="calibre10">yourScript.py</em> automatically. From the command line in Windows, run the following (on macOS and Linux, use the <code class="calibre9">python3</code> command instead of <code class="calibre9">python</code></p>
+):
+<pre class="calibre28"><code class="calibre9">C:\Users\Al&gt;<b class="calibre25">python -m black yourScript.py</b></code></pre>
+<p class="calibre23">After you run this command, the content of <em class="calibre10">yourScript.py</em> will be formatted according to Black’s style guide. </p>
+<p class="calibre23">Your <code class="calibre9">PATH</code> environment variable might already be set up to run Black directly, in which case you can format <em class="calibre10">yourScript.py</em> by simply entering the following:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al&gt;<b class="calibre25">black yourScript.py</b></code></pre>
+<p class="calibre23"><span type="pagebreak" title="55" id="calibre_link-405" class="calibre16"></span>If you want to run Black over every <em class="calibre10">.py</em> file in a folder, specify a single folder instead of an individual file. The following Windows example formats every file in the <em class="calibre10">C:\yourPythonFiles</em> folder, including its subfolders:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al&gt;<b class="calibre25">python -m black C:\yourPythonFiles</b></code></pre>
+<p class="calibre23">Specifying the folder is useful if your project contains several Python files and you don’t want to enter a command for each one.</p>
+<p class="calibre23">Although Black is fairly strict about how it formats code, the next three subsections describe a few options that you <em class="calibre10">can</em> change. To see the full range of options that Black offers, run <code class="bold">python -m black --help</code>.</p>
+<h4 id="calibre_link-743" class="calibre44">Adjusting Black’s Line Length Setting</h4>
+<p class="bodyfirst">The standard line of Python code is 80 characters long. The history of the 80 character line dates back to the era of punch card computing in the 1920s when IBM introduced punch cards that had 80 columns and 12 rows. The 80 column standard remained for the printers, monitors, and command line windows developed over the next several decades. </p>
+<p class="calibre23">But in the 21st century, high-resolution screens can display text that is more than 80 characters wide. A longer line length can keep you from having to scroll vertically to view a file. A shorter line length can keep too much code from crowding on a single line and allow you to compare two source code files side by side without having to scroll horizontally.</p>
+<p class="calibre23">Black uses a default of 88 characters per line for the rather arbitrary reason that it is 10 percent more than the standard 80 character line. My preference is to use 120 characters. To tell Black to format your code with, for example, a 120-character line length limit, use the <code class="calibre9">-l 120</code> (that’s the lowercase letter <em class="calibre10">L,</em> not the number 1) command line option. On Windows, the command looks like this:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al&gt;<b class="calibre25">python -m black -l 120 yourScript.py</b></code></pre>
+<p class="calibre23">No matter what line length limit you choose for your project, all <em class="calibre10">.py</em> files in a project should use the same limit.</p>
+<h4 id="calibre_link-744" class="calibre44">Disabling Black’s Double-Quoted Strings Setting</h4>
+<p class="bodyfirst">Black automatically changes any string literals in your code from using single quotes to double quotes unless the string contains double quote characters, in which case it uses single quotes. For example, let’s say <em class="calibre10">yourScript.py</em> contains the following:</p>
+<pre class="calibre28"><code class="calibre9">a = 'Hello'
+b = "Hello"
+c = 'Al\'s cat, Zophie.'
+d = 'Zophie said, "Meow"'
+e = "Zophie said, \"Meow\""
+f = '''Hello'''  </code></pre>
+<p class="calibre23"><span type="pagebreak" title="56" id="calibre_link-406" class="calibre16"></span>Running Black on <em class="calibre10">yourScript.py</em> would format it like this: </p>
+<pre class="calibre28"><code class="calibre9"><span class="codeannotationhang">1</span> a = "Hello"
+b = "Hello"
+c = "Al's cat, Zophie."
+<span class="codeannotationhang">2</span> d = 'Zophie said, "Meow"'
+e = 'Zophie said, "Meow"'
+<span class="codeannotationhang">3</span> f = """Hello"""</code></pre>
+<p class="calibre23">Black’s preference for double quotes makes your Python code look similar to code written in other programming languages, which often use double quotes for string literals. Notice that the strings for variables <code class="calibre9">a</code>, <code class="calibre9">b</code>, and <code class="calibre9">c</code> use double quotes. The string for variable <code class="calibre9">d</code> retains its original single quotes to avoid escaping any double quotes within the string <span class="codeannotation">2</span>. Note that Black also uses double quotes for Python’s triple-quoted, multiline strings <span class="codeannotation">3</span>.</p>
+<p class="calibre23">But if you want Black to leave your string literals as you wrote them and not change the type of quotes used, pass it the <code class="calibre9">-S</code> command line option. (Note that the <em class="calibre10">S</em> is uppercase.) For example, running Black on the original <em class="calibre10">yourScript.py</em> file in Windows would produce the following output:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al&gt;<b class="calibre25">python &ndash;m black -S yourScript.py</b>
+All done!
+1 file left unchanged.</code></pre>
+<p class="calibre23">You can also use the <code class="calibre9">-l</code> line length limit and <code class="calibre9">-S</code> options in the same command:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al&gt;<b class="calibre25">python &ndash;m black &ndash;l 120 -S yourScript.py</b></code></pre>
+<h4 id="calibre_link-745" class="calibre44">Previewing the Changes Black Will Make</h4>
+<p class="bodyfirst">Although Black won’t rename your variable or change your program’s behavior, you might not like the style changes Black makes. If you want to stick to your original formatting, you could either use version control for your source code or maintain your own backups. Alternatively, you can preview the changes Black would make without letting it actually alter your files by running Black with the <code class="calibre9">--diff</code> command line option. In Windows, it looks like this:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al&gt;<b class="calibre25">python -m black --diff yourScript.py</b></code></pre>
+<p class="calibre23">This command outputs the differences in the diff format commonly used by version control software, but it’s generally readable by humans. For example, if <em class="calibre10">yourScript.py</em> contains the line <code class="calibre9">weights=[42.0,3.1415,2.718]</code>, running the <code class="calibre9">--diff</code> option would display this result:</p>
+<pre class="calibre28"><code class="calibre9">C:\Users\Al\&gt;<b class="calibre25">python -m black --diff yourScript.py</b>
+--- yourScript.py       2020-12-07 02:04:23.141417 +0000
+<span type="pagebreak" title="57" id="calibre_link-407" class="calibre16"></span>+++ yourScript.py       2020-12-07 02:08:13.893578 +0000
+@@ -1 +1,2 @@
+-weights=[42.0,3.1415,2.718]
++weights = [42.0, 3.1415, 2.718]</code></pre>
+<p class="calibre23">The minus sign indicates that Black would remove the line <code class="bold">weights=</code><code class="calibre9">[42.0,3.1415,2.718]</code> and replace it with the line prefixed with a plus sign: <code class="calibre9">weights = [42.0, 3.1415, 2.718]</code>. Keep in mind that once you’ve run Black to change your source code files, there’s no way to undo this change. You need to either make backup copies of your source code or use version control software, such as Git, before running Black.</p>
+<h3 id="calibre_link-94" class="calibre27">Disabling Black for Parts of Your Code</h3>
+<p class="bodyfirst">As great as Black is, you might not want it to format some sections of your code. For example, I like to do my own special spacing whenever I’m lining up multiple related assignment statements, as in the following example:</p>
+<pre class="calibre28"><code class="calibre9"># Set up constants for different time amounts:
+SECONDS_PER_MINUTE = 60
+SECONDS_PER_HOUR   = 60 * SECONDS_PER_MINUTE
+SECONDS_PER_DAY    = 24 * SECONDS_PER_HOUR
+SECONDS_PER_WEEK   = 7  * SECONDS_PER_DAY</code></pre>
+<p class="calibre23">Black would remove the additional spaces before the <code class="calibre9">=</code> assignment operator, making them, in my opinion, less readable:</p>
+<pre class="calibre28"><code class="calibre9"># Set up constants for different time amounts:
+SECONDS_PER_MINUTE = 60
+SECONDS_PER_HOUR = 60 * SECONDS_PER_MINUTE
+SECONDS_PER_DAY = 24 * SECONDS_PER_HOUR
+SECONDS_PER_WEEK = 7 * SECONDS_PER_DAY</code></pre>
+<p class="calibre23">By adding <code class="calibre9"># fmt: off</code> and <code class="calibre9"># fmt: on</code> comments, we can tell Black to turn off its code formatting for these lines and then resume code formatting afterward:</p>
+<pre class="calibre28"><code class="calibre9"># Set up constants for different time amounts:
+# fmt: off
+SECONDS_PER_MINUTE = 60
+SECONDS_PER_HOUR   = 60 * SECONDS_PER_MINUTE
+SECONDS_PER_DAY    = 24 * SECONDS_PER_HOUR
+SECONDS_PER_WEEK   = 7  * SECONDS_PER_DAY
+# fmt: on</code></pre>
+<p class="calibre23">Running Black on this file now won’t affect the unique spacing, or any other formatting, in the code between these two comments.</p>
+<h2 id="calibre_link-95" class="calibre7"><span type="pagebreak" title="58" id="calibre_link-408" class="calibre20"></span>Summary</h2>
+<p class="bodyfirst">Although good formatting can be invisible, poor formatting can make reading code frustrating. Style is subjective, but the software development field generally agrees on what constitutes good and poor formatting while still leaving room for personal preferences.</p>
+<p class="calibre23">Python’s syntax makes it rather flexible when it comes to style. If you’re writing code that nobody else will ever see, you can write it however you like. But much of software development is collaborative. Whether you’re working with others on a project or simply want to ask more experienced developers to review your work, formatting your code to fit accepted style guides is important. </p>
+<p class="calibre23">Formatting your code in an editor is a boring task that you can automate with a tool like Black. This chapter covered several of the guidelines that Black follows to make your code more readable, including spacing code vertically and horizontally, which keeps it from being too dense to read easily, and setting a limit on how long each line should be. Black enforces these rules for you, preventing potential style arguments with collaborators. </p>
+<p class="calibre23">But there’s more to code style than spacing and deciding between single and double quotes. For instance, choosing descriptive variable names is also a critical factor for code readability. Although automated tools like Black can make <em class="calibre10">syntactic</em> decisions, such as the amount of spacing code should have, they can’t make <em class="calibre10">semantic</em> decisions, such as what a good variable name is. That responsibility is yours, and we’ll discuss this topic in the next chapter.</p>
+</section>
+</div>
+
+
+<a href="chapter2.html">Prev: Chapter 2 - Environment Setup and the Command Line</a> | <a href="chapter4.html">Next: Chapter 4 - Choosing Understandable Names</a>
+</body></html>

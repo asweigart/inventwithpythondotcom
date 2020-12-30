@@ -1,0 +1,346 @@
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-106">
+<section class="toclist">
+<header class="calibre12">
+<h1 class="chaptertitle">
+<span class="partnumber"><span type="pagebreak" title="69" id="calibre_link-418" class="calibre26"></span>5</span><br class="calibre18" />
+<span class="parttitle1">Finding Code Smells</span>
+</h1>
+</header>
+<figure class="opener"><img src="images/000017.png" alt="" class="calibre15" /></figure><p class="chapterintro">Code that causes a program to crash is obviously wrong, but crashes aren’t the only indicator of issues in your programs. Other signs can suggest the presence of more subtle bugs or unreadable code. Just as the smell of gas can indicate a gas leak or the smell of smoke could indicate a fire, a <em class="calibre10">code smell</em> is a source code pattern that signals potential bugs. A code smell doesn’t necessarily mean a problem exists, but it does mean you should investigate your program.</p>
+<p class="calibre22">This chapter lists several common code smells. It takes much less time and effort to prevent a bug than to encounter, understand, and fix a bug later. Every programmer has stories of spending hours debugging only to <span type="pagebreak" title="70" id="calibre_link-419" class="calibre16"></span>find that the fix involved changing a single line of code. For this reason, even a whiff of a potential bug should give you pause, prompting you to double-check that you aren’t creating future problems.</p>
+<p class="calibre23">Of course, a code smell isn’t necessarily a problem. Ultimately, whether to address or ignore a code smell is a judgment call for you to make.</p>
+<h2 id="calibre_link-107" class="calibre7">Duplicate Code</h2>
+<p class="bodyfirst">The most common code smell is <em class="calibre10">duplicate code</em>. Duplicate code is any source code that you could have created by copying and pasting some other code into your program. For example, this short program contains duplicate code. Notice that it asks how the user is feeling three times:</p>
+<pre class="calibre28"><code class="calibre9">print('Good morning!')
+print('How are you feeling?')
+feeling = input()
+print('I am happy to hear that you are feeling ' + feeling + '.')
+print('Good afternoon!')
+print('How are you feeling?')
+feeling = input()
+print('I am happy to hear that you are feeling ' + feeling + '.')
+print('Good evening!')
+print('How are you feeling?')
+feeling = input()
+print('I am happy to hear that you are feeling ' + feeling + '.')</code></pre>
+<p class="calibre23">Duplicate code is a problem because it makes changing the code difficult; a change you make to one copy of the duplicate code must be made to every copy of it in the program. If you forget to make a change somewhere, or if you make different changes to different copies, your program will likely end up with bugs.</p>
+<p class="calibre23">The solution to duplicate code is to <em class="calibre10">deduplicate</em> it; that is, make it appear once in your program by placing the code in a function or loop. In the following example, I’ve moved the duplicate code into a function and then repeatedly called that function:</p>
+<pre class="calibre28"><code class="calibre9">def askFeeling():
+    print('How are you feeling?')
+    feeling = input()
+    print('I am happy to hear that you are feeling ' + feeling + '.')
+
+print('Good morning!')
+askFeeling()
+print('Good afternoon!')
+askFeeling()
+print('Good evening!')
+askFeeling()</code></pre>
+<p class="calibre23"><span type="pagebreak" title="71" id="calibre_link-420" class="calibre16"></span>In this next example, I’ve moved the duplicate code into a loop:</p>
+<pre class="calibre28"><code class="calibre9">for timeOfDay in ['morning', 'afternoon', 'evening']:
+    print('Good ' + timeOfDay + '!')
+    print('How are you feeling?')
+    feeling = input()
+    print('I am happy to hear that you are feeling ' + feeling + '.')</code></pre>
+<p class="calibre23">You could also combine these two techniques and use a function and a loop:</p>
+<pre class="calibre28"><code class="calibre9">def askFeeling(timeOfDay):
+    print('Good ' + timeOfDay + '!')
+    print('How are you feeling?')
+    feeling = input()
+    print('I am happy to hear that you are feeling ' + feeling + '.')
+
+for timeOfDay in ['morning', 'afternoon', 'evening']:
+    askFeeling(timeOfDay)</code></pre>
+<p class="calibre23">Notice that the code that produces the “Good morning/afternoon/evening!” messages is similar but not identical. In the third improvement to the program, I parameterized the code to deduplicate the identical parts. Meanwhile, the <code class="calibre9">timeOfDay</code> parameter and <code class="calibre9">timeOfDay</code> loop variable replace the parts that differ. Now that I’ve deduplicated this code by removing the extra copies, I only need to make any necessary changes in one place.</p>
+<p class="calibre23">As with all code smells, avoiding duplicate code isn’t a hard-and-fast rule you must always follow. In general, the longer the duplicate code section or the more duplicate copies that appear in your program, the stronger the case for deduplicating it. I don’t mind copying and pasting code once or even twice. But I generally start to consider deduplicating code when three or four copies exist in my program. </p>
+<p class="calibre23">Sometimes, code is just not worth the trouble of deduplicating. Compare the first code example in this section to the most recent one. Although the duplicate code is longer, it’s simple and straightforward. The deduplicated example does the same thing but involves a loop, a new <code class="calibre9">timeOfDay</code> loop variable, and a new function with a parameter that is also named <code class="calibre9">timeOfDay</code>.</p>
+<p class="calibre23">Duplicate code is a code smell because it makes your code harder to change consistently. If several duplicates are in your program, the solution is to place code inside a function or loop so it appears only once.</p>
+<h2 id="calibre_link-108" class="calibre7">Magic Numbers</h2>
+<p class="bodyfirst">It’s no surprise that programming involves numbers. But some of the numbers that appear in your source code can confuse other programmers (or you a couple weeks after writing them). For example, consider the number <code class="calibre9">604800</code> in the following line:</p>
+<pre class="calibre28"><code class="calibre9">expiration = time.time() + 604800</code></pre>
+<p class="calibre23"><span type="pagebreak" title="72" id="calibre_link-421" class="calibre16"></span>The <code class="calibre9">time.time()</code> function returns an integer representing the current time. We can assume that the <code class="calibre9">expiration</code> variable will represent some point 604,800 seconds into the future. But <code class="calibre9">604800</code> is rather mysterious: what’s the significance of this expiration date? A comment can help clarify:</p>
+<pre class="calibre28"><code class="calibre9">expiration = time.time() + 604800  # Expire in one week.</code></pre>
+<p class="calibre23">This is a good solution, but an even better one is to replace these “magic” numbers with constants. <em class="calibre10">Constants</em> are variables whose names are written in uppercase letters to indicate that their values shouldn’t change after their initial assignment. Usually, constants are defined as global variables at the top of the source code file:</p>
+<pre class="calibre28"><code class="calibre9"># Set up constants for different time amounts:
+SECONDS_PER_MINUTE = 60
+SECONDS_PER_HOUR   = 60 * SECONDS_PER_MINUTE
+SECONDS_PER_DAY    = 24 * SECONDS_PER_HOUR
+SECONDS_PER_WEEK   = 7  * SECONDS_PER_DAY
+
+<var class="calibre43">--snip--</var>
+
+expiration = time.time() + SECONDS_PER_WEEK  # Expire in one week.</code></pre>
+<p class="calibre23">You should use separate constants for magic numbers that serve different purposes, even if the magic number is the same. For example, there are 52 cards in a deck of playing cards and 52 weeks in a year. But if you have both amounts in your program, you should do something like the following:</p>
+<pre class="calibre28"><code class="calibre9">NUM_CARDS_IN_DECK = 52
+NUM_WEEKS_IN_YEAR = 52
+
+print('This deck contains', NUM_CARDS_IN_DECK, 'cards.')
+print('The 2-year contract lasts for', 2 * NUM_WEEKS_IN_YEAR, 'weeks.')</code></pre>
+<p class="calibre23">When you run this code, the output will look like this:</p>
+<pre class="calibre28"><code class="calibre9">This deck contains 52 cards.
+The 2-year contract lasts for 104 weeks.</code></pre>
+<p class="calibre23">Using separate constants allows you to change them independently in the future. Note that constant variables should never change values while the program is running. But this doesn’t mean that the programmer can never update them in the source code. For example, if a future version of the code includes a joker card, you can change the <code class="calibre9">cards</code> constant without affecting the <code class="calibre9">weeks</code> one:</p>
+<pre class="calibre28"><code class="calibre9">NUM_CARDS_IN_DECK = 53
+NUM_WEEKS_IN_YEAR = 52</code></pre>
+<p class="calibre23"><span type="pagebreak" title="73" id="calibre_link-422" class="calibre16"></span>The term <em class="calibre10">magic number</em> can also apply to non-numeric values. For example, you might use string values as constants. Consider the following program, which asks the user to enter a direction and displays a warning if the direction is north. A <code class="calibre9">'nrth'</code> typo causes a bug that prevents the program from displaying the warning:</p>
+<pre class="calibre28"><code class="calibre9">while True:
+    print('Set solar panel direction:')
+    direction = input().lower()
+    if direction in ('north', 'south', 'east', 'west'):
+        break
+
+print('Solar panel heading set to:', direction)
+<span class="codeannotationhang">1</span> if direction == 'nrth':
+    print('Warning: Facing north is inefficient for this panel.')</code></pre>
+<p class="calibre23">This bug can be hard to detect: the typo in the <code class="calibre9">'nrth'</code> string <span class="codeannotation">1</span> is still syntactically correct Python. The program doesn’t crash, and it’s easy to overlook the lack of a warning message. But if we used constants and made this same typo, the typo would cause the program to crash because Python would notice that a <code class="calibre9">NRTH</code> constant doesn’t exist:</p>
+<pre class="calibre28"><code class="calibre9"># Set up constants for each cardinal direction:
+NORTH = 'north'
+SOUTH = 'south'
+EAST = 'east'
+WEST = 'west'
+
+while True:
+    print('Set solar panel direction:')
+    direction = input().lower()
+    if direction in (NORTH, SOUTH, EAST, WEST):
+        break
+
+print('Solar panel heading set to:', direction)
+<span class="codeannotationhang">1</span> if direction == NRTH:
+    print('Warning: Facing north is inefficient for this panel.')</code></pre>
+<p class="calibre23">The <code class="calibre9">NameError</code> exception raised by the code line with the <code class="calibre9">NRTH</code> typo <span class="codeannotation">1</span> makes the bug immediately obvious when you run this program:</p>
+<pre class="calibre28"><code class="calibre9">Set solar panel direction:
+<b class="calibre25">west</b>
+Solar panel heading set to: west
+Traceback (most recent call last):
+  File "panelset.py", line 14, in &lt;module&gt;
+    if direction == NRTH:
+NameError: name 'NRTH' is not defined</code></pre>
+<p class="calibre23">Magic numbers are a code smell because they don’t convey their purpose, making your code less readable, harder to update, and prone to undetectable typos. The solution is to use constant variables instead.</p>
+<h2 id="calibre_link-109" class="calibre7"><span type="pagebreak" title="74" id="calibre_link-423" class="calibre20"></span>Commented-Out Code and Dead Code</h2>
+<p class="bodyfirst">Commenting out code so it doesn’t run is fine as a temporary measure. You might want to skip some lines to test other functionality, and commenting them out makes them easy to add back in later. But if commented-out code remains in place, it’s a complete mystery why it was removed and under what condition it might ever be needed again. Consider the following example:</p>
+<pre class="calibre28"><code class="calibre9">doSomething()
+#doAnotherThing()
+doSomeImportantTask()
+doAnotherThing()</code></pre>
+<p class="calibre23">This code prompts many unanswered questions: Why was <code class="calibre9">doAnotherThing()</code> commented out? Will we ever include it again? Why wasn’t the second call to <code class="calibre9">doAnotherThing()</code> commented out? Were there originally two calls to <code class="calibre9">doAnotherThing()</code>, or was there one call that was moved after <code class="calibre9">doSomeImportantTask()</code>? Is there a reason we shouldn’t remove the commented-out code? There are no readily available answers to these questions.</p>
+<p class="calibre23"><em class="calibre10">Dead code</em> is code that is unreachable or logically can never run. For example, code inside a function but after a <code class="calibre9">return</code> statement, code in an <code class="calibre9">if</code> statement block with an always <code class="calibre9">False</code> condition, or code in a function that is never called is all dead code. To see this in practice, enter the following into the interactive shell:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">import random</b>
+&gt;&gt;&gt; <b class="calibre25">def coinFlip():</b>
+...     <b class="calibre25">if random.randint(0, 1):</b>
+...         <b class="calibre25">return 'Heads!'</b>
+...     <b class="calibre25">else:</b>
+...         <b class="calibre25">return 'Tails!'</b>
+...     <b class="calibre25">return 'The coin landed on its edge!'</b>
+...
+&gt;&gt;&gt; <b class="calibre25">print(coinFlip())</b>
+Tails!</code></pre>
+<p class="calibre23">The <code class="calibre9">return 'The coin landed on its edge!'</code> line is dead code because the code in the <code class="calibre9">if </code>and <code class="calibre9">else</code> blocks returns before the execution could ever reach that line. Dead code is misleading because programmers reading it assume that it’s an active part of the program when it’s effectively the same as commented-out code.</p>
+<p class="calibre23"><em class="calibre10">Stubs</em> are an exception to these code smell rules. These are placeholders for future code, such as functions or classes that have yet to be implemented. In lieu of real code, a stub contains a <code class="calibre9">pass</code> statement, which does nothing. (It’s also called a <em class="calibre10">no operation</em> or <em class="calibre10">no-op</em>.) The <code class="calibre9">pass</code> statement exists so you can create stubs in places where the language syntax requires some code:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">def exampleFunction():</b>
+...     <b class="calibre25">pass</b>
+...</code></pre>
+<p class="calibre23"><span type="pagebreak" title="75" id="calibre_link-424" class="calibre16"></span>When this function is called, it does nothing. Instead, it indicates that code will eventually be added in. </p>
+<p class="calibre23">Alternatively, to avoid accidentally calling an unimplemented function, you can stub it with a <code class="calibre9">raise</code><code class="calibre9">NotImplementedError</code> statement. This will immediately indicate that the function isn’t yet ready to be called:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">def exampleFunction():</b>
+...     <b class="calibre25">raise NotImplementedError</b>
+...
+&gt;&gt;&gt; <b class="calibre25">exampleFunction()</b>
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+  File "&lt;stdin&gt;", line 2, in exampleFunction
+NotImplementedError</code></pre>
+<p class="calibre23">Raising a <code class="calibre9">NotImplementedError</code> will warn you whenever your program calls a stub function or method by accident.</p>
+<p class="calibre23">Commented-out code and dead code are code smells because they can mislead programmers into thinking that the code is an executable part of the program. Instead, remove them and use a version control system, such as Git or Subversion, to keep track of changes. Version control is covered in <span class="calibre" itemid="xref_target_Chapter 12">Chapter 12</span>. With version control, you can remove the code from your program and, if needed, easily add it back in later.</p>
+<h2 id="calibre_link-110" class="calibre7">Print Debugging</h2>
+<p class="bodyfirst"><em class="calibre10">Print debugging</em> is the practice of placing temporary <code class="calibre9">print()</code> calls in a program to display the values of variables and then rerunning the program. The process often follows these steps:</p>
+<ol class="decimal">
+<li value="1" class="calibre11">Notice a bug in your program.</li>
+<li value="2" class="calibre11">Add <code class="calibre9">print()</code> calls for some variables to find out what they contain.</li>
+<li value="3" class="calibre11">Rerun the program.</li>
+<li value="4" class="calibre11">Add some more <code class="calibre9">print()</code> calls because the earlier ones didn’t show enough information.</li>
+<li value="5" class="calibre11">Rerun the program.</li>
+<li value="6" class="calibre11">Repeat the previous two steps a few more times before finally figuring out the bug.</li>
+<li value="7" class="calibre11">Rerun the program.</li>
+<li value="8" class="calibre11">Realize you forgot to remove some of the <code class="calibre9">print()</code> calls and remove them.</li>
+</ol>
+<p class="calibre23">Print debugging is deceptively quick and simple. But it often requires multiple iterations of rerunning the program before you display the information you need to fix your bug. The solution is to use a debugger or set up logfiles for your program. By using a debugger, you can run your programs one line of code at a time and inspect any variable. Using a debugger might seem slower than simply inserting a <code class="calibre9">print()</code> call, but it saves you time in the long run.</p>
+<p class="calibre23"><span type="pagebreak" title="76" id="calibre_link-425" class="calibre16"></span>Logfiles can record large amounts of information from your program so you can compare one run of it to previous runs. In Python, the built-in <code class="calibre9">logging</code> module provides the functionality you need to easily create logfiles by using just three lines of code:</p>
+<pre class="calibre28"><code class="calibre9">import logging
+logging.basicConfig(filename='log_filename.txt', level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.debug('This is a log message.')</code></pre>
+<p class="calibre23">After importing the <code class="calibre9">logging</code> module and setting up its basic configuration, you can call <code class="calibre9">logging.debug()</code> to write information to a text file, as opposed to using <code class="calibre9">print()</code> to display it onscreen. Unlike print debugging, calling <code class="calibre9">logging.debug()</code> makes it obvious what output is debugging information and what output is the result of the program’s normal run. You can find more information about debugging in Chapter 11 of <em class="calibre10">Automate the Boring Stuff with Python</em>, 2nd edition (No Starch, 2019), which you can read online at <a href="https://autbor.com/2e/c11/" class="calibre19">https://autbor.com/2e/c11/</a>.</p>
+<h2 id="calibre_link-111" class="calibre7">Variables with Numeric Suffixes</h2>
+<p class="bodyfirst">When writing programs, you might need multiple variables that store the same kind of data. In those cases, you might be tempted to reuse a variable name by adding a numeric suffix to it. For example, if you’re handling a signup form that asks users to enter their password twice to prevent typos, you might store those password strings in variables named <code class="calibre9">password1</code> and <code class="calibre9">password2</code>. These numeric suffixes aren’t good descriptions of what the variables contain or the differences between them. They also don’t indicate how many of these variables there are: is there a <code class="calibre9">password3</code> or a <code class="calibre9">password4</code> as well? Try to create distinct names rather than lazily adding numeric suffixes. A better set of names for this password example would be <code class="calibre9">password</code> and <code class="calibre9">confirm_password</code>.</p>
+<p class="calibre23">Let’s look at another example: if you have a function that deals with start and destination coordinates, you might have the parameters <code class="calibre9">x1</code>, <code class="calibre9">y1</code>, <code class="calibre9">x2</code>, and <code class="calibre9">y2</code>. But the numeric suffix names don’t convey as much information as the names <code class="calibre9">start_x</code>, <code class="calibre9">start_y</code>, <code class="calibre9">end_x</code>, and <code class="calibre9">end_y</code>. It’s also clearer that the <code class="calibre9">start_x</code> and <code class="calibre9">start_y</code> variables are related to each other, compared to <code class="calibre9">x1</code> and <code class="calibre9">y1</code>.</p>
+<p class="calibre23">If your numeric suffixes extend past 2, you might want to use a list or set data structure to store your data as a collection. For example, you could store the values of <code class="calibre9">pet1Name</code>, <code class="calibre9">pet2Name</code>, <code class="calibre9">pet3Name</code>, and so on in a list called <code class="calibre9">petNames</code>.</p>
+<p class="calibre23">This code smell doesn’t apply to every variable that simply ends with a number. For example, it’s perfectly fine to have a variable named <code class="calibre9">enableIPv6</code>, because “6” is part of the “IPv6” proper name, not a numeric suffix. But if you’re using numeric suffixes for a series of variables, consider replacing them with a data structure, such as a list or dictionary.</p>
+<h2 id="calibre_link-112" class="calibre7"><span type="pagebreak" title="77" id="calibre_link-426" class="calibre20"></span>Classes That Should Just Be Functions or Modules</h2>
+<p class="bodyfirst">Programmers who use languages such as Java are used to creating classes to organize their program’s code. For example, let’s look at this example <code class="calibre9">Dice</code> class, which has a <code class="calibre9">roll()</code> method:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">import random</b>
+&gt;&gt;&gt; <b class="calibre25">class Dice:</b>
+...     <b class="calibre25">def __init__(self, sides=6):</b>
+...         <b class="calibre25">self.sides = sides</b>
+...     <b class="calibre25">def roll(self):</b>
+...         <b class="calibre25">return random.randint(1, self.sides)</b>
+...
+&gt;&gt;&gt; <b class="calibre25">d = Dice()</b>
+&gt;&gt;&gt; <b class="calibre25">print('You rolled a', d.roll())</b>
+You rolled a 1</code></pre>
+<p class="calibre23">This might seem like well-organized code, but think about what our actual needs are: a random number between 1 and 6. We could replace this entire class with a simple function call:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">print('You rolled a', random.randint(1, 6))</b>
+You rolled a 6</code></pre>
+<p class="calibre23">Compared to other languages, Python uses a casual approach to organizing code, because its code isn’t required to exist in a class or other boilerplate structure. If you find you’re creating objects simply to make a single function call, or if you’re writing classes that contain only static methods, these are code smells that indicate you might be better off writing functions instead. </p>
+<p class="calibre23">In Python, we use modules rather than classes to group functions together. Because classes must be in a module anyway, putting this code in classes just adds an unnecessary layer of organization to your code. <span class="calibre" itemid="xref_target_Chapters 15">Chapters 15</span> through <span class="calibre" itemid="xref_target_17">17</span> discuss these object-oriented design principles in more detail. Jack Diederich’s PyCon 2012 talk “Stop Writing Classes” covers other ways that you might be overcomplicating your Python code. </p>
+<h2 id="calibre_link-113" class="calibre7">List Comprehensions Within List Comprehensions</h2>
+<p class="bodyfirst">List comprehensions are a concise way to create complex list values. For example, to create a list of strings of digits for the numbers 0 through 100, excluding all multiples of 5, you’d typically need a <code class="calibre9">for</code> loop:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">spam = []</b>
+&gt;&gt;&gt; <b class="calibre25">for number in range(100):</b>
+...     <b class="calibre25">if number % 5 != 0:</b>
+...         <b class="calibre25">spam.append(str(number))</b>
+...
+&gt;&gt;&gt; <b class="calibre25">spam</b>
+['1', '2', '3', '4', '6', '7', '8', '9', '11', '12', '13', '14', '16', '17',
+<var class="calibre43">--snip--</var>
+'86', '87', '88', '89', '91', '92', '93', '94', '96', '97', '98', '99']</code></pre>
+<p class="calibre23"><span type="pagebreak" title="78" id="calibre_link-427" class="calibre16"></span>Alternatively, you can create this same list in a single line of code by using the list comprehension syntax:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">spam = [str(number) for number in range(100) if number % 5 != 0]</b>
+&gt;&gt;&gt; <b class="calibre25">spam</b>
+['1', '2', '3', '4', '6', '7', '8', '9', '11', '12', '13', '14', '16', '17',
+<var class="calibre43">--snip--</var>
+'86', '87', '88', '89', '91', '92', '93', '94', '96', '97', '98', '99']</code></pre>
+<p class="calibre23">Python also has syntax for set comprehensions and dictionary comprehensions:</p>
+<pre class="calibre28"><code class="calibre9"><span class="codeannotationhang">1</span> &gt;&gt;&gt; <b class="calibre25">spam = {str(number) for number in range(100) if number % 5 != 0}</b>
+&gt;&gt;&gt; <b class="calibre25">spam</b>
+{'39', '31', '96', '76', '91', '11', '71', '24', '2', '1', '22', '14', '62',
+<var class="calibre43">--snip--</var>
+'4', '57', '49', '51', '9', '63', '78', '93', '6', '86', '92', '64', '37'}
+<span class="codeannotationhang">2</span> &gt;&gt;&gt; <b class="calibre25">spam = {str(number): number for number in range(100) if number % 5 != 0}</b>
+&gt;&gt;&gt; <b class="calibre25">spam</b>
+{'1': 1, '2': 2, '3': 3, '4': 4, '6': 6, '7': 7, '8': 8, '9': 9, '11': 11,
+<var class="calibre43">--snip--</var>
+'92': 92, '93': 93, '94': 94, '96': 96, '97': 97, '98': 98, '99': 99}</code></pre>
+<p class="calibre23">A set comprehension <span class="codeannotation">1</span> uses braces instead of square brackets and produces a set value. A dictionary comprehension <span class="codeannotation">2</span> produces a dictionary value and uses a colon to separate the key and value in the comprehension.</p>
+<p class="calibre23">These comprehensions are concise and can make your code more readable. But notice that the comprehensions produce a list, set, or dictionary based on an iterable object (in this example, the <code class="calibre9">range</code> object returned by the <code class="calibre9">range(100)</code> call). Lists, sets, and dictionaries are iterable objects, which means you could have comprehensions nested inside of comprehensions, as in the following example:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">nestedIntList = [[0, 1, 2, 3], [4], [5, 6], [7, 8, 9]]</b>
+&gt;&gt;&gt; <b class="calibre25">nestedStrList = [[str(i) for i in sublist] for sublist in nestedIntList]</b>
+&gt;&gt;&gt; <b class="calibre25">nestedStrList</b>
+[['0', '1', '2', '3'], ['4'], ['5', '6'], ['7', '8', '9']]</code></pre>
+<p class="calibre23">But nested list comprehensions (or nested set and dictionary comprehensions) cram a lot of complexity into a small amount of code, making your code hard to read. It’s better to expand the list comprehension into one or more <code class="calibre9">for</code> loops instead:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">nestedIntList = [[0, 1, 2, 3], [4], [5, 6], [7, 8, 9]]</b>
+&gt;&gt;&gt; <b class="calibre25">nestedStrList = []</b>
+&gt;&gt;&gt; <b class="calibre25">for sublist in nestedIntList:</b>
+...     <b class="calibre25">nestedStrList.append([str(i) for i in sublist])</b>
+...
+&gt;&gt;&gt; <b class="calibre25">nestedStrList</b>
+[['0', '1', '2', '3'], ['4'], ['5', '6'], ['7', '8', '9']]</code></pre>
+<p class="calibre23"><span type="pagebreak" title="79" id="calibre_link-428" class="calibre16"></span>Comprehensions can also contain multiple <code class="calibre9">for</code> expressions, although this tends to produce unreadable code as well. For example, the following list comprehension produces a flattened list from a nested list:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">nestedList = [[0, 1, 2, 3], [4], [5, 6], [7, 8, 9]]</b>
+&gt;&gt;&gt; <b class="calibre25">flatList = [num for sublist in nestedList for num in sublist]</b>
+&gt;&gt;&gt; <b class="calibre25">flatList</b>
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</code></pre>
+<p class="calibre23">This list comprehension contains two <code class="calibre9">for</code> expressions, but it’s difficult for even experienced Python developers to understand. The expanded form, which uses two <code class="calibre9">for</code> loops, creates the same flattened list but is much easier to read: </p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">nestedList = [[0, 1, 2, 3], [4], [5, 6], [7, 8, 9]]</b>
+&gt;&gt;&gt; <b class="calibre25">flatList = []</b>
+&gt;&gt;&gt; <b class="calibre25">for sublist in nestedList:</b>
+...     <b class="calibre25">for num in sublist:</b>
+...         <b class="calibre25">flatList.append(num)</b>
+...
+&gt;&gt;&gt; <b class="calibre25">flatList</b>
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</code></pre>
+<p class="calibre23">Comprehensions are syntactic shortcuts that can produce concise code, but don’t go overboard and nest them within each other.</p>
+<h2 id="calibre_link-114" class="calibre7">Empty except Blocks and Poor Error Messages</h2>
+<p class="bodyfirst">Catching exceptions is one of the primary ways to ensure that your programs will continue to function even when problems arise. When an exception is raised but there is no <code class="calibre9">except</code> block to handle it, the Python program crashes by immediately stopping. This could result in losing your unsaved work or leaving files in a half-finished state.</p>
+<p class="calibre23">You can prevent crashes by supplying an <code class="calibre9">except</code> block that contains code for handling the error. But it can be difficult to decide how to handle an error, and programmers can be tempted to simply leave the <code class="calibre9">except</code> block blank with a <code class="calibre9">pass</code> statement. For example, in the following code we use <code class="calibre9">pass</code> to create an <code class="calibre9">except</code> block that does nothing:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">try:</b>
+...     <b class="calibre25">num = input('Enter a number: ')</b>
+...     <b class="calibre25">num = int(num)</b>
+... <b class="calibre25">except ValueError:</b>
+...     <b class="calibre25">pass</b>
+...
+Enter a number: <b class="calibre25">forty two</b>
+&gt;&gt;&gt; <b class="calibre25">num</b>
+'forty two'</code></pre>
+<p class="calibre23"><span type="pagebreak" title="80" id="calibre_link-429" class="calibre16"></span>This code doesn’t crash when <code class="calibre9">'forty two'</code> is passed to <code class="calibre9">int()</code> because the <code class="calibre9">ValueError</code> that <code class="calibre9">int()</code> raises is handled by the <code class="calibre9">except</code> statement. But doing nothing in response to an error might be worse than a crash. Programs crash so they don’t continue to run with bad data or in incomplete states, which could lead to even worse bugs later on. Our code doesn’t crash when nondigit characters are entered. But now the <code class="calibre9">num</code> variable contains a string instead of an integer, which could cause issues whenever the <code class="calibre9">num</code> variable gets used. Our <code class="calibre9">except</code> statement isn’t handling errors so much as hiding them. </p>
+<p class="calibre23">Handling exceptions with poor error messages is another code smell. Look at this example:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">try:</b>
+...     <b class="calibre25">num = input('Enter a number: ')</b>
+...     <b class="calibre25">num = int(num)</b>
+... <b class="calibre25">except ValueError:</b>
+...     <b class="calibre25">print('An incorrect value was passed to int()')</b>
+...
+Enter a number: <b class="calibre25">forty two</b>
+An incorrect value was passed to int()</code></pre>
+<p class="calibre23">This code doesn’t crash, which is good, but it doesn’t give the user enough information to know how to fix the problem. Error messages are meant to be read by users, not programmers. Not only does this error message have technical details that a user wouldn’t understand, such as a reference to the <code class="calibre9">int()</code> function, but it doesn’t tell the user how to fix the problem. Error messages should explain what happened as well as what the user should do about it.</p>
+<p class="calibre23">It’s easier for programmers to quickly write a single, unhelpful description of what happened rather than detailed steps that the user can take to fix the problem. But keep in mind that if your program doesn’t handle all possible exceptions that could be raised, it’s an unfinished program.</p>
+<h2 id="calibre_link-115" class="calibre7">Code Smell Myths</h2>
+<p class="bodyfirst">Some code smells aren’t really code smells at all. Programming is full of half-remembered bits of bad advice that are taken out of context or stick around long after they’ve outlived their usefulness. I blame tech book authors who try to pass off their subjective opinions as best practices.</p>
+<p class="calibre23">You might have been told some of these practices are code smells, but they’re mostly fine. I call them <em class="calibre10">code smell myths</em>: they’re warnings that you can and should ignore. Let’s look at a few of them.</p>
+<h3 id="calibre_link-116" class="calibre27">Myth: Functions Should Have Only One return Statement at the End</h3>
+<p class="bodyfirst">The “one entry, one exit” idea comes from misinterpreted advice from the days of programming in assembly and FORTRAN languages. These languages allowed you to enter a subroutine (a structure similar to a function) at any point, including in the middle of it, making it hard to debug which <span type="pagebreak" title="81" id="calibre_link-430" class="calibre16"></span>parts of the subroutine had been executed. Functions don’t have this problem (execution always begins at the start of the function). But the advice lingered, becoming “functions and methods should only have one <code class="calibre9">return</code> statement, which should be at the end of the function or method.”</p>
+<p class="calibre23">Trying to achieve a single <code class="calibre9">return</code> statement per function or method often requires a convoluted series of <code class="calibre9">if</code>-<code class="calibre9">else</code> statements that’s far more confusing than having multiple <code class="calibre9">return</code> statements. Having more than one <code class="calibre9">return</code> statement in a function or method is fine.</p>
+<h3 id="calibre_link-117" class="calibre27">Myth: Functions Should Have at Most One try Statement</h3>
+<p class="bodyfirst">“Functions and methods should do one thing” is good advice in general. But taking this to mean that exception handling should occur in a separate function goes too far. For example, let’s look at a function that indicates whether a file we want to delete is already nonexistent:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">import os</b>
+&gt;&gt;&gt; <b class="calibre25">def deleteWithConfirmation(filename):</b>
+...     <b class="calibre25">try:</b>
+...         <b class="calibre25">if (input('Delete ' + filename + ', are you sure? Y/N') == 'Y'):</b>
+...             <b class="calibre25">os.unlink(filename)</b>
+...     <b class="calibre25">except FileNotFoundError:</b>
+...         <b class="calibre25">print('That file already did not exist.')</b>
+...</code></pre>
+<p class="calibre23">Proponents of this code smell myth argue that because functions should always do just one thing, and error handling is one thing, we should split this function into two functions. They argue that if you use a <code class="calibre9">try</code>-<code class="calibre9">except</code> statement, it should be the first statement in a function and envelop all of the function’s code to look like this:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">import os</b>
+&gt;&gt;&gt; <b class="calibre25">def handleErrorForDeleteWithConfirmation(filename):</b>
+...     <b class="calibre25">try:</b>
+...         <b class="calibre25">_deleteWithConfirmation(filename)</b>
+...     <b class="calibre25">except FileNotFoundError:</b>
+...         <b class="calibre25">print('That file already did not exist.')</b>
+...
+&gt;&gt;&gt; <b class="calibre25">def _deleteWithConfirmation(filename):</b>
+...     <b class="calibre25">if (input('Delete ' + filename + ', are you sure? Y/N') == 'Y'):</b>
+...         <b class="calibre25">os.unlink(filename)</b>
+...</code></pre>
+<p class="calibre23">This is unnecessarily complicated code. The <code class="calibre9">_deleteWithConfirmation()</code> function is now marked as private with the <code class="calibre9">_</code> underscore prefix to clarify that it should never be called directly, only indirectly through a call to <code class="calibre9">handleErrorForDeleteWithConfirmation()</code>. This new function’s name is awkward, because we call it intending to delete a file, not handle an error to delete a file.</p>
+<p class="calibre23"><span type="pagebreak" title="82" id="calibre_link-431" class="calibre16"></span>Your functions should be small and simple, but this doesn’t mean they should always be limited to doing “one thing” (however you define that). It’s fine if your functions have more than one <code class="calibre9">try</code>-<code class="calibre9">except</code> statement and the statements don’t envelop all of the function’s code.</p>
+<h3 id="calibre_link-118" class="calibre27">Myth: Flag Arguments Are Bad</h3>
+<p class="bodyfirst">Boolean arguments to function or method calls are sometimes referred to as <em class="calibre10">flag arguments</em>. In programming, a <em class="calibre10">flag</em> is a value that indicates a binary setting, such as “enabled” or “disabled,” and it’s often represented by a Boolean value. We can describe these settings as set (that is, <code class="calibre9">True</code>) or cleared (that is, <code class="calibre9">False</code>).</p>
+<p class="calibre23">The false belief that flag arguments to function calls are bad is based on the claim that, depending on the flag value, the function does two entirely different things, such as in the following example:</p>
+<pre class="calibre28"><code class="calibre9">def someFunction(flagArgument):
+    if flagArgument:
+        # Run some code...
+    else:
+        # Run some completely different code...</code></pre>
+<p class="calibre23">Indeed, if your function looks like this, you should create two separate functions rather than making an argument decide which half of the function’s code to run. But most functions with flag arguments don’t do this. For example, you can pass a Boolean value for the <code class="calibre9">sorted()</code> function’s <code class="calibre9">reverse</code> keyword argument to determine the sort order. This code wouldn’t be improved by splitting the function into two functions named <code class="calibre9">sorted()</code> and <code class="calibre9">reverseSorted()</code> (while also duplicating the amount of documentation required). So the idea that flag arguments are always bad is a code smell myth.</p>
+<h3 id="calibre_link-119" class="calibre27">Myth: Global Variables Are Bad</h3>
+<p class="bodyfirst">Functions and methods are like mini-programs within your program: they contain code, including local variables that are forgotten when the function returns. This is similar to how a program’s variables are forgotten after it terminates. Functions are isolated: their code either performs correctly or has a bug depending on the arguments passed when they’re called.</p>
+<p class="calibre23">But functions and methods that use global variables lose some of this helpful isolation. Every global variable you use in a function effectively becomes another input to the function, just like the arguments. More arguments mean more complexity, which in turn means a higher likelihood for bugs. If a bug manifests in a function due to a bad value in a global variable, that bad value could have been set anywhere in the program. To search for a likely cause of this bad value, you can’t just analyze the code in the function or the line of code calling the function; you must look at the entire program’s code. For this reason, you should limit your use of global variables.</p>
+<p class="calibre23"><span type="pagebreak" title="83" id="calibre_link-432" class="calibre16"></span>For example, let’s look at the <code class="calibre9">calculateSlicesPerGuest()</code> function in a fictional <em class="calibre10">partyPlanner.py</em> program that is thousands of lines long. I’ve included line numbers to give you a sense of the program’s size:</p>
+<pre class="calibre28"><code class="calibre9">1504. def calculateSlicesPerGuest(numberOfCakeSlices):
+1505.     global numberOfPartyGuests
+1506.     return numberOfCakeSlices / numberOfPartyGuests</code></pre>
+<p class="calibre23">Let’s say when we run this program, we encounter the following exception:</p>
+<pre class="calibre28"><code class="calibre9">Traceback (most recent call last):
+  File "partyPlanner.py", line 1898, in &lt;module&gt;
+    print(calculateSlicesPerGuest(42))
+  File "partyPlanner.py", line 1506, in calculateSlicesPerGuest
+    return numberOfCakeSlices / numberOfPartyGuests
+ZeroDivisionError: division by zero</code></pre>
+<p class="calibre23">The program has a zero divide error, caused by the line <code class="calibre9">return numberOfCakeSlices / numberOfPartyGuests</code>. The <code class="calibre9">numberOfPartyGuests</code> variable must be set to <code class="calibre9">0</code> to have caused this, but where did <code class="calibre9">numberOfPartyGuests</code> get assigned this value? Because it’s a global variable, it could have happened anywhere in the thousands of lines in this program! From the traceback information, we know that <code class="calibre9">calculateSlicesPerGuest()</code> was called on line 1898 of our fictional program. If we looked at line 1898, we could find out what argument was passed for the <code class="calibre9">numberOfCakeSlices</code> parameter. But the <code class="calibre9">numberOfPartyGuests</code> global variable could have been set at any time before the function call.</p>
+<p class="calibre23">Note that global constants aren’t considered poor programming practice. Because their values never change, they don’t introduce complexity into the code the way other global variables do. When programmers mention that “global variables are bad,” they aren’t referring to constant variables.</p>
+<p class="calibre23">Global variables broaden the amount of debugging needed to find where an exception-causing value could have been set. This makes abundant use of global variables a bad idea. But the idea that <em class="calibre10">all</em> global variables are bad is a code smell myth. Global variables can be useful in smaller programs or for keeping track of settings that apply across the entire program. If you can avoid using a global variable, that’s a sign you probably should avoid using one. But “global variables are bad” is an oversimplified opinion.</p>
+<h3 id="calibre_link-120" class="calibre27">Myth: Comments Are Unnecessary</h3>
+<p class="bodyfirst">Bad comments are indeed worse than no comments at all. A comment with outdated or misleading information creates more work for the programmer instead of a better understanding. But this potential problem is sometimes used to proclaim that <em class="calibre10">all</em> comments are bad. The argument asserts that every comment should be replaced with more readable code, to the point that programs should have no comments at all.</p>
+<p class="calibre23"><span type="pagebreak" title="84" id="calibre_link-433" class="calibre16"></span>Comments are written in English (or whatever language the programmer speaks), allowing them to convey information to a degree that variable, function, and class names cannot. But writing concise, effective comments is hard. Comments, like code, require rewrites and multiple iterations to get right. We understand the code we write immediately after writing it, so writing comments seems like pointless extra work. As a result, programmers are primed to accept the “comments are unnecessary” viewpoint.</p>
+<p class="calibre23">The far more common experience is that programs have too few or no comments rather than too many or misleading comments. Rejecting comments is like saying, “Flying across the Atlantic Ocean in a passenger jet is only 99.999991 percent safe, so I’m going to swim across it instead.”</p>
+<p class="calibre23"><span class="calibre" itemid="xref_target_Chapter 10">Chapter 10</span> has more information about how to write effective comments.</p>
+<h2 id="calibre_link-121" class="calibre7">Summary</h2>
+<p class="bodyfirst">Code smells indicate that there might be a better way to write your code. They don’t necessarily require a change, but they should make you take another look. The most common code smell is duplicate code, which can signal an opportunity to place code inside a function or loop. This ensures future code changes will need to be made in only one place. Other code smells include magic numbers, which are unexplained values in your code that can be replaced by constants with descriptive names. Similarly, commented-out code and dead code are never run by the computer, and might mislead programmers who later read the program’s code. It’s best to remove them and rely on a source control system like Git if you later need to add them back to your program.</p>
+<p class="calibre23">Print debugging uses <code class="calibre9">print()</code> calls to display debugging information. Although this approach to debugging is easy, it’s often faster in the long run to rely on a debugger and logs to diagnose bugs.</p>
+<p class="calibre23">Variables with numeric suffixes, such as <code class="calibre9">x1</code>, <code class="calibre9">x2</code>, <code class="calibre9">x3</code>, and so on, are often best replaced with a single variable containing a list. Unlike in languages such as Java, in Python we use modules rather than classes to group functions together. A class that contains a single method or only static methods is a code smell suggesting that you should put that code into a module rather than a class. And although list comprehensions are a concise way to create list values, nested list comprehensions are usually unreadable.</p>
+<p class="calibre23">Additionally, any exceptions handled with empty <code class="calibre9">except</code> blocks are a code smell that you’re simply silencing the error rather than handling it. A short, cryptic error message is just as useless to the user as no error message.</p>
+<p class="calibre23">Along with these code smells are the code smell myths: programming advice that is no longer valid or has, over time, proven counterproductive. These include putting only a single <code class="calibre9">return</code> statement or <code class="calibre9">try</code>-<code class="calibre9">except</code> block in each function, never using flag arguments or global variables, and believing that comments are unnecessary.</p>
+<p class="calibre23"><span type="pagebreak" title="85" id="calibre_link-434" class="calibre16"></span>Of course, as with all programming advice, the code smells described in this chapter might or might not apply to your project or personal preferences. A best practice isn’t an objective measure. As you gain more experience, you’ll come to different conclusions about what code is readable or reliable, but the recommendations in this chapter outline issues to consider.</p>
+</section>
+</div>

@@ -1,0 +1,688 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Chapter 1: The Interactive Shell</title></head><body style="background-color: #fffeee;">
+
+<script type="text/javascript">
+//<![CDATA[
+
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5459430-3']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
+//]]>
+</script>
+
+
+<div style="background-color: #eeeddd; float: right; height: 310px; font-family: sans-serif;" id="otherbooks">
+  <a href="#" onclick="document.getElementById('otherbooks').outerHTML='';" style="vertical-align: top;">(close)</a><br />
+
+  <a target="_blank" href="https://nostarch.com/automatestuff2" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_automate.link');"><img src="/images/cover_automate2_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/beyond-basic-stuff-python" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_beyond.link');"><img src="/images/cover_beyond_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/inventwithpython" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_invent.link');"><img src="/images/cover_invent4th_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://www.amazon.com/Making-Games-Python-Pygame-Sweigart/dp/1469901730?ie=UTF8&amp;tag=playwithpyth-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1469901730" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_pygame.link');"><img src="/images/cover_makinggames_thumb.png" style="height: 200px; border: solid black 1px; /"></a>
+  <a target="_blank" href="https://nostarch.com/crackingcodes" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_hacking.link');"><img src="/images/cover_crackingcodes_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/scratchplayground"><img src="/images/cover_scratchprogrammingplayground_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/codingwithminecraft"><img src="/images/cover_codingwithminecraft_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <br />
+  <a href="https://inventwithpython.com/automateudemy">Use this link to get 70% off the Automate the Boring Stuff online video course.</a><br />
+  <a href="https://www.patreon.com/AlSweigart">Support me on Patreon</a>
+</div>
+
+<a href="chapter16.html">Prev: Chapter 16 - Object-Oriented Programming and Inheritance</a>
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-1">
+<section class="toclist">
+<header class="calibre12">
+<h1 class="chaptertitle">
+<span class="partnumber"><span type="pagebreak" title="315" id="calibre_link-645" class="calibre26"></span>17</span><br class="calibre18" />
+<span class="parttitle1">Pythonic OOP: Properties and Dunder Methods</span>
+</h1>
+</header>
+<figure class="opener"><img src="images/000017.png" alt="" class="calibre15" /></figure>
+<p class="chapterintro">Many languages have OOP features, but Python has some unique OOP features, including properties and dunder methods. Learning how to use these Pythonic techniques can help you write concise and readable code.</p>
+<p class="calibre22">Properties allow you to run some specific code each time an object’s attribute is read, modified, or deleted to ensure the object isn’t put into an invalid state. In other languages, this code is often called <em class="calibre10">getters</em> or <em class="calibre10">setters</em>. Dunder methods allow you to use your objects with Python’s built-in operators, such as the <code class="calibre9">+</code> operator. This is how you can combine two <code class="calibre9">datetime.timedelta</code> objects, such as <code class="calibre9">datetime.timedelta(days=2)</code> and<code class="calibre9"> datetime.timedelta(days=3)</code>, to create a new <code class="calibre9">datetime.timedelta(days=5)</code> object.</p>
+<p class="calibre23">In addition to using other examples, we’ll continue to expand the <code class="calibre9">WizCoin</code> class we started in Chapter 15 by adding properties and overloading operators with dunder methods. These features will make <code class="calibre9">WizCoin</code> objects more expressive and easier to use in any application that imports the <code class="calibre9">wizcoin</code> module.</p>
+<h2 id="calibre_link-301" class="calibre7"><span type="pagebreak" title="316" id="calibre_link-646" class="calibre20"></span>Properties</h2>
+<p class="bodyfirst">The <code class="calibre9">BankAccount</code> class that we used in Chapter 15 marked its <code class="calibre9">_balance</code> attribute as private by placing an underscore at the start of its name. But remember that designating an attribute as private is only a convention: all attributes in Python are technically public, meaning they’re accessible to code outside the class. There’s nothing to prevent code from intentionally or maliciously changing the <code class="calibre9">_balance</code> attribute to an invalid value.</p>
+<p class="calibre23">But you can prevent <em class="calibre10">accidental</em> invalid changes to these private attributes with properties. In Python, <em class="calibre10">properties</em> are attributes that have specially assigned <em class="calibre10">getter</em>, <em class="calibre10">setter</em>, and <em class="calibre10">deleter</em> methods that can regulate how the attribute is read, changed, and deleted. For example, if the attribute is only supposed to have integer values, setting it to the string <code class="calibre9">'42'</code> will likely cause bugs. A property would call the setter method to run code that fixes, or at least provides early detection of, setting an invalid value. If you’ve thought, “I wish I could run some code each time this attribute was accessed, modified with an assignment statement, or deleted with a <code class="calibre9">del</code> statement,” then you want to use properties.</p>
+<h3 id="calibre_link-302" class="calibre27">Turning an Attribute into a Property</h3>
+<p class="bodyfirst">First, let’s create a simple class that has a regular attribute instead of a property. Open a new file editor window and enter the following code, saving it as <em class="calibre10">regularAttributeExample.py</em>:</p>
+<pre class="calibre28"><code class="calibre9">class ClassWithRegularAttributes:
+    def __init__(self, someParameter):
+        self.someAttribute = someParameter
+
+obj = ClassWithRegularAttributes('some initial value')
+print(obj.someAttribute)  # Prints 'some initial value'
+obj.someAttribute = 'changed value'
+print(obj.someAttribute)  # Prints 'changed value'
+del obj.someAttribute  # Deletes the someAttribute attribute.</code></pre>
+<p class="calibre23">This <code class="calibre9">ClassWithRegularAttributes</code> class has a regular attribute named <code class="calibre9">someAttribute</code>. The <code class="calibre9">__init__()</code> method sets <code class="calibre9">someAttribute</code> to <code class="calibre9">'some initial value'</code>, but we then directly change the attribute’s value to <code class="calibre9">'changed value'</code>. When you run this program, the output looks like this:</p>
+<pre class="calibre28"><code class="calibre9">some initial value
+changed value</code></pre>
+<p class="calibre23">This output indicates that code can easily change <code class="calibre9">someAttribute</code> to any value. The downside of using regular attributes is that your code can set the <code class="calibre9">someAttribute</code> attribute to invalid values. This flexibility is simple and convenient, but it also means <code class="calibre9">someAttribute</code> could be set to some invalid value that causes bugs.</p>
+<p class="calibre23"><span type="pagebreak" title="317" id="calibre_link-647" class="calibre16"></span>Let’s rewrite this class using properties by following these steps to do this for an attribute named <code class="calibre9">someAttribute</code>:</p>
+<ol class="decimal">
+<li value="1" class="calibre11">Rename the attribute with an underscore prefix: <code class="calibre9">_someAttribute</code>.</li>
+<li value="2" class="calibre11">Create a method named <code class="calibre9">someAttribute</code> with the <code class="calibre9">@property</code> decorator. This getter method has the <code class="calibre9">self</code> parameter that all methods have. </li>
+<li value="3" class="calibre11">Create another method named <code class="calibre9">someAttribute</code> with the <code class="calibre9">@someAttribute.setter</code> decorator. This setter method has parameters named <code class="calibre9">self</code> and <code class="calibre9">value</code>.</li>
+<li value="4" class="calibre11">Create another method named <code class="calibre9">someAttribute</code> with the <code class="calibre9">@someAttribute.deleter</code> decorator. This deleter method has the <code class="calibre9">self</code> parameter that all methods have.</li>
+</ol>
+<p class="calibre23">Open a new file editor window and enter the following code, saving it as <em class="calibre10">propertiesExample.py</em>:</p>
+<pre class="calibre28"><code class="calibre9">class ClassWithProperties:
+    def __init__(self):
+        self.someAttribute = 'some initial value'
+
+    @property
+    def someAttribute(self): # This is the "getter" method.
+        return self._someAttribute
+
+    @someAttribute.setter
+    def someAttribute(self, value): # This is the "setter" method.
+        self._someAttribute = value
+
+    @someAttribute.deleter
+    def someAttribute(self): # This is the "deleter" method.
+        del self._someAttribute
+
+obj = ClassWithProperties()
+print(obj.someAttribute) # Prints 'some initial value'
+obj.someAttribute = 'changed value'
+print(obj.someAttribute) # Prints 'changed value'
+del obj.someAttribute # Deletes the _someAttribute attribute.</code></pre>
+<p class="calibre23">This program’s output is the same as the <em class="calibre10">regularAttributeExample.py</em> code, because they effectively do the same task: they print an object’s initial attribute and then update that attribute and print it again. </p>
+<p class="calibre23">But notice that the code outside the class never directly accesses the <code class="calibre9">_someAttribute</code> attribute (it’s private, after all). Instead, the outside code accesses the <code class="calibre9">someAttribute</code> property. What this property actually consists of is a bit abstract: the getter, setter, and deleter methods combined make up the property. When we rename an attribute named <code class="calibre9">someAttribute</code> to <code class="calibre9">_someAttribute</code> while creating getter, setter, and deleter methods for it, we call this the <code class="calibre9">someAttribute</code> property.</p>
+<p class="calibre23"><span type="pagebreak" title="318" id="calibre_link-648" class="calibre16"></span>In this context, the <code class="calibre9">_someAttribute</code> attribute is called a <em class="calibre10">backing field</em> or <em class="calibre10">backing variable</em> and is the attribute on which the property is based. Most, but not all, properties use a backing variable. We’ll create a property without a backing variable in “Read-Only Properties” later in this chapter.</p>
+<p class="calibre23">You never call the getter, setter, and deleter methods in your code because Python does it for you under the following circumstances:</p>
+<ul class="calibre36">
+<li class="calibre11">When Python runs code that accesses a property, such as <code class="calibre9">print(obj.someAttribute)</code>, behind the scenes, it calls the getter method and uses the returned value. </li>
+<li class="calibre11">When Python runs an assignment statement with a property, such as <code class="calibre9">obj.someAttribute = 'changed value'</code>, behind the scenes, it calls the setter method, passing the <code class="calibre9">'changed value'</code> string for the <code class="calibre9">value</code> parameter.</li>
+<li class="calibre11">When Python runs a <code class="calibre9">del</code> statement with a property, such as <code class="calibre9">del obj.someAttribute</code>, behind the scenes, it calls the deleter method.</li>
+</ul>
+<p class="calibre23">The code in the property’s getter, setter, and deleter methods acts on the backing variable directly. You don’t want the getter, setter, or deleter methods to act on the property, because this could cause errors. In one possible example, the getter method would access the property, causing the getter method to call itself, which makes it access the property again, causing it to call itself again, and so on until the program crashes. Open a new file editor window and enter the following code, saving it as <em class="calibre10">badPropertyExample.py</em>:</p>
+<pre class="calibre28"><code class="calibre9">class ClassWithBadProperty:
+    def __init__(self):
+        self.someAttribute = 'some initial value'
+
+    @property
+    def someAttribute(self):  # This is the "getter" method.
+        # We forgot the _ underscore in `self._someAttribute here`, causing
+        # us to use the property and call the getter method again:
+        return self.someAttribute  # This calls the getter again!
+
+    @someAttribute.setter
+    def someAttribute(self, value):  # This is the "setter" method.
+        self._someAttribute = value
+
+obj = ClassWithBadProperty()
+print(obj.someAttribute)  # Error because the getter calls the getter.</code></pre>
+<p class="calibre23">When you run this code, the getter continually calls itself until Python raises a <code class="calibre9">RecursionError</code> exception:</p>
+<pre class="calibre28"><code class="calibre9">Traceback (most recent call last):
+  File "badPropertyExample.py", line 16, in &lt;module&gt;
+    print(obj.someAttribute)  # Error because the getter calls the getter.
+  File "badPropertyExample.py", line 9, in someAttribute
+    return self.someAttribute  # This calls the getter again!
+<span type="pagebreak" title="319" id="calibre_link-649" class="calibre16"></span>  File "badPropertyExample.py", line 9, in someAttribute
+    return self.someAttribute  # This calls the getter again!
+  File "badPropertyExample.py", line 9, in someAttribute
+    return self.someAttribute  # This calls the getter again!
+  [Previous line repeated 996 more times]
+RecursionError: maximum recursion depth exceeded</code></pre>
+<p class="calibre23">To prevent this recursion, the code inside your getter, setter, and deleter methods should always act on the backing variable (which should have an underscore prefix in its name), never the property. Code outside these methods should use the property, although as with the private access underscore prefix convention, nothing prevents you from writing code on the backing variable anyway.</p>
+<h3 id="calibre_link-303" class="calibre27">Using Setters to Validate Data</h3>
+<p class="bodyfirst">The most common need for using properties is to <em class="calibre10">validate</em> data or to make sure it’s in the format you want it to be in. You might not want code outside the class to be able to set an attribute to just any value; this could lead to bugs. You can use properties to add checks that ensure only valid values are assigned to an attribute. These checks let you catch bugs earlier in code development, because they raise an exception as soon as an invalid value is set.</p>
+<p class="calibre23">Let’s update the <em class="calibre10">wizcoin.py</em> file from Chapter 15 to turn the <code class="calibre9">galleons</code>, <code class="calibre9">sickles</code>, and <code class="calibre9">knuts</code> attributes into properties. We’ll change the setter for these properties so only positive integers are valid. Our <code class="calibre9">WizCoin</code> objects represent an amount of coins, and you can’t have half a coin or an amount of coins less than zero. If code outside the class tries to set the <code class="calibre9">galleons</code>, <code class="calibre9">sickles</code>, or <code class="calibre9">knuts</code> properties to an invalid value, we’ll raise a <code class="calibre9">WizCoinException</code> exception.</p>
+<p class="calibre23">Open the <em class="calibre10">wizcoin.py</em> file that you saved in Chapter 15 and modify it to look like the following:</p>
+<pre class="calibre28"><code class="calibre9"><span class="codeannotationhang">1</span> class WizCoinException(Exception):
+<span class="codeannotationhang">2</span>     """The wizcoin module raises this when the module is misused."""
+    pass
+
+class WizCoin:
+    def __init__(self, galleons, sickles, knuts):
+        """Create a new WizCoin object with galleons, sickles, and knuts."""
+<span class="codeannotationhang">3</span>         self.galleons = galleons
+        self.sickles  = sickles
+        self.knuts    = knuts
+        # NOTE: __init__() methods NEVER have a return statement.
+
+<em class="calibre10">--snip--</em>
+
+    @property
+<span class="codeannotationhang">4</span>     def galleons(self):
+        """Returns the number of galleon coins in this object."""
+        return self._galleons
+
+<span type="pagebreak" title="320" id="calibre_link-650" class="calibre16"></span>    @galleons.setter
+<span class="codeannotationhang">5</span>     def galleons(self, value):
+<span class="codeannotationhang">6</span>         if not isinstance(value, int):
+<span class="codeannotationhang">7</span>             raise WizCoinException('galleons attr must be set to an int, not a ' + value.__class__.__qualname__)
+<span class="codeannotationhang">8</span>         if value &lt; 0:
+            raise WizCoinException('galleons attr must be a positive int, not ' + value.__class__.__qualname__)
+        self._galleons = value
+
+<em class="calibre10">--snip--</em></code></pre>
+<p class="calibre23">The new changes add a <code class="calibre9">WizCoinException</code> class <span class="codeannotation">1</span> that inherits from Python’s built-in <code class="calibre9">Exception</code> class. The class’s docstring describes how the <code class="calibre9">wizcoin</code> module <span class="codeannotation">2</span> uses it. This is a best practice for Python modules: the <code class="calibre9">WizCoin</code> class’s objects can raise this when they’re misused. That way, if a <code class="calibre9">WizCoin</code> object raises other exception classes, like <code class="calibre9">ValueError</code> or <code class="calibre9">TypeError</code>, this will mostly likely signify that it’s a bug in the <code class="calibre9">WizCoin</code> class.</p>
+<p class="calibre23">In the <code class="calibre9">__init__()</code> method, we set the <code class="calibre9">self.galleons</code>, <code class="calibre9">self.sickles</code>, and <code class="calibre9">self.knuts</code> properties <span class="codeannotation">3</span> to the corresponding parameters. </p>
+<p class="calibre23">At the bottom of the file, after the <code class="calibre9">total()</code> and <code class="calibre9">weight()</code> methods, we add a getter <span class="codeannotation">4</span> and setter method <span class="codeannotation">5</span> for the <code class="calibre9">self._galleons</code> attribute. The getter simply returns the value in <code class="calibre9">self._galleons</code>. The setter checks whether the value being assigned to the <code class="calibre9">galleons</code> property is an integer <span class="codeannotation">6</span> and positive <span class="codeannotation">8</span>. If either check fails, <code class="calibre9">WizCoinException</code> is raised with an error message. This check prevents <code class="calibre9">_galleons</code> from ever being set with an invalid value as long as code always uses the <code class="calibre9">galleons</code> property. </p>
+<p class="calibre23">All Python objects automatically have a <code class="calibre9">__class__</code> attribute, which refers to the object’s class object. In other words, <code class="calibre9">value.__class__</code> is the same class object that <code class="calibre9">type(value)</code> returns. This class object has an attribute named <code class="calibre9">__qualname__</code> that is a string of the class’s name. (Specifically, it’s the <em class="calibre10">qualified</em> name of the class, which includes the names of any classes the class object is nested in. Nested classes are of limited use and beyond the scope of this book.) For example, if <code class="calibre9">value</code> stored the <code class="calibre9">date</code> object returned by <code class="calibre9">datetime.date(2021, 1, 1)</code>, then <code class="calibre9">value.__class__.__qualname__</code> would be the string <code class="calibre9">'date'</code>. The exception messages use <code class="calibre9">value.__class__.__qualname__</code> <span class="codeannotation">7</span> to get a string of the value object’s name. The class name makes the error message more useful to the programmer reading it, because it identifies not only that the <code class="calibre9">value</code> argument was not the right type, but what type it was and what type it should be.</p>
+<p class="calibre23">You’ll need to copy the code for the getter and setter for <code class="calibre9">_galleons</code> to use for the <code class="calibre9">_sickles</code> and <code class="calibre9">_knuts</code> attributes as well. Their code is identical except they use the <code class="calibre9">_sickles</code> and <code class="calibre9">_knuts</code> attributes, instead of <code class="calibre9">_galleons</code>, as backing variables.</p>
+<h3 id="calibre_link-304" class="calibre27">Read-Only Properties</h3>
+<p class="bodyfirst">Your objects might need some read-only properties that can’t be set with the assignment operator <code class="calibre9">=</code>. You can make a property read-only by omitting the setter and deleter methods.</p>
+<p class="calibre23"><span type="pagebreak" title="321" id="calibre_link-651" class="calibre16"></span>For example, the <code class="calibre9">total()</code> method in the <code class="calibre9">WizCoin</code> class returns the value of the object in knuts. We could change this from a regular method to a read-only property, because there is no reasonable way to set the <code class="calibre9">total</code> of a <code class="calibre9">WizCoin</code> object. After all, if you set <code class="calibre9">total</code> to the integer <code class="calibre9">1000</code>, does this mean 1,000 knuts? Or does it mean 1 galleon and 493 knuts? Or does it mean some other combination? For this reason, we’ll make <code class="calibre9">total</code> a read-only property by adding the code in bold to the <em class="calibre10">wizcoin.py</em> file:</p>
+<pre class="calibre28"><code class="calibre9">    <b class="calibre25">@property</b>
+    def total(self):
+        """Total value (in knuts) of all the coins in this WizCoin object."""
+        return (self.galleons * 17 * 29) + (self.sickles * 29) + (self.knuts)
+
+    <b class="calibre25"># Note that there is no setter or deleter method for `total`.</b></code></pre>
+<p class="calibre23">After you add the <code class="calibre9">@property</code> function decorator in front of <code class="calibre9">total()</code>, Python will call the <code class="calibre9">total()</code> method whenever <code class="calibre9">total</code> is accessed. Because there is no setter or deleter method, Python raises <code class="calibre9">AttributeError</code> if any code attempts to modify or delete <code class="calibre9">total</code> by using it in an assignment or <code class="calibre9">del</code> statement, respectively. Notice that the value of the <code class="calibre9">total</code> property depends on the value in the <code class="calibre9">galleons</code>, <code class="calibre9">sickles</code>, and <code class="calibre9">knuts</code> properties: this property isn’t based on a backing variable named <code class="calibre9">_total</code>. Enter the following into the interactive shell:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">import wizcoin</b>
+&gt;&gt;&gt; <b class="calibre25">purse = wizcoin.WizCoin(2, 5, 10)</b>
+&gt;&gt;&gt; <b class="calibre25">purse.total</b>
+1141
+&gt;&gt;&gt; <b class="calibre25">purse.total = 1000</b>
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+AttributeError: can't set attribute</code></pre>
+<p class="calibre23">You might not like that your program immediately crashes when you attempt to change a read-only property, but this behavior is preferable to allowing a change to a read-only property. Your program being able to modify a read-only property would certainly cause a bug at some point while the program runs. If this bug happens much later after you modify the read-only property, it would be hard to track down the original cause. Crashing immediately allows you to notice the problem sooner.</p>
+<p class="calibre23">Don’t confuse read-only properties with constant variables. Constant variables are written in all uppercase and rely on the programmer to not modify them. Their value is supposed to remain constant and unchanging for the duration of a program’s run. A read-only property is, as with any attribute, associated with an object. A read-only property cannot be directly set or deleted. But it might evaluate to a changing value. Our <code class="calibre9">WizCoin</code> class’s <code class="calibre9">total</code> property changes as its <code class="calibre9">galleons</code>, <code class="calibre9">sickles</code>, and <code class="calibre9">knuts</code> properties change.</p>
+<h3 id="calibre_link-305" class="calibre27"><span type="pagebreak" title="322" id="calibre_link-652" class="calibre37"></span>When to Use Properties</h3>
+<p class="bodyfirst">As you saw in the previous sections, properties provide more control over how we can use a class’s attributes, and they’re a Pythonic way to write code. Methods with names like <code class="calibre9">getSomeAttribute()</code> or <code class="calibre9">setSomeAttribute()</code> signal that you should probably use properties instead.</p>
+<p class="calibre23">This isn’t to say that <em class="calibre10">every</em> instance of a method beginning with <em class="calibre10">get</em> or <em class="calibre10">set</em> should immediately be replaced with a property. There are situations in which you should use a method, even if its name begins with <em class="calibre10">get</em> or <em class="calibre10">set</em>. Here are some examples:</p>
+<ul class="calibre36">
+<li class="calibre11">For slow operations that take more than a second or two&mdash;for example, downloading or uploading a file</li>
+<li class="calibre11">For operations that have side effects, such as changes to other attributes or objects</li>
+<li class="calibre11">For operations that require additional arguments to be passed to the get or set operation&mdash;for example, in a method call like <code class="calibre9">emailObj.getFileAttachment(filename)</code></li>
+</ul>
+<p class="calibre23">Programmers often think of methods as verbs (in the sense that methods perform some action), and they think of attributes and properties as nouns (in the sense that they represent some item or object). If your code seems to be performing more of an action of getting or setting rather than getting or setting an item, it might be best to use a getter or setter method. Ultimately, this decision depends on what sounds right to you as the programmer.</p>
+<p class="calibre23">The great advantage of using Python’s properties is that you don’t have to use them when you first create your class. You can use regular attributes, and if you need properties later, you can convert the attributes to properties without breaking any code outside the class. When we make a property with the attribute’s name, we can rename the attribute using a prefix underscore and our program will still work as it did before.</p>
+<h2 id="calibre_link-306" class="calibre7">Python’s Dunder Methods</h2>
+<p class="bodyfirst">Python has several special method names that begin and end with double underscores, abbreviated as <em class="calibre10">dunder</em>. These methods are called <em class="calibre10">dunder methods</em>, <em class="calibre10">special methods</em>, or <em class="calibre10">magic methods</em>. You’re already familiar with the <code class="calibre9">__init__()</code> dunder method name, but Python has several more. We often use them for <em class="calibre10">operator overloading</em>&mdash;that is, adding custom behaviors that allow us to use objects of our classes with Python operators, such as <code class="calibre9">+</code> or <code class="calibre9">&gt;=</code>. Other dunder methods let objects of our classes work with Python’s built-in functions, such as <code class="calibre9">len()</code> or <code class="calibre9">repr()</code>. </p>
+<p class="calibre23">As with <code class="calibre9">__init__()</code> or the getter, setter, and deleter methods for properties, you almost never call dunder methods directly. Python calls them behind the scenes when you use the objects with operators or built-in functions. For example, if you create a method named <code class="calibre9">__len__()</code> or <code class="calibre9">__repr__()</code> for your class, they’ll be called behind the scenes when an object of that class is <span type="pagebreak" title="323" id="calibre_link-653" class="calibre16"></span>passed to the <code class="calibre9">len()</code> or <code class="calibre9">repr()</code> function, respectively. These methods are documented online in the official Python documentation at <a href="https://docs.python.org/3/reference/datamodel.html" class="calibre19">https://docs.python.org/3/reference/datamodel.html</a>.</p>
+<p class="calibre23">As we explore the many different types of dunder methods, we’ll expand our <code class="calibre9">WizCoin</code> class to take advantage of them.</p>
+<h3 id="calibre_link-307" class="calibre27">String Representation Dunder Methods</h3>
+<p class="bodyfirst">You can use the <code class="calibre9">__repr_()</code> and <code class="calibre9">__str__()</code> dunder methods to create string representations of objects that Python typically doesn’t know how to handle. Usually, Python creates string representations of objects in two ways. The <em class="calibre10">repr</em> (pronounced “repper”) string is a string of Python code that, when run, creates a copy of the object. The <em class="calibre10">str</em> (pronounced “stir”) string is a human-readable string that provides clear, useful information about the object. The repr and str strings are returned by the <code class="calibre9">repr()</code> and <code class="calibre9">str()</code> built-in functions, respectively. For example, enter the following into the interactive shell to see a <code class="calibre9">datetime.date</code> object’s repr and str strings:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">import datetime</b>
+<span class="codeannotationhang">1</span> &gt;&gt;&gt; <b class="calibre25">newyears = datetime.date(2021, 1, 1)</b>
+&gt;&gt;&gt; <b class="calibre25">repr(newyears)</b>
+<span class="codeannotationhang">2</span> 'datetime.date(2021, 1, 1)'
+&gt;&gt;&gt; <b class="calibre25">str(newyears)</b>
+<span class="codeannotationhang">3</span> '2021-01-01'
+<span class="codeannotationhang">4</span> &gt;&gt;&gt; <b class="calibre25">newyears</b>
+datetime.date(2021, 1, 1)</code></pre>
+<p class="calibre23">In this example, the <code class="calibre9">'datetime.date(2021, 1, 1)'</code> repr string of the <code class="calibre9">datetime.date</code> object <span class="codeannotation">2</span> is literally a string of Python code that creates a copy of that object <span class="codeannotation">1</span>. This copy provides a precise representation of the object. On the other hand, the <code class="calibre9">'2021-01-01'</code> str string of the <code class="calibre9">datetime.date</code> object <span class="codeannotation">3</span> is a string representing the object’s value in a way that’s easy for humans to read. If we simply enter the object into the interactive shell <span class="codeannotation">4</span>, it displays the repr string. An object’s str string is often displayed to users, whereas an object’s repr string is used in technical contexts, such as error messages and logfiles.</p>
+<p class="calibre23">Python knows how to display objects of its built-in types, such as integers and strings. But it can’t know how to display objects of the classes we create. If <code class="calibre9">repr()</code> doesn’t know how to create a repr or str string for an object, by convention the string will be enclosed in angle brackets and contain the object’s memory address and class name: <code class="calibre9">'&lt;wizcoin.WizCoin object at 0x00000212B4148EE0&gt;'</code>. To create this kind of string for a <code class="calibre9">WizCoin</code> object, enter the following into the interactive shell:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">import wizcoin</b>
+&gt;&gt;&gt; <b class="calibre25">purse = wizcoin.WizCoin(2, 5, 10)</b>
+&gt;&gt;&gt; <b class="calibre25">str(purse) </b>
+'&lt;wizcoin.WizCoin object at 0x00000212B4148EE0&gt;'
+&gt;&gt;&gt; <b class="calibre25">repr(purse) </b>
+'&lt;wizcoin.WizCoin object at 0x00000212B4148EE0&gt;'
+&gt;&gt;&gt; <b class="calibre25">purse</b>
+&lt;wizcoin.WizCoin object at 0x00000212B4148EE0&gt;</code></pre>
+<p class="calibre23"><span type="pagebreak" title="324" id="calibre_link-654" class="calibre16"></span>These strings aren’t very readable or useful, so we can tell Python what strings to use by implementing the <code class="calibre9">__repr__()</code> and <code class="calibre9">__str__()</code> dunder methods. The <code class="calibre9">__repr__()</code> method specifies what string Python should return when the object is passed to the <code class="calibre9">repr()</code> built-in function, and the <code class="calibre9">__str__()</code> method specifies what string Python should return when the object is passed to the <code class="calibre9">str()</code> built-in function. Add the following to the end of the <em class="calibre10">wizcoin.py</em> file:</p>
+<pre class="calibre28"><code class="calibre9"><var class="calibre43">--snip--</var>
+    def __repr__(self):
+        """Returns a string of an expression that re-creates this object."""
+        return f'{self.__class__.__qualname__}({self.galleons}, {self.sickles}, {self.knuts})'
+
+    def __str__(self):
+        """Returns a human-readable string representation of this object."""
+        return f'{self.galleons}g, {self.sickles}s, {self.knuts}k'</code></pre>
+<p class="calibre23">When we pass <code class="calibre9">purse</code> to <code class="calibre9">repr()</code> and <code class="calibre9">str()</code>, Python calls the <code class="calibre9">__repr__()</code> and <code class="calibre9">__str__()</code> dunder methods. We don’t call the dunder methods in our code. </p>
+<p class="calibre23">Note that f-strings that include the object in braces will implicitly call <code class="calibre9">str()</code> to get an object’s str string. For example, enter the following into the interactive shell:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">import wizcoin</b>
+&gt;&gt;&gt; <b class="calibre25">purse = wizcoin.WizCoin(2, 5, 10)</b>
+&gt;&gt;&gt; <b class="calibre25">repr(purse)</b>  # Calls WizCoin's __repr__() behind the scenes.
+'WizCoin(2, 5, 10)'
+&gt;&gt;&gt; <b class="calibre25">str(purse)</b>  # Calls WizCoin's __str__() behind the scenes.
+'2g, 5s, 10k'
+&gt;&gt;&gt; <b class="calibre25">print(f'My purse contains {purse}.')</b>  # Calls WizCoin's __str__().
+My purse contains 2g, 5s, 10k.</code></pre>
+<p class="calibre23">When we pass the <code class="calibre9">WizCoin</code> object in <code class="calibre9">purse</code> to the <code class="calibre9">repr()</code> and <code class="calibre9">str()</code> functions, behind the scenes Python calls the <code class="calibre9">WizCoin</code> class’s <code class="calibre9">__repr__()</code> and <code class="calibre9">__str__()</code> methods. We programmed these methods to return more readable and useful strings. If you entered the text of the <code class="calibre9">'WizCoin(2, 5, 10)'</code> repr string into the interactive shell, it would create a <code class="calibre9">WizCoin</code> object that has the same attributes as the object in <code class="calibre9">purse</code>. The str string is a more human-readable representation of the object’s value: <code class="calibre9">'2g, 5s, 10k'</code>. If you use a <code class="calibre9">WizCoin</code> object in an f-string, Python uses the object’s str string.</p>
+<p class="calibre23">If <code class="calibre9">WizCoin</code> objects were so complex that it would be impossible to create a copy of them with a single constructor function call, we would enclose the repr string in angle brackets to denote that it’s not meant to be Python code. This is what the generic representation strings, such as <code class="calibre9">'&lt;wizcoin.WizCoin object at 0x00000212B4148EE0&gt;'</code>, do. Typing this string into the interactive shell would raise a <code class="calibre9">SyntaxError</code>, so it couldn’t possibly be confused for Python code that creates a copy of the object.</p>
+<p class="calibre23">Inside the <code class="calibre9">__repr__()</code> method, we use <code class="calibre9">self.__class__.__qualname__</code> instead of hardcoding the string <code class="calibre9">'WizCoin'</code>; so if we subclass <code class="calibre9">WizCoin</code>, the inherited <code class="calibre9">__repr__()</code> method will use the subclass’s name instead of <code class="calibre9">'WizCoin'</code>. In addition, if we rename the <code class="calibre9">WizCoin</code> class, the <code class="calibre9">__repr__()</code> method will automatically use the updated name.</p>
+<p class="calibre23"><span type="pagebreak" title="325" id="calibre_link-655" class="calibre16"></span>But the <code class="calibre9">WizCoin</code> object’s str string shows us the attribute values in a neat, concise form. I highly recommended you implement <code class="calibre9">__repr__()</code> and <code class="calibre9">__str__()</code> in all your classes.</p>
+<aside type="sidebar" class="authors">
+<div class="top"><hr class="calibre32" /></div>
+<section class="box">
+<h2 class="calibre38">Sensitive Information in repr Strings</h2>
+<p class="boxbodyfirst">As mentioned earlier, we usually display the str string to users, and we use the repr string in technical contexts, such as logfiles. But the repr string can cause security issues if the object you’re creating contains sensitive information, such as passwords, medical details, or personally identifiable information. If this is the case, make sure the <code class="calibre41">__repr__()</code> method doesn’t include this information in the string it returns. When software crashes, it’s frequently set up to include the contents of variables in a logfile to aid in debugging. Often, these logfiles aren’t treated as sensitive information. In several security incidents, publicly shared logfiles have inadvertently included passwords, credit card numbers, home addresses, and other sensitive information. Keep this in mind when you’re writing <code class="calibre41">__repr__()</code> methods for your class.</p>
+<div class="top"><hr class="calibre32" /></div>
+</section>
+</aside>
+<h3 id="calibre_link-308" class="calibre27">Numeric Dunder Methods</h3>
+<p class="bodyfirst">The <em class="calibre10">numeric dunder methods</em>, also called the <em class="calibre10">math dunder methods</em>, overload Python’s mathematical operators, such as <code class="calibre9">+</code>, <code class="calibre9">-</code>, <code class="calibre9">*</code>, <code class="calibre9">/</code>, and so on. Currently, we can’t perform an operation like adding two <code class="calibre9">WizCoin</code> objects together with the <code class="calibre9">+</code> operator. If we try to do so, Python will raise a <code class="calibre9">TypeError</code> exception, because it doesn’t know how to add <code class="calibre9">WizCoin</code> objects. To see this error, enter the following into the interactive shell:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">import wizcoin</b>
+&gt;&gt;&gt; <b class="calibre25">purse = wizcoin.WizCoin(2, 5, 10)</b>
+&gt;&gt;&gt; <b class="calibre25">tipJar = wizcoin.WizCoin(0, 0, 37)</b>
+&gt;&gt;&gt; <b class="calibre25">purse + tipJar</b>
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+TypeError: unsupported operand type(s) for +: 'WizCoin' and 'WizCoin'</code></pre>
+<p class="calibre23">Instead of writing an <code class="calibre9">addWizCoin()</code> method for the <code class="calibre9">WizCoin</code> class, you can use the <code class="calibre9">__add__()</code> dunder method so <code class="calibre9">WizCoin</code> objects work with the <code class="calibre9">+</code> operator. Add the following to the end of the <em class="calibre10">wizcoin.py</em> file:</p>
+<pre class="calibre28"><code class="calibre9"><var class="calibre43">--snip--</var>
+<span class="codeannotationhang">1</span>     def __add__(self, other):
+        """Adds the coin amounts in two WizCoin objects together."""
+<span class="codeannotationhang">2</span>         if not isinstance(other, WizCoin):
+            return NotImplemented
+
+<span class="codeannotationhang">3</span>         return WizCoin(other.galleons + self.galleons, other.sickles + self.sickles, other.knuts + self.knuts)</code></pre>
+<p class="calibre23"><span type="pagebreak" title="326" id="calibre_link-656" class="calibre16"></span>When a <code class="calibre9">WizCoin</code> object is on the left side of the <code class="calibre9">+</code> operator, Python calls the <code class="calibre9">__add__()</code> method <span class="codeannotation">1</span> and passes in the value on the right side of the <code class="calibre9">+</code> operator for the <code class="calibre9">other</code> parameter. (The parameter can be named anything, but <code class="calibre9">other</code> is the convention.) </p>
+<p class="calibre23">Keep in mind that you can pass any type of object to the <code class="calibre9">__add__()</code> method, so the method must include type checks <span class="codeannotation">2</span>. For example, it doesn’t make sense to add an integer or a float to a <code class="calibre9">WizCoin</code> object, because we don’t know whether it should be added to the <code class="calibre9">galleons</code>, <code class="calibre9">sickles</code>, or <code class="calibre9">knuts</code> amount.</p>
+<p class="calibre23">The <code class="calibre9">__add__()</code> method creates a new <code class="calibre9">WizCoin</code> object with amounts equal to the sum of the <code class="calibre9">galleons</code>, <code class="calibre9">sickles</code>, and <code class="calibre9">knuts</code> attributes of <code class="calibre9">self</code> and <code class="calibre9">other</code> <span class="codeannotation">3</span>. Because these three attributes contain integers, we can use the <code class="calibre9">+</code> operator on them. Now that we’ve overloaded the <code class="calibre9">+</code> operator for the <code class="calibre9">WizCoin</code> class, we can use the <code class="calibre9">+</code> operator on <code class="calibre9">WizCoin</code> objects.</p>
+<p class="calibre23">Overloading the <code class="calibre9">+</code> operator like this allows us to write more readable code. For example, enter the following into the interactive shell:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">import wizcoin</b>
+&gt;&gt;&gt; <b class="calibre25">purse = wizcoin.WizCoin(2, 5, 10)</b>  # Create a WizCoin object.
+&gt;&gt;&gt; <b class="calibre25">tipJar = wizcoin.WizCoin(0, 0, 37)</b>  # Create another WizCoin object.
+&gt;&gt;&gt; <b class="calibre25">purse + tipJar</b>  # Creates a new WizCoin object with the sum amount.
+WizCoin(2, 5, 47)</code></pre>
+<p class="calibre23">If the wrong type of object is passed for <code class="calibre9">other</code>, the dunder method shouldn’t raise an exception but rather return the built-in value <code class="calibre9">NotImplemented</code>. For example, in the following code, <code class="calibre9">other</code> is an integer:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">import wizcoin</b>
+&gt;&gt;&gt; <b class="calibre25">purse = wizcoin.WizCoin(2, 5, 10)</b>
+&gt;&gt;&gt; <b class="calibre25">purse + 42</b>  # WizCoin objects and integers can't be added together.
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+TypeError: unsupported operand type(s) for +: 'WizCoin' and 'int'</code></pre>
+<p class="calibre23">Returning <code class="calibre9">NotImplemented</code> signals Python to try calling other methods to perform this operation. (See “Reflected Numeric Dunder Methods” later in this chapter for more details.) Behind the scenes, Python calls the <code class="calibre9">__add__()</code> method with <code class="calibre9">42</code> for the <code class="calibre9">other</code> parameter, which also returns <code class="calibre9">NotImplemented</code>, causing Python to raise a <code class="calibre9">TypeError</code>.</p>
+<p class="calibre23">Although we shouldn’t be able to add integers to or subtract them from <code class="calibre9">WizCoin</code> objects, it would make sense to allow code to multiply <code class="calibre9">WizCoin</code> objects by positive integer amounts by defining a <code class="calibre9">__mul__()</code> dunder method. Add the following to the end of <em class="calibre10">wizcoin.py</em>:</p>
+<pre class="calibre28"><code class="calibre9"><var class="calibre43">--snip--</var>
+    def __mul__(self, other):
+        """Multiplies the coin amounts by a non-negative integer."""
+        if not isinstance(other, int):
+            return NotImplemented
+        if other &lt; 0:
+            # Multiplying by a negative int results in negative
+            # amounts of coins, which is invalid.
+<span type="pagebreak" title="327" id="calibre_link-657" class="calibre16"></span>            raise WizCoinException('cannot multiply with negative integers')
+
+        return WizCoin(self.galleons * other, self.sickles * other, self.knuts * other)</code></pre>
+<p class="calibre23">This <code class="calibre9">__mul__()</code> method lets you multiply <code class="calibre9">WizCoin</code> objects by positive integers. If <code class="calibre9">other</code> is an integer, it’s the data type the <code class="calibre9">__mul__()</code> method is expecting and we shouldn’t return <code class="calibre9">NotImplemented</code>. But if this integer is negative, multiplying the <code class="calibre9">WizCoin</code> object by it would result in negative amounts of coins in our <code class="calibre9">WizCoin</code> object. Because this goes against our design for this class, we raise a <code class="calibre9">WizCoinException</code> with a descriptive error message. </p>
+<aside type="sidebar" class="authors">
+<div class="top"><hr class="calibre32" /></div>
+<section class="note">
+<h2 class="calibre33"><span class="notehead">NOTE</span></h2>
+<p class="calibre34">You shouldn’t change the<em class="calibre10"> </em><code class="calibre9">self</code><em class="calibre10"> </em>object in a numeric dunder method. Rather, the method should always create and return a new object. The <code class="calibre9">+</code> and other numeric operators are always expected to evaluate to a new object rather than modifying an object’s value in-place.</p>
+<div class="top"><hr class="calibre32" /></div>
+</section>
+</aside>
+<p class="calibre23">Enter the following into the interactive shell to see the<code class="calibre9"> __mul__() </code>dunder method in action:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">import wizcoin</b>
+&gt;&gt;&gt; <b class="calibre25">purse = wizcoin.WizCoin(2, 5, 10)</b>  # Create a WizCoin object.
+&gt;&gt;&gt; <b class="calibre25">purse * 10</b>  # Multiply the WizCoin object by an integer.
+WizCoin(20, 50, 100)
+&gt;&gt;&gt; <b class="calibre25">purse * -2</b>  # Multiplying by a negative integer causes an error.
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+  File "C:\Users\Al\Desktop\wizcoin.py", line 86, in __mul__
+    raise WizCoinException('cannot multiply with negative integers')
+wizcoin.WizCoinException: cannot multiply with negative integers</code></pre>
+<p class="calibre23"><a id="calibre_link-3" href="#calibre_link-2" class="calibre19">Table 17-1</a> shows the full list of numeric dunder methods. You don’t always need to implement all of them for your class. It’s up to you to decide which methods are relevant.</p>
+<figure class="calibre29">
+<figcaption class="calibre30"><p class="calibre31"><a id="calibre_link-2" href="#calibre_link-3" class="calibre19">Table 17-1:</a> Numeric Dunder Methods</p></figcaption>
+<table id="calibre_link-763" border="1" class="calibre45">
+<thead class="calibre46">
+<tr class="calibre47">
+<td class="calibre48"><b class="calibre25">Dunder method</b></td><td class="calibre48"><b class="calibre25">Operation</b></td><td class="calibre48"><b class="calibre25">Operator or built-in function</b></td></tr>
+</thead>
+<tbody class="calibre49">
+<tr class="calibre50">
+<td class="calibre48"><code class="calibre41">__add__()</code></td><td class="calibre48">Addition</td><td class="calibre48"><code class="calibre41">+</code></td></tr>
+<tr class="calibre51">
+<td class="calibre48"><code class="calibre41">__sub__()</code></td><td class="calibre48">Subtraction</td><td class="calibre48"><code class="calibre41">-</code></td></tr>
+<tr class="calibre50">
+<td class="calibre48"><code class="calibre41">__mul__()</code></td><td class="calibre48">Multiplication</td><td class="calibre48"><code class="calibre41">*</code></td></tr>
+<tr class="calibre51">
+<td class="calibre48"><code class="calibre41">__matmul__()</code></td><td class="calibre48">Matrix multiplication (new in Python 3.5)</td><td class="calibre48"><code class="calibre41">@</code></td></tr>
+<tr class="calibre50">
+<td class="calibre48"><code class="calibre41">__truediv__()</code></td><td class="calibre48">Division</td><td class="calibre48"><code class="calibre41">/</code></td></tr>
+<tr class="calibre51">
+<td class="calibre48"><code class="calibre41">__floordiv__()</code></td><td class="calibre48">Integer division</td><td class="calibre48"><code class="calibre41">//</code></td></tr>
+<tr class="calibre50">
+<td class="calibre48"><code class="calibre41">__mod__()</code></td><td class="calibre48">Modulus</td><td class="calibre48"><code class="calibre41">%</code></td></tr>
+<tr class="calibre51">
+<td class="calibre48"><code class="calibre41">__divmod__()</code></td><td class="calibre48">Division and modulus</td><td class="calibre48"><code class="calibre41">divmod()</code></td></tr>
+<tr class="calibre50">
+<td class="calibre48"><code class="calibre41"><span type="pagebreak" title="328" id="calibre_link-658" class="calibre57"></span>__pow__()</code></td><td class="calibre48">Exponentiation</td><td class="calibre48"><code class="calibre41">**</code>, <code class="calibre41">pow()</code></td></tr>
+<tr class="calibre51">
+<td class="calibre48"><code class="calibre41">__lshift__()</code></td><td class="calibre48">Left shift</td><td class="calibre48"><code class="calibre41">&gt;&gt;</code></td></tr>
+<tr class="calibre50">
+<td class="calibre48"><code class="calibre41">__rshift__()</code></td><td class="calibre48">Right shift</td><td class="calibre48"><code class="calibre41">&lt;&lt;</code></td></tr>
+<tr class="calibre51">
+<td class="calibre48"><code class="calibre41">__and__()</code></td><td class="calibre48">Bitwise and</td><td class="calibre48"><code class="calibre41">&amp;</code></td></tr>
+<tr class="calibre50">
+<td class="calibre48"><code class="calibre41">__or__()</code></td><td class="calibre48">Bitwise or</td><td class="calibre48"><code class="calibre41">|</code></td></tr>
+<tr class="calibre51">
+<td class="calibre48"><code class="calibre41">__xor__()</code></td><td class="calibre48">Bitwise exclusive or</td><td class="calibre48"><code class="calibre41">^</code></td></tr>
+<tr class="calibre50">
+<td class="calibre48"><code class="calibre41">__neg__()</code></td><td class="calibre48">Negation</td><td class="calibre48">Unary <code class="calibre41">-</code>, as in <code class="calibre41">-42</code></td></tr>
+<tr class="calibre51">
+<td class="calibre48"><code class="calibre41">__pos__()</code></td><td class="calibre48">Identity</td><td class="calibre48">Unary <code class="calibre41">+</code>, as in <code class="calibre41">+42</code></td></tr>
+<tr class="calibre50">
+<td class="calibre48"><code class="calibre41">__abs__()</code></td><td class="calibre48">Absolute value</td><td class="calibre48"><code class="calibre41">abs()</code></td></tr>
+<tr class="calibre51">
+<td class="calibre48"><code class="calibre41">__invert__()</code></td><td class="calibre48">Bitwise inversion</td><td class="calibre48"><code class="calibre41">~</code></td></tr>
+<tr class="calibre50">
+<td class="calibre48"><code class="calibre41">__complex__()</code></td><td class="calibre48">Complex number form</td><td class="calibre48"><code class="calibre41">complex()</code></td></tr>
+<tr class="calibre51">
+<td class="calibre48"><code class="calibre41">__int__()</code></td><td class="calibre48">Integer number form</td><td class="calibre48"><code class="calibre41">int()</code></td></tr>
+<tr class="calibre50">
+<td class="calibre48"><code class="calibre41">__float__()</code></td><td class="calibre48">Floating-point number form</td><td class="calibre48"><code class="calibre41">float()</code></td></tr>
+<tr class="calibre51">
+<td class="calibre48"><code class="calibre41">__bool__()</code></td><td class="calibre48">Boolean form</td><td class="calibre48"><code class="calibre41">bool()</code></td></tr>
+<tr class="calibre50">
+<td class="calibre48"><code class="calibre41">__round__()</code></td><td class="calibre48">Rounding</td><td class="calibre48"><code class="calibre41">round()</code></td></tr>
+<tr class="calibre51">
+<td class="calibre48"><code class="calibre41">__trunc__()</code></td><td class="calibre48">Truncation</td><td class="calibre48"><code class="calibre41">math.trunc()</code></td></tr>
+<tr class="calibre50">
+<td class="calibre48"><code class="calibre41">__floor__()</code></td><td class="calibre48">Rounding down</td><td class="calibre48"><code class="calibre41">math.floor()</code></td></tr>
+<tr class="calibre51">
+<td class="calibre48"><code class="calibre41">__ceil__()</code></td><td class="calibre48">Rounding up</td><td class="calibre48"><code class="calibre41">math.ceil()</code></td></tr>
+</tbody>
+</table>
+</figure>
+<p class="calibre23">Some of these methods are relevant to our <code class="calibre9">WizCoin</code> class. Try writing your own implementation of the <code class="calibre9">__sub__()</code>, <code class="calibre9">__pow__()</code>, <code class="calibre9">__int__()</code>, <code class="calibre9">__float__()</code>, and <code class="calibre9">__bool__()</code> methods. You can see an example of an implementation at <a href="https://autbor.com/wizcoinfull" class="calibre19">https://autbor.com/wizcoinfull</a>. The full documentation for the numeric dunder methods is in the Python documentation at <a href="https://docs.python.org/3/reference/datamodel.html#emulating-numeric-types" class="calibre19">https://docs.python.org/3/reference/datamodel.html#emulating-numeric-types</a>.</p>
+<p class="calibre23">The numeric dunder methods allow objects of your classes to use Python’s built-in math operators. If you’re writing methods with names like <code class="calibre9">multiplyBy()</code>, <code class="calibre9">convertToInt()</code>, or something similar that describes a task typically done by an existing operator or built-in function, use the numeric dunder methods (as well as the reflected and in-place dunder methods described in the next two sections).</p>
+<h3 id="calibre_link-309" class="calibre27">Reflected Numeric Dunder Methods</h3>
+<p class="bodyfirst">Python calls the numeric dunder methods when the object is on the left side of a math operator. But it calls the <em class="calibre10">reflected </em>numeric dunder methods (also called the <em class="calibre10">reverse</em> or <em class="calibre10">right-hand </em>dunder methods) when the object is on the right side of a math operator. </p>
+<p class="calibre23">Reflected numeric dunder methods are useful because programmers using your class won’t always write the object on the left side of the operator, which could lead to unexpected behavior. For example, let’s consider <span type="pagebreak" title="329" id="calibre_link-659" class="calibre16"></span>what happens when <code class="calibre9">purse</code> contains a <code class="calibre9">WizCoin</code> object, and Python evaluates the expression <code class="calibre9">2 * purse</code>, where <code class="calibre9">purse</code> is on the right side of the operator:</p>
+<ol class="decimal">
+<li value="1" class="calibre11">Because <code class="calibre9">2</code> is an integer, the <code class="calibre9">int</code> class’s <code class="calibre9">__mul__()</code> method is called with <code class="calibre9">purse</code> passed for the <code class="calibre9">other</code> parameter.</li>
+<li value="2" class="calibre11">The <code class="calibre9">int</code> class’s <code class="calibre9">__mul__()</code> method doesn’t know how to handle <code class="calibre9">WizCoin</code> objects, so it returns <code class="calibre9">NotImplemented</code>.</li>
+<li value="3" class="calibre11">Python doesn’t raise a <code class="calibre9">TypeError</code> just yet. Because <code class="calibre9">purse</code> contains a <code class="calibre9">WizCoin</code> object, the <code class="calibre9">WizCoin</code> class’s <code class="calibre9">__rmul__()</code> method is called with <code class="calibre9">2</code> passed for the <code class="calibre9">other</code> parameter.</li>
+<li value="4" class="calibre11">If <code class="calibre9">__rmul__()</code> returns <code class="calibre9">NotImplemented</code>, Python raises a <code class="calibre9">TypeError</code>.</li>
+</ol>
+<p class="calibre23">Otherwise, the returned object from <code class="calibre9">__rmul__()</code> is what the <code class="calibre9">2 * purse</code> expression evaluates to.</p>
+<p class="calibre23">But the expression <code class="calibre9">purse * 2</code>, where <code class="calibre9">purse</code> is on the left side of the operator, works differently:</p>
+<ol class="decimal">
+<li value="1" class="calibre11">Because <code class="calibre9">purse</code> contains a <code class="calibre9">WizCoin</code> object, the <code class="calibre9">WizCoin</code> class’s <code class="calibre9">__mul__()</code> method is called with <code class="calibre9">2</code> passed for the <code class="calibre9">other</code> parameter.</li>
+<li value="2" class="calibre11">The <code class="calibre9">__mul__()</code> method creates a new <code class="calibre9">WizCoin</code> object and returns it.</li>
+<li value="3" class="calibre11">This returned object is what the <code class="calibre9">purse * 2</code> expression evaluates to.</li>
+</ol>
+<p class="calibre23">Numeric dunder methods and reflected numeric dunder methods have identical code if they are <em class="calibre10">commutative</em>. Commutative operations, like addition, have the same result backward and forward: 3 + 2 is the same as 2 + 3. But other operations aren’t commutative: 3 &ndash; 2 is not the same as 2 &ndash; 3. Any commutative operation can just call the original numeric dunder method whenever the reflected numeric dunder method is called. For example, add the following to the end of the <em class="calibre10">wizcoin.py</em> file to define a reflected numeric dunder method for the multiplication operation:</p>
+<pre class="calibre28"><code class="calibre9"><var class="calibre43">--snip--</var>
+    def __rmul__(self, other):
+        """Multiplies the coin amounts by a non-negative integer."""
+        return self.__mul__(other)</code></pre>
+<p class="calibre23">Multiplying an integer and a <code class="calibre9">WizCoin</code> object is commutative: <code class="calibre9">2 * purse</code> is the same as <code class="calibre9">purse * 2</code>. Instead of copying and pasting the code from <code class="calibre9">__mul__()</code>, we just call <code class="calibre9">self.__mul__()</code> and pass it the <code class="calibre9">other </code>parameter. </p>
+<p class="calibre23">After updating <em class="calibre10">wizcoin.py</em>, practice using the reflected multiplication dunder method by entering the following into the interactive shell:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">import wizcoin</b>
+&gt;&gt;&gt; <b class="calibre25">purse = wizcoin.WizCoin(2, 5, 10)</b>
+&gt;&gt;&gt; <b class="calibre25">purse * 10</b>  # Calls __mul__() with 10 for the `other` parameter.
+WizCoin(20, 50, 100)
+&gt;&gt;&gt; <b class="calibre25">10 * purse</b>  # Calls __rmul__() with 10 for the `other` parameter.
+WizCoin(20, 50, 100)</code></pre>
+<p class="calibre23"><span type="pagebreak" title="330" id="calibre_link-660" class="calibre16"></span>Keep in mind that in the expression <code class="calibre9">10 * purse</code>, Python first calls the <code class="calibre9">int</code> class’s <code class="calibre9">__mul__()</code> method to see whether integers can be multiplied with <code class="calibre9">WizCoin</code> objects. Of course, Python’s built-in <code class="calibre9">int</code> class doesn’t know anything about the classes we create, so it returns <code class="calibre9">NotImplemented</code>. This signals to Python to next call <code class="calibre9">WizCoin</code> class’s <code class="calibre9">__rmul__()</code>, and if it exists, to handle this operation. If the calls to the <code class="calibre9">int</code> class’s <code class="calibre9">__mul__()</code> and <code class="calibre9">WizCoin</code> class’s <code class="calibre9">__rmul__()</code> both return <code class="calibre9">NotImplemented</code>, Python raises a <code class="calibre9">TypeError</code> exception.</p>
+<p class="calibre23">Only <code class="calibre9">WizCoin</code> objects can be added to each other. This guarantees that the first <code class="calibre9">WizCoin</code> object’s <code class="calibre9">__add__()</code> method will handle the operation, so we don’t need to implement <code class="calibre9">__radd__()</code>. For example, in the expression <code class="calibre9">purse + tipJar</code>, the <code class="calibre9">__add__()</code> method for the <code class="calibre9">purse</code> object is called with <code class="calibre9">tipJar</code> passed for the <code class="calibre9">other</code> parameter. Because this call won’t return <code class="calibre9">NotImplemented</code>, Python doesn’t try to call the <code class="calibre9">tipJar</code> object’s <code class="calibre9">__radd__()</code> method with <code class="calibre9">purse</code> as the <code class="calibre9">other</code> parameter.</p>
+<p class="calibre23"><a id="calibre_link-5" href="#calibre_link-4" class="calibre19">Table 17-2</a> contains a full listing of the available reflected dunder methods.</p>
+<figure class="calibre29">
+<figcaption class="calibre30"><p class="calibre31"><a id="calibre_link-4" href="#calibre_link-5" class="calibre19">Table 17-2:</a> Reflected Numeric Dunder Methods</p></figcaption>
+<table id="calibre_link-764" border="1" class="calibre45">
+<thead class="calibre46">
+<tr class="calibre47">
+<td class="calibre48"><b class="calibre25">Dunder method</b></td><td class="calibre48"><b class="calibre25">Operation</b></td><td class="calibre48"><b class="calibre25">Operator or built-in function</b></td></tr>
+</thead>
+<tbody class="calibre49">
+<tr class="calibre50">
+<td class="calibre48"><code class="calibre41">__radd__()</code></td><td class="calibre48">Addition</td><td class="calibre48"><code class="calibre41">+</code></td></tr>
+<tr class="calibre51">
+<td class="calibre48"><code class="calibre41">__rsub__()</code></td><td class="calibre48">Subtraction</td><td class="calibre48"><code class="calibre41">-</code></td></tr>
+<tr class="calibre50">
+<td class="calibre48"><code class="calibre41">__rmul__()</code></td><td class="calibre48">Multiplication</td><td class="calibre48"><code class="calibre41">*</code></td></tr>
+<tr class="calibre51">
+<td class="calibre48"><code class="calibre41">__rmatmul__()</code></td><td class="calibre48">Matrix multiplication (new in Python 3.5)</td><td class="calibre48"><code class="calibre41">@</code></td></tr>
+<tr class="calibre50">
+<td class="calibre48"><code class="calibre41">__rtruediv__()</code></td><td class="calibre48">Division</td><td class="calibre48"><code class="calibre41">/</code></td></tr>
+<tr class="calibre51">
+<td class="calibre48"><code class="calibre41">__rfloordiv__()</code></td><td class="calibre48">Integer division</td><td class="calibre48"><code class="calibre41">//</code></td></tr>
+<tr class="calibre50">
+<td class="calibre48"><code class="calibre41">__rmod__()</code></td><td class="calibre48">Modulus</td><td class="calibre48"><code class="calibre41">%</code></td></tr>
+<tr class="calibre51">
+<td class="calibre48"><code class="calibre41">__rdivmod__()</code></td><td class="calibre48">Division and modulus</td><td class="calibre48"><code class="calibre41">divmod()</code></td></tr>
+<tr class="calibre50">
+<td class="calibre48"><code class="calibre41">__rpow__()</code></td><td class="calibre48">Exponentiation</td><td class="calibre48"><code class="calibre41">**</code>, <code class="calibre41">pow()</code></td></tr>
+<tr class="calibre51">
+<td class="calibre48"><code class="calibre41">__rlshift__()</code></td><td class="calibre48">Left shift</td><td class="calibre48"><code class="calibre41">&gt;&gt;</code></td></tr>
+<tr class="calibre50">
+<td class="calibre48"><code class="calibre41">__rrshift__()</code></td><td class="calibre48">Right shift</td><td class="calibre48"><code class="calibre41">&lt;&lt;</code></td></tr>
+<tr class="calibre51">
+<td class="calibre48"><code class="calibre41">__rand__()</code></td><td class="calibre48">Bitwise and</td><td class="calibre48"><code class="calibre41">&amp;</code></td></tr>
+<tr class="calibre50">
+<td class="calibre48"><code class="calibre41">__ror__()</code></td><td class="calibre48">Bitwise or</td><td class="calibre48"><code class="calibre41">|</code></td></tr>
+<tr class="calibre51">
+<td class="calibre48"><code class="calibre41">__rxor__()</code></td><td class="calibre48">Bitwise exclusive or</td><td class="calibre48"><code class="calibre41">^</code></td></tr>
+</tbody>
+</table>
+</figure>
+<p class="calibre23">The full documentation for the reflected dunder methods is in the Python documentation at <a href="https://docs.python.org/3/reference/datamodel.html#emulating-numeric-types" class="calibre19">https://docs.python.org/3/reference/datamodel.html#emulating-numeric-types</a>.</p>
+<h3 id="calibre_link-310" class="calibre27">In-Place Augmented Assignment Dunder Methods</h3>
+<p class="bodyfirst">The numeric and reflected dunder methods always create new objects rather than modifying the object in-place. The <em class="calibre10">in-place dunder methods</em>, called by the augmented assignment operators, such as <code class="calibre9">+=</code> and <code class="calibre9">*=</code>, modify the object in-place <span type="pagebreak" title="331" id="calibre_link-661" class="calibre16"></span>rather than creating new objects. (There is an exception to this, which I’ll explain at the end of this section.) These dunder method names begin with an <em class="calibre10">i</em>, such as <code class="calibre9">__iadd__()</code> and <code class="calibre9">__imul__()</code> for the <code class="calibre9">+=</code> and <code class="calibre9">*=</code> operators, respectively.</p>
+<p class="calibre23">For example, when Python runs the code <code class="calibre9">purse *= 2</code>, the expected behavior isn’t that the <code class="calibre9">WizCoin</code> class’s <code class="calibre9">__imul__()</code> method creates and returns a new <code class="calibre9">WizCoin</code> object with twice as many coins, and then assigns it the <code class="calibre9">purse</code> variable. Instead, the <code class="calibre9">__imul__()</code> method modifies the existing <code class="calibre9">WizCoin</code> object in <code class="calibre9">purse</code> so it has twice as many coins. This is a subtle but important difference if you want your classes to overload the augmented assignment operators.</p>
+<p class="calibre23">Our <code class="calibre9">WizCoin</code> objects already overload the <code class="calibre9">+</code> and <code class="calibre9">*</code> operators, so let’s define the <code class="calibre9">__iadd__()</code> and <code class="calibre9">__imul__()</code> dunder methods so they overload the <code class="calibre9">+=</code> and <code class="calibre9">*=</code> operators as well. In the expressions <code class="calibre9">purse += tipJar</code> and <code class="calibre9">purse *= 2</code>, we call the <code class="calibre9">__iadd__()</code> and __<code class="calibre9">imul__()</code> methods, respectively, with <code class="calibre9">tipJar</code> and <code class="calibre9">2</code> passed for the <code class="calibre9">other</code> parameter, respectively. Add the following to the end of the <em class="calibre10">wizcoin.py</em> file:</p>
+<pre class="calibre28"><code class="calibre9"><var class="calibre43">--snip--</var>
+    def __iadd__(self, other):
+        """Add the amounts in another WizCoin object to this object."""
+        if not isinstance(other, WizCoin):
+            return NotImplemented
+
+        # We modify the `self` object in-place:
+        self.galleons += other.galleons
+        self.sickles += other.sickles
+        self.knuts += other.knuts
+        return self  # In-place dunder methods almost always return self.
+
+    def __imul__(self, other):
+        """Multiply the amount of galleons, sickles, and knuts in this object
+        by a non-negative integer amount."""
+        if not isinstance(other, int):
+            return NotImplemented
+        if other &lt; 0:
+            raise WizCoinException('cannot multiply with negative integers')
+
+        # The WizCoin class creates mutable objects, so do NOT create a
+        # new object like this commented-out code:
+        #return WizCoin(self.galleons * other, self.sickles * other, self.knuts * other)
+
+        # We modify the `self` object in-place:
+        self.galleons *= other
+        self.sickles *= other
+        self.knuts *= other
+        return self  # In-place dunder methods almost always return self.</code></pre>
+<p class="calibre23">The <code class="calibre9">WizCoin</code> objects can use the <code class="calibre9">+=</code> operator with other <code class="calibre9">WizCoin</code> objects and the <code class="calibre9">*=</code> operator with positive integers. Notice that after ensuring that the other parameter is valid, the in-place methods modify the <code class="calibre9">self</code> object in-place rather than creating a new <code class="calibre9">WizCoin</code> object. Enter the following into <span type="pagebreak" title="332" id="calibre_link-662" class="calibre16"></span>the interactive shell to see how the augmented assignment operators modify the <code class="calibre9">WizCoin</code> objects in-place:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">import wizcoin</b>
+&gt;&gt;&gt; <b class="calibre25">purse = wizcoin.WizCoin(2, 5, 10)</b>
+&gt;&gt;&gt; <b class="calibre25">tipJar = wizcoin.WizCoin(0, 0, 37)</b>
+<span class="codeannotationhang">1</span> &gt;&gt;&gt; <b class="calibre25">purse + tipJar</b>
+<span class="codeannotationhang">2</span> WizCoin(2, 5, 46)
+&gt;&gt;&gt; <b class="calibre25">purse</b>
+WizCoin(2, 5, 10)
+<span class="codeannotationhang">3</span> &gt;&gt;&gt; <b class="calibre25">purse += tipJar</b>
+&gt;&gt;&gt; <b class="calibre25">purse</b>
+WizCoin(2, 5, 47)
+<span class="codeannotationhang">4</span> &gt;&gt;&gt; <b class="calibre25">purse *= 10</b>
+&gt;&gt;&gt; <b class="calibre25">purse</b>
+WizCoin(20, 50, 470)</code></pre>
+<p class="calibre23">The <code class="calibre9">+</code> operator <span class="codeannotation">1</span> calls the <code class="calibre9">__add__()</code> or <code class="calibre9">__radd__()</code> dunder methods to create and return new objects <span class="codeannotation">2</span>. The original objects operated on by the <code class="calibre9">+</code> operator remain unmodified. The in-place dunder methods <span class="codeannotation">3</span> <span class="codeannotation">4</span> should modify the object in-place as long as the object is mutable (that is, it’s an object whose value can change). The exception is for immutable objects: because an immutable object can’t be modified, it’s impossible to modify it in-place. In that case, the in-place dunder methods should create and return a new object, just like the numeric and reflected numeric dunder methods.</p>
+<p class="calibre23">We didn’t make the <code class="calibre9">galleons</code>, <code class="calibre9">sickles</code>, and <code class="calibre9">knuts</code> attributes read-only, which means they can change. So <code class="calibre9">WizCoin</code> objects are mutable. Most of the classes you write will create mutable objects, so you should design your in-place dunder methods to modify the object in-place.</p>
+<p class="calibre23">If you don’t implement an in-place dunder method, Python will instead call the numeric dunder method. For example, if the <code class="calibre9">WizCoin</code> class had no <code class="calibre9">__imul__()</code> method, the expression <code class="calibre9">purse *= 10</code> will call <code class="calibre9">__mul__()</code> instead and assign its return value to <code class="calibre9">purse.</code> Because <code class="calibre9">WizCoin</code> objects are mutable, this is unexpected behavior that could lead to subtle bugs.</p>
+<h3 id="calibre_link-311" class="calibre27">Comparison Dunder Methods</h3>
+<p class="bodyfirst">Python’s <code class="calibre9">sort()</code> method and <code class="calibre9">sorted()</code> function contain an efficient sorting algorithm that you can access with a simple call. But if you want to compare and sort objects of the classes you make, you’ll need to tell Python how to compare two of these objects by implementing the comparison dunder methods. Python calls the comparison dunder methods behind the scenes whenever your objects are used in an expression with the <code class="calibre9">&lt;</code>, <code class="calibre9">&gt;</code>, <code class="calibre9">&lt;=</code>, <code class="calibre9">&gt;=</code>, <code class="calibre9">==</code>, and <code class="calibre9">!=</code> comparison operators.</p>
+<p class="calibre23">Before we explore the comparison dunder methods, let’s examine six functions in the <code class="calibre9">operator</code> module that perform the same operations as the six comparison operators. Our comparison dunder methods will be calling these functions. Enter the following into the interactive shell.</p>
+<span type="pagebreak" title="333" id="calibre_link-707" class="calibre16"></span><pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">import operator</b>
+&gt;&gt;&gt; <b class="calibre25">operator.eq(42, 42)</b>        # "EQual", same as 42 == 42
+True
+&gt;&gt;&gt; <b class="calibre25">operator.ne('cat', 'dog')</b>  # "Not Equal", same as 'cat' != 'dog'
+True
+&gt;&gt;&gt; <b class="calibre25">operator.gt(10, 20)</b>        # "Greater Than ", same as 10 &gt; 20
+False
+&gt;&gt;&gt; <b class="calibre25">operator.ge(10, 10)</b>        # "Greater than or Equal", same as 10 &gt;= 10
+True
+&gt;&gt;&gt; <b class="calibre25">operator.lt(10, 20)</b>        # "Less Than", same as 10 &lt; 20
+True
+&gt;&gt;&gt; <b class="calibre25">operator.le(10, 20)</b>        # "Less than or Equal", same as 10 &lt;= 20
+True</code></pre>
+<p class="calibre23">The <code class="calibre9">operator</code> module gives us function versions of the comparison operators. Their implementations are simple. For example, we could write our own <code class="calibre9">operator.eq()</code> function in two lines:</p>
+<pre class="calibre28"><code class="calibre9">def eq(a, b):
+    return a == b</code></pre>
+<p class="calibre23">It’s useful to have a function form of the comparison operators because, unlike operators, functions can be passed as arguments to function calls. We’ll be doing this to implement a helper method for our comparison dunder methods. </p>
+<p class="calibre23">First, add the following to the start of <em class="calibre10">wizcoin.py</em>. These imports give us access to the functions in the <code class="calibre9">operator</code> module and allow us to check whether the <code class="calibre9">other</code> argument in our method is a sequence by comparing it to <code class="calibre9">collections.abc.Sequence</code>:</p>
+<pre class="calibre28"><code class="calibre9">import collections.abc
+import operator</code></pre>
+<p class="calibre23">Then add the following to the end of the <em class="calibre10">wizcoin.py</em> file:</p>
+<pre class="calibre28"><code class="calibre9"><var class="calibre43">--snip--</var>
+<span class="codeannotationhang">1</span>     def _comparisonOperatorHelper(self, operatorFunc, other):
+        """A helper method for our comparison dunder methods."""
+
+<span class="codeannotationhang">2</span>         if isinstance(other, WizCoin):
+            return operatorFunc(self.total, other.total)
+<span class="codeannotationhang">3</span>         elif isinstance(other, (int, float)):
+            return operatorFunc(self.total, other)
+<span class="codeannotationhang">4</span>         elif isinstance(other, collections.abc.Sequence):
+            otherValue = (other[0] * 17 * 29) + (other[1] * 29) + other[2]
+            return operatorFunc(self.total, otherValue)
+        elif operatorFunc == operator.eq:
+            return False
+        elif operatorFunc == operator.ne:
+            return True
+        else:
+            return NotImplemented
+
+<span type="pagebreak" title="334" id="calibre_link-663" class="calibre16"></span>    def __eq__(self, other):  # eq is "EQual"
+<span class="codeannotationhang">5</span>         return self._comparisonOperatorHelper(operator.eq, other)
+
+    def __ne__(self, other):  # ne is "Not Equal"
+<span class="codeannotationhang">6</span>         return self._comparisonOperatorHelper(operator.ne, other)
+
+    def __lt__(self, other):  # lt is "Less Than"
+<span class="codeannotationhang">7</span>         return self._comparisonOperatorHelper(operator.lt, other)
+
+    def __le__(self, other):  # le is "Less than or Equal"
+<span class="codeannotationhang">8</span>         return self._comparisonOperatorHelper(operator.le, other)
+
+    def __gt__(self, other):  # gt is "Greater Than"
+<span class="codeannotationhang">9</span>        return self._comparisonOperatorHelper(operator.gt, other)
+
+    def __ge__(self, other):  # ge is "Greater than or Equal"
+<span class="codeannotationhang">a</span>        return self._comparisonOperatorHelper(operator.ge, other)</code></pre>
+<p class="calibre23">Our comparison dunder methods call the <code class="calibre9">_comparisonOperatorHelper()</code> method <span class="codeannotation">1</span> and pass the appropriate function from the <code class="calibre9">operator</code> module for the <code class="calibre9">operatorFunc</code> parameter. When we call <code class="calibre9">operatorFunc()</code>, we’re calling the function that was passed for the <code class="calibre9">operatorFunc</code> parameter&mdash;<code class="calibre9">eq()</code><span class="codeannotation">5</span>, <code class="calibre9">ne()</code><span class="codeannotation">6</span>, <code class="calibre9">lt()</code><span class="codeannotation">7</span>, <code class="calibre9">le()</code><span class="codeannotation">8</span>, <code class="calibre9">gt()</code><span class="codeannotation">9</span>, or <code class="calibre9">ge()</code><span class="codeannotation">a</span>&mdash;from the <code class="calibre9">operator</code> module. Otherwise, we’d have to duplicate the code in <code class="calibre9">_comparisonOperatorHelper()</code> in each of our six comparison dunder methods. </p>
+<aside type="sidebar" class="authors">
+<div class="top"><hr class="calibre32" /></div>
+<section class="note">
+<h2 class="calibre33"><span class="notehead">NOTE</span></h2>
+<p class="calibre34">Functions (or methods) like <code class="calibre9">_comparisonOperatorHelper()</code> that accept other functions as arguments are called <em class="calibre10">higher-order functions</em>.</p>
+<div class="top"><hr class="calibre32" /></div>
+</section>
+</aside>
+<p class="calibre23">Our <code class="calibre9">WizCoin</code> objects can now be compared with other <code class="calibre9">WizCoin</code> objects <span class="codeannotation">2</span>, integers and floats <span class="codeannotation">3</span>, and sequence values of three number values that represent the galleons, sickles, and knuts <span class="codeannotation">4</span>. Enter the following into the interactive shell to see this in action:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">import wizcoin</b>
+&gt;&gt;&gt; <b class="calibre25">purse = wizcoin.WizCoin(2, 5, 10)</b>  # Create a WizCoin object.
+&gt;&gt;&gt; <b class="calibre25">tipJar = wizcoin.WizCoin(0, 0, 37)</b> # Create another WizCoin object.
+&gt;&gt;&gt; <b class="calibre25">purse.total, tipJar.total</b> # Examine the values in knuts.
+(1141, 37)
+&gt;&gt;&gt; <b class="calibre25">purse &gt; tipJar</b> # Compare WizCoin objects with a comparison operator.
+True
+&gt;&gt;&gt; <b class="calibre25">purse &lt; tipJar</b>
+False
+&gt;&gt;&gt; <b class="calibre25">purse &gt; 1000</b><code class="calibre42"> # Compare with an int.</code>
+True
+&gt;&gt;&gt; <b class="calibre25">purse &lt;= 1000</b>
+False
+&gt;&gt;&gt; <b class="calibre25">purse == 1141</b>
+True
+&gt;&gt;&gt; <b class="calibre25">purse == 1141.0</b><code class="calibre42"> # Compare with a float.</code>
+True
+&gt;&gt;&gt; <b class="calibre25">purse == '1141'</b> # The WizCoin is not equal to any string value.
+False
+<span type="pagebreak" title="335" id="calibre_link-664" class="calibre16"></span>&gt;&gt;&gt; <b class="calibre25">bagOfKnuts = wizcoin.WizCoin(0, 0, 1141)</b>
+&gt;&gt;&gt; <b class="calibre25">purse == bagOfKnuts</b>
+True
+&gt;&gt;&gt; <b class="calibre25">purse == (2, 5, 10)</b> # We can compare with a 3-integer tuple.
+True
+&gt;&gt;&gt; <b class="calibre25">purse &gt;= [2, 5, 10]</b> # We can compare with a 3-integer list.
+True
+&gt;&gt;&gt; <b class="calibre25">purse &gt;= ['cat', 'dog']</b> # This should cause an error.
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+  File "C:\Users\Al\Desktop\wizcoin.py", line 265, in __ge__
+    return self._comparisonOperatorHelper(operator.ge, other)
+  File "C:\Users\Al\Desktop\wizcoin.py", line 237, in _comparisonOperatorHelper
+    otherValue = (other[0] * 17 * 29) + (other[1] * 29) + other[2]
+IndexError: list index out of range</code></pre>
+<p class="calibre23">Our helper method calls <code class="calibre9">isinstance(other, collections.abc.Sequence)</code> to see whether <code class="calibre9">other</code> is a sequence data type, such as a tuple or list. By making <code class="calibre9">WizCoin</code> objects comparable with sequences, we can write code such as <code class="calibre9">purse &gt;= [2, 5, 10]</code> for a quick comparison.</p>
+<aside type="sidebar" class="authors">
+<div class="top"><hr class="calibre32" /></div>
+<section class="box">
+<h2 class="calibre38">Sequence Comparisons</h2>
+<p class="boxbodyfirst">When comparing two objects of the built-in sequence types, such as strings, lists, or tuples, Python puts more significance on the earlier items in the sequence. That is, it won’t compare the later items unless the earlier items have equal values. For example, enter the following into the interactive shell:</p>
+<pre class="calibre28"><code class="calibre41">&gt;&gt;&gt; 'Azriel' &lt; 'Zelda'
+True
+&gt;&gt;&gt; (1, 2, 3) &gt; (0, 8888, 9999)
+True</code></pre>
+<p class="calibre40">The string <code class="calibre41">'Azriel'</code> comes before (in other words, is less than) <code class="calibre41">'Zelda'</code> because <code class="calibre41">'A'</code> comes before <code class="calibre41">'Z'</code>. The tuple <code class="calibre41">(1, 2, 3)</code> comes after (in other words, is greater than) <code class="calibre41">(0, 8888, 9999)</code> because <code class="calibre41">1</code> is greater than <code class="calibre41">0</code>. On the other hand, enter the following into the interactive shell:</p>
+<pre class="calibre28"><code class="calibre41">&gt;&gt;&gt; 'Azriel' &lt; 'Aaron'
+False
+&gt;&gt;&gt; (1, 0, 0) &gt; (1, 0, 9999)
+False</code></pre>
+<p class="calibre40">The string <code class="calibre41">'Azriel'</code> doesn’t come before <code class="calibre41">'Aaron'</code> because even though the <code class="calibre41">'A'</code> in <code class="calibre41">'Azriel'</code> is equal to the <code class="calibre41">'A'</code> in <code class="calibre41">'Aaron'</code>, the subsequent <code class="calibre41">'z'</code> in <code class="calibre41">'Azriel'</code> doesn’t come before the <code class="calibre41">'a'</code> in <code class="calibre41">'Aaron'</code>. The same applies to the tuples <code class="calibre41">(1, 0, 0)</code><span type="pagebreak" title="336" id="calibre_link-665" class="calibre16"></span>and <code class="calibre41">(1, 0, 9999)</code>: the first two items in each tuple are equal, so it’s the third items (<code class="calibre41">0</code> and <code class="calibre41">9999</code>, respectively) that determine that <code class="calibre41">(1, 0, 0)</code> comes before <code class="calibre41">(1, 0, 9999)</code>.</p>
+<p class="calibre40">This forces us to make a design decision about our <code class="calibre41">WizCoin</code> class. Should <code class="calibre41">WizCoin(0, 0, 9999)</code> come before or after <code class="calibre41">WizCoin(1, 0, 0)</code>? If the number of galleons is more significant than the number of sickles or knuts, <code class="calibre41">WizCoin(0, 0, 9999)</code> should come before <code class="calibre41">WizCoin(1, 0, 0)</code>. Or if we compare objects based on their values in knuts, <code class="calibre41">WizCoin(0, 0, 9999)</code> (worth 9,999 knuts) comes after <code class="calibre41">WizCoin(1, 0, 0)</code> (worth 493 knuts). In <em class="calibre10">wizcoin.py</em>, I decided to use the object’s value in knuts because it makes the behavior consistent with how <code class="calibre41">WizCoin</code> objects compare with integers and floats. These are the kinds of decisions you’ll have to make when designing your own classes.</p>
+<div class="top"><hr class="calibre32" /></div>
+</section>
+</aside>
+<p class="calibre23">There are no <em class="calibre10">reflected</em> comparison dunder methods, such as <code class="calibre9">__req__()</code> or <code class="calibre9">__rne__()</code>, that you’ll need to implement. Instead, <code class="calibre9">__lt__()</code> and <code class="calibre9">__gt__()</code> reflect each other, <code class="calibre9">__le__()</code> and <code class="calibre9">__ge__()</code> reflect each other, and <code class="calibre9">__eq__()</code> and <code class="calibre9">__ne__()</code> reflect themselves. The reason is that the following relationships hold true no matter what the values on the left or right side of the operator are:</p>
+<ul class="calibre36">
+<li class="calibre11"><code class="calibre9">purse &gt; [2, 5, 10]</code> is the same as <code class="calibre9">[2, 5, 10] &lt; purse</code></li>
+<li class="calibre11"><code class="calibre9">purse &gt;= [2, 5, 10]</code> is the same as <code class="calibre9">[2, 5, 10] &lt;= purse</code></li>
+<li class="calibre11"><code class="calibre9">purse == [2, 5, 10]</code> is the same as <code class="calibre9">[2, 5, 10] == purse</code></li>
+<li class="calibre11"><code class="calibre9">purse != [2, 5, 10]</code> is the same as <code class="calibre9">[2, 5, 10] != purse</code></li>
+</ul>
+<p class="calibre23">Once you’ve implemented the comparison dunder methods, Python’s <code class="calibre9">sort()</code> function will automatically use them to sort your objects. Enter the following into the interactive shell:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">import wizcoin</b>
+&gt;&gt;&gt; <b class="calibre25">oneGalleon = wizcoin.WizCoin(1, 0, 0)</b> # Worth 493 knuts.
+&gt;&gt;&gt; <b class="calibre25">oneSickle = wizcoin.WizCoin(0, 1, 0)</b>  # Worth 29 knuts.
+&gt;&gt;&gt; <b class="calibre25">oneKnut = wizcoin.WizCoin(0, 0, 1)</b>    # Worth 1 knut.
+&gt;&gt;&gt; <b class="calibre25">coins = [oneSickle, oneKnut, oneGalleon, 100]</b>
+&gt;&gt;&gt; <b class="calibre25">coins.sort()</b> # Sort them from lowest value to highest.
+&gt;&gt;&gt; <b class="calibre25">coins</b>
+[WizCoin(0, 0, 1), WizCoin(0, 1, 0), 100, WizCoin(1, 0, 0)] </code></pre>
+<p class="calibre23"><a id="calibre_link-7" href="#calibre_link-6" class="calibre19">Table 17-3</a> contains a full listing of the available comparison dunder methods and operator functions.</p>
+<figure class="calibre29">
+<figcaption class="calibre30"><p class="calibre31"><a id="calibre_link-6" href="#calibre_link-7" class="calibre19">Table 17-3:</a> Comparison Dunder Methods and <code class="calibre41">operator</code> Module Functions</p></figcaption>
+<table id="calibre_link-765" border="1" class="calibre45">
+<thead class="calibre46">
+<tr class="calibre47">
+<td class="calibre48"><b class="calibre25">Dunder method</b></td><td class="calibre48"><b class="calibre25">Operation</b></td><td class="calibre48"><b class="calibre25">Comparison operator</b></td><td class="calibre48"><b class="calibre25">Function in <code class="bold2">operator</code> module</b></td></tr>
+</thead>
+<tbody class="calibre49">
+<tr class="calibre50">
+<td class="calibre48"><code class="calibre41">__eq__()</code></td><td class="calibre48"><b class="calibre25">EQ</b>ual</td><td class="calibre48"><code class="calibre41">==</code></td><td class="calibre48"><code class="calibre41">operator.eq()</code></td></tr>
+<tr class="calibre51">
+<td class="calibre48"><code class="calibre41">__ne__()</code></td><td class="calibre48"><b class="calibre25">N</b>ot <b class="calibre25">E</b>qual</td><td class="calibre48"><code class="calibre41">!=</code></td><td class="calibre48"><code class="calibre41">operator.ne()</code></td></tr>
+<tr class="calibre50">
+<td class="calibre48"><code class="calibre41"><span type="pagebreak" title="337" id="calibre_link-666" class="calibre57"></span>__lt__()</code></td><td class="calibre48"><b class="calibre25">L</b>ess <b class="calibre25">T</b>han</td><td class="calibre48"><code class="calibre41">&lt;</code></td><td class="calibre48"><code class="calibre41">operator.lt()</code></td></tr>
+<tr class="calibre51">
+<td class="calibre48"><code class="calibre41">__le__()</code></td><td class="calibre48"><b class="calibre25">L</b>ess than or <b class="calibre25">E</b>qual</td><td class="calibre48"><code class="calibre41">&lt;=</code></td><td class="calibre48"><code class="calibre41">operator.le()</code></td></tr>
+<tr class="calibre50">
+<td class="calibre48"><code class="calibre41">__gt__()</code></td><td class="calibre48"><b class="calibre25">G</b>reater <b class="calibre25">T</b>han</td><td class="calibre48"><code class="calibre41">&gt;</code></td><td class="calibre48"><code class="calibre41">operator.gt()</code></td></tr>
+<tr class="calibre51">
+<td class="calibre48"><code class="calibre41">__ge__()</code></td><td class="calibre48"><b class="calibre25">G</b>reater than or <b class="calibre25">E</b>qual</td><td class="calibre48"><code class="calibre41">&gt;=</code></td><td class="calibre48"><code class="calibre41">operator.ge()</code></td></tr>
+</tbody>
+</table>
+</figure>
+<p class="calibre23">You can see the implementation for these methods at <a href="https://autbor.com/wizcoinfull" class="calibre19">https://autbor.com/wizcoinfull</a>. The full documentation for the comparison dunder methods is in the Python documentation at <a href="https://docs.python.org/3/reference/datamodel.html#object.__lt__" class="calibre19">https://docs.python.org/3/reference/datamodel.html#object.__lt__</a>.</p>
+<p class="calibre23">The comparison dunder methods let objects of your classes use Python’s comparison operators rather than forcing you to create your own methods. If you’re creating methods named <code class="calibre9">equals()</code> or <code class="calibre9">isGreaterThan()</code>, they’re not Pythonic, and they’re a sign that you should use comparison dunder methods.</p>
+<h2 id="calibre_link-312" class="calibre7">Summary</h2>
+<p class="bodyfirst">Python implements object-oriented features differently than other OOP languages, such as Java or C++. Instead of explicit getter and setter methods, Python has properties that allow you to validate attributes or make attributes read-only. </p>
+<p class="calibre23">Python also lets you overload its operators via its dunder methods, which begin and end with double underscore characters. We overload common mathematical operators using the numeric and reflected numeric dunder methods. These methods provide a way for Python’s built-in operators to work with objects of the classes you create. If they’re unable to handle the data type of the object on the other side of the operator, they’ll return the built-in <code class="calibre9">NotImplemented</code> value. These dunder methods create and return new objects, whereas the in-place dunder methods (which overload the augmented assignment operators) modify the object in-place. The comparison dunder methods not only implement the six Python comparison operators for objects, but also allow Python’s <code class="calibre9">sort()</code> function to sort objects of your classes. You might want to use the <code class="calibre9">eq()</code>, <code class="calibre9">ne()</code>, <code class="calibre9">lt()</code>, <code class="calibre9">le()</code>, <code class="calibre9">gt()</code>, and <code class="calibre9">ge()</code> functions in the <em class="calibre10">operator</em> module to help you implement these dunder methods.</p>
+<p class="calibre23">Properties and dunder methods allow you to write classes that are consistent and readable. They let you avoid much of the boilerplate code that other languages, such as Java, require you to write. To learn more about writing Pythonic code, two PyCon talks by Raymond Hettinger expand on these ideas: “Transforming Code into Beautiful, Idiomatic Python” at <a href="https://youtu.be/OSGv2VnC0go/" class="calibre19">https://youtu.be/OSGv2VnC0go/</a> and “Beyond PEP 8&mdash;Best Practices for Beautiful, Intelligible Code” at <a href="https://youtu.be/wf-BqAjZb8M/" class="calibre19">https://youtu.be/wf-BqAjZb8M/</a> cover some of the concepts in this chapter and beyond.</p>
+<p class="calibre23"><span type="pagebreak" title="338" id="calibre_link-667" class="calibre16"></span>There’s much more to learn about how to use Python effectively. The books <em class="calibre10">Fluent Python</em> (O’Reilly Media, 2021) by Luciano Ramalho and <em class="calibre10">Effective Python</em> (Addison-Wesley Professional, 2019) by Brett Slatkin provide more in-depth information about Python’s syntax and best practices, and are must-reads for anyone who wants to continue to learn more about Python.</p>
+</section>
+</div>
+
+
+
+<a href="chapter16.html">Prev: Chapter 16 - Object-Oriented Programming and Inheritance</a>
+</body></html>

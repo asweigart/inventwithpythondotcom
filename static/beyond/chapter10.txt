@@ -1,0 +1,443 @@
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-13">
+<section class="toclist">
+<header class="calibre12">
+<h1 class="chaptertitle">
+<span class="partnumber"><span type="pagebreak" title="161" id="calibre_link-502" class="calibre26"></span>10</span><br class="calibre18" />
+<span class="parttitle1">Writing Effective Functions</span>
+</h1>
+</header>
+<figure class="opener"><img src="images/000017.png" alt="" class="calibre15" /></figure><p class="chapterintro">Functions are like mini programs within our programs that allow us to break code into smaller units. This spares us from having to write duplicate code, which can introduce bugs. But writing effective functions requires making many decisions about naming, size, parameters, and complexity. </p>
+<p class="calibre22">This chapter explores the different ways we can write functions and the benefits and drawbacks of different trade-offs. We’ll delve into how to trade off between small and large functions, how the number of parameters affects the function’s complexity, and how to write functions with variable numbers of arguments using the <code class="calibre9">*</code> and <code class="calibre9">**</code> operators. We’ll also explore the functional programming paradigm and the benefits of writing functions according to this paradigm.</p>
+<h2 id="calibre_link-190" class="calibre7"><span type="pagebreak" title="162" id="calibre_link-503" class="calibre20"></span>Function Names</h2>
+<p class="bodyfirst">Function names should follow the same convention we use for identifiers in general, as described in Chapter 4. But they should usually include a verb, because functions typically perform some action. You might also include a noun to describe the thing being acted on. For example, the names <code class="calibre9">refreshConnection()</code>, <code class="calibre9">setPassword()</code>, and <code class="calibre9">extract_version()</code> clarify what the function does and to what. </p>
+<p class="calibre23">You might not need a noun for methods that are part of a class or module. A <code class="calibre9">reset()</code> method in a <code class="calibre9">SatelliteConnection</code> class or an <code class="calibre9">open()</code> function in the <code class="calibre9">webbrowser</code> module already provides the necessary context. You can tell that a satellite connection is the item being reset and that a web browser is the item being opened.</p>
+<p class="calibre23">It’s better to use long, descriptive names rather than an acronym or a name that’s too short. A mathematician might immediately understand that a function named <code class="calibre9">gcd()</code> returns the greatest common denominator of two numbers, but everyone else would find <code class="calibre9">getGreatestCommonDenominator()</code> more informative.</p>
+<p class="calibre23">Remember not to use any of Python’s built-in function or module names, such as <code class="calibre9">all</code>, <code class="calibre9">any</code>, <code class="calibre9">date</code>, <code class="calibre9">email</code>, <code class="calibre9">file</code>, <code class="calibre9">format</code>, <code class="calibre9">hash</code>, <code class="calibre9">id</code>, <code class="calibre9">input</code>, <code class="calibre9">list</code>, <code class="calibre9">min</code>, <code class="calibre9">max</code>, <code class="calibre9">object</code>, <code class="calibre9">open</code>, <code class="calibre9">random</code>, <code class="calibre9">set</code>, <code class="calibre9">str</code>, <code class="calibre9">sum</code>, <code class="calibre9">test</code>, and <code class="calibre9">type</code>.</p>
+<h2 id="calibre_link-191" class="calibre7">Function Size Trade-Offs</h2>
+<p class="bodyfirst">Some programmers say that functions should be as short as possible and no longer than what can fit on a single screen. A function that is only a dozen lines long is relatively easy to understand, at least compared to one that is hundreds of lines long. But making functions shorter by splitting up their code into multiple smaller functions can also have its downsides. Let’s look at some of the advantages of small functions:</p>
+<ul class="calibre36">
+<li class="calibre11">The function’s code is easier to understand.</li>
+<li class="calibre11">The function likely requires fewer parameters.</li>
+<li class="calibre11">The function is less likely to have side effects, as described in “Functional Programming” on page 172.</li>
+<li class="calibre11">The function is easier to test and debug.</li>
+<li class="calibre11">The function likely raises fewer different kinds of exceptions.</li>
+</ul>
+<p class="calibre23">But there are also some disadvantages to short functions:</p>
+<ul class="calibre36">
+<li class="calibre11">Writing short functions often means a larger number of functions in the program.</li>
+<li class="calibre11">Having more functions means the program is more complicated.</li>
+<li class="calibre11">Having more functions also means having to come up with additional descriptive, accurate names, which is a difficult task.</li>
+<li class="calibre11">Using more functions requires you to write more documentation.</li>
+<li class="calibre11">The relationships between functions become more complicated.</li>
+</ul>
+<p class="calibre23"><span type="pagebreak" title="163" id="calibre_link-504" class="calibre16"></span>Some people take the guideline “the shorter, the better” to an extreme and claim that all functions should be three or four lines of code at most. This is madness. For example, here’s the <code class="calibre9">getPlayerMove()</code> function from Chapter 14’s Tower of Hanoi game. The specifics of how this code works are unimportant. Just look at the function’s general structure:</p>
+<pre class="calibre28"><code class="calibre9">def getPlayerMove(towers):
+    """Asks the player for a move. Returns (fromTower, toTower)."""
+
+    while True:  # Keep asking player until they enter a valid move.
+        print('Enter the letters of "from" and "to" towers, or QUIT.')
+        print("(e.g. AB to moves a disk from tower A to tower B.)")
+        print()
+        response = input("&gt; ").upper().strip()
+
+        if response == "QUIT":
+            print("Thanks for playing!")
+            sys.exit()
+
+        # Make sure the user entered valid tower letters:
+        if response not in ("AB", "AC", "BA", "BC", "CA", "CB"):
+            print("Enter one of AB, AC, BA, BC, CA, or CB.")
+            continue  # Ask player again for their move.
+
+        # Use more descriptive variable names:
+        fromTower, toTower = response[0], response[1]
+
+        if len(towers[fromTower]) == 0:
+            # The "from" tower cannot be an empty tower:
+            print("You selected a tower with no disks.")
+            continue  # Ask player again for their move.
+        elif len(towers[toTower]) == 0:
+            # Any disk can be moved onto an empty "to" tower:
+            return fromTower, toTower
+        elif towers[toTower][-1] &lt; towers[fromTower][-1]:
+            print("Can't put larger disks on top of smaller ones.")
+            continue  # Ask player again for their move.
+        else:
+            # This is a valid move, so return the selected towers:
+            return fromTower, toTower</code></pre>
+<p class="calibre23">This function is 34 lines long. Although it covers multiple tasks, including allowing the player to enter a move, checking whether this move is valid, and asking the player again to enter a move if the move is invalid, these tasks all fall under the umbrella of getting the player’s move. On the other hand, if we were devoted to writing short functions, we could break the code in <code class="calibre9">getPlayerMove()</code> into smaller functions, like this:</p>
+<pre class="calibre28"><code class="calibre9">def getPlayerMove(towers):
+    """Asks the player for a move. Returns (fromTower, toTower)."""
+
+    while True:  # Keep asking player until they enter a valid move.
+        response = askForPlayerMove()
+<span type="pagebreak" title="164" id="calibre_link-505" class="calibre16"></span>        terminateIfResponseIsQuit(response)
+        if not isValidTowerLetters(response):
+            continue # Ask player again for their move.
+
+        # Use more descriptive variable names:
+        fromTower, toTower = response[0], response[1]
+
+        if towerWithNoDisksSelected(towers, fromTower):
+            continue  # Ask player again for their move.
+        elif len(towers[toTower]) == 0:
+            # Any disk can be moved onto an empty "to" tower:
+            return fromTower, toTower
+        elif largerDiskIsOnSmallerDisk(towers, fromTower, toTower):
+            continue  # Ask player again for their move.
+        else:
+            # This is a valid move, so return the selected towers:
+            return fromTower, toTower
+
+def askForPlayerMove():
+    """Prompt the player, and return which towers they select."""
+    print('Enter the letters of "from" and "to" towers, or QUIT.')
+    print("(e.g. AB to moves a disk from tower A to tower B.)")
+    print()
+    return input("&gt; ").upper().strip()
+
+def terminateIfResponseIsQuit(response):
+    """Terminate the program if response is 'QUIT'"""
+    if response == "QUIT":
+        print("Thanks for playing!")
+        sys.exit()
+
+def isValidTowerLetters(towerLetters):
+    """Return True if `towerLetters` is valid."""
+    if towerLetters not in ("AB", "AC", "BA", "BC", "CA", "CB"):
+        print("Enter one of AB, AC, BA, BC, CA, or CB.")
+        return False
+    return True
+
+def towerWithNoDisksSelected(towers, selectedTower):
+    """Return True if `selectedTower` has no disks."""
+    if len(towers[selectedTower]) == 0:
+        print("You selected a tower with no disks.")
+        return True
+    return False
+
+def largerDiskIsOnSmallerDisk(towers, fromTower, toTower):
+    """Return True if a larger disk would move on a smaller disk."""
+    if towers[toTower][-1] &lt; towers[fromTower][-1]:
+        print("Can't put larger disks on top of smaller ones.")
+        return True
+    return False</code></pre>
+<p class="calibre23"><span type="pagebreak" title="165" id="calibre_link-506" class="calibre16"></span>These six functions are 56 lines long, nearly double the line count of the original code, but they do the same tasks. Although each function is easier to understand than the original <code class="calibre9">getPlayerMove()</code> function, the group of them together represents an increase in complexity. Readers of your code might have trouble understanding how they all fit together. The <code class="calibre9">getPlayerMove()</code> function is the only one called by other parts of the program; the other five functions are called only once, from <code class="calibre9">getPlayerMove()</code>. But the mass of functions doesn’t convey this fact.</p>
+<p class="calibre23">I also had to come up with new names and docstrings (the triple-quoted strings under each <code class="calibre9">def</code> statement, further explained in Chapter 11) for each new function. This leads to functions with confusingly similar names, such as <code class="calibre9">getPlayerMove()</code> and <code class="calibre9">askForPlayerMove()</code>. Also, <code class="calibre9">getPlayerMove()</code> is still longer than three or four lines, so if I were following the guideline “the shorter, the better,” I’d need to split it into even smaller functions!</p>
+<p class="calibre23">In this case, the policy of allowing only incredibly short functions might have resulted in simpler functions, but the overall complexity of the program increased drastically. In my opinion, functions should be fewer than 30 lines ideally and definitely no longer than 200 lines. Make your functions as short as reasonably possible but not any shorter.</p>
+<h2 id="calibre_link-192" class="calibre7">Function Parameters and Arguments</h2>
+<p class="bodyfirst">A function’s parameters are the variable names between the parentheses of the function’s <code class="calibre9">def</code> statement, whereas the arguments are the values between a function call’s parentheses. The more parameters a function has, the more configurable and generalized its code can be. But more parameters also mean greater complexity.</p>
+<p class="calibre23">A good rule to adhere to is that zero to three parameters is fine, but more than five or six is probably too many. Once functions become overly complicated, it’s best to consider how to split them into smaller functions with fewer parameters.</p>
+<h3 id="calibre_link-193" class="calibre27">Default Arguments</h3>
+<p class="bodyfirst">One way to reduce the complexity of your function’s parameters is by providing default arguments for your parameters. A <em class="calibre10">default argument</em> is a value used as an argument if the function call doesn’t specify one. If the majority of function calls use a particular parameter value, we can make that value a default argument to avoid having to enter it repeatedly in the function call. </p>
+<p class="calibre23">We specify a default argument in the <code class="calibre9">def</code> statement, following the parameter name and an equal sign. For example, in this <code class="calibre9">introduction()</code> function, a parameter named <code class="calibre9">greeting</code> has the value <code class="calibre9">'Hello'</code> if the function call doesn’t specify it:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">def introduction(name, greeting='Hello'):</b>
+...     <b class="calibre25">print(greeting + ', ' + name)</b>
+...
+&gt;&gt;&gt; <b class="calibre25">introduction('Alice')</b>
+<span type="pagebreak" title="166" id="calibre_link-507" class="calibre16"></span>Hello, Alice
+&gt;&gt;&gt; <b class="calibre25">introduction('Hiro', 'Ohiyo gozaimasu')</b>
+Ohiyo gozaimasu, Hiro</code></pre>
+<p class="calibre23">When the <code class="calibre9">introduction()</code> function is called without a second argument, it uses the string <code class="calibre9">'Hello'</code> by default. Note that parameters with default arguments must always come after parameters without default arguments.</p>
+<p class="calibre23">Recall from Chapter 8 that you should avoid using a mutable object, such as an empty list <code class="calibre9">[]</code> or empty dictionary <code class="calibre9">{}</code>, as the default value. “Don’t Use Mutable Values for Default Arguments” on ﻿page 143 explains the problem that this approach causes and its solution.</p>
+<h3 id="calibre_link-194" class="calibre27">Using * and ** to Pass Arguments to Functions</h3>
+<p class="bodyfirst">You can use the <code class="calibre9">*</code> and <code class="calibre9">**</code> syntax (often pronounced as <em class="calibre10">star </em>and <em class="calibre10">star star</em>) to pass groups of arguments to functions separately. The <code class="calibre9">*</code> syntax allows you to pass in the items in an iterable object (such as a list or tuple). The <code class="calibre9">**</code> syntax allows you to pass in the key-value pairs in a mapping object (such as a dictionary) as individual arguments.</p>
+<p class="calibre23">For example, the <code class="calibre9">print()</code> function can take multiple arguments. It places a space in between them by default, as the following code shows:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">print('cat', 'dog', 'moose')</b>
+cat dog moose</code></pre>
+<p class="calibre23">These arguments are called <em class="calibre10">positional arguments</em>, because their position in the function call determines which argument is assigned to which parameter. But if you stored these strings in a list and tried to pass the list, the <code class="calibre9">print()</code> function would think you were trying to print the list as a single value:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">args = ['cat', 'dog', 'moose']</b>
+&gt;&gt;&gt; <b class="calibre25">print(args)</b>
+['cat', 'dog', 'moose']</code></pre>
+<p class="calibre23">Passing the list to <code class="calibre9">print()</code> displays the list, including brackets, quotes, and comma characters. </p>
+<p class="calibre23">One way to print the individual items in the list would be to split the list into multiple arguments by passing each item’s index to the function individually, resulting in code that is harder to read:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; # An example of less readable code:
+&gt;&gt;&gt; <b class="calibre25">args = ['cat', 'dog', 'moose']</b>
+&gt;&gt;&gt; <b class="calibre25">print(args[0], args[1], args[2])</b>
+cat dog moose</code></pre>
+<p class="calibre23">There’s an easier way to pass these items to <code class="calibre9">print()</code>. You can use the <code class="calibre9">*</code> syntax to interpret the items in a list (or any other iterable data type) as individual positional arguments. Enter the following example into the interactive shell.</p>
+<span type="pagebreak" title="167" id="calibre_link-704" class="calibre16"></span><pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">args = ['cat', 'dog', 'moose']</b>
+&gt;&gt;&gt; <b class="calibre25">print(*args)</b>
+cat dog moose</code></pre>
+<p class="calibre23">The <code class="calibre9">*</code> syntax allows you pass the list items to a function individually, no matter how many items are in the list.</p>
+<p class="calibre23">You can use the <code class="calibre9">**</code> syntax to pass mapping data types (such as dictionaries) as individual <em class="calibre10">keyword arguments</em>. Keyword arguments are preceded by a parameter name and equal sign. For example, the <code class="calibre9">print()</code> function has a <code class="calibre9">sep</code> keyword argument that specifies a string to put in between the arguments it displays. It’s set to a single space string <code class="calibre9">' '</code> by default. You can assign a keyword argument to a different value using either an assignment statement or the <code class="calibre9">**</code> syntax. To see how this works, enter the following into the interactive shell:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">print('cat', 'dog', 'moose', sep='-')</b>
+cat-dog-moose
+&gt;&gt;&gt; <b class="calibre25">kwargsForPrint = {'sep': '-'}</b>
+&gt;&gt;&gt; <b class="calibre25">print('cat', 'dog', 'moose', **kwargsForPrint)</b>
+cat-dog-moose</code></pre>
+<p class="calibre23">Notice that these instructions produce identical output. In the example, we used only one line of code to set up the <code class="calibre9">kwargsForPrint</code> dictionary. But for more complex cases, you might need more code to set up a dictionary of keyword arguments. The <code class="calibre9">**</code> syntax allows you to create a custom dictionary of configuration settings to pass to a function call. This is useful especially for functions and methods that accept a large number of keyword arguments.</p>
+<p class="calibre23">By modifying a list or dictionary at runtime, you can supply a variable number of arguments for a function call using the <code class="calibre9">*</code> and <code class="calibre9">**</code> syntax.</p>
+<h3 id="calibre_link-195" class="calibre27">Using * to Create Variadic Functions</h3>
+<p class="bodyfirst">You can also use the <code class="calibre9">*</code> syntax in <code class="calibre9">def</code> statements to create <em class="calibre10">variadic</em> or <em class="calibre10">varargs</em> functions that receive a varying number of positional arguments. For instance, <code class="calibre9">print()</code> is a variadic function, because you can pass any number of strings to it: <code class="calibre9">print('Hello!')</code> or <code class="calibre9">print('My name is', name)</code>, for example. Note that although we used the <code class="calibre9">*</code> syntax in function calls in the previous section, we use the <code class="calibre9">*</code> syntax in function definitions in this section.</p>
+<p class="calibre23">Let’s look at an example by creating a <code class="calibre9">product()</code> function that takes any number of arguments and multiplies them together:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">def product(*args):</b>
+...     <b class="calibre25">result = 1</b>
+...     <b class="calibre25">for num in args:</b>
+...         <b class="calibre25">result *= num</b>
+...     <b class="calibre25">return result</b>
+...
+&gt;&gt;&gt; <b class="calibre25">product(3, 3)</b>
+9
+&gt;&gt;&gt; <b class="calibre25">product(2, 1, 2, 3)</b>
+12</code></pre>
+<p class="calibre23"><span type="pagebreak" title="168" id="calibre_link-508" class="calibre16"></span>Inside the function, <code class="calibre9">args</code> is just a regular Python tuple containing all the positional arguments. Technically, you can name this parameter anything, as long as it begins with the star (<code class="calibre9">*</code>), but it’s usually named <code class="calibre9">args</code> by convention. </p>
+<p class="calibre23">Knowing when to use the <code class="calibre9">*</code> takes some thought. After all, the alternative to making a variadic function is to have a single parameter that accepts a list (or other iterable data type), which contains a varying number of items. This is what the built-in <code class="calibre9">sum()</code> function does:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">sum([2, 1, 2, 3])</b>
+8</code></pre>
+<p class="calibre23">The <code class="calibre9">sum()</code> function expects one iterable argument, so passing it multiple arguments results in an exception:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">sum(2, 1, 2, 3)</b>
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+TypeError: sum() takes at most 2 arguments (4 given)</code></pre>
+<p class="calibre23">Meanwhile, the built-in <code class="calibre9">min()</code> and <code class="calibre9">max()</code> functions, which find the minimum or maximum value of several values, accept a single iterable argument or multiple separate arguments:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">min([2, 1, 3, 5, 8])</b>
+1
+&gt;&gt;&gt; <b class="calibre25">min(2, 1, 3, 5, 8)</b>
+1
+&gt;&gt;&gt; <b class="calibre25">max([2, 1, 3, 5, 8])</b>
+8
+&gt;&gt;&gt; <b class="calibre25">max(2, 1, 3, 5, 8)</b>
+8</code></pre>
+<p class="calibre23">All of these functions take a varying number of arguments, so why are their parameters designed differently? And when should we design functions to take a single iterable argument or multiple separate arguments using the <code class="calibre9">*</code> syntax?</p>
+<p class="calibre23">How we design our parameters depends on how we predict a programmer will use our code. The <code class="calibre9">print()</code> function takes multiple arguments because programmers more often pass a series of strings, or variables that contain strings, to it, as in <code class="calibre9">print('My name is', name)</code>. It isn’t as common to collect these strings into a list over several steps and then pass the list to <code class="calibre9">print()</code>. Also, if you passed a list to <code class="calibre9">print()</code>, the function would print that list value in its entirety, so you can’t use it to print the individual values in the list. </p>
+<p class="calibre23">There’s no reason to call <code class="calibre9">sum()</code> with separate arguments because Python already uses the <code class="calibre9">+</code> operator for that. Because you can write code like <code class="calibre9">2 + 4 + 8</code>, you don’t need to be able to write code like <code class="calibre9">sum(2, 4, 8)</code>. It makes sense that you must pass the varying number of arguments only as a list to <code class="calibre9">sum()</code>.</p>
+<p class="calibre23"><span type="pagebreak" title="169" id="calibre_link-509" class="calibre16"></span>The <code class="calibre9">min()</code> and <code class="calibre9">max()</code> functions allow both styles. If the programmer passes one argument, the function assumes it’s a list or tuple of values to inspect. If the programmer passes multiple arguments, it assumes these are the values to inspect. These two functions commonly handle lists of values while the program is running, as in the function call <code class="calibre9">min(allExpenses)</code>. They also deal with separate arguments the programmer selects while writing the code, such as in <code class="calibre9">max(0, someNumber)</code>. Therefore, the functions are designed to accept both kinds of arguments. The following <code class="calibre9">myMinFunction()</code>, which is my own implementation of the <code class="calibre9">min()</code> function, demonstrates this:</p>
+<pre class="calibre28"><code class="calibre9">def myMinFunction(*args):
+    if len(args) == 1:
+    <span class="codeannotation">1</span> values = args[0]
+    else:
+    <span class="codeannotation">2</span> values = args
+
+    if len(values) == 0:
+    <span class="codeannotation">3</span> raise ValueError('myMinFunction() args is an empty sequence')
+
+ <span class="codeannotation">4</span> for i, value in enumerate(values):
+        if i == 0 or value &lt; smallestValue:
+            smallestValue = value
+    return smallestValue</code></pre>
+<p class="calibre23">The <code class="calibre9">myMinFunction()</code> uses the <code class="calibre9">*</code> syntax to accept a varying number of arguments as a tuple. If this tuple contains only one value, we assume it’s a sequence of values to inspect <span class="codeannotation">1</span>. Otherwise, we assume that <code class="calibre9">args</code> is a tuple of values to inspect <span class="codeannotation">2</span>. Either way, the <code class="calibre9">values</code> variable will contain a sequence of values for the rest of the code to inspect. Like the actual <code class="calibre9">min()</code> function, we raise <code class="calibre9">ValueError</code> if the caller didn’t pass any arguments or passed an empty sequence <span class="codeannotation">3</span>. The rest of the code loops through values and returns the smallest value found <span class="codeannotation">4</span>. To keep this example simple, <code class="calibre9">myMinFunction()</code> accepts only sequences like lists or tuples rather than any iterable value.</p>
+<p class="calibre23">You might wonder why we don’t always write functions to accept both ways of passing a varying number of arguments. The answer is that it’s best to keep your functions as simple as possible. Unless both ways of calling the function are common, choose one over the other. If a function usually deals with a data structure created while the program is running, it’s better to have it accept a single parameter. If a function usually deals with arguments that the programmer specifies while writing the code, it’s better to use the <code class="calibre9">*</code> syntax to accept a varying number of arguments.</p>
+<h3 id="calibre_link-196" class="calibre27">Using ** to Create Variadic Functions</h3>
+<p class="bodyfirst">Variadic functions can use the <code class="calibre9">**</code> syntax, too. Although the <code class="calibre9">*</code> syntax in <code class="calibre9">def</code> statements represents a varying number of positional arguments, the <code class="calibre9">**</code> syntax represents a varying number of optional keyword arguments.</p>
+<p class="calibre23">If you define a function that could take numerous optional keyword arguments without using the <code class="calibre9">**</code> syntax, your <code class="calibre9">def</code> statement could become <span type="pagebreak" title="170" id="calibre_link-510" class="calibre16"></span>unwieldy. Consider a hypothetical <code class="calibre9">formMolecule()</code> function, which has parameters for all 118 known elements:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">def formMolecule(hydrogen, helium, lithium, beryllium, boron, </b><var class="calibre43">--snip--</var></code></pre>
+<p class="calibre23">Passing <code class="calibre9">2</code> for the <code class="calibre9">hydrogen</code> parameter and <code class="calibre9">1</code> for the <code class="calibre9">oxygen</code> parameter to return <code class="calibre9">'water'</code> would also be burdensome and unreadable, because you’d have to set all of the irrelevant elements to zero:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">formMolecule(2, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 </b><var class="calibre43">--snip--</var>
+'water'</code></pre>
+<p class="calibre23">You could make the function more manageable by using named keyword parameters that each have a default argument, freeing you from having to pass that parameter an argument in a function call. </p>
+<aside type="sidebar" class="authors">
+<div class="top"><hr class="calibre32" /></div>
+<section class="note">
+<h2 class="calibre33"><span class="notehead">NOTE</span></h2>
+<p class="calibre34">Although the terms <em class="calibre10">argument</em> and <em class="calibre10">parameter</em> are well defined, programmers tend to use <em class="calibre10">keyword argument</em> and <em class="calibre10">keyword parameter</em> interchangeably.</p>
+<div class="top"><hr class="calibre32" /></div>
+</section>
+</aside>
+<p class="calibre23">For example, this <code class="calibre9">def</code> statement has default arguments of <code class="calibre9">0</code> for each of the keyword parameters:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">def formMolecule(hydrogen=0, helium=0, lithium=0, beryllium=0, </b><var class="calibre43">--snip--</var></code></pre>
+<p class="calibre23">This makes calling <code class="calibre9">formMolecule()</code> easier, because you only need to specify arguments for parameters that have a different value than the default argument. You can also specify the keyword arguments in any order:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">formMolecule(hydrogen=2, oxygen=1)</b>
+'water'
+&gt;&gt;&gt; <b class="calibre25">formMolecule(oxygen=1, hydrogen=2)</b>
+'water'
+&gt;&gt;&gt; <b class="calibre25">formMolecule(carbon=8, hydrogen=10, nitrogen=4, oxygen=2)</b>
+'caffeine'</code></pre>
+<p class="calibre23">But you still have an unwieldy <code class="calibre9">def</code> statement with 118 parameter names. And what if new elements were discovered? You’d have to update the function’s <code class="calibre9">def</code> statement along with any documentation of the function’s parameters. </p>
+<p class="calibre23">Instead, you can collect all the parameters and their arguments as key-value pairs in a dictionary using the <code class="calibre9">**</code> syntax for keyword arguments. Technically, you can name the <code class="calibre9">**</code> parameter anything, but it’s usually named <code class="calibre9">kwargs</code> by convention:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">def formMolecules(**kwargs):</b>
+...     <b class="calibre25">if len(kwargs) == 2 and kwargs['hydrogen'] == 2 and</b> </code></pre>
+<code class="bold">                                kwargs['oxygen'] == 1:</code><pre class="calibre28"><code class="calibre9">
+...         <b class="calibre25">return 'water'</b>
+...     <b class="calibre25"># (rest of code for the function goes here)</b>
+...
+&gt;&gt;&gt; <b class="calibre25">formMolecules(hydrogen=2, oxygen=1)</b>
+'water'</code></pre>
+<p class="calibre23"><span type="pagebreak" title="171" id="calibre_link-511" class="calibre16"></span>The <code class="calibre9">**</code> syntax indicates that the <code class="calibre9">kwargs</code> parameter can handle all keyword arguments passed in a function call. They’ll be stored as key-value pairs in a dictionary assigned to the <code class="calibre9">kwargs</code> parameter. As new chemical elements are discovered, you’d need to update the function’s code but not its <code class="calibre9">def</code> statement, because all keyword arguments are put into <code class="calibre9">kwargs</code>:</p>
+<pre class="calibre28"><code class="calibre9"><span class="codeannotationhang">1</span> &gt;&gt;&gt; <b class="calibre25">def formMolecules(**kwargs):</b>
+<span class="codeannotationhang">2</span> ...     <b class="calibre25">if len(kwargs) == 1 and kwargs.get('unobtanium') == 12:</b>
+...         <b class="calibre25">return 'aether'</b>
+...     <b class="calibre25"># (rest of code for the function goes here)</b>
+...
+&gt;&gt;&gt; <b class="calibre25">formMolecules(unobtanium=12)</b>
+'aether'</code></pre>
+<p class="calibre23">As you can see, the <code class="calibre9">def</code> statement <span class="codeannotation">1</span> is the same as before, and only the function’s code <span class="codeannotation">2</span> needed updating. When you use the <code class="calibre9">**</code> syntax, the <code class="calibre9">def</code> statement and the function calls become much simpler to write and still produce readable code.</p>
+<h3 id="calibre_link-197" class="calibre27">Using * and ** to Create Wrapper Functions</h3>
+<p class="bodyfirst">A common use case for the <code class="calibre9">*</code> and <code class="calibre9">**</code> syntax in <code class="calibre9">def</code> statements is to create wrapper functions, which pass on arguments to another function and return that function’s return value. You can use the <code class="calibre9">*</code> and <code class="calibre9">**</code> syntax to forward any and all arguments to the wrapped function. For example, we can create a <code class="calibre9">printLowercase()</code> function that wraps the built-in <code class="calibre9">print()</code> function. It relies on <code class="calibre9">print()</code> to do the real work but converts the string arguments to lowercase first:</p>
+<pre class="calibre28"><code class="calibre9"><span class="codeannotationhang">1</span> &gt;&gt;&gt; <b class="calibre25">def printLower(*args, **kwargs):</b>
+<span class="codeannotationhang">2</span> ...     <b class="calibre25">args = list(args)</b>
+...     <b class="calibre25">for i, value in enumerate(args):</b>
+...         <b class="calibre25">args[i] = str(value).lower()</b>
+<span class="codeannotationhang">3</span> ...     <b class="calibre25">return print(*args, **kwargs)</b>
+...
+&gt;&gt;&gt; <b class="calibre25">name = 'Albert'</b>
+&gt;&gt;&gt; <b class="calibre25">printLower('Hello,', name)</b>
+hello, albert
+&gt;&gt;&gt; <b class="calibre25">printLower('DOG', 'CAT', 'MOOSE', sep=', ')</b>
+dog, cat, moose</code></pre>
+<p class="calibre23">The <code class="calibre9">printLower()</code> function <span class="codeannotation">1</span> uses the <code class="calibre9">*</code> syntax to accept a varying number of positional arguments in a tuple assigned to the <code class="calibre9">args</code> parameter, whereas the <code class="calibre9">**</code> syntax assigns any keyword arguments to a dictionary in the <code class="calibre9">kwargs</code> parameter. If a function uses <code class="calibre9">*args</code> and <code class="calibre9">**kwargs</code> together, the <code class="calibre9">*args</code> parameter must come before the <code class="calibre9">**kwargs</code> parameter. We pass these on to the wrapped <code class="calibre9">print()</code> function, but first our function modifies some of the arguments, so we create a list form of the <code class="calibre9">args</code> tuple <span class="codeannotation">2</span>.</p>
+<p class="calibre23">After changing the strings in <code class="calibre9">args</code> to lowercase, we pass the items in <code class="calibre9">args</code> and key-value pairs in <code class="calibre9">kwargs</code> as separate arguments to <code class="calibre9">print()</code> using the <code class="calibre9">*</code><span type="pagebreak" title="172" id="calibre_link-512" class="calibre16"></span>and <code class="calibre9">**</code> syntax <span class="codeannotation">3</span>. The return value of <code class="calibre9">print()</code> also gets returned as the return value of <code class="calibre9">printLower()</code>. These steps effectively wrap the <code class="calibre9">print()</code> function.</p>
+<h2 id="calibre_link-198" class="calibre7">Functional Programming</h2>
+<p class="bodyfirst">Functional programming is a programming paradigm that emphasizes writing functions that perform calculations without modifying global variables or any external state (such as files on the hard drive, internet connections, or databases). Some programming languages, such as Erlang, Lisp, and Haskell, are heavily designed around functional programming concepts. Although not shackled to the paradigm, Python has some functional programming features. The main ones that Python programs can use are side-effect-free functions, higher-order functions, and lambda functions.</p>
+<h3 id="calibre_link-199" class="calibre27">Side Effects</h3>
+<p class="bodyfirst"><em class="calibre10">Side effects</em> are any changes a function makes to the parts of the program that exist outside of its own code and local variables. To illustrate this, let’s create a <code class="calibre9">subtract()</code> function that implements Python’s subtraction operator (<code class="calibre9">-</code>):</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">def subtract(number1, number2):</b>
+...     <b class="calibre25">return number1 - number2</b>
+...
+&gt;&gt;&gt; <b class="calibre25">subtract(123, 987)</b>
+-864</code></pre>
+<p class="calibre23">This <code class="calibre9">subtract()</code> function has no side effects. That is, it doesn’t affect anything in the program that isn’t a part of its code. There’s no way to tell from the program’s or the computer’s state whether the <code class="calibre9">subtract()</code> function has been called once, twice, or a million times before. A function might modify local variables inside the function, but these changes remain isolated from the rest of the program. </p>
+<p class="calibre23">Now consider an <code class="calibre9">addToTotal()</code> function, which adds the numeric argument to a global variable named <code class="calibre9">TOTAL</code>:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">TOTAL = 0</b>
+&gt;&gt;&gt; <b class="calibre25">def addToTotal(amount):</b>
+...     <b class="calibre25">global TOTAL</b>
+...     <b class="calibre25">TOTAL += amount</b>
+...     <b class="calibre25">return TOTAL</b>
+...
+&gt;&gt;&gt; <b class="calibre25">addToTotal(10)</b>
+10
+&gt;&gt;&gt; <b class="calibre25">addToTotal(10)</b>
+20
+&gt;&gt;&gt; <b class="calibre25">addToTotal(9999)</b>
+10019
+&gt;&gt;&gt; <b class="calibre25">TOTAL</b>
+10019</code></pre>
+<p class="calibre23"><span type="pagebreak" title="173" id="calibre_link-513" class="calibre16"></span>The <code class="calibre9">addToTotal()</code> function does have a side effect, because it modifies an element that exists outside of the function: the <code class="calibre9">TOTAL</code> global variable. Side effects can be more than changes to global variables. They include updating or deleting files, printing text onscreen, opening a database connection, authenticating to a server, or making any other change outside of the function. Any trace that a function call leaves behind after returning is a side effect.</p>
+<p class="calibre23">Side effects can also include making in-place changes to mutable objects referred to outside of the function. For example, the following <code class="calibre9">removeLastCatFromList()</code> function modifies the list argument in-place:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">def removeLastCatFromList(petSpecies):</b>
+...     <b class="calibre25">if len(petSpecies) &gt; 0 and petSpecies[-1] == 'cat':</b>
+...         <b class="calibre25">petSpecies.pop()</b>
+...
+&gt;&gt;&gt; <b class="calibre25">myPets = ['dog', 'cat', 'bird', 'cat']</b>
+&gt;&gt;&gt; <b class="calibre25">removeLastCatFromList(myPets)</b>
+&gt;&gt;&gt; <b class="calibre25">myPets</b>
+['dog', 'cat', 'bird']</code></pre>
+<p class="calibre23">In this example, the <code class="calibre9">myPets</code> variable and <code class="calibre9">petSpecies</code> parameter hold references to the same list. Any in-place modifications made to the list object inside the function would also exist outside the function, making this modification a side effect.</p>
+<p class="calibre23">A related concept, a <em class="calibre10">deterministic function</em>, always returns the same return value given the same arguments. The <code class="calibre9">subtract(123, 987)</code> function call always returns <code class="calibre9">−864</code>. Python’s built-in <code class="calibre9">round()</code> function always returns <code class="calibre9">3</code> when passed <code class="calibre9">3.14</code> as an argument. A <em class="calibre10">nondeterministic function</em> won’t always return the same values when passed the same arguments. For example, calling <code class="calibre9">random.randint(1, 10)</code> returns a random integer between <code class="calibre9">1</code> and <code class="calibre9">10</code>. The <code class="calibre9">time.time()</code> function has no arguments, but it returns a different value depending on what your computer’s clock is set to when the function was called. In the case of <code class="calibre9">time.time()</code>, the clock is an external resource that is effectively an input into the function the same way an argument is. Functions that depend on resources external to the function (including global variables, files on the hard drive, databases, and internet connections) are not considered deterministic.</p>
+<p class="calibre23">One benefit of deterministic functions is that you can cache their values. There’s no need for <code class="calibre9">subtract()</code> to calculate the difference of <code class="calibre9">123</code> and <code class="calibre9">987</code> more than once if it can remember the return value from the first time it’s called with those arguments. Therefore, deterministic functions allow us to make a <em class="calibre10">space-time trade-off</em>, quickening the runtime of a function by using space in memory to cache previous results.</p>
+<p class="calibre23">A function that is deterministic and free of side effects is called a <em class="calibre10">pure function</em>. Functional programmers strive to create only pure functions in their programs. In addition to those already noted, pure functions offer several benefits:</p>
+<ul class="calibre36">
+<li class="calibre11">They’re well suited for unit testing, because they don’t require you to set up any external resources.</li>
+<li class="calibre11"><span type="pagebreak" title="174" id="calibre_link-514" class="calibre16"></span>It’s easy to reproduce bugs in a pure function by calling the function with the same arguments.</li>
+<li class="calibre11">Pure functions can call other pure functions and remain pure.</li>
+<li class="calibre11">In multithreaded programs, pure functions are thread-safe and can safely run concurrently. (Multithreading is beyond the scope of this book.)</li>
+<li class="calibre11">Multiple calls to pure functions can run on parallel CPU cores or in a multithreaded program because they don’t have to depend on any external resources that require them to be run in any particular sequence.</li>
+</ul>
+<p class="calibre23">You can and should write pure functions in Python whenever possible. Python functions are made pure by convention only; there’s no setting that causes the Python interpreter to enforce purity. The most common way to make your functions pure is to avoid using global variables in them and ensure they don’t interact with files, the internet, the system clock, random numbers, or other external resources.</p>
+<h3 id="calibre_link-200" class="calibre27">Higher-Order Functions</h3>
+<p class="bodyfirst"><em class="calibre10">Higher-order functions</em> can accept other functions as arguments or return functions as return values. For example, let’s define a function named <code class="calibre9">callItTwice()</code> that will call a given function twice:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; def callItTwice(func, *args, **kwargs):
+...     func(*args, **kwargs)
+...     func(*args, **kwargs)
+...
+&gt;&gt;&gt; callItTwice(print, 'Hello, world!')
+Hello, world!
+Hello, world!</code></pre>
+<p class="calibre23">The <code class="calibre9">callItTwice()</code> function works with any function it’s passed. In Python, functions are <em class="calibre10">first-class objects</em>, meaning they’re like any other object: you can store functions in variables, pass them as arguments, or use them as return values.</p>
+<h3 id="calibre_link-201" class="calibre27">Lambda Functions</h3>
+<p class="bodyfirst"><em class="calibre10">Lambda functions</em>, also known as <em class="calibre10">anonymous functions</em> or <em class="calibre10">nameless functions</em>, are simplified functions that have no names and whose code consists solely of one <code class="calibre9">return</code> statement. We often use lambda functions when passing functions as arguments to other functions. </p>
+<p class="calibre23">For example, we could create a normal function that accepts a list containing a 4 by 10 rectangle’s width and height, like this:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">def rectanglePerimeter(rect):</b>
+...     <b class="calibre25">return (rect[0] * 2) + (rect[1] * 2)</b>
+...
+&gt;&gt;&gt; <b class="calibre25">myRectangle = [4, 10]</b>
+&gt;&gt;&gt; <b class="calibre25">rectanglePerimeter(myRectangle)</b>
+28</code></pre>
+<p class="calibre23"><span type="pagebreak" title="175" id="calibre_link-515" class="calibre16"></span>The equivalent lambda function would look like this:</p>
+<pre class="calibre28"><code class="calibre9">lambda rect: (rect[0] * 2) + (rect[1] * 2)</code></pre>
+<p class="calibre23">To define a Python lambda function, use the <code class="calibre9">lambda</code> keyword, followed by a comma-delimited list of parameters (if any), a colon, and then an expression that acts as the return value. Because functions are first-class objects, you can assign a lambda function to a variable, effectively replicating what a <code class="calibre9">def</code> statement does:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">rectanglePerimeter = lambda rect: (rect[0] * 2) + (rect[1] * 2)</b>
+&gt;&gt;&gt; <b class="calibre25">rectanglePerimeter([4, 10])</b>
+28</code></pre>
+<p class="calibre23">We assigned this lambda function to a variable named <code class="calibre9">rectanglePerimeter</code>, essentially giving us a <code class="calibre9">rectanglePerimeter()</code> function. As you can see, functions created by <code class="calibre9">lambda</code> statements are the same as functions created by <code class="calibre9">def</code> statements. </p>
+<aside type="sidebar" class="authors">
+<div class="top"><hr class="calibre32" /></div>
+<section class="note">
+<h2 class="calibre33"><span class="notehead">NOTE</span></h2>
+<p class="calibre34">In real-world code, use <code class="calibre9">def</code> statements rather than assigning lambda functions to a constant variable. Lambda functions are specifically made for situations in which a function doesn’t need a name.</p>
+<div class="top"><hr class="calibre32" /></div>
+</section>
+</aside>
+<p class="calibre23">The lambda function syntax is helpful for specifying small functions to serve as arguments to other function calls. For example, the <code class="calibre9">sorted()</code> function has a keyword argument named <code class="calibre9">key</code> that lets you specify a function. Instead of sorting items in a list based on the item’s value, it sorts them based on the function’s return value. In the following example, we pass <code class="calibre9">sorted()</code> a lambda function that returns the perimeter of the given rectangle. This makes the <code class="calibre9">sorted()</code> function sort based on the calculated perimeter of its <code class="calibre9">[width, height]</code> list rather than based directly on the <code class="calibre9">[width, height]</code> list:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">rects = [[10, 2], [3, 6], [2, 4], [3, 9], [10, 7], [9, 9]]</b>
+&gt;&gt;&gt; <b class="calibre25">sorted(rects, key=lambda rect: (rect[0] * 2) + (rect[1] * 2))</b>
+[[2, 4], [3, 6], [10, 2], [3, 9], [10, 7], [9, 9]]</code></pre>
+<p class="calibre23">Rather than sorting the values <code class="calibre9">[10, 2]</code> or <code class="calibre9">[3, 6]</code>, for example, the function now sorts based on the returned perimeter integers <code class="calibre9">24</code> and <code class="calibre9">18</code>. Lambda functions are a convenient syntactic shortcut: you can specify a small one-line lambda function instead of defining a new, named function with a <code class="calibre9">def</code> statement.</p>
+<h3 id="calibre_link-202" class="calibre27">Mapping and Filtering with List Comprehensions</h3>
+<p class="bodyfirst">In earlier Python versions, the <code class="calibre9">map()</code> and <code class="calibre9">filter()</code> functions were common higher-order functions that could transform and filter lists, often with <span type="pagebreak" title="176" id="calibre_link-516" class="calibre16"></span>the help of lambda functions. Mapping could create a list of values based on the values of another list. Filtering could create a list that contained only the values from another list that match some criteria.</p>
+<p class="calibre23">For example, if you wanted to create a new list that had strings instead of the integers <code class="calibre9">[8, 16, 18, 19, 12, 1, 6, 7]</code>, you could pass that list and <code class="calibre9">lambda n: str(n)</code> to the <code class="calibre9">map()</code> function:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">mapObj = map(lambda n: str(n), [8, 16, 18, 19, 12, 1, 6, 7])</b>
+&gt;&gt;&gt; <b class="calibre25">list(mapObj)</b>
+['8', '16', '18', '19', '12', '1', '6', '7']</code></pre>
+<p class="calibre23">The <code class="calibre9">map()</code> function returns a <code class="calibre9">map</code> object, which we can get in list form by passing it to the <code class="calibre9">list()</code> function. The mapped list now contains string values based on the original list’s integer values. The <code class="calibre9">filter()</code> function is similar, but here, the lambda function argument determines which items in the list remain (if the lambda function returns <code class="calibre9">True</code>) or are filtered out (if it returns <code class="calibre9">False</code>). For example, we could pass <code class="calibre9">lambda n: n % 2 == 0</code> to filter out any odd integers:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">filterObj = filter(lambda n: n % 2 == 0, [8, 16, 18, 19, 12, 1, 6, 7])</b>
+&gt;&gt;&gt; <b class="calibre25">list(filterObj)</b>
+[8, 16, 18, 12, 6]</code></pre>
+<p class="calibre23">The <code class="calibre9">filter()</code> function returns a filter object, which we can once again pass to the <code class="calibre9">list()</code> function. Only the even integers remain in the filtered list.</p>
+<p class="calibre23">But the <code class="calibre9">map()</code> and <code class="calibre9">filter()</code> functions are outdated ways to create mapped or filtered lists in Python. Instead, you can now create them with list comprehensions. List comprehensions not only free you from writing out a lambda function, but are also faster than <code class="calibre9">map()</code> and <code class="calibre9">filter()</code>.</p>
+<p class="calibre23">Here we replicate the <code class="calibre9">map()</code> function example using a list comprehension:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">[str(n) for n in [8, 16, 18, 19, 12, 1, 6, 7]]</b>
+['8', '16', '18', '19', '12', '1', '6', '7']</code></pre>
+<p class="calibre23">Notice that the <code class="calibre9">str(n)</code> part of the list comprehension is similar to <code class="calibre9">lambda n: str(n)</code>. </p>
+<p class="calibre23">And here we replicate the <code class="calibre9">filter()</code> function example using a list comprehension:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">[n for n in [8, 16, 18, 19, 12, 1, 6, 7] if n % 2 == 0]</b>
+[8, 16, 18, 12, 6]</code></pre>
+<p class="calibre23">Notice that the <code class="calibre9">if n % 2 == 0</code> part of the list comprehension is similar to <code class="calibre9">lambda n: n % 2 == 0</code>.</p>
+<p class="calibre23">Many languages have a concept of functions as first-class objects, allowing for the existence of higher-order functions, including mapping and filtering functions. </p>
+<h2 id="calibre_link-203" class="calibre7"><span type="pagebreak" title="177" id="calibre_link-517" class="calibre20"></span>Return Values Should Always Have the Same Data Type</h2>
+<p class="bodyfirst">Python is a dynamically typed language, which means that Python functions and methods are free to return values of any data type. But to make your functions more predictable, you should strive to have them return values of only a single data type.</p>
+<p class="calibre23">For example, here’s a function that, depending on a random number, returns either an integer value or a string value:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">import random</b>
+&gt;&gt;&gt; <b class="calibre25">def returnsTwoTypes():</b>
+...     <b class="calibre25">if random.randint(1, 2) == 1:</b>
+...         <b class="calibre25">return 42</b>
+...     <b class="calibre25">else:</b>
+...         <b class="calibre25">return 'forty two'</b></code></pre>
+<p class="calibre23">When you’re writing code that calls this function, it can be easy to forget that you must handle several possible data types. To continue this example, say we call <code class="calibre9">returnsTwoTypes()</code> and want to convert the <em class="calibre10">number</em> that it returns to hexadecimal:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">hexNum = hex(returnsTwoTypes())</b>
+&gt;&gt;&gt; <b class="calibre25">hexNum</b>
+'0x2a'</code></pre>
+<p class="calibre23">Python’s built-in <code class="calibre9">hex()</code> function returns a string of a hexadecimal number of the integer value it was passed. This code works fine as long as <code class="calibre9">returnsTwoTypes()</code> returns an integer, giving us the impression that this code is bug free. But when <code class="calibre9">returnsTwoTypes()</code> returns a string, it raises an exception:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">hexNum = hex(returnsTwoTypes())</b>
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+TypeError: 'str' object cannot be interpreted as an integer</code></pre>
+<p class="calibre23">Of course, we should always remember to handle every possible data type that the return value could have. But in the real world, it’s easy to forget this. To prevent these bugs, we should always attempt to make functions return values of a single data type. This isn’t a strict requirement, and sometimes there’s no way around having your function return values of different data types. But the closer you get to returning only one type, the simpler and less bug prone your functions will be.</p>
+<p class="calibre23">There is one case in particular to be aware of: don’t return <code class="calibre9">None</code> from your function unless your function always returns <code class="calibre9">None</code>. The <code class="calibre9">None</code> value is the only value in the <code class="calibre9">NoneType</code> data type. It’s tempting to have a function return <code class="calibre9">None</code> to signify that an error occurred (I discuss this practice in the next section, “Raising Exceptions vs. Returning Error Codes”), but you should reserve returning <code class="calibre9">None</code> for functions that have no meaningful return value.</p>
+<p class="calibre23"><span type="pagebreak" title="178" id="calibre_link-518" class="calibre16"></span>The reason is that returning <code class="calibre9">None</code> to indicate an error is a common source of uncaught <code class="calibre9">'NoneType' object has no attribute</code> exceptions:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">import random</b>
+&gt;&gt;&gt; <b class="calibre25">def sometimesReturnsNone():</b>
+...     <b class="calibre25">if random.randint(1, 2) == 1:</b>
+...         <b class="calibre25">return 'Hello!'</b>
+...     <b class="calibre25">else:</b>
+...         <b class="calibre25">return None</b>
+...
+&gt;&gt;&gt; <b class="calibre25">returnVal = sometimesReturnsNone()</b>
+&gt;&gt;&gt; <b class="calibre25">returnVal.upper()</b>
+'HELLO!'
+&gt;&gt;&gt; <b class="calibre25">returnVal = sometimesReturnsNone()</b>
+&gt;&gt;&gt; <b class="calibre25">returnVal.upper()</b>
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+AttributeError: 'NoneType' object has no attribute 'upper'</code></pre>
+<p class="calibre23">This error message is rather vague, and it could take some effort to trace its cause back to a function that normally returns an expected result but could also return <code class="calibre9">None</code> when an error happens. The problem occurred because <code class="calibre9">sometimesReturnsNone()</code> returned <code class="calibre9">None</code>, which we then assigned to the <code class="calibre9">returnVal</code> variable. But the error message would lead you to think the problem occurred in the call to the <code class="calibre9">upper()</code> method.</p>
+<p class="calibre23">In a 2009 conference talk, computer scientist Tony Hoare apologized for inventing the null reference (the general analogous value to Python’s <code class="calibre9">None</code> value) in 1965, saying “I call it my billion dollar mistake. […] I couldn’t resist the temptation to put in a null reference, simply because it was so easy to implement. This has led to innumerable errors, vulnerabilities, and system crashes, which have probably caused a billion dollars of pain and damage in the last 40 years.” You can view his full talk online at <a href="https://autbor.com/billiondollarmistake" class="calibre19">https://autbor.com/billiondollarmistake</a>.</p>
+<h2 id="calibre_link-204" class="calibre7">Raising Exceptions vs. Returning Error Codes</h2>
+<p class="bodyfirst">In Python, the meanings of the terms <em class="calibre10">exception</em> and <em class="calibre10">error</em> are roughly the same: an exceptional circumstance in your program that usually indicates a problem. Exceptions became popular as a programming language feature in the 1980s and 1990s with C++ and Java. They replaced the use of <em class="calibre10">error codes</em>, which are values returned from functions to indicate a problem. The benefit of exceptions is that return values are only related to the function’s purpose instead of also indicating the presence of errors.</p>
+<p class="calibre23">Error codes can also cause issues in your program. For example, Python’s <code class="calibre9">find()</code> string method normally returns the index where it found a substring, and if it’s unable to find it, it returns <code class="calibre9">-1</code> as an error code. But because we can also use <code class="calibre9">-1</code> to specify the index from the end of a string, inadvertently using <code class="calibre9">-1</code> as an error code might introduce a bug. Enter the following in the interactive shell to see how this works.</p>
+<span type="pagebreak" title="179" id="calibre_link-709" class="calibre16"></span><pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">print('Letters after b in "Albert":', 'Albert'['Albert'.find('b') + 1:])</b>
+Letters after b in "Albert": ert
+&gt;&gt;&gt; <b class="calibre25">print('Letters after x in "Albert":', 'Albert'['Albert'.find('x') + 1:])</b>
+Letters after x in "Albert": Albert</code></pre>
+<p class="calibre23">The <code class="calibre9">'Albert'.find('x')</code> part of the code evaluates to the error code <code class="calibre9">-1</code>. That makes the expression <code class="calibre9">'Albert'['Albert'.find('x') + 1:]</code> evaluate to <code class="calibre9">'Albert'[-1 + 1:]</code>, which further evaluates to <code class="calibre9">'Albert'[0:]</code> and then to <code class="calibre9">'Albert'</code>. Obviously, this isn’t the code’s intended behavior. Calling <code class="calibre9">index()</code> instead of <code class="calibre9">find()</code>, as in <code class="calibre9">'Albert'['Albert'.index('x') + 1:]</code>, would have raised an exception, making the problem obvious and unignorable.</p>
+<p class="calibre23">The <code class="calibre9">index()</code> string method, on the other hand, raises a <code class="calibre9">ValueError</code> exception if it’s unable to find a substring. If you don’t handle this exception, it will crash the program&mdash;behavior that is often preferable to not noticing the error. </p>
+<p class="calibre23">The names of exception classes often end with “Error” when the exception indicates an actual error, such as <code class="calibre9">ValueError</code>, <code class="calibre9">NameError</code>, or <code class="calibre9">SyntaxError</code>. Exception classes that represent exceptional cases that aren’t necessarily errors include <code class="calibre9">StopIteration</code>, <code class="calibre9">KeyboardInterrupt</code>, or <code class="calibre9">SystemExit</code>.</p>
+<h2 id="calibre_link-205" class="calibre7">Summary</h2>
+<p class="bodyfirst">Functions are a common way of grouping our programs’ code together, and they require you to make certain decisions: what to name them, how big to make them, how many parameters they should have, and how many arguments you should pass for those parameters. The <code class="calibre9">*</code> and <code class="calibre9">**</code> syntax in <code class="calibre9">def</code> statements allows functions to receive a varying number of parameters, making them variadic functions.</p>
+<p class="calibre23">Although not a functional programming language, Python has many features that functional programming languages use. Functions are first-class objects, meaning you can store them in variables and pass them as arguments to other functions (which are called higher-order functions in this context). Lambda functions offer a short syntax for specifying nameless, anonymous functions as the arguments for higher-order functions. The most common higher-order functions in Python are <code class="calibre9">map()</code> and <code class="calibre9">filter()</code>, although you can execute the functionality they provide faster with list comprehensions.</p>
+<p class="calibre23">The return values of your functions should always be the same data type. You shouldn’t use return values as error codes: exceptions are for indicating errors. The <code class="calibre9">None</code> value in particular is often mistakenly used as an error code.</p>
+</section>
+</div>

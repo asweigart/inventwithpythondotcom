@@ -1,0 +1,388 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Chapter 1: The Interactive Shell</title></head><body style="background-color: #fffeee;">
+
+<script type="text/javascript">
+//<![CDATA[
+
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5459430-3']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
+//]]>
+</script>
+
+
+<div style="background-color: #eeeddd; float: right; height: 310px; font-family: sans-serif;" id="otherbooks">
+  <a href="#" onclick="document.getElementById('otherbooks').outerHTML='';" style="vertical-align: top;">(close)</a><br />
+
+  <a target="_blank" href="https://nostarch.com/automatestuff2" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_automate.link');"><img src="/images/cover_automate2_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/beyond-basic-stuff-python" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_beyond.link');"><img src="/images/cover_beyond_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/inventwithpython" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_invent.link');"><img src="/images/cover_invent4th_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://www.amazon.com/Making-Games-Python-Pygame-Sweigart/dp/1469901730?ie=UTF8&amp;tag=playwithpyth-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1469901730" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_pygame.link');"><img src="/images/cover_makinggames_thumb.png" style="height: 200px; border: solid black 1px; /"></a>
+  <a target="_blank" href="https://nostarch.com/crackingcodes" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_hacking.link');"><img src="/images/cover_crackingcodes_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/scratchplayground"><img src="/images/cover_scratchprogrammingplayground_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/codingwithminecraft"><img src="/images/cover_codingwithminecraft_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <br />
+  <a href="https://inventwithpython.com/automateudemy">Use this link to get 70% off the Automate the Boring Stuff online video course.</a><br />
+  <a href="https://www.patreon.com/AlSweigart">Support me on Patreon</a>
+</div>
+
+<a href="chapter5.html">Prev: Chapter 5 - Finding Code Smells</a> | <a href="chapter7.html">Next: Chapter 7 - Programming Jargon</a>
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-122">
+<section class="toclist">
+<header class="calibre12">
+<h1 class="chaptertitle">
+<span class="partnumber"><span type="pagebreak" title="87" id="calibre_link-435" class="calibre26"></span>6</span><br class="calibre18" />
+<span class="parttitle1">Writing Pythonic Code</span>
+</h1>
+</header>
+<figure class="opener"><img src="images/000017.png" alt="" class="calibre15" /></figure><p class="chapterintro"><em class="calibre10">Powerful</em> is a meaningless adjective for programming languages. Every programming language describes itself as powerful: the official Python Tutorial begins with the sentence “Python is an easy to learn, powerful programming language.” But there’s no algorithm that one language can do that another can’t, and no unit of measurement to quantify a programming language’s “power” (although you certainly can measure the volume at which programmers argue for their favorite language).</p>
+<p class="calibre22">But every language does have its own design patterns and gotchas that make up its strengths and weaknesses. To write Python code like a true <em class="calibre10">Pythonista</em>, you’ll need to know more than just the syntax and standard library<span class="calibre" itemid="xref_target_"><span type="pagebreak" title="88" id="calibre_link-436" class="calibre16"></span></span>. The next step is to learn its <em class="calibre10">idioms</em>, or Python-specific coding practices. Certain Python language features lend themselves to writing code in ways that have become known as <em class="calibre10">pythonic</em>. </p>
+<p class="calibre23">In this chapter, I’ll provide several common ways of writing idiomatic Python code along with their unpythonic counterparts. What counts as pythonic can vary from programmer to programmer, but it commonly includes the examples and practices I discuss here. Experienced Python programmers use these techniques, so becoming familiar with them allows you to recognize them in real-world code.
+</p>
+<h2 id="calibre_link-123" class="calibre7">The Zen of Python</h2>
+<p class="bodyfirst"><em class="calibre10">The Zen of Python</em> by Tim Peters is a set of 20 guidelines for the design of the Python language and for Python programs. Your Python code doesn’t necessarily have to follow these guidelines, but they’re good to keep in mind. The Zen of Python is also an <em class="calibre10">Easter egg</em>, or hidden joke, that appears when you run <code class="calibre9">import this</code>:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">import this</b>
+The Zen of Python, by Tim Peters
+
+Beautiful is better than ugly.
+Explicit is better than implicit.
+<var class="calibre43">--snip--</var></code></pre>
+<aside type="sidebar" class="authors">
+<div class="top"><hr class="calibre32" /></div>
+<section class="note">
+<h2 class="calibre33"><span class="notehead">NOTE</span></h2>
+<p class="calibre34">Mysteriously, only 19 of the guidelines are written down. Guido van Rossum, creator of Python, reportedly said that the missing 20th aphorism is “some bizarre Tim Peters in-joke.” Tim left it blank for Guido to fill, which he seems to never have gotten around to doing.</p>
+<div class="top"><hr class="calibre32" /></div>
+</section>
+</aside>
+<p class="calibre23">In the end, these guidelines are opinions that programmers can argue for or against. Like all good sets of moral codes, they contradict themselves to provide the most flexibility. Here’s my interpretation of these aphorisms:</p>
+<ol class="none">
+<li class="calibre11"><span class="runinhead">Beautiful is better than ugly.  </span>Beautiful code can be thought of as easy to read and understand. Programmers often write code quickly without concern for readability. The computer will run unreadable code, but unreadable code is difficult for human programmers to maintain and debug. Beauty is subjective, but code that is written without regard for how understandable it is often ugly to others. The reason for Python’s popularity is that its syntax isn’t cluttered with cryptic punctuation marks like other languages, making it easy to work with.</li>
+<li class="calibre11"><span class="runinhead">Explicit is better than implicit.  </span>If I’d written only “This is self-explanatory,” I would have provided a terrible explanation for this aphorism. Similarly, in code, it’s best to be verbose and explicit. You should avoid hiding code’s functionality behind obscure language features that require deep language familiarity to fully understand.</li>
+<li class="calibre11"><span type="pagebreak" title="89" id="calibre_link-437" class="calibre16"></span><span class="runinhead">Simple is better than complex. Complex is better than complicated.  </span>These two aphorisms remind us that we can build anything with simple or complex techniques. If you have a simple problem that requires a shovel, it’s overkill to use a 50-ton hydraulic bulldozer. But for an enormous job, the complexity of operating a single bulldozer is preferable to the complications of coordinating a team of 100 shovelers. Prefer simplicity to complexity, but know the limits of simplicity.</li>
+<li class="calibre11"><span class="runinhead">Flat is better than nested.  </span>Programmers love to organize their code into categories, especially categories that contain subcategories that contain other sub-subcategories. These hierarchies often don’t add organization so much as they add bureaucracy. It’s okay to write code in just one top-level module or data structure. If your code looks like <code class="calibre9">spam.eggs.bacon.ham()</code> or <code class="calibre9">spam['eggs']['bacon']['ham']</code>, you’re making your code too complicated.</li>
+<li class="calibre11"><span class="runinhead">Sparse is better than dense.  </span>Programmers often like to cram as much functionality into as little code as possible, as in the following line: <code class="calibre9">print('\n'.join("%i bytes = %i bits which has %i possiblevalues." % (j, j*8, 256**j-1) for j in (1 &lt;&lt; i for i in range(8))))</code>. Although code like this might impress their friends, it’ll infuriate their co-workers who have to try to understand it. Don’t make your code try to do too much at once. Code that is spread out over multiple lines is often easier to read than dense one-liners. This aphorism is roughly the same as simple is better than complex.</li>
+<li class="calibre11"><span class="runinhead">Readability counts.  </span>Although <code class="calibre9">strcmp()</code> might obviously mean the “string compare” function to someone who has been programming in C since the 1970s, modern computers have enough memory to write out the full function name. Don’t drop letters from your names or write overly terse code. Take the time to come up with descriptive, specific names for your variables and functions. A blank line in between sections of your code can serve the same function as paragraph breaks in a book, letting the reader know which parts are meant to be read together. This aphorism is roughly the same as beautiful is better than ugly.</li>
+<li class="calibre11"><span class="runinhead">Special cases aren’t special enough to break the rules. Although practicality beats purity.  </span>These two aphorisms contradict each other. Programming is full of “best practices” that programmers should strive for in their code. Skirting these practices for a quick hack might be tempting but can lead to a rat’s nest of inconsistent, unreadable code. On the other hand, bending over backward to adhere to rules can result in highly abstract, unreadable code. For example, the Java programming language’s attempt to fit all code to its object-oriented paradigm often results in lots of boilerplate code for even the smallest program. Walking the line between these two aphorisms becomes easier with experience. In time, you’ll learn not only the rules but also when to break them.</li>
+<li class="calibre11"><span class="runinhead">Errors should never pass silently. Unless explicitly silenced.  </span>Just because programmers often ignore error messages doesn’t mean the program should stop emitting them. Silent errors can happen when <span type="pagebreak" title="90" id="calibre_link-438" class="calibre16"></span>functions return error codes or <code class="calibre9">None</code> instead of raising exceptions. These two aphorisms tell us that it’s better for a program to fail fast and crash than to silence the error and continue running. The bugs that inevitably happen later on will be harder to debug because they’re detected long after the original cause. Although you can always decide to explicitly ignore the errors your programs cause, be sure you’re making the conscious choice to do so.</li>
+<li class="calibre11"><span class="runinhead">In the face of ambiguity, refuse the temptation to guess.  </span>Computers have made humans superstitious: to exorcise the demons in our computers, we perform the sacred ritual of turning them off and then on. Supposedly this will fix any mysterious problem. But computers are not magic. If your code isn’t working, there’s a reason why, and only careful, critical thinking will solve the problem. Refuse the temptation to blindly try solutions until something seems to work; often, you’ve merely masked the problem rather than solved it.</li>
+<li class="calibre11"><span class="runinhead">There should be one&mdash;and preferably only one&mdash;obvious way to do it.  </span>This is a broadside against the Perl programming language’s motto, “There’s more than one way to do it!” It turns out that having three or four different ways to write code that does the same task is a double-edged sword: you have flexibility in how you write code, but now you have to learn every possible way it could have been written to read other people’s code. This flexibility isn’t worth the increased effort needed to learn a programming language.</li>
+<li class="calibre11"><span class="runinhead">Although that way may not be obvious at first unless you’re Dutch.  </span>This line is a joke. Guido van Rossum, the creator of Python, is Dutch.</li>
+<li class="calibre11"><span class="runinhead">Now is better than never. Although never is often better than *right* now.  </span>These two aphorisms tell us that code that runs slowly is obviously worse than code that runs quickly. But it’s better to have to wait for your program to finish than to finish it too early with incorrect results.</li>
+<li class="calibre11"><span class="runinhead">If the implementation is hard to explain, it’s a bad idea. If the implementation is easy to explain, it may be a good idea.  </span>Many things get more complicated over time: tax laws, romantic relationships, Python programming books. Software is no different. These two aphorisms remind us that if code is so complicated as to be impossible for programmers to understand and debug, it’s bad code. But just because it’s easy to explain a program’s code to someone else doesn’t mean it isn’t bad code. Unfortunately, figuring out how to make code as simple as possible, and not any simpler, is hard.</li>
+<li class="calibre11"><span class="runinhead">Namespaces are one honking great idea&mdash;let’s do more of those!</span>  Namespaces are separate containers for identifiers to prevent naming conflicts. For example, the <code class="calibre9">open()</code> built-in function and the <code class="calibre9">webbrowser.open()</code> function have the same name but refer to different functions. Importing <code class="calibre9">webbrowser</code> doesn’t overwrite the built-in <code class="calibre9">open()</code> function because both <code class="calibre9">open()</code> functions exist in different namespaces: the built-in <span type="pagebreak" title="91" id="calibre_link-439" class="calibre16"></span>namespace and the <code class="calibre9">webbrowser</code> module’s namespace, respectively. But keep in mind that flat is better than nested: as great as namespaces are, you should make them only to prevent naming conflicts, not to add needless categorization.</li>
+</ol>
+<p class="calibre23">As with all opinions about programming, you can argue against those I’ve listed here, or they might simply be irrelevant to your situation. Arguing over how you should write code or what counts as “pythonic” is rarely as productive as you think it is. (Unless you’re writing an entire book full of programming opinions.)</p>
+<h2 id="calibre_link-124" class="calibre7">Learning to Love Significant Indentation</h2>
+<p class="bodyfirst">The most common concern I hear about Python from programmers coming from other languages is that Python’s <em class="calibre10">significant indentation</em> (often mistakenly called <em class="calibre10">significant whitespace</em>) is weird and unfamiliar. The amount of indentation at the start of a line of code has meaning in Python, because it determines which lines of code are in the same code block. </p>
+<p class="calibre23">Grouping blocks of Python code using indentation can seem odd, because other languages begin and end their blocks with braces, <code class="calibre9">{</code> and <code class="calibre9">}</code>. But programmers in non-Python languages usually indent their blocks too, just like Python programmers, to make their code more readable. For example, the Java programming language doesn’t have significant indentation. Java programmers don’t need to indent blocks of code, but they often do anyway for readability. The following example has a Java function named <code class="calibre9">main()</code> that contains a single call to a <code class="calibre9">println()</code> function:</p>
+<pre class="calibre28"><code class="calibre9">// Java Example
+public static void main(String[] args) {
+    System.out.println("Hello, world!");
+}</code></pre>
+<p class="calibre23">This Java code would run just fine if the <code class="calibre9">println()</code> line weren’t indented, because the braces, rather than the indentation, are what mark the start and end of blocks in Java. Instead of allowing indentation to be optional, Python forces your code to be consistently readable. But note that Python doesn’t have <em class="calibre10">significant whitespace</em>, because Python doesn’t restrict how you can use nonindentation whitespace (both <code class="calibre9">2 + 2</code> and <code class="calibre9">2+2</code> are valid Python expressions).</p>
+<p class="calibre23">Some programmers argue that the opening brace should be on the same line as the opening statement, while others argue it should be on the following line. Programmers will argue the merits of their preferred style until the end of time. Python neatly sidesteps this issue by not using braces at all, letting Pythonistas get back to more productive work. I’ve come to wish that all programming languages would adopt Python’s approach to grouping blocks of code.</p>
+<p class="calibre23">But some people still long for braces and want to add them to a future version of Python&mdash;despite how unpythonic they are. Python’s <code class="calibre9">__future__</code><span type="pagebreak" title="92" id="calibre_link-440" class="calibre16"></span>module backports features to earlier Python versions, and you’ll find a hidden Easter egg if you try to import a braces feature into Python:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">from __future__ import braces</b>
+SyntaxError: not a chance</code></pre>
+<p class="calibre23">I wouldn’t count on braces being added to Python any time soon.</p>
+<h2 id="calibre_link-125" class="calibre7">Commonly Misused Syntax</h2>
+<p class="bodyfirst">If Python isn’t your first programming language, you might write your Python code with the same strategies you use to write code in other programming languages. Or perhaps you learned an unusual way of writing your Python code because you were unaware that there are more established best practices. This awkward code works, but you could save some time and effort by learning more standard approaches to writing pythonic code. This section explains common missteps programmers make and how you should write<b class="calibre25"><i class="calibre10"> </i></b>the code instead.</p>
+<h3 id="calibre_link-126" class="calibre27">Use enumerate() Instead of range()</h3>
+<p class="bodyfirst">When looping over a list or other sequence, some programmers use the <code class="calibre9">range()</code> and <code class="calibre9">len()</code> functions to generate the index integers from <code class="calibre9">0</code> up to, but not including, the length of the sequence. It’s common to use the variable name <code class="calibre9">i</code> (for <em class="calibre10">index</em>) in these <code class="calibre9">for</code> loops. For example, enter the following unpythonic example into the interactive shell:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">animals = ['cat', 'dog', 'moose']</b>
+&gt;&gt;&gt; <b class="calibre25">for i in range(len(animals)):</b>
+...     <b class="calibre25">print(i, animals[i])</b>
+...
+0 cat
+1 dog
+2 moose</code></pre>
+<p class="calibre23">The <code class="calibre9">range(len())</code> convention is straightforward but less than ideal because it can be difficult to read. Instead, pass the list or sequence to the built-in <code class="calibre9">enumerate()</code> function, which will return an integer for the index and the item at that index. For example, you can write the following pythonic code:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; # Pythonic Example
+&gt;&gt;&gt; <b class="calibre25">animals = ['cat', 'dog', 'moose']</b>
+&gt;&gt;&gt; <b class="calibre25">for i, animal in enumerate(animals):</b>
+...     <b class="calibre25">print(i, animal)</b>
+...
+0 cat
+1 dog
+2 moose</code></pre>
+<p class="calibre23">The code you write will be slightly cleaner using <code class="calibre9">enumerate()</code> instead of <code class="calibre9">range(len())</code>. If you need only the items but not the indexes, you can still directly iterate over the list in a pythonic way:</p>
+<span type="pagebreak" title="93" id="calibre_link-441" class="calibre16"></span><pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; # Pythonic Example
+&gt;&gt;&gt; <b class="calibre25">animals = ['cat', 'dog', 'moose']</b>
+&gt;&gt;&gt; <b class="calibre25">for animal in animals:</b>
+...     <b class="calibre25">print(animal)</b>
+...
+cat
+dog
+moose</code></pre>
+<p class="calibre23">Calling <code class="calibre9">enumerate()</code> and iterating over a sequence directly are preferable to using the old-fashioned <code class="calibre9">range(len())</code> convention.</p>
+<h3 id="calibre_link-127" class="calibre27">Use the with Statement Instead of open() and close()</h3>
+<p class="bodyfirst">The <code class="calibre9">open()</code> function will return a file object that contains methods for reading or writing a file. When you’re done, the file object’s <code class="calibre9">close()</code> method makes the file available to other programs for reading and writing. You can use these functions individually. But doing so is unpythonic. For example, enter the following into the interactive shell to write the text “Hello, world!” to a file named <em class="calibre10">spam.txt</em>:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; # Unpythonic Example
+&gt;&gt;&gt; <b class="calibre25">fileObj = open('spam.txt', 'w')</b>
+&gt;&gt;&gt; <b class="calibre25">fileObj.write('Hello, world!')</b>
+13
+&gt;&gt;&gt; <b class="calibre25">fileObj.close()</b></code></pre>
+<p class="calibre23">Writing code this way can lead to unclosed files if, say, an error occurs in a <code class="calibre9">try</code> block and the program skips the call to <code class="calibre9">close()</code>. For example:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; # Unpythonic Example
+&gt;&gt;&gt; <b class="calibre25">try:</b>
+...     <b class="calibre25">fileObj = open('spam.txt', 'w')</b>
+...     <b class="calibre25">eggs = 42 / 0    # A zero divide error happens here.</b>
+<span type="pagebreak" title="94" id="calibre_link-442" class="calibre16"></span>...     <b class="calibre25">fileObj.close()  # This line never runs.</b>
+... <b class="calibre25">except:</b>
+...     <b class="calibre25">print('Some error occurred.')</b>
+...
+Some error occurred.</code></pre>
+<p class="calibre23">Upon reaching the zero divide error, the execution moves to the <code class="calibre9">except</code> block, skipping the <code class="calibre9">close()</code> call and leaving the file open. This can lead to file corruption bugs later that are hard to trace back to the <code class="calibre9">try</code> block.</p>
+<p class="calibre23">Instead, you can use the <code class="calibre9">with</code> statement to automatically call <code class="calibre9">close()</code> when the execution leaves the <code class="calibre9">with</code> statement’s block. The following pythonic example does the same task as the first example in this section:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; # Pythonic Example
+&gt;&gt;&gt; <b class="calibre25">with open('spam.txt', 'w') as fileObj:</b>
+...     <b class="calibre25">fileObj.write('Hello, world!')</b>
+...</code></pre>
+<p class="calibre23">Even though there’s no explicit call to <code class="calibre9">close()</code>, the <code class="calibre9">with</code> statement will know to call it when the execution leaves the block. .</p>
+<h3 id="calibre_link-128" class="calibre27">Use is to Compare with None Instead of ==</h3>
+<p class="bodyfirst">The <code class="calibre9">==</code> equality operator compares two object’s values, whereas the <code class="calibre9">is</code> identity operator compares two object’s identities. Chapter 7 covers value and identity. Two objects can store equivalent values, but being two separate objects means they have separate identities. However, whenever you compare a value to <code class="calibre9">None</code>, you should almost always use the <code class="calibre9">is</code> operator rather than the <code class="calibre9">==</code> operator.</p>
+<p class="calibre23">In some cases, the expression <code class="calibre9">spam == None</code> could evaluate to <code class="calibre9">True</code> even when <code class="calibre9">spam</code> merely contains <code class="calibre9">None</code>. This can happen due to overloading the <code class="calibre9">==</code> operator, which <span class="calibre" itemid="xref_target_Chapter 17">Chapter 17</span> covers in more detail. But <code class="calibre9">spam is None</code> will check whether the value in the <code class="calibre9">spam</code> variable is literally <code class="calibre9">None</code>. Because <code class="calibre9">None</code> is the only value of the NoneType data type, there is only one <code class="calibre9">None</code> object in any Python program. If a variable is set to <code class="calibre9">None</code>, the <code class="calibre9">is None</code> comparison will always evaluate to <code class="calibre9">True</code>. <span class="calibre" itemid="xref_target_Chapter 17">Chapter 17</span> describes the specifics of overloading the <code class="calibre9">==</code> operator, but the following is an example of this behavior:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">class SomeClass:</b>
+...     <b class="calibre25">def __eq__(self, other):</b>
+...         <b class="calibre25">if other is None:</b>
+...             <b class="calibre25">return True</b>
+...
+&gt;&gt;&gt; <b class="calibre25">spam = SomeClass()</b>
+&gt;&gt;&gt; <b class="calibre25">spam == None</b>
+True
+&gt;&gt;&gt; <b class="calibre25">spam is None</b>
+False</code></pre>
+<p class="calibre23"><span type="pagebreak" title="95" id="calibre_link-706" class="calibre16"></span>The possibility that a class overloads the <code class="calibre9">==</code> operator this way is rare, but it’s become idiomatic Python to always use <code class="calibre9">is None</code> instead of <code class="calibre9">== None</code> just in case.</p>
+<p class="calibre23">Finally, you shouldn’t use the <code class="calibre9">is</code> operator with the values <code class="calibre9">True</code> and <code class="calibre9">False</code>. You can use the <code class="calibre9">==</code> equality operator to compare a value with <code class="calibre9">True</code> or <code class="calibre9">False</code>, such as <code class="calibre9">spam == True</code> or <code class="calibre9">spam == False</code>. Even more common is to leave out the operator and Boolean value altogether, writing code like <code class="calibre9">if spam:</code> or <code class="calibre9">if not spam:</code> instead of <code class="calibre9">if spam == True:</code> or <code class="calibre9">if spam == False:</code>.</p>
+<h2 id="calibre_link-129" class="calibre7">Formatting Strings</h2>
+<p class="bodyfirst">Strings appear in almost every computer program, no matter the language. This data type is common, so it’s no surprise there are many approaches to manipulating and formatting strings. This section highlights a couple of best practices.</p>
+<h3 id="calibre_link-130" class="calibre27">Use Raw Strings If Your String Has Many Backslashes</h3>
+<p class="bodyfirst">Escape characters allow you to insert text into string literals that would otherwise be impossible to include. For example, you need the <code class="calibre9">\</code> in <code class="calibre9">'Zophie\'s chair'</code> so Python interprets the second quote as part of the string, not the symbol marking the end of the string. Because the backslash has this special escape meaning, if you want to put an actual backslash character in your string, you must enter it as <code class="calibre9">\\</code>.</p>
+<p class="calibre23"><em class="calibre10">Raw strings</em> are string literals that have an <code class="calibre9">r</code> prefix, and they don’t treat the backslash characters as escape characters. Instead, they just put the backslashes into the string. For example, this string of a Windows file path requires several escaped backslashes, which isn’t very pythonic:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; # Unpythonic Example
+&gt;&gt;&gt; <b class="calibre25">print('The file is in C:\\Users\\Al\\Desktop\\Info\\Archive\\Spam')</b>
+The file is in C:\Users\Al\Desktop\Info\Archive\Spam</code></pre>
+<p class="calibre23">This raw string (notice the <code class="calibre9">r</code> prefix) produces the same string value while being more readable:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; # Pythonic Example
+&gt;&gt;&gt; <b class="calibre25">print(r'The file is in C:\Users\Al\Desktop\Info\Archive\Spam')</b>
+The file is in C:\Users\Al\Desktop\Info\Archive\Spam</code></pre>
+<p class="calibre23">Raw strings aren’t a different kind of string data type; they’re just a convenient way to type string literals that contain several backslash characters. We often use raw strings to type the strings for regular expressions or Windows file paths, which often have several backslash characters in them that would be a pain to escape individually with <code class="calibre9">\\</code>.</p>
+<h3 id="calibre_link-131" class="calibre27"><span type="pagebreak" title="96" id="calibre_link-443" class="calibre37"></span>Format Strings with F-Strings</h3>
+<p class="bodyfirst"><em class="calibre10">String formatting</em>, or <em class="calibre10">string interpolation</em>, is the process of creating strings that include other strings and has had a long history in Python. Originally, the <code class="calibre9">+</code> operator could concatenate strings together, but this resulted in code with many quotes and pluses: <code class="calibre9">'Hello, ' + name + '. Today is ' + day + ' and it is ' + weather + '.'</code>. The <code class="calibre9">%s</code> conversion specifier made the syntax a bit easier: <code class="calibre9">'Hello, %s. Today is %s and it is %s.' % (name, day, weather)</code>. Both techniques will insert the strings in the <code class="calibre9">name</code>, <code class="calibre9">day</code>, and <code class="calibre9">weather</code> variables into the string literals to evaluate to a new string value, like this: <code class="calibre9">'Hello, Al. Today is Sunday and it is sunny.'</code>.</p>
+<p class="calibre23">The <code class="calibre9">format()</code> string method adds the <em class="calibre10">Format Specification Mini-Language</em> (<a href="https://docs.python.org/3/library/string.html#formatspec" class="calibre19">https://docs.python.org/3/library/string.html#formatspec</a>), which involves using <code class="calibre9">{}</code> brace pairs in a way similar to the <code class="calibre9">%s</code> conversion specifier. However, the method is somewhat convoluted and can produce unreadable code, so I discourage its use.</p>
+<p class="calibre23">But as of Python 3.6, <em class="calibre10">f-strings</em> (short for <em class="calibre10">format strings</em>) offer a more convenient way to create strings that include other strings. Just like how raw strings are prefixed with an <code class="calibre9">r</code> before the first quote, f-strings are prefixed with an <code class="calibre9">f</code>. You can include variable names in between braces in the f-string to insert the strings stored in those variables:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">name, day, weather = 'Al', 'Sunday', 'sunny'</b>
+&gt;&gt;&gt; <b class="calibre25">f'Hello, {name}. Today is {day} and it is {weather}.'</b>
+'Hello, Al. Today is Sunday and it is sunny.'</code></pre>
+<p class="calibre23">The braces can contain entire expressions as well:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">width, length = 10, 12</b>
+&gt;&gt;&gt; <b class="calibre25">f'A {width} by {length} room has an area of {width * length}.'</b>
+'A 10 by 12 room has an area of 120.'</code></pre>
+<p class="calibre23">If you need to use a literal brace inside an f-string, you can escape it with an additional brace:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">spam = 42</b>
+&gt;&gt;&gt; <b class="calibre25">f'This prints the value in spam: {spam}'</b>
+'This prints the value in spam: 42'
+&gt;&gt;&gt; <b class="calibre25">f'This prints literal curly braces: {{spam}}'</b>
+'This prints literal curly braces: {spam}'</code></pre>
+<p class="calibre23">Because you can put variable names and expressions inline inside the string, your code becomes more readable than using the old ways of string formatting.</p>
+<p class="calibre23">All of these different ways to format strings go against the Zen of Python aphorism that there should be one&mdash;and preferably only one&mdash;obvious way to do something. But f-strings are an improvement to the language (in my <span type="pagebreak" title="97" id="calibre_link-444" class="calibre16"></span>opinion), and as the other guideline states, practicality beats purity. If you’re writing code for Python 3.6 or later only, use f-strings. If you’re writing code that might be run by earlier Python versions, stick to the <code class="calibre9">format()</code> string method or <code class="calibre9">%s</code> conversion specifiers.</p>
+<h2 id="calibre_link-132" class="calibre7">Making Shallow Copies of Lists</h2>
+<p class="bodyfirst">The <em class="calibre10">slice </em>syntax can easily create new strings or lists from existing ones. Enter the following into the interactive shell to see how it works:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">'Hello, world!'[7:12] </b># Create a string from a larger string.
+<b class="calibre25">'world'</b>
+<b class="calibre25">&gt;&gt;&gt; 'Hello, world!'[:5] </b># Create a string from a larger string.
+'Hello'
+&gt;&gt;&gt; <b class="calibre25">['cat', 'dog', 'rat', 'eel'][2:] </b># Create a list from a larger list.
+['rat', 'eel']</code></pre>
+<p class="calibre23">The colon (<code class="calibre9">:</code>) separates the starting and ending indexes of the items to put in the new list you’re creating. If you omit the starting index before the colon, as in <code class="calibre9">'Hello, world!'[:5]</code>, the starting index defaults to <code class="calibre9">0</code>. If you omit the ending index after the colon, as in <code class="calibre9">['cat', 'dog', 'rat', 'eel'][2:]</code>, the ending index defaults to the end of the list.</p>
+<p class="calibre23">If you omit both indexes, the starting index is <code class="calibre9">0</code> (the start of the list) and the ending index is the end of the list. This effectively creates a copy of the list:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">spam = ['cat', 'dog', 'rat', 'eel']</b>
+&gt;&gt;&gt; <b class="calibre25">eggs = spam[:]</b>
+&gt;&gt;&gt; <b class="calibre25">eggs</b>
+['cat', 'dog', 'rat', 'eel']
+&gt;&gt;&gt; <b class="calibre25">id(spam) == id(eggs)</b>
+False</code></pre>
+<p class="calibre23">Notice that the identities of the lists in <code class="calibre9">spam</code> and <code class="calibre9">eggs</code> are different. The <code class="calibre9">eggs = spam[:]</code> line creates a <em class="calibre10">shallow copy </em>of the list in <code class="calibre9">spam</code>, whereas <code class="calibre9">eggs = spam</code> would copy only the reference to the list. But the <code class="calibre9">[:]</code> does look a bit odd, and using the <code class="calibre9">copy</code> module’s <code class="calibre9">copy()</code> function to produce a shallow copy of the list is more readable:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; # Pythonic Example
+&gt;&gt;&gt; <b class="calibre25">import copy</b>
+&gt;&gt;&gt; <b class="calibre25">spam = ['cat', 'dog', 'rat', 'eel']</b>
+&gt;&gt;&gt; <b class="calibre25">eggs = copy.copy(spam)</b>
+&gt;&gt;&gt; <b class="calibre25">id(spam) == id(eggs)</b>
+False</code></pre>
+<p class="calibre23"><span type="pagebreak" title="98" id="calibre_link-445" class="calibre16"></span>You should know about this odd syntax in case you come across Python code that uses it, but I don’t recommend writing it in your own code. Keep in mind that both <code class="calibre9">[:]</code> and <code class="calibre9">copy.copy()</code> create shallow copies.</p>
+<h2 id="calibre_link-133" class="calibre7">Pythonic Ways to Use Dictionaries</h2>
+<p class="bodyfirst">Dictionaries are at the core of many Python programs because of the flexibility that key-value pairs (discussed further in Chapter 7) provide by mapping one piece of data to another. Therefore, it’s useful to learn about some of the dictionary idioms Python code commonly uses.</p>
+<p class="calibre23">For further information about dictionaries, consult Python programmer Brandon Rhodes’s incredible talks about dictionaries and how they work: “The Mighty Dictionary” at PyCon 2010, viewable at <a href="https://invpy.com/mightydictionary" class="calibre19">https://invpy.com/mightydictionary</a>, and “The Dictionary Even Mightier” at PyCon 2017, viewable at <a href="https://invpy.com/dictionaryevenmightier" class="calibre19">https://invpy.com/dictionaryevenmightier</a>.</p>
+<h3 id="calibre_link-134" class="calibre27">Use get() and setdefault() with Dictionaries</h3>
+<p class="bodyfirst">Trying to access a dictionary key that doesn’t exist will result in a <code class="calibre9">KeyError</code> error, so programmers will often write unpythonic code to avoid the situation, like this:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; # Unpythonic Example
+&gt;&gt;&gt; <b class="calibre25">numberOfPets = {'dogs': 2}</b>
+&gt;&gt;&gt; <b class="calibre25">if 'cats' in numberOfPets:</b> # Check if 'cats' exists as a key.
+...     <b class="calibre25">print('I have', numberOfPets['cats'], 'cats.')</b>
+... <b class="calibre25">else:</b>
+...     <b class="calibre25">print('I have 0 cats.')</b>
+...
+I have 0 cats.</code></pre>
+<p class="calibre23">This code checks whether the string <code class="calibre9">'cats'</code> exists as a key in the <code class="calibre9">numberOfPets</code> dictionary. If it does, a <code class="calibre9">print()</code> call accesses <code class="calibre9">numberOfPets['cats']</code> as part of a message for the user. If it doesn’t, another <code class="calibre9">print()</code> call prints a string without accessing <code class="calibre9">numberOfPets['cats']</code> so it doesn’t raise a <code class="calibre9">KeyError</code>.</p>
+<p class="calibre23">This pattern happens so often that dictionaries have a <code class="calibre9">get()</code> method that allows you to specify a default value to return when a key doesn’t exist in the dictionary. The following pythonic code is equivalent to the previous example:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; # Pythonic Example
+&gt;&gt;&gt; <b class="calibre25">numberOfPets = {'dogs': 2}</b>
+&gt;&gt;&gt; <b class="calibre25">print('I have', numberOfPets.get('cats', 0), 'cats.')</b>
+I have 0 cats.</code></pre>
+<p class="calibre23">The <code class="calibre9">numberOfPets.get('cats', 0)</code> call checks whether the key <code class="calibre9">'cats'</code> exists in the <code class="calibre9">numberOfPets</code> dictionary. If it does, the method call returns the value for the <code class="calibre9">'cats'</code> key. If it doesn’t, it returns the second argument, <code class="calibre9">0</code>, instead. <span type="pagebreak" title="99" id="calibre_link-446" class="calibre16"></span>Using the <code class="calibre9">get()</code> method to specify a default value to use for nonexistent keys is shorter and more readable than using <code class="calibre9">if</code>-<code class="calibre9">else</code> statements. </p>
+<p class="calibre23">Conversely, you might want to set a default value if a key doesn’t exist. For example, if the dictionary in <code class="calibre9">numberOfPets</code> doesn’t have a <code class="calibre9">'cats'</code> key, the instruction <code class="calibre9">numberOfPets['cats'] += 10</code> would result in a <code class="calibre9">KeyError</code> error. You might want to add code that checks for the key’s absence and sets a default value:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; # Unpythonic Example
+&gt;&gt;&gt; <b class="calibre25">numberOfPets = {'dogs': 2}</b>
+&gt;&gt;&gt; <b class="calibre25">if 'cats' not in numberOfPets:</b>
+...     <b class="calibre25">numberOfPets['cats'] = 0</b>
+...
+&gt;&gt;&gt; <b class="calibre25">numberOfPets['cats'] += 10</b>
+&gt;&gt;&gt; <b class="calibre25">numberOfPets['cats']</b>
+10</code></pre>
+<p class="calibre23">But because this pattern is also common, dictionaries have a more pythonic <code class="calibre9">setdefault()</code> method. The following code is equivalent to the previous example:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; # Pythonic Example
+&gt;&gt;&gt; <b class="calibre25">numberOfPets = {'dogs': 2}</b>
+&gt;&gt;&gt; <b class="calibre25">numberOfPets.setdefault('cats', 0) </b># Does nothing if 'cats' exists.
+0
+&gt;&gt;&gt; <b class="calibre25">numberOfPets['cats'] += 10</b>
+&gt;&gt;&gt; <b class="calibre25">numberOfPets['cats']</b>
+10</code></pre>
+<p class="calibre23">If you’re writing <code class="calibre9">if</code> statements that check whether a key exists in a dictionary and sets a default value if the key is absent, use the <code class="calibre9">setdefault()</code> method instead.</p>
+<h3 id="calibre_link-135" class="calibre27">Use collections.defaultdict for Default Values</h3>
+<p class="bodyfirst">You can use the <code class="calibre9">collections.defaultdict</code> class to eliminate <code class="calibre9">KeyError</code> errors entirely. This class lets you create a default dictionary by importing the <code class="calibre9">collections</code> module and calling <code class="calibre9">collections.defaultdict()</code>, passing it a data type to use for a default value. For example, by passing <code class="calibre9">int</code> to <code class="calibre9">collections.defaultdict()</code>, you can make a dictionary-like object that uses <code class="calibre9">0</code> for a default value of nonexistent keys. Enter the following into the interactive shell:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">import collections</b>
+&gt;&gt;&gt; <b class="calibre25">scores = collections.defaultdict(int)</b>
+&gt;&gt;&gt; <b class="calibre25">scores</b>
+defaultdict(&lt;class 'int'&gt;, {})
+&gt;&gt;&gt; <b class="calibre25">scores['Al'] += 1</b> # No need to set a value for the 'Al' key first.
+&gt;&gt;&gt; <b class="calibre25">scores</b>
+defaultdict(&lt;class 'int'&gt;, {'Al': 1})
+&gt;&gt;&gt; <b class="calibre25">scores['Zophie']</b> # No need to set a value for the 'Zophie' key first.
+<span type="pagebreak" title="100" id="calibre_link-447" class="calibre16"></span>0
+&gt;&gt;&gt; <b class="calibre25">scores['Zophie'] += 40</b>
+&gt;&gt;&gt; <b class="calibre25">scores</b>
+defaultdict(&lt;class 'int'&gt;, {'Al': 1, 'Zophie': 40})</code></pre>
+<p class="calibre23">Note that you’re passing the <code class="calibre9">int()</code> function, not calling it, so you omit the parentheses after <code class="calibre9">int</code> in <code class="calibre9">collections.defaultdict(int)</code>. You can also pass <code class="calibre9">list</code> to use an empty list as the default value. Enter the following into the interactive shell:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">import collections</b>
+&gt;&gt;&gt; <b class="calibre25">booksReadBy = collections.defaultdict(list)</b>
+&gt;&gt;&gt; <b class="calibre25">booksReadBy['Al'].append('Oryx and Crake')</b>
+&gt;&gt;&gt; <b class="calibre25">booksReadBy['Al'].append('American Gods')</b>
+&gt;&gt;&gt; <b class="calibre25">len(booksReadBy['Al'])</b>
+2
+&gt;&gt;&gt; <b class="calibre25">len(booksReadBy['Zophie'])</b> # The default value is an empty list.
+0</code></pre>
+<p class="calibre23">If you need a default value for every possible key, it’s much easier to use <code class="calibre9">collections.defaultdict()</code> than use a regular dictionary and constantly call the <code class="calibre9">setdefault()</code> method.</p>
+<h3 id="calibre_link-136" class="calibre27">Use Dictionaries Instead of a switch Statement</h3>
+<p class="bodyfirst">Languages such as Java have a <code class="calibre9">switch</code> statement, which is a kind of <code class="calibre9">if</code>-<code class="calibre9">elif</code>-<code class="calibre9">else</code> statement that runs code based on which one of many values a specific variable contains. Python doesn’t have a <code class="calibre9">switch</code> statement, so Python programmers sometimes write code like the following example, which runs a different assignment statement based on which one of many values the <code class="calibre9">season</code> variable contains:</p>
+<pre class="calibre28"><code class="calibre9"># All of the following if and elif conditions have "season ==":
+if season == 'Winter':
+    holiday = 'New Year\'s Day'
+elif season == 'Spring':
+    holiday = 'May Day'
+elif season == 'Summer':
+    holiday = 'Juneteenth'
+elif season == 'Fall':
+    holiday = 'Halloween'
+else:
+    holiday = 'Personal day off'</code></pre>
+<p class="calibre23">This code isn’t necessarily unpythonic, but it’s a bit verbose. By default, Java <code class="calibre9">switch</code> statements have “fall-through” that requires each block to end with a <code class="calibre9">break</code> statement. Otherwise, the execution continues on to the next block. Forgetting to add this <code class="calibre9">break</code> statement is a common source of bugs. But all the <code class="calibre9">if</code>-<code class="calibre9">elif</code> statements in our Python example can be repetitive. <span type="pagebreak" title="101" id="calibre_link-448" class="calibre16"></span>Some Python programmers prefer to set up a dictionary value instead of using <code class="calibre9">if-elif</code> statements. The following concise and pythonic code is equivalent to the previous example:</p>
+<pre class="calibre28"><code class="calibre9">holiday = {'Winter': 'New Year\'s Day',
+           'Spring': 'May Day',
+           'Summer': 'Juneteenth',
+           'Fall':   'Halloween'}.get(season, 'Personal day off')</code></pre>
+<p class="calibre23">This code is just a single assignment statement. The value stored in <code class="calibre9">holiday</code> is the return value of the <code class="calibre9">get()</code> method call, which returns the value for the key that <code class="calibre9">season</code> is set to. If the <code class="calibre9">season</code> key doesn’t exist, <code class="calibre9">get()</code> returns <code class="calibre9">'Personal day off'</code>. Using a dictionary will result in more concise code, but it can also make your code harder to read. It’s up to you whether or not to use this convention.</p>
+<h2 id="calibre_link-137" class="calibre7">Conditional Expressions: Python’s “Ugly” Ternary Operator</h2>
+<p class="bodyfirst"><em class="calibre10">Ternary operators</em> (officially called <em class="calibre10">conditional expressions</em>, or sometimes <em class="calibre10">ternary selection expressions</em>, in Python) evaluate an expression to one of two values based on a condition. Normally, you would do this with a pythonic <code class="calibre9">if</code>-<code class="calibre9">else</code> statement:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; # Pythonic Example
+&gt;&gt;&gt; <b class="calibre25">condition = True</b>
+&gt;&gt;&gt; <b class="calibre25">if condition:</b>
+...     <b class="calibre25">message = 'Access granted'</b>
+... <b class="calibre25">else:</b>
+...     <b class="calibre25">message = 'Access denied'</b>
+...
+&gt;&gt;&gt; <b class="calibre25">message</b>
+'Access granted'</code></pre>
+<p class="calibre23"><em class="calibre10">Ternary</em> simply means an operator with three inputs, but in programming it’s synonymous with <em class="calibre10">conditional expression.</em> Conditional expressions also offer a more concise one-liner for code that fits this pattern. In Python, they’re implemented with an odd arrangement of the <code class="calibre9">if</code> and <code class="calibre9">else</code> keywords:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">valueIfTrue = 'Access granted'</b>
+&gt;&gt;&gt; <b class="calibre25">valueIfFalse = 'Access denied'</b>
+&gt;&gt;&gt; <b class="calibre25">condition = True</b>
+<span class="codeannotationhang">1</span> &gt;&gt;&gt; <b class="calibre25">message = valueIfTrue if condition else valueIfFalse</b>
+&gt;&gt;&gt; <b class="calibre25">message</b>
+'Access granted'
+<span class="codeannotationhang">2</span> &gt;&gt;&gt; <b class="calibre25">print(valueIfTrue if condition else valueIfFalse)</b>
+'Access granted'
+&gt;&gt;&gt; <b class="calibre25">condition = False</b>
+&gt;&gt;&gt; <b class="calibre25">message = valueIfTrue if condition else valueIfFalse</b>
+&gt;&gt;&gt; <b class="calibre25">message</b>
+'Access denied'</code></pre>
+<p class="calibre23"><span type="pagebreak" title="102" id="calibre_link-449" class="calibre16"></span>The expression <code class="calibre9">valueIfTrue if condition else valueIfFalse</code><span class="codeannotation">1</span> evaluates to <code class="calibre9">valueIfTrue</code> if the <code class="calibre9">condition</code> variable is <code class="calibre9">True</code>. When the <code class="calibre9">condition</code> variable is <code class="calibre9">False</code>, the expression evaluates to <code class="calibre9">valueIfFalse</code>. Guido van Rossum jokingly described his syntax design as “intentionally ugly.” Most languages with a ternary operator list the condition first, followed by the true value and then the false value. You can use a conditional expression anywhere you can use an expression or value, including as the argument to a function call <span class="codeannotation">2</span>.</p>
+<p class="calibre23">Why would Python introduce this syntax in Python 2.5 even though it breaks the first guideline that beautiful is better than ugly? Unfortunately, despite being somewhat unreadable, many programmers use ternary operators and wanted Python to support this syntax. It’s possible to abuse Boolean operator short-circuiting to create a <em class="calibre10">sort of</em> ternary operator. The expression <code class="calibre9">condition and valueIfTrue or valueIfFalse</code> will evaluate to <code class="calibre9">valueIfTrue</code> if <code class="calibre9">condition</code> is <code class="calibre9">True</code>, and <code class="calibre9">valueIfFalse</code> if <code class="calibre9">condition</code> is <code class="calibre9">False</code> (except in one important case). Enter the following into the interactive shell:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; # Unpythonic Example
+&gt;&gt;&gt; <b class="calibre25">valueIfTrue = 'Access granted'</b>
+&gt;&gt;&gt; <b class="calibre25">valueIfFalse = 'Access denied'</b>
+&gt;&gt;&gt; <b class="calibre25">condition = True</b>
+&gt;&gt;&gt; <b class="calibre25">condition and valueIfTrue or valueIfFalse</b>
+'Access granted'</code></pre>
+<p class="calibre23">This <code class="calibre9">condition and valueIfTrue or valueIfFalse</code> style of pseudo-ternary operator has a subtle bug: if <code class="calibre9">valueIfTrue</code> is a falsey value (such as <code class="calibre9">0</code>, <code class="calibre9">False</code>, <code class="calibre9">None</code>, or the blank string), the expression unexpectedly evaluates to <code class="calibre9">valueIfFalse</code> if <code class="calibre9">condition</code> is <code class="calibre9">True</code>.</p>
+<p class="calibre23">But programmers continued to use this fake ternary operator anyway, and “Why doesn’t Python have a ternary operator?” became a perennial question to the Python core developers. Conditional expressions were created so programmers would stop asking for a ternary operator and wouldn’t use the bug-prone pseudo-ternary operator. But conditional expressions are also ugly enough to discourage programmers from using them. Although beautiful may be better than ugly, Python’s “ugly” ternary operator is an example of a case when practicality beats purity. </p>
+<p class="calibre23">Conditional expressions aren’t exactly pythonic, but they’re not unpythonic, either. If you do use them, avoid nesting conditional expressions inside other conditional expressions:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; # Unpythonic Example
+&gt;&gt;&gt; <b class="calibre25">age = 30</b>
+&gt;&gt;&gt; <b class="calibre25">ageRange = 'child' if age &lt; 13 else 'teenager' if age &gt;= 13 and age &lt; 18 else 'adult'</b>
+&gt;&gt;&gt; <b class="calibre25">ageRange</b>
+'adult'</code></pre>
+<p class="calibre23">Nested conditional expressions are a good example of how a dense one-liner can be technically correct but frustrating to make sense of when reading.</p>
+<h2 id="calibre_link-138" class="calibre7"><span type="pagebreak" title="103" id="calibre_link-450" class="calibre20"></span>Working with Variable Values</h2>
+<p class="bodyfirst">You’ll often need to check and modify the values that variables store. Python has several ways of doing this. Let’s look at a couple of examples.</p>
+<h3 id="calibre_link-139" class="calibre27">Chaining Assignment and Comparison Operators</h3>
+<p class="bodyfirst">When you have to check whether a number is within a certain range, you might use the Boolean <code class="calibre9">and</code> operator like this:</p>
+<pre class="calibre28"><code class="calibre9"># Unpythonic Example
+if 42 &lt; spam and spam &lt; 99:</code></pre>
+<p class="calibre23">But Python lets you chain comparison operators so you don’t need to use the <code class="calibre9">and</code> operator. The following code is equivalent to the previous example:</p>
+<pre class="calibre28"><code class="calibre9"># Pythonic Example
+if 42 &lt; spam &lt; 99:</code></pre>
+<p class="calibre23">The same applies to chaining the <code class="calibre9">=</code> assignment operator. You can set multiple variables to the same value in a single line of code:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; # Pythonic Example
+&gt;&gt;&gt; <b class="calibre25">spam = eggs = bacon = 'string'</b>
+&gt;&gt;&gt; <b class="calibre25">print(spam, eggs, bacon)</b>
+string string string</code></pre>
+<p class="calibre23">To check whether all three of these variables are the same, you can use the <code class="calibre9">and</code> operator, or more simply, chain the <code class="calibre9">==</code> comparison operator for equality.</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; # Pythonic Example
+&gt;&gt;&gt; <b class="calibre25">spam = eggs = bacon = 'string'</b>
+&gt;&gt;&gt; <b class="calibre25">spam == eggs == bacon == 'string'</b>
+True</code></pre>
+<p class="calibre23">Chaining operators is a small but useful shortcut in Python. However, if you use them incorrectly, they can cause problems. <span class="calibre" itemid="xref_target_Chapter 8">Chapter 8</span> demonstrates some instances where using them can introduce unexpected bugs in your code.</p>
+<h3 id="calibre_link-140" class="calibre27">Checking Whether a Variable Is One of Many Values</h3>
+<p class="bodyfirst">You might sometimes encounter the inverse of the situation described in the preceding section: checking whether a single variable is one of multiple possible values. You could do this using the <code class="calibre9">or</code> operator, such as in the expression <code class="calibre9">spam == 'cat' or spam == 'dog' or spam == 'moose'</code>. All of those redundant “<code class="calibre9">spam ==</code>” parts make this expression a bit unwieldy.</p>
+<p class="calibre23"><span type="pagebreak" title="104" id="calibre_link-451" class="calibre16"></span>Instead, you can put the multiple values into a tuple and check for whether a variable’s value exists in that tuple using the <code class="calibre9">in</code> operator, as in the following example:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; # Pythonic Example
+&gt;&gt;&gt; <b class="calibre25">spam = 'cat'</b>
+&gt;&gt;&gt; <b class="calibre25">spam in ('cat', 'dog', 'moose')</b>
+True</code></pre>
+<p class="calibre23">Not only is this idiom easier to understand, it’s also slightly faster, according to <code class="calibre9">timeit</code>.</p>
+<h2 id="calibre_link-141" class="calibre7">Summary</h2>
+<p class="bodyfirst">All programming languages have their own idioms and best practices. This chapter focuses on the particular ways that Python programmers have come to write “pythonic” code to make the best use of Python’s syntax. </p>
+<p class="calibre23">At the core of pythonic code are the 20 aphorisms from the Zen of Python, which are rough guidelines for writing Python. These aphorisms are opinions and not strictly necessary for writing Python code, but they are good to keep in mind.</p>
+<p class="calibre23">Python’s significant indentation (not to be confused with significant whitespace) provokes the most protest from new Python programmers. Although almost all programming languages commonly use indentation to make code readable, Python requires it in place of the more typical braces that other languages use. </p>
+<p class="calibre23">Although many Python programmers use the <code class="calibre9">range(len())</code> convention for <code class="calibre9">for</code> loops, the <code class="calibre9">enumerate()</code> function offers a cleaner approach to getting the index and value while iterating over a sequence. Similarly, the <code class="calibre9">with</code><span type="pagebreak" title="105" id="calibre_link-452" class="calibre16"></span>statement is a cleaner and less bug-prone way to handle files compared to calling <code class="calibre9">open()</code> and <code class="calibre9">close()</code> manually. The <code class="calibre9">with</code> statement ensures that <code class="calibre9">close()</code> gets called whenever the execution moves outside the <code class="calibre9">with</code> statement’s block. </p>
+<p class="calibre23">Python has had several ways to interpolate strings. The original way was to use the <code class="calibre9">%s</code> conversion specifier to mark where strings should be included in the original string. The modern way as of Python 3.6 is to use f-strings. F-strings prefix the string literal with the letter <code class="calibre9">f</code> and use braces to mark where you can place strings (or entire expressions) inside the string.</p>
+<p class="calibre23">The <code class="calibre9">[:]</code> syntax for making shallow copies of lists is a bit odd-looking and not necessarily pythonic, but it’s become a common way to quickly create a shallow list. </p>
+<p class="calibre23">Dictionaries have a <code class="calibre9">get()</code> and <code class="calibre9">setdefault()</code> method for dealing with nonexistent keys. Alternatively, a <code class="calibre9">collections.defaultdict</code> dictionary will use a default value for nonexistent keys. Also, although there is no <code class="calibre9">switch</code> statement in Python, using a dictionary is a terse way to implement its equivalent without using several <code class="calibre9">if</code>-<code class="calibre9">elif</code>-<code class="calibre9">else</code> statements, and you can use ternary operators when evaluating between two values.</p>
+<p class="calibre23">A chain of <code class="calibre9">==</code> operators can check whether multiple variables are equal to each other, whereas the <code class="calibre9">in</code> operator can check whether a variable is one of many possible values. </p>
+<p class="calibre23">This chapter covered several Python language idioms, providing you with hints for how to write more pythonic code. In the next chapter, you’ll learn about some of the Python gotchas and pitfalls that beginners fall into.</p>
+</section>
+</div>
+
+
+<a href="chapter5.html">Prev: Chapter 5 - Finding Code Smells</a> | <a href="chapter7.html">Next: Chapter 7 - Programming Jargon</a>
+</body></html>

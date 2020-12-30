@@ -1,0 +1,207 @@
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-35">
+<section class="toclist">
+<header class="calibre12">
+<h1 class="chaptertitle">
+<span class="partnumber"><span type="pagebreak" title="3" id="calibre_link-355" class="calibre26"></span>1</span><br class="calibre18" />
+<span class="parttitle1">Dealing with Errors and Asking for Help</span>
+</h1>
+</header>
+<figure class="opener"><img src="images/000017.png" alt="" class="calibre15" /></figure>
+<p class="chapterintro">Please don’t anthropomorphize computers; they find it very annoying. When a computer presents you with an error message, it’s not because you’ve offended it. Computers are the most sophisticated tools most of us will ever interact with, but still, they’re just tools.</p>
+<p class="calibre22">Even so, it’s easy to blame these tools. Because much of learning to program is self-directed, it’s common to feel like a failure when you still need to consult the internet multiple times a day, even though you’ve been studying Python for months. But even professional software developers search the internet or consult documentation to answer their programming questions. </p>
+<p class="calibre23">Unless you have the financial or social resources to hire a private tutor who can answer your programming questions, you’re stuck with your computer, internet search engines, and your own fortitude. Fortunately, your questions have almost certainly been asked before. As a programmer, being <span type="pagebreak" title="4" id="calibre_link-356" class="calibre16"></span>able to find answers on your own is far more important than any algorithms or data structure knowledge. This chapter guides you through developing this crucial skill.</p>
+<h2 id="calibre_link-36" class="calibre7">How to Understand Python Error Messages</h2>
+<p class="bodyfirst">When they’re confronted with an error message’s large wall of technobabble text, many programmers’ first impulse is to completely ignore it. But inside this error message is the answer to what’s wrong with your program. Finding this answer is a two-step process: examining the traceback and doing an internet search of the error message.</p>
+<h3 id="calibre_link-37" class="calibre27">Examining Tracebacks</h3>
+<p class="bodyfirst">Python programs crash when the code raises an exception that an <code class="calibre9">except</code> statement doesn’t handle. When this happens, Python displays the exception’s message and a <em class="calibre10">traceback</em>. Also called a <em class="calibre10">stack trace,</em> the traceback shows the place in your program where the exception happened and the trail of function calls that led up to it.</p>
+<p class="calibre23">To practice reading tracebacks, enter the following buggy program and save it as <em class="calibre10">abcTraceback.py</em>. The line numbers are for reference only and aren’t part of the program.</p>
+<pre class="calibre28"><code class="calibre9"> 1. def a():
+ 2.     print('Start of a()')
+<span class="codeannotationhang">1</span>  3.     b()  # Call b().
+ 4.
+ 5. def b():
+ 6.     print('Start of b()')
+<span class="codeannotationhang">2</span>  7.     c()  # Call c().
+ 8.
+ 9. def c():
+10.     print('Start of c()')
+<span class="codeannotationhang">3</span> 11.     42 / 0  # This will cause a zero divide error.
+12.
+13. a()  # Call a().</code></pre>
+<p class="calibre23">In this program, the <code class="calibre9">a()</code> function calls <code class="calibre9">b()</code><span class="codeannotation">1</span>, which calls <code class="calibre9">c()</code><span class="codeannotation">2</span>. Inside <code class="calibre9">c()</code>, the <code class="calibre9">42 / 0</code> expression <span class="codeannotation">3</span> causes a zero divide error. When you run this program, the output should look like this:</p>
+<pre class="calibre28"><code class="calibre9">Start of a()
+Start of b()
+Start of c()
+Traceback (most recent call last):
+  File "abcTraceback.py", line 13, in &lt;module&gt;
+    a()  # Call a().
+  File "abcTraceback.py", line 3, in a
+    b()  # Call b().
+  File "abcTraceback.py", line 7, in b
+    c()  # Call c().
+<span type="pagebreak" title="5" id="calibre_link-357" class="calibre16"></span>  File "abcTraceback.py", line 11, in c
+    42 / 0  # This will cause a zero divide error.
+ZeroDivisionError: division by zero</code></pre>
+<p class="calibre23">Let’s examine this traceback line by line, starting with this line:</p>
+<pre class="calibre28"><code class="calibre9">Traceback (most recent call last):</code></pre>
+<p class="calibre23">This message lets you know that what follows is a traceback. The <code class="calibre9">most recent call last</code> text indicates that each of the function calls is listed in order, starting with the first function call and ending with the most recent.</p>
+<p class="calibre23">The next line shows the traceback’s first function call:</p>
+<pre class="calibre28"><code class="calibre9">  File "abcTraceback.py", line 13, in &lt;module&gt;
+    a()  # Call a().</code></pre>
+<p class="calibre23">These two lines are the <em class="calibre10">frame summary</em>, and they show the information inside a frame object. When a function is called, the local variable data as well as where in the code to return to after the function call ends are stored in a <em class="calibre10">frame object</em>. Frame objects hold local variables and other data associated with function calls. Frame objects are created when the function is called and destroyed when the function returns. The traceback shows a frame summary for each frame leading up to the crash. We can see that this function call is on line 13 of <em class="calibre10">abcTraceback.py</em>, and the <code class="calibre9">&lt;module&gt;</code> text tells us this line is in the global scope. Line 13 is displayed with two spaces of indentation next.</p>
+<p class="calibre23">The four lines that follow are the next two frame summaries:</p>
+<pre class="calibre28"><code class="calibre9">  File "abcTraceback.py", line 3, in a
+    b()  # Call b().
+  File "abcTraceback.py", line 7, in b
+    c()  # Call c().</code></pre>
+<p class="calibre23">We can tell from the <code class="calibre9">line 3, in a</code> text that <code class="calibre9">b()</code> was called on line 3 inside the <code class="calibre9">a()</code> function, which led to <code class="calibre9">c()</code> being called on line 7 inside the <code class="calibre9">b()</code> function. Notice that the <code class="calibre9">print()</code> calls on lines 2, 6, and 10 aren’t displayed in the traceback, even though they ran before the function calls occurred. Only the lines containing function calls that lead up to the exception are displayed in the traceback.</p>
+<p class="calibre23">The last frame summary shows the line that caused the unhandled exception, followed by the name of the exception and the exception’s message:</p>
+<pre class="calibre28"><code class="calibre9">  File "abcTraceback.py", line 11, in c
+    42 / 0  # This will cause a zero divide error.
+ZeroDivisionError: division by zero</code></pre>
+<p class="calibre23">Note that the line number given by the traceback is where Python finally detected an error. The true source of the bug could be somewhere before this line.</p>
+<p class="calibre23"><span type="pagebreak" title="6" id="calibre_link-358" class="calibre16"></span>Error messages are notoriously short and inscrutable: the three words <code class="calibre9">division by zero</code> won’t mean anything to you unless you know that dividing a number by zero is mathematically impossible and a common software bug. In this program, the bug isn’t too hard to find. Looking at the line of code in the frame summary, it’s clear where in the <code class="calibre9">42 / 0</code> code the zero divide error is happening.</p>
+<p class="calibre23">But let’s look at a more difficult case. Enter the following code into a text editor and save it as <em class="calibre10">zeroDivideTraceback.py</em>:</p>
+<pre class="calibre28"><code class="calibre9">def spam(number1, number2):
+    return number1 / (number2 - 42)
+
+spam(101, 42)</code></pre>
+<p class="calibre23">When you run this program, the output should look like this:</p>
+<pre class="calibre28"><code class="calibre9">Traceback (most recent call last):
+  File "zeroDivideTraceback.py", line 4, in &lt;module&gt;
+    spam(101, 42)
+  File "zeroDivideTraceback.py", line 2, in spam
+    return number1 / (number2 - 42)
+ZeroDivisionError: division by zero</code></pre>
+<p class="calibre23">The error message is the same, but the zero divide in <code class="calibre9">return number1 / (number2 - 42)</code> isn’t quite so obvious. You can deduce that there is a division happening from the <code class="calibre9">/</code> operator, and that the expression <code class="calibre9">(number2 - 42)</code> must evaluate to <code class="calibre9">0</code>. This would lead you to conclude that the <code class="calibre9">spam()</code> function fails whenever the <code class="calibre9">number2</code> parameter is set to <code class="calibre9">42</code>.</p>
+<p class="calibre23">Sometimes the traceback might indicate that an error is on the line after the true cause of the bug. For example, in the following program, the first line is missing the closing parenthesis:</p>
+<pre class="calibre28"><code class="calibre9">print('Hello.'
+print('How are you?')</code></pre>
+<p class="calibre23">But the error message for this program indicates the problem is on the second line:</p>
+<pre class="calibre28"><code class="calibre9">  File "example.py", line 2
+    print('How are you?')
+        ^
+SyntaxError: invalid syntax</code></pre>
+<p class="calibre23">The reason is that the Python interpreter didn’t notice the syntax error until it read the second line. The traceback can indicate where things went wrong, but that isn’t always the same as where the actual cause of a bug is. If the frame summary doesn’t give you enough information to figure out the bug, or if the true cause of the bug is on a previous line not shown by the traceback, you’ll have to step through the program with a debugger <span type="pagebreak" title="7" id="calibre_link-359" class="calibre16"></span>or check any logging messages to find the cause. This can take a significant amount of time. An internet search of the error message might give you critical clues about the solution much more quickly.</p>
+<h3 id="calibre_link-38" class="calibre27">Searching for Error Messages</h3>
+<p class="bodyfirst">Often, error messages are so short they’re not even full sentences. Because programmers encounter them regularly, they’re intended as reminders rather than full explanations. If you’re encountering an error message for the first time, copying and pasting it into an internet search frequently returns a detailed explanation of what the error means and what its likely causes are. <a id="calibre_link-698" href="#calibre_link-316" class="calibre19">Figure 1-1</a> shows the results of a search for <b class="calibre25">python “ZeroDivisionError: division by zero”</b>. Including quotation marks around the error message helps find the exact phrase, and adding the word <em class="calibre10">python</em> can narrow down your search as well.</p>
+<figure class="calibre29">
+<img src="images/000023.png" alt="f01001" class="calibre15" />
+<figcaption class="calibre30"><p class="calibre31"><a id="calibre_link-316" href="#calibre_link-698" class="calibre19">Figure 1-1:</a> Copying and pasting an error message into an internet search tool can quickly provide explanations and solutions.</p></figcaption>
+</figure>
+<p class="calibre23">Searching for error messages isn’t cheating. Nobody can be expected to memorize every possible error message for a programming language. Professional software developers search the internet for programming answers on a daily basis.</p>
+<p class="calibre23">You might want to exclude any part of the error message that is particular to your code. For example, consider the following error messages:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">print(employeRecord)</b>
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+<span type="pagebreak" title="8" id="calibre_link-360" class="calibre16"></span><span class="codeannotationhang">1</span> NameError: name 'employeRecord' is not defined
+&gt;&gt;&gt; <b class="calibre25">42 - 'hello'</b>
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+<span class="codeannotationhang">2</span> TypeError: unsupported operand type(s) for -: 'int' and 'str'</code></pre>
+<p class="calibre23">This example has a typo in the variable <code class="calibre9">employeRecord</code>, causing an error <span class="codeannotation">1</span>. Because the identifier <code class="calibre9">employeRecord</code> in <code class="calibre9">NameError: name 'employeRecord' is not defined</code> is specific to your code, you might want to instead search for <b class="calibre25">python “NameError: name” “is not defined”</b>. In the last line, the <code class="calibre9">'int' and 'str'</code> part of the error message <span class="codeannotation">2</span> seems to refer to the <code class="calibre9">42</code> and <code class="calibre9">'hello'</code> values, so truncating the search to <b class="calibre25">python “TypeError: unsupported operand type(s) for”</b> would avoid including parts particular to your code. If these searches don’t yield useful results, try including the full error message.</p>
+<h2 id="calibre_link-39" class="calibre7">Preventing Errors with Linters</h2>
+<p class="bodyfirst">The best way to fix mistakes is to not make them in the first place. Lint software, or <em class="calibre10">linters</em>, are applications that analyze your source code to warn you of any potential errors. The name references the small fibers and debris collected by a clothes dryer’s lint trap. Although a linter won’t catch all errors, <em class="calibre10">static analysis</em> (examining source code without running it) can identify common errors caused by typos. (Chapter 11 explores how to use type hints for static analysis.) Many text editors and integrated development environments (IDEs) incorporate a linter that runs in the background and can point out problems in real time, such as in <a id="calibre_link-699" href="#calibre_link-317" class="calibre19">Figure 1-2</a>.</p>
+<figure class="calibre29">
+<img src="images/000015.png" alt="f01002" class="calibre15" />
+<figcaption class="calibre30"><p class="calibre31"><a id="calibre_link-317" href="#calibre_link-699" class="calibre19">Figure 1-2:</a> A linter points out an undefined variable in Mu (top), PyCharm (middle), and Sublime Text (bottom).</p></figcaption>
+</figure>
+<p class="calibre23"><span type="pagebreak" title="9" id="calibre_link-361" class="calibre16"></span>The near-instant notifications that a linter provides greatly improves your programming productivity. Without one, you’d have to run your program, watch it crash, read the traceback, and then find the line in your source code to fix a typo. And if you’ve made multiple typos, this run-fix cycle would only find them one at a time. Linting can point out multiple errors at once, and it does so directly in the editor, so you can see the line on which they occur.</p>
+<p class="calibre23">Your editor or IDE might not come with a lint feature, but if it supports plug-ins, almost certainly a linter will be available. Often, these plug-ins use a linting module called Pyflakes or some other module to do their analysis. You can install Pyflakes from <a href="https://pypi.org/project/pyflakes/" class="calibre19">https://pypi.org/project/pyflakes/</a> or by running <code class="calibre9">pip install --user pyflakes</code>. It’s well worth the effort.</p>
+<aside type="sidebar" class="authors">
+<div class="top"><hr class="calibre32" /></div>
+<section class="note">
+<h2 class="calibre33"><span class="notehead">NOTE</span></h2>
+<p class="calibre34">On Windows, you can run the <var class="calibre35">python</var> and <var class="calibre35">pip</var> commands. But on macOS and Linux, these command names are for Python version 2 only, so instead you’ll need to run <var class="calibre35">python3</var> and <var class="calibre35">pip3</var>. Keep this in mind whenever you see <var class="calibre35">python</var> or <var class="calibre35">pip</var> in this book.</p>
+<div class="top"><hr class="calibre32" /></div>
+</section>
+</aside>
+<p class="calibre23">IDLE, the IDE that comes with Python, doesn’t have a linter or the capability of having one installed.</p>
+<h2 id="calibre_link-40" class="calibre7">How to Ask for Programming Help</h2>
+<p class="bodyfirst">When internet searches and linters fail to solve your problem, you can ask for programming help on the internet. But there is an etiquette to efficiently asking for advice. If experienced software developers are willing to answer your questions at no charge, it’s best to make efficient use of their time.</p>
+<p class="calibre23">Asking strangers for programming help should always be a last resort. Hours or days could pass before someone replies to your posted question, if you get a reply at all. It’s much faster to search the web for other people who have already asked your question and read their answers. Online documentation and search engines were made to relieve the question-answering work that would otherwise have to be done by humans.</p>
+<p class="calibre23">But when you’ve exhausted your options and must ask a human audience your programming question, avoid the following common mistakes:</p>
+<ul class="calibre36">
+<li class="calibre11">Asking if it’s okay to ask a question instead of just asking it</li>
+<li class="calibre11">Implying your question instead of asking it directly</li>
+<li class="calibre11">Asking your question on the wrong forum or website</li>
+<li class="calibre11">Writing an unspecific post headline or email subject, such as “I have a problem” or “Please help”</li>
+<li class="calibre11">Saying “my program doesn’t work” but not explaining how you want it to work</li>
+<li class="calibre11">Not including the full error message</li>
+<li class="calibre11">Not sharing your code</li>
+<li class="calibre11"><span type="pagebreak" title="10" id="calibre_link-362" class="calibre16"></span>Sharing poorly formatted code</li>
+<li class="calibre11">Not explaining what you’ve already tried</li>
+<li class="calibre11">Not giving operating system or version information</li>
+<li class="calibre11">Asking someone to write a program for you</li>
+</ul>
+<p class="calibre23">This list of “don’ts” isn’t just for decorum; these habits prevent your helpers from helping you. Your helper’s first step will be to run your code and try to reproduce your problem. To do so, they’ll need a lot of information about your code, computer, and intentions. It’s far more common to provide too little information than too much. The next several sections explore what you can do to prevent these common mistakes. I’ll assume that you’re posting your question to an online forum, but these guidelines also apply to cases when you’re emailing questions to a single person or mailing list.</p>
+<h3 id="calibre_link-41" class="calibre27">Limit Back and Forth by Providing Your Information Upfront</h3>
+<p class="bodyfirst">If you approached someone in person, asking “Can I ask you a question?” would be a short, pleasant means to see if your helper was available. But on online forums, your helper can hold off on a reply until they have the time to do so. Because there could be hours between replies, it’s best to supply all the information your helper might need in your initial post instead of asking for permission to ask your question. If they don’t reply, you can copy and paste this information to a different forum.</p>
+<h3 id="calibre_link-42" class="calibre27">State Your Question in the Form of an Actual Question</h3>
+<p class="bodyfirst">It’s easy to assume that your helpers know what you’re talking about when you explain your problem. But programming is an expansive field, and they might not have experience with the particular area in which you’re having trouble. So it’s important to state your question in the form of an actual question. Although sentences that begin with “I want to . . .” or “The code isn’t working” can imply what your question is, be sure to include explicit questions: literally, sentences that end with a question mark. Otherwise, it’s probably unclear what you’re asking.</p>
+<h3 id="calibre_link-43" class="calibre27">Ask Your Question on the Appropriate Website</h3>
+<p class="bodyfirst">Asking a Python question on a JavaScript forum or an algorithms question on a network security mailing list will likely be unproductive. Often, mailing lists and online forums have Frequently Asked Questions (FAQ) documents or description pages that explain which topics are appropriate to discuss. For example, the <em class="calibre10">python-dev</em> mailing list is about the Python language’s design features, so it isn’t a general Python help mailing list. The web page at <a href="https://www.python.org/about/help/" class="calibre19">https://www.python.org/about/help/</a> can direct you to an appropriate place to ask whatever sort of Python question you have.</p>
+<h3 id="calibre_link-44" class="calibre27"><span type="pagebreak" title="11" id="calibre_link-363" class="calibre37"></span>Summarize Your Question in the Headline</h3>
+<p class="bodyfirst">The benefit of posting your question to an online forum is that future programmers who have the same question can find it and its answers using an internet search. Be sure to use a headline that summarizes the question to make it easy for search engines to organize. A generic headline like “Help please” or “Why isn’t this working?” is too vague. If you’re asking your question in an email, a meaningful subject line tells your helper what your question is as they scan their inbox.</p>
+<h3 id="calibre_link-45" class="calibre27">Explain What You Want the Code to Do</h3>
+<p class="bodyfirst">The question “Why doesn’t my program work?” omits the critical detail of what you want your program to do. This isn’t always obvious to your helper, because they don’t know what your intention is. Even if your question is just “Why am I getting this error?” it helps to also say what your program’s end goal is. In some cases, your helper can tell you if you need an entirely different approach, and you can abandon your problem rather than wasting time trying to solve it.</p>
+<h3 id="calibre_link-46" class="calibre27">Include the Full Error Message</h3>
+<p class="bodyfirst">Be sure to copy and paste the entire error message, including the traceback. Merely describing your error, such as “I’m getting an out of range error,” doesn’t provide enough detail for your helper to figure out what is wrong. Also, specify whether you always encounter this error or if it’s an intermittent problem. If you’ve identified the specific circumstances in which the error happens, include those details as well.</p>
+<h3 id="calibre_link-47" class="calibre27">Share Your Complete Code</h3>
+<p class="bodyfirst">Along with the full error message and traceback, provide the source code for your entire program. That way, your helper can run your program on their machine under a debugger to examine what is happening. Always produce a <em class="calibre10">minimum, complete, and reproducible</em> (<em class="calibre10">MCR</em>) example that reliably reproduces the error you’re getting. The MCR term comes from Stack Overflow and is discussed in detail at <a href="https://stackoverflow.com/help/mcve/" class="calibre19">https://stackoverflow.com/help/mcve/</a>. <em class="calibre10">Minimal </em>means your code example is as short as possible while still reproducing the problem you’re encountering. <em class="calibre10">Complete</em> means that your code example contains everything it needs to reproduce the problem. <em class="calibre10">Reproducible</em> means that your code example reliably reproduces the problem you’re describing.</p>
+<p class="calibre23">But if your program is contained in one file, sending it to your helper is a simple matter. Just ensure that it’s properly formatted, as discussed in the next section.</p>
+<aside type="sidebar" class="authors">
+<div class="top"><hr class="calibre32" /></div>
+<section class="box">
+<h2 class="calibre38"><span type="pagebreak" title="12" id="calibre_link-364" class="calibre39"></span>Stack Overflow and Building an Answer Archive</h2>
+<p class="boxbodyfirst">Stack Overflow is a popular website for answering programming questions, but many new programmers express frustration, or even intimidation, about using it. Stack Overflow moderators have a reputation for ruthlessly closing questions that don’t meet their strict guidelines. But there’s a good reason that Stack Overflow runs such a tight ship.</p>
+<p class="calibre40">Stack Overflow isn’t intended to answer questions so much as to build an archive of programming questions matched with their answers. Accordingly, they want questions that are specific, unique, and not opinion based. Questions need to be detailed and well stated so search engine users can easily find them. (The internet for programmers before Stack Overflow is the basis for the joke in the “Wisdom of the Ancients” XKCD comic at <a href="https://xkcd.com/979/" class="calibre19">https://xkcd.com/979/</a>.) Thirty entries for the same question not only would duplicate the answering efforts of the site’s volunteer experts, but could confuse search engine users with multiple results. Questions need to have concrete, objective answers: “What is the best programming language?” is a matter of opinion and can cause needless argument. (Besides, we already know that Python is the best programming language.)</p>
+<p class="calibre40">But being in the position of needing and requesting help only to have your question promptly closed can be hurtful and embarrassing. My advice is to first carefully read the advice in this chapter and on Stack Overflow’s “How do I ask a good question?” guide at <a href="https://stackoverflow.com/help/how-to-ask/" class="calibre19">https://stackoverflow.com/help/how-to-ask/</a>. Second, feel free to use a pseudonym if you’re afraid of asking “dumb” questions. Stack Overflow doesn’t require real names for its accounts. If you prefer a more casual place for your questions, consider posting them to <a href="https://reddit.com/r/learnpython/" class="calibre19">https://reddit.com/r/learnpython/</a>, which is more lax about which questions they accept. Still, be sure to read their posting guidelines before submitting a question.</p>
+<div class="top"><hr class="calibre32" /></div>
+</section>
+</aside>
+<h3 id="calibre_link-48" class="calibre27">Make Your Code Readable with Proper Formatting</h3>
+<p class="bodyfirst">The point of sharing your code is so your helper can run your program and reproduce the error you’re getting. Not only do they need the code, but they also need it properly formatted. Make sure that they can easily copy your source and run it as is. If you’re copying and pasting your source code in an email, be aware that many email clients might remove the indentation, resulting in code that looks like this:</p>
+<pre class="calibre28"><code class="calibre9">def knuts(self, value):
+if not isinstance(value, int) or value &lt; 0:
+raise WizCoinException('knuts attr must be a positive int')
+self._knuts = value</code></pre>
+<p class="calibre23"><span type="pagebreak" title="13" id="calibre_link-365" class="calibre16"></span>Not only would it take a long time for your helper to reinsert the indentation for every line in your program, but it’s ambiguous as to how much indentation each line had to begin with. To ensure your code is properly formatted, copy and paste your code to a <em class="calibre10">pastebin</em> website, such as <a href="https://pastebin.com/" class="calibre19">https://pastebin.com/</a> or <a href="https://gist.github.com/" class="calibre19">https://gist.github.com/</a>, which stores your code at a short, public URL, such as <a href="https://pastebin.com/XeU3yusC" class="calibre19">https://pastebin.com/XeU3yusC</a>. Sharing this URL is easier than using a file attachment.</p>
+<p class="calibre23">If you’re posting code to a website, such as <a href="https://stackoverflow.com/" class="calibre19">https://stackoverflow.com/</a> or <a href="https://reddit.com/r/learnpython/" class="calibre19">https://reddit.com/r/learnpython/</a>, make sure you use the formatting tools its text boxes provide. Often, indenting a line with four spaces will ensure that line uses a monospace “code font,” which is easier to read. You can also enclose text with a backtick (<code class="calibre9">`</code>) character to put it in the monospace code font. These sites frequently have a link to formatting information. Not using these tips might mangle your source code, making it all appear on one line, like the following:</p>
+<pre class="calibre28"><code class="calibre9">def knuts(self, value):if not isinstance(value, int) or value &lt; 0:raise WizCoinException('knuts attr must be a positive int') self._knuts = value</code></pre>
+<p class="calibre23">In addition, don’t share your code by taking a screenshot or a photo of your screen and sending the image. It’s impossible to copy and paste the code from the image, and it’s usually unreadable as well.</p>
+<h3 id="calibre_link-49" class="calibre27">Tell Your Helper What You’ve Already Tried</h3>
+<p class="bodyfirst">When posting your question, tell your helper what you’ve already tried and the results of those tries. This information saves your helper the effort of retrying these false leads and shows that you’ve put effort into solving your own problem.</p>
+<p class="calibre23">Additionally, this information ensures that you’re asking for help, not just asking for someone to write your software for you. Unfortunately, it’s common for computer science students to ask online strangers to do their homework or for entrepreneurs to ask for someone to create a “quick app” for them for free. Programming help forums aren’t made for this purpose.</p>
+<h3 id="calibre_link-50" class="calibre27">Describe Your Setup</h3>
+<p class="bodyfirst">Your computer’s particular setup might affect how your program runs and what errors it produces. To ensure that your helpers can reproduce your problem on their computer, give them the following information about your computer:</p>
+<ul class="calibre36">
+<li class="calibre11">The operating system and version, such as “Windows 10 Professional Edition” or “macOS Catalina”</li>
+<li class="calibre11">The Python version running the program, such as “Python 3.7” or “Python 3.6.6”</li>
+<li class="calibre11">Any third-party modules your program uses and their versions, such as “Django 2.1.1”</li>
+</ul>
+<p class="calibre23"><span type="pagebreak" title="14" id="calibre_link-366" class="calibre16"></span>You can find the versions of your installed third-party modules by running <code class="calibre9">pip list</code>. It’s also a convention to include the module’s version in the <code class="calibre9">__version__</code> attribute, as in the following interactive shell example:</p>
+<pre class="calibre28"><code class="calibre9">&gt;&gt;&gt; <b class="calibre25">import django</b>
+&gt;&gt;&gt; <b class="calibre25">django.__version__</b>
+'2.1.1'</code></pre>
+<p class="calibre23">Most likely, this information won’t be necessary. But to reduce the back and forth, offer this information in your initial post anyway.</p>
+<h2 id="calibre_link-51" class="calibre7">Examples of Asking a Question</h2>
+<p class="bodyfirst">Here is a properly asked question that follows the dos and don’ts of the previous section:</p>
+<blockquote class="quote">
+<p class="blockquote"><b class="calibre25">Selenium webdriver: How do I find ALL of an element’s attributes?</b></p>
+<p class="blockquote">In the Python Selenium module, once I have a <code class="calibre41">WebElement</code> object I can get the value of any of its attributes with <code class="calibre41">get_attribute()</code>:</p>
+<p class="blockquote"><code class="calibre41">foo = elem.get_attribute('href')</code></p>
+<p class="blockquote">If the attribute named <code class="calibre41">'href'</code> doesn’t exist, <code class="calibre41">None</code> is returned.</p>
+<p class="blockquote">My question is, how can I get a list of all the attributes that an element has? There doesn’t seem to be a <code class="calibre41">get_attributes()</code> or <code class="calibre41">get_attribute_names()</code> method.</p>
+<p class="blockquote">I’m using version 2.44.0 of the Selenium module for Python.</p>
+</blockquote>
+<p class="calibre23">This question comes from <a href="https://stackoverflow.com/q/27307131/1893164/" class="calibre19">https://stackoverflow.com/q/27307131/1893164/</a>. The headline summarizes the question in a single sentence. The problem is stated in the form of a question and ends with a question mark. In the future, if a person reads this headline in an internet search result, they’ll immediately know whether or not it’s relevant to their own question.</p>
+<p class="calibre23">The question formats the code using the monospace code font and breaks up text across multiple paragraphs. It’s clear what the question in this post is: it’s even prefaced with “My question is.” It suggests that <code class="calibre9">get_attributes()</code> or <code class="calibre9">get_attribute_names()</code> could have been, but aren’t, answers, which shows that the asker has tried to find a solution while hinting at what they believe the true answer to this question would look like. The asker also includes the Selenium module’s version information just in case it’s relevant. It’s better to include too much information than not enough.</p>
+<h2 id="calibre_link-52" class="calibre7">Summary</h2>
+<p class="bodyfirst">Independently answering your own programming questions is the most important skill a programmer must learn. The internet, which was built by programmers, has a wealth of resources that provide the answers you need.</p>
+<p class="calibre23"><span type="pagebreak" title="15" id="calibre_link-367" class="calibre16"></span>But first, you must parse the often cryptic error messages that Python raises. It’s fine if you can’t understand the text of an error message. You can still submit this text to a search engine to find the error message’s plain English explanation and the likely cause. The error’s traceback will indicate where in your program the error occurred.</p>
+<p class="calibre23">A real-time linter can point out typos and potential bugs as you write code. Linters are so useful that modern software development effectively requires them. If your text editor or IDE doesn’t have a linter or the ability to add a linter plug-in, consider switching to one that does.</p>
+<p class="calibre23">If you can’t find the solution to your problem by searching the internet, try posting your question to an online forum or email someone. To make this process efficient, this chapter provided guidelines for asking a good programming question. This includes asking a specific, well-stated question, providing full source code and error message details, explaining what you’ve already tried, and telling your helper which operating system and Python version you’re using. Not only will the posted answers solve your problem, but they can help future programmers who have the same question and find your post.</p>
+<p class="calibre23">Don’t feel discouraged if you seem to be constantly looking up answers and asking for help. Programming is an extensive field, and no one can hold all of its details in their head at once. Even experienced software developers check online for documentation and solutions daily. Instead, focus on becoming skillful at finding solutions, and you’ll be on your way to becoming a proficient Pythonista.</p>
+</section>
+</div>
