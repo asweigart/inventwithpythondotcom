@@ -18,7 +18,7 @@ chapters = [
 'Chapter 16 - Object-Oriented Programming and Inheritance',
 'Chapter 17 - Python OOP: Properties and Dunder Methods',
 ]
-header = """<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Chapter 1: The Interactive Shell</title></head><body style="background-color: #fffeee;">
+header = """<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>%s</title></head><body style="background-color: #fffeee;">
 
 <script type="text/javascript">
 //<![CDATA[
@@ -70,7 +70,7 @@ for i in range(18):
             else:
                 prevNextHtml = '<a href="chapter%s.html">Prev: %s</a> | <a href="chapter%s.html">Next: %s</a>' % (i - 1, chapters[i - 1], i + 1, chapters[i + 1])
 
-            fo.write(header % (prevNextHtml))
+            fo.write(header % (chapters[i], prevNextHtml))
             fo.write('\n\n' + chapterContent + '\n\n\n')
             fo.write(footer % (prevNextHtml))
 
