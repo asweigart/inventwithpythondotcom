@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+{% set title = 'Online Diff Tool - The Big Book of Small Python Projects' %}
+
+{% block content %}
+
+<script type="text/javascript" src="/dojo.js"></script>
+<script type="text/javascript" src="/sourceCodesBigBookPython.js"></script>
+<script type="text/javascript" src="/diff/diffview.js"></script>
+<link rel="stylesheet" type="text/css" href="/diff/diffview.css"/>
+<script type="text/javascript" src="/diff/difflib.js"></script>
+
+<script type="text/javascript">
+//<![CDATA[
+var $ = dojo.byId;
+dojo.require("dojo.io");
+var url = window.location.toString().split("#")[0];
+
+// Array.indexOf method
+if (!Array.prototype.indexOf)
+{
+  Array.prototype.indexOf = function(elt /*, from*/)
+  {
+    var len = this.length >>> 0;
+
+    var from = Number(arguments[1]) || 0;
+    from = (from < 0)
+         ? Math.ceil(from)
+         : Math.floor(from);
+    if (from < 0)
+      from += len;
+
+    for (; from < len; from++)
+    {
+      if (from in this &&
+          this[from] === elt)
+        return from;
+    }
+    return -1;
+  };
+}
+
+
+// Read a page's GET URL variables and return them as an associative array.
+function getUrlVars() {
+  var vars = [], hash;
+  var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+
+  for(var i = 0; i < hashes.length; i++) {
+    hash = hashes[i].split('=');
+    vars.push(hash[0]);
+    vars[hash[0]] = hash[1];
+  }
+  return vars;
+}
+
+function diffUsingJS() {
+  //var base = difflib.stringAsLines($("baseText").value);
+  var base = difflib.stringAsLines(sourceCodes[$('programSelect').value]);
+  var newtxt = difflib.stringAsLines($("newText").value);
+  var sm = new difflib.SequenceMatcher(base, newtxt);
+  var opcodes = sm.get_opcodes();
+  var diffoutputdiv = $("diffoutput");
+  while (diffoutputdiv.firstChild) diffoutputdiv.removeChild(diffoutputdiv.firstChild);
+  //var contextSize = $("contextSize").value;
+  //contextSize = contextSize ? contextSize : null;
+  diffoutputdiv.appendChild(diffview.buildView({ baseTextLines:base,
+                           newTextLines:newtxt,
+                           opcodes:opcodes,
+                           baseTextName:"The Book's Program",
+                           newTextName:"Your Program",
+                           contextSize:null, // I've removed the contextSize field from the form.
+                           viewType: 0 }));
+  window.location = url + "#diff";
+}
+
+function onPageLoad() {
+  // the optional "p" GET parameter can set the default program selected.
+  var getVars = getUrlVars();
+  var allPrograms = ["Bagels", "Birthday Paradox Simulation", "Bitmap Message", "Blackjack", "Bouncing DVD Logo", "Caesar Cipher", "Caesar Cipher Hacker", "Calendar Maker", "Carrot in a Box", "Cho-Han", "Clickbait Headline Generator", "Collatz Sequence", "Conway's Game of Life", "Countdown", "Deep Cave", "Diamonds", "Dice Math", "Dice Roller", "Digital Clock", "Digital Stream", "DNA", "Duckling Screensaver", "Etching Drawer", "Factor Finder", "Fast Draw", "Fibonacci Sequence", "Fish Tank", "Flooder", "Forest Fire Sim", "Four in a Row", "Guess the Number", "Gullible", "Hacking Minigame", "Hangman", "Hex Grid", "Hour Glass Animation", "Hungry Robots", "J'ACCUSE!", "Langton's Ant", "Leetspeak", "Lucky Stars", "Magic Fortune Ball", "Mancala", "Maze Runner 2D", "Maze 3D", "Million Dice Roll Statistics Simulator", "Mondrian Art Generator", "The Monty Hall Problem", "Multiplication Table", "Ninety-Nine Bottles of Milk on the Wall", "niNety-nniinE BoOttels of Mlik On teh waLl", "Numeral System Counters", "Periodic Table of Elements", "Pig Latin", "Powerball Lottery", "Prime Numbers", "Progress Bar Simulation", "Rainbow", "Rock", "Rock", "ROT13 Cipher", "Rotating Cube", "The Royal Game of Ur", "Sevseg", "Shining Carpet", "Simple Substitution Cipher", "Sine Message", "Sliding Tile Puzzle", "Snail Race", "Soroban Japanese Abacus", "Sound Mimic", "sPoNgEcAsE", "Sudoku Puzzle", "Text To Speech Talker", "Three-Card Monte", "Tic-Tac-Toe", "The Tower of Hanoi", "Trick Questions", "Twenty Forty Eight", "Vigenère Cipher", "Water Bucket Puzzle"];
+
+  if ((getVars['p']) && (allPrograms.indexOf(getVars['p']) != -1)) {
+    $('programSelect').value = getVars['p'];
+  }
+}
+
+dojo.addOnLoad(onPageLoad);
+</script>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <h2>Online Diff Tool</h2>
+
+      <p>A <a href="https://en.wikipedia.org/wiki/Diff_utility">diff tool</a> shows you the differences between two pieces of text. If the program you copied from the book isn't working, you can copy/paste it here to see any differences between your code and the code in the book.</p>
+
+      <p>Common errors include missing commas, unclosed string quotes, or uneven indentation.</p>
+
+      <p><strong>NOTE:</strong> This page is for the 4th edition (with a snake on the cover). If you want to compare your code to the 3rd edition (with a dragon on the cover) book, <a href="../../diff/3rdedition.html">use the 3rd edition diff tool</a>.</p>
+
+<table border="0">
+    <tr>
+        <td valign="top">
+            <p>Select program:</p>
+
+            <select name='programSelect' id='programSelect' size="16" style="vertical-align: text-top">
+<option value="Bagels">Bagels</option>
+<option value="Birthday Paradox Simulation">Birthday Paradox Simulation</option>
+<option value="Bitmap Message">Bitmap Message</option>
+<option value="Blackjack">Blackjack</option>
+<option value="Bouncing DVD Logo">Bouncing DVD Logo</option>
+<option value="Caesar Cipher">Caesar Cipher</option>
+<option value="Caesar Cipher Hacker">Caesar Cipher Hacker</option>
+<option value="Calendar Maker">Calendar Maker</option>
+<option value="Carrot in a Box">Carrot in a Box</option>
+<option value="Cho-Han">Cho-Han</option>
+<option value="Clickbait Headline Generator">Clickbait Headline Generator</option>
+<option value="Collatz Sequence">Collatz Sequence</option>
+<option value="Conway's Game of Life">Conway's Game of Life</option>
+<option value="Countdown">Countdown</option>
+<option value="Deep Cave">Deep Cave</option>
+<option value="Diamonds">Diamonds</option>
+<option value="Dice Math">Dice Math</option>
+<option value="Dice Roller">Dice Roller</option>
+<option value="Digital Clock">Digital Clock</option>
+<option value="Digital Stream">Digital Stream</option>
+<option value="DNA">DNA</option>
+<option value="Duckling Screensaver">Duckling Screensaver</option>
+<option value="Etching Drawer">Etching Drawer</option>
+<option value="Factor Finder">Factor Finder</option>
+<option value="Fast Draw">Fast Draw</option>
+<option value="Fibonacci Sequence">Fibonacci Sequence</option>
+<option value="Fish Tank">Fish Tank</option>
+<option value="Flooder">Flooder</option>
+<option value="Forest Fire Sim">Forest Fire Sim</option>
+<option value="Four in a Row">Four in a Row</option>
+<option value="Guess the Number">Guess the Number</option>
+<option value="Gullible">Gullible</option>
+<option value="Hacking Minigame">Hacking Minigame</option>
+<option value="Hangman">Hangman</option>
+<option value="Hex Grid">Hex Grid</option>
+<option value="Hour Glass Animation">Hour Glass Animation</option>
+<option value="Hungry Robots">Hungry Robots</option>
+<option value="J'ACCUSE!">J'ACCUSE!</option>
+<option value="Langton's Ant">Langton's Ant</option>
+<option value="Leetspeak">Leetspeak</option>
+<option value="Lucky Stars">Lucky Stars</option>
+<option value="Magic Fortune Ball">Magic Fortune Ball</option>
+<option value="Mancala">Mancala</option>
+<option value="Maze Runner 2D">Maze Runner 2D</option>
+<option value="Maze 3D">Maze 3D</option>
+<option value="Million Dice Roll Statistics Simulator">Million Dice Roll Statistics Simulator</option>
+<option value="Mondrian Art Generator">Mondrian Art Generator</option>
+<option value="The Monty Hall Problem">The Monty Hall Problem</option>
+<option value="Multiplication Table">Multiplication Table</option>
+<option value="Ninety-Nine Bottles of Milk on the Wall">Ninety-Nine Bottles of Milk on the Wall</option>
+<option value="niNety-nniinE BoOttels of Mlik On teh waLl">niNety-nniinE BoOttels of Mlik On teh waLl</option>
+<option value="Numeral System Counters">Numeral System Counters</option>
+<option value="Periodic Table of Elements">Periodic Table of Elements</option>
+<option value="Pig Latin">Pig Latin</option>
+<option value="Powerball Lottery">Powerball Lottery</option>
+<option value="Prime Numbers">Prime Numbers</option>
+<option value="Progress Bar Simulation">Progress Bar Simulation</option>
+<option value="Rainbow">Rainbow</option>
+<option value="Rock">Rock</option>
+<option value="Rock">Rock</option>
+<option value="ROT13 Cipher">ROT13 Cipher</option>
+<option value="Rotating Cube">Rotating Cube</option>
+<option value="The Royal Game of Ur">The Royal Game of Ur</option>
+<option value="Sevseg">Sevseg</option>
+<option value="Shining Carpet">Shining Carpet</option>
+<option value="Simple Substitution Cipher">Simple Substitution Cipher</option>
+<option value="Sine Message">Sine Message</option>
+<option value="Sliding Tile Puzzle">Sliding Tile Puzzle</option>
+<option value="Snail Race">Snail Race</option>
+<option value="Soroban Japanese Abacus">Soroban Japanese Abacus</option>
+<option value="Sound Mimic">Sound Mimic</option>
+<option value="sPoNgEcAsE">sPoNgEcAsE</option>
+<option value="Sudoku Puzzle">Sudoku Puzzle</option>
+<option value="Text To Speech Talker">Text To Speech Talker</option>
+<option value="Three-Card Monte">Three-Card Monte</option>
+<option value="Tic-Tac-Toe">Tic-Tac-Toe</option>
+<option value="The Tower of Hanoi">The Tower of Hanoi</option>
+<option value="Trick Questions">Trick Questions</option>
+<option value="Twenty Forty Eight">Twenty Forty Eight</option>
+<option value="Vigenère Cipher">Vigenère Cipher</option>
+<option value="Water Bucket Puzzle">Water Bucket Puzzle</option>
+
+            </select>
+        </td>
+        <td width="700">
+            <p>Copy and paste your code here:</p>
+            <textarea id="newText" style="width:100%;height:300px"></textarea><br />
+        </td>
+    </tr>
+    <tr>
+        <td align="right" colspan="2">
+            <input type="button" value="Compare" onclick="javascript:diffUsingJS();"/>
+        </td>
+    </tr>
+</table>
+
+
+
+<a name="diff"> </a>
+<div id="diffoutput" style="width:100%"> </div>
+
+
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}

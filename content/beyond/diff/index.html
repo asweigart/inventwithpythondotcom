@@ -4,7 +4,7 @@
 {% block content %}
 
 <script type="text/javascript" src="/dojo.js"></script>
-<script type="text/javascript" src="sourceCodesBeyond.js"></script>
+<script type="text/javascript" src="/sourceCodesBeyond.js"></script>
 <script type="text/javascript" src="/diff/diffview.js"></script>
 <link rel="stylesheet" type="text/css" href="/diff/diffview.css"/>
 <script type="text/javascript" src="/diff/difflib.js"></script>
@@ -76,7 +76,8 @@ function diffUsingJS() {
 function onPageLoad() {
   // the optional "p" GET parameter can set the default program selected.
   var getVars = getUrlVars();
-  var allPrograms = ['abcTraceback', 'zeroDivideTraceback', 'towerofhanoi', 'fourinarow', 'wcexample1', 'wizcoin', 'wcexample2', 'privateExampe', 'tictactoe', 'tictactoe_oop', 'inheritanceExample', 'flyingboat', 'regularAttributeExample', 'propertiesExample', 'badPropertyExample', ];
+  // TODO add wizcoin
+  var allPrograms = ['abcTraceback', 'zeroDivideTraceback', 'towerofhanoi', 'fourinarow', 'wcexample1', 'wcexample2', 'privateExample', 'tictactoe', 'tictactoe_oop', 'inheritanceExample', 'flyingboat', 'regularAttributeExample', 'propertiesExample', 'badPropertyExample', ];
 
   if ((getVars['p']) && (allPrograms.indexOf(getVars['p']) != -1)) {
     $('programSelect').value = getVars['p'];
@@ -95,35 +96,28 @@ dojo.addOnLoad(onPageLoad);
 
       <p>Common errors include missing commas, unclosed string quotes, or uneven indentation.</p>
 
-      <p><strong>NOTE:</strong> This page is for the 4th edition (with a snake on the cover). If you want to compare your code to the 3rd edition (with a dragon on the cover) book, <a href="../../diff/3rdedition.html">use the 3rd edition diff tool</a>.</p>
-
 <table border="0">
     <tr>
         <td valign="top">
             <p>Select program:</p>
 
             <select name='programSelect' id='programSelect' size="16" style="vertical-align: text-top">
-                <option value='AISim1'>AISim1.py</option>
-                <option value='AISim2'>AISim2.py</option>
-                <option value='AISim3'>AISim3.py</option>
-                <option value='animation'>animation.py</option>
-                <option value='bagels'>bagels.py</option>
-                <option value='buggy'>buggy.py</option>
-                <option value='cipher'>cipher.py</option>
-                <option value='coinFlips'>coinFlips.py</option>
-                <option value='collisionDetection'>collisionDetection.py</option>
-                <option value='dodger'>dodger.py</option>
-                <option value='dragon'>dragon.py</option>
-                <option value='guess'>guess.py</option>
-                <option value='hangman'>hangman.py</option>
-                <option value='hangman2'>hangman2.py</option>
-                <option value='hello'>hello.py</option>
-                <option value='jokes'>jokes.py</option>
-                <option value='pygameHelloWorld'>pygameHelloWorld.py</option>
-                <option value='reversegam'>reversegam.py</option>
-                <option value='sonar'>sonar.py</option>
-                <option value='spritesAndSounds'>spritesAndSounds.py</option>
+                <option value='abcTraceback'>abcTraceback.py</option>
+                <option value='zeroDivideTraceback'>zeroDivideTraceback.py</option>
+                <option value='towerofhanoi'>towerofhanoi.py</option>
+                <option value='fourinarow'>fourinarow.py</option>
+                <option value='wcexample1'>wcexample1.py</option>
+                <option value='wizcoin'>wizcoin.py</option>
+                <option value='wcexample2'>wcexample2.py</option>
+                <option value='privateExample'>privateExample.py</option>
                 <option value='tictactoe'>tictactoe.py</option>
+                <option value='tictactoe_oop'>tictactoe_oop.py</option>
+                <option value='inheritanceExample'>inheritanceExample.py</option>
+                <option value='flyingboat'>flyingboat.py</option>
+                <option value='regularAttributeExample'>regularAttributeExample.py</option>
+                <option value='propertiesExample'>propertiesExample.py</option>
+                <option value='badPropertyExample'>badPropertyExample.py</option>
+
             </select>
         </td>
         <td width="700">

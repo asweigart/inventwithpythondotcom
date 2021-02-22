@@ -7,7 +7,18 @@
     </head>
     <body>
 
-            <p>You've written a Python 3 program and want to make it available in other languages. You <em>could</em> duplicate the entire code-base, then go painstakingly through each .py file and replace any text strings you find. But this would mean you have two separate copies of your code, which doubles your workload every time you need to make a change or fix a bug. And if you want your program in other languages, it gets even worse.</p>
+<!-- Check out these links and maybe add them to this blog post:
+https://phrase.com/blog/posts/translate-python-gnu-gettext/
+https://lingohub.com/blog/2013/07/php-internationalization-with-gettext-tutorial
+https://www.gnu.org/software/libc/manual/html_node/Translation-with-gettext.html
+https://www.gnu.org/software/gawk/manual/html_node/Explaining-gettext.html
+-->
+
+<!-- TODO
+<p>UPDATED: </p>
+-->
+
+<p>You've written a Python 3 program and want to make it available in other languages. You <em>could</em> duplicate the entire code-base, then go painstakingly through each .py file and replace any text strings you find. But this would mean you have two separate copies of your code, which doubles your workload every time you need to make a change or fix a bug. And if you want your program in other languages, it gets even worse.</p>
 <p>Fortunately, Python provides a solution with the <code>gettext</code> module.</p>
 <p><span id="more-1893"></span></p>
 <h3>A Hack Solution</h3>
@@ -53,7 +64,7 @@ print(_('Good job, %s! You guessed my number in %s guesses!') % (myName, guesses
 <p>In the <em>Tools/i18n</em> of your Python installation (<em>C:\Python34\Tools\i18n</em> on Windows) is the <em>pygettext.py</em> script. While the normal gettext unix command parse C/C++ source code for translatable strings and the xgettext unix command can parse other languages, <em>pygettext.py</em> knows how to parse Python source code. It will find all of these strings and produce a "pot" file.</p>
 <p>On Windows, I've run this script like so:</p>
 <pre>C:\>py -3.4 C:\Python34\Tools\i18n\pygettext.py -d guess guess.py</pre>
-<p>This creates a pot file named <em>guess.pot</em>. This is just a normal plaintext file that lists all the translated strings it found in the source code by search for <code>_()</code> calls. You can <a href="/blogstatic/gettext/guess.pot?27f655">view the <em>guess.pot</em> file here</a>.</p>
+<p><!-- TODO explain the -d and domains -->This creates a pot file named <em>guess.pot</em>. This is just a normal plaintext file that lists all the translated strings it found in the source code by search for <code>_()</code> calls. You can <a href="/blogstatic/gettext/guess.pot?27f655">view the <em>guess.pot</em> file here</a>.</p>
 <h3>Step 3: Translate the Strings using Poedit</h3>
 <p>You could fill in the translation using a text editor, but the free Poedit software makes it easier. <a href="http://poedit.net" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://poedit.net', 'Download it from http://poedit.net']);" >Download it from http://poedit.net</a>. Select <strong>File > New from POT/PO file...</strong> and select your <em>guess.po</em> file.</p>
 <p><img src="/blogstatic/gettext/poedit_new.jpg?27f655" /></p>
@@ -68,7 +79,7 @@ print(_('Good job, %s! You guessed my number in %s guesses!') % (myName, guesses
 ./locale/es/LC_MESSAGES/guess.po
 ./locale/de/LC_MESSAGES/guess.mo
 ./locale/de/LC_MESSAGES/guess.po</pre>
-<p>These two-character language names like "es" for Spanish and "de" for German are called <a href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes', 'ISO 639-1 codes']);" >ISO 639-1 codes</a> and are standard abbreviations for languages. You don't <em>have</em> to use them, but it makes sense to follow that naming standard.</p>
+<p><!-- TODO Explain that this folder structure is specified in the gettext.translation() function call -->These two-character language names like "es" for Spanish and "de" for German are called <a href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes', 'ISO 639-1 codes']);" >ISO 639-1 codes</a> and are standard abbreviations for languages. You don't <em>have</em> to use them, but it makes sense to follow that naming standard.</p>
 <h3>Step 4: Add gettext Code to Your Program</h3>
 <p>Now that you have the .mo file that contains the translations, modify your Python script to use it. Add the following to your program:</p>
 <pre>import gettext
@@ -76,12 +87,13 @@ es = gettext.translation('guess', localedir='locale', languages=['es'])
 es.install()</pre>
 <p>The first argument <code>'guess'</code> is the "domain", which basically means the "guess" part of the <em>guess.mo</em> filename. The <code>localedir</code> is the directory location of the <em>locale</em> folder you created. This can be either a relative or absolute path. The <code>'es'</code> string describes the folder under the <em>locale</em> folder. The <em>LC_MESSAGES</em> folder is a standard name</p>
 <p>The <code>install()</code> method will cause all the <code>_()</code> calls to return the Spanish translated string. If you want to go back to the original English, just assign a lambda function value to <code>_</code> that returns the string it was passed:</p>
-<pre>import gettext
-es = gettext.translation('guess', localedir='locale', languages=['es'])
+<pre>import gettext, os
+FOLDER_OF_THIS_FILE = os.path.dirname(os.path.abspath(__file__))
+esLang = gettext.translation('guess', localedir=os.path.join(FOLDER_OF_THIS_FILE, 'locale'), languages=['es'])
+esLang.install()  # All _() calls return Spanish strings after this point.
 print(_('Hello! What is your name?'))  # prints Spanish
+</pre>
 
-_ = lambda s: s</pre>
-<p>print(_('Hello! What is your name?'))  # prints English</p>
 <p>You can <a href="/blogstatic/gettext/guess.py">view the translation-ready source code for the "Guess the Number"</a>. If you want to run this program, <a href="/blogstatic/gettext/guess_gettext.zip?27f655">download and unzip this zip file</a> with it's <em>locale</em> folders and .mo file set up.</p>
 <h3>Further Reading</h3>
 <p>I am by no means an expert on I18N or gettext, and please leave comments if I'm breaking any best practices in this tutorial. Most of the time your software will not switch languages while it's running, and instead read one of the <code>LANGUAGE</code>, <code>LC_ALL</code>, <code>LC_MESSAGES</code>, and <code>LANG</code> environment variables to figure out the locale of the computer it's running on. I'll update this tutorial as I learn more.</p>

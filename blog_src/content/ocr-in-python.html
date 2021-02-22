@@ -1,0 +1,57 @@
+<html>
+    <head>
+        <title>Text Recognition in Python with pytesseract</title>
+        <meta name="tags" content="" />
+        <meta name="date" content="2021-01-11 12:01" />
+        <meta name="summary" content="" />
+    </head>
+    <body>
+
+<p>Extracting text as string values from images is called <em>optical character recognition</em> (OCR) or simply <em>text recognition</em>. This blog post tells you how to run the Tesseract OCR engine from Python. For example, if you have the following image stored in <a href="/blogstatic/diploma_legal_notes.png">diploma_legal_notes.png</a>, you can run OCR over it to extract the string of text.</p>
+
+<p><img src="/blogstatic/diploma_legal_notes.png" /></p>
+
+<blockquote><code>' \n\n \n\nCLASS OF 2019!\n\nYOUR DIPLOMA GRANTS YOU MANY NEW\nPOWERS AND PRIVILEGES. THESE INCLUDE:\n\n+ YOU MAY NOW LEGALLY PERFORM\nMARRIAGES AND ARREST PEOPLE.\n\n+ IF YOU HAVE YOUR DIPLOMA WITH YOU,\nYOU CAN USE. GROCERY STORE EXPRESS\nLANES WITH ANY NUMBER OF ITEMS.\n\n+ ALL GRADUATES ARE ENTITLED To\nDELETE ONE WORD OF THEIR CHOICE.\nFROM THE OXFORD ENGUSH DICTIONARY.\n+ THE UNIVERSITY WILL MAIL YOU YOUR’\nWORKING LIGHTSABER WITHIN 6-8 WEEKS.\n* YOU CAN SEND MAIL WITHOUT STAMPS.\n+ YOU HAVE EARNED THE RIGHT TO\nCHALLENGE THE BRITISH ROYAL FAMILY\nTO TRIAL BY COMBAT. IF YOU DEFEAT\nTHEM ALL, THE THRONE |S YOURS.\n\n* YOU MAY NOL IGNORE. "DO NOT PET”\nWARNINGS ON AIRPORT SECURITY DOGS.\n\n= CONGRATULATIONS,\n\n \n\n \n\x0c'</code></blockquote>
+
+<p>Notice that the text recognition isn't quite perfect. The "CONGRATULATIONS" at the top is mistakenly placed at the bottom, the word "NOW" is recognized as "NOL", the word "IS" has a vertical pipe character "|" instead of a capital "I", and there seems to be some confusing punctuation marks added in. Cleaning up your OCR scans depends on your particular project. This blog post will simply show you the code to do OCR from Python.</p>
+
+<h2>Installing Tesseract</h2>
+
+<p>First, run <code>pip install pytesseract</code>. The <a href="https://pypi.org/project/pytesseract/">pytesseract</a> package is a Python wrapper for the Tesseract OCR engine. If you need help running pip, see <a href="https://inventwithpython.com/blog/2021/01/11/a-quick-pip-guide-how-to-install-python-modules/">A Quick Pip Guide</a> or <a href="https://realpython.com/what-is-pip/">What Is Pip? A Guide for New Pythonistas</a>.</p>
+
+<p>At this point, if you tried to use the <code>pytesseract</code> module, you'd get a <code>TesseractNotFoundError</code> message that says, <code>tesseract is not installed or it's not in your path</code>. (You can learn about the PATH environment variable in <a href="">Chapter 2 of my free book, Beyond the Basic Stuff with Python</a>.) Let's install the Tesseract OCR engine itself next.</p>
+
+<p>On Windows, you can download <a href="https://digi.bib.uni-mannheim.de/tesseract/tesseract-ocr-w64-setup-v5.0.0-alpha.20201127.exe">the installer for version 5.0.0 of Tesseract</a> and run the installer. (To get the latest version of Tesseract, go to the <a href="https://github.com/UB-Mannheim/tesseract/wiki">Tesseract at UB Mannheim web page</a>.)</p>
+
+<p>On macOS, according to <a href="https://guides.library.illinois.edu/c.php?g=347520&p=4121425">this article</a>, you can install Tesseract with Brew by opening a Terminal window and running <code>brew install tesseract --all-languages</code>. You can also install Tesseract on macOS with MacPorts by running <code>sudo port install Tesseract</code>, then run <code>sudo port install tesseract-eng</code> to install the English language. For other languages, <a href="https://ports.macports.org/?search=tesseract-&search_by=name">use the language codes listed in this link</a>.</p>
+
+<p>On Linux, Tesseract may already be installed. If it isn't, according to <a href="https://linuxhint.com/install-tesseract-ocr-linux/">this article</a>, you can run the following:</p>
+
+<p>On Ubuntu, run <code>sudo apt-get install tesseract-ocr</code> and then <code>sudo apt-get install tesseract-ocr-all</code> to install all languages. You also need to install ImageMagick for its <code>convert</code> program by running <code>sudo apt-get install imagemagick</code>.</p>
+
+<p>On Fedora, run <code>sudo dnf install tesseract</code></p>
+
+<p>On Manjaro, run <code>sudo pacman -Syu tesseract</code></p>
+
+<h2>Installing Pillow</h2>
+
+<p>The pytesseract module also requires the Pillow module for Python. You can install with pip by running <code>pip install pillow</code> on Windows or <code>pip3 install pillow</code> on macOS and Linux.</p>
+
+<h2>Running Tesseract from Python</h2>
+
+<p>To extract text from an image file named <em>image.png</em>, run the following code:</p>
+
+<pre>import pytesseract as tess
+from PIL import Image
+img = Image.open('image.png')
+text = tess.image_to_string(img)
+print(text)</pre>
+
+<p>The recognized text in the image is returned as a string value from <code>image_to_string()</code>.</p>
+
+<h2>Additional Resources</h2>
+
+<p>To see an example of all of these steps, check out this YouTube video: <a href="https://www.youtube.com/watch?v=4DrCIVS5U3Y">Image to Text with pytesseract</a></p>
+
+</body>
+</html>
