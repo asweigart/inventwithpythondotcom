@@ -1,0 +1,929 @@
+<!doctype html>
+<html>
+
+<!--
+Copyright (c) 2012 Greg Reimer
+http://obadger.com/
+"gregreimer" "at" "gmail" "dot" "com"
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
+
+<head>
+<title>JavaScript Turtle Graphics</title>
+
+	<meta property="og:title" content="JavaScript Turtle Graphics">
+	<meta property="og:image" content="/turtle/spiro.jpg">
+	<meta property="og:description" content="Fun for programming geeks. Use simple JavaScript commands to make the turtle race around the screen.">
+
+<style type="text/css">
+body{
+	font-size:14px;
+	font-family:helvetica,arial,sans-serif;
+	background:#aaa;
+	overflow:hidden;
+}
+h1,h2,h3,h4,h5,h6,p,ol,ul,dl,pre{
+	margin-top:10px;
+	margin-bottom:10px;
+}
+a[href]{
+	color:inherit;
+	text-decoration: none;
+}
+.mess{
+	position:fixed;
+	margin:0;
+	top:0;
+	left:0;
+	background:#fff;
+	color:#000;
+	padding:7px 20px;
+	opacity:.4;
+	letter-spacing:1px;
+}
+#turtle{
+	position:absolute;
+	top:0;
+	left:0;
+	width:41px;
+	height:41px;
+	margin:-21px;
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACkAAAApCAYAAACoYAD2AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAIFJREFUeNrs1dEGwDAMRuEm9t7rnjwzNmaM0j+TcXLVq/gcoRYRrfp4+8GABAkSJMjvkat6oSV8i8dCq4y8V9yqIq+K0pourtjPd1feprLks56spidUbOqaqpJv1SQ1PamitKai5MiCqZqL4mT4u0GCBAkSJEiQIEGCBAlyfHYBBgA6tCSzDhxhwgAAAABJRU5ErkJggg==);
+	background-image: url(turtle.png);
+	-webkit-transform-origin: 50% 50%;
+	   -moz-transform-origin: 50% 50%;
+	        transform-origin: 50% 50%;
+}
+#c{
+	position:absolute;
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
+	width:100%;
+	height:100%;
+	background-color:#000;
+}
+#control{
+	position:absolute;
+	left:0;
+	right:0;
+	bottom:0;
+	background-color: #000;
+	color:#fff;
+	opacity:.5;
+	border-top:1px solid rgba(255,255,255,0.4);
+	padding:10px 50px 10px 38px;
+	font-size:20px;
+	font-family: Inconsolata, Consolas, 'courier new', monospace;
+}
+#control:before{
+	content:'';
+	position: absolute;
+	left:17px;
+	top:16px;
+	width:8px;
+	height:12px;
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAMCAYAAABfnvydAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAEJJREFUeNpi+P//PwMQ5wKxBJSNgmGSIHADmyIGqOANXIpgDJyKkI3DqgjdURiKmBgIAWKtwOtIgt4kGFB4gxogwADPNiDlqExOKQAAAABJRU5ErkJggg==);
+
+}
+#esctip{
+	position: absolute;
+	bottom:100%;
+	left:0;
+	margin:0 0 1px;
+	padding:6px 7px;
+	font-size:12px;
+	color:#fff;
+	background:#222;
+	opacity:.75;
+}
+#input,
+#biginput{
+	color:inherit;
+	font:inherit;
+	width:100%;
+	margin:0;
+	padding:0;
+	border:none;
+	background-color: transparent;
+	line-height:1;
+	position: relative;
+}
+#input:focus,
+#biginput:focus{
+	outline:none;
+}
+#biginput{
+	height:1em;
+	resize:none;
+	-webkit-transition:height 300ms ease-in-out;
+	   -moz-transition:height 300ms ease-in-out;
+	        transition:height 300ms ease-in-out;
+}
+#althint{
+	position: absolute;
+	left:0;
+	right:0;
+	text-align: center;
+	top:50%;
+	margin-top:-27px;
+	font:bold 30px/1.3 helvetica,arial,sans-serif;
+	opacity:.2;
+}
+#expand,
+#collapse{
+	position: absolute;
+	top:0;
+	right:0;
+	width:40px;
+	border:none;
+	margin:0;
+	padding:0;
+	cursor:pointer;
+	color:transparent;
+	font-size:0;
+	background-color:transparent;
+	background-repeat:no-repeat;
+	background-position: 50% 50%;
+	opacity:.5;
+}
+#expand{
+	bottom:0;
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAARCAYAAADQWvz5AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAIVJREFUeNrs0sEJwCAMBVBTOoEguP8encGrI/TUFVKF0AYbk/TSUwNBkO8jYAARg1GRzkMLLQ5ko45qsk806di64F2F7sS8FzExC6kMqRpmIZlBWcM4kgQkMCgIWJpNNCIjNGLXWxD2KLfe+cfSCUpGhB4bIkCvF9JdP/QhtDoy4IFOAQYAIVd4gaJr3SIAAAAASUVORK5CYII=);
+}
+#collapse{
+	height:40px;
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAARCAYAAADQWvz5AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAIRJREFUeNrs0s0JgDAMBWC7QkDoPs7tDL06gqeuEFNIIU2TVtCbBh794fnhoQERlzcm3IBqIfzQF6BIOSeQ7lCLIJEyByWqOxTnyB1510ArJRmYhCSS+JsOKgEDq6MR8P7Iw1DtO8SDNCbHREaQhblIyewdAWXn/UbJTx4k8JpHpUuAAQCOQ5bABCYU5gAAAABJRU5ErkJggg==);
+}
+#tip{
+	position:absolute;
+	bottom:100%;
+	margin:0;
+	margin-bottom:1px;
+	right:0;
+	font:normal 14px/1.4 helvetica,arial,sans-serif;
+	background:#fff;
+	color:#000;
+	padding:10px 15px;
+	opacity:.4;
+}
+#help{
+	position:fixed;
+	overflow:auto;
+	left:0;
+	top:0;
+	right:0;
+	bottom:0;
+	z-index:10;
+	color:#cfc;
+	font-size:13px;
+	line-height:1.4;
+	font-family: Inconsolata, Consolas, 'courier new', monospace;
+	background:#222;
+}
+#help.hidden{
+	display:none;
+}
+#help a[href]{
+	color:#fff;
+	text-decoration: none;
+}
+#helpesctip{
+	position:absolute;
+	margin:0;
+	top:20px;
+	right:25px;
+	z-index:1;
+}
+#help h2{
+	color:#ffa;
+}
+#help h2,
+#help h3{
+	font-size:inherit;
+}
+#help h3{
+	font-weight:normal;
+}
+#help h3 + pre{
+	margin-top:-6px;
+}
+#help p + h2,
+#help pre + h2{
+	margin-top:20px;
+}
+#help table{
+	border-collapse:collapse;
+	border:1px solid #444;
+	margin:20px 0;
+	background:#262626;
+}
+#help table th,
+#help table td{
+	font-weight: normal;
+	text-align:left;
+	border:1px solid #444;
+	padding:3px 7px;
+	vertical-align:top;
+}
+#help table th{
+	color:#777;
+	background:#2a2a2a;
+}
+#help code{
+	color:#fff;
+}
+#help pre{
+	color:#ccc;
+}
+#helpA,
+#helpB{
+	padding:10px 25px 300px;
+	-webkit-box-sizing:border-box;
+	   -moz-box-sizing:border-box;
+	        box-sizing:border-box;
+	position:absolute;
+	top:0;
+}
+#helpA{
+	width:60%;
+	left:0;
+	padding-right:100px;
+}
+#helpB{
+	width:40%;
+	right:0;
+	border-left:1px dotted rgba(255,255,255,0.15);
+}
+#helpB h3{
+	border-top:1px dotted rgba(255,255,255,0.15);
+	padding-top:10px;
+	margin-left:-25px;
+	padding-left:25px;
+	margin-right:-25px;
+	padding-right:25px;
+	position: relative;
+}
+.runner{
+	position: absolute;
+	top:0;
+	right:0;
+	padding:5px 15px;
+	border:1px dotted rgba(255,255,255,0.15);
+	border-width:0 0 1px 1px;
+	color:#aaa!important;
+}
+a[href].runner:hover{
+	background:rgba(255,255,255,0.05);
+}
+a[href].toggle-help{
+	color: inherit;
+	font-style:italic;
+}
+</style>
+<script src="jquery-1.8.0.min.js"></script>
+<script src="jtg.js"></script>
+</head>
+<body>
+<div id="help" class="hidden">
+	<p id="helpesctip">
+		Press F1 or <a href="#" class="toggle-help">click here</a> to show/hide this help
+	</p>
+	<div id="helpA">
+		<h2>Welcome to JavaScript Turtle Graphics!</h2>
+		<p>
+			Type your commands at the prompt and see them faithfully executed by our eponymous turtle.
+			Press F1 to toggle between the prompt and this help screen.
+		</p>
+		<p>
+			What's turtle graphics?
+			<a href="http://en.wikipedia.org/wiki/Turtle_graphics">From Wikipedia</a>: "Turtle graphics is a term in computer graphics for a method of programming vector graphics using a relative cursor (the "turtle") upon a Cartesian plane.
+			Turtle graphics is a key feature of the Logo programming language."
+		</p>
+		<p>
+			Here, you'll be programming in JavaScript instead of the Logo language, but you still get to watch a triangle race around the screen!
+			The interactive prompt below exposes the valiable <code>t</code>, which is an instance of class <code>Turtle</code>.
+			Here's a quick rundown of its methods.
+		</p>
+		<table>
+			<thead><tr><th>method</th><th>description</th></tr></thead>
+			<tbody>
+			<tr><td><code>t.fd(n)</code></td><td>Forward. Move ahead by <code>n</code> pixels.</td></tr>
+			<tr><td><code>t.bk(n)</code></td><td>Back. Move in reverse by <code>n</code> pixels.</td></tr>
+			<tr><td><code>t.rt(deg)</code></td><td>Right turn. Rotate <code>deg</code> clockwise.</td></tr>
+			<tr><td><code>t.lt(deg)</code></td><td>Left turn. Rotate <code>deg</code> counter-clockwise.</td></tr>
+			<tr><td><code>t.pu()</code></td><td>Pen up. Turtle no longer traces line along its path.</td></tr>
+			<tr><td><code>t.pd()</code></td><td>Pen down. Turtle resumes tracing line along its path.</td></tr>
+			<tr><td><code>t.circle(radius)</code></td><td>Make an empty circle with midpoint at turtle position, with given <code>radius</code>.</td></tr>
+			<tr><td><code>t.disc(radius)</code></td><td>Make a solid disc with midpoint at turtle position, with given <code>radius</code>.</td></tr>
+			<tr><td><code>t.clean(bgColor)</code></td><td>Erases all lines. If <code>bgColor</code> is provided, updates background color.</td></tr>
+			<tr><td><code>t.home()</code></td><td>Revert turtle to center screen (0,0) and facing "north".</td></tr>
+			<tr><td><code>t.clear()</code></td><td>Equivalent to <code>clean()</code> and <code>home()</code> together.</td></tr>
+			<tr><td><code>t.reset()</code></td><td>Same as <code>clear()</code>, but also restores defaults.</td></tr>
+			<tr><td><code>t.color(color)</code></td><td>Sets pen color. Accepts any CSS color.</td></tr>
+			<tr><td><code>t.thickness(n)</code></td><td>Sets the width in px of the pen stroke.</td></tr>
+			<tr><td><code>t.face(x, y)</code></td><td>Turtle faces toward the given absolute coordinate.</td></tr>
+			<tr><td><code>t.butt(x, y)</code></td><td>Turtle faces away from the given absolute coordinate.</td></tr>
+			<tr><td><code>t.xy(x, y)</code></td><td>Moves turtle to given absolute coords, where origin (0,0) is center of screen.</td></tr>
+			<tr><td><code>t.x(x)</code></td><td>Moves turtle to given absolute X coord, leaving Y coord unchanged.</td></tr>
+			<tr><td><code>t.y(y)</code></td><td>Moves turtle to given Y coord, leaving X coord unchanged.</td></tr>
+			<tr><td><code>t.heading(deg)</code></td><td>Sets absolute turtle direction in degrees, with 0 being "north".</td></tr>
+			</tbody>
+		</table>
+		<p>
+			The above methods all return <code>this</code>, so they can be chained, e.g. <code>t.fd(100).rt(90).fd(100)</code>.
+			You may also wish to query turtle state.
+			For that, we have the <code>get</code> methods.
+		</p>
+		<table>
+			<thead><tr><th>method</th><th>description</th></tr></thead>
+			<tbody>
+			<tr><td><code>t.get.x()</code></td><td>Turtle's x position where origin (0,0) is center of screen.</td></tr>
+			<tr><td><code>t.get.y()</code></td><td>Turtle's y position where origin (0,0) is center of screen.</td></tr>
+			<tr><td><code>t.get.heading()</code></td><td>Turtle's orientation in degrees, where 0 is "north".</td></tr>
+			<tr><td><code>t.get.pu()</code></td><td><code>true</code> if pen is up, <code>false</code> otherwise.</td></tr>
+			<tr><td><code>t.get.pd()</code></td><td><code>true</code> if pen is down, <code>false</code> otherwise.</td></tr>
+			<tr><td><code>t.get.color()</code></td><td>Pen color.</td></tr>
+			<tr><td><code>t.get.background()</code></td><td>Background color.</td></tr>
+			<tr><td><code>t.get.thickness()</code></td><td>Width in pixels of pen stroke.</td></tr>
+			<tr><td><code>t.get.top()</code></td><td>Top boundary of screen.</td></tr>
+			<tr><td><code>t.get.bottom()</code></td><td>Bottom boundary of screen.</td></tr>
+			<tr><td><code>t.get.left()</code></td><td>Left boundary of screen.</td></tr>
+			<tr><td><code>t.get.right()</code></td><td>Right boundary of screen.</td></tr>
+			<tr><td><code>t.get.oob()</code></td><td>Returns <code>true</code> if the turtle has moved out of bounds of the screen.</td></tr>
+			</tbody>
+		</table>
+		<p>
+			...and also some randomness functions for convenience.
+		</p>
+		<table>
+			<thead><tr><th>method</th><th>description</th></tr></thead>
+			<tbody>
+			<tr><td><code>t.rand.uni([lower, ]upper)</code></td><td>A uniform distribution between <code>lower</code> (or zero) and <code>upper</code>.</td></tr>
+			<tr><td><code>t.rand.norm(mean, stdDev)</code></td><td>A normal distribution with the given <code>mean</code> and <code>stdDev</code> (standard deviation).</td></tr>
+			<tr><td><code>t.rand.chance(odds)</code></td><td>Returns <code>true</code> with a probability of <code>odds</code>, where <code>odds</code> is between 0 and 1.</td></tr>
+			</tbody>
+		</table>
+		<h2>Depth notes I</h2>
+		<p>
+			JavaScript provides a number of ways to do loops, and you're certainly free to use them here.
+			Alternatively, the turtle gives you a couple of its own ways to do things over and over again.
+			This allows you to do loops the "turtle" way, which isn't necessarily better, just fitting with the rest of the API.
+		</p>
+		<table>
+			<thead><tr><th>method</th><th>description</th></tr></thead>
+			<tbody>
+			<tr><td><code>t.repeat(n, func)</code></td><td>Runs <code>func</code> until it returns false or until it runs <code>n</code> times, passing <code>i</code> as arg.</td></tr>
+			<tr><td><code>t.forever(func)</code></td><td>Runs <code>func</code> until it returns false, passing <code>i</code> as arg.</td></tr>
+			</tbody>
+		</table>
+		<h2>Depth notes II</h2>
+		<p>
+			Colors can take any form accepted by CSS or canvas.
+			This includes <code>"#fff"</code>, <code>"#ffffff"</code>, <code>"rgb(...)"</code>, <code>"hsl(...)"</code>, and even <code>"rgba(...)"</code> and <code>"hsla(...)"</code>.
+		</p>
+		<h2>Depth notes III</h2>
+		<p>
+			Some drawings finish quickly, while others take a long time.
+			This is because the drawing is rendered sequentially, piece by piece, and sometimes there are lots of pieces.
+			To speed things up, when the number of pieces gets quite long, more and more of them are batched together between renders.
+			When the drawing approaches the end, this batching decreases and then stops.
+			You'll see the turtle initially tear through the drawing at a high rate of speed, and then slow to a more leisurely pace at the end.
+			Your machine is actually working harder at the beginning of the drawing than at the end.
+		</p>
+		<h2>Depth notes IV</h2>
+		<p>
+			Who am I? My name is Greg Reimer.
+			I build web applications for fun and profit.
+			Find me on <a href="https://github.com/greim">github</a> and <a href="http://www.linkedin.com/profile/view?id=1191459">LinkedIn</a>.
+			This turtle graphics project is also <a href="https://github.com/greim/jtg">on github</a> under the MIT license.
+			If you write an awesome sample program that you think should be included here, send me a pull request!
+		</p>
+	</div>
+	<div id="helpB">
+		<h2>Sample Code</h2>
+		<h3>Sunburst <a href="#" class="runner" title="run this sample program" data-code="sunburst-code">run this example</a></h3>
+		<pre id="sunburst-code">
+t.reset()
+.color('rgba(255,255,255,0.15)')
+.repeat(720, function(i){
+  if(i%72 &lt; 36){
+    t.fd(2000).bk(2000);
+  }
+  t.rt(.5);
+})
+		</pre>
+		<h3>Interesting moir&#233; <a href="#" class="runner" title="run this sample program" data-code="moire-code">run this example</a></h3>
+		<pre id="moire-code">
+t.reset()
+.repeat(1000, function(i){
+  t.fd(i).rt(90.1)
+})
+		</pre>
+		<h3>Phi rays <a href="#" class="runner" title="run this sample program" data-code="phi-code">run this example</a></h3>
+		<pre id="phi-code">
+var phi = (Math.sqrt(5) + 1)/2;
+t.reset().color('rgba(255,255,255,0.2)')
+.repeat(987, function(){
+  t.fd(2000).pu().bk(2000).pd().rt(360*phi);
+});
+		</pre>
+		<h3>Random paths <a href="#" class="runner" title="run this sample program" data-code="random-code">run this example</a></h3>
+		<pre id="random-code">
+t.reset()
+.color('rgba(255,255,255,0.1)')
+.repeat(200000, function(){
+  t.fd(3).rt(t.rand.uni(-10,10))
+  if (t.get.oob()) t.home().rt(t.rand.uni(360))
+})
+		</pre>
+		<h3>Fun with spirograph <a href="#" class="runner" title="run this sample program" data-code="circles-code">run this example</a></h3>
+		<pre id="circles-code">
+t.reset()
+.repeat(10, function(){
+  t.repeat(36, function(i){
+    t.color('hsla('+(i*10)+',50%,50%,0.3)')
+    .repeat(36, function(){
+      t.fd(27).rt(10)
+    }).rt(10);
+  }).rt(1);
+});
+		</pre>
+		<h3>More fun with Phi <a href="#" class="runner" title="run this sample program" data-code="phi2-code">run this example</a></h3>
+		<pre id="phi2-code">
+var phi = (Math.sqrt(5) + 1)/2;
+t.reset().repeat(1000, function(i){
+  t.pu().rt(360*phi).fd(Math.log(i)*40).pd();
+  t.repeat(50, function(j){
+    t.color('hsla('+((360 * (i/1000))-120)+',50%,50%,'+ Math.pow(1.1,-j) +')').fd(2.5);
+  });
+  t.pu().xy(0,0).pd();
+});
+		</pre>
+		<h3>Cool thingy <a href="#" class="runner" title="run this sample program" data-code="phi3-code">run this example</a></h3>
+		<pre id="phi3-code">
+var phi = (Math.sqrt(5) + 1)/2;
+t.reset().repeat(3000, function(i){
+  t.pu().rt(360*phi).fd(Math.log(i)*40).pd();
+  t.repeat(25, function(j){
+    t.color('hsla('+((360 * (i/3000))-120)+',50%,50%,'+ Math.pow(1.2,-j) +')').fd(5).lt(2);
+  });
+  t.pu().xy(0,0).pd();
+});
+		</pre>
+		<h3>Circles <a href="#" class="runner" title="run this sample program" data-code="circles2-code">run this example</a></h3>
+		<pre id="circles2-code">
+var circle = (function(){
+  function circ(size, steps, level) {
+    t.repeat(2, function(){
+      if (level &gt; 0) { circ(size/2, steps, level-1); }
+      t.repeat(steps, function(){ t.fd((size/steps)*2).rt(180/steps); });
+    });
+  }
+  return function(size, steps, level){
+    var r = (size/Math.PI)*2;
+    t.pu().lt(90).fd(r).rt(90).pd().rt((180/steps)/2);
+    circ(size, steps, level);
+    t.lt((180/steps)/2).pu().rt(90).fd(r).lt(90).pd();
+  }
+})();
+t.reset().color('rgba(255,255,255,0.5)');
+circle(500, 20, 8);
+		</pre>
+		<h3>Sierpinski triangle 1 <a href="#" class="runner" title="run this sample program" data-code="sierpinski-code-1">run this example</a></h3>
+		<pre id="sierpinski-code-1">
+function triangle(len, level){
+  if (level &lt; 1) {
+    t.repeat(3, function(){
+      t.fd(len).rt(120);
+    });
+  } else {
+    t.repeat(3, function(){
+      t.pd();
+      triangle(len/2, level-1);
+      t.pu().fd(len).rt(120);
+    })
+  }
+}
+t.reset().xy(-300, -200).rt(30).clean();
+triangle(600, 7);
+		</pre>
+		<h3>Sierpinski triangle 2 <a href="#" class="runner" title="run this sample program" data-code="sierpinski-code-2">run this example</a></h3>
+		<pre id="sierpinski-code-2">
+var triangle = (function(){
+  function frag(len, depth, left){
+    if (left === undefined) left = !(depth % 2);
+    if (depth > 1) {
+      frag(len/2, depth-1, !left);
+      t[left?'lt':'rt'](60);
+      frag(len/2, depth-1, left);
+      t[left?'lt':'rt'](60);
+      frag(len/2, depth-1, !left);
+    } else {
+      t.fd(len);
+    }
+  }
+  return frag;
+})();
+t.reset().pu().bk(250).rt(90).bk(350).pd().color('hsl(30, 100%, 70%)');
+triangle(700, 8);
+		</pre>
+		<h3>Koch snowflake <a href="#" class="runner" title="run this sample program" data-code="koch-code">run this example</a></h3>
+		<pre id="koch-code">
+var koch = (function(){
+  function frag(len, depth){
+    if (depth &gt; 1) {
+      frag(len/3, depth-1); t.rt(60);
+      frag(len/3, depth-1); t.lt(120);
+      frag(len/3, depth-1); t.rt(60);
+      frag(len/3, depth-1);
+    } else {
+      t.fd(len);
+    }
+  }
+  return function(len, depth){
+    frag(len,depth); t.lt(120);
+    frag(len,depth); t.lt(120);
+    frag(len,depth); t.lt(120);
+  }
+})();
+t.reset().bk(300).clean().rt(30).color('#0f0');
+koch(550, 6);
+		</pre>
+		<h3>Koch snowflake with subtriangles randomly oriented <a href="#" class="runner" title="run this sample program" data-code="ran-koch-code">run this example</a></h3>
+		<pre id="ran-koch-code">
+var kochRandom = (function(){
+  function frag(len, depth){
+    if (depth &gt; 1) {
+      var r = t.rand.chance(1/2);
+      frag(len/3, depth-1); t[r?'rt':'lt'](60);
+      frag(len/3, depth-1); t[r?'lt':'rt'](120);
+      frag(len/3, depth-1); t[r?'rt':'lt'](60);
+      frag(len/3, depth-1);
+    } else {
+      t.fd(len);
+    }
+  }
+  return function(len, depth){
+    frag(len,depth); t.lt(120);
+    frag(len,depth); t.lt(120);
+    frag(len,depth); t.lt(120);
+  }
+})();
+t.reset().bk(300).clean().rt(30).color('#90f');
+kochRandom(550, 6);
+		</pre>
+		<h3>Lots of randomized Koch snowflakes overlaid <a href="#" class="runner" title="run this sample program" data-code="ran-koch-code-lots">run this example</a></h3>
+		<pre id="ran-koch-code-lots">
+var kochRandom = (function(){
+  function frag(len, depth){
+    if (depth &gt; 1) {
+      var r = t.rand.chance(1/2);
+      frag(len/3, depth-1); t[r?'rt':'lt'](60);
+      frag(len/3, depth-1); t[r?'lt':'rt'](120);
+      frag(len/3, depth-1); t[r?'rt':'lt'](60);
+      frag(len/3, depth-1);
+    } else {
+      t.fd(len);
+    }
+  }
+  return function(len, depth){
+    frag(len,depth); t.lt(120);
+    frag(len,depth); t.lt(120);
+    frag(len,depth); t.lt(120);
+  }
+})();
+t.reset().bk(300).clean().rt(30);
+t.repeat(60, function(i){
+  t.color('hsla('+i+',50%,50%,0.1)');
+  kochRandom(550, 6);
+});
+		</pre>
+		<h3>Tree <a href="#" class="runner" title="run this sample program" data-code="tree-code">run this example</a></h3>
+		<pre id="tree-code">
+function tree(length, branches, depth, origDepth){
+  if (origDepth === undefined) origDepth = depth;
+  var l = t.rand.uni(length*.95,length*1.05);
+  t.color('rgba(255,255,255,'+(depth+1)/origDepth+')').fd(l);
+  var angle = 180/branches;
+  if (depth &gt; 0) {
+    t.lt(90);
+    for (var i=0; i&lt;branches; i++){
+      t.rt((angle/2));
+      var angleJitter = t.rand.uni(-5,5);
+      t.rt(angleJitter);
+      tree(length*(3/4), branches, depth-1, origDepth);
+      t.lt(angleJitter);
+      t.rt(angle/2);
+    }
+    t.lt(90);
+  }
+  t.pu().bk(l).pd();
+}
+t.reset().bk(280).clean();
+tree(180,4,6);
+		</pre>
+		<h3>Heighway dragon <a href="#" class="runner" title="run this sample program" data-code="dragon-code">run this example</a></h3>
+		<pre id="dragon-code">
+function dragon(length, iters){
+  var d = [true];
+  for (var i=0; i&lt;iters; i++) {
+    var len = d.length;
+    d.push(true);
+    for (var j=len-1; j&gt;=0; j--) {
+      d.push(!d[j]);
+    }
+    length = Math.sqrt((length * length) / 2);
+  }
+  var c = 0;
+  for (var i=0; i&lt;d.length; i++) {
+    c += .01;
+    t.color('hsl('+c+',100%,70%)').fd(length)[d[i]?'rt':'lt'](90);
+  }
+}
+t.reset().xy(250,170).clean().lt(95);
+dragon(470,15);
+		</pre>
+		<h3>Another sample <a href="#" class="runner" title="run this sample program" data-code="state-code">run this example</a></h3>
+		<pre id="state-code">
+t.reset()
+.color('rgba(255,255,255,0.1)')
+.repeat(360, function(i){
+  t.pu().home().pd()
+  .repeat(80, function(){
+    t.fd(20).rt(t.get.y()+i)
+  })
+})
+		</pre>
+	</div>
+</div>
+<canvas id="c"></canvas>
+<span id="turtle"></span>
+<form id="control"></form>
+<script>
+
+$('a[href].runner').on('click', function(ev){
+	ev.preventDefault();
+	var $codeEl = $(this).parent().next('pre');
+	run($codeEl);
+});
+
+function run($codeEl){
+	var code = $codeEl.text();
+	if (!$codeEl.is('pre')) return;
+	$('input#input').val('/* type JS commands here (or type "help") */').select();
+	$('#help').addClass('hidden').hide();
+	try {
+		with (window) { window.eval(code); }
+	} catch(err) {
+		mess(err.message);
+	}
+}
+
+$(function(){
+	$('.runner').each(function(){
+		var $runner = $(this);
+		$runner.attr('href', '#' + $runner.parent().next('pre').attr('id'))
+	});
+	if (!location.hash) return;
+	if (!(/^#[a-z0-9_-]+$/i).test(location.hash)) return;
+	run($(location.hash));
+});
+
+var canvas = document.getElementById('c');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+var turtle = new Turtle(canvas);
+var t = turtle;
+
+(function(){
+	var command = '';
+	var commands = [];
+	var count = 0;
+
+	$('body').on('keydown', 'input#input', function(ev){
+		var $inp = $(this);
+		if (ev.keyCode === 38) {
+			// up
+			ev.preventDefault();
+			count = Math.max(0, count - 1);
+			var c = commands[count];
+			if (c) $inp.val(c);
+		} else if (ev.keyCode === 40) {
+			// down
+			ev.preventDefault();
+			count = Math.min(commands.length, count + 1);
+			var c = commands[count];
+			if (c) $inp.val(c);
+			else $inp.val(command);
+		} else if (ev.keyCode === 13) {
+			// enter
+			ev.preventDefault();
+			var val = $inp.val();
+			if (!val || !/\S/.test(val)) return;
+			if ((/^\s*help\s*$/i).test(val)){
+				toggleHelp();
+				$inp.val('');
+				return;
+			}
+			try {
+				with (window) { window.eval(val); }
+			} catch(err) {
+				mess(err.message);
+				return;
+			}
+			$inp.val('');
+			commands.push(val);
+			command = '';
+			count = commands.length;
+		} else {
+			setTimeout(function(){
+				var newCommand = $inp.val();
+				if (newCommand !== commands[count]){
+					command = newCommand;
+				}
+			},1);
+		}
+	});
+
+	$('body').on('keydown', 'textarea#biginput', function(ev){
+		$('#althint').fadeOut(500);
+		var $inp = $(this);
+		if (ev.keyCode === 38 && ev.altKey) {
+			// up
+			ev.preventDefault();
+			count = Math.max(0, count - 1);
+			var c = commands[count];
+			if (c) $inp.val(c);
+		} else if (ev.keyCode === 40 && ev.altKey) {
+			// down
+			ev.preventDefault();
+			count = Math.min(commands.length, count + 1);
+			var c = commands[count];
+			if (c) $inp.val(c);
+			else $inp.val(command);
+		} else if (ev.keyCode === 13 && ev.altKey) {
+			// enter
+			ev.preventDefault();
+			var val = $inp.val();
+			if (!val || !/\S/.test(val)) return;
+			if ((/^\s*help\s*$/i).test(val)){
+				toggleHelp();
+				$inp.val('');
+				return;
+			}
+			val = val.replace(/\r?\n$/,'');
+			$inp.val(val);
+			try {
+				with (window) { window.eval(val); }
+			} catch(err) {
+				mess(err.message);
+				return;
+			}
+			$inp.val('');
+			commands.push(val);
+			command = '';
+			count = commands.length;
+		} else {
+			setTimeout(function(){
+				var newCommand = $inp.val();
+				if (newCommand !== commands[count]){
+					command = newCommand;
+				}
+			},1);
+		}
+	});
+})();
+
+
+(function(){
+	var hintsHtml = '<p id="esctip">press ESC to clear screen<br><a href="#" class="toggle-help">click here</a> or press F1 to show/hide help and code samples<br>press UP or DOWN to navigate history</p>';
+	var collapsedHtml = hintsHtml+'<input id="input" autofocus autocomplete="off"><button type="button" id="expand" href="#" data-title="Switch to multi-line input">expand</button>';
+	var expandedHtml = '<span id="althint">EXECUTE: ALT+ENTER<br>HISTORY: ALT+UP/DOWN</span>'+hintsHtml+'<textarea id="biginput" autofocus></textarea><button type="button" id="collapse" href="#" data-title="Switch to single-line input">collapse</button>';
+	$('#control').html(collapsedHtml);
+	$('body').on('click','#expand', function(ev){
+		ev.preventDefault();
+		$('#control').html(expandedHtml);
+		$('#biginput').css('height','10em');
+		$('#biginput').focus();
+	});
+	$('body').on('click','#collapse', function(ev){
+		ev.preventDefault();
+		$('#biginput').css('height','1em');
+		setTimeout(function(){
+			$('#control').html(collapsedHtml);
+			$('#input').focus();
+		},350);
+	});
+	function showTip(m){ $('#control').append('<p id="tip">'+m+'</p>'); }
+	function hideTip(){ $('#tip').remove(); }
+	$('body').on('mouseenter','#expand, #collapse', function(ev){ showTip($(this).attr('data-title')); });
+	$('body').on('mouseleave','#expand, #collapse', function(ev){ hideTip(); });
+})();
+
+$('#input').val("t.repeat(180, function(){ t.fd(200).rt(106); }); /* press ENTER to see the results */").focus();
+
+function toggleHelp(){
+	var $help = $('#help');
+	if ($help.hasClass('hidden')) {
+		$help.hide().removeClass('hidden').fadeIn(200);
+	} else {
+		$help.fadeOut(100, function(){
+			$help.addClass('hidden');
+		});
+	}
+}
+
+$('body').on('click', '.toggle-help', function(ev){
+	ev.preventDefault();
+	toggleHelp();
+});
+
+$('body').on('keydown', function(ev){
+	if (ev.keyCode === 112) {
+		toggleHelp();
+	} else if (ev.keyCode === 27) {
+		ev.preventDefault();
+		t.clear();
+	}
+});
+
+var $turtle = $('#turtle');
+t.on('move', function(args){
+	$turtle.css({
+		left:args.x+'px',
+		top:args.y+'px'
+	});
+});
+
+t.on('rotate', function(deg){
+	$turtle.css({
+		'-webkit-transform':'rotate('+Math.round(deg)+'deg)',
+		'-moz-transform':'rotate('+Math.round(deg)+'deg)',
+		'transform':'rotate('+Math.round(deg)+'deg)'
+	});
+});
+
+t.init();
+
+$('form#control').submit(function(ev){
+	ev.preventDefault();
+});
+
+function mess(message) {
+	$('body').append('<p class="mess">'+message+'</p>');
+	var $m = $('.mess');
+	$m.hide().fadeIn(200, function(){
+		setTimeout(function(){
+			$m.fadeOut(600, function(){
+				$m.remove();
+			});
+		},1500);
+	});
+}
+
+</script>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23536883-1']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

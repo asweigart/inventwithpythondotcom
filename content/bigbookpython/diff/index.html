@@ -76,7 +76,8 @@ function diffUsingJS() {
 function onPageLoad() {
   // the optional "p" GET parameter can set the default program selected.
   var getVars = getUrlVars();
-  var allPrograms = ["Bagels", "Birthday Paradox Simulation", "Bitmap Message", "Blackjack", "Bouncing DVD Logo", "Caesar Cipher", "Caesar Cipher Hacker", "Calendar Maker", "Carrot in a Box", "Cho-Han", "Clickbait Headline Generator", "Collatz Sequence", "Conway's Game of Life", "Countdown", "Deep Cave", "Diamonds", "Dice Math", "Dice Roller", "Digital Clock", "Digital Stream", "DNA", "Duckling Screensaver", "Etching Drawer", "Factor Finder", "Fast Draw", "Fibonacci Sequence", "Fish Tank", "Flooder", "Forest Fire Sim", "Four in a Row", "Guess the Number", "Gullible", "Hacking Minigame", "Hangman", "Hex Grid", "Hour Glass Animation", "Hungry Robots", "J'ACCUSE!", "Langton's Ant", "Leetspeak", "Lucky Stars", "Magic Fortune Ball", "Mancala", "Maze Runner 2D", "Maze 3D", "Million Dice Roll Statistics Simulator", "Mondrian Art Generator", "The Monty Hall Problem", "Multiplication Table", "Ninety-Nine Bottles of Milk on the Wall", "niNety-nniinE BoOttels of Mlik On teh waLl", "Numeral System Counters", "Periodic Table of Elements", "Pig Latin", "Powerball Lottery", "Prime Numbers", "Progress Bar Simulation", "Rainbow", "Rock", "Rock", "ROT13 Cipher", "Rotating Cube", "The Royal Game of Ur", "Sevseg", "Shining Carpet", "Simple Substitution Cipher", "Sine Message", "Sliding Tile Puzzle", "Snail Race", "Soroban Japanese Abacus", "Sound Mimic", "sPoNgEcAsE", "Sudoku Puzzle", "Text To Speech Talker", "Three-Card Monte", "Tic-Tac-Toe", "The Tower of Hanoi", "Trick Questions", "Twenty Forty Eight", "Vigenère Cipher", "Water Bucket Puzzle"];
+  var allPrograms = ["bagels.py", "birthdayparadox.py", "bitmapmessage.py", "blackjack.py", "bouncingdvd.py", "caesarcipher.py", "caesarhacker.py", "calendarmaker.py", "carrotinabox.py", "chohan.py", "clickbait.py", "collatz.py", "conwaysgameoflife.py", "countdown.py", "deepcave.py", "diamonds.py", "dicemath.py", "diceroller.py", "digitalclock.py", "digitalstream.py", "dna.py", "ducklings.py", "etchingdrawer.py", "factorfinder.py", "fastdraw.py", "fibonacci.py", "fishtank.py", "flooder.py", "forestfiresim.py", "fourinarow.py", "guess.py", "gullible.py", "hacking.py", "hangman.py", "hexgrid.py", "hourglass.py", "hungryrobots.py", "jaccuse.py", "langtonsant.py", "leetspeak.py", "luckystars.py", "magicfortuneball.py", "mancala.py", "mazerunner2d.py", "mazerunner3d.py", "milliondicestats.py", "mondrian.py", "montyhall.py", "multiplicationtable.py", "ninetyninebottles.py", "ninetyninebottles2.py", "numeralsystems.py", "periodictable.py", "piglatin.py", "powerballlottery.py", "primenumbers.py", "progressbar.py", "rainbow.py", "rockpaperscissors.py", "rockpaperscissorsalwayswin.py", "rot13cipher.py", "rotatingcube.py", "royalgameofur.py", "sevseg.py", "shiningcarpet.py", "simplesubcipher.py", "sinemessage.py", "slidingtilepuzzle.py", "snailrace.py", "soroban.py", "soundmimic.py", "spongecase.py", "sudoku.py", "texttospeechtalker.py", "threecardmonte.py", "tictactoe.py", "towerofhanoi.py", "trickquestions.py", "twentyfortyeight.py", "vigenerecipher.py", "waterbucket.py"];
+//["Bagels", "Birthday Paradox Simulation", "Bitmap Message", "Blackjack", "Bouncing DVD Logo", "Caesar Cipher", "Caesar Cipher Hacker", "Calendar Maker", "Carrot in a Box", "Cho-Han", "Clickbait Headline Generator", "Collatz Sequence", "Conway's Game of Life", "Countdown", "Deep Cave", "Diamonds", "Dice Math", "Dice Roller", "Digital Clock", "Digital Stream", "DNA", "Duckling Screensaver", "Etching Drawer", "Factor Finder", "Fast Draw", "Fibonacci Sequence", "Fish Tank", "Flooder", "Forest Fire Sim", "Four in a Row", "Guess the Number", "Gullible", "Hacking Minigame", "Hangman", "Hex Grid", "Hour Glass Animation", "Hungry Robots", "J'ACCUSE!", "Langton's Ant", "Leetspeak", "Lucky Stars", "Magic Fortune Ball", "Mancala", "Maze Runner 2D", "Maze 3D", "Million Dice Roll Statistics Simulator", "Mondrian Art Generator", "The Monty Hall Problem", "Multiplication Table", "Ninety-Nine Bottles of Milk on the Wall", "niNety-nniinE BoOttels of Mlik On teh waLl", "Numeral System Counters", "Periodic Table of Elements", "Pig Latin", "Powerball Lottery", "Prime Numbers", "Progress Bar Simulation", "Rainbow", "Rock", "Rock", "ROT13 Cipher", "Rotating Cube", "The Royal Game of Ur", "Sevseg", "Shining Carpet", "Simple Substitution Cipher", "Sine Message", "Sliding Tile Puzzle", "Snail Race", "Soroban Japanese Abacus", "Sound Mimic", "sPoNgEcAsE", "Sudoku Puzzle", "Text To Speech Talker", "Three-Card Monte", "Tic-Tac-Toe", "The Tower of Hanoi", "Trick Questions", "Twenty Forty Eight", "Vigenère Cipher", "Water Bucket Puzzle"]
 
   if ((getVars['p']) && (allPrograms.indexOf(getVars['p']) != -1)) {
     $('programSelect').value = getVars['p'];
@@ -103,7 +104,7 @@ dojo.addOnLoad(onPageLoad);
             <p>Select program:</p>
 
             <select name='programSelect' id='programSelect' size="16" style="vertical-align: text-top">
-<option value="Bagels">Bagels</option>
+<!--<option value="Bagels">Bagels</option>
 <option value="Birthday Paradox Simulation">Birthday Paradox Simulation</option>
 <option value="Bitmap Message">Bitmap Message</option>
 <option value="Blackjack">Blackjack</option>
@@ -183,7 +184,88 @@ dojo.addOnLoad(onPageLoad);
 <option value="Trick Questions">Trick Questions</option>
 <option value="Twenty Forty Eight">Twenty Forty Eight</option>
 <option value="Vigenère Cipher">Vigenère Cipher</option>
-<option value="Water Bucket Puzzle">Water Bucket Puzzle</option>
+<option value="Water Bucket Puzzle">Water Bucket Puzzle</option>-->
+<option value="bagels.py">bagels.py</option>
+<option value="birthdayparadox.py">birthdayparadox.py</option>
+<option value="bitmapmessage.py">bitmapmessage.py</option>
+<option value="blackjack.py">blackjack.py</option>
+<option value="bouncingdvd.py">bouncingdvd.py</option>
+<option value="caesarcipher.py">caesarcipher.py</option>
+<option value="caesarhacker.py">caesarhacker.py</option>
+<option value="calendarmaker.py">calendarmaker.py</option>
+<option value="carrotinabox.py">carrotinabox.py</option>
+<option value="chohan.py">chohan.py</option>
+<option value="clickbait.py">clickbait.py</option>
+<option value="collatz.py">collatz.py</option>
+<option value="conwaysgameoflife.py">conwaysgameoflife.py</option>
+<option value="countdown.py">countdown.py</option>
+<option value="deepcave.py">deepcave.py</option>
+<option value="diamonds.py">diamonds.py</option>
+<option value="dicemath.py">dicemath.py</option>
+<option value="diceroller.py">diceroller.py</option>
+<option value="digitalclock.py">digitalclock.py</option>
+<option value="digitalstream.py">digitalstream.py</option>
+<option value="dna.py">dna.py</option>
+<option value="ducklings.py">ducklings.py</option>
+<option value="etchingdrawer.py">etchingdrawer.py</option>
+<option value="factorfinder.py">factorfinder.py</option>
+<option value="fastdraw.py">fastdraw.py</option>
+<option value="fibonacci.py">fibonacci.py</option>
+<option value="fishtank.py">fishtank.py</option>
+<option value="flooder.py">flooder.py</option>
+<option value="forestfiresim.py">forestfiresim.py</option>
+<option value="fourinarow.py">fourinarow.py</option>
+<option value="guess.py">guess.py</option>
+<option value="gullible.py">gullible.py</option>
+<option value="hacking.py">hacking.py</option>
+<option value="hangman.py">hangman.py</option>
+<option value="hexgrid.py">hexgrid.py</option>
+<option value="hourglass.py">hourglass.py</option>
+<option value="hungryrobots.py">hungryrobots.py</option>
+<option value="jaccuse.py">jaccuse.py</option>
+<option value="langtonsant.py">langtonsant.py</option>
+<option value="leetspeak.py">leetspeak.py</option>
+<option value="luckystars.py">luckystars.py</option>
+<option value="magicfortuneball.py">magicfortuneball.py</option>
+<option value="mancala.py">mancala.py</option>
+<option value="mazerunner2d.py">mazerunner2d.py</option>
+<option value="mazerunner3d.py">mazerunner3d.py</option>
+<option value="milliondicestats.py">milliondicestats.py</option>
+<option value="mondrian.py">mondrian.py</option>
+<option value="montyhall.py">montyhall.py</option>
+<option value="multiplicationtable.py">multiplicationtable.py</option>
+<option value="ninetyninebottles.py">ninetyninebottles.py</option>
+<option value="ninetyninebottles2.py">ninetyninebottles2.py</option>
+<option value="numeralsystems.py">numeralsystems.py</option>
+<option value="periodictable.py">periodictable.py</option>
+<option value="piglatin.py">piglatin.py</option>
+<option value="powerballlottery.py">powerballlottery.py</option>
+<option value="primenumbers.py">primenumbers.py</option>
+<option value="progressbar.py">progressbar.py</option>
+<option value="rainbow.py">rainbow.py</option>
+<option value="rockpaperscissors.py">rockpaperscissors.py</option>
+<option value="rockpaperscissorsalwayswin.py">rockpaperscissorsalwayswin.py</option>
+<option value="rot13cipher.py">rot13cipher.py</option>
+<option value="rotatingcube.py">rotatingcube.py</option>
+<option value="royalgameofur.py">royalgameofur.py</option>
+<option value="sevseg.py">sevseg.py</option>
+<option value="shiningcarpet.py">shiningcarpet.py</option>
+<option value="simplesubcipher.py">simplesubcipher.py</option>
+<option value="sinemessage.py">sinemessage.py</option>
+<option value="slidingtilepuzzle.py">slidingtilepuzzle.py</option>
+<option value="snailrace.py">snailrace.py</option>
+<option value="soroban.py">soroban.py</option>
+<option value="soundmimic.py">soundmimic.py</option>
+<option value="spongecase.py">spongecase.py</option>
+<option value="sudoku.py">sudoku.py</option>
+<option value="texttospeechtalker.py">texttospeechtalker.py</option>
+<option value="threecardmonte.py">threecardmonte.py</option>
+<option value="tictactoe.py">tictactoe.py</option>
+<option value="towerofhanoi.py">towerofhanoi.py</option>
+<option value="trickquestions.py">trickquestions.py</option>
+<option value="twentyfortyeight.py">twentyfortyeight.py</option>
+<option value="vigenerecipher.py">vigenerecipher.py</option>
+<option value="waterbucket.py">waterbucket.py</option>
 
             </select>
         </td>
