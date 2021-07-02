@@ -1,0 +1,235 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="../style.css" rel="stylesheet" type="text/css" />
+<title>Project 33 - Hacking Minigame</title></head><body>
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-156">
+<section class="toclist">
+<header class="calibre10">
+<h1 class="chapter">
+<span class="chapternumber"><span type="pagebreak" title="150" id="calibre_link-518" class="calibre11"></span>#33</span><br class="calibre14" />
+<span class="chaptertitle">Hacking Minigame</span></h1>
+</header>
+<figure class="opener">
+<img src="../images/000002.png" alt="" class="calibre12" />
+</figure>
+<p class="chapterintro">In this game, the player must hack a computer by guessing a seven-letter word used as the secret password. The computer’s memory banks display the possible words, and the player is given hints as to how close each guess was. For example, if the secret password is MONITOR but the player guessed CONTAIN, they are given the hint that two out of seven letters were correct, because both MONITOR and CONTAIN have the letter <em class="calibre9">O</em> and <em class="calibre9">N</em> as their second and third letter. This game is similar to Project 1, “Bagels,” and the hacking minigame in the <em class="calibre9">Fallout</em> series of video games.</p>
+<h2 id="calibre_link-157" class="calibre5"><span type="pagebreak" title="151" id="calibre_link-519" class="calibre15"></span>The Program in Action</h2>
+<p class="bodyfirst">When you run <em class="calibre9">hacking.py</em>, the output will look like this:</p>
+<pre class="calibre24"><code class="calibre22">Hacking Minigame, by Al Sweigart al@inventwithpython.com
+Find the password in the computer's memory:
+0x1150  $],&gt;@|~~RESOLVE^    0x1250  {&gt;+)&lt;!?CHICKEN,%
+0x1160  }@%_-:;/$^(|&lt;|!(    0x1260  .][})?#@#ADDRESS
+0x1170  _;)][#?&lt;&amp;~$~+&amp;}}    0x1270  ,#=)&gt;{-;/DESPITE
+0x1180  %[!]{REFUGEE@?~,    0x1280  }/.}!-DISPLAY%%/
+0x1190  _[^%[@}^&lt;_+{_@$~    0x1290  =&gt;&gt;,:*%?_?@+{%#.
+0x11a0  )?~/)+PENALTY?-=    0x12a0  &gt;[,?*#IMPROVE@$/
+<var class="calibre27">--snip--</var>
+Enter password: (4 tries remaining)
+&gt; <b class="calibre6">resolve</b>
+Access Denied (2/7 correct)
+Enter password: (3 tries remaining)
+&gt; <b class="calibre6">improve</b>
+A C C E S S   G R A N T E D</code></pre>
+<h2 id="calibre_link-158" class="calibre5">How It Works</h2>
+<p class="bodyfirst">This game has a hacking theme, but it doesn’t involve any actual computer hacking. If we’d just listed the possible words on the screen, the gameplay would have been identical. However, the cosmetic additions that mimic a computer’s memory banks convey an exciting feeling of computer hacking. The attention to detail and user experience turn a plain, boring game into an exciting one.</p>
+<pre class="calibre24"><code class="calibre22">  1. """Hacking Minigame, by Al Sweigart al@inventwithpython.com
+  2. The hacking mini-game from "Fallout 3". Find out which seven-letter
+  3. word is the password by using clues each guess gives you.
+  4. View this code at https://nostarch.com/big-book-small-python-projects
+  5. Tags: large, artistic, game, puzzle"""
+  6.
+  7. # NOTE: This program requires the sevenletterwords.txt file. You can
+  8. # download it from https://inventwithpython.com/sevenletterwords.txt
+  9.
+ 10. import random, sys
+ 11.
+ 12. # Set up the constants:
+ 13. # The garbage filler characters for the "computer memory" display.
+ 14. GARBAGE_CHARS = '~!@#$%^&amp;*()_+-={}[]|;:,.&lt;&gt;?/'
+ 15.
+ 16. # Load the WORDS list from a text file that has 7-letter words.
+ 17. with open('sevenletterwords.txt') as wordListFile:
+ 18.     WORDS = wordListFile.readlines()
+ 19. for i in range(len(WORDS)):
+ 20.     # Convert each word to uppercase and remove the trailing newline:
+ 21.     WORDS[i] = WORDS[i].strip().upper()
+ 22.
+ 23.
+<span type="pagebreak" title="152" id="calibre_link-520" class="calibre13"></span> 24. def main():
+ 25.     """Run a single game of Hacking."""
+ 26.     print('''Hacking Minigame, by Al Sweigart al@inventwithpython.com
+ 27. Find the password in the computer's memory. You are given clues after
+ 28. each guess. For example, if the secret password is MONITOR but the
+ 29. player guessed CONTAIN, they are given the hint that 2 out of 7 letters
+ 30. were correct, because both MONITOR and CONTAIN have the letter O and N
+ 31. as their 2nd and 3rd letter. You get four guesses.\n''')
+ 32.     input('Press Enter to begin...')
+ 33.
+ 34.     gameWords = getWords()
+ 35.     # The "computer memory" is just cosmetic, but it looks cool:
+ 36.     computerMemory = getComputerMemoryString(gameWords)
+ 37.     secretPassword = random.choice(gameWords)
+ 38.
+ 39.     print(computerMemory)
+ 40.     # Start at 4 tries remaining, going down:
+ 41.     for triesRemaining in range(4, 0, -1):
+ 42.         playerMove = askForPlayerGuess(gameWords, triesRemaining)
+ 43.         if playerMove == secretPassword:
+ 44.             print('A C C E S S   G R A N T E D')
+ 45.             return
+ 46.         else:
+ 47.             numMatches = numMatchingLetters(secretPassword, playerMove)
+ 48.             print('Access Denied ({}/7 correct)'.format(numMatches))
+ 49.     print('Out of tries. Secret password was {}.'.format(secretPassword))
+ 50.
+ 51.
+ 52. def getWords():
+ 53.     """Return a list of 12 words that could possibly be the password.
+ 54.
+ 55.     The secret password will be the first word in the list.
+ 56.     To make the game fair, we try to ensure that there are words with
+ 57.     a range of matching numbers of letters as the secret word."""
+ 58.     secretPassword = random.choice(WORDS)
+ 59.     words = [secretPassword]
+ 60.
+ 61.     # Find two more words; these have zero matching letters.
+ 62.     # We use "&lt; 3" because the secret password is already in words.
+ 63.     while len(words) &lt; 3:
+ 64.         randomWord = getOneWordExcept(words)
+ 65.         if numMatchingLetters(secretPassword, randomWord) == 0:
+ 66.             words.append(randomWord)
+ 67.
+ 68.     # Find two words that have 3 matching letters (but give up at 500
+ 69.     # tries if not enough can be found).
+ 70.     for i in range(500):
+ 71.         if len(words) == 5:
+ 72.             break  # Found 5 words, so break out of the loop.
+ 73.
+ 74.         randomWord = getOneWordExcept(words)
+ 75.         if numMatchingLetters(secretPassword, randomWord) == 3:
+ 76.             words.append(randomWord)
+ 77.
+<span type="pagebreak" title="153" id="calibre_link-521" class="calibre13"></span> 78.     # Find at least seven words that have at least one matching letter
+ 79.     # (but give up at 500 tries if not enough can be found).
+ 80.     for i in range(500):
+ 81.         if len(words) == 12:
+ 82.             break  # Found 7 or more words, so break out of the loop.
+ 83.
+ 84.         randomWord = getOneWordExcept(words)
+ 85.         if numMatchingLetters(secretPassword, randomWord) != 0:
+ 86.             words.append(randomWord)
+ 87.
+ 88.     # Add any random words needed to get 12 words total.
+ 89.     while len(words) &lt; 12:
+ 90.         randomWord = getOneWordExcept(words)
+ 91.         words.append(randomWord)
+ 92.
+ 93.     assert len(words) == 12
+ 94.     return words
+ 95.
+ 96.
+ 97. def getOneWordExcept(blocklist=None):
+ 98.     """Returns a random word from WORDS that isn't in blocklist."""
+ 99.     if blocklist == None:
+100.         blocklist = []
+101.
+102.     while True:
+103.         randomWord = random.choice(WORDS)
+104.         if randomWord not in blocklist:
+105.             return randomWord
+106.
+107.
+108. def numMatchingLetters(word1, word2):
+109.     """Returns the number of matching letters in these two words."""
+110.     matches = 0
+111.     for i in range(len(word1)):
+112.         if word1[i] == word2[i]:
+113.             matches += 1
+114.     return matches
+115.
+116.
+117. def getComputerMemoryString(words):
+118.     """Return a string representing the "computer memory"."""
+119.
+120.     # Pick one line per word to contain a word. There are 16 lines, but
+121.     # they are split into two halves.
+122.     linesWithWords = random.sample(range(16 * 2), len(words))
+123.     # The starting memory address (this is also cosmetic).
+124.     memoryAddress = 16 * random.randint(0, 4000)
+125.
+126.     # Create the "computer memory" string.
+127.     computerMemory = []  # Will contain 16 strings, one for each line.
+128.     nextWord = 0  # The index in words of the word to put into a line.
+129.     for lineNum in range(16):  # The "computer memory" has 16 lines.
+130.         # Create a half line of garbage characters:
+<span type="pagebreak" title="154" id="calibre_link-522" class="calibre13"></span>131.         leftHalf = ''
+132.         rightHalf = ''
+133.         for j in range(16):  # Each half line has 16 characters.
+134.             leftHalf += random.choice(GARBAGE_CHARS)
+135.             rightHalf += random.choice(GARBAGE_CHARS)
+136.
+137.         # Fill in the password from words:
+138.         if lineNum in linesWithWords:
+139.             # Find a random place in the half line to insert the word:
+140.             insertionIndex = random.randint(0, 9)
+141.             # Insert the word:
+142.             leftHalf = (leftHalf[:insertionIndex] + words[nextWord]
+143.                 + leftHalf[insertionIndex + 7:])
+144.             nextWord += 1  # Update the word to put in the half line.
+145.         if lineNum + 16 in linesWithWords:
+146.             # Find a random place in the half line to insert the word:
+147.             insertionIndex = random.randint(0, 9)
+148.             # Insert the word:
+149.             rightHalf = (rightHalf[:insertionIndex] + words[nextWord]
+150.                 + rightHalf[insertionIndex + 7:])
+151.             nextWord += 1  # Update the word to put in the half line.
+152.
+153.         computerMemory.append('0x' + hex(memoryAddress)[2:].zfill(4)
+154.                      + '  ' + leftHalf + '    '
+155.                      + '0x' + hex(memoryAddress + (16*16))[2:].zfill(4)
+156.                      + '  ' + rightHalf)
+157.
+158.         memoryAddress += 16  # Jump from, say, 0xe680 to 0xe690.
+159.
+160.     # Each string in the computerMemory list is joined into one large
+161.     # string to return:
+162.     return '\n'.join(computerMemory)
+163.
+164.
+165. def askForPlayerGuess(words, tries):
+166.     """Let the player enter a password guess."""
+167.     while True:
+168.         print('Enter password: ({} tries remaining)'.format(tries))
+169.         guess = input('&gt; ').upper()
+170.         if guess in words:
+171.             return guess
+172.         print('That is not one of the possible passwords listed above.')
+173.         print('Try entering "{}" or "{}".'.format(words[0], words[1]))
+174.
+175.
+176. # If this program was run (instead of imported), run the game:
+177. if __name__ == '__main__':
+178.     try:
+179.         main()
+180.     except KeyboardInterrupt:
+181.         sys.exit()  # When Ctrl-C is pressed, end the program.</code></pre>
+<p class="calibre19"><span type="pagebreak" title="155" id="calibre_link-523" class="calibre20"></span>After entering the source code and running it a few times, try making experimental changes to it. On your own, you can also try to figure out how to do the following:</p>
+<ul class="calibre25">
+<li class="calibre8">Find a word list on the internet and create your own <em class="calibre9">sevenletterwords.txt</em> file, maybe one with six- or eight-letter words.</li>
+<li class="calibre8">Create a different visualization of the “computer memory.”</li>
+</ul>
+<h2 id="calibre_link-159" class="calibre5">Exploring the Program</h2>
+<p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
+<ol class="decimal">
+<li value="1" class="calibre8">What happens if you change <code class="calibre22">for j in range(16):</code> on line 133 to <code class="calibre22">for j in range(0):</code>?</li>
+<li value="2" class="calibre8">What happens if you change <code class="calibre22">GARBAGE_CHARS = '~!@#$%^&amp;*()_+-={}[]|;:,.&lt;&gt;?/'</code> on line 14 to <code class="calibre22">GARBAGE_CHARS = '.'</code>?</li>
+<li value="3" class="calibre8">What happens if you change <code class="calibre22">gameWords = getWords()</code> on line 34 to <code class="calibre22">gameWords = ['MALKOVICH'] * 20</code>?</li>
+<li value="4" class="calibre8">What error message do you get if you change <code class="calibre22">return words</code> on line 94 to <code class="calibre22">return</code>?</li>
+<li value="5" class="calibre8">What happens if you change <code class="calibre22">randomWord = random.choice(WORDS)</code> on line 103 to <code class="calibre22">secretPassword = 'PASSWORD'</code>?</li>
+</ol>
+</section>
+</div>
+
+
+
+
+</body></html>

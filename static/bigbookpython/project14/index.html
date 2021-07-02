@@ -1,0 +1,101 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="../style.css" rel="stylesheet" type="text/css" />
+<title>Project 14 - Countdown</title></head><body>
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-24">
+<section class="toclist">
+<header class="calibre10">
+<h1 class="chapter">
+<span class="chapternumber"><span type="pagebreak" title="63" id="calibre_link-431" class="calibre11"></span>#14</span><br class="calibre14" />
+<span class="chaptertitle">Countdown</span></h1>
+</header>
+<figure class="opener">
+<img src="../images/000002.png" alt="" class="calibre12" />
+</figure>
+<p class="chapterintro">This program displays a digital timer that counts down to zero. Rather than render numeric characters directly, the <em class="calibre9">sevseg.py</em> module from Project 64, “Seven-Segment Display Module,” generates the drawings for each digit. You must create this file before the Countdown program can work. Then, set the countdown timer to any number of seconds, minutes, and hours you like. This program is similar to Project 19, “Digital Clock.”</p>
+<h2 id="calibre_link-85" class="calibre5"><span type="pagebreak" title="64" id="calibre_link-432" class="calibre15"></span>The Program in Action</h2>
+<p class="bodyfirst">When you run <em class="calibre9">countdown.py</em>, the output will look like this:</p>
+<pre class="calibre24"><code class="calibre22"> __   __       __   __       __   __
+|  | |  |  *  |  | |  |  *   __| |__|
+|__| |__|  *  |__| |__|  *  |__   __|
+
+Press Ctrl-C to quit.</code></pre>
+<h2 id="calibre_link-86" class="calibre5">How It Works</h2>
+<p class="bodyfirst">After running <code class="calibre22">import sevseg</code>, you can call the <code class="calibre22">sevseg.getSevSegStr()</code> function to get a multiline string of the seven segment digits. However, the Countdown program needs to display a colon made out of asterisks in between the hours, minutes, and seconds. This requires splitting up the three lines of the multiline strings for these digits into three separate strings with the <code class="calibre22">splitlines()</code> method.</p>
+<pre class="calibre24"><code class="calibre22"> 1. """Countdown, by Al Sweigart al@inventwithpython.com
+ 2. Show a countdown timer animation using a seven-segment display.
+ 3. Press Ctrl-C to stop.
+ 4. More info at https://en.wikipedia.org/wiki/Seven-segment_display
+ 5. Requires sevseg.py to be in the same folder.
+ 6. View this code at https://nostarch.com/big-book-small-python-projects
+ 7. Tags: tiny, artistic"""
+ 8.
+ 9. import sys, time
+10. import sevseg  # Imports our sevseg.py program.
+11.
+12. # (!) Change this to any number of seconds:
+13. secondsLeft = 30
+14.
+15. try:
+16.     while True:  # Main program loop.
+17.         # Clear the screen by printing several newlines:
+18.         print('\n' * 60)
+19.
+20.         # Get the hours/minutes/seconds from secondsLeft:
+21.         # For example: 7265 is 2 hours, 1 minute, 5 seconds.
+22.         # So 7265 // 3600 is 2 hours:
+23.         hours = str(secondsLeft // 3600)
+24.         # And 7265 % 3600 is 65, and 65 // 60 is 1 minute:
+25.         minutes = str((secondsLeft % 3600) // 60)
+26.         # And 7265 % 60 is 5 seconds:
+27.         seconds = str(secondsLeft % 60)
+28.
+29.         # Get the digit strings from the sevseg module:
+30.         hDigits = sevseg.getSevSegStr(hours, 2)
+31.         hTopRow, hMiddleRow, hBottomRow = hDigits.splitlines()
+32.
+33.         mDigits = sevseg.getSevSegStr(minutes, 2)
+34.         mTopRow, mMiddleRow, mBottomRow = mDigits.splitlines()
+<span type="pagebreak" title="65" id="calibre_link-433" class="calibre13"></span>35.
+36.         sDigits = sevseg.getSevSegStr(seconds, 2)
+37.         sTopRow, sMiddleRow, sBottomRow = sDigits.splitlines()
+38.
+39.         # Display the digits:
+40.         print(hTopRow    + '     ' + mTopRow    + '     ' + sTopRow)
+41.         print(hMiddleRow + '  *  ' + mMiddleRow + '  *  ' + sMiddleRow)
+42.         print(hBottomRow + '  *  ' + mBottomRow + '  *  ' + sBottomRow)
+43.
+44.         if secondsLeft == 0:
+45.             print()
+46.             print('    * * * * BOOM * * * *')
+47.             break
+48.
+49.         print()
+50.         print('Press Ctrl-C to quit.')
+51.
+52.         time.sleep(1)  # Insert a one-second pause.
+53.         secondsLeft -= 1
+54. except KeyboardInterrupt:
+55.     print('Countdown, by Al Sweigart al@inventwithpython.com')
+56.     sys.exit()  # When Ctrl-C is pressed, end the program.)</code></pre>
+<p class="calibre19">After entering the source code and running it a few times, try making experimental changes to it. On your own, you can also try to figure out how to do the following:</p>
+<ul class="calibre25">
+<li class="calibre8">Prompt the user to enter the starting countdown time.</li>
+<li class="calibre8">Let the user enter a message to display at the end of the countdown.</li>
+</ul>
+<h2 id="calibre_link-87" class="calibre5">Exploring the Program</h2>
+<p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
+<ol class="decimal">
+<li value="1" class="calibre8">What happens if you change <code class="calibre22">secondsLeft = 30</code> on line 13 to <code class="calibre22">secondsLeft = 30.5</code>?</li>
+<li value="2" class="calibre8">What happens if you change the <code class="calibre22">2</code> on lines 30, 33, and 36 to <code class="calibre22">1</code>?</li>
+<li value="3" class="calibre8">What happens if you change <code class="calibre22">time.sleep(1)</code> on line 52 to <code class="calibre22">time.sleep(0.1)</code>?</li>
+<li value="4" class="calibre8">What happens if you change <code class="calibre22">secondsLeft -= 1</code> on line 53 to <code class="calibre22">secondsLeft -= 2</code>?</li>
+<li value="5" class="calibre8">What happens if you delete or comment out <code class="calibre22">print('\n' * 60)</code> on line 18?</li>
+<li value="6" class="calibre8">What error message do you get if you delete or comment out <code class="calibre22">import sevseg</code> on line 10?</li>
+</ol>
+</section>
+</div>
+
+
+
+
+</body></html>

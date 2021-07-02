@@ -1,0 +1,314 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="../style.css" rel="stylesheet" type="text/css" />
+<title>Project 79 - Twenty Forty-Eight</title></head><body>
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-324">
+<section class="toclist">
+<header class="calibre10">
+<h1 class="chapter">
+<span class="chapternumber"><span type="pagebreak" title="377" id="calibre_link-745" class="calibre11"></span>#79</span><br class="calibre14" />
+<span class="chaptertitle">Twenty Forty-Eight</span></h1>
+</header>
+<figure class="opener">
+<img src="../images/000002.png" alt="" class="calibre12" />
+</figure>
+<p class="chapterintro">Gabriele Cirulli, a web developer, invented the game 2048 in one weekend. It was inspired by Veewo Studios’ 1024 game, which in turn was inspired by Threes!, a game by the development team Sirvo. In 2048, you must merge numbers on a 4 × 4 board to clear them from the screen. Two 2s merge into a 4, two 4s merge into an 8, and so on. The game adds a new 2 to the board on each merging. The objective is to reach 2048 before the entire board fills up.</p>
+<h2 id="calibre_link-325" class="calibre5"><span type="pagebreak" title="378" id="calibre_link-746" class="calibre15"></span>The Program in Action</h2>
+<p class="bodyfirst">When you run <em class="calibre9">twentyfortyeight.py</em>, the output will look like this:</p>
+<pre class="calibre24"><code class="calibre22">Twenty Forty-Eight, by Al Sweigart al@inventwithpython.com
+<var class="calibre27">--snip--</var>
++-----+-----+-----+-----+
+|     |     |     |     |
+|     |     |  2  |  16 |
+|     |     |     |     |
++-----+-----+-----+-----+
+|     |     |     |     |
+|     |  16 |  4  |  2  |
+|     |     |     |     |
++-----+-----+-----+-----+
+|     |     |     |     |
+|  2  |     |  4  |  32 |
+|     |     |     |     |
++-----+-----+-----+-----+
+|     |     |     |     |
+|     |     |     |  2  |
+|     |     |     |     |
++-----+-----+-----+-----+
+
+Score: 80
+Enter move: (WASD or Q to quit)
+<var class="calibre27">--snip--</var></code></pre>
+<h2 id="calibre_link-326" class="calibre5">How It Works</h2>
+<p class="bodyfirst">This program implements its sliding behavior using “column” data structures, represented by lists of four strings: <code class="calibre22">BLANK</code> (a single-space string), <code class="calibre22">'2'</code>, <code class="calibre22">'4'</code>, <code class="calibre22">'8'</code>, and so on. The first value in this list represents the bottom of the column, while the last represents the top. Numbers that combine in a column always slide downward, whether the player slides the tiles up, down, left, or right. Think of it as gravity pulling the tiles in these directions. For example, <a href="#calibre_link-353" id="calibre_link-814" class="linkurl">Figure 79-1</a> shows a board with tiles sliding to the right. We’ll create four lists to represent the columns:</p>
+<ul class="calibre25">
+<li class="calibre8"><code class="calibre22">['2', '4', '8', ' ']</code></li>
+<li class="calibre8"><code class="calibre22">[' ', ' ', ' ', '4']</code></li>
+<li class="calibre8"><code class="calibre22">[' ', ' ', ' ', '2']</code></li>
+<li class="calibre8"><code class="calibre22">[' ', ' ', ' ', ' ']</code></li>
+</ul>
+<p class="calibre19">The <code class="calibre22">combineTilesInColumn()</code> function accepts one column list and returns another, with the matching numbers combined and shifted toward the bottom. The code that calls <code class="calibre22">combineTilesInColumn()</code> handles creating the column lists in the appropriate direction and updating the game board with the returned list.</p>
+<span type="pagebreak" title="379" id="calibre_link-747" class="calibre20"></span><figure class="calibre28">
+<img src="../images/000014.png" alt="f79001" class="calibre12" />
+<figcaption class="calibre29"><p class="calibre30"><a id="calibre_link-353" class="linkurl">Figure 79-1</a>: Columns (highlighted) when a game board is sliding to the right</p></figcaption>
+</figure>
+<pre class="calibre24"><code class="calibre22">  1. """Twenty Forty-Eight, by Al Sweigart al@inventwithpython.com
+  2. A sliding tile game to combine exponentially-increasing numbers.
+  3. Inspired by Gabriele Cirulli's 2048, which is a clone of Veewo Studios'
+  4. 1024, which in turn is a clone of the Threes! game.
+  5. More info at https://en.wikipedia.org/wiki/2048_(video_game)
+  6. View this code at https://nostarch.com/big-book-small-python-projects
+  7. Tags: large, game, puzzle"""
+  8.
+  9. import random, sys
+ 10.
+ 11. # Set up the constants:
+ 12. BLANK = ''  # A value that represents a blank space on the board.
+ 13.
+ 14.
+ 15. def main():
+ 16.     print('''Twenty Forty-Eight, by Al Sweigart al@inventwithpython.com
+ 17.
+ 18. Slide all the tiles on the board in one of four directions. Tiles with
+ 19. like numbers will combine into larger-numbered tiles. A new 2 tile is
+ 20. added to the board on each move. You win if you can create a 2048 tile.
+ 21. You lose if the board fills up the tiles before then.''')
+ 22.     input('Press Enter to begin...')
+ 23.
+ 24.     gameBoard = getNewBoard()
+ 25.
+ 26.     while True:  # Main game loop.
+ 27.         drawBoard(gameBoard)
+ 28.         print('Score:', getScore(gameBoard))
+ 29.         playerMove = askForPlayerMove()
+ 30.         gameBoard = makeMove(gameBoard, playerMove)
+ 31.         addTwoToBoard(gameBoard)
+ 32.
+<span type="pagebreak" title="380" id="calibre_link-748" class="calibre13"></span> 33.         if isFull(gameBoard):
+ 34.             drawBoard(gameBoard)
+ 35.             print('Game Over - Thanks for playing!')
+ 36.             sys.exit()
+ 37.
+ 38.
+ 39. def getNewBoard():
+ 40.     """Returns a new data structure that represents a board.
+ 41.
+ 42.     It's a dictionary with keys of (x, y) tuples and values of the tile
+ 43.     at that space. The tile is either a power-of-two integer or BLANK.
+ 44.     The coordinates are laid out as:
+ 45.        X0 1 2 3
+ 46.       Y+-+-+-+-+
+ 47.       0| | | | |
+ 48.        +-+-+-+-+
+ 49.       1| | | | |
+ 50.        +-+-+-+-+
+ 51.       2| | | | |
+ 52.        +-+-+-+-+
+ 53.       3| | | | |
+ 54.        +-+-+-+-+"""
+ 55.
+ 56.     newBoard = {}  # Contains the board data structure to be returned.
+ 57.     # Loop over every possible space and set all the tiles to blank:
+ 58.     for x in range(4):
+ 59.         for y in range(4):
+ 60.             newBoard[(x, y)] = BLANK
+ 61.
+ 62.     # Pick two random spaces for the two starting 2s:
+ 63.     startingTwosPlaced = 0  # The number of starting spaces picked.
+ 64.     while startingTwosPlaced &lt; 2:  # Repeat for duplicate spaces.
+ 65.         randomSpace = (random.randint(0, 3), random.randint(0, 3))
+ 66.         # Make sure the randomly selected space isn't already taken:
+ 67.         if newBoard[randomSpace] == BLANK:
+ 68.             newBoard[randomSpace] = 2
+ 69.             startingTwosPlaced = startingTwosPlaced + 1
+ 70.
+ 71.     return newBoard
+ 72.
+ 73.
+ 74. def drawBoard(board):
+ 75.     """Draws the board data structure on the screen."""
+ 76.
+ 77.     # Go through each possible space left to right, top to bottom, and
+ 78.     # create a list of what each space's label should be.
+ 79.     labels = []  # A list of strings for the number/blank for that tile.
+ 80.     for y in range(4):
+ 81.         for x in range(4):
+ 82.             tile = board[(x, y)]  # Get the tile at this space.
+ 83.             # Make sure the label is 5 spaces long:
+ 84.             labelForThisTile = str(tile).center(5)
+ 85.             labels.append(labelForThisTile)
+ 86.
+ 87.     # The {} are replaced with the label for that tile:
+<span type="pagebreak" title="381" id="calibre_link-749" class="calibre13"></span> 88.     print("""
+ 89. +-----+-----+-----+-----+
+ 90. |     |     |     |     |
+ 91. |{}|{}|{}|{}|
+ 92. |     |     |     |     |
+ 93. +-----+-----+-----+-----+
+ 94. |     |     |     |     |
+ 95. |{}|{}|{}|{}|
+ 96. |     |     |     |     |
+ 97. +-----+-----+-----+-----+
+ 98. |     |     |     |     |
+ 99. |{}|{}|{}|{}|
+100. |     |     |     |     |
+101. +-----+-----+-----+-----+
+102. |     |     |     |     |
+103. |{}|{}|{}|{}|
+104. |     |     |     |     |
+105. +-----+-----+-----+-----+
+106. """.format(*labels))
+107.
+108.
+109. def getScore(board):
+110.     """Returns the sum of all the tiles on the board data structure."""
+111.     score = 0
+112.     # Loop over every space and add the tile to the score:
+113.     for x in range(4):
+114.         for y in range(4):
+115.             # Only add non-blank tiles to the score:
+116.             if board[(x, y)] != BLANK:
+117.                 score = score + board[(x, y)]
+118.     return score
+119.
+120.
+121. def combineTilesInColumn(column):
+122.     """The column is a list of four tile. Index 0 is the "bottom" of
+123.     the column, and tiles are pulled "down" and combine if they are the
+124.     same. For example, combineTilesInColumn([2, BLANK, 2, BLANK])
+125.     returns [4, BLANK, BLANK, BLANK]."""
+126.
+127.     # Copy only the numbers (not blanks) from column to combinedTiles
+128.     combinedTiles = []  # A list of the non-blank tiles in column.
+129.     for i in range(4):
+130.         if column[i] != BLANK:
+131.             combinedTiles.append(column[i])
+132.
+133.     # Keep adding blanks until there are 4 tiles:
+134.     while len(combinedTiles) &lt; 4:
+135.         combinedTiles.append(BLANK)
+136.
+137.     # Combine numbers if the one "above" it is the same, and double it.
+138.     for i in range(3):  # Skip index 3: it's the topmost space.
+139.         if combinedTiles[i] == combinedTiles[i + 1]:
+140.             combinedTiles[i] *= 2  # Double the number in the tile.
+141.             # Move the tiles above it down one space:
+142.             for aboveIndex in range(i + 1, 3):
+<span type="pagebreak" title="382" id="calibre_link-750" class="calibre13"></span>143.                 combinedTiles[aboveIndex] = combinedTiles[aboveIndex + 1]
+144.             combinedTiles[3] = BLANK  # Topmost space is always BLANK.
+145.     return combinedTiles
+146.
+147.
+148. def makeMove(board, move):
+149.     """Carries out the move on the board.
+150.
+151.     The move argument is either 'W', 'A', 'S', or 'D' and the function
+152.     returns the resulting board data structure."""
+153.
+154.     # The board is split up into four columns, which are different
+155.     # depending on the direction of the move:
+156.     if move == 'W':
+157.         allColumnsSpaces = [[(0, 0), (0, 1), (0, 2), (0, 3)],
+158.                             [(1, 0), (1, 1), (1, 2), (1, 3)],
+159.                             [(2, 0), (2, 1), (2, 2), (2, 3)],
+160.                             [(3, 0), (3, 1), (3, 2), (3, 3)]]
+161.     elif move == 'A':
+162.         allColumnsSpaces = [[(0, 0), (1, 0), (2, 0), (3, 0)],
+163.                             [(0, 1), (1, 1), (2, 1), (3, 1)],
+164.                             [(0, 2), (1, 2), (2, 2), (3, 2)],
+165.                             [(0, 3), (1, 3), (2, 3), (3, 3)]]
+166.     elif move == 'S':
+167.         allColumnsSpaces = [[(0, 3), (0, 2), (0, 1), (0, 0)],
+168.                             [(1, 3), (1, 2), (1, 1), (1, 0)],
+169.                             [(2, 3), (2, 2), (2, 1), (2, 0)],
+170.                             [(3, 3), (3, 2), (3, 1), (3, 0)]]
+171.     elif move == 'D':
+172.         allColumnsSpaces = [[(3, 0), (2, 0), (1, 0), (0, 0)],
+173.                             [(3, 1), (2, 1), (1, 1), (0, 1)],
+174.                             [(3, 2), (2, 2), (1, 2), (0, 2)],
+175.                             [(3, 3), (2, 3), (1, 3), (0, 3)]]
+176.
+177.     # The board data structure after making the move:
+178.     boardAfterMove = {}
+179.     for columnSpaces in allColumnsSpaces:  # Loop over all 4 columns.
+180.         # Get the tiles of this column (The first tile is the "bottom"
+181.         # of the column):
+182.         firstTileSpace = columnSpaces[0]
+183.         secondTileSpace = columnSpaces[1]
+184.         thirdTileSpace = columnSpaces[2]
+185.         fourthTileSpace = columnSpaces[3]
+186.
+187.         firstTile = board[firstTileSpace]
+188.         secondTile = board[secondTileSpace]
+189.         thirdTile = board[thirdTileSpace]
+190.         fourthTile = board[fourthTileSpace]
+191.
+192.         # Form the column and combine the tiles in it:
+193.         column = [firstTile, secondTile, thirdTile, fourthTile]
+194.         combinedTilesColumn = combineTilesInColumn(column)
+195.
+196.         # Set up the new board data structure with the combined tiles:
+197.         boardAfterMove[firstTileSpace] = combinedTilesColumn[0]
+<span type="pagebreak" title="383" id="calibre_link-751" class="calibre13"></span>198.         boardAfterMove[secondTileSpace] = combinedTilesColumn[1]
+199.         boardAfterMove[thirdTileSpace] = combinedTilesColumn[2]
+200.         boardAfterMove[fourthTileSpace] = combinedTilesColumn[3]
+201.
+202.     return boardAfterMove
+203.
+204.
+205. def askForPlayerMove():
+206.     """Asks the player for the direction of their next move (or quit).
+207.
+208.     Ensures they enter a valid move: either 'W', 'A', 'S' or 'D'."""
+209.     print('Enter move: (WASD or Q to quit)')
+210.     while True:  # Keep looping until they enter a valid move.
+211.         move = input('&gt; ').upper()
+212.         if move == 'Q':
+213.             # End the program:
+214.             print('Thanks for playing!')
+215.             sys.exit()
+216.
+217.         # Either return the valid move, or loop back and ask again:
+218.         if move in ('W', 'A', 'S', 'D'):
+219.             return move
+220.         else:
+221.             print('Enter one of "W", "A", "S", "D", or "Q".')
+222.
+223.
+224. def addTwoToBoard(board):
+225.     """Adds a new 2 tile randomly to the board."""
+226.     while True:
+227.         randomSpace = (random.randint(0, 3), random.randint(0, 3))
+228.         if board[randomSpace] == BLANK:
+229.             board[randomSpace] = 2
+230.             return  # Return after finding one non-blank tile.
+231.
+232.
+233. def isFull(board):
+234.     """Returns True if the board data structure has no blanks."""
+235.     # Loop over every space on the board:
+236.     for x in range(4):
+237.         for y in range(4):
+238.             # If a space is blank, return False:
+239.             if board[(x, y)] == BLANK:
+240.                 return False
+241.     return True  # No space is blank, so return True.
+242.
+243.
+244. # If this program was run (instead of imported), run the game:
+245. if __name__ == '__main__':
+246.     try:
+247.         main()
+248.     except KeyboardInterrupt:
+249.         sys.exit()  # When Ctrl-C is pressed, end the program.</code></pre>
+<h2 id="calibre_link-327" class="calibre5"><span type="pagebreak" title="384" id="calibre_link-752" class="calibre15"></span>Exploring the Program</h2>
+<p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
+<ol class="decimal">
+<li value="1" class="calibre8">What happens if you change <code class="calibre22">return score</code> on line 118 to <code class="calibre22">return 9999</code>?</li>
+<li value="2" class="calibre8">What happens if you change <code class="calibre22">board[randomSpace] = 2</code> on line 229 to <code class="calibre22">board[randomSpace] = 256</code>?</li>
+</ol>
+</section>
+</div>
+
+
+
+
+</body></html>

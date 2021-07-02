@@ -1,0 +1,97 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="../style.css" rel="stylesheet" type="text/css" />
+<title>Project 15 - Deep Cave</title></head><body>
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-19">
+<section class="toclist">
+<header class="calibre10">
+<h1 class="chapter">
+<span class="chapternumber"><span type="pagebreak" title="66" id="calibre_link-434" class="calibre11"></span>#15</span><br class="calibre14" />
+<span class="chaptertitle">Deep Cave</span></h1>
+</header>
+<figure class="opener">
+<img src="../images/000002.png" alt="" class="calibre12" />
+</figure>
+<p class="chapterintro">This program is an animation of a deep cave that descends forever into the earth. Although short, this program takes advantage of the scrolling nature of the computer screen to produce an interesting and unending visualization, proof that it doesn’t take much code to produce something fun to watch. This program is similar to Project 58, “Rainbow.”</p>
+<h2 id="calibre_link-88" class="calibre5"><span type="pagebreak" title="67" id="calibre_link-435" class="calibre15"></span>The Program in Action</h2>
+<p class="bodyfirst">When you run <em class="calibre9">deepcave.py</em>, the output will look like this:</p>
+<pre class="calibre24"><code class="calibre22">Deep Cave, by Al Sweigart al@inventwithpython.com
+Press Ctrl-C to stop.
+####################          ########################################
+####################         #########################################
+####################          ########################################
+####################          ########################################
+#####################          #######################################
+######################          ######################################
+#####################          #######################################
+####################          ########################################
+###################          #########################################
+<var class="calibre27">--snip--</var></code></pre>
+<h2 id="calibre_link-89" class="calibre5">How It Works</h2>
+<p class="bodyfirst">This program takes advantage of the fact that printing new lines eventually causes the previous lines to move up the screen. By printing a slightly different gap on each line, the program creates a scrolling animation that looks like the viewer is moving downward.</p>
+<p class="calibre19">The number of hashtag characters on the left side is tracked by the <code class="calibre22">leftWidth</code> variable. The number of spaces in the middle is tracked by the <code class="calibre22">gapWidth</code> variable. The number of hashtag characters on the right side is calculated from <code class="calibre22">WIDTH - gapWidth - leftWidth</code>. This ensures that each line is always the same width.</p>
+<pre class="calibre24"><code class="calibre22"> 1. """Deep Cave, by Al Sweigart al@inventwithpython.com
+ 2. An animation of a deep cave that goes forever into the earth.
+ 3. View this code at https://nostarch.com/big-book-small-python-projects
+ 4. Tags: tiny, beginner, scrolling, artistic"""
+ 5.
+ 6.
+ 7. import random, sys, time
+ 8.
+ 9. # Set up the constants:
+10. WIDTH = 70  # (!) Try changing this to 10 or 30.
+11. PAUSE_AMOUNT = 0.05  # (!) Try changing this to 0 or 1.0.
+12.
+13. print('Deep Cave, by Al Sweigart al@inventwithpython.com')
+14. print('Press Ctrl-C to stop.')
+15. time.sleep(2)
+16.
+17. leftWidth = 20
+18. gapWidth = 10
+19.
+20. while True:
+21.     # Display the tunnel segment:
+22.     rightWidth = WIDTH - gapWidth - leftWidth
+23.     print(('#' * leftWidth) + (' ' * gapWidth) + ('#' * rightWidth))
+<span type="pagebreak" title="68" id="calibre_link-436" class="calibre13"></span>24.
+25.     # Check for Ctrl-C press during the brief pause:
+26.     try:
+27.         time.sleep(PAUSE_AMOUNT)
+28.     except KeyboardInterrupt:
+29.         sys.exit()  # When Ctrl-C is pressed, end the program.
+30.
+31.     # Adjust the left side width:
+32.     diceRoll = random.randint(1, 6)
+33.     if diceRoll == 1 and leftWidth &gt; 1:
+34.         leftWidth = leftWidth - 1  # Decrease left side width.
+35.     elif diceRoll == 2 and leftWidth + gapWidth &lt; WIDTH - 1:
+36.         leftWidth = leftWidth + 1  # Increase left side width.
+37.     else:
+38.         pass  # Do nothing; no change in left side width.
+39.
+40.     # Adjust the gap width:
+41.     # (!) Try uncommenting out all of the following code:
+42.     #diceRoll = random.randint(1, 6)
+43.     #if diceRoll == 1 and gapWidth &gt; 1:
+44.     #    gapWidth = gapWidth - 1  # Decrease gap width.
+45.     #elif diceRoll == 2 and leftWidth + gapWidth &lt; WIDTH - 1:
+46.     #    gapWidth = gapWidth + 1  # Increase gap width.
+47.     #else:
+48.     #    pass  # Do nothing; no change in gap width.</code></pre>
+<p class="calibre19">After entering the source code and running it a few times, try making experimental changes to it. The comments marked with <code class="calibre22">(!)</code> have suggestions for small changes you can make.</p>
+<h2 id="calibre_link-90" class="calibre5">Exploring the Program</h2>
+<p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
+<ol class="decimal">
+<li value="1" class="calibre8">What happens if you change <code class="calibre22">(' ' * gapWidth)</code> on line 23 to <code class="calibre22">('.' * gapWidth)</code>?</li>
+<li value="2" class="calibre8">What happens if you change <code class="calibre22">random.randint(1, 6)</code> on line 32 to <code class="calibre22">random.randint(1, 1)</code>?</li>
+<li value="3" class="calibre8">What happens if you change <code class="calibre22">random.randint(1, 6)</code> on line 32 to <code class="calibre22">random.randint(2, 2)</code>?</li>
+<li value="4" class="calibre8">What error message do you get if you delete or comment out <code class="calibre22">leftWidth = 20</code> on line 17?</li>
+<li value="5" class="calibre8">What happens if you change <code class="calibre22">WIDTH = 70</code> on line 10 to <code class="calibre22">WIDTH = -70</code>?</li>
+<li value="6" class="calibre8">What error message do you get if you change <code class="calibre22">PAUSE_AMOUNT = 0.05</code> on line 11 to <code class="calibre22">PAUSE_AMOUNT = -0.05</code>?</li>
+</ol>
+</section>
+</div>
+
+
+
+
+</body></html>

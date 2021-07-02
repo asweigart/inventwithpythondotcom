@@ -1,0 +1,309 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="../style.css" rel="stylesheet" type="text/css" />
+<title>Project 37 - Hungry Robots</title></head><body>
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-31">
+<section class="toclist">
+<header class="calibre10">
+<h1 class="chapter">
+<span class="chapternumber"><span type="pagebreak" title="171" id="calibre_link-539" class="calibre11"></span>#37</span><br class="calibre14" />
+<span class="chaptertitle">Hungry Robots</span></h1>
+</header>
+<figure class="opener">
+<img src="../images/000002.png" alt="" class="calibre12" />
+</figure>
+<p class="chapterintro">You are trapped in a maze with hungry robots! You don’t know why robots need to eat, but you don’t want to find out. The robots are badly programmed and will move directly toward you, even if blocked by walls. You must trick the robots into crashing into each other (or dead robots) without being caught.</p>
+<p class="calibre18">You have a personal teleporter device that can send you to a random new place, but it only has enough battery for two trips. Also, you and the robots can slip through corners!</p>
+<h2 id="calibre_link-169" class="calibre5"><span type="pagebreak" title="172" id="calibre_link-540" class="calibre15"></span>The Program in Action</h2>
+<p class="bodyfirst">When you run <em class="calibre9">hungryrobots.py</em>, the output will look like this:</p>
+<pre class="calibre24"><code class="calibre22">Hungry Robots, by Al Sweigart al@inventwithpython.com
+<var class="calibre27">--snip--</var>
+░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+░   ░ R             R ░  ░             ░
+░ ░    ░░░   R░                    ░░  ░
+░     ░ ░    ░ ░  ░         ░  ░░░     ░
+░    R░   ░    ░      ░░   ░░     ░    ░
+░ ░░  ░     ░ ░░░    ░           ░     ░
+░ ░░    ░   RX░░░  ░  ░  ░      ░      ░
+░          ░ R     R        R ░      ░ ░
+░    ░   ░            ░        ░   R ░ ░
+░ ░ R       R     ░   R ░   R          ░
+░   ░  ░     ░       ░  ░       ░   ░  ░
+░  @            ░          ░    R░░░ ░ ░
+░   ░  ░░      ░░                 ░    ░
+░  ░   ░░  ░            ░     R       ░░
+░░X          ░  ░        ░ R ░░RR  ░ R ░
+░RR R       R ░    ░          ░       R░
+░   ░░  RRR   R                        ░
+░           ░░R     ░                  ░
+░      R  ░ ░                     ░    ░
+░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+(T)eleports remaining: 2
+                    (Q) (W) ( )
+                    (A) (S) (D)
+Enter move or QUIT: (Z) (X) ( )
+<var class="calibre27">--snip--</var></code></pre>
+<h2 id="calibre_link-170" class="calibre5">How It Works</h2>
+<p class="bodyfirst">The x- and y- Cartesian coordinates that represent positions in this game allow us to use math to determine the direction in which the robots should move. In programming, x-coordinates increase going right, and y-coordinates increase going down. This means that if the robot’s x-coordinate is larger than the player’s coordinate, it should move left (that is, the code should subtract from its current x-coordinate) to move closer to the player. If the robot’s x-coordinate is smaller, it should move right (that is, the code should add to its current x-coordinate) instead. The same applies to moving up and down based on their relative y-coordinates.</p>
+<pre class="calibre24"><code class="calibre22">  1. """Hungry Robots, by Al Sweigart al@inventwithpython.com
+  2. Escape the hungry robots by making them crash into each other.
+  3. View this code at https://nostarch.com/big-book-small-python-projects
+  4. Tags: large, game"""
+  5.
+  6. import random, sys
+  7.
+  8. # Set up the constants:
+<span type="pagebreak" title="173" id="calibre_link-541" class="calibre13"></span>  9. WIDTH = 40           # (!) Try changing this to 70 or 10.
+ 10. HEIGHT = 20          # (!) Try changing this to 10.
+ 11. NUM_ROBOTS = 10      # (!) Try changing this to 1 or 30.
+ 12. NUM_TELEPORTS = 2    # (!) Try changing this to 0 or 9999.
+ 13. NUM_DEAD_ROBOTS = 2  # (!) Try changing this to 0 or 20.
+ 14. NUM_WALLS = 100      # (!) Try changing this to 0 or 1000.
+ 15.
+ 16. EMPTY_SPACE = ' '    # (!) Try changing this to '.'.
+ 17. PLAYER = '@'         # (!) Try changing this to 'R'.
+ 18. ROBOT = 'R'          # (!) Try changing this to '@'.
+ 19. DEAD_ROBOT = 'X'     # (!) Try changing this to 'R'.
+ 20.
+ 21. # (!) Try changing this to '#' or 'O' or ' ':
+ 22. WALL = chr(9617)  # Character 9617 is '░'
+ 23.
+ 24.
+ 25. def main():
+ 26.     print('''Hungry Robots, by Al Sweigart al@inventwithpython.com
+ 27.
+ 28. You are trapped in a maze with hungry robots! You don't know why robots
+ 29. need to eat, but you don't want to find out. The robots are badly
+ 30. programmed and will move directly toward you, even if blocked by walls.
+ 31. You must trick the robots into crashing into each other (or dead robots)
+ 32. without being caught. You have a personal teleporter device, but it only
+ 33. has enough battery for {} trips. Keep in mind, you and robots can slip
+ 34. through the corners of two diagonal walls!
+ 35. '''.format(NUM_TELEPORTS))
+ 36.
+ 37.     input('Press Enter to begin...')
+ 38.
+ 39.     # Set up a new game:
+ 40.     board = getNewBoard()
+ 41.     robots = addRobots(board)
+ 42.     playerPosition = getRandomEmptySpace(board, robots)
+ 43.     while True:  # Main game loop.
+ 44.         displayBoard(board, robots, playerPosition)
+ 45.
+ 46.         if len(robots) == 0:  # Check if the player has won.
+ 47.             print('All the robots have crashed into each other and you')
+ 48.             print('lived to tell the tale! Good job!')
+ 49.             sys.exit()
+ 50.
+ 51.         # Move the player and robots:
+ 52.         playerPosition = askForPlayerMove(board, robots, playerPosition)
+ 53.         robots = moveRobots(board, robots, playerPosition)
+ 54.
+ 55.         for x, y in robots:  # Check if the player has lost.
+ 56.             if (x, y) == playerPosition:
+ 57.                 displayBoard(board, robots, playerPosition)
+ 58.                 print('You have been caught by a robot!')
+ 59.                 sys.exit()
+ 60.
+ 61.
+ 62. def getNewBoard():
+ 63.     """Returns a dictionary that represents the board. The keys are
+<span type="pagebreak" title="174" id="calibre_link-542" class="calibre13"></span> 64.     (x, y) tuples of integer indexes for board positions, the values are
+ 65.     WALL, EMPTY_SPACE, or DEAD_ROBOT. The dictionary also has the key
+ 66.     'teleports' for the number of teleports the player has left.
+ 67.     The living robots are stored separately from the board dictionary."""
+ 68.     board = {'teleports': NUM_TELEPORTS}
+ 69.
+ 70.     # Create an empty board:
+ 71.     for x in range(WIDTH):
+ 72.         for y in range(HEIGHT):
+ 73.             board[(x, y)] = EMPTY_SPACE
+ 74.
+ 75.     # Add walls on the edges of the board:
+ 76.     for x in range(WIDTH):
+ 77.         board[(x, 0)] = WALL  # Make top wall.
+ 78.         board[(x, HEIGHT - 1)] = WALL  # Make bottom wall.
+ 79.     for y in range(HEIGHT):
+ 80.         board[(0, y)] = WALL  # Make left wall.
+ 81.         board[(WIDTH - 1, y)] = WALL  # Make right wall.
+ 82.
+ 83.     # Add the random walls:
+ 84.     for i in range(NUM_WALLS):
+ 85.         x, y = getRandomEmptySpace(board, [])
+ 86.         board[(x, y)] = WALL
+ 87.
+ 88.     # Add the starting dead robots:
+ 89.     for i in range(NUM_DEAD_ROBOTS):
+ 90.         x, y = getRandomEmptySpace(board, [])
+ 91.         board[(x, y)] = DEAD_ROBOT
+ 92.     return board
+ 93.
+ 94.
+ 95. def getRandomEmptySpace(board, robots):
+ 96.     """Return a (x, y) integer tuple of an empty space on the board."""
+ 97.     while True:
+ 98.         randomX = random.randint(1, WIDTH - 2)
+ 99.         randomY = random.randint(1, HEIGHT - 2)
+100.         if isEmpty(randomX, randomY, board, robots):
+101.             break
+102.     return (randomX, randomY)
+103.
+104.
+105. def isEmpty(x, y, board, robots):
+106.     """Return True if the (x, y) is empty on the board and there's also
+107.     no robot there."""
+108.     return board[(x, y)] == EMPTY_SPACE and (x, y) not in robots
+109.
+110.
+111. def addRobots(board):
+112.     """Add NUM_ROBOTS number of robots to empty spaces on the board and
+113.     return a list of these (x, y) spaces where robots are now located."""
+114.     robots = []
+115.     for i in range(NUM_ROBOTS):
+116.         x, y = getRandomEmptySpace(board, robots)
+117.         robots.append((x, y))
+118.     return robots
+<span type="pagebreak" title="175" id="calibre_link-543" class="calibre13"></span>119.
+120.
+121. def displayBoard(board, robots, playerPosition):
+122.     """Display the board, robots, and player on the screen."""
+123.     # Loop over every space on the board:
+124.     for y in range(HEIGHT):
+125.         for x in range(WIDTH):
+126.             # Draw the appropriate character:
+127.             if board[(x, y)] == WALL:
+128.                 print(WALL, end='')
+129.             elif board[(x, y)] == DEAD_ROBOT:
+130.                 print(DEAD_ROBOT, end='')
+131.             elif (x, y) == playerPosition:
+132.                 print(PLAYER, end='')
+133.             elif (x, y) in robots:
+134.                 print(ROBOT, end='')
+135.             else:
+136.                 print(EMPTY_SPACE, end='')
+137.         print()  # Print a newline.
+138.
+139.
+140. def askForPlayerMove(board, robots, playerPosition):
+141.     """Returns the (x, y) integer tuple of the place the player moves
+142.     next, given their current location and the walls of the board."""
+143.     playerX, playerY = playerPosition
+144.
+145.     # Find which directions aren't blocked by a wall:
+146.     q = 'Q' if isEmpty(playerX - 1, playerY - 1, board, robots) else ' '
+147.     w = 'W' if isEmpty(playerX + 0, playerY - 1, board, robots) else ' '
+148.     e = 'E' if isEmpty(playerX + 1, playerY - 1, board, robots) else ' '
+149.     d = 'D' if isEmpty(playerX + 1, playerY + 0, board, robots) else ' '
+150.     c = 'C' if isEmpty(playerX + 1, playerY + 1, board, robots) else ' '
+151.     x = 'X' if isEmpty(playerX + 0, playerY + 1, board, robots) else ' '
+152.     z = 'Z' if isEmpty(playerX - 1, playerY + 1, board, robots) else ' '
+153.     a = 'A' if isEmpty(playerX - 1, playerY + 0, board, robots) else ' '
+154.     allMoves = (q + w + e + d + c + x + a + z + 'S')
+155.
+156.     while True:
+157.         # Get player's move:
+158.         print('(T)eleports remaining: {}'.format(board["teleports"]))
+159.         print('                    ({}) ({}) ({})'.format(q, w, e))
+160.         print('                    ({}) (S) ({})'.format(a, d))
+161.         print('Enter move or QUIT: ({}) ({}) ({})'.format(z, x, c))
+162.
+163.         move = input('&gt; ').upper()
+164.         if move == 'QUIT':
+165.             print('Thanks for playing!')
+166.             sys.exit()
+167.         elif move == 'T' and board['teleports'] &gt; 0:
+168.             # Teleport the player to a random empty space:
+169.             board['teleports'] -= 1
+170.             return getRandomEmptySpace(board, robots)
+171.         elif move != '' and move in allMoves:
+172.             # Return the new player position based on their move:
+173.             return {'Q': (playerX - 1, playerY - 1),
+<span type="pagebreak" title="176" id="calibre_link-544" class="calibre13"></span>174.                     'W': (playerX + 0, playerY - 1),
+175.                     'E': (playerX + 1, playerY - 1),
+176.                     'D': (playerX + 1, playerY + 0),
+177.                     'C': (playerX + 1, playerY + 1),
+178.                     'X': (playerX + 0, playerY + 1),
+179.                     'Z': (playerX - 1, playerY + 1),
+180.                     'A': (playerX - 1, playerY + 0),
+181.                     'S': (playerX, playerY)}[move]
+182.
+183.
+184. def moveRobots(board, robotPositions, playerPosition):
+185.     """Return a list of (x, y) tuples of new robot positions after they
+186.     have tried to move toward the player."""
+187.     playerx, playery = playerPosition
+188.     nextRobotPositions = []
+189.
+190.     while len(robotPositions) &gt; 0:
+191.         robotx, roboty = robotPositions[0]
+192.
+193.         # Determine the direction the robot moves.
+194.         if robotx &lt; playerx:
+195.             movex = 1  # Move right.
+196.         elif robotx &gt; playerx:
+197.             movex = -1  # Move left.
+198.         elif robotx == playerx:
+199.             movex = 0  # Don't move horizontally.
+200.
+201.         if roboty &lt; playery:
+202.             movey = 1  # Move up.
+203.         elif roboty &gt; playery:
+204.             movey = -1  # Move down.
+205.         elif roboty == playery:
+206.             movey = 0  # Don't move vertically.
+207.
+208.         # Check if the robot would run into a wall, and adjust course:
+209.         if board[(robotx + movex, roboty + movey)] == WALL:
+210.             # Robot would run into a wall, so come up with a new move:
+211.             if board[(robotx + movex, roboty)] == EMPTY_SPACE:
+212.                 movey = 0  # Robot can't move horizontally.
+213.             elif board[(robotx, roboty + movey)] == EMPTY_SPACE:
+214.                 movex = 0  # Robot can't move vertically.
+215.             else:
+216.                 # Robot can't move.
+217.                 movex = 0
+218.                 movey = 0
+219.         newRobotx = robotx + movex
+220.         newRoboty = roboty + movey
+221.
+222.         if (board[(robotx, roboty)] == DEAD_ROBOT
+223.             or board[(newRobotx, newRoboty)] == DEAD_ROBOT):
+224.             # Robot is at a crash site, remove it.
+225.             del robotPositions[0]
+226.             continue
+227.
+228.         # Check if it moves into a robot, then destroy both robots:
+<span type="pagebreak" title="177" id="calibre_link-545" class="calibre13"></span>229.         if (newRobotx, newRoboty) in nextRobotPositions:
+230.             board[(newRobotx, newRoboty)] = DEAD_ROBOT
+231.             nextRobotPositions.remove((newRobotx, newRoboty))
+232.         else:
+233.             nextRobotPositions.append((newRobotx, newRoboty))
+234.
+235.         # Remove robots from robotPositions as they move.
+236.         del robotPositions[0]
+237.     return nextRobotPositions
+238.
+239.
+240. # If this program was run (instead of imported), run the game:
+241. if __name__ == '__main__':
+242.     main()</code></pre>
+<p class="calibre19">After entering the source code and running it a few times, try making experimental changes to it. The comments marked with <code class="calibre22">(!)</code> have suggestions for small changes you can make. On your own, you can also try to figure out how to do the following:</p>
+<ul class="calibre25">
+<li class="calibre8">Create two different kinds of robots: those that can only move diagonally and those that can only move in cardinal directions.</li>
+<li class="calibre8">Give the player a limited number of traps they can leave behind to stop any robot that steps on one.</li>
+<li class="calibre8">Give the player a limited number of “instant walls” that they can put up for their own defense.</li>
+</ul>
+<h2 id="calibre_link-171" class="calibre5">Exploring the Program</h2>
+<p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
+<ol class="decimal">
+<li value="1" class="calibre8">What happens if you change <code class="calibre22">WALL = chr(9617)</code> on line 22 to <code class="calibre22">WALL = 'R'</code>?</li>
+<li value="2" class="calibre8">What happens if you change <code class="calibre22">return nextRobotPositions</code> on line 237 to <code class="calibre22">return robotPositions</code>?</li>
+<li value="3" class="calibre8">What happens if you delete or comment out <code class="calibre22">displayBoard(board, robots, playerPosition)</code> on line 44?</li>
+<li value="4" class="calibre8">What happens if you delete or comment out <code class="calibre22">robots = moveRobots(board, robots, playerPosition)</code> on line 53?</li>
+</ol>
+</section>
+</div>
+
+
+
+
+</body></html>

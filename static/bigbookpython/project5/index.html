@@ -1,0 +1,196 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="../style.css" rel="stylesheet" type="text/css" />
+<title>Project 5 - Bouncing DVD Logo</title></head><body>
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-52">
+<section class="toclist">
+<header class="calibre10">
+<h1 class="chapter">
+<span class="chapternumber"><span type="pagebreak" title="23" id="calibre_link-391" class="calibre11"></span>#5</span><br class="calibre14" />
+<span class="chaptertitle">Bouncing DVD Logo</span></h1>
+</header>
+<figure class="opener">
+<img src="../images/000002.png" alt="" class="calibre12" />
+</figure>
+<p class="chapterintro">If you are of a certain age, you’ll remember those ancient technological devices called DVD players. When not playing DVDs, they would display a diagonally traveling DVD logo that bounced off the edges of the screen. This program simulates this colorful DVD logo by making it change direction each time it hits an edge. We’ll also keep track of how many times a logo hits a corner of the screen. This creates an interesting visual animation to look at, especially for the magical moment when a logo lines up perfectly with a corner.</p>
+<p class="calibre18"><span type="pagebreak" title="24" id="calibre_link-392" class="calibre20"></span>You can’t run this program from your integrated development environment (IDE) or editor because it uses the <code class="calibre22">bext</code> module. Therefore, it must be run from the Command Prompt or Terminal in order to display correctly. You can find more information about the <code class="calibre22">bext</code> module at <a href="https://pypi.org/project/bext/" class="linkurl">https://pypi.org/project/bext/</a>.</p>
+<h2 id="calibre_link-53" class="calibre5">The Program in Action</h2>
+<p class="bodyfirst">When you run <em class="calibre9">bouncingdvd.py</em>, the output will look like <a href="#calibre_link-336" id="calibre_link-796" class="linkurl">Figure 5-1</a>.</p>
+<figure class="calibre28">
+<img src="../images/000011.png" alt="f05001" class="calibre12" />
+<figcaption class="calibre29"><p class="calibre30"><a id="calibre_link-336" class="linkurl">Figure 5-1</a>: The diagonally moving DVD logos of the <em class="calibre31">bouncingdvd.py</em> program</p></figcaption>
+</figure>
+<h2 id="calibre_link-54" class="calibre5">How It Works</h2>
+<p class="bodyfirst">You may remember Cartesian coordinates from your math class in school. In programming, the x-coordinate represents an object’s horizontal position and the y-coordinate represents its vertical position, just like in mathematics. However, unlike in mathematics, the origin point (0, 0) is in the upper-left corner of the screen, and the y-coordinate increases as you go down. The x-coordinate increases as the object moves right, just like in mathematics. <a href="#calibre_link-337" id="calibre_link-797" class="linkurl">Figure 5-2</a> shows the coordinate system for your screen.</p>
+<span type="pagebreak" title="25" id="calibre_link-393" class="calibre20"></span><figure class="calibre28">
+<img src="../images/000023.png" alt="f05002" class="calibre12" />
+<figcaption class="calibre29"><p class="calibre30"><a id="calibre_link-337" class="linkurl">Figure 5-2</a>: The origin point (0, 0) is in the upper left of the screen, while the x- and y-coordinates increase going right and down, respectively.</p></figcaption>
+</figure>
+<p class="calibre19">The <code class="calibre22">bext</code> module’s <code class="calibre22">goto()</code> function works the same way: calling <code class="calibre22">bext.goto(0, 0)</code> places the text cursor at the top left of the terminal window. We represent each bouncing DVD logo using a Python dictionary with the keys <code class="calibre22">'color'</code>, <code class="calibre22">'direction'</code>, <code class="calibre22">'x'</code>, and <code class="calibre22">'y'</code>. The values for the <code class="calibre22">'x'</code> and <code class="calibre22">'y'</code> are integers representing the logo’s position in the window. Since these values get passed to <code class="calibre22">bext.goto()</code>, increasing them will move the logo right and down, while decreasing them will move the logo left and up.</p>
+<pre class="calibre24"><code class="calibre22">  1. """Bouncing DVD Logo, by Al Sweigart al@inventwithpython.com
+  2. A bouncing DVD logo animation. You have to be "of a certain age" to
+  3. appreciate this. Press Ctrl-C to stop.
+  4.
+  5. NOTE: Do not resize the terminal window while this program is running.
+  6. View this code at https://nostarch.com/big-book-small-python-projects
+  7. Tags: short, artistic, bext"""
+  8.
+  9. import sys, random, time
+ 10.
+ 11. try:
+ 12.     import bext
+ 13. except ImportError:
+ 14.     print('This program requires the bext module, which you')
+ 15.     print('can install by following the instructions at')
+ 16.     print('https://pypi.org/project/Bext/')
+ 17.     sys.exit()
+ 18.
+ 19. # Set up the constants:
+ 20. WIDTH, HEIGHT = bext.size()
+<span type="pagebreak" title="26" id="calibre_link-394" class="calibre13"></span> 21. # We can't print to the last column on Windows without it adding a
+ 22. # newline automatically, so reduce the width by one:
+ 23. WIDTH -= 1
+ 24.
+ 25. NUMBER_OF_LOGOS = 5  # (!) Try changing this to 1 or 100.
+ 26. PAUSE_AMOUNT = 0.2  # (!) Try changing this to 1.0 or 0.0.
+ 27. # (!) Try changing this list to fewer colors:
+ 28. COLORS = ['red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white']
+ 29.
+ 30. UP_RIGHT   = 'ur'
+ 31. UP_LEFT    = 'ul'
+ 32. DOWN_RIGHT = 'dr'
+ 33. DOWN_LEFT  = 'dl'
+ 34. DIRECTIONS = (UP_RIGHT, UP_LEFT, DOWN_RIGHT, DOWN_LEFT)
+ 35.
+ 36. # Key names for logo dictionaries:
+ 37. COLOR = 'color'
+ 38. X = 'x'
+ 39. Y = 'y'
+ 40. DIR = 'direction'
+ 41.
+ 42.
+ 43. def main():
+ 44.     bext.clear()
+ 45.
+ 46.     # Generate some logos.
+ 47.     logos = []
+ 48.     for i in range(NUMBER_OF_LOGOS):
+ 49.         logos.append({COLOR: random.choice(COLORS),
+ 50.                       X: random.randint(1, WIDTH - 4),
+ 51.                       Y: random.randint(1, HEIGHT - 4),
+ 52.                       DIR: random.choice(DIRECTIONS)})
+ 53.         if logos[-1][X] % 2 == 1:
+ 54.             # Make sure X is even so it can hit the corner.
+ 55.             logos[-1][X] -= 1
+ 56.
+ 57.     cornerBounces = 0  # Count how many times a logo hits a corner.
+ 58.     while True:  # Main program loop.
+ 59.         for logo in logos:  # Handle each logo in the logos list.
+ 60.             # Erase the logo's current location:
+ 61.             bext.goto(logo[X], logo[Y])
+ 62.             print('   ', end='')  # (!) Try commenting this line out.
+ 63.
+ 64.             originalDirection = logo[DIR]
+ 65.
+ 66.             # See if the logo bounces off the corners:
+ 67.             if logo[X] == 0 and logo[Y] == 0:
+ 68.                 logo[DIR] = DOWN_RIGHT
+ 69.                 cornerBounces += 1
+ 70.             elif logo[X] == 0 and logo[Y] == HEIGHT - 1:
+ 71.                 logo[DIR] = UP_RIGHT
+ 72.                 cornerBounces += 1
+ 73.             elif logo[X] == WIDTH - 3 and logo[Y] == 0:
+ 74.                 logo[DIR] = DOWN_LEFT
+ 75.                 cornerBounces += 1
+<span type="pagebreak" title="27" id="calibre_link-395" class="calibre13"></span> 76.             elif logo[X] == WIDTH - 3 and logo[Y] == HEIGHT - 1:
+ 77.                 logo[DIR] = UP_LEFT
+ 78.                 cornerBounces += 1
+ 79.
+ 80.             # See if the logo bounces off the left edge:
+ 81.             elif logo[X] == 0 and logo[DIR] == UP_LEFT:
+ 82.                 logo[DIR] = UP_RIGHT
+ 83.             elif logo[X] == 0 and logo[DIR] == DOWN_LEFT:
+ 84.                 logo[DIR] = DOWN_RIGHT
+ 85.
+ 86.             # See if the logo bounces off the right edge:
+ 87.             # (WIDTH - 3 because 'DVD' has 3 letters.)
+ 88.             elif logo[X] == WIDTH - 3 and logo[DIR] == UP_RIGHT:
+ 89.                 logo[DIR] = UP_LEFT
+ 90.             elif logo[X] == WIDTH - 3 and logo[DIR] == DOWN_RIGHT:
+ 91.                 logo[DIR] = DOWN_LEFT
+ 92.
+ 93.             # See if the logo bounces off the top edge:
+ 94.             elif logo[Y] == 0 and logo[DIR] == UP_LEFT:
+ 95.                 logo[DIR] = DOWN_LEFT
+ 96.             elif logo[Y] == 0 and logo[DIR] == UP_RIGHT:
+ 97.                 logo[DIR] = DOWN_RIGHT
+ 98.
+ 99.             # See if the logo bounces off the bottom edge:
+100.             elif logo[Y] == HEIGHT - 1 and logo[DIR] == DOWN_LEFT:
+101.                 logo[DIR] = UP_LEFT
+102.             elif logo[Y] == HEIGHT - 1 and logo[DIR] == DOWN_RIGHT:
+103.                 logo[DIR] = UP_RIGHT
+104.
+105.             if logo[DIR] != originalDirection:
+106.                 # Change color when the logo bounces:
+107.                 logo[COLOR] = random.choice(COLORS)
+108.
+109.             # Move the logo. (X moves by 2 because the terminal
+110.             # characters are twice as tall as they are wide.)
+111.             if logo[DIR] == UP_RIGHT:
+112.                 logo[X] += 2
+113.                 logo[Y] -= 1
+114.             elif logo[DIR] == UP_LEFT:
+115.                 logo[X] -= 2
+116.                 logo[Y] -= 1
+117.             elif logo[DIR] == DOWN_RIGHT:
+118.                 logo[X] += 2
+119.                 logo[Y] += 1
+120.             elif logo[DIR] == DOWN_LEFT:
+121.                 logo[X] -= 2
+122.                 logo[Y] += 1
+123.
+124.         # Display number of corner bounces:
+125.         bext.goto(5, 0)
+126.         bext.fg('white')
+127.         print('Corner bounces:', cornerBounces, end='')
+128.
+129.         for logo in logos:
+130.             # Draw the logos at their new location:
+<span type="pagebreak" title="28" id="calibre_link-396" class="calibre13"></span>131.             bext.goto(logo[X], logo[Y])
+132.             bext.fg(logo[COLOR])
+133.             print('DVD', end='')
+134.
+135.         bext.goto(0, 0)
+136.
+137.         sys.stdout.flush()  # (Required for bext-using programs.)
+138.         time.sleep(PAUSE_AMOUNT)
+139.
+140.
+141. # If this program was run (instead of imported), run the game:
+142. if __name__ == '__main__':
+143.     try:
+144.         main()
+145.     except KeyboardInterrupt:
+146.         print()
+147.         print('Bouncing DVD Logo, by Al Sweigart')
+148.         sys.exit()  # When Ctrl-C is pressed, end the program.</code></pre>
+<p class="calibre19">After entering the source code and running it a few times, try making experimental changes to it. The comments marked with <code class="calibre22">(!)</code> have suggestions for small changes you can make. On your own, you can also try to figure out how to do the following:</p>
+<ul class="calibre25">
+<li class="calibre8">Change <code class="calibre22">NUMBER_OF_LOGOS</code> to increase the number of bouncing logos on the screen.</li>
+<li class="calibre8">Change <code class="calibre22">PAUSE_AMOUNT</code> to speed up or slow down the logos.</li>
+</ul>
+<h2 id="calibre_link-55" class="calibre5">Exploring the Program</h2>
+<p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
+<ol class="decimal">
+<li value="1" class="calibre8">What happens if you change <code class="calibre22">WIDTH, HEIGHT = bext.size()</code> on line 20 to <code class="calibre22">WIDTH, HEIGHT = 10, 5</code>?</li>
+<li value="2" class="calibre8">What happens if you replace <code class="calibre22">DIR: random.choice(DIRECTIONS)</code> on line 52 with <code class="calibre22">DIR: DOWN_RIGHT</code>?</li>
+<li value="3" class="calibre8">How can you make the <code class="calibre22">'Corner bounces:'</code> text not appear on the screen?</li>
+<li value="4" class="calibre8">What error message do you get if you delete or comment out <code class="calibre22">cornerBounces = 0</code> on line 57?</li>
+</ol>
+</section>
+</div>
+
+
+
+
+</body></html>

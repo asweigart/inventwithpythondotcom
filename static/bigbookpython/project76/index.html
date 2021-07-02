@@ -1,0 +1,155 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="../style.css" rel="stylesheet" type="text/css" />
+<title>Project 76 - Tic-Tac-Toe</title></head><body>
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-26">
+<section class="toclist">
+<header class="calibre10">
+<h1 class="chapter">
+<span class="chapternumber"><span type="pagebreak" title="361" id="calibre_link-729" class="calibre11"></span>#76</span><br class="calibre14" />
+<span class="chaptertitle">Tic-Tac-Toe</span></h1>
+</header>
+<figure class="opener">
+<img src="../images/000002.png" alt="" class="calibre12" />
+</figure>
+<p class="chapterintro">Tic-tac-toe is a classic pencil-and-paper game played on a 3 × 3 grid. Players take turns placing their X or O marks, trying to get three in a row. Most games of tic-tac-toe end in a tie, but it is possible to outsmart your opponent if they’re not careful.</p>
+<h2 id="calibre_link-314" class="calibre5"><span type="pagebreak" title="362" id="calibre_link-730" class="calibre15"></span>The Program in Action</h2>
+<p class="bodyfirst">When you run <em class="calibre9">tictactoe.py</em>, the output will look like this:</p>
+<pre class="calibre24"><code class="calibre22">Welcome to Tic-Tac-Toe!
+
+       | |   1 2 3
+      -+-+-
+       | |   4 5 6
+      -+-+-
+       | |   7 8 9
+What is X's move? (1-9)
+&gt; <b class="calibre6">1</b>
+
+      X| |   1 2 3
+      -+-+-
+       | |   4 5 6
+      -+-+-
+       | |   7 8 9
+What is O's move? (1-9)
+<var class="calibre27">--snip--</var>
+      X|O|X  1 2 3
+      -+-+-
+      X|O|O  4 5 6
+      -+-+-
+      O|X|X  7 8 9
+The game is a tie!
+Thanks for playing!</code></pre>
+<h2 id="calibre_link-315" class="calibre5">How It Works</h2>
+<p class="bodyfirst">To represent tic-tac-toe boards in this program, we use a dictionary with keys <code class="calibre22">'1'</code> through <code class="calibre22">'9'</code> for the spaces on the board. The numbered spaces are arranged in the same way as a phone’s keypad. The values in this dictionary are the string <code class="calibre22">'X'</code> or <code class="calibre22">'O'</code> for a player’s mark and <code class="calibre22">' '</code> for an empty space.</p>
+<pre class="calibre24"><code class="calibre22">  1. """Tic-Tac-Toe, by Al Sweigart al@inventwithpython.com
+  2. The classic board game.
+  3. View this code at https://nostarch.com/big-book-small-python-projects
+  4. Tags: short, board game, game, two-player"""
+  5.
+  6. ALL_SPACES = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
+  7. X, O, BLANK = 'X', 'O', ' '  # Constants for string values.
+  8.
+  9.
+ 10. def main():
+ 11.     print('Welcome to Tic-Tac-Toe!')
+ 12.     gameBoard = getBlankBoard()  # Create a TTT board dictionary.
+ 13.     currentPlayer, nextPlayer = X, O  # X goes first, O goes next.
+ 14.
+ 15.     while True:  # Main game loop.
+ 16.         # Display the board on the screen:
+ 17.         print(getBoardStr(gameBoard))
+<span type="pagebreak" title="363" id="calibre_link-731" class="calibre13"></span> 18.
+ 19.         # Keep asking the player until they enter a number 1-9:
+ 20.         move = None
+ 21.         while not isValidSpace(gameBoard, move):
+ 22.             print('What is {}\'s move? (1-9)'.format(currentPlayer))
+ 23.             move = input('&gt; ')
+ 24.         updateBoard(gameBoard, move, currentPlayer)  # Make the move.
+ 25.
+ 26.         # Check if the game is over:
+ 27.         if isWinner(gameBoard, currentPlayer):  # Check for a winner.
+ 28.             print(getBoardStr(gameBoard))
+ 29.             print(currentPlayer + ' has won the game!')
+ 30.             break
+ 31.         elif isBoardFull(gameBoard):  # Check for a tie.
+ 32.             print(getBoardStr(gameBoard))
+ 33.             print('The game is a tie!')
+ 34.             break
+ 35.         # Switch turns to the next player:
+ 36.         currentPlayer, nextPlayer = nextPlayer, currentPlayer
+ 37.     print('Thanks for playing!')
+ 38.
+ 39.
+ 40. def getBlankBoard():
+ 41.     """Create a new, blank tic-tac-toe board."""
+ 42.     # Map of space numbers: 1|2|3
+ 43.     #                       -+-+-
+ 44.     #                       4|5|6
+ 45.     #                       -+-+-
+ 46.     #                       7|8|9
+ 47.     # Keys are 1 through 9, the values are X, O, or BLANK:
+ 48.     board = {}
+ 49.     for space in ALL_SPACES:
+ 50.         board[space] = BLANK  # All spaces start as blank.
+ 51.     return board
+ 52.
+ 53.
+ 54. def getBoardStr(board):
+ 55.     """Return a text-representation of the board."""
+ 56.     return '''
+ 57.       {}|{}|{}  1 2 3
+ 58.       -+-+-
+ 59.       {}|{}|{}  4 5 6
+ 60.       -+-+-
+ 61.       {}|{}|{}  7 8 9'''.format(board['1'], board['2'], board['3'],
+ 62.                                 board['4'], board['5'], board['6'],
+ 63.                                 board['7'], board['8'], board['9'])
+ 64.
+ 65. def isValidSpace(board, space):
+ 66.     """Returns True if the space on the board is a valid space number
+ 67.     and the space is blank."""
+ 68.     return space in ALL_SPACES and board[space] == BLANK
+ 69.
+ 70.
+ 71. def isWinner(board, player):
+ 72.     """Return True if player is a winner on this TTTBoard."""
+<span type="pagebreak" title="364" id="calibre_link-732" class="calibre13"></span> 73.     # Shorter variable names used here for readability:
+ 74.     b, p = board, player
+ 75.     # Check for 3 marks across 3 rows, 3 columns, and 2 diagonals.
+ 76.     return ((b['1'] == b['2'] == b['3'] == p) or  # Across top
+ 77.             (b['4'] == b['5'] == b['6'] == p) or  # Across middle
+ 78.             (b['7'] == b['8'] == b['9'] == p) or  # Across bottom
+ 79.             (b['1'] == b['4'] == b['7'] == p) or  # Down left
+ 80.             (b['2'] == b['5'] == b['8'] == p) or  # Down middle
+ 81.             (b['3'] == b['6'] == b['9'] == p) or  # Down right
+ 82.             (b['3'] == b['5'] == b['7'] == p) or  # Diagonal
+ 83.             (b['1'] == b['5'] == b['9'] == p))    # Diagonal
+ 84.
+ 85. def isBoardFull(board):
+ 86.     """Return True if every space on the board has been taken."""
+ 87.     for space in ALL_SPACES:
+ 88.         if board[space] == BLANK:
+ 89.             return False  # If any space is blank, return False.
+ 90.     return True  # No spaces are blank, so return True.
+ 91.
+ 92.
+ 93. def updateBoard(board, space, mark):
+ 94.     """Sets the space on the board to mark."""
+ 95.     board[space] = mark
+ 96.
+ 97.
+ 98. if __name__ == '__main__':
+ 99.     main()  # Call main() if this module is run, but not when imported.</code></pre>
+<h2 id="calibre_link-316" class="calibre5">Exploring the Program</h2>
+<p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
+<ol class="decimal">
+<li value="1" class="calibre8">What happens if you change <code class="calibre22">X, O, BLANK = 'X', 'O', ' '</code> on line 7 to <code class="calibre22">X, O, BLANK = 'X', 'X', ' '</code>?</li>
+<li value="2" class="calibre8">What happens if you change <code class="calibre22">board[space] = mark</code> on line 95 to <code class="calibre22">board[space] = X</code>?</li>
+<li value="3" class="calibre8">What happens if you change <code class="calibre22">board[space] = BLANK</code> on line 50 to <code class="calibre22">board[space] = X</code>?</li>
+</ol>
+</section>
+</div>
+
+
+
+
+</body></html>

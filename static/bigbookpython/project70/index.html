@@ -1,0 +1,225 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="../style.css" rel="stylesheet" type="text/css" />
+<title>Project 70 - Soroban Japanese Abacus</title></head><body>
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-291">
+<section class="toclist">
+<header class="calibre10">
+<h1 class="chapter">
+<span class="chapternumber"><span type="pagebreak" title="333" id="calibre_link-701" class="calibre11"></span>#70</span><br class="calibre14" />
+<span class="chaptertitle">Soroban Japanese Abacus</span></h1>
+</header>
+<figure class="opener">
+<img src="../images/000002.png" alt="" class="calibre12" />
+</figure>
+<p class="chapterintro">An abacus, also called a counting frame, is a calculating tool used in many cultures long before electronic calculators were invented. <a href="#calibre_link-352" id="calibre_link-813" class="linkurl">Figure 70-1</a> shows the Japanese form of the abacus, called a soroban. Each wire represents a place in a positional numeral system, and the beads on the wire represent the digit at that place. For example, a soroban with two beads moved over on the rightmost wire and three beads moved over on the second-to-rightmost wire would represent the number 32. This program simulates a soroban. (The irony of using a computer to simulate a pre-computer computing tool is not lost on me.)</p>
+<span type="pagebreak" title="334" id="calibre_link-702" class="calibre20"></span><figure class="calibre28">
+<img src="../images/000008.png" alt="f70001" class="calibre12" />
+<figcaption class="calibre29"><p class="calibre30"><a id="calibre_link-352" class="linkurl">Figure 70-1</a>: A soroban</p></figcaption>
+</figure>
+<p class="calibre19">Each column in the soroban represents a different digit. The rightmost column is the ones place, the column to its left is the tens place, the column to the left of that is the hundreds place, and so on. The Q, W, E, R, T, Y, U, I, O, and P keys along the top of your keyboard can increase the digit at their respective positions, while the A, S, D, F, G, H, J, K, L, and ; keys will decrease them. The beads on the virtual soroban will slide to reflect the current number. You can also enter numbers directly.</p>
+<p class="calibre19">The four beads below the horizontal divider are “earth” beads, and lifting them up against the divider counts as 1 for that digit. The bead above the horizontal divider is a “heaven” bead, and pulling it down against the divider counts as 5 for that digit, so pulling down one heaven bead and pulling up three earth beads in the tens column represents the number 80. More information about abacuses and how to use them can be found at <a href="https://en.wikipedia.org/wiki/Abacus" class="linkurl">https://en.wikipedia.org/wiki/Abacus</a>.</p>
+<h2 id="calibre_link-292" class="calibre5">The Program in Action</h2>
+<p class="bodyfirst">When you run <em class="calibre9">soroban.py</em>, the output will look like this:</p>
+<pre class="calibre24"><code class="calibre22">Soroban - The Japanese Abacus
+By Al Sweigart al@inventwithpython.com
+
+
++================================+
+I  O  O  O  O  O  O  O  O  O  O  I
+I  |  |  |  |  |  |  |  |  |  |  I
+I  |  |  |  |  |  |  |  |  |  |  I
++================================+
+I  |  |  |  |  |  |  |  |  |  |  I
+I  |  |  |  |  |  |  |  |  |  |  I
+I  O  O  O  O  O  O  O  O  O  O  I
+I  O  O  O  O  O  O  O  O  O  O  I
+I  O  O  O  O  O  O  O  O  O  O  I
+I  O  O  O  O  O  O  O  O  O  O  I
++==0==0==0==0==0==0==0==0==0==0==+
+  +q  w  e  r  t  y  u  i  o  p
+  -a  s  d  f  g  h  j  k  l  ;
+(Enter a number, "quit", or a stream of up/down letters.)
+&gt; <b class="calibre6">pppiiiii</b>
+
+<span type="pagebreak" title="335" id="calibre_link-703" class="calibre13"></span>+================================+
+I  O  O  O  O  O  O  O  |  O  O  I
+I  |  |  |  |  |  |  |  |  |  |  I
+I  |  |  |  |  |  |  |  O  |  |  I
++================================+
+I  |  |  |  |  |  |  |  |  |  O  I
+I  |  |  |  |  |  |  |  |  |  O  I
+I  O  O  O  O  O  O  O  O  O  O  I
+I  O  O  O  O  O  O  O  O  O  |  I
+I  O  O  O  O  O  O  O  O  O  |  I
+I  O  O  O  O  O  O  O  O  O  O  I
++==0==0==0==0==0==0==0==5==0==3==+
+  +q  w  e  r  t  y  u  i  o  p
+  -a  s  d  f  g  h  j  k  l  ;
+(Enter a number, "quit", or a stream of up/down letters.)
+<var class="calibre27">--snip--</var></code></pre>
+<h2 id="calibre_link-293" class="calibre5">How It Works</h2>
+<p class="bodyfirst">The <code class="calibre22">displayAbacus()</code> function accepts a <code class="calibre22">number</code> argument used to figure out where it should render beads on the abacus. The soroban always has exactly 80 possible locations for either <code class="calibre22">'O' </code>beads or <code class="calibre22">'|'</code> rod segments, as marked by the curly braces (<code class="calibre22">{}</code>) in the multiline string on lines 127 to 139. Another 10 curly braces represent the digits of the <code class="calibre22">number</code> argument.</p>
+<p class="calibre19">We need to create a list of strings to fill in these curly braces, going from left to right, top to bottom. The code in <code class="calibre22">displayAbacus()</code> will populate a <code class="calibre22">hasBead</code> list with a <code class="calibre22">True</code> value to display a <code class="calibre22">'O'</code> bead and a <code class="calibre22">False</code> value to display a <code class="calibre22">'|'</code>. The first 10 values in this list are for the top “heaven” row. We’ll put a bead in this row if the column’s digit is 0, 1, 2, 3, or 4, since the heaven bead won’t be in that row unless the digit for that column is 0 to 4. We add Boolean values to <code class="calibre22">hasBead</code> for the remaining rows.</p>
+<p class="calibre19">Lines 118 to 123 use <code class="calibre22">hasBead</code> to create an <code class="calibre22">abacusChar</code> list that contains the actual <code class="calibre22">'O'</code> and <code class="calibre22">'|'</code> strings. When combined with <code class="calibre22">numberList</code> on line 126, the program forms a <code class="calibre22">chars</code> list that populates the curly braces (<code class="calibre22">{}</code>) for the multiline-string ASCII art of the soroban.</p>
+<pre class="calibre24"><code class="calibre22">  1. """Soroban Japanese Abacus, by Al Sweigart al@inventwithpython.com
+  2. A simulation of a Japanese abacus calculator tool.
+  3. More info at: https://en.wikipedia.org/wiki/Soroban
+  4. View this code at https://nostarch.com/big-book-small-python-projects
+  5. Tags: large, artistic, math, simulation"""
+  6.
+  7. NUMBER_OF_DIGITS = 10
+  8.
+  9.
+ 10. def main():
+ 11.     print('Soroban - The Japanese Abacus')
+ 12.     print('By Al Sweigart al@inventwithpython.com')
+ 13.     print()
+ 14.
+ 15.     abacusNumber = 0  # This is the number represented on the abacus.
+<span type="pagebreak" title="336" id="calibre_link-704" class="calibre13"></span> 16.
+ 17.     while True:  # Main program loop.
+ 18.         displayAbacus(abacusNumber)
+ 19.         displayControls()
+ 20.
+ 21.         commands = input('&gt; ')
+ 22.         if commands == 'quit':
+ 23.             # Quit the program:
+ 24.             break
+ 25.         elif commands.isdecimal():
+ 26.             # Set the abacus number:
+ 27.             abacusNumber = int(commands)
+ 28.         else:
+ 29.             # Handle increment/decrement commands:
+ 30.             for letter in commands:
+ 31.                 if letter == 'q':
+ 32.                     abacusNumber += 1000000000
+ 33.                 elif letter == 'a':
+ 34.                     abacusNumber -= 1000000000
+ 35.                 elif letter == 'w':
+ 36.                     abacusNumber += 100000000
+ 37.                 elif letter == 's':
+ 38.                     abacusNumber -= 100000000
+ 39.                 elif letter == 'e':
+ 40.                     abacusNumber += 10000000
+ 41.                 elif letter == 'd':
+ 42.                     abacusNumber -= 10000000
+ 43.                 elif letter == 'r':
+ 44.                     abacusNumber += 1000000
+ 45.                 elif letter == 'f':
+ 46.                     abacusNumber -= 1000000
+ 47.                 elif letter == 't':
+ 48.                     abacusNumber += 100000
+ 49.                 elif letter == 'g':
+ 50.                     abacusNumber -= 100000
+ 51.                 elif letter == 'y':
+ 52.                     abacusNumber += 10000
+ 53.                 elif letter == 'h':
+ 54.                     abacusNumber -= 10000
+ 55.                 elif letter == 'u':
+ 56.                     abacusNumber += 1000
+ 57.                 elif letter == 'j':
+ 58.                     abacusNumber -= 1000
+ 59.                 elif letter == 'i':
+ 60.                     abacusNumber += 100
+ 61.                 elif letter == 'k':
+ 62.                     abacusNumber -= 100
+ 63.                 elif letter == 'o':
+ 64.                     abacusNumber += 10
+ 65.                 elif letter == 'l':
+ 66.                     abacusNumber -= 10
+ 67.                 elif letter == 'p':
+ 68.                     abacusNumber += 1
+ 69.                 elif letter == ';':
+ 70.                     abacusNumber -= 1
+<span type="pagebreak" title="337" id="calibre_link-705" class="calibre13"></span> 71.
+ 72.         # The abacus can't show negative numbers:
+ 73.         if abacusNumber &lt; 0:
+ 74.             abacusNumber = 0  # Change any negative numbers to 0.
+ 75.         # The abacus can't show numbers larger than 9999999999:
+ 76.         if abacusNumber &gt; 9999999999:
+ 77.             abacusNumber = 9999999999
+ 78.
+ 79.
+ 80. def displayAbacus(number):
+ 81.     numberList = list(str(number).zfill(NUMBER_OF_DIGITS))
+ 82.
+ 83.     hasBead = []  # Contains a True or False for each bead position.
+ 84.
+ 85.     # Top heaven row has a bead for digits 0, 1, 2, 3, and 4.
+ 86.     for i in range(NUMBER_OF_DIGITS):
+ 87.         hasBead.append(numberList[i] in '01234')
+ 88.
+ 89.     # Bottom heaven row has a bead for digits 5, 6, 7, 8, and 9.
+ 90.     for i in range(NUMBER_OF_DIGITS):
+ 91.         hasBead.append(numberList[i] in '56789')
+ 92.
+ 93.     # 1st (topmost) earth row has a bead for all digits except 0.
+ 94.     for i in range(NUMBER_OF_DIGITS):
+ 95.         hasBead.append(numberList[i] in '12346789')
+ 96.
+ 97.     # 2nd earth row has a bead for digits 2, 3, 4, 7, 8, and 9.
+ 98.     for i in range(NUMBER_OF_DIGITS):
+ 99.         hasBead.append(numberList[i] in '234789')
+100.
+101.     # 3rd earth row has a bead for digits 0, 3, 4, 5, 8, and 9.
+102.     for i in range(NUMBER_OF_DIGITS):
+103.         hasBead.append(numberList[i] in '034589')
+104.
+105.     # 4th earth row has a bead for digits 0, 1, 2, 4, 5, 6, and 9.
+106.     for i in range(NUMBER_OF_DIGITS):
+107.         hasBead.append(numberList[i] in '014569')
+108.
+109.     # 5th earth row has a bead for digits 0, 1, 2, 5, 6, and 7.
+110.     for i in range(NUMBER_OF_DIGITS):
+111.         hasBead.append(numberList[i] in '012567')
+112.
+113.     # 6th earth row has a bead for digits 0, 1, 2, 3, 5, 6, 7, and 8.
+114.     for i in range(NUMBER_OF_DIGITS):
+115.         hasBead.append(numberList[i] in '01235678')
+116.
+117.     # Convert these True or False values into O or | characters.
+118.     abacusChar = []
+119.     for i, beadPresent in enumerate(hasBead):
+120.         if beadPresent:
+121.             abacusChar.append('O')
+122.         else:
+123.             abacusChar.append('|')
+124.
+125.     # Draw the abacus with the O/| characters.
+<span type="pagebreak" title="338" id="calibre_link-706" class="calibre13"></span>126.     chars = abacusChar + numberList
+127.     print("""
+128. +================================+
+129. I  {}  {}  {}  {}  {}  {}  {}  {}  {}  {}  I
+130. I  |  |  |  |  |  |  |  |  |  |  I
+131. I  {}  {}  {}  {}  {}  {}  {}  {}  {}  {}  I
+132. +================================+
+133. I  {}  {}  {}  {}  {}  {}  {}  {}  {}  {}  I
+134. I  {}  {}  {}  {}  {}  {}  {}  {}  {}  {}  I
+135. I  {}  {}  {}  {}  {}  {}  {}  {}  {}  {}  I
+136. I  {}  {}  {}  {}  {}  {}  {}  {}  {}  {}  I
+137. I  {}  {}  {}  {}  {}  {}  {}  {}  {}  {}  I
+138. I  {}  {}  {}  {}  {}  {}  {}  {}  {}  {}  I
+139. +=={}=={}=={}=={}=={}=={}=={}=={}=={}=={}==+""".format(*chars))
+140.
+141.
+142. def displayControls():
+143.     print('  +q  w  e  r  t  y  u  i  o  p')
+144.     print('  -a  s  d  f  g  h  j  k  l  ;')
+145.     print('(Enter a number, "quit", or a stream of up/down letters.)')
+146.
+147.
+148. if __name__ == '__main__':
+149.     main()</code></pre>
+<h2 id="calibre_link-294" class="calibre5">Exploring the Program</h2>
+<p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
+<ol class="decimal">
+<li value="1" class="calibre8">What happens if you change <code class="calibre22">abacusNumber = 0</code> on line 15 to <code class="calibre22">abacusNumber = 9999</code>?</li>
+<li value="2" class="calibre8">What happens if you change <code class="calibre22">abacusChar.append('O')</code> on line 121 to <code class="calibre22">abacusChar.append('@')</code>?</li>
+</ol>
+</section>
+</div>
+
+
+
+
+</body></html>

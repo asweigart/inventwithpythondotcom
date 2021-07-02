@@ -1,0 +1,210 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="../style.css" rel="stylesheet" type="text/css" />
+<title>Project 39 - Langton’s Ant</title></head><body>
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-22">
+<section class="toclist">
+<header class="calibre10">
+<h1 class="chapter">
+<span class="chapternumber"><span type="pagebreak" title="186" id="calibre_link-554" class="calibre11"></span>#39</span><br class="calibre14" />
+<span class="chaptertitle">Langton’s Ant</span></h1>
+</header>
+<figure class="opener">
+<img src="../images/000002.png" alt="" class="calibre12" />
+</figure>
+<p class="chapterintro">Langton’s Ant is a cellular automata simulation on a two-dimensional grid, similar to Project 13, “Conway’s Game of Life.” In the simulation, an “ant” begins on a square that is one of two colors. If the space is the first color, the ant switches it to the second color, turns 90 degrees to the right, and moves forward one space. If the space is the second color, the ant switches it to the first color, turns 90 degrees to the left, and moves forward one space. Despite the very simple set of rules, the simulation displays complex emergent behavior. Simulations can feature multiple ants in the same space, causing interesting interactions when they cross paths with each other. Langton’s Ant was invented by computer scientist Chris Langton in 1986. More information about Langton’s Ant can be found at <a href="https://en.wikipedia.org/wiki/Langton%27s_ant" class="linkurl">https://en.wikipedia.org/wiki/Langton%27s_ant</a>.</p>
+<h2 id="calibre_link-175" class="calibre5"><span type="pagebreak" title="187" id="calibre_link-555" class="calibre15"></span>The Program in Action</h2>
+<p class="bodyfirst"><a href="#calibre_link-23" id="calibre_link-803" class="linkurl">Figure 39-1</a> shows what the output will look like when you run <em class="calibre9">langtonsant.py</em>.</p>
+<figure class="calibre28">
+<img src="../images/000015.png" alt="f39001" class="calibre12" />
+<figcaption class="calibre29"><p class="calibre30"><a id="calibre_link-23" class="linkurl">Figure 39-1</a>: The hypnotic output of the Langton’s Ant cellular automata</p></figcaption>
+</figure>
+<h2 id="calibre_link-176" class="calibre5">How It Works</h2>
+<p class="bodyfirst">This program uses two senses of “direction.” On the one hand, the dictionaries that represent each ant store <em class="calibre9">cardinal directions</em>: north, south, east, and west. However, turning left or right (or counterclockwise and clockwise, since we are viewing the ants from above) is a <em class="calibre9">rotational direction</em>. Ants are supposed to turn left or right in response to the tile they’re standing on, so lines 78 to 100 set a new cardinal direction based on the ant’s current cardinal direction and the direction they are turning.</p>
+<pre class="calibre24"><code class="calibre22">  1. """Langton's Ant, by Al Sweigart al@inventwithpython.com
+  2. A cellular automata animation. Press Ctrl-C to stop.
+  3. More info: https://en.wikipedia.org/wiki/Langton%27s_ant
+  4. View this code at https://nostarch.com/big-book-small-python-projects
+  5. Tags: large, artistic, bext, simulation"""
+  6.
+  7. import copy, random, sys, time
+  8.
+  9. try:
+ 10.     import bext
+ 11. except ImportError:
+ 12.     print('This program requires the bext module, which you')
+ 13.     print('can install by following the instructions at')
+ 14.     print('https://pypi.org/project/Bext/')
+ 15.     sys.exit()
+ 16.
+<span type="pagebreak" title="188" id="calibre_link-556" class="calibre13"></span> 17. # Set up the constants:
+ 18. WIDTH, HEIGHT = bext.size()
+ 19. # We can't print to the last column on Windows without it adding a
+ 20. # newline automatically, so reduce the width by one:
+ 21. WIDTH -= 1
+ 22. HEIGHT -= 1  # Adjustment for the quit message at the bottom.
+ 23.
+ 24. NUMBER_OF_ANTS = 10  # (!) Try changing this to 1 or 50.
+ 25. PAUSE_AMOUNT = 0.1  # (!) Try changing this to 1.0 or 0.0.
+ 26.
+ 27. # (!) Try changing these to make the ants look different:
+ 28. ANT_UP = '^'
+ 29. ANT_DOWN = 'v'
+ 30. ANT_LEFT = '&lt;'
+ 31. ANT_RIGHT = '&gt;'
+ 32.
+ 33. # (!) Try changing these colors to one of 'black', 'red', 'green',
+ 34. # 'yellow', 'blue', 'purple', 'cyan', or 'white'. (These are the only
+ 35. # colors that the bext module supports.)
+ 36. ANT_COLOR = 'red'
+ 37. BLACK_TILE = 'black'
+ 38. WHITE_TILE = 'white'
+ 39.
+ 40. NORTH = 'north'
+ 41. SOUTH = 'south'
+ 42. EAST = 'east'
+ 43. WEST = 'west'
+ 44.
+ 45.
+ 46. def main():
+ 47.     bext.fg(ANT_COLOR)  # The ants' color is the foreground color.
+ 48.     bext.bg(WHITE_TILE)  # Set the background to white to start.
+ 49.     bext.clear()
+ 50.
+ 51.     # Create a new board data structure:
+ 52.     board = {'width': WIDTH, 'height': HEIGHT}
+ 53.
+ 54.     # Create ant data structures:
+ 55.     ants = []
+ 56.     for i in range(NUMBER_OF_ANTS):
+ 57.         ant = {
+ 58.             'x': random.randint(0, WIDTH - 1),
+ 59.             'y': random.randint(0, HEIGHT - 1),
+ 60.             'direction': random.choice([NORTH, SOUTH, EAST, WEST]),
+ 61.         }
+ 62.         ants.append(ant)
+ 63.
+ 64.     # Keep track of which tiles have changed and need to be redrawn on
+ 65.     # the screen:
+ 66.     changedTiles = []
+ 67.
+ 68.     while True:  # Main program loop.
+ 69.         displayBoard(board, ants, changedTiles)
+ 70.         changedTiles = []
+ 71.
+<span type="pagebreak" title="189" id="calibre_link-557" class="calibre13"></span> 72.         # nextBoard is what the board will look like on the next step in
+ 73.         # the simulation. Start with a copy of the current step's board:
+ 74.         nextBoard = copy.copy(board)
+ 75.
+ 76.         # Run a single simulation step for each ant:
+ 77.         for ant in ants:
+ 78.             if board.get((ant['x'], ant['y']), False) == True:
+ 79.                 nextBoard[(ant['x'], ant['y'])] = False
+ 80.                 # Turn clockwise:
+ 81.                 if ant['direction'] == NORTH:
+ 82.                     ant['direction'] = EAST
+ 83.                 elif ant['direction'] == EAST:
+ 84.                     ant['direction'] = SOUTH
+ 85.                 elif ant['direction'] == SOUTH:
+ 86.                     ant['direction'] = WEST
+ 87.                 elif ant['direction'] == WEST:
+ 88.                     ant['direction'] = NORTH
+ 89.             else:
+ 90.                 nextBoard[(ant['x'], ant['y'])] = True
+ 91.                 # Turn counter clockwise:
+ 92.                 if ant['direction'] == NORTH:
+ 93.                     ant['direction'] = WEST
+ 94.                 elif ant['direction'] == WEST:
+ 95.                     ant['direction'] = SOUTH
+ 96.                 elif ant['direction'] == SOUTH:
+ 97.                     ant['direction'] = EAST
+ 98.                 elif ant['direction'] == EAST:
+ 99.                     ant['direction'] = NORTH
+100.             changedTiles.append((ant['x'], ant['y']))
+101.
+102.             # Move the ant forward in whatever direction it's facing:
+103.             if ant['direction'] == NORTH:
+104.                 ant['y'] -= 1
+105.             if ant['direction'] == SOUTH:
+106.                 ant['y'] += 1
+107.             if ant['direction'] == WEST:
+108.                 ant['x'] -= 1
+109.             if ant['direction'] == EAST:
+110.                 ant['x'] += 1
+111.
+112.             # If the ant goes past the edge of the screen,
+113.             # it should wrap around to other side.
+114.             ant['x'] = ant['x'] % WIDTH
+115.             ant['y'] = ant['y'] % HEIGHT
+116.
+117.             changedTiles.append((ant['x'], ant['y']))
+118.
+119.         board = nextBoard
+120.
+121.
+122. def displayBoard(board, ants, changedTiles):
+123.     """Displays the board and ants on the screen. The changedTiles
+124.     argument is a list of (x, y) tuples for tiles on the screen that
+125.     have changed and need to be redrawn."""
+126.
+<span type="pagebreak" title="190" id="calibre_link-558" class="calibre13"></span>127.     # Draw the board data structure:
+128.     for x, y in changedTiles:
+129.         bext.goto(x, y)
+130.         if board.get((x, y), False):
+131.             bext.bg(BLACK_TILE)
+132.         else:
+133.             bext.bg(WHITE_TILE)
+134.
+135.         antIsHere = False
+136.         for ant in ants:
+137.             if (x, y) == (ant['x'], ant['y']):
+138.                 antIsHere = True
+139.                 if ant['direction'] == NORTH:
+140.                     print(ANT_UP, end='')
+141.                 elif ant['direction'] == SOUTH:
+142.                     print(ANT_DOWN, end='')
+143.                 elif ant['direction'] == EAST:
+144.                     print(ANT_LEFT, end='')
+145.                 elif ant['direction'] == WEST:
+146.                     print(ANT_RIGHT, end='')
+147.                 break
+148.         if not antIsHere:
+149.             print(' ', end='')
+150.
+151.     # Display the quit message at the bottom of the screen:
+152.     bext.goto(0, HEIGHT)
+153.     bext.bg(WHITE_TILE)
+154.     print('Press Ctrl-C to quit.', end='')
+155.
+156.     sys.stdout.flush()  # (Required for bext-using programs.)
+157.     time.sleep(PAUSE_AMOUNT)
+158.
+159.
+160. # If this program was run (instead of imported), run the game:
+161. if __name__ == '__main__':
+162.     try:
+163.         main()
+164.     except KeyboardInterrupt:
+165.         print("Langton's Ant, by Al Sweigart al@inventwithpython.com")
+166.         sys.exit()  # When Ctrl-C is pressed, end the program.</code></pre>
+<p class="calibre19">After entering the source code and running it a few times, try making experimental changes to it. The comments marked with <code class="calibre22">(!)</code> have suggestions for small changes you can make. On your own, you can also try to figure out how to do the following:</p>
+<ul class="calibre25">
+<li class="calibre8">Let the player load and save the state of the board’s tiles from and to a text file.</li>
+<li class="calibre8">Create additional tile states with new rules of movement and see what behavior emerges.</li>
+<li class="calibre8">Implement some of the ideas suggested in the Wikipedia article for Langton’s Ant.</li>
+</ul>
+<h2 id="calibre_link-177" class="calibre5"><span type="pagebreak" title="191" id="calibre_link-559" class="calibre15"></span>Exploring the Program</h2>
+<p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
+<ol class="decimal">
+<li value="1" class="calibre8">What happens if you change <code class="calibre22">print(' ', end='')</code> on line 149 to <code class="calibre22">print('.', end='')</code>?</li>
+<li value="2" class="calibre8">What happens if you change <code class="calibre22">ant['y'] += 1</code> on line 106 to <code class="calibre22">ant['y'] -= 1</code>?</li>
+<li value="3" class="calibre8">What happens if you change <code class="calibre22">nextBoard[(ant['x'], ant['y'])] = False</code> on line 79 to <code class="calibre22">nextBoard[(ant['x'], ant['y'])] = True</code>?</li>
+<li value="4" class="calibre8">What happens if you change <code class="calibre22">WIDTH -= 1</code> on line 21 to <code class="calibre22">WIDTH -= 40</code>?</li>
+<li value="5" class="calibre8">What happens if you change <code class="calibre22">board = nextBoard</code> on line 119 to <code class="calibre22">board = board</code>?</li>
+</ol>
+</section>
+</div>
+
+
+
+
+</body></html>

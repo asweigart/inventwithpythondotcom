@@ -1,0 +1,255 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="../style.css" rel="stylesheet" type="text/css" />
+<title>Project 30 - Four in a Row</title></head><body>
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-145">
+<section class="toclist">
+<header class="calibre10">
+<h1 class="chapter">
+<span class="chapternumber"><span type="pagebreak" title="137" id="calibre_link-505" class="calibre11"></span>#30</span><br class="calibre14" />
+<span class="chaptertitle">Four in a Row</span></h1>
+</header>
+<figure class="opener">
+<img src="../images/000002.png" alt="" class="calibre12" />
+</figure>
+<p class="chapterintro">In this classic tile-dropping board game for two players, you must try to get four of your tiles in a row horizontally, vertically, or diagonally, while preventing your opponent from doing the same. This program is similar to Connect Four.</p>
+<h2 id="calibre_link-146" class="calibre5"><span type="pagebreak" title="138" id="calibre_link-506" class="calibre15"></span>The Program in Action</h2>
+<p class="bodyfirst">When you run <em class="calibre9">fourinarow.py</em>, the output will look like this:</p>
+<pre class="calibre24"><code class="calibre22">Four in a Row, by Al Sweigart al@inventwithpython.com
+<var class="calibre27">--snip--</var>
+     1234567
+    +-------+
+    |.......|
+    |.......|
+    |.......|
+    |.......|
+    |.......|
+    |.......|
+    +-------+
+Player X, enter a column or QUIT:
+&gt; <b class="calibre6">3</b>
+
+     1234567
+    +-------+
+    |.......|
+    |.......|
+    |.......|
+    |.......|
+    |.......|
+    |..X....|
+    +-------+
+Player O, enter a column or QUIT:
+&gt; <b class="calibre6">5</b>
+<var class="calibre27">--snip--</var>
+Player O, enter a column or QUIT:
+&gt; <b class="calibre6">4</b>
+
+     1234567
+    +-------+
+    |.......|
+    |.......|
+    |XXX.XO.|
+    |OOOOXO.|
+    |OOOXOX.|
+    |OXXXOXX|
+    +-------+
+Player O has won!</code></pre>
+<h2 id="calibre_link-147" class="calibre5">How It Works</h2>
+<p class="bodyfirst">The board game projects in this book follow a similar program structure. There’s often a dictionary or list for representing the state of the board, a <code class="calibre22">getNewBoard()</code> function that returns a data structure for a board, a <code class="calibre22">displayBoard()</code> function for rendering a board data structure on the screen, and so on. You can check out the other projects in this book with the <em class="calibre9">board game</em> tag and compare them with each other, especially when you want to create your own original board game programs.</p>
+<pre class="calibre24"><code class="calibre22"><span type="pagebreak" title="139" id="calibre_link-507" class="calibre13"></span>  1. """Four in a Row, by Al Sweigart al@inventwithpython.com
+  2. A tile-dropping game to get four in a row, similar to Connect Four.
+  3. View this code at https://nostarch.com/big-book-small-python-projects
+  4. Tags: large, game, board game, two-player"""
+  5.
+  6. import sys
+  7.
+  8. # Constants used for displaying the board:
+  9. EMPTY_SPACE = '.'  # A period is easier to count than a space.
+ 10. PLAYER_X = 'X'
+ 11. PLAYER_O = 'O'
+ 12.
+ 13. # Note: Update displayBoard() &amp; COLUMN_LABELS if BOARD_WIDTH is changed.
+ 14. BOARD_WIDTH = 7
+ 15. BOARD_HEIGHT = 6
+ 16. COLUMN_LABELS = ('1', '2', '3', '4', '5', '6', '7')
+ 17. assert len(COLUMN_LABELS) == BOARD_WIDTH
+ 18.
+ 19.
+ 20. def main():
+ 21.     print("""Four in a Row, by Al Sweigart al@inventwithpython.com
+ 22.
+ 23. Two players take turns dropping tiles into one of seven columns, trying
+ 24. to make four in a row horizontally, vertically, or diagonally.
+ 25. """)
+ 26.
+ 27.     # Set up a new game:
+ 28.     gameBoard = getNewBoard()
+ 29.     playerTurn = PLAYER_X
+ 30.
+ 31.     while True:  # Run a player's turn.
+ 32.         # Display the board and get player's move:
+ 33.         displayBoard(gameBoard)
+ 34.         playerMove = askForPlayerMove(playerTurn, gameBoard)
+ 35.         gameBoard[playerMove] = playerTurn
+ 36.
+ 37.         # Check for a win or tie:
+ 38.         if isWinner(playerTurn, gameBoard):
+ 39.             displayBoard(gameBoard)  # Display the board one last time.
+ 40.             print('Player ' + playerTurn + ' has won!')
+ 41.             sys.exit()
+ 42.         elif isFull(gameBoard):
+ 43.             displayBoard(gameBoard)  # Display the board one last time.
+ 44.             print('There is a tie!')
+ 45.             sys.exit()
+ 46.
+ 47.         # Switch turns to other player:
+ 48.         if playerTurn == PLAYER_X:
+ 49.             playerTurn = PLAYER_O
+ 50.         elif playerTurn == PLAYER_O:
+ 51.             playerTurn = PLAYER_X
+ 52.
+ 53.
+ 54. def getNewBoard():
+<span type="pagebreak" title="140" id="calibre_link-508" class="calibre13"></span> 55.     """Returns a dictionary that represents a Four in a Row board.
+ 56.
+ 57.     The keys are (columnIndex, rowIndex) tuples of two integers, and the
+ 58.     values are one of the 'X', 'O' or '.' (empty space) strings."""
+ 59.     board = {}
+ 60.     for columnIndex in range(BOARD_WIDTH):
+ 61.         for rowIndex in range(BOARD_HEIGHT):
+ 62.             board[(columnIndex, rowIndex)] = EMPTY_SPACE
+ 63.     return board
+ 64.
+ 65.
+ 66. def displayBoard(board):
+ 67.     """Display the board and its tiles on the screen."""
+ 68.
+ 69.     '''Prepare a list to pass to the format() string method for the
+ 70.     board template. The list holds all of the board's tiles (and empty
+ 71.     spaces) going left to right, top to bottom:'''
+ 72.     tileChars = []
+ 73.     for rowIndex in range(BOARD_HEIGHT):
+ 74.         for columnIndex in range(BOARD_WIDTH):
+ 75.             tileChars.append(board[(columnIndex, rowIndex)])
+ 76.
+ 77.     # Display the board:
+ 78.     print("""
+ 79.      1234567
+ 80.     +-------+
+ 81.     |{}{}{}{}{}{}{}|
+ 82.     |{}{}{}{}{}{}{}|
+ 83.     |{}{}{}{}{}{}{}|
+ 84.     |{}{}{}{}{}{}{}|
+ 85.     |{}{}{}{}{}{}{}|
+ 86.     |{}{}{}{}{}{}{}|
+ 87.     +-------+""".format(*tileChars))
+ 88.
+ 89.
+ 90. def askForPlayerMove(playerTile, board):
+ 91.     """Let a player select a column on the board to drop a tile into.
+ 92.
+ 93.     Returns a tuple of the (column, row) that the tile falls into."""
+ 94.     while True:  # Keep asking player until they enter a valid move.
+ 95.         print('Player {}, enter a column or QUIT:'.format(playerTile))
+ 96.         response = input('&gt; ').upper().strip()
+ 97.
+ 98.         if response == 'QUIT':
+ 99.             print('Thanks for playing!')
+100.             sys.exit()
+101.
+102.         if response not in COLUMN_LABELS:
+103.             print('Enter a number from 1 to {}.'.format(BOARD_WIDTH))
+104.             continue  # Ask player again for their move.
+105.
+106.         columnIndex = int(response) - 1  # -1 for 0-based the index.
+107.
+108.         # If the column is full, ask for a move again:
+109.         if board[(columnIndex, 0)] != EMPTY_SPACE:
+<span type="pagebreak" title="141" id="calibre_link-509" class="calibre13"></span>110.             print('That column is full, select another one.')
+111.             continue  # Ask player again for their move.
+112.
+113.         # Starting from the bottom, find the first empty space.
+114.         for rowIndex in range(BOARD_HEIGHT - 1, -1, -1):
+115.             if board[(columnIndex, rowIndex)] == EMPTY_SPACE:
+116.                 return (columnIndex, rowIndex)
+117.
+118.
+119. def isFull(board):
+120.     """Returns True if the `board` has no empty spaces, otherwise
+121.     returns False."""
+122.     for rowIndex in range(BOARD_HEIGHT):
+123.         for columnIndex in range(BOARD_WIDTH):
+124.             if board[(columnIndex, rowIndex)] == EMPTY_SPACE:
+125.                 return False  # Found an empty space, so return False.
+126.     return True  # All spaces are full.
+127.
+128.
+129. def isWinner(playerTile, board):
+130.     """Returns True if `playerTile` has four tiles in a row on `board`,
+131.     otherwise returns False."""
+132.
+133.     # Go through the entire board, checking for four-in-a-row:
+134.     for columnIndex in range(BOARD_WIDTH - 3):
+135.         for rowIndex in range(BOARD_HEIGHT):
+136.             # Check for horizontal four-in-a-row going right:
+137.             tile1 = board[(columnIndex, rowIndex)]
+138.             tile2 = board[(columnIndex + 1, rowIndex)]
+139.             tile3 = board[(columnIndex + 2, rowIndex)]
+140.             tile4 = board[(columnIndex + 3, rowIndex)]
+141.             if tile1 == tile2 == tile3 == tile4 == playerTile:
+142.                 return True
+143.
+144.     for columnIndex in range(BOARD_WIDTH):
+145.         for rowIndex in range(BOARD_HEIGHT - 3):
+146.             # Check for vertical four-in-a-row going down:
+147.             tile1 = board[(columnIndex, rowIndex)]
+148.             tile2 = board[(columnIndex, rowIndex + 1)]
+149.             tile3 = board[(columnIndex, rowIndex + 2)]
+150.             tile4 = board[(columnIndex, rowIndex + 3)]
+151.             if tile1 == tile2 == tile3 == tile4 == playerTile:
+152.                 return True
+153.
+154.     for columnIndex in range(BOARD_WIDTH - 3):
+155.         for rowIndex in range(BOARD_HEIGHT - 3):
+156.             # Check for four-in-a-row going right-down diagonal:
+157.             tile1 = board[(columnIndex, rowIndex)]
+158.             tile2 = board[(columnIndex + 1, rowIndex + 1)]
+159.             tile3 = board[(columnIndex + 2, rowIndex + 2)]
+160.             tile4 = board[(columnIndex + 3, rowIndex + 3)]
+161.             if tile1 == tile2 == tile3 == tile4 == playerTile:
+162.                 return True
+163.
+164.             # Check for four-in-a-row going left-down diagonal:
+<span type="pagebreak" title="142" id="calibre_link-510" class="calibre13"></span>165.             tile1 = board[(columnIndex + 3, rowIndex)]
+166.             tile2 = board[(columnIndex + 2, rowIndex + 1)]
+167.             tile3 = board[(columnIndex + 1, rowIndex + 2)]
+168.             tile4 = board[(columnIndex, rowIndex + 3)]
+169.             if tile1 == tile2 == tile3 == tile4 == playerTile:
+170.                 return True
+171.     return False
+172.
+173.
+174. # If the program is run (instead of imported), run the game:
+175. if __name__ == '__main__':
+176.     main()</code></pre>
+<p class="calibre19">After entering the source code and running it a few times, try making experimental changes to it. The comments marked with <code class="calibre22">(!)</code> have suggestions for small changes you can make. On your own, you can also try to figure out how to do the following:</p>
+<ul class="calibre25">
+<li class="calibre8">Create a three-in-a-row or five-in-a-row variant.</li>
+<li class="calibre8">Make a three-player variant of this game.</li>
+<li class="calibre8">Add a “wildcard” tile that randomly drops after the players’ turns and can be used by either player.</li>
+<li class="calibre8">Add “block” tiles that cannot be used by either player.</li>
+</ul>
+<h2 id="calibre_link-148" class="calibre5">Exploring the Program</h2>
+<p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
+<ol class="decimal">
+<li value="1" class="calibre8">What happens if you change <code class="calibre22">PLAYER_O = 'O'</code> on line 11 to <code class="calibre22">PLAYER_O = 'X'</code>?</li>
+<li value="2" class="calibre8">What happens if you change <code class="calibre22">return (columnIndex, rowIndex)</code> on line 116 to <code class="calibre22">return (columnIndex, 0)</code>?</li>
+<li value="3" class="calibre8">What happens if you change <code class="calibre22">response == 'QUIT'</code> on line 98 to <code class="calibre22">response != 'QUIT'</code>?</li>
+<li value="4" class="calibre8">What error message do you get if you change <code class="calibre22">tileChars = []</code> on line 72 to <code class="calibre22">tileChars = {}</code>?</li>
+</ol>
+</section>
+</div>
+
+
+
+
+</body></html>

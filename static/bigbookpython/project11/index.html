@@ -1,0 +1,187 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="../style.css" rel="stylesheet" type="text/css" />
+<title>Project 11 - Clickbait Headline Generator</title></head><body>
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-10">
+<section class="toclist">
+<header class="calibre10">
+<h1 class="chapter">
+<span class="chapternumber"><span type="pagebreak" title="51" id="calibre_link-419" class="calibre11"></span>#11</span><br class="calibre14" />
+<span class="chaptertitle">Clickbait Headline Generator</span></h1>
+</header>
+<figure class="opener">
+<img src="../images/000002.png" alt="" class="calibre12" />
+</figure>
+<p class="chapterintro">Our website needs to trick people into looking at advertisements! But coming up with creative, original content is too hard. Luckily, with the clickbait headline generator, we can make a computer come up with millions of outrageous fake headlines. They’re all low quality, but readers don’t seem to mind. This program generates as many headlines as you need from a Mad Libs&ndash;style template.</p>
+<p class="calibre18">There’s a lot of text in this program for the headline templates, but the code itself is straightforward and suitable for beginners.</p>
+<h2 id="calibre_link-76" class="calibre5"><span type="pagebreak" title="52" id="calibre_link-420" class="calibre15"></span>The Program in Action</h2>
+<p class="bodyfirst">When you run <em class="calibre9">clickbait.py</em>, the output will look like this:</p>
+<pre class="calibre24"><code class="calibre22">Clickbait Headline Generator
+By Al Sweigart al@inventwithpython.com
+
+Our website needs to trick people into looking at ads!
+Enter the number of clickbait headlines to generate:
+&gt; <b class="calibre6">1000</b>
+Big Companies Hate Him! See How This New York Cat Invented a Cheaper Robot
+What Telephone Psychics Don't Want You To Know About Avocados
+You Won't Believe What This North Carolina Shovel Found in Her Workplace
+<var class="calibre27">--snip--</var>
+14 Reasons Why Parents Are More Interesting Than You Think (Number 1 Will Surprise You!)
+What Robots Don't Want You To Know About Cats
+This Florida Telephone Psychic Didn't Think Robots Would Take Her Job. She Was Wrong.</code></pre>
+<h2 id="calibre_link-77" class="calibre5">How It Works</h2>
+<p class="bodyfirst">This program has several functions for generating different kinds of clickbait headlines. Each of them gets random words from <code class="calibre22">STATES</code>, <code class="calibre22">NOUNS</code>, <code class="calibre22">PLACES</code>, <code class="calibre22">WHEN</code>, and other lists. The functions then insert these words into a template string with the <code class="calibre22">format()</code> string method before returning this string. This is like a “Mad Libs” activity book, except the computer fills in the blanks, allowing the program to generate thousands of clickbait headlines in seconds.</p>
+<pre class="calibre24"><code class="calibre22">  1. """Clickbait Headline Generator, by Al Sweigart al@inventwithpython.com
+  2. A clickbait headline generator for your soulless content farm website.
+  3. View this code at https://nostarch.com/big-book-small-python-projects
+  4. Tags: large, beginner, humor, word"""
+  5.
+  6. import random
+  7.
+  8. # Set up the constants:
+  9. OBJECT_PRONOUNS = ['Her', 'Him', 'Them']
+ 10. POSSESIVE_PRONOUNS = ['Her', 'His', 'Their']
+ 11. PERSONAL_PRONOUNS = ['She', 'He', 'They']
+ 12. STATES = ['California', 'Texas', 'Florida', 'New York', 'Pennsylvania',
+ 13.           'Illinois', 'Ohio', 'Georgia', 'North Carolina', 'Michigan']
+ 14. NOUNS = ['Athlete', 'Clown', 'Shovel', 'Paleo Diet', 'Doctor', 'Parent',
+ 15.          'Cat', 'Dog', 'Chicken', 'Robot', 'Video Game', 'Avocado',
+ 16.          'Plastic Straw','Serial Killer', 'Telephone Psychic']
+ 17. PLACES = ['House', 'Attic', 'Bank Deposit Box', 'School', 'Basement',
+ 18.           'Workplace', 'Donut Shop', 'Apocalypse Bunker']
+ 19. WHEN = ['Soon', 'This Year', 'Later Today', 'RIGHT NOW', 'Next Week']
+ 20.
+ 21.
+ 22. def main():
+ 23.     print('Clickbait Headline Generator')
+ 24.     print('By Al Sweigart al@inventwithpython.com')
+<span type="pagebreak" title="53" id="calibre_link-421" class="calibre13"></span> 25.     print()
+ 26.
+ 27.     print('Our website needs to trick people into looking at ads!')
+ 28.     while True:
+ 29.         print('Enter the number of clickbait headlines to generate:')
+ 30.         response = input('&gt; ')
+ 31.         if not response.isdecimal():
+ 32.             print('Please enter a number.')
+ 33.         else:
+ 34.             numberOfHeadlines = int(response)
+ 35.             break  # Exit the loop once a valid number is entered.
+ 36.
+ 37.     for i in range(numberOfHeadlines):
+ 38.         clickbaitType = random.randint(1, 8)
+ 39.
+ 40.         if clickbaitType == 1:
+ 41.             headline = generateAreMillennialsKillingHeadline()
+ 42.         elif clickbaitType == 2:
+ 43.             headline = generateWhatYouDontKnowHeadline()
+ 44.         elif clickbaitType == 3:
+ 45.             headline = generateBigCompaniesHateHerHeadline()
+ 46.         elif clickbaitType == 4:
+ 47.             headline = generateYouWontBelieveHeadline()
+ 48.         elif clickbaitType == 5:
+ 49.             headline = generateDontWantYouToKnowHeadline()
+ 50.         elif clickbaitType == 6:
+ 51.             headline = generateGiftIdeaHeadline()
+ 52.         elif clickbaitType == 7:
+ 53.             headline = generateReasonsWhyHeadline()
+ 54.         elif clickbaitType == 8:
+ 55.             headline = generateJobAutomatedHeadline()
+ 56.
+ 57.         print(headline)
+ 58.     print()
+ 59.
+ 60.     website = random.choice(['wobsite', 'blag', 'Facebuuk', 'Googles',
+ 61.                              'Facesbook', 'Tweedie', 'Pastagram'])
+ 62.     when = random.choice(WHEN).lower()
+ 63.     print('Post these to our', website, when, 'or you\'re fired!')
+ 64.
+ 65.
+ 66. # Each of these functions returns a different type of headline:
+ 67. def generateAreMillennialsKillingHeadline():
+ 68.     noun = random.choice(NOUNS)
+ 69.     return 'Are Millennials Killing the {} Industry?'.format(noun)
+ 70.
+ 71.
+ 72. def generateWhatYouDontKnowHeadline():
+ 73.     noun = random.choice(NOUNS)
+ 74.     pluralNoun = random.choice(NOUNS) + 's'
+ 75.     when = random.choice(WHEN)
+ 76.     return 'Without This {}, {} Could Kill You {}'.format(noun, pluralNoun, when)
+ 77.
+ 78.
+ 79. def generateBigCompaniesHateHerHeadline():
+<span type="pagebreak" title="54" id="calibre_link-422" class="calibre13"></span> 80.     pronoun = random.choice(OBJECT_PRONOUNS)
+ 81.     state = random.choice(STATES)
+ 82.     noun1 = random.choice(NOUNS)
+ 83.     noun2 = random.choice(NOUNS)
+ 84.     return 'Big Companies Hate {}! See How This {} {} Invented a Cheaper {}'.
+         format(pronoun, state, noun1, noun2)
+ 85.
+ 86.
+ 87. def generateYouWontBelieveHeadline():
+ 88.     state = random.choice(STATES)
+ 89.     noun = random.choice(NOUNS)
+ 90.     pronoun = random.choice(POSSESIVE_PRONOUNS)
+ 91.     place = random.choice(PLACES)
+ 92.     return 'You Won\'t Believe What This {} {} Found in {} {}'.format(state, noun,
+         pronoun, place)
+ 93.
+ 94.
+ 95. def generateDontWantYouToKnowHeadline():
+ 96.     pluralNoun1 = random.choice(NOUNS) + 's'
+ 97.     pluralNoun2 = random.choice(NOUNS) + 's'
+ 98.     return 'What {} Don\'t Want You To Know About {}'.format(pluralNoun1, pluralNoun2)
+ 99.
+100.
+101. def generateGiftIdeaHeadline():
+102.     number = random.randint(7, 15)
+103.     noun = random.choice(NOUNS)
+104.     state = random.choice(STATES)
+105.     return '{} Gift Ideas to Give Your {} From {}'.format(number, noun, state)
+106.
+107.
+108. def generateReasonsWhyHeadline():
+109.     number1 = random.randint(3, 19)
+110.     pluralNoun = random.choice(NOUNS) + 's'
+111.     # number2 should be no larger than number1:
+112.     number2 = random.randint(1, number1)
+113.     return '{} Reasons Why {} Are More Interesting Than You Think (Number {} Will
+         Surprise You!)'.format(number1, pluralNoun, number2)
+114.
+115.
+116. def generateJobAutomatedHeadline():
+117.     state = random.choice(STATES)
+118.     noun = random.choice(NOUNS)
+119.
+120.     i = random.randint(0, 2)
+121.     pronoun1 = POSSESIVE_PRONOUNS[i]
+122.     pronoun2 = PERSONAL_PRONOUNS[i]
+123.     if pronoun1 == 'Their':
+124.         return 'This {} {} Didn\'t Think Robots Would Take {} Job. {} Were
+             Wrong.'.format(state, noun, pronoun1, pronoun2)
+125.     else:
+126.         return 'This {} {} Didn\'t Think Robots Would Take {} Job. {} Was
+             Wrong.'.format(state, noun, pronoun1, pronoun2)
+127.
+128.
+<span type="pagebreak" title="55" id="calibre_link-423" class="calibre13"></span>129. # If the program is run (instead of imported), run the game:
+130. if __name__ == '__main__':
+131.     main()</code></pre>
+<p class="calibre19">After entering the source code and running it a few times, try making experimental changes to it. On your own, you can also try to figure out how to do the following:</p>
+<ul class="calibre25">
+<li class="calibre8">Add additional types of clickbait headlines.</li>
+<li class="calibre8">Add new categories of words, beyond <code class="calibre22">NOUNS</code>, <code class="calibre22">STATES</code>, and so on.</li>
+</ul>
+<h2 id="calibre_link-78" class="calibre5">Exploring the Program</h2>
+<p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
+<ol class="decimal">
+<li value="1" class="calibre8">What error message do you get if you delete or comment out <code class="calibre22">numberOfHeadlines = int(response)</code> on line 34?</li>
+<li value="2" class="calibre8">What error message do you get if you change <code class="calibre22">int(response)</code> to <code class="calibre22">response</code> on line 34?</li>
+<li value="3" class="calibre8">What error message do you get if you change line 19 to <code class="calibre22">WHEN = []</code>?</li>
+</ol>
+</section>
+</div>
+
+
+
+
+</body></html>
