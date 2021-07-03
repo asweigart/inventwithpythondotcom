@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="../style.css" rel="stylesheet" type="text/css" />
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" />
 <title>Project 66 - Simple Substitution Cipher</title></head><body>
 
 <div type="bodymatter chapter" class="calibre1" id="calibre_link-275">
@@ -9,7 +9,7 @@
 <span class="chaptertitle">Simple Substitution Cipher</span></h1>
 </header>
 <figure class="opener">
-<img src="../images/000002.png" alt="" class="calibre12" />
+<img src="images/000002.png" alt="" class="calibre12" />
 </figure>
 <p class="chapterintro">The Simple Substitution Cipher substitutes one letter for another. Since there are 26 possible substitutions for the letter <em class="calibre9">A</em>, 25 possible substitutions for <em class="calibre9">B</em>, 24 for <em class="calibre9">C</em>, and so on, the total number of possible keys is 26 × 25 × 24 × 23 × . . . × 1, or 403,291,461,126,605,635,584,000,000 keys! That’s far too many keys for even a supercomputer to brute force, so the code-breaking method used in Project 7, “Caesar Hacker,” can’t be used against the simple cipher. Unfortunately, devious attackers can take advantage of known weakness to break the code. If you’d like to learn more about ciphers and code breaking, you can read my book <em class="calibre9">Cracking Codes with Python</em> (No Starch Press, 2018; <a href="https://nostarch.com/crackingcodes/" class="linkurl">https://nostarch.com/crackingcodes/</a>).</p>
 <h2 id="calibre_link-276" class="calibre5"><span type="pagebreak" title="316" id="calibre_link-684" class="calibre15"></span>The Program in Action</h2>
@@ -44,7 +44,7 @@ Full decrypted text copied to clipboard.</code></pre>
 <h2 id="calibre_link-277" class="calibre5">How It Works</h2>
 <p class="bodyfirst">The position of each of the key’s 26 letters corresponds to the letter of the alphabet at that same position:</p>
 <figure class="calibre28">
-<img src="../images/000020.png" alt="f66001" class="calibre12" />
+<img src="images/000020.png" alt="f66001" class="calibre12" />
 <figcaption class="calibre29"><p class="calibre30"><a id="calibre_link-351" class="linkurl">Figure 66-1</a>: How the letters of the alphabet encrypt with a key that begins with <em class="calibre31">WNOM</em>. To decrypt, replace letters at the bottom with the corresponding letters above them.</p></figcaption>
 </figure>
 <p class="calibre19">With this key, the letter <em class="calibre9">A</em> encrypts to <em class="calibre9">W</em> (and <em class="calibre9">W</em> decrypts to <em class="calibre9">A</em>), the letter <em class="calibre9">B</em> encrypts to <em class="calibre9">N</em>, and so on. The <code class="calibre22">LETTERS</code> and <code class="calibre22">key</code> variables are assigned to <code class="calibre22">charsA</code> and <code class="calibre22">charsB</code> (or the other way around if decrypting). Any message characters in <code class="calibre22">charsA</code> are substituted with the corresponding character in <code class="calibre22">charsB</code> to produce the final translated message.</p>
