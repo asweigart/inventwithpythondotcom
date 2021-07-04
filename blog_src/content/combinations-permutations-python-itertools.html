@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <title>Combinations and Permutations in Python with itertools</title>
+        <meta name="tags" content="" />
+        <meta name="date" content="2021-07-03 12:01" />
+        <meta name="summary" content="" />
+    </head>
+    <body>
+
+<p><em>(The following information and more can be found from my upcoming, to-be-announced book on recursive algorithms. I'll update this post when the book is released in 2022.)</em></p>
+
+<p>If you a list, dictionary, or other iterable object of values you need to generate combinations and permutations from, Python has the built-in <code>itertools</code> module as part of its standard library. The <em>permutations</em> of an iterable are every possible <strong>ordering of all</strong> of the values, while the <em>combinations</em> are every possible <strong>selection of some, none, or all</strong> of the values. For example, the permutations and combinations of the set <code>{'A', 'B', 'C'}</code> are:</p>
+
+<table style="border: 1px black solid">
+    <tr><th>Permutations</th><th>Combinations</th></tr>
+    <tr><td>ABC, ACB, BAC, BCA, CAB</td><td>(none), A, B, C, AB, AC, BC, ABC</td></tr>
+</table>
+
+<p>You can also reuse the values multiple times, which is called <em>permutations with repetition</em> and <em>combinations with repetition</em> (also called replacement):</p>
+
+<table>
+    <tr><th>Permutations with Repetition</th><th>Combinations with Repetition</th></tr>
+    <tr><td>AAA, AAB, AAC, ABA, ABB, ABC, ACA, ACB, ACC, BAA, BAB, BAC, BBA, BBB, BBC, BCA, BCB, BCC, CAA, CAB, CAC, CBA, CBB, CBC, CCA, CCB, CCC</td><td>(none), A, B, C, AA, AB, AC, BB, BC, CC, AAA, AAB, AAC, ABB, ABC, ACC, BBB, BBC, BCC, CCC</td></tr>
+</table>
+
+<p>(Note that permutations with repetition is effectively the same as a password cracker that tries every possible combination of characters to brute force a password.)</p>
+
+<p>The number of permutations and combinations quickly grows when more values are added to the iterable object. The total number of permutations and combinations is given in the following:</p>
+
+<table>
+    <tr><td></td><td>Permutations of n Values</td><td>Combinations of n Values</td></tr>
+    <tr><td>Without Repetition</td><td>n!</td><td>2^n</td></tr>
+    <tr><td>With Repetition</td><td>n^n</td><td>"2n choose n", that is, (2n)! / (n!)^2</td></tr>
+</table>
+
+<p>But to have Python generate permutations, you can use <code>itertools.permutations()</code>:</p>
+
+<pre>
+>>> import itertools
+>>> for v in itertools.permutations(['A', 'B', 'C']):
+...   print(v)
+...
+('A', 'B', 'C')
+('A', 'C', 'B')
+('B', 'A', 'C')
+('B', 'C', 'A')
+('C', 'A', 'B')
+('C', 'B', 'A')
+>>>
+>>> list(itertools.permutations(['A', 'B', 'C']))
+[('A', 'B', 'C'), ('A', 'C', 'B'), ('B', 'A', 'C'), ('B', 'C', 'A'), ('C', 'A', 'B'), ('C', 'B', 'A')]
+
+
+>>> list(itertools.permutations(['A', 'B', 'C'], 2))
+[('A', 'B'), ('A', 'C'), ('B', 'A'), ('B', 'C'), ('C', 'A'), ('C', 'B')]
+>>> list(itertools.permutations(['A', 'B', 'C'], 1))
+[('A',), ('B',), ('C',)]
+</pre>
+
+<p>To have Python generate combinations, you can use <code>itertools.combinations()</code>:</p>
+
+<pre>
+>>> import itertools
+>>> for v in itertools.combinations(['A', 'B', 'C'], 2):
+...   print(v)
+...
+('A', 'B')
+('A', 'C')
+('B', 'C')
+
+
+>>> list(itertools.combinations(['A', 'B', 'C'], 1))
+[('A',), ('B',), ('C',)]
+>>> list(itertools.combinations(['A', 'B', 'C'], 2))
+[('A', 'B'), ('A', 'C'), ('B', 'C')]
+>>> list(itertools.combinations(['A', 'B', 'C'], 3))
+[('A', 'B', 'C')]
+</pre>
+
+<p>Note that the <code>combinations()</code> function takes a second argument for the number of values to select. To get <strong>all</strong> combinations (also called the <em>power set</em>), you'll need to make multiple calls to <code>combinations()</code>:</p>
+
+<pre>
+>>> powerSet = []
+>>> import itertools
+>>> for k in range(4):
+...   powerSet.extend(itertools.combinations(['A', 'B', 'C'], k))
+...
+>>> powerSet
+[(), ('A',), ('B',), ('C',), ('A', 'B'), ('A', 'C'), ('B', 'C'), ('A', 'B', 'C')]
+</pre>
+
+<p>To get permutations with repetition/replacement, call <code>itertools.product()</code> and pass the size of the iterable object for its <code>repeat</code> argument:</p>
+
+<pre>
+>>> import itertools
+>>> for v in itertools.product(['A', 'B', 'C'], repeat=3):
+...   print(v)
+...
+('A', 'A', 'A')
+('A', 'A', 'B')
+('A', 'A', 'C')
+('A', 'B', 'A')
+('A', 'B', 'B')
+('A', 'B', 'C')
+('A', 'C', 'A')
+('A', 'C', 'B')
+('A', 'C', 'C')
+('B', 'A', 'A')
+('B', 'A', 'B')
+('B', 'A', 'C')
+('B', 'B', 'A')
+('B', 'B', 'B')
+('B', 'B', 'C')
+('B', 'C', 'A')
+('B', 'C', 'B')
+('B', 'C', 'C')
+('C', 'A', 'A')
+('C', 'A', 'B')
+('C', 'A', 'C')
+('C', 'B', 'A')
+('C', 'B', 'B')
+('C', 'B', 'C')
+('C', 'C', 'A')
+('C', 'C', 'B')
+('C', 'C', 'C')
+>>> list(itertools.product(['A', 'B', 'C'], repeat=3))
+[('A', 'A', 'A'), ('A', 'A', 'B'), ('A', 'A', 'C'), ('A', 'B', 'A'), ('A', 'B', 'B'), ('A', 'B', 'C'), ('A', 'C', 'A'), ('A', 'C', 'B'), ('A', 'C', 'C'), ('B', 'A', 'A'), ('B', 'A', 'B'), ('B', 'A', 'C'), ('B', 'B', 'A'), ('B', 'B', 'B'), ('B', 'B', 'C'), ('B', 'C', 'A'), ('B', 'C', 'B'), ('B', 'C', 'C'), ('C', 'A', 'A'), ('C', 'A', 'B'), ('C', 'A', 'C'), ('C', 'B', 'A'), ('C', 'B', 'B'), ('C', 'B', 'C'), ('C', 'C', 'A'), ('C', 'C', 'B'), ('C', 'C', 'C')]
+</pre>
+
+
+<p>To get combinations with repetition/replacement, call <code>itertools.combinations_with_replacement()</code>:</p>
+
+<pre>
+>>> import itertools
+>>> for v in itertools.combinations_with_replacement(['A', 'B', 'C'], 3):
+...   print(v)
+...
+('A', 'A', 'A')
+('A', 'A', 'B')
+('A', 'A', 'C')
+('A', 'B', 'B')
+('A', 'B', 'C')
+('A', 'C', 'C')
+('B', 'B', 'B')
+('B', 'B', 'C')
+('B', 'C', 'C')
+('C', 'C', 'C')
+>>> list(itertools.combinations_with_replacement(['A', 'B', 'C'], 3))
+[('A', 'A', 'A'), ('A', 'A', 'B'), ('A', 'A', 'C'), ('A', 'B', 'B'), ('A', 'B', 'C'), ('A', 'C', 'C'), ('B', 'B', 'B'), ('B', 'B', 'C'), ('B', 'C', 'C'), ('C', 'C', 'C')]
+</pre>
+
+<p>If you're like me and you had trouble remembering the differences between permutations and combinations, with and without repetition, and which Python functions implement them, bookmark this page to have easy access in the future.</p>
+
+</body>
+</html>
