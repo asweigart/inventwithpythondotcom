@@ -1,0 +1,258 @@
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-113">
+<section class="toclist">
+<header class="calibre10">
+<h1 class="chapter">
+<span class="chapternumber"><span type="pagebreak" title="94" id="calibre_link-462" class="calibre11"></span>#22</span><br class="calibre14" />
+<span class="chaptertitle">Ducklings</span></h1>
+</header>
+<figure class="opener">
+<img src="images/000002.png" alt="" class="calibre12" />
+</figure>
+<p class="chapterintro">This program creates a scrolling field of ducklings. Each duckling has slight variations: they can face left or right and have two different body sizes, four types of eyes, two types of mouths, and three positions for their wings. This gives us 96 different possible variations, which the Ducklings program produces endlessly.</p>
+<h2 id="calibre_link-114" class="calibre5"><span type="pagebreak" title="95" id="calibre_link-463" class="calibre15"></span>The Program in Action</h2>
+<p class="bodyfirst">When you run <em class="calibre9">ducklings</em><em class="calibre9">.py</em>, the output will look like this:</p>
+<pre class="calibre24"><code class="calibre22">Duckling Screensaver, by Al Sweigart al@inventwithpython.com
+Press Ctrl-C to quit...
+                                             =" )
+=")                                          (  v)=")
+( ^)                                          ^ ^ ( v) &gt;'')
+ ^^                                                ^^  (  ^)
+                              &gt;")                       ^ ^
+                              ( v)      =^^)
+ ("&lt;  ("&lt;                &gt;")   ^^       (  &gt;)
+(^ ) (&lt; )                ( ^)            ^ ^
+ ^^   ^^             ("&lt;  ^^                       (``&lt;&gt;^^)
+ (^^=               (^ )                          (&lt;  )(  ^)
+(v  ) ( "&lt;           ^^                            ^ ^  ^ ^
+<var class="calibre27">--snip--</var></code></pre>
+<h2 id="calibre_link-115" class="calibre5">How It Works</h2>
+<p class="bodyfirst">This program represents ducklings with a <code class="calibre22">Duckling</code> class. The random features of each ducking are chosen in the <code class="calibre22">__init__()</code> method of this class, while the various body parts of each duckling are returned by the <code class="calibre22">getHeadStr()</code>, <code class="calibre22">getBodyStr()</code>, and <code class="calibre22">getFeetStr()</code> methods.</p>
+<pre class="calibre24"><code class="calibre22">  1. """Duckling Screensaver, by Al Sweigart al@inventwithpython.com
+  2. A screensaver of many many ducklings.
+  3.
+  4. &gt;" )   =^^)    (``=   ("=  &gt;")    ("=
+  5. (  &gt;)  (  ^)  (v  )  (^ )  ( &gt;)  (v )
+  6.  ^ ^    ^ ^    ^ ^    ^^    ^^    ^^
+  7.
+  8. View this code at https://nostarch.com/big-book-small-python-projects
+  9. Tags: large, artistic, object-oriented, scrolling"""
+ 10.
+ 11. import random, shutil, sys, time
+ 12.
+ 13. # Set up the constants:
+ 14. PAUSE = 0.2  # (!) Try changing this to 1.0 or 0.0.
+ 15. DENSITY = 0.10  # (!) Try changing this to anything from 0.0 to 1.0.
+ 16.
+ 17. DUCKLING_WIDTH = 5
+ 18. LEFT = 'left'
+ 19. RIGHT = 'right'
+ 20. BEADY = 'beady'
+ 21. WIDE = 'wide'
+ 22. HAPPY = 'happy'
+ 23. ALOOF = 'aloof'
+ 24. CHUBBY = 'chubby'
+ 25. VERY_CHUBBY = 'very chubby'
+ 26. OPEN = 'open'
+ 27. CLOSED = 'closed'
+<span type="pagebreak" title="96" id="calibre_link-464" class="calibre13"></span> 28. OUT = 'out'
+ 29. DOWN = 'down'
+ 30. UP = 'up'
+ 31. HEAD = 'head'
+ 32. BODY = 'body'
+ 33. FEET = 'feet'
+ 34.
+ 35. # Get the size of the terminal window:
+ 36. WIDTH = shutil.get_terminal_size()[0]
+ 37. # We can't print to the last column on Windows without it adding a
+ 38. # newline automatically, so reduce the width by one:
+ 39. WIDTH -= 1
+ 40.
+ 41.
+ 42. def main():
+ 43.     print('Duckling Screensaver, by Al Sweigart')
+ 44.     print('Press Ctrl-C to quit...')
+ 45.     time.sleep(2)
+ 46.
+ 47.     ducklingLanes = [None] * (WIDTH // DUCKLING_WIDTH)
+ 48.
+ 49.     while True:  # Main program loop.
+ 50.         for laneNum, ducklingObj in enumerate(ducklingLanes):
+ 51.             # See if we should create a duckling in this lane:
+ 52.             if (ducklingObj == None and random.random() &lt;= DENSITY):
+ 53.                     # Place a duckling in this lane:
+ 54.                     ducklingObj = Duckling()
+ 55.                     ducklingLanes[laneNum] = ducklingObj
+ 56.
+ 57.             if ducklingObj != None:
+ 58.                 # Draw a duckling if there is one in this lane:
+ 59.                 print(ducklingObj.getNextBodyPart(), end='')
+ 60.                 # Delete the duckling if we've finished drawing it:
+ 61.                 if ducklingObj.partToDisplayNext == None:
+ 62.                     ducklingLanes[laneNum] = None
+ 63.             else:
+ 64.                 # Draw five spaces since there is no duckling here.
+ 65.                 print(' ' * DUCKLING_WIDTH, end='')
+ 66.
+ 67.         print()  # Print a newline.
+ 68.         sys.stdout.flush()  # Make sure text appears on the screen.
+ 69.         time.sleep(PAUSE)
+ 70.
+ 71.
+ 72. class Duckling:
+ 73.     def __init__(self):
+ 74.         """Create a new duckling with random body features."""
+ 75.         self.direction = random.choice([LEFT, RIGHT])
+ 76.         self.body = random.choice([CHUBBY, VERY_CHUBBY])
+ 77.         self.mouth = random.choice([OPEN, CLOSED])
+ 78.         self.wing = random.choice([OUT, UP, DOWN])
+ 79.
+ 80.         if self.body == CHUBBY:
+ 81.             # Chubby ducklings can only have beady eyes.
+ 82.             self.eyes = BEADY
+<span type="pagebreak" title="97" id="calibre_link-465" class="calibre13"></span> 83.         else:
+ 84.             self.eyes = random.choice([BEADY, WIDE, HAPPY, ALOOF])
+ 85.
+ 86.         self.partToDisplayNext = HEAD
+ 87.
+ 88.     def getHeadStr(self):
+ 89.         """Returns the string of the duckling's head."""
+ 90.         headStr = ''
+ 91.         if self.direction == LEFT:
+ 92.             # Get the mouth:
+ 93.             if self.mouth == OPEN:
+ 94.                 headStr += '&gt;'
+ 95.             elif self.mouth == CLOSED:
+ 96.                 headStr += '='
+ 97.
+ 98.             # Get the eyes:
+ 99.             if self.eyes == BEADY and self.body == CHUBBY:
+100.                 headStr += '"'
+101.             elif self.eyes == BEADY and self.body == VERY_CHUBBY:
+102.                 headStr += '" '
+103.             elif self.eyes == WIDE:
+104.                 headStr += "''"
+105.             elif self.eyes == HAPPY:
+106.                 headStr += '^^'
+107.             elif self.eyes == ALOOF:
+108.                 headStr += '``'
+109.
+110.             headStr += ') '  # Get the back of the head.
+111.
+112.         if self.direction == RIGHT:
+113.             headStr += ' ('  # Get the back of the head.
+114.
+115.             # Get the eyes:
+116.             if self.eyes == BEADY and self.body == CHUBBY:
+117.                 headStr += '"'
+118.             elif self.eyes == BEADY and self.body == VERY_CHUBBY:
+119.                 headStr += ' "'
+120.             elif self.eyes == WIDE:
+121.                 headStr += "''"
+122.             elif self.eyes == HAPPY:
+123.                 headStr += '^^'
+124.             elif self.eyes == ALOOF:
+125.                 headStr += '``'
+126.
+127.             # Get the mouth:
+128.             if self.mouth == OPEN:
+129.                 headStr += '&lt;'
+130.             elif self.mouth == CLOSED:
+131.                 headStr += '='
+132.
+133.         if self.body == CHUBBY:
+134.             # Get an extra space so chubby ducklings are the same
+135.             # width as very chubby ducklings.
+136.             headStr += ' '
+137.
+<span type="pagebreak" title="98" id="calibre_link-466" class="calibre13"></span>138.         return headStr
+139.
+140.     def getBodyStr(self):
+141.         """Returns the string of the duckling's body."""
+142.         bodyStr = '('  # Get the left side of the body.
+143.         if self.direction == LEFT:
+144.             # Get the interior body space:
+145.             if self.body == CHUBBY:
+146.                 bodyStr += ' '
+147.             elif self.body == VERY_CHUBBY:
+148.                 bodyStr += '  '
+149.
+150.             # Get the wing:
+151.             if self.wing == OUT:
+152.                 bodyStr += '&gt;'
+153.             elif self.wing == UP:
+154.                 bodyStr += '^'
+155.             elif self.wing == DOWN:
+156.                 bodyStr += 'v'
+157.
+158.         if self.direction == RIGHT:
+159.             # Get the wing:
+160.             if self.wing == OUT:
+161.                 bodyStr += '&lt;'
+162.             elif self.wing == UP:
+163.                 bodyStr += '^'
+164.             elif self.wing == DOWN:
+165.                 bodyStr += 'v'
+166.
+167.             # Get the interior body space:
+168.             if self.body == CHUBBY:
+169.                 bodyStr += ' '
+170.             elif self.body == VERY_CHUBBY:
+171.                 bodyStr += '  '
+172.
+173.         bodyStr += ')'  # Get the right side of the body.
+174.
+175.         if self.body == CHUBBY:
+176.             # Get an extra space so chubby ducklings are the same
+177.             # width as very chubby ducklings.
+178.             bodyStr += ' '
+179.
+180.         return bodyStr
+181.
+182.     def getFeetStr(self):
+183.         """Returns the string of the duckling's feet."""
+184.         if self.body == CHUBBY:
+185.             return ' ^^  '
+186.         elif self.body == VERY_CHUBBY:
+187.             return ' ^ ^ '
+188.
+189.     def getNextBodyPart(self):
+190.         """Calls the appropriate display method for the next body
+191.         part that needs to be displayed. Sets partToDisplayNext to
+192.         None when finished."""
+<span type="pagebreak" title="99" id="calibre_link-467" class="calibre13"></span>193.         if self.partToDisplayNext == HEAD:
+194.             self.partToDisplayNext = BODY
+195.             return self.getHeadStr()
+196.         elif self.partToDisplayNext == BODY:
+197.             self.partToDisplayNext = FEET
+198.             return self.getBodyStr()
+199.         elif self.partToDisplayNext == FEET:
+200.             self.partToDisplayNext = None
+201.             return self.getFeetStr()
+202.
+203.
+204.
+205. # If this program was run (instead of imported), run the game:
+206. if __name__ == '__main__':
+207.     try:
+208.         main()
+209.     except KeyboardInterrupt:
+210.         sys.exit()  # When Ctrl-C is pressed, end the program.</code></pre>
+<p class="calibre19">After entering the source code and running it a few times, try making experimental changes to it. The comments marked with <code class="calibre22">(!)</code> have suggestions for small changes you can make.</p>
+<h2 id="calibre_link-116" class="calibre5">Exploring the Program</h2>
+<p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
+<ol class="decimal">
+<li value="1" class="calibre8">What happens if you change <code class="calibre22">random.choice([LEFT, RIGHT]) </code>on line 75 to <code class="calibre22">random.choice([LEFT])?</code></li>
+<li value="2" class="calibre8">What happens if you change <code class="calibre22">self.partToDisplayNext = BODY</code> on line 194 to <code class="calibre22">self.partToDisplayNext = None</code>?</li>
+<li value="3" class="calibre8">What happens if you change <code class="calibre22">self.partToDisplayNext = FEET</code> on line 197 to <code class="calibre22">self.partToDisplayNext = BODY</code>?</li>
+<li value="4" class="calibre8">What happens if you change <code class="calibre22">return</code> <code class="calibre22">self.getHeadStr()</code> on line 195 to <code class="calibre22">return</code> <code class="calibre22">self.getFeetStr()</code>?</li>
+</ol>
+</section>
+</div>
+
+
+
+
+

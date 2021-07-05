@@ -1,0 +1,165 @@
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-37">
+<section class="toclist">
+<header class="calibre10">
+<h1 class="chapter">
+<span class="chapternumber"><span type="pagebreak" title="1" id="calibre_link-369" class="calibre11"></span>#1</span><br class="calibre14" />
+<span class="chaptertitle">Bagels</span></h1>
+</header>
+<figure class="opener">
+<img src="images/000002.png" alt="" class="calibre12" />
+</figure>
+<p class="chapterintro">In Bagels, a deductive logic game, you must guess a secret three-digit number based on clues. The game offers one of the following hints in response to your guess: “Pico” when your guess has a correct digit in the wrong place, “Fermi” when your guess has a correct digit in the correct place, and “Bagels” if your guess has no correct digits. You have 10 tries to guess the secret number.</p>
+<h2 id="calibre_link-38" class="calibre5"><span type="pagebreak" title="2" id="calibre_link-370" class="calibre15"></span>The Program in Action</h2>
+<p class="bodyfirst">When you run <em class="calibre9">bagels.py</em>, the output will look like this:</p>
+<pre class="calibre24"><code class="calibre22">Bagels, a deductive logic game.
+By Al Sweigart al@inventwithpython.com
+I am thinking of a 3-digit number. Try to guess what it is.
+Here are some clues:
+When I say:    That means:
+  Pico         One digit is correct but in the wrong position.
+  Fermi        One digit is correct and in the right position.
+  Bagels       No digit is correct.
+I have thought up a number.
+ You have 10 guesses to get it.
+Guess #1:
+&gt; <b class="calibre6">123</b>
+Pico
+Guess #2:
+&gt; <b class="calibre6">456</b>
+Bagels
+Guess #3:
+&gt; <b class="calibre6">178</b>
+Pico Pico
+<var class="calibre27">--snip--</var>
+Guess #7:
+&gt; <b class="calibre6">791</b>
+Fermi Fermi
+Guess #8:
+&gt; <b class="calibre6">701</b>
+You got it!
+Do you want to play again? (yes or no)
+&gt; <b class="calibre6">no</b>
+Thanks for playing!</code></pre>
+<h2 id="calibre_link-39" class="calibre5">How It Works</h2>
+<p class="bodyfirst">Keep in mind that this program uses not integer values but rather string values that contain numeric digits. For example, <code class="calibre22">'426'</code> is a different value than <code class="calibre22">426</code>. We need to do this because we are performing string comparisons with the secret number, not math operations. Remember that <code class="calibre22">'0'</code> can be a leading digit: the string <code class="calibre22">'026'</code> is different from <code class="calibre22">'26'</code>, but the integer <code class="calibre22">026</code> is the same as <code class="calibre22">26</code>.</p>
+<pre class="calibre24"><code class="calibre22"> 1. """Bagels, by Al Sweigart al@inventwithpython.com
+ 2. A deductive logic game where you must guess a number based on clues.
+ 3. View this code at https://nostarch.com/big-book-small-python-projects
+ 4. A version of this game is featured in the book "Invent Your Own
+ 5. Computer Games with Python" https://nostarch.com/inventwithpython
+ 6. Tags: short, game, puzzle"""
+ 7.
+ 8. import random
+ 9.
+<span type="pagebreak" title="3" id="calibre_link-371" class="calibre13"></span>10. NUM_DIGITS = 3  # (!) Try setting this to 1 or 10.
+11. MAX_GUESSES = 10  # (!) Try setting this to 1 or 100.
+12.
+13.
+14. def main():
+15.     print('''Bagels, a deductive logic game.
+16. By Al Sweigart al@inventwithpython.com
+17.
+18. I am thinking of a {}-digit number with no repeated digits.
+19. Try to guess what it is. Here are some clues:
+20. When I say:    That means:
+21.   Pico         One digit is correct but in the wrong position.
+22.   Fermi        One digit is correct and in the right position.
+23.   Bagels       No digit is correct.
+24.
+25. For example, if the secret number was 248 and your guess was 843, the
+26. clues would be Fermi Pico.'''.format(NUM_DIGITS))
+27.
+28.     while True:  # Main game loop.
+29.         # This stores the secret number the player needs to guess:
+30.         secretNum = getSecretNum()
+31.         print('I have thought up a number.')
+32.         print(' You have {} guesses to get it.'.format(MAX_GUESSES))
+33.
+34.         numGuesses = 1
+35.         while numGuesses &lt;= MAX_GUESSES:
+36.             guess = ''
+37.             # Keep looping until they enter a valid guess:
+38.             while len(guess) != NUM_DIGITS or not guess.isdecimal():
+39.                 print('Guess #{}: '.format(numGuesses))
+40.                 guess = input('&gt; ')
+41.
+42.             clues = getClues(guess, secretNum)
+43.             print(clues)
+44.             numGuesses += 1
+45.
+46.             if guess == secretNum:
+47.                 break  # They're correct, so break out of this loop.
+48.             if numGuesses &gt; MAX_GUESSES:
+49.                 print('You ran out of guesses.')
+50.                 print('The answer was {}.'.format(secretNum))
+51.
+52.         # Ask player if they want to play again.
+53.         print('Do you want to play again? (yes or no)')
+54.         if not input('&gt; ').lower().startswith('y'):
+55.             break
+56.     print('Thanks for playing!')
+57.
+58.
+59. def getSecretNum():
+60.     """Returns a string made up of NUM_DIGITS unique random digits."""
+61.     numbers = list('0123456789')  # Create a list of digits 0 to 9.
+62.     random.shuffle(numbers)  # Shuffle them into random order.
+63.
+64.     # Get the first NUM_DIGITS digits in the list for the secret number:
+<span type="pagebreak" title="4" id="calibre_link-372" class="calibre13"></span>65.     secretNum = ''
+66.     for i in range(NUM_DIGITS):
+67.         secretNum += str(numbers[i])
+68.     return secretNum
+69.
+70.
+71. def getClues(guess, secretNum):
+72.     """Returns a string with the pico, fermi, bagels clues for a guess
+73.     and secret number pair."""
+74.     if guess == secretNum:
+75.         return 'You got it!'
+76.
+77.     clues = []
+78.
+79.     for i in range(len(guess)):
+80.         if guess[i] == secretNum[i]:
+81.             # A correct digit is in the correct place.
+82.             clues.append('Fermi')
+83.         elif guess[i] in secretNum:
+84.             # A correct digit is in the incorrect place.
+85.             clues.append('Pico')
+86.     if len(clues) == 0:
+87.         return 'Bagels'  # There are no correct digits at all.
+88.     else:
+89.         # Sort the clues into alphabetical order so their original order
+90.         # doesn't give information away.
+91.         clues.sort()
+92.         # Make a single string from the list of string clues.
+93.         return ' '.join(clues)
+94.
+95.
+96. # If the program is run (instead of imported), run the game:
+97. if __name__ == '__main__':
+98.     main()</code></pre>
+<p class="calibre19">After entering the source code and running it a few times, try making experimental changes to it. The comments marked with <code class="calibre22">(!)</code> have suggestions for small changes you can make. On your own, you can also try to figure out how to do the following:</p>
+<ul class="calibre25">
+<li class="calibre8">Change the number of digits for the secret number by changing <code class="calibre22">NUM_DIGITS</code>.</li>
+<li class="calibre8">Change the number of guesses the player gets by changing <code class="calibre22">MAX_GUESSES</code>.</li>
+<li class="calibre8">Try to create a version with letters as well as digits in the secret number.</li>
+</ul>
+<h2 id="calibre_link-40" class="calibre5">Exploring the Program</h2>
+<p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
+<ol class="decimal">
+<li value="1" class="calibre8">What happens when you change the <code class="calibre22">NUM_DIGITS</code> constant?</li>
+<li value="2" class="calibre8"><span type="pagebreak" title="5" id="calibre_link-373" class="calibre20"></span>What happens when you change the <code class="calibre22">MAX_GUESSES</code> constant?</li>
+<li value="3" class="calibre8">What happens if you set <code class="calibre22">NUM_DIGITS</code> to a number larger than <code class="calibre22">10</code>?</li>
+<li value="4" class="calibre8">What happens if you replace <code class="calibre22">secretNum = getSecretNum()</code> on line 30 with <code class="calibre22">secretNum = '123'</code>?</li>
+<li value="5" class="calibre8">What error message do you get if you delete or comment out <code class="calibre22">numGuesses = 1</code> on line 34?</li>
+<li value="6" class="calibre8">What happens if you delete or comment out <code class="calibre22">random.shuffle(numbers)</code> on line 62?</li>
+<li value="7" class="calibre8">What happens if you delete or comment out <code class="calibre22">if</code> <code class="calibre22">guess == secretNum:</code> on line 74 and <code class="calibre22">return 'You got it!'</code> on line 75?</li>
+<li value="8" class="calibre8">What happens if you comment out <code class="calibre22">numGuesses += 1</code> on line 44?</li>
+</ol>
+</section>
+</div>
+

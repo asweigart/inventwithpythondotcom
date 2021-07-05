@@ -1,0 +1,76 @@
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-13">
+<section class="toclist">
+<header class="calibre10">
+<h1 class="chapter">
+<span class="chapternumber"><span type="pagebreak" title="162" id="calibre_link-530" class="calibre11"></span>#35</span><br class="calibre14" />
+<span class="chaptertitle">Hex Grid</span></h1>
+</header>
+<figure class="opener">
+<img src="images/000002.png" alt="" class="calibre12" />
+</figure>
+<p class="chapterintro">This short program produces a tessellated image of a hexagonal grid, similar to chicken wire. It shows that you don’t need a lot of code to make something interesting. A slightly more complicated variation of this program is Project 65, “Shining Carpet.”</p>
+<p class="calibre18">Note that this program uses raw strings, which prefix the opening quote with a lowercase <code class="calibre22">r</code> so that the backslashes in the string aren’t interpreted as escape characters.</p>
+<h2 id="calibre_link-163" class="calibre5"><span type="pagebreak" title="163" id="calibre_link-531" class="calibre15"></span>The Program in Action</h2>
+<p class="bodyfirst"><a href="#calibre_link-14" id="calibre_link-801" class="linkurl">Figure 35-1</a> shows what the output will look like when you run <em class="calibre9">hexgrid.py</em>.</p>
+<figure class="calibre28">
+<img src="images/000001.png" alt="f35001" class="calibre12" />
+<figcaption class="calibre29"><p class="calibre30"><a id="calibre_link-14" class="linkurl">Figure 35-1</a>: Output showing a tessellated image of a hexagonal grid</p></figcaption>
+</figure>
+<h2 id="calibre_link-164" class="calibre5">How It Works</h2>
+<p class="bodyfirst">The power behind programming is that it can make a computer carry out repetitive instructions quickly and without mistakes. This is how a dozen lines of code can create hundreds, thousands, or millions of hexagons on the screen.</p>
+<p class="calibre19">In the Command Prompt or Terminal window, you can redirect a program’s output from the screen to a text file. On Windows, run <code class="calibre22">py hexgrid.py &gt; hextiles.txt</code> to create a text file that contains the hexagons. On Linux and macOS, run <code class="calibre22">python3 hexgrid.py &gt; hextiles.txt</code>. Without the size of the screen as a limit, you can increase the <code class="calibre22">X_REPEAT</code> and <code class="calibre22">Y_REPEAT</code> constants and save the contents to a file. From there, it’s easy to print the file on paper, send it in an email, or post it to social media. This applies to any computer-generated artwork you create.</p>
+<pre class="calibre24"><code class="calibre22"> 1. """Hex Grid, by Al Sweigart al@inventwithpython.com
+ 2. Displays a simple tessellation of a hexagon grid.
+ 3. View this code at https://nostarch.com/big-book-small-python-projects
+ 4. Tags: tiny, beginner, artistic"""
+ 5.
+ 6. # Set up the constants:
+ 7. # (!) Try changing these values to other numbers:
+ 8. X_REPEAT = 19  # How many times to tessellate horizontally.
+ 9. Y_REPEAT = 12  # How many times to tessellate vertically.
+10.
+<span type="pagebreak" title="164" id="calibre_link-532" class="calibre13"></span>11. for y in range(Y_REPEAT):
+12.     # Display the top half of the hexagon:
+13.     for x in range(X_REPEAT):
+14.         print(r'/ \_', end='')
+15.     print()
+16.
+17.     # Display the bottom half of the hexagon:
+18.     for x in range(X_REPEAT):
+19.         print(r'\_/ ', end='')
+20.     print()</code></pre>
+<p class="calibre19">After entering the source code and running it a few times, try making experimental changes to it. The comments marked with <code class="calibre22">(!)</code> have suggestions for small changes you can make. On your own, you can also try to figure out how to do the following:</p>
+<ul class="calibre25">
+<li class="calibre8">Create tiled hexagons of a larger size.</li>
+<li class="calibre8">Create tiled rectangular bricks instead of hexagons.</li>
+</ul>
+<p class="calibre19">For practice, try re-creating this program with larger hexagon grids, such as the following patterns:</p>
+<pre class="calibre24"><code class="calibre22"> /   \     /   \     /   \     /   \     /   \     /   \     /   \
+/     \___/     \___/     \___/     \___/     \___/     \___/     \
+\     /   \     /   \     /   \     /   \     /   \     /   \     /
+ \___/     \___/     \___/     \___/     \___/     \___/     \___/
+ /   \     /   \     /   \     /   \     /   \     /   \     /   \
+/     \___/     \___/     \___/     \___/     \___/     \___/     \
+
+  /     \         /     \         /     \         /     \
+ /       \       /       \       /       \       /       \
+/         \_____/         \_____/         \_____/         \_____
+\         /     \         /     \         /     \         /
+ \       /       \       /       \       /       \       /
+  \_____/         \_____/         \_____/         \_____/
+  /     \         /     \         /     \         /     \
+ /       \       /       \       /       \       /       \
+/         \_____/         \_____/         \_____/         \_____
+</code></pre>
+<h2 id="calibre_link-165" class="calibre5">Exploring the Program</h2>
+<p class="bodyfirst">This is a base program, so there aren’t many options to customize it. Instead, consider how you could similarly program patterns of other shapes. </p>
+</section>
+</div>
+
+
+
+
+

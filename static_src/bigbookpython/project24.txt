@@ -1,0 +1,98 @@
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-121">
+<section class="toclist">
+<header class="calibre10">
+<h1 class="chapter">
+<span class="chapternumber"><span type="pagebreak" title="106" id="calibre_link-474" class="calibre11"></span>#24</span><br class="calibre14" />
+<span class="chaptertitle">Factor Finder</span></h1>
+</header>
+<figure class="opener">
+<img src="images/000002.png" alt="" class="calibre12" />
+</figure>
+<p class="chapterintro">A number’s factors are any two other numbers that, when multiplied with each other, produce the number. For example, 2 × 13 = 26, so 2 and 13 are factors of 26. Also, 1 × 26 = 26, so 1 and 26 are also factors of 26. Therefore, we say that 26 has four factors: 1, 2, 13, and 26.</p>
+<p class="calibre18">If a number only has two factors (1 and itself), we call that a prime number. Otherwise, we call it a composite number. Use the factor finder to discover some new prime numbers! (Hint: Prime numbers always end with an odd number that isn’t 5.) You can also have the computer calculate them with Project 56, “Prime Numbers.”</p>
+<p class="calibre19">The math for this program isn’t too heavy, making it an ideal project for beginners.</p>
+<h2 id="calibre_link-122" class="calibre5"><span type="pagebreak" title="107" id="calibre_link-475" class="calibre15"></span>The Program in Action</h2>
+<p class="bodyfirst">When you run <em class="calibre9">factorfinder.py</em>, the output will look like this:</p>
+<pre class="calibre24"><code class="calibre22">Factor Finder, by Al Sweigart al@inventwithpython.com
+<var class="calibre27">--snip--</var>
+Enter a number to factor (or "QUIT" to quit):
+&gt; <b class="calibre6">26</b>
+1, 2, 13, 26
+Enter a number to factor (or "QUIT" to quit):
+&gt; <b class="calibre6">4352784</b>
+1, 2, 3, 4, 6, 8, 12, 16, 24, 29, 48, 53, 58, 59, 87, 106, 116, 118, 159, 174, 177, 212, 232, 236, 318, 348, 354, 424, 464, 472, 636, 696, 708, 848, 944, 1272, 1392, 1416, 1537, 1711, 2544, 2832, 3074, 3127, 3422, 4611, 5133, 6148, 6254, 6844, 9222, 9381, 10266, 12296, 12508, 13688, 18444, 18762, 20532, 24592, 25016, 27376, 36888, 37524, 41064, 50032, 73776, 75048, 82128, 90683, 150096, 181366, 272049, 362732, 544098, 725464, 1088196, 1450928, 2176392, 4352784
+Enter a number to factor (or "QUIT" to quit):
+&gt; <b class="calibre6">9787</b>
+1, 9787
+Enter a number to factor (or "QUIT" to quit):
+&gt; <b class="calibre6">quit</b></code></pre>
+<h2 id="calibre_link-123" class="calibre5">How It Works</h2>
+<p class="bodyfirst">We can tell if a number is a factor of another number by checking if the second number evenly divides the first number. For example, 7 is a factor of 21 because 21 ÷ 7 is 3. This also gives us another of 21’s factors: 3. However, 8 is not a factor of 21 because 21 ÷ 8 = 2.625. The fractional remainder component tells us this equation did not divide evenly.</p>
+<p class="calibre19">The <code class="calibre22">%</code> mod operator will perform division and tell us if there’s a remainder: <code class="calibre22">21 % 7</code> evaluates to <code class="calibre22">0</code>, meaning there is no remainder and 7 is a factor of 21, whereas <code class="calibre22">21 % 8</code> evaluates to <code class="calibre22">1</code>, a nonzero value, meaning that it isn’t a factor. The factor finder program uses this technique on line 35 to determine which numbers are factors.</p>
+<p class="calibre19">The <code class="calibre22">math.sqrt()</code> function returns the square root of the number passed to it. For example, <code class="calibre22">math.sqrt(25)</code> returns <code class="calibre22">5.0</code> because 5 times itself is 25, making it the square root of 25.</p>
+<pre class="calibre24"><code class="calibre22"> 1. """Factor Finder, by Al Sweigart al@inventwithpython.com
+ 2. Finds all the factors of a number.
+ 3. View this code at https://nostarch.com/big-book-small-python-projects
+ 4. Tags: tiny, beginner, math"""
+ 5.
+ 6. import math, sys
+ 7.
+ 8. print('''Factor Finder, by Al Sweigart al@inventwithpython.com
+ 9.
+10. A number's factors are two numbers that, when multiplied with each
+<span type="pagebreak" title="108" id="calibre_link-476" class="calibre13"></span>11. other, produce the number. For example, 2 x 13 = 26, so 2 and 13 are
+12. factors of 26. 1 x 26 = 26, so 1 and 26 are also factors of 26. We
+13. say that 26 has four factors: 1, 2, 13, and 26.
+14.
+15. If a number only has two factors (1 and itself), we call that a prime
+16. number. Otherwise, we call it a composite number.
+17.
+18. Can you discover some prime numbers?
+19. ''')
+20.
+21. while True:  # Main program loop.
+22.     print('Enter a positive whole number to factor (or QUIT):')
+23.     response = input('&gt; ')
+24.     if response.upper() == 'QUIT':
+25.         sys.exit()
+26.
+27.     if not (response.isdecimal() and int(response) &gt; 0):
+28.         continue
+29.     number = int(response)
+30.
+31.     factors = []
+32.
+33.     # Find the factors of number:
+34.     for i in range(1, int(math.sqrt(number)) + 1):
+35.         if number % i == 0:  # If there's no remainder, it is a factor.
+36.             factors.append(i)
+37.             factors.append(number // i)
+38.
+39.     # Convert to a set to get rid of duplicate factors:
+40.     factors = list(set(factors))
+41.     factors.sort()
+42.
+43.     # Display the results:
+44.     for i, factor in enumerate(factors):
+45.         factors[i] = str(factor)
+46.     print(', '.join(factors))</code></pre>
+<h2 id="calibre_link-124" class="calibre5">Exploring the Program</h2>
+<p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
+<ol class="decimal">
+<li value="1" class="calibre8">What happens if you delete or comment out <code class="calibre22">factors.append(i)</code> on line 36?</li>
+<li value="2" class="calibre8">What happens if you delete or comment out <code class="calibre22">factors = list(set(factors))</code> on line 40? (Hint: Enter a square number such as 25 or 36 or 49.)</li>
+<li value="3" class="calibre8">What happens if you delete or comment out <code class="calibre22">factors.sort()</code> on line 41?</li>
+<li value="4" class="calibre8"><span type="pagebreak" title="109" id="calibre_link-477" class="calibre20"></span>What error message do you get if you change <code class="calibre22">factors = []</code> on line 31 to <code class="calibre22">factors = ''</code>?</li>
+<li value="5" class="calibre8">What happens if you change <code class="calibre22">factors = []</code> on line 31 to <code class="calibre22">factors = [-42]</code>?</li>
+<li value="6" class="calibre8">What error message do you get if you change <code class="calibre22">factors = []</code> on line 31 to <code class="calibre22">factors = ['hello']</code>?</li>
+</ol>
+</section>
+</div>
+
+
+
+
+

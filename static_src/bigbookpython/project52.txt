@@ -1,0 +1,112 @@
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-1">
+<section class="toclist">
+<header class="calibre10">
+<h1 class="chapter">
+<span class="chapternumber"><span type="pagebreak" title="255" id="calibre_link-623" class="calibre11"></span>#52</span><br class="calibre14" />
+<span class="chaptertitle">Numeral System Counters</span></h1>
+</header>
+<figure class="opener">
+<img src="images/000002.png" alt="" class="calibre12" />
+</figure>
+<p class="chapterintro">We’re used to counting in the decimal numeral system, which uses 10 digits: 0 through 9. This system likely developed because humans counted on their fingers, and most people have 10 fingers. But other number systems exist. Computers make use of <em class="calibre9">binary</em>, a numeral system with only two digits, 0 and 1. Programmers also sometimes use hexadecimal, which is a base-16 numeral system that uses the digits 0 to 9 but also extends into the letters <em class="calibre9">A</em> to <em class="calibre9">F</em>.</p>
+<p class="calibre18">We can represent any number in any numeral system, and this program displays a range of numbers in decimal, binary, and hexadecimal.</p>
+<h2 id="calibre_link-225" class="calibre5"><span type="pagebreak" title="256" id="calibre_link-624" class="calibre15"></span>The Program in Action</h2>
+<p class="bodyfirst">When you run <em class="calibre9">numeralsystems.py</em>, the output will look like this:</p>
+<pre class="calibre24"><code class="calibre22">Numeral System Counters, by Al Sweigart al@inventwithpython.com
+
+<var class="calibre27">--snip--</var>
+Enter the starting number (e.g. 0) &gt; <b class="calibre6">0</b>
+Enter how many numbers to display (e.g. 1000) &gt; <b class="calibre6">20</b>
+DEC: 0    HEX: 0    BIN: 0
+DEC: 1    HEX: 1    BIN: 1
+DEC: 2    HEX: 2    BIN: 10
+DEC: 3    HEX: 3    BIN: 11
+DEC: 4    HEX: 4    BIN: 100
+DEC: 5    HEX: 5    BIN: 101
+DEC: 6    HEX: 6    BIN: 110
+DEC: 7    HEX: 7    BIN: 111
+DEC: 8    HEX: 8    BIN: 1000
+DEC: 9    HEX: 9    BIN: 1001
+DEC: 10    HEX: A    BIN: 1010
+DEC: 11    HEX: B    BIN: 1011
+DEC: 12    HEX: C    BIN: 1100
+DEC: 13    HEX: D    BIN: 1101
+DEC: 14    HEX: E    BIN: 1110
+DEC: 15    HEX: F    BIN: 1111
+DEC: 16    HEX: 10    BIN: 10000
+DEC: 17    HEX: 11    BIN: 10001
+DEC: 18    HEX: 12    BIN: 10010
+DEC: 19    HEX: 13    BIN: 10011</code></pre>
+<h2 id="calibre_link-226" class="calibre5">How It Works</h2>
+<p class="bodyfirst">You can get the binary and hexadecimal representations of a number in Python by calling the <code class="calibre22">bin()</code> and <code class="calibre22">hex()</code> functions, respectively:</p>
+<pre class="calibre24"><code class="calibre22">&gt;&gt;&gt; <b class="calibre6">bin(42)</b>
+'0b101010'
+&gt;&gt;&gt; <b class="calibre6">hex(42)</b>
+'0x2a'</code></pre>
+<p class="calibre19">Convert these strings back into decimal integers by calling <code class="calibre22">int()</code> and supplying the base to convert from, like so:</p>
+<pre class="calibre24"><code class="calibre22">&gt;&gt;&gt; <b class="calibre6">int('0b101010', 2)</b>
+42
+&gt;&gt;&gt; <b class="calibre6">int('0x2a', 16)</b>
+42</code></pre>
+<p class="calibre19">Keep in mind that the binary and hexadecimal “numbers” returned by <code class="calibre22">bin()</code> and <code class="calibre22">hex()</code> are actually string values: <code class="calibre22">bin(42)</code> returns the string <code class="calibre22">'0b101010'</code> and <code class="calibre22">hex(42)</code> returns the string <code class="calibre22">'0x2a'</code>. In programming, it is convention to add a <code class="calibre22">0b</code> prefix to binary numbers and <code class="calibre22">0x</code> prefix to hexadecimal numbers. <span type="pagebreak" title="257" id="calibre_link-625" class="calibre20"></span>That way, no one will confuse the binary number 10000 (the number 16 in decimal) with the decimal number “ten thousand.” The numeral systems program removes these prefixes before displaying the number.</p>
+<pre class="calibre24"><code class="calibre22"> 1. """Numeral System Counters, by Al Sweigart al@inventwithpython.com
+ 2. Shows equivalent numbers in decimal, hexadecimal, and binary.
+ 3. View this code at https://nostarch.com/big-book-small-python-projects
+ 4. Tags: tiny, math"""
+ 5.
+ 6.
+ 7. print('''Numeral System Counters, by Al Sweigart al@inventwithpython.com
+ 8.
+ 9. This program shows you equivalent numbers in decimal (base 10),
+10. hexadecimal (base 16), and binary (base 2) numeral systems.
+11.
+12. (Ctrl-C to quit.)
+13. ''')
+14.
+15. while True:
+16.     response = input('Enter the starting number (e.g. 0) &gt; ')
+17.     if response == '':
+18.         response = '0'  # Start at 0 by default.
+19.         break
+20.     if response.isdecimal():
+21.         break
+22.     print('Please enter a number greater than or equal to 0.')
+23. start = int(response)
+24.
+25. while True:
+26.     response = input('Enter how many numbers to display (e.g. 1000) &gt; ')
+27.     if response == '':
+28.         response = '1000'  # Display 1000 numbers by default.
+29.         break
+30.     if response.isdecimal():
+31.         break
+32.     print('Please enter a number.')
+33. amount = int(response)
+34.
+35. for number in range(start, start + amount):  # Main program loop.
+36.     # Convert to hexadecimal/binary and remove the prefix:
+37.     hexNumber = hex(number)[2:].upper()
+38.     binNumber = bin(number)[2:]
+39.
+40.     print('DEC:', number, '   HEX:', hexNumber, '   BIN:', binNumber)</code></pre>
+<p class="calibre19">After entering the source code and running it a few times, try making experimental changes to it. On your own, you can also try to figure out how to do the following:</p>
+<ul class="calibre25">
+<li class="calibre8">Enter a new row for <em class="calibre9">octal</em>, the base-8 number system, using Python’s <code class="calibre22">oct()</code> function.</li>
+<li class="calibre8">Search the internet for “number system conversion” to find out how to implement your own <code class="calibre22">bin()</code>, <code class="calibre22">oct()</code>, and <code class="calibre22">hex()</code> functions.</li>
+</ul>
+<h2 id="calibre_link-227" class="calibre5"><span type="pagebreak" title="258" id="calibre_link-626" class="calibre15"></span>Exploring the Program</h2>
+<p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
+<ol class="decimal">
+<li value="1" class="calibre8">What happens if you change <code class="calibre22">hex(number)[2:].upper()</code> on line 37 to <code class="calibre22">hex(number)[2:]</code>?</li>
+<li value="2" class="calibre8">What error do you cause if you change <code class="calibre22">int(response)</code> on line 33 to <code class="calibre22">response</code>?</li>
+</ol>
+</section>
+</div>
+
+
+
+
+

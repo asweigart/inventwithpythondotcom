@@ -1,0 +1,228 @@
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-68">
+<section class="toclist">
+<header class="calibre10">
+<h1 class="chapter">
+<span class="chapternumber"><span type="pagebreak" title="41" id="calibre_link-409" class="calibre11"></span>#9</span><br class="calibre14" />
+<span class="chaptertitle">Carrot in a Box</span></h1>
+</header>
+<figure class="opener">
+<img src="images/000002.png" alt="" class="calibre12" />
+</figure>
+<p class="chapterintro">This is a simple and silly bluffing game for two human players. Each player has a box. One box has a carrot in it, and each player wants to have the carrot. The first player looks in their box and then tells the second player they either do or don’t have the carrot. The second player gets to decide whether to swap boxes or not.</p>
+<p class="calibre18">The ASCII art in the code makes typing this program take a while (though copying and pasting the ASCII art can speed up the task), but this project is good for beginners because it is straightforward, with minimal looping and no defined functions.</p>
+<h2 id="calibre_link-69" class="calibre5"><span type="pagebreak" title="42" id="calibre_link-410" class="calibre15"></span>The Program in Action</h2>
+<p class="bodyfirst">When you run <em class="calibre9">carrotinabox.py</em>, the output will look like this:</p>
+<pre class="calibre24"><code class="calibre22">Carrot in a Box, by Al Sweigart al@inventwithpython.com
+<var class="calibre27">--snip--</var>
+Human player 1, enter your name: <b class="calibre6">Alice</b>
+Human player 2, enter your name: <b class="calibre6">Bob</b>
+HERE ARE TWO BOXES:
+  __________     __________
+ /         /|   /         /|
++---------+ |  +---------+ |
+|   RED   | |  |   GOLD  | |
+|   BOX   | /  |   BOX   | /
++---------+/   +---------+/
+   Alice           Bob
+
+Alice, you have a RED box in front of you.
+Bob, you have a GOLD box in front of you.
+Press Enter to continue...
+<var class="calibre27">--snip--</var>
+When Bob has closed their eyes, press Enter...
+Alice here is the inside of your box:
+
+   ___VV____
+  |   VV    |
+  |   VV    |
+  |___||____|    __________
+ /    ||   /|   /         /|
++---------+ |  +---------+ |
+|   RED   | |  |   GOLD  | |
+|   BOX   | /  |   BOX   | /
++---------+/   +---------+/
+ (carrot!)
+   Alice           Bob
+Press Enter to continue...
+<var class="calibre27">--snip--</var></code></pre>
+<h2 id="calibre_link-70" class="calibre5">How It Works</h2>
+<p class="bodyfirst">This program relies on the second player closing their eyes so they don’t see the contents of the first player’s box. In order to keep the second player from seeing the box contents after this step, we need to find a way to clear the screen. Line 83 does this with <code class="calibre22">print('\n' * 100)</code>. This prints 100 newline characters, causing the previously printed content to scroll up and out of view. This keeps the second player from accidentally seeing what was only intended for the first player. While the second player could always scroll up to see this text, it’d be obvious to the first player, who’s sitting right next to them, that they had done so.</p>
+<p class="calibre19">On lines 114, 130, and 142, the spacing of the vertical lines may look incorrect, but the program replaces the curly braces with the string <code class="calibre22">'RED '</code> <span type="pagebreak" title="43" id="calibre_link-411" class="calibre20"></span>(with a space at the end) or <code class="calibre22">'GOLD'</code>. The four characters in these strings will cause the rest of the box’s vertical lines to line up with the rest of the ASCII-art image.</p>
+<pre class="calibre24"><code class="calibre22">  1. """Carrot in a Box, by Al Sweigart al@inventwithpython.com
+  2. A silly bluffing game between two human players. Based on the game
+  3. from the show 8 Out of 10 Cats.
+  4. View this code at https://nostarch.com/big-book-small-python-projects
+  5. Tags: large, beginner, game, two-player"""
+  6.
+  7. import random
+  8.
+  9. print('''Carrot in a Box, by Al Sweigart al@inventwithpython.com
+ 10.
+ 11. This is a bluffing game for two human players. Each player has a box.
+ 12. One box has a carrot in it. To win, you must have the box with the
+ 13. carrot in it.
+ 14.
+ 15. This is a very simple and silly game.
+ 16.
+ 17. The first player looks into their box (the second player must close
+ 18. their eyes during this). The first player then says "There is a carrot
+ 19. in my box" or "There is not a carrot in my box". The second player then
+ 20. gets to decide if they want to swap boxes or not.
+ 21. ''')
+ 22. input('Press Enter to begin...')
+ 23.
+ 24. p1Name = input('Human player 1, enter your name: ')
+ 25. p2Name = input('Human player 2, enter your name: ')
+ 26. playerNames = p1Name[:11].center(11) + '    ' + p2Name[:11].center(11)
+ 27.
+ 28. print('''HERE ARE TWO BOXES:
+ 29.   __________     __________
+ 30.  /         /|   /         /|
+ 31. +---------+ |  +---------+ |
+ 32. |   RED   | |  |   GOLD  | |
+ 33. |   BOX   | /  |   BOX   | /
+ 34. +---------+/   +---------+/''')
+ 35.
+ 36. print()
+ 37. print(playerNames)
+ 38. print()
+ 39. print(p1Name + ', you have a RED box in front of you.')
+ 40. print(p2Name + ', you have a GOLD box in front of you.')
+ 41. print()
+ 42. print(p1Name + ', you will get to look into your box.')
+ 43. print(p2Name.upper() + ', close your eyes and don\'t look!!!')
+ 44. input('When ' + p2Name + ' has closed their eyes, press Enter...')
+ 45. print()
+ 46.
+ 47. print(p1Name + ' here is the inside of your box:')
+ 48.
+ 49. if random.randint(1, 2) == 1:
+ 50.     carrotInFirstBox = True
+<span type="pagebreak" title="44" id="calibre_link-412" class="calibre13"></span> 51. else:
+ 52.     carrotInFirstBox = False
+ 53.
+ 54. if carrotInFirstBox:
+ 55.     print('''
+ 56.    ___VV____
+ 57.   |   VV    |
+ 58.   |   VV    |
+ 59.   |___||____|    __________
+ 60.  /    ||   /|   /         /|
+ 61. +---------+ |  +---------+ |
+ 62. |   RED   | |  |   GOLD  | |
+ 63. |   BOX   | /  |   BOX   | /
+ 64. +---------+/   +---------+/
+ 65.  (carrot!)''')
+ 66.     print(playerNames)
+ 67. else:
+ 68.     print('''
+ 69.    _________
+ 70.   |         |
+ 71.   |         |
+ 72.   |_________|    __________
+ 73.  /         /|   /         /|
+ 74. +---------+ |  +---------+ |
+ 75. |   RED   | |  |   GOLD  | |
+ 76. |   BOX   | /  |   BOX   | /
+ 77. +---------+/   +---------+/
+ 78. (no carrot!)''')
+ 79.     print(playerNames)
+ 80.
+ 81. input('Press Enter to continue...')
+ 82.
+ 83. print('\n' * 100)  # Clear the screen by printing several newlines.
+ 84. print(p1Name + ', tell ' + p2Name + ' to open their eyes.')
+ 85. input('Press Enter to continue...')
+ 86.
+ 87. print()
+ 88. print(p1Name + ', say one of the following sentences to ' + p2Name + '.')
+ 89. print('  1) There is a carrot in my box.')
+ 90. print('  2) There is not a carrot in my box.')
+ 91. print()
+ 92. input('Then press Enter to continue...')
+ 93.
+ 94. print()
+ 95. print(p2Name + ', do you want to swap boxes with ' + p1Name + '? YES/NO')
+ 96. while True:
+ 97.     response = input('&gt; ').upper()
+ 98.     if not (response.startswith('Y') or response.startswith('N')):
+ 99.         print(p2Name + ', please enter "YES" or "NO".')
+100.     else:
+101.         break
+102.
+103. firstBox = 'RED '  # Note the space after the "D".
+<span type="pagebreak" title="45" id="calibre_link-413" class="calibre13"></span>104. secondBox = 'GOLD'
+105.
+106. if response.startswith('Y'):
+107.     carrotInFirstBox = not carrotInFirstBox
+108.     firstBox, secondBox = secondBox, firstBox
+109.
+110. print('''HERE ARE THE TWO BOXES:
+111.   __________     __________
+112.  /         /|   /         /|
+113. +---------+ |  +---------+ |
+114. |   {}  | |  |   {}  | |
+115. |   BOX   | /  |   BOX   | /
+116. +---------+/   +---------+/'''.format(firstBox, secondBox))
+117. print(playerNames)
+118.
+119. input('Press Enter to reveal the winner...')
+120. print()
+121.
+122. if carrotInFirstBox:
+123.     print('''
+124.    ___VV____      _________
+125.   |   VV    |    |         |
+126.   |   VV    |    |         |
+127.   |___||____|    |_________|
+128.  /    ||   /|   /         /|
+129. +---------+ |  +---------+ |
+130. |   {}  | |  |   {}  | |
+131. |   BOX   | /  |   BOX   | /
+132. +---------+/   +---------+/'''.format(firstBox, secondBox))
+133.
+134. else:
+135.     print('''
+136.    _________      ___VV____
+137.   |         |    |   VV    |
+138.   |         |    |   VV    |
+139.   |_________|    |___||____|
+140.  /         /|   /    ||   /|
+141. +---------+ |  +---------+ |
+142. |   {}  | |  |   {}  | |
+143. |   BOX   | /  |   BOX   | /
+144. +---------+/   +---------+/'''.format(firstBox, secondBox))
+145.
+146. print(playerNames)
+147.
+148. # This modification made possible through the 'carrotInFirstBox' variable
+149. if carrotInFirstBox:
+150.     print(p1Name + ' is the winner!')
+151. else:
+152.     print(p2Name + ' is the winner!')
+153.
+154. print('Thanks for playing!')</code></pre>
+<p class="calibre19"><span type="pagebreak" title="46" id="calibre_link-414" class="calibre20"></span>After entering the source code and running it a few times, try making experimental changes to it. On your own, you can also try to figure out how to do the following:</p>
+<ul class="calibre25">
+<li class="calibre8">Change the ASCII art for the boxes and carrots to something more ornate.</li>
+<li class="calibre8">Add a “would you like to play again?” feature that lets the players play again while keeping score.</li>
+<li class="calibre8">Add a third player that the second player must bluff to.</li>
+</ul>
+<h2 id="calibre_link-71" class="calibre5">Exploring the Program</h2>
+<p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
+<ol class="decimal">
+<li value="1" class="calibre8">Note that line 26 has the code <code class="calibre22">p1Name[:11]</code> and <code class="calibre22">p2Name[:11]</code>. Enter a name longer than 11 letters. What do you notice about how the program displays this name?</li>
+<li value="2" class="calibre8">What happens if you omit the space at the end of <code class="calibre22">firstBox = 'RED '</code> on line 103?</li>
+<li value="3" class="calibre8">What happens if you delete or comment out <code class="calibre22">print('\n' * 100)</code> on line 83?</li>
+<li value="4" class="calibre8">What happens if you delete or comment out the <code class="calibre22">else:</code> on line 100 and <code class="calibre22">break</code> on line 101?</li>
+</ol>
+</section>
+</div>
+
+
+
+
+

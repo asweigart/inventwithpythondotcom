@@ -1,0 +1,208 @@
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-32">
+<section class="toclist">
+<p class="calibre19"><span type="pagebreak" title="390" id="calibre_link-758" class="calibre20"></span></p>
+<header class="calibre10">
+<h1 class="chapter">
+<span class="chapternumber">#81</span><br class="calibre14" />
+<span class="chaptertitle">Water Bucket Puzzle</span></h1>
+</header>
+<figure class="opener">
+<img src="images/000002.png" alt="" class="calibre12" />
+</figure>
+<p class="chapterintro">In this solitaire puzzle game, you must use three buckets (three-liter, five-liter, and eight-liter buckets) to collect exactly four liters of water in one of the buckets. Buckets can only be emptied, completely filled, or poured into another bucket. For example, you can fill the five-liter bucket and then pour its contents into the three-liter bucket, leaving you with a full three-liter bucket and two liters of water in the five-liter bucket.</p>
+<p class="calibre18">With some effort, you should be able to solve the puzzle. But can you figure out how to solve it with the minimal number of moves?</p>
+<h2 id="calibre_link-331" class="calibre5"><span type="pagebreak" title="391" id="calibre_link-759" class="calibre15"></span>The Program in Action</h2>
+<p class="bodyfirst">When you run <em class="calibre9">waterbucket.py</em>, the output will look like this:</p>
+<pre class="calibre24"><code class="calibre22">Water Bucket Puzzle, by Al Sweigart al@inventwithpython.com
+
+Try to get 4L of water into one of these
+buckets:
+
+8|      |
+7|      |
+6|      |
+5|      |  5|      |
+4|      |  4|      |
+3|      |  3|      |  3|      |
+2|      |  2|      |  2|      |
+1|      |  1|      |  1|      |
+ +------+   +------+   +------+
+    8L         5L         3L
+
+You can:
+  (F)ill the bucket
+  (E)mpty the bucket
+  (P)our one bucket into another
+  (Q)uit
+&gt; <b class="calibre6">f</b>
+Select a bucket 8, 5, 3, or QUIT:
+&gt; <b class="calibre6">5</b>
+
+Try to get 4L of water into one of these
+buckets:
+
+8|      |
+7|      |
+6|      |
+5|      |  5|WWWWWW|
+4|      |  4|WWWWWW|
+3|      |  3|WWWWWW|  3|      |
+2|      |  2|WWWWWW|  2|      |
+1|      |  1|WWWWWW|  1|      |
+ +------+   +------+   +------+
+    8L         5L         3L
+<var class="calibre27">--snip--</var></code></pre>
+<h2 id="calibre_link-332" class="calibre5">How It Works</h2>
+<p class="bodyfirst">The <code class="calibre22">waterInBucket</code> variable stores a dictionary that represents the state of the water buckets. The keys to this dictionary are the strings <code class="calibre22">'8'</code>, <code class="calibre22">'5'</code>, and <code class="calibre22">'3'</code> (representing the buckets), and their values are integers (representing the liters of water in that bucket).</p>
+<p class="calibre19">Lines 48 to 59 use this dictionary to render the buckets and water on the screen. The <code class="calibre22">waterDisplay</code> list contains either <code class="calibre22">'WWWWWW'</code> (representing water) or <code class="calibre22">'      '</code> (representing air) and is passed to the <code class="calibre22">format()</code> string <span type="pagebreak" title="392" id="calibre_link-760" class="calibre20"></span>method. The first eight strings in the <code class="calibre22">waterDisplay</code> list fill the eight-liter bucket, the next five strings the five-liter bucket, and the final three strings the three-liter bucket.</p>
+<pre class="calibre24"><code class="calibre22">  1. """Water Bucket Puzzle, by Al Sweigart al@inventwithpython.com
+  2. A water pouring puzzle.
+  3. More info: https://en.wikipedia.org/wiki/Water_pouring_puzzle
+  4. View this code at https://nostarch.com/big-book-small-python-projects
+  5. Tags: large, game, math, puzzle"""
+  6.
+  7. import sys
+  8.
+  9.
+ 10. print('Water Bucket Puzzle, by Al Sweigart al@inventwithpython.com')
+ 11.
+ 12. GOAL = 4  # The exact amount of water to have in a bucket to win.
+ 13. steps = 0  # Keep track of how many steps the player made to solve this.
+ 14.
+ 15. # The amount of water in each bucket:
+ 16. waterInBucket = {'8': 0, '5': 0, '3': 0}
+ 17.
+ 18. while True:  # Main game loop.
+ 19.     # Display the current state of the buckets:
+ 20.     print()
+ 21.     print('Try to get ' + str(GOAL) + 'L of water into one of these')
+ 22.     print('buckets:')
+ 23.
+ 24.     waterDisplay = []  # Contains strings for water or empty space.
+ 25.
+ 26.     # Get the strings for the 8L bucket:
+ 27.     for i in range(1, 9):
+ 28.         if waterInBucket['8'] &lt; i:
+ 29.             waterDisplay.append('      ')  # Add empty space.
+ 30.         else:
+ 31.             waterDisplay.append('WWWWWW')  # Add water.
+ 32.
+ 33.     # Get the strings for the 5L bucket:
+ 34.     for i in range(1, 6):
+ 35.         if waterInBucket['5'] &lt; i:
+ 36.             waterDisplay.append('      ')  # Add empty space.
+ 37.         else:
+ 38.             waterDisplay.append('WWWWWW')  # Add water.
+ 39.
+ 40.     # Get the strings for the 3L bucket:
+ 41.     for i in range(1, 4):
+ 42.         if waterInBucket['3'] &lt; i:
+ 43.             waterDisplay.append('      ')  # Add empty space.
+ 44.         else:
+ 45.             waterDisplay.append('WWWWWW')  # Add water.
+ 46.
+ 47.     # Display the buckets with the amount of water in each one:
+ 48.     print('''
+ 49. 8|{7}|
+ 50. 7|{6}|
+<span type="pagebreak" title="393" id="calibre_link-761" class="calibre13"></span> 51. 6|{5}|
+ 52. 5|{4}|  5|{12}|
+ 53. 4|{3}|  4|{11}|
+ 54. 3|{2}|  3|{10}|  3|{15}|
+ 55. 2|{1}|  2|{9}|  2|{14}|
+ 56. 1|{0}|  1|{8}|  1|{13}|
+ 57.  +------+   +------+   +------+
+ 58.     8L         5L         3L
+ 59. '''.format(*waterDisplay))
+ 60.
+ 61.     # Check if any of the buckets has the goal amount of water:
+ 62.     for waterAmount in waterInBucket.values():
+ 63.         if waterAmount == GOAL:
+ 64.             print('Good job! You solved it in', steps, 'steps!')
+ 65.             sys.exit()
+ 66.
+ 67.     # Let the player select an action to do with a bucket:
+ 68.     print('You can:')
+ 69.     print('  (F)ill the bucket')
+ 70.     print('  (E)mpty the bucket')
+ 71.     print('  (P)our one bucket into another')
+ 72.     print('  (Q)uit')
+ 73.
+ 74.     while True:  # Keep asking until the player enters a valid action.
+ 75.         move = input('&gt; ').upper()
+ 76.         if move == 'QUIT' or move == 'Q':
+ 77.             print('Thanks for playing!')
+ 78.             sys.exit()
+ 79.
+ 80.         if move in ('F', 'E', 'P'):
+ 81.             break  # Player has selected a valid action.
+ 82.         print('Enter F, E, P, or Q')
+ 83.
+ 84.     # Let the player select a bucket:
+ 85.     while True:  # Keep asking until valid bucket entered.
+ 86.         print('Select a bucket 8, 5, 3, or QUIT:')
+ 87.         srcBucket = input('&gt; ').upper()
+ 88.
+ 89.         if srcBucket == 'QUIT':
+ 90.             print('Thanks for playing!')
+ 91.             sys.exit()
+ 92.
+ 93.         if srcBucket in ('8', '5', '3'):
+ 94.             break  # Player has selected a valid bucket.
+ 95.
+ 96.     # Carry out the selected action:
+ 97.     if move == 'F':
+ 98.         # Set the amount of water to the max size.
+ 99.         srcBucketSize = int(srcBucket)
+100.         waterInBucket[srcBucket] = srcBucketSize
+101.         steps += 1
+102.
+103.     elif move == 'E':
+104.         waterInBucket[srcBucket] = 0  # Set water amount to nothing.
+105.         steps += 1
+<span type="pagebreak" title="394" id="calibre_link-762" class="calibre13"></span>106.
+107.     elif move == 'P':
+108.         # Let the player select a bucket to pour into:
+109.         while True:  # Keep asking until valid bucket entered.
+110.             print('Select a bucket to pour into: 8, 5, or 3')
+111.             dstBucket = input('&gt; ').upper()
+112.             if dstBucket in ('8', '5', '3'):
+113.                 break  # Player has selected a valid bucket.
+114.
+115.         # Figure out the amount to pour:
+116.         dstBucketSize = int(dstBucket)
+117.         emptySpaceInDstBucket = dstBucketSize - waterInBucket[dstBucket]
+118.         waterInSrcBucket = waterInBucket[srcBucket]
+119.         amountToPour = min(emptySpaceInDstBucket, waterInSrcBucket)
+120.
+121.         # Pour out water from this bucket:
+122.         waterInBucket[srcBucket] -= amountToPour
+123.
+124.         # Put the poured out water into the other bucket:
+125.         waterInBucket[dstBucket] += amountToPour
+126.         steps += 1
+127.
+128.     elif move == 'C':
+129.         pass  # If the player selected Cancel, do nothing.</code></pre>
+<p class="calibre19">After entering the source code and running it a few times, try making experimental changes to it. On your own, you can also try to figure out how to do the following:</p>
+<ul class="calibre25">
+<li class="calibre8">Add variety by making the game configurable so you can specify any sizes for the three buckets and any amount for the goal quantity.</li>
+<li class="calibre8">Add a “hint” that examines the amount of water in each bucket and provides the next step to take. If the program can’t figure out which action to take next, it can simply display “I don’t know what you should do next. Maybe start over?”</li>
+</ul>
+<h2 id="calibre_link-333" class="calibre5">Exploring the Program</h2>
+<p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
+<ol class="decimal">
+<li value="1" class="calibre8">What happens if you change <code class="calibre22">waterInBucket[srcBucket] = 0</code> on line 104 to <code class="calibre22">waterInBucket[srcBucket] = 1</code>?</li>
+<li value="2" class="calibre8">What happens if you change <code class="calibre22">{'8': 0, '5': 0, '3': 0}</code> on line 16 to <code class="calibre22">{'8': 0, '5': 4, '3': 0}</code>?</li>
+<li value="3" class="calibre8">What happens if you change <code class="calibre22">{'8': 0, '5': 0, '3': 0}</code> on line 16 to <code class="calibre22">{'8': 9, '5': 0, '3': 0}</code>?</li>
+</ol>
+</section>
+</div>
+
+
+
+
+

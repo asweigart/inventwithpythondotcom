@@ -1,0 +1,118 @@
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-16">
+<section class="toclist">
+<header class="calibre10">
+<h1 class="chapter">
+<span class="chapternumber"><span type="pagebreak" title="263" id="calibre_link-631" class="calibre11"></span>#54</span><br class="calibre14" />
+<span class="chaptertitle">Pig Latin</span></h1>
+</header>
+<figure class="opener">
+<img src="images/000002.png" alt="" class="calibre12" />
+</figure>
+<p class="chapterintro">Pig Latin is a word game that transforms English words into a parody of Latin. In Pig Latin, if a word begins with a consonant, the speaker removes this letter and puts it at the end, followed by “ay.” For example, “pig” becomes “igpay” and “latin” becomes “atinlay.” Otherwise, if the word begins with a vowel, the speaker simply adds “yay” to the end of it. For example, “elephant” becomes “elephantyay” and “umbrella” becomes “umbrellayay.”</p>
+<h2 id="calibre_link-231" class="calibre5"><span type="pagebreak" title="264" id="calibre_link-632" class="calibre15"></span>The Program in Action</h2>
+<p class="bodyfirst">When you run <em class="calibre9">piglatin.py</em>, the output will look like this:</p>
+<pre class="calibre24"><code class="calibre22">Igpay Atinlay (Pig Latin)
+By Al Sweigart al@inventwithpython.com
+
+Enter your message:
+&gt; <b class="calibre6">This is a very serious message.</b>
+Isthay isyay ayay eryvay erioussay essagemay.
+(Copied pig latin to clipboard.)</code></pre>
+<h2 id="calibre_link-232" class="calibre5">How It Works</h2>
+<p class="bodyfirst">The <code class="calibre22">englishToPigLatin()</code> function takes a string of English text and returns a string of its Pig Latin equivalent. The <code class="calibre22">main()</code> function only gets called if a user runs the program directly. You could also write your own Python programs, import <em class="calibre9">piglatin.py</em> with an <code class="calibre22">import piglatin</code> statement, then call <code class="calibre22">piglatin.englishToPigLatin()</code> to make use of the <code class="calibre22">englishToPigLatin()</code> function. This reuse technique can save you the time and effort required to reinvent this code yourself.</p>
+<pre class="calibre24"><code class="calibre22"> 1. """Pig Latin, by Al Sweigart al@inventwithpython.com
+ 2. Translates English messages into Igpay Atinlay.
+ 3. View this code at https://nostarch.com/big-book-small-python-projects
+ 4. Tags: short, word"""
+ 5.
+ 6. try:
+ 7.     import pyperclip  # pyperclip copies text to the clipboard.
+ 8. except ImportError:
+ 9.     pass  # If pyperclip is not installed, do nothing. It's no big deal.
+10.
+11. VOWELS = ('a', 'e', 'i', 'o', 'u', 'y')
+12.
+13.
+14. def main():
+15.     print('''Igpay Atinlay (Pig Latin)
+16. By Al Sweigart al@inventwithpython.com
+17.
+18. Enter your message:''')
+19.     pigLatin = englishToPigLatin(input('&gt; '))
+20.
+21.     # Join all the words back together into a single string:
+22.     print(pigLatin)
+23.
+24.     try:
+25.         pyperclip.copy(pigLatin)
+26.         print('(Copied pig latin to clipboard.)')
+27.     except NameError:
+28.         pass  # Do nothing if pyperclip wasn't installed.
+29.
+<span type="pagebreak" title="265" id="calibre_link-633" class="calibre13"></span>30.
+31. def englishToPigLatin(message):
+32.     pigLatin = ''  # A string of the pig latin translation.
+33.     for word in message.split():
+34.         # Separate the non-letters at the start of this word:
+35.         prefixNonLetters = ''
+36.         while len(word) &gt; 0 and not word[0].isalpha():
+37.             prefixNonLetters += word[0]
+38.             word = word[1:]
+39.         if len(word) == 0:
+40.             pigLatin = pigLatin + prefixNonLetters + ' '
+41.             continue
+42.
+43.         # Separate the non-letters at the end of this word:
+44.         suffixNonLetters = ''
+45.         while not word[-1].isalpha():
+46.             suffixNonLetters = word[-1] + suffixNonLetters
+47.             word = word[:-1]
+48.
+49.         # Remember if the word was in uppercase or titlecase.
+50.         wasUpper = word.isupper()
+51.         wasTitle = word.istitle()
+52.
+53.         word = word.lower()  # Make the word lowercase for translation.
+54.
+55.         # Separate the consonants at the start of this word:
+56.         prefixConsonants = ''
+57.         while len(word) &gt; 0 and not word[0] in VOWELS:
+58.             prefixConsonants += word[0]
+59.             word = word[1:]
+60.
+61.         # Add the pig latin ending to the word:
+62.         if prefixConsonants != '':
+63.             word += prefixConsonants + 'ay'
+64.         else:
+65.             word += 'yay'
+66.
+67.         # Set the word back to uppercase or titlecase:
+68.         if wasUpper:
+69.             word = word.upper()
+70.         if wasTitle:
+71.             word = word.title()
+72.
+73.         # Add the non-letters back to the start or end of the word.
+74.         pigLatin += prefixNonLetters + word + suffixNonLetters + ' '
+75.     return pigLatin
+76.
+77.
+78. if __name__ == '__main__':
+79.     main()</code></pre>
+<h2 id="calibre_link-233" class="calibre5"><span type="pagebreak" title="266" id="calibre_link-634" class="calibre15"></span>Exploring the Program</h2>
+<p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
+<ol class="decimal">
+<li value="1" class="calibre8">What happens if you change <code class="calibre22">message.split()</code> on line 33 to <code class="calibre22">message</code>?</li>
+<li value="2" class="calibre8">What happens if you change <code class="calibre22">('a', 'e', 'i', 'o', 'u', 'y')</code> on line 11 to <code class="calibre22">()</code>?</li>
+<li value="3" class="calibre8">What happens if you change <code class="calibre22">('a', 'e', 'i', 'o', 'u', 'y')</code> on line 11 to <code class="calibre22">('A', 'E', 'I', 'O', 'U', 'Y')</code>?</li>
+</ol>
+</section>
+</div>
+
+
+
+
+

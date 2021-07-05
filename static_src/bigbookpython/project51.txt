@@ -1,0 +1,152 @@
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-5">
+<section class="toclist">
+<header class="calibre10">
+<h1 class="chapter">
+<span class="chapternumber"><span type="pagebreak" title="251" id="calibre_link-619" class="calibre11"></span>#51</span><br class="calibre14" />
+<span class="chaptertitle">niNety-nniinE BoOttels</span></h1>
+</header>
+<figure class="opener">
+<img src="images/000002.png" alt="" class="calibre12" />
+</figure>
+<p class="chapterintro">In this version of the song “Ninety-Nine Bottles,” the program introduces small imperfections in each stanza by either removing a letter, swapping the casing of a letter, transposing two letters, or doubling a letter.</p>
+<p class="calibre18">As the song continues to play, these mutations add up, resulting in a very silly song. It’s a good idea to try Project 50, “Ninety-Nine Bottles,” before attempting this one.</p>
+<h2 id="calibre_link-222" class="calibre5"><span type="pagebreak" title="252" id="calibre_link-620" class="calibre15"></span>The Program in Action</h2>
+<p class="bodyfirst">When you run <em class="calibre9">ninetyninebottles2.py</em>, the output will look like this:</p>
+<pre class="calibre24"><code class="calibre22">niNety-nniinE BoOttels, by Al Sweigart al@inventwithpython.com
+<var class="calibre27">--snip--</var>
+99 bottles of milk on the wall,
+99 bottles of milk,
+Take one down, pass it around,
+98 bottles of milk on the wall!
+
+98 bottles of milk on the wall,
+98 bottles of milk,
+Take one d wn, pass it around,
+97 bottles of milk on the wall!
+
+97 bottles of milk on the wall,
+97 bottels of milk,
+Take one d wn,  pass it around,
+96 bottles of milk on the wall!
+<var class="calibre27">--snip--</var>
+75b otlte  of mIl  on teh wall,
+75   ottels  f miLk,
+Take one d wn,  pass it ar und,
+74 bbOttles of milk on t e wall!
+<var class="calibre27">--snip--</var>
+1  otlE t of iml  oo nteh  lall,
+1   o  Tle   FF FmMLIIkk,
+Taake on  d wn,  pAasSs itt au nn d,
+No more bottles of milk on the wall!</code></pre>
+<h2 id="calibre_link-223" class="calibre5">How It Works</h2>
+<p class="bodyfirst">String values in Python are <em class="calibre9">immutable</em>, meaning they cannot be changed. If the string <code class="calibre22">'Hello'</code> is stored in a variable called <code class="calibre22">greeting</code>, the code <code class="calibre22">greeting = greeting + ' world!'</code> doesn’t actually change the <code class="calibre22">'Hello'</code> string. Rather, it creates a new string, <code class="calibre22">'Hello world!'</code>, to replace the <code class="calibre22">'Hello'</code> string in <code class="calibre22">greeting</code>. The technical reasons for this are beyond the scope of this book, but it’s important to understand the distinction, because it means code like <code class="calibre22">greeting[0] = 'h'</code> isn’t allowed, since strings are immutable. However, since lists are mutable, we can create a list of single-character strings (as line 62 does), change the characters in the list, and then create a string from the list (line 85). This is how our program seemingly changes, or <em class="calibre9">mutates</em>, the strings containing the song lyrics.</p>
+<pre class="calibre24"><code class="calibre22"> 1. """niNety-nniinE BoOttels of Mlik On teh waLl
+ 2. By Al Sweigart al@inventwithpython.com
+ 3. Print the full lyrics to one of the longest songs ever! The song
+ 4. gets sillier and sillier with each verse. Press Ctrl-C to stop.
+ 5. View this code at https://nostarch.com/big-book-small-python-projects
+ 6. Tags: short, scrolling, word"""
+ 7.
+<span type="pagebreak" title="253" id="calibre_link-621" class="calibre13"></span> 8. import random, sys, time
+ 9.
+10. # Set up the constants:
+11. # (!) Try changing both of these to 0 to print all the lyrics at once.
+12. SPEED = 0.01  # The pause in between printing letters.
+13. LINE_PAUSE = 1.5  # The pause at the end of each line.
+14.
+15.
+16. def slowPrint(text, pauseAmount=0.1):
+17.     """Slowly print out the characters in text one at a time."""
+18.     for character in text:
+19.         # Set flush=True here so the text is immediately printed:
+20.         print(character, flush=True, end='')  # end='' means no newline.
+21.         time.sleep(pauseAmount)  # Pause in between each character.
+22.     print()  # Print a newline.
+23.
+24.
+25. print('niNety-nniinE BoOttels, by Al Sweigart al@inventwithpython.com')
+26. print()
+27. print('(Press Ctrl-C to quit.)')
+28.
+29. time.sleep(2)
+30.
+31. bottles = 99  # This is the starting number of bottles.
+32.
+33. # This list holds the string used for the lyrics:
+34. lines = [' bottles of milk on the wall,',
+35.          ' bottles of milk,',
+36.          'Take one down, pass it around,',
+37.          ' bottles of milk on the wall!']
+38.
+39. try:
+40.     while bottles &gt; 0:  # Keep looping and display the lyrics.
+41.         slowPrint(str(bottles) + lines[0], SPEED)
+42.         time.sleep(LINE_PAUSE)
+43.         slowPrint(str(bottles) + lines[1], SPEED)
+44.         time.sleep(LINE_PAUSE)
+45.         slowPrint(lines[2], SPEED)
+46.         time.sleep(LINE_PAUSE)
+47.         bottles = bottles - 1  # Decrease the number of bottles by one.
+48.
+49.         if bottles &gt; 0:  # Print the last line of the current stanza.
+50.             slowPrint(str(bottles) + lines[3], SPEED)
+51.         else:  # Print the last line of the entire song.
+52.             slowPrint('No more bottles of milk on the wall!', SPEED)
+53.
+54.         time.sleep(LINE_PAUSE)
+55.         print()  # Print a newline.
+56.
+57.         # Choose a random line to make "sillier":
+58.         lineNum = random.randint(0, 3)
+59.
+60.         # Make a list from the line string so we can edit it. (Strings
+61.         # in Python are immutable.)
+62.         line = list(lines[lineNum])
+<span type="pagebreak" title="254" id="calibre_link-622" class="calibre13"></span>63.
+64.         effect = random.randint(0, 3)
+65.         if effect == 0:  # Replace a character with a space.
+66.             charIndex = random.randint(0, len(line) - 1)
+67.             line[charIndex] = ' '
+68.         elif effect == 1:  # Change the casing of a character.
+69.             charIndex = random.randint(0, len(line) - 1)
+70.             if line[charIndex].isupper():
+71.                 line[charIndex] = line[charIndex].lower()
+72.             elif line[charIndex].islower():
+73.                 line[charIndex] = line[charIndex].upper()
+74.         elif effect == 2:  # Transpose two characters.
+75.             charIndex = random.randint(0, len(line) - 2)
+76.             firstChar = line[charIndex]
+77.             secondChar = line[charIndex + 1]
+78.             line[charIndex] = secondChar
+79.             line[charIndex + 1] = firstChar
+80.         elif effect == 3:  # Double a character.
+81.             charIndex = random.randint(0, len(line) - 2)
+82.             line.insert(charIndex, line[charIndex])
+83.
+84.         # Convert the line list back to a string and put it in lines:
+85.         lines[lineNum] = ''.join(line)
+86. except KeyboardInterrupt:
+87.     sys.exit()  # When Ctrl-C is pressed, end the program.</code></pre>
+<p class="calibre19">After entering the source code and running it a few times, try making experimental changes to it. The comments marked with <code class="calibre22">(!)</code> have suggestions for small changes you can make. On your own, you can also try to figure out how to do the following:</p>
+<ul class="calibre25">
+<li class="calibre8">Swap the order of two adjacent words, where a “word” is text separated by spaces.</li>
+<li class="calibre8">On rare occasions, have the song start counting upward for a few iterations.</li>
+<li class="calibre8">Change the case of an entire word.</li>
+</ul>
+<h2 id="calibre_link-224" class="calibre5">Exploring the Program</h2>
+<p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
+<ol class="decimal">
+<li value="1" class="calibre8">What happens if you change <code class="calibre22">bottles = bottles - 1</code> on line 47 to <code class="calibre22">bottles = bottles - 2</code>?</li>
+<li value="2" class="calibre8">What happens if you change <code class="calibre22">effect = random.randint(0, 3)</code> on line 64 to <code class="calibre22">effect = 0</code>?</li>
+<li value="3" class="calibre8">What error happens if you delete or comment out <code class="calibre22">line = list(lines[lineNum])</code> on line 62?</li>
+</ol>
+</section>
+</div>
+
+
+
+
+

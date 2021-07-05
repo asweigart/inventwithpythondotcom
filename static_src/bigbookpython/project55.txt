@@ -1,0 +1,183 @@
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-11">
+<section class="toclist">
+<header class="calibre10">
+<h1 class="chapter">
+<span class="chapternumber"><span type="pagebreak" title="267" id="calibre_link-635" class="calibre11"></span>#55</span><br class="calibre14" />
+<span class="chaptertitle">Powerball Lottery</span></h1>
+</header>
+<figure class="opener">
+<img src="images/000002.png" alt="" class="calibre12" />
+</figure>
+<p class="chapterintro">The Powerball Lottery is an exciting way to lose small amounts of money. If you purchase a $2 ticket, you can pick six numbers: five drawn from 1 to 69, and a sixth “Powerball” number drawn from 1 to 26. The order of the numbers doesn’t matter. If the lottery selects your six numbers, you win $1.586 billion dollars! Except you won’t win, because your odds are 1 in 292,201,338. But if you spent $200 on 100 tickets, your odds would be . . . 1 in 2,922,013. You won’t win that either, but at least you’ll lose 100 times as much money. The more you like losing money, the more fun the lottery is!</p>
+<p class="calibre18">To help you visualize how often you won’t win the lottery, this program simulates up to one million Powerball drawings and then compares them with the numbers you picked. Now you can have all the excitement of losing the lottery without spending money.</p>
+<p class="calibre19"><span type="pagebreak" title="268" id="calibre_link-636" class="calibre20"></span>Fun fact: every set of six numbers is just as likely to win as any other. So the next time you want to buy a lottery ticket, pick the numbers 1, 2, 3, 4, 5, and 6. Those numbers are just as likely to come up as a more complex set.</p>
+<h2 id="calibre_link-234" class="calibre5">The Program in Action</h2>
+<p class="bodyfirst">When you run <em class="calibre9">powerballlottery.py</em>, the output will look like this:</p>
+<pre class="calibre24"><code class="calibre22">Powerball Lottery, by Al Sweigart al@inventwithpython.com
+
+Each powerball lottery ticket costs $2. The jackpot for this game
+is $1.586 billion! It doesn't matter what the jackpot is, though,
+because the odds are 1 in 292,201,338, so you won't win.
+
+This simulation gives you the thrill of playing without wasting money.
+
+Enter 5 different numbers from 1 to 69, with spaces between
+each number. (For example: 5 17 23 42 50 51)
+&gt; <b class="calibre6">1 2 3 4 5</b>
+Enter the powerball number from 1 to 26.
+&gt; <b class="calibre6">6</b>
+How many times do you want to play? (Max: 1000000)
+&gt; <b class="calibre6">1000000</b>
+It costs $2000000 to play 1000000 times, but don't
+worry. I'm sure you'll win it all back.
+Press Enter to start...
+The winning numbers are: 12 29 48 11 4 and 13  You lost.
+The winning numbers are: 54 39 3 42 16 and 12  You lost.
+The winning numbers are: 56 4 63 23 38 and 24  You lost.
+<var class="calibre27">--snip--</var>
+The winning numbers are: 46 29 10 62 17 and 21 You lost.
+The winning numbers are: 5 20 18 65 30 and 10  You lost.
+The winning numbers are: 54 30 58 10 1 and 18  You lost.
+You have wasted $2000000
+Thanks for playing!</code></pre>
+<h2 id="calibre_link-235" class="calibre5">How It Works</h2>
+<p class="bodyfirst">The output from this program looks fairly uniform because the <code class="calibre22">allWinningNums.ljust(21)</code> code on line 109 pads the numbers with enough spaces to take up 21 columns, no matter how many digits the winning numbers have. This makes the “You lost.” text always appear in the same place on the screen, so it remains readable even as the program quickly outputs several lines.</p>
+<pre class="calibre24"><code class="calibre22">  1. """Powerball Lottery, by Al Sweigart al@inventwithpython.com
+  2. A simulation of the lottery so you can experience the thrill of
+  3. losing the lottery without wasting your money.
+  4. View this code at https://nostarch.com/big-book-small-python-projects
+  5. Tags: short, humor, simulation"""
+  6.
+<span type="pagebreak" title="269" id="calibre_link-637" class="calibre13"></span>  7. import random
+  8.
+  9. print('''Powerball Lottery, by Al Sweigart al@inventwithpython.com
+ 10.
+ 11. Each powerball lottery ticket costs $2. The jackpot for this game
+ 12. is $1.586 billion! It doesn't matter what the jackpot is, though,
+ 13. because the odds are 1 in 292,201,338, so you won't win.
+ 14.
+ 15. This simulation gives you the thrill of playing without wasting money.
+ 16. ''')
+ 17.
+ 18. # Let the player enter the first five numbers, 1 to 69:
+ 19. while True:
+ 20.     print('Enter 5 different numbers from 1 to 69, with spaces between')
+ 21.     print('each number. (For example: 5 17 23 42 50)')
+ 22.     response = input('&gt; ')
+ 23.
+ 24.     # Check that the player entered 5 things:
+ 25.     numbers = response.split()
+ 26.     if len(numbers) != 5:
+ 27.         print('Please enter 5 numbers, separated by spaces.')
+ 28.         continue
+ 29.
+ 30.     # Convert the strings into integers:
+ 31.     try:
+ 32.         for i in range(5):
+ 33.             numbers[i] = int(numbers[i])
+ 34.     except ValueError:
+ 35.         print('Please enter numbers, like 27, 35, or 62.')
+ 36.         continue
+ 37.
+ 38.     # Check that the numbers are between 1 and 69:
+ 39.     for i in range(5):
+ 40.         if not (1 &lt;= numbers[i] &lt;= 69):
+ 41.             print('The numbers must all be between 1 and 69.')
+ 42.             continue
+ 43.
+ 44.     # Check that the numbers are unique:
+ 45.     # (Create a set from number to remove duplicates.)
+ 46.     if len(set(numbers)) != 5:
+ 47.         print('You must enter 5 different numbers.')
+ 48.         continue
+ 49.
+ 50.     break
+ 51.
+ 52. # Let the player select the powerball, 1 to 26:
+ 53. while True:
+ 54.     print('Enter the powerball number from 1 to 26.')
+ 55.     response = input('&gt; ')
+ 56.
+ 57.     # Convert the strings into integers:
+ 58.     try:
+ 59.         powerball = int(response)
+ 60.     except ValueError:
+ 61.         print('Please enter a number, like 3, 15, or 22.')
+<span type="pagebreak" title="270" id="calibre_link-638" class="calibre13"></span> 62.         continue
+ 63.
+ 64.     # Check that the number is between 1 and 26:
+ 65.     if not (1 &lt;= powerball &lt;= 26):
+ 66.         print('The powerball number must be between 1 and 26.')
+ 67.         continue
+ 68.
+ 69.     break
+ 70.
+ 71. # Enter the number of times you want to play:
+ 72. while True:
+ 73.     print('How many times do you want to play? (Max: 1000000)')
+ 74.     response = input('&gt; ')
+ 75.
+ 76.     # Convert the strings into integers:
+ 77.     try:
+ 78.         numPlays = int(response)
+ 79.     except ValueError:
+ 80.         print('Please enter a number, like 3, 15, or 22000.')
+ 81.         continue
+ 82.
+ 83.     # Check that the number is between 1 and 1000000:
+ 84.     if not (1 &lt;= numPlays &lt;= 1000000):
+ 85.         print('You can play between 1 and 1000000 times.')
+ 86.         continue
+ 87.
+ 88.     break
+ 89.
+ 90. # Run the simulation:
+ 91. price = '$' + str(2 * numPlays)
+ 92. print('It costs', price, 'to play', numPlays, 'times, but don\'t')
+ 93. print('worry. I\'m sure you\'ll win it all back.')
+ 94. input('Press Enter to start...')
+ 95.
+ 96. possibleNumbers = list(range(1, 70))
+ 97. for i in range(numPlays):
+ 98.     # Come up with lottery numbers:
+ 99.     random.shuffle(possibleNumbers)
+100.     winningNumbers = possibleNumbers[0:5]
+101.     winningPowerball = random.randint(1, 26)
+102.
+103.     # Display winning numbers:
+104.     print('The winning numbers are: ', end='')
+105.     allWinningNums = ''
+106.     for i in range(5):
+107.         allWinningNums += str(winningNumbers[i]) + ' '
+108.     allWinningNums += 'and ' + str(winningPowerball)
+109.     print(allWinningNums.ljust(21), end='')
+110.
+111.     # NOTE: Sets are not ordered, so it doesn't matter what order the
+112.     # integers in set(numbers) and set(winningNumbers) are.
+113.     if (set(numbers) == set(winningNumbers)
+114.         and powerball == winningPowerball):
+115.             print()
+116.             print('You have won the Powerball Lottery! Congratulations,')
+<span type="pagebreak" title="271" id="calibre_link-639" class="calibre13"></span>117.             print('you would be a billionaire if this was real!')
+118.             break
+119.     else:
+120.         print(' You lost.')  # The leading space is required here.
+121.
+122. print('You have wasted', price)
+123. print('Thanks for playing!')</code></pre>
+<h2 id="calibre_link-236" class="calibre5">Exploring the Program</h2>
+<p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
+<ol class="decimal">
+<li value="1" class="calibre8">What happens if you change <code class="calibre22">possibleNumbers[0:5]</code> on line 100 to <code class="calibre22">numbers</code> and <code class="calibre22">random.randint(1, 26)</code> on line 101 to <code class="calibre22">powerball</code>?</li>
+<li value="2" class="calibre8">What error do you get if you delete or comment out <code class="calibre22">possibleNumbers = list(range(1, 70))</code> on line 96?</li>
+</ol>
+</section>
+</div>
+
+
+
+
+

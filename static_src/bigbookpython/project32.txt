@@ -1,0 +1,68 @@
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-2">
+<section class="toclist">
+<header class="calibre10">
+<h1 class="chapter">
+<span class="chapternumber"><span type="pagebreak" title="147" id="calibre_link-515" class="calibre11"></span>#32</span><br class="calibre14" />
+<span class="chaptertitle">Gullible</span></h1>
+</header>
+<figure class="opener">
+<img src="images/000002.png" alt="" class="calibre12" />
+</figure>
+<p class="chapterintro">In this short and simple program, you can learn the secret and subtle art of keeping a gullible person busy for hours. I won’t spoil the punch line here. Copy the code and run it for yourself. This project is great for beginners, whether you’re smart or . . . not so smart.</p>
+<h2 id="calibre_link-153" class="calibre5"><span type="pagebreak" title="148" id="calibre_link-516" class="calibre15"></span>The Program in Action</h2>
+<p class="bodyfirst">When you run <em class="calibre9">gullible.py</em>, the output will look like this:</p>
+<pre class="calibre24"><code class="calibre22">Gullible, by Al Sweigart al@inventwithpython.com
+Do you want to know how to keep a gullible person busy for hours? Y/N
+&gt; <b class="calibre6">y</b>
+Do you want to know how to keep a gullible person busy for hours? Y/N
+&gt; <b class="calibre6">y</b>
+Do you want to know how to keep a gullible person busy for hours? Y/N
+&gt; <b class="calibre6">yes</b>
+Do you want to know how to keep a gullible person busy for hours? Y/N
+&gt; <b class="calibre6">YES</b>
+Do you want to know how to keep a gullible person busy for hours? Y/N
+&gt; <b class="calibre6">TELL ME HOW TO KEEP A GULLIBLE PERSON BUSY FOR HOURS</b>
+"TELL ME HOW TO KEEP A GULLIBLE PERSON BUSY FOR HOURS" is not a valid yes/no response.
+Do you want to know how to keep a gullible person busy for hours? Y/N
+&gt; <b class="calibre6">y</b>
+Do you want to know how to keep a gullible person busy for hours? Y/N
+&gt; <b class="calibre6">y</b>
+Do you want to know how to keep a gullible person busy for hours? Y/N
+&gt; <b class="calibre6">n</b>
+Thank you. Have a nice day!</code></pre>
+<h2 id="calibre_link-154" class="calibre5">How It Works</h2>
+<p class="bodyfirst">To be more user friendly, your programs should attempt to interpret a range of possible inputs from the user. For example, this program asks the user a yes/no question, but it would be simpler for the player to simply enter “y” or “n” instead of enter the full word. The program can also understand the player’s intent if their <span class="keycaps">caps lock</span> key is activated, because it calls the <code class="calibre22">lower()</code> string method on the string the player entered. This way, <code class="calibre22">'y'</code>, <code class="calibre22">'yes'</code>, <code class="calibre22">'Y'</code>, <code class="calibre22">'Yes'</code>, and <code class="calibre22">'YES'</code>, are all interpreted the same by the program. The same goes for a negative response from the player.</p>
+<pre class="calibre24"><code class="calibre22"> 1. """Gullible, by Al Sweigart al@inventwithpython.com
+ 2. How to keep a gullible person busy for hours. (This is a joke program.)
+ 3. View this code at https://nostarch.com/big-book-small-python-projects
+ 4. Tags: tiny, beginner, humor"""
+ 5.
+ 6. print('Gullible, by Al Sweigart al@inventwithpython.com')
+ 7.
+ 8. while True:  # Main program loop.
+ 9.     print('Do you want to know how to keep a gullible person busy for
+        hours? Y/N')
+10.     response = input('&gt; ')  # Get the user's response.
+11.     if response.lower() == 'no' or response.lower() == 'n':
+12.         break  # If "no", break out of this loop.
+13.     if response.lower() == 'yes' or response.lower() == 'y':
+14.         continue  # If "yes", continue to the start of this loop.
+<span type="pagebreak" title="149" id="calibre_link-517" class="calibre13"></span>15.     print('"{}" is not a valid yes/no response.'.format(response))
+16.
+17. print('Thank you. Have a nice day!')</code></pre>
+<h2 id="calibre_link-155" class="calibre5">Exploring the Program</h2>
+<p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
+<ol class="decimal">
+<li value="1" class="calibre8">What happens if you change <code class="calibre22">response.lower() == 'no'</code> on line 11 to <code class="calibre22">response.lower() != 'no'</code>?</li>
+<li value="2" class="calibre8">What happens if you change <code class="calibre22">while True:</code> on line 8 to <code class="calibre22">while False:</code>?</li>
+</ol>
+</section>
+</div>
+
+
+
+
+

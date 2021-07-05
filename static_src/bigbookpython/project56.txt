@@ -1,0 +1,97 @@
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-29">
+<section class="toclist">
+<header class="calibre10">
+<h1 class="chapter">
+<span class="chapternumber"><span type="pagebreak" title="272" id="calibre_link-640" class="calibre11"></span>#56</span><br class="calibre14" />
+<span class="chaptertitle">Prime Numbers</span></h1>
+</header>
+<figure class="opener">
+<img src="images/000002.png" alt="" class="calibre12" />
+</figure>
+<p class="chapterintro">A <em class="calibre9">prime number</em> is a number that is evenly divisible only by one and itself. Prime numbers have a variety of practical applications, but no algorithm can predict them; we must calculate them one at a time. However, we do know that there is an infinite number of prime numbers to be discovered.</p>
+<p class="calibre18">This program finds prime numbers through brute-force calculation. Its code is similar to Project 24, “Factor Finder.” (Another way to describe a prime number is that one and the number itself are its only factors.) You can find out more about prime numbers from <a href="https://en.wikipedia.org/wiki/Prime_number" class="linkurl">https://en.wikipedia.org/wiki/Prime_number</a>.</p>
+<h2 id="calibre_link-237" class="calibre5"><span type="pagebreak" title="273" id="calibre_link-641" class="calibre15"></span>The Program in Action</h2>
+<p class="bodyfirst">When you run <em class="calibre9">primenumbers.py</em>, the output will look like this:</p>
+<pre class="calibre24"><code class="calibre22">Prime Numbers, by Al Sweigart al@inventwithpython.com
+<var class="calibre27">--snip--</var>
+Enter a number to start searching for primes from:
+(Try 0 or 1000000000000 (12 zeros) or another number.)
+&gt; <b class="calibre6">0</b>
+Press Ctrl-C at any time to quit. Press Enter to begin...
+2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269, 271, 277, 281, 283, 293, 307, 311, 313, 317, 331, 337, 347, 349, 353, 359, 367, 373, 379, 383, 389, 397, 401, 409, 419, 421, 431, 433, 439, 443, 449, 457, 461, 463, 467, 479, 487, 491, 499, 503, 509, 521, 523, 541, 547, 557, 563, 569, 571, 577, 587, 593, 599, 601, 607, 613, 617, 619, 631, 641, 643, 647, <var class="calibre27">--snip--</var></code></pre>
+<h2 id="calibre_link-238" class="calibre5">How It Works</h2>
+<p class="bodyfirst">The <code class="calibre22">isPrime()</code> function accepts an integer and returns <code class="calibre22">True</code> if it is a prime number. Otherwise, it returns <code class="calibre22">False</code>. Project 24 is worth studying if you’re trying to understand this program. The <code class="calibre22">isPrime()</code> function essentially looks for any factors in the given number and returns <code class="calibre22">False</code> if it finds any.</p>
+<p class="calibre19">The algorithm in this program can quickly find large prime numbers. The number one trillion has a mere 10 digits. But to find prime numbers that are as big as a googol (a one followed by 100 zeros), you need to use an advanced algorithm such as the Rabin-Miller primality test. Chapter 22 of my book <em class="calibre9">Cracking Codes with Python</em> (No Starch Press, 2018) has a Python implementation of this algorithm.</p>
+<pre class="calibre24"><code class="calibre22"> 1. """Prime Numbers, by Al Sweigart al@inventwithpython.com
+ 2. Calculates prime numbers, which are numbers that are only evenly
+ 3. divisible by one and themselves. They are used in a variety of practical
+ 4. applications.
+ 5. More info at: https://en.wikipedia.org/wiki/Prime_number
+ 6. View this code at https://nostarch.com/big-book-small-python-projects
+ 7. Tags: tiny, math, scrolling"""
+ 8.
+ 9. import math, sys
+10.
+11. def main():
+12.     print('Prime Numbers, by Al Sweigart al@inventwithpython.com')
+13.     print('Prime numbers are numbers that are only evenly divisible by')
+14.     print('one and themselves. They are used in a variety of practical')
+15.     print('applications, but cannot be predicted. They must be')
+16.     print('calculated one at a time.')
+17.     print()
+18.     while True:
+19.         print('Enter a number to start searching for primes from:')
+20.         print('(Try 0 or 1000000000000 (12 zeros) or another number.)')
+<span type="pagebreak" title="274" id="calibre_link-642" class="calibre13"></span>21.         response = input('&gt; ')
+22.         if response.isdecimal():
+23.             num = int(response)
+24.             break
+25.
+26.     input('Press Ctrl-C at any time to quit. Press Enter to begin...')
+27.
+28.     while True:
+29.         # Print out any prime numbers:
+30.         if isPrime(num):
+31.             print(str(num) + ', ', end='', flush=True)
+32.         num = num + 1  # Go to the next number.
+33.
+34.
+35. def isPrime(number):
+36.     """Returns True if number is prime, otherwise returns False."""
+37.     # Handle special cases:
+38.     if number &lt; 2:
+39.         return False
+40.     elif number == 2:
+41.         return True
+42.
+43.     # Try to evenly divide number by all numbers from 2 up to number's
+44.     # square root.
+45.     for i in range(2, int(math.sqrt(number)) + 1):
+46.         if number % i == 0:
+47.             return False
+48.     return True
+49.
+50.
+51. # If this program was run (instead of imported), run the game:
+52. if __name__ == '__main__':
+53.     try:
+54.         main()
+55.     except KeyboardInterrupt:
+56.         sys.exit()  # When Ctrl-C is pressed, end the program.</code></pre>
+<h2 id="calibre_link-239" class="calibre5">Exploring the Program</h2>
+<p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
+<ol class="decimal">
+<li value="1" class="calibre8">What error do you get if you change <code class="calibre22">response.isdecimal()</code> on line 22 to <code class="calibre22">response</code> and enter a non-number for the number from which to start searching for primes?</li>
+<li value="2" class="calibre8">What happens if you change <code class="calibre22">number &lt; 2</code> on line 38 to <code class="calibre22">number &gt; 2</code>?</li>
+<li value="3" class="calibre8">What happens if you change <code class="calibre22">number % 1 == 0</code> on line 46 to <code class="calibre22">number % i != 0</code>?</li>
+</ol>
+</section>
+</div>
+
+
+
+
+

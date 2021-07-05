@@ -1,0 +1,195 @@
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-310">
+<section class="toclist">
+<header class="calibre10">
+<h1 class="chapter">
+<span class="chapternumber"><span type="pagebreak" title="356" id="calibre_link-724" class="calibre11"></span>#75</span><br class="calibre14" />
+<span class="chaptertitle">Three-Card Monte</span></h1>
+</header>
+<figure class="opener">
+<img src="images/000002.png" alt="" class="calibre12" />
+</figure>
+<p class="chapterintro">Three-card monte is a common scam played on gullible tourists and other easy marks. Three playing cards, one of which is the “red lady” Queen of Hearts, are put facedown on a cardboard box. The dealer quickly rearranges the cards and then asks the mark to pick the Queen of Hearts. But the dealer can use all sorts of tricks to hide the card or otherwise cheat, guaranteeing that the victim never wins. It’s also common for the dealer to have shills in the crowd who secretly work with the dealer but pretend to win the game (to make the victim think they too could win) or purposefully lose badly (to make the victim think they could do much better).</p>
+<p class="calibre18">This program shows the three cards and then quickly describes a series of swaps. At the end, it clears the screen, and the player must pick a card. <span type="pagebreak" title="357" id="calibre_link-725" class="calibre20"></span>Can you keep up with the “red lady”? For the authentic three-card monte experience, you can enable the cheat feature, which causes the player to always lose, even if they select the correct card.</p>
+<h2 id="calibre_link-311" class="calibre5">The Program in Action</h2>
+<p class="bodyfirst">When you run <em class="calibre9">threecardmonte.py</em>, the output will look like this:</p>
+<pre class="calibre24"><code class="calibre22">Three-Card Monte, by Al Sweigart al@inventwithpython.com
+
+Find the red lady (the Queen of Hearts)! Keep an eye on how
+the cards move.
+
+Here are the cards:
+ ___   ___   ___
+|J  | |Q  | |8  |
+| ♦ | | ♥ | | ♣ |
+|__J| |__Q| |__8|
+Press Enter when you are ready to begin...
+swapping left and middle...
+swapping right and middle...
+swapping middle and left...
+swapping right and left...
+swapping left and middle...
+<var class="calibre27">--snip--</var>
+<var class="calibre27">&lt;screen clears&gt;</var>
+Which card has the Queen of Hearts? (LEFT MIDDLE RIGHT)
+&gt; <b class="calibre6">middle</b>
+ ___   ___   ___
+|Q  | |8  | |J  |
+| ♥ | | ♣ | | ♦ |
+|__Q| |__8| |__J|
+You lost!
+Thanks for playing, sucker!</code></pre>
+<h2 id="calibre_link-312" class="calibre5">How It Works</h2>
+<p class="bodyfirst">In this program, we use a <code class="calibre22">(</code><var class="calibre26">rank</var><code class="calibre22">, </code><var class="calibre26">suit</var><code class="calibre22">)</code> tuple to represent a playing card. The rank is a string representing the card number, such as <code class="calibre22">'2'</code>, <code class="calibre22">'10'</code>, <code class="calibre22">'Q'</code>, or <code class="calibre22">'K'</code>, and the suit is a string of either a heart, club, spade, or diamond emoji. Since you cannot enter the emoji character using your keyboard, we’ll use the <code class="calibre22">chr()</code> function calls on lines 16 to 19 to produce them. The tuple <code class="calibre22">('9', '♦')</code> represents the nine of diamonds.</p>
+<p class="calibre19">Instead of printing these tuples directly, the <code class="calibre22">displayCards()</code> function on lines 28 to 43 interprets them and displays ASCII-art representations on the screen, like in Project 4, “Blackjack.” The <code class="calibre22">cards</code> argument for this function is a list of the playing card tuples, allowing multiple cards to be displayed in a row.</p>
+<pre class="calibre24"><code class="calibre22"><span type="pagebreak" title="358" id="calibre_link-726" class="calibre13"></span>  1. """Three-Card Monte, by Al Sweigart al@inventwithpython.com
+  2. Find the Queen of Hearts after cards have been swapped around.
+  3. (In the real-life version, the scammer palms the Queen of Hearts so you
+  4. always lose.)
+  5. More info at https://en.wikipedia.org/wiki/Three-card_Monte
+  6. View this code at https://nostarch.com/big-book-small-python-projects
+  7. Tags: large, card game, game"""
+  8.
+  9. import random, time
+ 10.
+ 11. # Set up the constants:
+ 12. NUM_SWAPS = 16   # (!) Try changing this to 30 or 100.
+ 13. DELAY     = 0.8  # (!) Try changing this 2.0 or 0.0.
+ 14.
+ 15. # The card suit characters:
+ 16. HEARTS   = chr(9829)  # Character 9829 is '♥'
+ 17. DIAMONDS = chr(9830)  # Character 9830 is '♦'
+ 18. SPADES   = chr(9824)  # Character 9824 is '♠'
+ 19. CLUBS    = chr(9827)  # Character 9827 is '♣'
+ 20. # A list of chr() codes is at https://inventwithpython.com/chr
+ 21.
+ 22. # The indexes of a 3-card list:
+ 23. LEFT   = 0
+ 24. MIDDLE = 1
+ 25. RIGHT  = 2
+ 26.
+ 27.
+ 28. def displayCards(cards):
+ 29.     """Display the cards in "cards", which is a list of (rank, suit)
+ 30.     tuples."""
+ 31.     rows = ['', '', '', '', '']  # Stores the text to display.
+ 32.
+ 33.     for i, card in enumerate(cards):
+ 34.         rank, suit = card  # The card is a tuple data structure.
+ 35.         rows[0] += ' ___  '  # Print the top line of the card.
+ 36.         rows[1] += '|{} | '.format(rank.ljust(2))
+ 37.         rows[2] += '| {} | '.format(suit)
+ 38.         rows[3] += '|_{}| '.format(rank.rjust(2, '_'))
+ 39.
+ 40.
+ 41.     # Print each row on the screen:
+ 42.     for i in range(5):
+ 43.         print(rows[i])
+ 44.
+ 45.
+ 46. def getRandomCard():
+ 47.     """Returns a random card that is NOT the Queen of Hearts."""
+ 48.     while True:  # Make cards until you get a non-Queen of Hearts.
+ 49.         rank = random.choice(list('23456789JQKA') + ['10'])
+ 50.         suit = random.choice([HEARTS, DIAMONDS, SPADES, CLUBS])
+ 51.
+ 52.         # Return the card as long as it's not the Queen of Hearts:
+ 53.         if rank != 'Q' and suit != HEARTS:
+ 54.             return (rank, suit)
+<span type="pagebreak" title="359" id="calibre_link-727" class="calibre13"></span> 55.
+ 56.
+ 57. print('Three-Card Monte, by Al Sweigart al@inventwithpython.com')
+ 58. print()
+ 59. print('Find the red lady (the Queen of Hearts)! Keep an eye on how')
+ 60. print('the cards move.')
+ 61. print()
+ 62.
+ 63. # Show the original arrangement:
+ 64. cards = [('Q', HEARTS), getRandomCard(), getRandomCard()]
+ 65. random.shuffle(cards)  # Put the Queen of Hearts in a random place.
+ 66. print('Here are the cards:')
+ 67. displayCards(cards)
+ 68. input('Press Enter when you are ready to begin...')
+ 69.
+ 70. # Print the swaps:
+ 71. for i in range(NUM_SWAPS):
+ 72.     swap = random.choice(['l-m', 'm-r', 'l-r', 'm-l', 'r-m', 'r-l'])
+ 73.
+ 74.     if swap == 'l-m':
+ 75.         print('swapping left and middle...')
+ 76.         cards[LEFT], cards[MIDDLE] = cards[MIDDLE], cards[LEFT]
+ 77.     elif swap == 'm-r':
+ 78.         print('swapping middle and right...')
+ 79.         cards[MIDDLE], cards[RIGHT] = cards[RIGHT], cards[MIDDLE]
+ 80.     elif swap == 'l-r':
+ 81.         print('swapping left and right...')
+ 82.         cards[LEFT], cards[RIGHT] = cards[RIGHT], cards[LEFT]
+ 83.     elif swap == 'm-l':
+ 84.         print('swapping middle and left...')
+ 85.         cards[MIDDLE], cards[LEFT] = cards[LEFT], cards[MIDDLE]
+ 86.     elif swap == 'r-m':
+ 87.         print('swapping right and middle...')
+ 88.         cards[RIGHT], cards[MIDDLE] = cards[MIDDLE], cards[RIGHT]
+ 89.     elif swap == 'r-l':
+ 90.         print('swapping right and left...')
+ 91.         cards[RIGHT], cards[LEFT] = cards[LEFT], cards[RIGHT]
+ 92.
+ 93.     time.sleep(DELAY)
+ 94.
+ 95. # Print several new lines to hide the swaps.
+ 96. print('\n' * 60)
+ 97.
+ 98. # Ask the user to find the red lady:
+ 99. while True:  # Keep asking until LEFT, MIDDLE, or RIGHT is entered.
+100.     print('Which card has the Queen of Hearts? (LEFT MIDDLE RIGHT)')
+101.     guess = input('&gt; ').upper()
+102.
+103.     # Get the index in cards for the position that the player entered:
+104.     if guess in ['LEFT', 'MIDDLE', 'RIGHT']:
+105.         if guess == 'LEFT':
+106.             guessIndex = 0
+107.         elif guess == 'MIDDLE':
+108.             guessIndex = 1
+109.         elif guess == 'RIGHT':
+<span type="pagebreak" title="360" id="calibre_link-728" class="calibre13"></span>110.             guessIndex = 2
+111.         break
+112.
+113. # (!) Uncomment this code to make the player always lose:
+114. #if cards[guessIndex] == ('Q', HEARTS):
+115. #    # Player has won, so let's move the queen.
+116. #    possibleNewIndexes = [0, 1, 2]
+117. #    possibleNewIndexes.remove(guessIndex)  # Remove the queen's index.
+118. #    newInd = random.choice(possibleNewIndexes)  # Choose a new index.
+119. #    # Place the queen at the new index:
+120. #    cards[guessIndex], cards[newInd] = cards[newInd], cards[guessIndex]
+121.
+122. displayCards(cards)  # Show all the cards.
+123.
+124. # Check if the player won:
+125. if cards[guessIndex] == ('Q', HEARTS):
+126.     print('You won!')
+127.     print('Thanks for playing!')
+128. else:
+129.     print('You lost!')
+130.     print('Thanks for playing, sucker!')</code></pre>
+<p class="calibre19">After entering the source code and running it a few times, try making experimental changes to it. The comments marked with <code class="calibre22">(!)</code> have suggestions for small changes you can make. On your own, you can also try to figure out how to do the following:</p>
+<ul class="calibre25">
+<li class="calibre8">Use the backspace-printing technique from Project 57, “Progress Bar,” to display each swap message briefly and then print <code class="calibre22">\b</code> characters to erase it before printing the next one.</li>
+<li class="calibre8">Create a four-card monte game for added difficulty.</li>
+</ul>
+<h2 id="calibre_link-313" class="calibre5">Exploring the Program</h2>
+<p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
+<ol class="decimal">
+<li value="1" class="calibre8">What happens if you change <code class="calibre22">[('Q', HEARTS), getRandomCard(), getRandomCard()]</code> on line 64 to <code class="calibre22">[('Q', HEARTS), ('Q', HEARTS), ('Q', HEARTS)]</code>?</li>
+<li value="2" class="calibre8">What happens if you change <code class="calibre22">list('23456789JQKA')</code> on line 49 to <code class="calibre22">list('ABCDEFGHIJK')</code>?</li>
+<li value="3" class="calibre8">What happens if you delete or comment out <code class="calibre22">time.sleep(DELAY)</code> on line 93?</li>
+</ol>
+</section>
+</div>
+
+
+
+
+

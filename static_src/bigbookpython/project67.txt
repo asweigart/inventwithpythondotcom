@@ -1,0 +1,99 @@
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-279">
+<section class="toclist">
+<header class="calibre10">
+<h1 class="chapter">
+<span class="chapternumber"><span type="pagebreak" title="320" id="calibre_link-688" class="calibre11"></span>#67</span><br class="calibre14" />
+<span class="chaptertitle">Sine Message</span></h1>
+</header>
+<figure class="opener">
+<img src="images/000002.png" alt="" class="calibre12" />
+</figure>
+<p class="chapterintro">This program displays a message of the user’s choice in a wavy pattern as the text scrolls up. It accomplishes this effect with <code class="calibre17">math.sin()</code>, which implements the trigonometric sine wave function. But even if you don’t understand the math, this program is rather short and easy to copy.</p>
+<h2 id="calibre_link-280" class="calibre5"><span type="pagebreak" title="321" id="calibre_link-689" class="calibre15"></span>The Program in Action</h2>
+<p class="bodyfirst">When you run <em class="calibre9">sinemessage.py</em>, the output will look like this:</p>
+<pre class="calibre24"><code class="calibre22">Sine Message, by Al Sweigart al@inventwithpython.com
+(Press Ctrl-C to quit.)
+
+What message do you want to display? (Max 39 chars.)
+&gt; I &lt;3 Programming!
+                                 I &lt;3 Programming!
+                                         I &lt;3 Programming!
+                                                I &lt;3 Programming!
+                                                       I &lt;3 Programming!
+                                                            I &lt;3 Programming!
+                                                                I &lt;3 Programming!
+                                                                 I &lt;3 Programming!
+                                                                 I &lt;3 Programming!
+                                                               I &lt;3 Programming!
+                                                          I &lt;3 Programming!
+                                                    I &lt;3 Programming!
+                                             I &lt;3 Programming!
+                                     I &lt;3 Programming!
+                             I &lt;3 Programming!
+                     I &lt;3 Programming!
+              I &lt;3 Programming!
+        I &lt;3 Programming!
+   I &lt;3 Programming!
+I &lt;3 Programming!
+I &lt;3 Programming!
+ I &lt;3 Programming!
+    I &lt;3 Programming!
+         I &lt;3 Programming!
+<var class="calibre27">--snip--</var></code></pre>
+<h2 id="calibre_link-281" class="calibre5">How It Works</h2>
+<p class="bodyfirst">The <code class="calibre22">math.sin()</code> function in Python’s <code class="calibre22">math</code> module takes an argument, which we’ll call <em class="calibre9">x</em>, and returns another number called the <em class="calibre9">sine of x</em>. Several mathematical applications use the sine function; in our program, its purpose is merely to create a neat wave effect. We pass a variable named <code class="calibre22">step</code> to <code class="calibre22">math.sin()</code>. This variable starts at <code class="calibre22">0</code> and increases by <code class="calibre22">0.25</code> on each iteration of the main program loop.</p>
+<p class="calibre19">We’ll use the return value of <code class="calibre22">math.sin()</code> to figure out how many spaces of padding we should print on either side of the user’s message. Since <code class="calibre22">math.sin()</code> returns a floating point number between <code class="calibre22">-1.0</code> and <code class="calibre22">1.0</code>, but the minimum amount of padding we want is zero, not a negative value, line 31 adds <code class="calibre22">1</code> to the return value of <code class="calibre22">math.sin()</code>, making the effective range <code class="calibre22">0.0</code> to <code class="calibre22">2.0</code>. We’ll certainly need more than zero to two spaces, so line 31 multiplies this number by a variable named <code class="calibre22">multiplier</code> to increase the amount of padding. The product of this multiplication is the number of spaces of padding to add to the left side before printing the user’s message.</p>
+<p class="calibre19"><span type="pagebreak" title="322" id="calibre_link-690" class="calibre20"></span>The result is the waving message animation you see when you run the program.</p>
+<pre class="calibre24"><code class="calibre22"> 1. """Sine Message, by Al Sweigart al@inventwithpython.com
+ 2. Create a sine-wavy message.
+ 3. View this code at https://nostarch.com/big-book-small-python-projects
+ 4. Tags: tiny, artistic"""
+ 5.
+ 6. import math, shutil, sys, time
+ 7.
+ 8. # Get the size of the terminal window:
+ 9. WIDTH, HEIGHT = shutil.get_terminal_size()
+10. # We can't print to the last column on Windows without it adding a
+11. # newline automatically, so reduce the width by one:
+12. WIDTH -= 1
+13.
+14. print('Sine Message, by Al Sweigart al@inventwithpython.com')
+15. print('(Press Ctrl-C to quit.)')
+16. print()
+17. print('What message do you want to display? (Max', WIDTH // 2, 'chars.)')
+18. while True:
+19.     message = input('&gt; ')
+20.     if 1 &lt;= len(message) &lt;= (WIDTH // 2):
+21.         break
+22.     print('Message must be 1 to', WIDTH // 2, 'characters long.')
+23.
+24.
+25. step = 0.0  # The "step" determines how far into the sine wave we are.
+26. # Sine goes from -1.0 to 1.0, so we need to change it by a multiplier:
+27. multiplier = (WIDTH - len(message)) / 2
+28. try:
+29.     while True:  # Main program loop.
+30.         sinOfStep = math.sin(step)
+31.         padding = ' ' * int((sinOfStep + 1) * multiplier)
+32.         print(padding + message)
+33.         time.sleep(0.1)
+34.         step += 0.25  # (!) Try changing this to 0.1 or 0.5.
+35. except KeyboardInterrupt:
+36.     sys.exit()  # When Ctrl-C is pressed, end the program.</code></pre>
+<p class="calibre19">After entering the source code and running it a few times, try making experimental changes to it. The comments marked with <code class="calibre22">(!)</code> have suggestions for small changes you can make.</p>
+<h2 id="calibre_link-282" class="calibre5">Exploring the Program</h2>
+<p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
+<ol class="decimal">
+<li value="1" class="calibre8">What happens if you change <code class="calibre22">math.sin(step)</code> on line 30 to <code class="calibre22">math.cos(step)</code>?</li>
+<li value="2" class="calibre8">What happens if you change <code class="calibre22">math.sin(step)</code> on line 30 to <code class="calibre22">math.sin(0)</code>?</li>
+</ol>
+</section>
+</div>
+
+
+
+
+
