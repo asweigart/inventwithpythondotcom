@@ -1,0 +1,222 @@
+
+<div><a target="_blank" href="https://www.amazon.com/gp/product/1593278225/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=1593278225&linkCode=as2&tag=playwithpyth-20&linkId=bf3b22819f0886d277e88b8a653b81ad">
+<img src="images/cover_crackingcodes_thumb.png" /><br />Buy the print or ebook online.</a></div>
+<div><a href="chapter0.html">Previous Chapter - Introduction</a> | <a href="chapter2.html">Next Chapter - Programming in the Interactive Shell</a></div>
+<div id="calibre_link-4" class="calibre">
+<h2 class="h2a1" id="calibre_link-56"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-894" class="calibre1"></span><span class="big">1</span><br class="calibre15" />MAKING PAPER CRYPTOGRAPHY TOOLS</h2>
+<p class="epigraph"><em class="calibre7">“The encryption genie is out of the bottle.”<br class="calibre9" />&mdash;Jan Koum, WhatsApp founder</em></p>
+<div class="image"><img src="images/00078.jpeg" alt="Images" class="calibre4" /></div>
+<p class="noindent">Before we start writing cipher programs, let’s look at the process of encrypting and decrypting with just pencil and paper. This will help you understand how ciphers work and the math that goes into producing their secret messages. In this chapter, you’ll learn what we mean by cryptog&shy;raphy and how codes are different from ciphers. Then you’ll use a simple cipher called the Caesar cipher to encrypt and decrypt messages using paper and pencil.</p>
+<div class="sidebar">
+<p class="sidebart"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-171"></span><strong class="calibre5">TOPICS COVERED IN THIS CHAPTER</strong></p>
+<ul class="calibre10">
+<li class="calibre11"><p class="noindent">What is cryptography?</p></li>
+<li class="calibre11"><p class="noindent">Codes and ciphers</p></li>
+<li class="calibre11"><p class="noindent">The Caesar cipher</p></li>
+<li class="calibre11"><p class="noindent">Cipher wheels</p></li>
+<li class="calibre11"><p class="noindent">Doing cryptography with arithmetic</p></li>
+<li class="calibre11"><p class="noindent">Double encryption</p></li>
+</ul>
+</div>
+<h3 class="h1" id="calibre_link-446"><strong class="calibre3">What Is Cryptography?</strong></h3>
+<p class="noindent">Historically, anyone who has needed to share secrets with others, such as spies, soldiers, hackers, pirates, merchants, tyrants, and political activists, has relied on cryptography to make sure their secrets stay secret. <em class="calibre7">Cryptography</em> is the science of using secret codes. To understand what cryptography looks like, look at the following two pieces of text:</p>
+<p class="image"><img src="images/00081.jpeg" alt="Images" class="calibre4" /></p>
+<p class="indent">The text on the left is a secret message that has been <em class="calibre7">encrypted</em>, or turned into a secret code. It’s completely unreadable to anyone who doesn’t know how to <em class="calibre7">decrypt</em> it, or turn it back into the original English message. The message on the right is random gibberish with no hidden meaning. Encryption keeps a message secret from other people who can’t decipher it, even if they get their hands on the encrypted message. <em class="calibre7">An encrypted message looks exactly like random nonsense.</em></p>
+<p class="indent">A <em class="calibre7">cryptographer</em> uses and studies secret codes. Of course, these secret messages don’t always remain secret. A <em class="calibre7">cryptanalyst</em>, also called a <em class="calibre7">code breaker</em> or <em class="calibre7">hacker</em>, can hack secret codes and read other people’s encrypted messages. This book teaches you how to encrypt and decrypt messages using various techniques. But unfortunately (or fortunately), the type of hacking you’ll learn in this book isn’t dangerous enough to get you in trouble with the law.</p>
+<h3 class="h1" id="calibre_link-447"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-167" class="calibre1"></span><strong class="calibre3">Codes vs. Ciphers</strong></h3>
+<p class="noindent">Unlike ciphers, <em class="calibre7">codes</em> are made to be understandable and publicly available. Codes substitute messages with symbols that anyone should be able to look up to translate into a message.</p>
+<p class="indent">In the early 19th century, one well-known code came from the development of the electric telegraph, which allowed for near-instant communication across continents through wires. Sending messages by telegraph was much faster than the previous alternative of sending a horseback rider carrying a bag of letters. However, the telegraph couldn’t directly send written letters drawn on paper. Instead, it could send only two types of electric pulses: a short pulse called a “dot” and a long pulse called a “dash.”</p>
+<p class="indent">To convert letters of the alphabet into these dots and dashes, you need an encoding system to translate English to electric pulses. The process of converting English into dots and dashes to send over a telegraph is called <em class="calibre7">encoding</em>, and the process of translating electric pulses to English when a message is received is called <em class="calibre7">decoding</em>. The code used to encode and decode messages over telegraphs (and later, radio) was called <em class="calibre7">Morse code</em>, as shown in <a href="#calibre_link-5" class="calibre8">Table 1-1</a>. Morse code was developed by Samuel Morse and Alfred Vail.</p>
+<p class="tabcap"><a id="calibre_link-5" class="calibre8"></a><strong class="calibre5">Table 1-1:</strong> International Morse Code Encoding</p>
+<table class="topbot">
+<thead class="calibre16">
+<tr class="table_w">
+<td class="table_th"><p class="table"><strong class="calibre5">Letter</strong></p></td>
+<td class="table_thr"><p class="table"><strong class="calibre5">Encoding</strong></p></td>
+<td class="table_th"><p class="table"><strong class="calibre5">Letter</strong></p></td>
+<td class="table_thr"><p class="table"><strong class="calibre5">Encoding</strong></p></td>
+<td class="table_th"><p class="table"><strong class="calibre5">Number</strong></p></td>
+<td class="table_th"><p class="table"><strong class="calibre5">Encoding</strong></p></td>
+</tr>
+</thead>
+<tbody class="calibre17">
+<tr class="table_w">
+<td class="calibre18"><p class="table">A</p></td>
+<td class="table_tb"><p class="table"><span class="ent">●</span> <span class="ent">▬</span></p></td>
+<td class="calibre18"><p class="table">N</p></td>
+<td class="table_tb"><p class="table"><span class="ent">▬</span> <span class="ent">●</span></p></td>
+<td class="calibre18"><p class="table">1</p></td>
+<td class="calibre18"><p class="table"><span class="ent">●</span> <span class="ent">▬</span> <span class="ent">▬</span> <span class="ent">▬</span> <span class="ent">▬</span></p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">B</p></td>
+<td class="table_tb"><p class="table"><span class="ent">▬</span> <span class="ent">●</span> <span class="ent">●</span> <span class="ent">●</span></p></td>
+<td class="calibre18"><p class="table">O</p></td>
+<td class="table_tb"><p class="table"><span class="ent">▬</span> <span class="ent">▬</span> <span class="ent">▬</span></p></td>
+<td class="calibre18"><p class="table">2</p></td>
+<td class="calibre18"><p class="table"><span class="ent">●</span> <span class="ent">●</span> <span class="ent">▬</span> <span class="ent">▬</span> <span class="ent">▬</span></p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">C</p></td>
+<td class="table_tb"><p class="table"><span class="ent">▬</span> <span class="ent">●</span> <span class="ent">▬</span> <span class="ent">●</span></p></td>
+<td class="calibre18"><p class="table">P</p></td>
+<td class="table_tb"><p class="table"><span class="ent">●</span> <span class="ent">▬</span> <span class="ent">▬</span> <span class="ent">●</span></p></td>
+<td class="calibre18"><p class="table">3</p></td>
+<td class="calibre18"><p class="table"><span class="ent">●</span> <span class="ent">●</span> <span class="ent">●</span> <span class="ent">▬</span> <span class="ent">▬</span></p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">D</p></td>
+<td class="table_tb"><p class="table"><span class="ent">▬</span> <span class="ent">●</span> <span class="ent">●</span></p></td>
+<td class="calibre18"><p class="table">Q</p></td>
+<td class="table_tb"><p class="table"><span class="ent">▬</span> <span class="ent">▬</span> <span class="ent">●</span> <span class="ent">▬</span></p></td>
+<td class="calibre18"><p class="table">4</p></td>
+<td class="calibre18"><p class="table"><span class="ent">●</span> <span class="ent">●</span> <span class="ent">●</span> <span class="ent">●</span> <span class="ent">▬</span></p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">E</p></td>
+<td class="table_tb"><p class="table"><span class="ent">●</span></p></td>
+<td class="calibre18"><p class="table">R</p></td>
+<td class="table_tb"><p class="table"><span class="ent">●</span> <span class="ent">▬</span> <span class="ent">●</span></p></td>
+<td class="calibre18"><p class="table">5</p></td>
+<td class="calibre18"><p class="table"><span class="ent">●</span> <span class="ent">●</span> <span class="ent">●</span> <span class="ent">●</span> <span class="ent">●</span></p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">F</p></td>
+<td class="table_tb"><p class="table"><span class="ent">●</span> <span class="ent">●</span> <span class="ent">▬</span> <span class="ent">●</span></p></td>
+<td class="calibre18"><p class="table">S</p></td>
+<td class="table_tb"><p class="table"><span class="ent">●</span> <span class="ent">●</span> <span class="ent">●</span></p></td>
+<td class="calibre18"><p class="table">6</p></td>
+<td class="calibre18"><p class="table"><span class="ent">▬</span> <span class="ent">●</span> <span class="ent">●</span> <span class="ent">●</span> <span class="ent">●</span></p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">G</p></td>
+<td class="table_tb"><p class="table"><span class="ent">▬</span> <span class="ent">▬</span> <span class="ent">●</span></p></td>
+<td class="calibre18"><p class="table">T</p></td>
+<td class="table_tb"><p class="table"><span class="ent">▬</span></p></td>
+<td class="calibre18"><p class="table">7</p></td>
+<td class="calibre18"><p class="table"><span class="ent">▬</span> <span class="ent">▬</span> <span class="ent">●</span> <span class="ent">●</span> <span class="ent">●</span></p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">H</p></td>
+<td class="table_tb"><p class="table"><span class="ent">●</span> <span class="ent">●</span> <span class="ent">●</span> <span class="ent">●</span></p></td>
+<td class="calibre18"><p class="table">U</p></td>
+<td class="table_tb"><p class="table"><span class="ent">●</span> <span class="ent">●</span> <span class="ent">▬</span></p></td>
+<td class="calibre18"><p class="table">8</p></td>
+<td class="calibre18"><p class="table"><span class="ent">▬</span> <span class="ent">▬</span> <span class="ent">▬</span> <span class="ent">●</span> <span class="ent">●</span></p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">I</p></td>
+<td class="table_tb"><p class="table"><span class="ent">●</span> <span class="ent">●</span></p></td>
+<td class="calibre18"><p class="table">V</p></td>
+<td class="table_tb"><p class="table"><span class="ent">●</span> <span class="ent">●</span> <span class="ent">●</span> <span class="ent">▬</span></p></td>
+<td class="calibre18"><p class="table">9</p></td>
+<td class="calibre18"><p class="table"><span class="ent">▬</span> <span class="ent">▬</span> <span class="ent">▬</span> <span class="ent">▬</span> <span class="ent">●</span></p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">J</p></td>
+<td class="table_tb"><p class="table"><span class="ent">●</span> <span class="ent">▬</span> <span class="ent">▬</span> <span class="ent">▬</span></p></td>
+<td class="calibre18"><p class="table">W</p></td>
+<td class="table_tb"><p class="table"><span class="ent">●</span> <span class="ent">▬</span> <span class="ent">▬</span></p></td>
+<td class="calibre18"><p class="table">0</p></td>
+<td class="calibre18"><p class="table"><span class="ent">▬</span> <span class="ent">▬</span> <span class="ent">▬</span> <span class="ent">▬</span> <span class="ent">▬</span></p></td>
+</tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">K</p></td>
+<td class="table_tb"><p class="table"><span class="ent">▬</span> <span class="ent">●</span> <span class="ent">▬</span></p></td>
+<td class="calibre18"><p class="table">X</p></td>
+<td class="table_tb"><p class="table"><span class="ent">▬</span> <span class="ent">●</span> <span class="ent">●</span> <span class="ent">▬</span></p></td>
+<td class="calibre19"></td><td class="calibre19"></td></tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">L</p></td>
+<td class="table_tb"><p class="table"><span class="ent">●</span> <span class="ent">▬</span> <span class="ent">●</span> <span class="ent">●</span></p></td>
+<td class="calibre18"><p class="table">Y</p></td>
+<td class="table_tb"><p class="table"><span class="ent">▬</span> <span class="ent">●</span> <span class="ent">▬</span> <span class="ent">▬</span></p></td>
+<td class="calibre19"></td><td class="calibre19"></td></tr>
+<tr class="table_w">
+<td class="calibre18"><p class="table">M</p></td>
+<td class="table_tb"><p class="table"><span class="ent">▬</span> <span class="ent">▬</span></p></td>
+<td class="calibre18"><p class="table">Z</p></td>
+<td class="table_tb"><p class="table"><span class="ent">▬</span> <span class="ent">▬</span> <span class="ent">●</span> <span class="ent">●</span></p></td>
+<td class="calibre19"></td><td class="calibre19"></td></tr></tbody></table>
+<p class="indent"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-148"></span>By tapping dots and dashes with a one-button telegraph, a telegraph operator could communicate an English message to someone on the other side of the world almost instantly! (To learn more about Morse code, visit <a href="https://www.nostarch.com/crackingcodes/" class="calibre8"><em class="calibre7">https://www.nostarch.com/crackingcodes/</em></a>.)</p>
+<p class="indent">In contrast with codes, a <em class="calibre7">cipher</em> is a specific type of code meant to keep messages secret. You can use a cipher to turn understandable English text, called <em class="calibre7">plaintext</em>, into gibberish that hides a secret message, called the <em class="calibre7">ciphertext</em>. A cipher is a set of rules for converting between plaintext and ciphertext. These rules often use a secret key to encrypt or decrypt that only the communicators know. In this book, you’ll learn several ciphers and write programs to use these ciphers to encrypt and decrypt text. But first, let’s encrypt messages by hand using simple paper tools.</p>
+<h3 class="h1" id="calibre_link-448"><strong class="calibre3">The Caesar Cipher</strong></h3>
+<p class="noindent">The first cipher you’ll learn is the Caesar cipher, which is named after Julius Caesar who used it 2000 years ago. The good news is that it’s simple and easy to learn. The bad news is that because it’s so simple, it’s also easy for a cryptanalyst to break. However, it’s still a useful learning exercise.</p>
+<p class="indent">The Caesar cipher works by substituting each letter of a message with a new letter after shifting the alphabet over. For example, Julius Caesar substituted letters in his messages by shifting the letters in the alphabet down by three, and then replacing every letter with the letters in his shifted alphabet.</p>
+<p class="indent">For example, every A in the message would be replaced by a D, every B would be an E, and so on. When Caesar needed to shift letters at the end of the alphabet, such as Y, he would wrap around to the beginning of the alphabet and shift three places to B. In this section, we’ll encrypt a message by hand using the Caesar cipher.</p>
+<h4 class="h2" id="calibre_link-449"><strong class="calibre3"><em class="calibre12">The Cipher Wheel</em></strong></h4>
+<p class="noindent">To make converting plaintext to ciphertext using the Caesar cipher easier, we’ll use a <em class="calibre7">cipher wheel</em>, also called a <em class="calibre7">cipher disk</em>. The cipher wheel consists of two rings of letters; each ring is split up into 26 slots (for a 26-letter alphabet). The outer ring represents the plaintext alphabet, and the inner ring represents the corresponding letters in the ciphertext. The inner ring also numbers the letters from 0 to 25. These numbers represent the <em class="calibre7">encryption key</em>, which in this case is the number of letters required to shift from A to the corresponding letter on the inner ring. Because the shift is circular, shifting with a key greater than 25 makes the alphabets wrap around, so shifting by 26 would be the same as shifting by 0, shifting by 27 would be the same as shifting by 1, and so on.</p>
+<p class="indent">You can access a virtual cipher wheel online at <a href="https://www.nostarch.com/crackingcodes/" class="calibre8"><em class="calibre7">https://www.nostarch.com/crackingcodes/</em></a>. <a href="#calibre_link-6" class="calibre8">Figure 1-1</a> shows what it looks like. To spin the wheel, click it and then move the mouse cursor around until the configuration you want is in place. Then click the mouse again to stop the wheel from spinning.</p>
+<p class="image"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-169"></span><img src="images/00083.jpeg" alt="Images" class="calibre4" /></p>
+<p class="figcap"><a id="calibre_link-6" class="calibre8"></a><em class="calibre7">Figure 1-1: The online cipher wheel</em></p>
+<p class="indent">A printable paper cipher wheel is also available from the book’s website. Cut out the two circles and lay them on top of each other, placing the smaller one in the middle of the larger one. Insert a pin or brad through the center of both circles so you can spin them around in place.</p>
+<p class="indent">Using either the paper or the virtual wheel, you can encrypt secret messages by hand.</p>
+<h4 class="h2" id="calibre_link-450"><strong class="calibre3"><em class="calibre12">Encrypting with the Cipher Wheel</em></strong></h4>
+<p class="noindent">To begin encrypting, write your message in English on a piece of paper. For this example, we’ll encrypt the message THE SECRET PASSWORD IS ROSEBUD. Next, spin the inner wheel of the cipher wheel until its slots match up with slots in the outer wheel. Notice the dot next to the letter A in the outer wheel. Take note of the number in the inner wheel next to this dot. This is the encryption key.</p>
+<p class="indent">For example, in <a href="#calibre_link-6" class="calibre8">Figure 1-1</a>, the outer circle’s A is over the inner circle’s number 8. We’ll use this encryption key to encrypt the message in our example, as shown in <a href="#calibre_link-7" class="calibre8">Figure 1-2</a>.</p>
+<p class="image"><img src="images/00084.jpeg" alt="Images" class="calibre4" /></p>
+<p class="figcap"><a id="calibre_link-7" class="calibre8"></a><em class="calibre7">Figure 1-2: Encrypting a message with a Caesar cipher key of 8</em></p>
+<p class="indent">For each letter in the message, find it in the outer circle and replace it with the corresponding letter in the inner circle. In this example, the first letter in the message is T (the first T in “THE SECRET…”), so find the <span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-168"></span>letter T in the outer circle and then find the corresponding letter in the inner circle, which is the letter B. So the secret message always replaces a T with a B. (If you were using a different encryption key, each T in the plaintext would be replaced with a different letter.) The next letter in the message is H, which turns into P. The letter E turns into M. Each letter on the outer wheel always encrypts to the same letter on the inner wheel. To save time, after you look up the first T in “THE SECRET…” and see that it encrypts to B, you can replace every T in the message with B, so you only need to look up a letter once.</p>
+<p class="indent">After you encrypt the entire message, the original message, THE SECRET PASSWORD IS ROSEBUD, becomes BPM AMKZMB XIAAEWZL QA ZWAMJCL. Notice that non-letter characters, such as the spaces, are not changed.</p>
+<p class="indent">Now you can send this encrypted message to someone (or keep it for yourself), and nobody will be able to read it unless you tell them the secret encryption key. Be sure to keep the encryption key a secret; the ciphertext can be read by anyone who knows that the message was encrypted with key 8.</p>
+<h4 class="h2" id="calibre_link-451"><strong class="calibre3"><em class="calibre12">Decrypting with the Cipher Wheel</em></strong></h4>
+<p class="noindent">To decrypt a ciphertext, start from the inner circle of the cipher wheel and then move to the outer circle. For example, let’s say you receive the ciphertext IWT CTL EPHHLDGS XH HLDGSUXHW. You wouldn’t be able to decrypt the message unless you knew the key (or unless you were a clever hacker). Luckily, your friend has already told you that they use the key 15 for their messages. The cipher wheel for this key is shown in <a href="#calibre_link-8" class="calibre8">Figure 1-3</a>.</p>
+<div class="image"><img src="images/00085.jpeg" alt="Images" class="calibre4" /></div>
+<p class="figcap"><a id="calibre_link-8" class="calibre8"></a><em class="calibre7">Figure 1-3: A cipher wheel set to key 15</em></p>
+<p class="indent">Now you can line up the letter A on the outer circle (the one with the dot below it) over the letter on the inner circle that has the number 15 (which is the letter P). Then, find the first letter in the secret message on the inner circle, which is I, and look at the corresponding letter on the outer circle, which is T. The second letter in the ciphertext, W, decrypts to the letter H. Decrypt the rest of the letters in the ciphertext back to the plaintext, and you’ll get the message THE NEW PASSWORD IS SWORDFISH, as shown in <a href="#calibre_link-9" class="calibre8">Figure 1-4</a>.</p>
+<div class="image"><img src="images/00086.jpeg" alt="Images" class="calibre4" /></div>
+<p class="figcap"><a id="calibre_link-9" class="calibre8"></a><em class="calibre7">Figure 1-4: Decrypting a message with a Caesar cipher key of 15</em></p>
+<p class="indent"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-149"></span>If you used an incorrect key, like 16, the decrypted message would be SGD MDV OZRRVNQC HR RVNQCEHRG, which is unreadable. Unless the correct key is used, the decrypted message won’t be understandable.</p>
+<h4 class="h2" id="calibre_link-452"><strong class="calibre3"><em class="calibre12">Encrypting and Decrypting with Arithmetic</em></strong></h4>
+<p class="noindent">The cipher wheel is a convenient tool for encrypting and decrypting with the Caesar cipher, but you can also encrypt and decrypt using arithmetic. To do so, write the letters of the alphabet from A to Z with the numbers from 0 to 25 under each letter. Begin with 0 under the A, 1 under the B, and so on until 25 is under the Z. <a href="#calibre_link-10" class="calibre8">Figure 1-5</a> shows what it should look like.</p>
+<div class="image"><img src="images/00088.jpeg" alt="Images" class="calibre4" /></div>
+<p class="figcap"><a id="calibre_link-10" class="calibre8"></a><em class="calibre7">Figure 1-5: Numbering the alphabet from 0 to 25</em></p>
+<p class="indent">You can use this letters-to-numbers code to represent letters. This is a powerful concept, because it allows you to do math on letters. For example, if you represent the letters CAT as the numbers 2, 0, and 19, you can add 3 to get the numbers 5, 3, and 22. These new numbers represent the letters FDW, as shown in <a href="#calibre_link-10" class="calibre8">Figure 1-5</a>. You have just “added” 3 to the word <em class="calibre7">cat</em>! Later, we’ll be able to program a computer to do this math for us.</p>
+<p class="indent">To use arithmetic to encrypt with the Caesar cipher, find the number under the letter you want to encrypt and add the key number to it. The resulting sum is the number under the encrypted letter. For example, let’s encrypt HELLO. HOW ARE YOU? using the key 13. (You can use any number from 1 to 25 for the key.) First, find the number under H, which is 7. Then add 13 to this number: 7 + 13 = 20. Because the number 20 is under the letter U, the letter H encrypts to U.</p>
+<p class="indent">Similarly, to encrypt the letter E (4), add 4 + 13 = 17. The number above 17 is R, so E gets encrypted to R, and so on.</p>
+<p class="indent">This process works fine until the letter O. The number under O is 14. But 14 plus 13 is 27, and the list of numbers only goes up to 25. If the sum of the letter’s number and the key is 26 or more, you need to subtract 26 from it. In this case, 27 &ndash; 26 = 1. The letter above the number 1 is B, so O encrypts to B using the key 13. When you encrypt each letter in the message, the ciphertext will be URYYB. UBJ NER LBH?</p>
+<p class="indent">To decrypt the ciphertext, subtract the key instead of adding it. The number of the ciphertext letter B is 1. Subtract 13 from 1 to get &ndash;12. Like our “subtract 26” rule for encrypting, when the result is less than 0 when decrypting, we need to add 26. Because &ndash;12 + 26 = 14, the ciphertext letter B decrypts to O.</p>
+<div class="note">
+<p class="notet"><strong class="calibre3"><span class="notes">NOTE</span></strong></p>
+<p class="notep"><em class="calibre7">If you don’t know how to add and subtract with negative numbers, you can read about it at</em> <a href="https://www.nostarch.com/crackingcodes/" class="calibre8">https://www.nostarch.com/crackingcodes/</a>.</p>
+</div>
+<p class="indent">As you can see, you don’t need a cipher wheel to use the Caesar cipher. All you need is a pencil, a piece of paper, and some simple arithmetic!</p>
+<h3 class="h1" id="calibre_link-453"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-207" class="calibre1"></span><strong class="calibre3">Why Double Encryption Doesn’t Work</strong></h3>
+<p class="noindent">You might think encrypting a message twice using two different keys would double the strength of the encryption. But this isn’t the case with the Caesar cipher (and most other ciphers). In fact, the result of double encryption is the same as what you would get after one normal encryption. Let’s try double encrypting a message to see why.</p>
+<p class="indent">For example, if you encrypt the word KITTEN using the key 3, you’re adding 3 to the plaintext letter’s number, and the resulting ciphertext would be NLWWHQ. If you then encrypt NLWWHQ, this time using the key 4, the resulting ciphertext would be RPAALU because you’re adding 4 to the plaintext letter’s number. But this is the same as encrypting the word KITTEN once with a key of 7.</p>
+<p class="indent">For most ciphers, encrypting more than once doesn’t provide additional strength. In fact, if you encrypt some plaintext with two keys that add up to 26, the resulting ciphertext will be the same as the original plaintext!</p>
+<h3 class="h1" id="calibre_link-454"><strong class="calibre3">Summary</strong></h3>
+<p class="noindent">The Caesar cipher and other ciphers like it were used to encrypt secret information for several centuries. But if you wanted to encrypt a long message&mdash;say, an entire book&mdash;it could take days or weeks to encrypt it all by hand. This is where programming can help. A computer can encrypt and decrypt a large amount of text in less than a second!</p>
+<p class="indent">To use a computer for encryption, you need to learn how to <em class="calibre7">program</em>, or instruct, the computer to do the same steps we just did using a language the computer can understand. Fortunately, learning a programming language like Python isn’t nearly as difficult as learning a foreign language like Japanese or Spanish. You also don’t need to know much math besides addition, subtraction, and multiplication. All you need is a computer and this book!</p>
+<p class="indent">Let’s move on to <a href="#calibre_link-11" class="calibre8">Chapter 2</a>, where we’ll learn how to use Python’s interactive shell to explore code one line at a time.</p>
+<div class="sidebar">
+<p class="sidebart" id="calibre_link-455"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-895"></span><strong class="calibre5">PRACTICE QUESTIONS</strong></p>
+<p class="noindent">Answers to the practice questions can be found on the book’s website at <em class="calibre7"><a href="https://www.nostarch.com/crackingcodes/" class="calibre8">https://www.nostarch.com/crackingcodes/</a></em>.</p>
+<ol class="calibre13">
+<li value="1" class="calibre11"><p class="noindent">Encrypt the following entries from Ambrose Bierce’s <em class="calibre7">The Devil’s Dictionary</em> with the given keys:</p>
+<ol class="lower-alpha">
+<li value="1" class="calibre11"><p class="noindent">With key 4: “AMBIDEXTROUS: Able to pick with equal skill a right-hand pocket or a left.”</p></li>
+<li value="2" class="calibre11"><p class="noindent">With key 17: “GUILLOTINE: A machine which makes a Frenchman shrug his shoulders with good reason.”</p></li>
+<li value="3" class="calibre11"><p class="noindent">With key 21: “IMPIETY: Your irreverence toward my deity.”</p></li>
+</ol>
+</li>
+<li value="2" class="calibre11"><p class="noindent">Decrypt the following ciphertexts with the given keys:</p>
+<ol class="lower-alpha">
+<li value="1" class="calibre11"><p class="noindent">With key 15: “ZXAI: P RDHIJBT HDBTIXBTH LDGC QN HRDIRWBTC XC PBTGXRP PCS PBTGXRPCH XC HRDIAPCS.”</p></li>
+<li value="2" class="calibre11"><p class="noindent">With key 4: “MQTSWXSV: E VMZEP EWTMVERX XS TYFPMG LSRSVW.”</p></li>
+</ol>
+</li>
+<li value="3" class="calibre11"><p class="noindent">Encrypt the following sentence with the key 0: “This is a silly example.”</p></li>
+<li value="4" class="calibre11"><p class="noindent">Here are some words and their encryptions. Which key was used for each word?</p>
+<ol class="lower-alpha">
+<li value="1" class="calibre11"><p class="noindent">ROSEBUD &ndash; LIMYVOX</p></li>
+<li value="2" class="calibre11"><p class="noindent">YAMAMOTO &ndash; PRDRDFKF</p></li>
+<li value="3" class="calibre11"><p class="noindent">ASTRONOMY &ndash; HZAYVUVTF</p></li>
+</ol>
+</li>
+<li value="5" class="calibre11"><p class="noindent">What does this sentence encrypted with key 8 decrypt to with key 9? “UMMSVMAA: Cvkwuuwv xibqmvkm qv xtivvqvo i zmdmvom bpib qa ewzbp epqtm.”</p></li>
+</ol>
+<span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-896"></span>
+</div>
+</div>
+

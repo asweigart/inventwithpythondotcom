@@ -1,0 +1,302 @@
+
+<div id="calibre_link-124" class="calibre">
+<h2 class="h1" id="calibre_link-97"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-929" class="calibre1"></span><span class="big"><strong class="calibre2">19</strong></span><br class="calibre9" /><strong class="calibre2">COLLISION DETECTION</strong></h2>
+<div class="imagec"><img src="images/00016.jpeg" alt="image" class="calibre3" /></div>
+<p class="noindent"><em class="calibre6">Collision detection</em> involves figuring out when two things on the screen have touched (that is, collided with) each other. Collision detection is really useful for games. For example, if the player touches an enemy, they may lose health. Or if the player touches a coin, they should automatically pick it up. Collision detection can help determine whether the game character is standing on solid ground or there’s nothing but empty air beneath them.</p>
+<p class="indent">In our games, collision detection will determine whether two rectangles are overlapping each other. This chapter’s example program will cover this basic technique. We’ll also look at how our <span class="literal1">pygame</span> programs can accept input from the player through the keyboard and the mouse. It’s a <span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-249"></span>bit more complicated than calling the <span class="literal1">input()</span> function, as we did for our text programs. But using the keyboard is much more interactive in GUI programs, and using the mouse isn’t even possible in our text games. These two concepts will make your games more exciting!</p>
+<div class="sidebar">
+<p class="sidebart"><strong class="calibre2">TOPICS COVERED IN THIS CHAPTER</strong></p>
+<p class="bull">• <span class="literal1">Clock</span> objects</p>
+<p class="bull">• Keyboard input in <span class="literal1">pygame</span></p>
+<p class="bull">• Mouse input in <span class="literal1">pygame</span></p>
+<p class="bull">• Collision detection</p>
+<p class="bull">• Not modifying a list while iterating over it</p>
+</div>
+<h3 class="h2" id="calibre_link-736"><strong class="calibre2">Sample Run of the Collision Detection Program</strong></h3>
+<p class="noindent">In this program, the player uses the keyboard’s arrow keys to move a black box around the screen. Smaller green squares, which represent food, appear on the screen, and the box “eats” them as it touches them. The player can click anywhere in the window to create new food squares. In addition, <small class="calibre11">ESC</small> quits the program, and the X key teleports the player to a random place on the screen.</p>
+<p class="indent"><a href="#calibre_link-125" class="calibre4">Figure 19-1</a> shows what the program will look like once finished.</p>
+<div class="image"><img src="images/00105.jpeg" alt="image" class="calibre3" /></div>
+<p class="figcap"><a id="calibre_link-125" class="calibre4"></a><em class="calibre6">Figure 19-1: A screenshot of the</em> <span class="literal"><span class="codeitalic">pygame</span></span> <em class="calibre6">Collision Detection program</em></p>
+<h3 class="h2" id="calibre_link-737"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-250" class="calibre1"></span><strong class="calibre2">Source Code for the Collision Detection Program</strong></h3>
+<p class="noindent">Start a new file, enter the following code, and then save it as <em class="calibre6">collisionDetection.py</em>. If you get errors after typing in this code, compare the code you typed to the book’s code with the online diff tool at <em class="calibre6"><a href="https://www.nostarch.com/inventwithpython#diff" class="calibre4">https://www.nostarch.com/inventwithpython#diff</a></em>.</p>
+<div class="image"><img src="images/00020.jpeg" alt="image" class="calibre3" /></div>
+<p class="sidenote"><em class="calibre6">collision Detection.py</em></p>
+<p class="programs">&nbsp;&nbsp;1. import pygame, sys, random<br class="calibre7" />&nbsp;&nbsp;2. from pygame.locals import *<br class="calibre7" />&nbsp;&nbsp;3.<br class="calibre7" />&nbsp;&nbsp;4. # Set up pygame.<br class="calibre7" />&nbsp;&nbsp;5. pygame.init()<br class="calibre7" />&nbsp;&nbsp;6. mainClock = pygame.time.Clock()<br class="calibre7" />&nbsp;&nbsp;7.<br class="calibre7" />&nbsp;&nbsp;8. # Set up the window.<br class="calibre7" />&nbsp;&nbsp;9. WINDOWWIDTH = 400<br class="calibre7" />&nbsp;10. WINDOWHEIGHT = 400<br class="calibre7" />&nbsp;11. windowSurface = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT),<br class="calibre7" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0, 32)<br class="calibre7" />&nbsp;12. pygame.display.set_caption('Collision Detection')<br class="calibre7" />&nbsp;13.<br class="calibre7" />&nbsp;14. # Set up the colors.<br class="calibre7" />&nbsp;15. BLACK = (0, 0, 0)<br class="calibre7" />&nbsp;16. GREEN = (0, 255, 0)<br class="calibre7" />&nbsp;17. WHITE = (255, 255, 255)<br class="calibre7" />&nbsp;18.<br class="calibre7" />&nbsp;19. # Set up the player and food data structures.<br class="calibre7" />&nbsp;20. foodCounter = 0<br class="calibre7" />&nbsp;21. NEWFOOD = 40<br class="calibre7" />&nbsp;22. FOODSIZE = 20<br class="calibre7" />&nbsp;23. player = pygame.Rect(300, 100, 50, 50)<br class="calibre7" />&nbsp;24. foods = []<br class="calibre7" />&nbsp;25. for i in range(20):<br class="calibre7" />&nbsp;26.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;foods.append(pygame.Rect(random.randint(0, WINDOWWIDTH - FOODSIZE),<br class="calibre7" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;random.randint(0, WINDOWHEIGHT - FOODSIZE), FOODSIZE, FOODSIZE))<br class="calibre7" />&nbsp;27.<br class="calibre7" />&nbsp;28. # Set up movement variables.<br class="calibre7" />&nbsp;29. moveLeft = False<br class="calibre7" />&nbsp;30. moveRight = False<br class="calibre7" />&nbsp;31. moveUp = False<br class="calibre7" />&nbsp;32. moveDown = False<br class="calibre7" />&nbsp;33.<br class="calibre7" />&nbsp;34. MOVESPEED = 6<br class="calibre7" />&nbsp;35.<br class="calibre7" />&nbsp;36.<br class="calibre7" />&nbsp;37. # Run the game loop.<br class="calibre7" />&nbsp;38. while True:<br class="calibre7" />&nbsp;39.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Check for events.<br class="calibre7" />&nbsp;40.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for event in pygame.event.get():<br class="calibre7" />&nbsp;41.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if event.type == QUIT:<br class="calibre7" /><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-930"></span> 42.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pygame.quit()<br class="calibre7" />&nbsp;43.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys.exit()<br class="calibre7" />&nbsp;44.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if event.type == KEYDOWN:<br class="calibre7" />&nbsp;45.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Change the keyboard variables.<br class="calibre7" />&nbsp;46.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if event.key == K_LEFT or event.key == K_a:<br class="calibre7" />&nbsp;47.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;moveRight = False<br class="calibre7" />&nbsp;48.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;moveLeft = True<br class="calibre7" />&nbsp;49.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if event.key == K_RIGHT or event.key == K_d:<br class="calibre7" />&nbsp;50.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;moveLeft = False<br class="calibre7" />&nbsp;51.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;moveRight = True<br class="calibre7" />&nbsp;52.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if event.key == K_UP or event.key == K_w:<br class="calibre7" />&nbsp;53.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;moveDown = False<br class="calibre7" />&nbsp;54.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;moveUp = True<br class="calibre7" />&nbsp;55.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if event.key == K_DOWN or event.key == K_s:<br class="calibre7" />&nbsp;56.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;moveUp = False<br class="calibre7" />&nbsp;57.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;moveDown = True<br class="calibre7" />&nbsp;58.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if event.type == KEYUP:<br class="calibre7" />&nbsp;59.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if event.key == K_ESCAPE:<br class="calibre7" />&nbsp;60.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pygame.quit()<br class="calibre7" />&nbsp;61.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys.exit()<br class="calibre7" />&nbsp;62.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if event.key == K_LEFT or event.key == K_a:<br class="calibre7" />&nbsp;63.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;moveLeft = False<br class="calibre7" />&nbsp;64.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if event.key == K_RIGHT or event.key == K_d:<br class="calibre7" />&nbsp;65.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;moveRight = False<br class="calibre7" />&nbsp;66.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if event.key == K_UP or event.key == K_w:<br class="calibre7" />&nbsp;67.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;moveUp = False<br class="calibre7" />&nbsp;68.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if event.key == K_DOWN or event.key == K_s:<br class="calibre7" />&nbsp;69.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;moveDown = False<br class="calibre7" />&nbsp;70.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if event.key == K_x:<br class="calibre7" />&nbsp;71.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;player.top = random.randint(0, WINDOWHEIGHT -<br class="calibre7" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;player.height)<br class="calibre7" />&nbsp;72.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;player.left = random.randint(0, WINDOWWIDTH -<br class="calibre7" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;player.width)<br class="calibre7" />&nbsp;73.<br class="calibre7" />&nbsp;74.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if event.type == MOUSEBUTTONUP:<br class="calibre7" />&nbsp;75.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;foods.append(pygame.Rect(event.pos[0], event.pos[1],<br class="calibre7" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOODSIZE, FOODSIZE))<br class="calibre7" />&nbsp;76.<br class="calibre7" />&nbsp;77.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;foodCounter += 1<br class="calibre7" />&nbsp;78.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if foodCounter &gt;= NEWFOOD:<br class="calibre7" />&nbsp;79.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Add new food.<br class="calibre7" />&nbsp;80.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;foodCounter = 0<br class="calibre7" />&nbsp;81.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;foods.append(pygame.Rect(random.randint(0, WINDOWWIDTH -<br class="calibre7" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOODSIZE), random.randint(0, WINDOWHEIGHT - FOODSIZE),<br class="calibre7" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOODSIZE, FOODSIZE))<br class="calibre7" />&nbsp;82.<br class="calibre7" />&nbsp;83.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Draw the white background onto the surface.<br class="calibre7" />&nbsp;84.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;windowSurface.fill(WHITE)<br class="calibre7" />&nbsp;85.<br class="calibre7" />&nbsp;86.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Move the player.<br class="calibre7" />&nbsp;87.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if moveDown and player.bottom &lt; WINDOWHEIGHT:<br class="calibre7" />&nbsp;88.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;player.top += MOVESPEED<br class="calibre7" />&nbsp;89.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if moveUp and player.top &gt; 0:<br class="calibre7" />&nbsp;90.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;player.top -= MOVESPEED<br class="calibre7" /><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-243"></span> 91.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if moveLeft and player.left &gt; 0:<br class="calibre7" />&nbsp;92.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;player.left -= MOVESPEED<br class="calibre7" />&nbsp;93.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if moveRight and player.right &lt; WINDOWWIDTH:<br class="calibre7" />&nbsp;94.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;player.right += MOVESPEED<br class="calibre7" />&nbsp;95.<br class="calibre7" />&nbsp;96.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Draw the player onto the surface.<br class="calibre7" />&nbsp;97.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pygame.draw.rect(windowSurface, BLACK, player)<br class="calibre7" />&nbsp;98.<br class="calibre7" />&nbsp;99.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Check whether the player has intersected with any food squares.<br class="calibre7" />100.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for food in foods[:]:<br class="calibre7" />101.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if player.colliderect(food):<br class="calibre7" />102.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;foods.remove(food)<br class="calibre7" />103.<br class="calibre7" />104.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Draw the food.<br class="calibre7" />105.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for i in range(len(foods)):<br class="calibre7" />106.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pygame.draw.rect(windowSurface, GREEN, foods[i])<br class="calibre7" />107.<br class="calibre7" />108.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Draw the window onto the screen.<br class="calibre7" />109.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pygame.display.update()<br class="calibre7" />110.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mainClock.tick(40)</p>
+<h3 class="h2" id="calibre_link-738"><strong class="calibre2">Importing the Modules</strong></h3>
+<p class="noindent">The <span class="literal1">pygame</span> Collision Detection program imports the same modules as the Animation program in <a href="#calibre_link-96" class="calibre4">Chapter 18</a>, plus the <span class="literal1">random</span> module:</p>
+<p class="programs">&nbsp;&nbsp;1. import pygame, sys, random<br class="calibre7" />&nbsp;&nbsp;2. from pygame.locals import *</p>
+<h3 class="h2" id="calibre_link-739"><strong class="calibre2">Using a Clock to Pace the Program</strong></h3>
+<p class="noindent">Lines 5 to 17 mostly do the same things that the Animation program did: they initialize <span class="literal1">pygame</span>, set <span class="literal1">WINDOWHEIGHT</span> and <span class="literal1">WINDOWWIDTH</span>, and assign the color and direction constants.</p>
+<p class="indent">However, line 6 is new:</p>
+<p class="programs">&nbsp;&nbsp;6. mainClock = pygame.time.Clock()</p>
+<p class="indent">In the Animation program, a call to <span class="literal1">time.sleep(0.02)</span> slowed down the program so that it wouldn’t run too fast. While this call will always pause for 0.02 seconds on all computers, the speed of the rest of the program depends on how fast the computer is. If we want this program to run at the same speed on any computer, we need a function that pauses longer on fast computers and shorter on slow computers.</p>
+<p class="indent">A <span class="literal1">pygame.time.Clock</span> object can pause an appropriate amount of time on any computer. Line 110 calls <span class="literal1">mainClock.tick(40)</span> inside the game loop. This call to the <span class="literal1">Clock</span> object’s <span class="literal1">tick()</span> method waits enough time so that it runs at <span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-252"></span>about 40 iterations a second, no matter what the computer’s speed is. This ensures that the game never runs faster than you expect. A call to <span class="literal1">tick()</span> should appear only once in the game loop.</p>
+<h3 class="h2" id="calibre_link-740"><strong class="calibre2">Setting Up the Window and Data Structures</strong></h3>
+<p class="noindent">Lines 19 to 22 set up a few variables for the food squares that appear on the screen:</p>
+<p class="programs">19. # Set up the player and food data structures.<br class="calibre7" />20. foodCounter = 0<br class="calibre7" />21. NEWFOOD = 40<br class="calibre7" />22. FOODSIZE = 20</p>
+<p class="indent">The <span class="literal1">foodCounter</span> variable will start at the value <span class="literal1">0</span>, <span class="literal1">NEWFOOD</span> at <span class="literal1">40</span>, and <span class="literal1">FOODSIZE</span> at <span class="literal1">20</span>. We’ll see how these are used later when we create the food.</p>
+<p class="indent">Line 23 sets up a <span class="literal1">pygame.Rect</span> object for the player’s location:</p>
+<p class="programs">23. player = pygame.Rect(300, 100, 50, 50)</p>
+<p class="indent">The <span class="literal1">player</span> variable has a <span class="literal1">pygame.Rect</span> object that represents the box’s size and position. The player’s box will move like the boxes did in the Animation program (see “<a href="#calibre_link-126" class="calibre4">Moving Each Box</a>” on <a href="#calibre_link-127" class="calibre4">page 280</a>), but in this program, the player can control where the box moves.</p>
+<p class="indent">Next, we set up some code to keep track of the food squares:</p>
+<p class="programs">24. foods = []<br class="calibre7" />25. for i in range(20):<br class="calibre7" />26.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;foods.append(pygame.Rect(random.randint(0, WINDOWWIDTH - FOODSIZE),<br class="calibre7" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;random.randint(0, WINDOWHEIGHT - FOODSIZE), FOODSIZE, FOODSIZE))</p>
+<p class="indent">The program will keep track of every food square with a list of <span class="literal1">Rect</span> objects in <span class="literal1">foods</span>. Lines 25 and 26 create 20 food squares randomly placed around the screen. You can use the <span class="literal1">random.randint()</span> function to come up with random x- and y-coordinates.</p>
+<p class="indent">On line 26, the program calls the <span class="literal1">pygame.Rect()</span> constructor function to return a new <span class="literal1">pygame.Rect</span> object. It will represent the position and size of a new food square. The first two parameters for <span class="literal1">pygame.Rect()</span> are the x- and y-coordinates of the top-left corner. You want the random coordinate to be between <span class="literal1">0</span> and the size of the window minus the size of the food square. If you set the random coordinate between <span class="literal1">0</span> and the size of the window, then the food square might be pushed outside of the window altogether, as in <a href="#calibre_link-128" class="calibre4">Figure 19-2</a>.</p>
+<p class="indent">The third and fourth parameters for <span class="literal1">pygame.Rect()</span> are the width and height of the food square. Both the width and height are the values in the <span class="literal1">FOODSIZE</span> constant.</p>
+<div class="image"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-251"></span><img src="images/00113.jpeg" alt="image" class="calibre3" /></div>
+<p class="figcap"><a id="calibre_link-128" class="calibre4"></a><em class="calibre6">Figure 19-2: For a 100×100 square in a 400×400 window, setting the top-left edge at 400 would place the rectangle outside of the window. To be inside, the left edge should be set at 300 instead.</em></p>
+<p class="indent">The third and fourth parameters for <span class="literal1">pygame.Rect()</span> are the width and height of the food square. Both the width and height are the values in the <span class="literal1">FOODSIZE</span> constant.</p>
+<h3 class="h2" id="calibre_link-741"><strong class="calibre2">Setting Up Variables to Track Movement</strong></h3>
+<p class="noindent">Starting at line 29, the code sets up some variables that track the movement of the player’s box for each direction the box can move:</p>
+<p class="programs">28. # Set up movement variables.<br class="calibre7" />29. moveLeft = False<br class="calibre7" />30. moveRight = False<br class="calibre7" />31. moveUp = False<br class="calibre7" />32. moveDown = False</p>
+<p class="indent">The four variables have Boolean values to keep track of which arrow key is being pressed and are initially set to <span class="literal1">False</span>. For example, when the player presses the left arrow key on their keyboard to move the box, <span class="literal1">moveLeft</span> is set to <span class="literal1">True</span>. When they let go of the key, <span class="literal1">moveLeft</span> is set back to <span class="literal1">False</span>.</p>
+<p class="indent">Lines 34 to 43 are nearly identical to code in the previous <span class="literal1">pygame</span> programs. These lines handle the start of the game loop and what to do when the player quits the program. We’ll skip the explanation for this code since we covered it in the previous chapter.</p>
+<h3 class="h2" id="calibre_link-137"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-138" class="calibre1"></span><strong class="calibre2">Handling Events</strong></h3>
+<p class="noindentb">The <span class="literal1">pygame</span> module can generate events in response to user input from the mouse or keyboard. The following are the events that can be returned by <span class="literal1">pygame.event.get()</span>:</p>
+<p class="hang"><span class="literal1"><span class="codestrong">QUIT</span></span> Generated when the player closes the window.</p>
+<p class="hang"><span class="literal1"><span class="codestrong">KEYDOWN</span></span> Generated when the player presses a key. Has a <span class="literal1">key</span> attribute that tells which key was pressed. Also has a <span class="literal1">mod</span> attribute that tells whether the <small class="calibre11">SHIFT</small>, <small class="calibre11">CTRL</small>, <small class="calibre11">ALT</small>, or other keys were held down when this key was pressed.</p>
+<p class="hang"><span class="literal1"><span class="codestrong">KEYUP</span></span> Generated when the player releases a key. Has <span class="literal1">key</span> and <span class="literal1">mod</span> attributes that are similar to those for <span class="literal1">KEYDOWN</span>.</p>
+<p class="hang"><span class="literal1"><span class="codestrong">MOUSEMOTION</span></span> Generated whenever the mouse moves over the window. Has a <span class="literal1">pos</span> attribute (short for <em class="calibre6">position</em>) that returns a tuple <span class="literal1">(x, y)</span> for the coordinates of where the mouse is in the window. The <span class="literal1">rel</span> attribute also returns an <span class="literal1">(x, y)</span> tuple, but it gives relative coordinates since the last <span class="literal1">MOUSEMOTION</span> event. For example, if the mouse moves left by 4 pixels from <span class="literal1">(200, 200)</span> to <span class="literal1">(196, 200)</span>, then <span class="literal1">rel</span> will be the tuple value <span class="literal1">(-4, 0)</span>. The <span class="literal1">button</span> attribute returns a tuple of three integers. The first integer in the tuple is for the left mouse button, the second integer is for the middle mouse button (if one exists), and the third integer is for the right mouse button. These integers will be <span class="literal1">0</span> if they are not being pressed when the mouse is moved and <span class="literal1">1</span> if they are pressed.</p>
+<p class="hang"><span class="literal1"><span class="codestrong">MOUSEBUTTONDOWN</span></span> Generated when a mouse button is pressed in the window. This event has a <span class="literal1">pos</span> attribute, which is an <span class="literal1">(x, y)</span> tuple for the coordinates of where the mouse was positioned when the button was pressed. There is also a <span class="literal1">button</span> attribute, which is an integer from <span class="literal1">1</span> to <span class="literal1">5</span> that tells which mouse button was pressed, as explained in <a href="#calibre_link-129" class="calibre4">Table 19-1</a>.</p>
+<p class="hang"><span class="literal1"><span class="codestrong">MOUSEBUTTONUP</span></span> Generated when the mouse button is released. This has the same attributes as <span class="literal1">MOUSEBUTTONDOWN</span>.</p>
+<p class="indentt">When the <span class="literal1">MOUSEBUTTONDOWN</span> event is generated, it has a <span class="literal1">button</span> attribute. The <span class="literal1">button</span> attribute is a value that is associated with the different types of buttons a mouse might have. For instance, the left button has the value <span class="literal1">1</span>, and the right button has the value <span class="literal1">3</span>. <a href="#calibre_link-129" class="calibre4">Table 19-1</a> lists all of the <span class="literal1">button</span> attributes for mouse events, but note that a mouse might not have all the <span class="literal1">button</span> values listed here.</p>
+<p class="tablecap"><a id="calibre_link-129" class="calibre4"></a><strong class="calibre5">Table 19-1:</strong> The <span class="literal">button</span> Attribute Values</p>
+<table class="topbot">
+<thead class="calibre14">
+<tr class="calibre15">
+<td class="table_th"><p class="table"><strong class="calibre5">Value of</strong> <span class="literal1"><span class="codestrong">button</span></span></p></td>
+<td class="table_th"><p class="table"><strong class="calibre5">Mouse button</strong></p></td>
+</tr>
+</thead>
+<tbody class="calibre16">
+<tr class="calibre15">
+<td class="table_3a"><p class="table">1</p></td>
+<td class="table_3a"><p class="table">Left button</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table">2</p></td>
+<td class="table_3a"><p class="table">Middle button</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table">3</p></td>
+<td class="table_3a"><p class="table">Right button</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table">4</p></td>
+<td class="table_3a"><p class="table">Scroll wheel moved up</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table">5</p></td>
+<td class="table_3a"><p class="table">Scroll wheel moved down</p></td>
+</tr>
+</tbody>
+</table>
+<p class="indent"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-189"></span>We’ll use these events to let the player control the box with <span class="literal1">KEYDOWN</span> events and with mouse button clicks.</p>
+<h4 class="h3" id="calibre_link-742"><em class="calibre10"><strong class="calibre2">Handling the KEYDOWN Event</strong></em></h4>
+<p class="noindenta">The code to handle the keypress and key release events starts on line 44; it includes the <span class="literal1">KEYDOWN</span> event type:</p>
+<p class="programs">44.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if event.type == KEYDOWN:</p>
+<p class="indent">If the event type is <span class="literal1">KEYDOWN</span>, then the <span class="literal1">Event</span> object has a <span class="literal1">key</span> attribute that indicates which key was pressed. When the player presses an arrow key or a WASD key (pronounced <em class="calibre6">wazz-dee</em>, these keys are in the same layout as the arrow keys but on the left side of the keyboard), then we want the box to move. We’ll use <span class="literal1">if</span> statements to check the pressed key in order to tell which direction the box should move.</p>
+<p class="indent">Line 46 compares this <span class="literal1">key</span> attribute to <span class="literal1">K_LEFT</span> and <span class="literal1">K_a</span>, which are the <span class="literal1">pygame.locals</span> constants that represent the left arrow key on the keyboard and the A in WASD, respectively. Lines 46 to 57 check for each of the arrow and WASD keys:</p>
+<p class="programs">45.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Change the keyboard variables.<br class="calibre7" />46.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if event.key == K_LEFT or event.key == K_a:<br class="calibre7" />47.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;moveRight = False<br class="calibre7" />48.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;moveLeft = True<br class="calibre7" />49.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if event.key == K_RIGHT or event.key == K_d:<br class="calibre7" />50.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;moveLeft = False<br class="calibre7" />51.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;moveRight = True<br class="calibre7" />52.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if event.key == K_UP or event.key == K_w:<br class="calibre7" />53.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;moveDown = False<br class="calibre7" />54.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;moveUp = True<br class="calibre7" />55.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if event.key == K_DOWN or event.key == K_s:<br class="calibre7" />56.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;moveUp = False<br class="calibre7" />57.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;moveDown = True</p>
+<p class="indent">When one of these keys is pressed, the code tells Python to set the corresponding movement variable to <span class="literal1">True</span>. Python will also set the movement variable of the opposite direction to <span class="literal1">False</span>.</p>
+<p class="indent">For example, the program executes lines 47 and 48 when the left arrow key has been pressed. In this case, Python will set <span class="literal1">moveLeft</span> to <span class="literal1">True</span> and <span class="literal1">moveRight</span> to <span class="literal1">False</span> (even though <span class="literal1">moveRight</span> might already be <span class="literal1">False</span>, Python will set it to <span class="literal1">False</span> again just to be sure).</p>
+<p class="indent">On line 46, <span class="literal1">event.key</span> can either be equal to <span class="literal1">K_LEFT</span> or <span class="literal1">K_a</span>. The value in <span class="literal1">event.key</span> is set to the same value as <span class="literal1">K_LEFT</span> if the left arrow key is pressed or the same value as <span class="literal1">K_a</span> if the A key is pressed.</p>
+<p class="indent">By executing the code on lines 47 and 48 if the keystroke is either <span class="literal1">K_LEFT</span> or <span class="literal1">K_a</span>, you make the left arrow key and the A key do the same thing. The W, A, S, and D keys are used as alternates for changing the movement variables, letting the player use their left hand instead of their right if they prefer. You can see an illustration of both sets of keys in <a href="#calibre_link-130" class="calibre4">Figure 19-3</a>.</p>
+<div class="image"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-190"></span><img src="images/00032.jpeg" alt="image" class="calibre3" /></div>
+<p class="figcap"><a id="calibre_link-130" class="calibre4"></a><em class="calibre6">Figure 19-3: The WASD keys can be programmed to do the same thing as the arrow keys.</em></p>
+<p class="indent">The constants for letter and number keys are easy to figure out: the A key’s constant is <span class="literal1">K_a</span>, the B key’s constant is <span class="literal1">K_b</span>, and so on. The 3 key’s constant is <span class="literal1">K_3</span>. <a href="#calibre_link-131" class="calibre4">Table 19-2</a> lists commonly used constant variables for the other keyboard keys.</p>
+<p class="tablecap"><a id="calibre_link-131" class="calibre4"></a><strong class="calibre5">Table 19-2:</strong> Constant Variables for Keyboard Keys</p>
+<table class="topbot">
+<thead class="calibre14">
+<tr class="calibre15">
+<td class="table_th"><p class="table"><span class="literal1"><span class="codestrong">pygame</span></span> <strong class="calibre5">constant variable</strong></p></td>
+<td class="table_th"><p class="table"><strong class="calibre5">Keyboard key</strong></p></td>
+</tr>
+</thead>
+<tbody class="calibre16">
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">K_LEFT</span></p></td>
+<td class="table_3a"><p class="table">Left arrow</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">K_RIGHT</span></p></td>
+<td class="table_3a"><p class="table">Right arrow</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">K_UP</span></p></td>
+<td class="table_3a"><p class="table">Up arrow</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">K_DOWN</span></p></td>
+<td class="table_3a"><p class="table">Down arrow</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">K_ESCAPE</span></p></td>
+<td class="table_3a"><p class="table"><small class="calibre11">ESC</small></p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">K_BACKSPACE</span></p></td>
+<td class="table_3a"><p class="table">Backspace</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">K_TAB</span></p></td>
+<td class="table_3a"><p class="table"><small class="calibre11">TAB</small></p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">K_RETURN</span></p></td>
+<td class="table_3a"><p class="table"><small class="calibre11">RETURN</small> or <small class="calibre11">ENTER</small></p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">K_SPACE</span></p></td>
+<td class="table_3a"><p class="table">Spacebar</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">K_DELETE</span></p></td>
+<td class="table_3a"><p class="table"><small class="calibre11">DEL</small></p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">K_LSHIFT</span></p></td>
+<td class="table_3a"><p class="table">Left <small class="calibre11">SHIFT</small></p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">K_RSHIFT</span></p></td>
+<td class="table_3a"><p class="table">Right <small class="calibre11">SHIFT</small></p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">K_LCTRL</span></p></td>
+<td class="table_3a"><p class="table">Left <small class="calibre11">CTRL</small></p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">K_RCTRL</span></p></td>
+<td class="table_3a"><p class="table">Right <small class="calibre11">CTRL</small></p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">K_LALT</span></p></td>
+<td class="table_3a"><p class="table">Left <small class="calibre11">ALT</small></p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">K_RALT</span></p></td>
+<td class="table_3a"><p class="table">Right <small class="calibre11">ALT</small></p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">K_HOME</span></p></td>
+<td class="table_3a"><p class="table"><small class="calibre11">HOME</small></p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">K_END</span></p></td>
+<td class="table_3a"><p class="table"><small class="calibre11">END</small></p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">K_PAGEUP</span></p></td>
+<td class="table_3a"><p class="table"><small class="calibre11">PGUP</small></p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">K_PAGEDOWN</span></p></td>
+<td class="table_3a"><p class="table"><small class="calibre11">PGDN</small></p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">K_F1</span></p></td>
+<td class="table_3a"><p class="table">F1</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">K_F2</span></p></td>
+<td class="table_3a"><p class="table">F2</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">K_F3</span></p></td>
+<td class="table_3a"><p class="table">F3</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">K_F4</span></p></td>
+<td class="table_3a"><p class="table">F4</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">K_F5</span></p></td>
+<td class="table_3a"><p class="table">F5</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">K_F6</span></p></td>
+<td class="table_3a"><p class="table">F6</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">K_F7</span></p></td>
+<td class="table_3a"><p class="table">F7</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">K_F8</span></p></td>
+<td class="table_3a"><p class="table">F8</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">K_F9</span></p></td>
+<td class="table_3a"><p class="table">F9</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">K_F10</span></p></td>
+<td class="table_3a"><p class="table">F10</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">K_F11</span></p></td>
+<td class="table_3a"><p class="table">F11</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">K_F12</span></p></td>
+<td class="table_3a"><p class="table">F12</p></td>
+</tr>
+</tbody>
+</table>
+<h4 class="h3" id="calibre_link-743"><em class="calibre10"><strong class="calibre2">Handling the KEYUP Event</strong></em></h4>
+<p class="noindenta">When the player releases the key that they were pressing, a <span class="literal1">KEYUP</span> event is generated:</p>
+<p class="programs">58.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if event.type == KEYUP:</p>
+<p class="indent"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-141"></span>If the key that the player released was <small class="calibre11">ESC</small>, then Python should terminate the program. Remember, in <span class="literal1">pygame</span> you must call the <span class="literal1">pygame.quit()</span> function before calling the <span class="literal1">sys.exit()</span> function, which we do in lines 59 to 61:</p>
+<p class="programs">59.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if event.key == K_ESCAPE:<br class="calibre7" />60.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pygame.quit()<br class="calibre7" />61.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys.exit()</p>
+<p class="indent">Lines 62 to 69 set a movement variable to <span class="literal1">False</span> if that direction’s key was released:</p>
+<p class="programs">62.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if event.key == K_LEFT or event.key == K_a:<br class="calibre7" />63.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;moveLeft = False<br class="calibre7" />64.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if event.key == K_RIGHT or event.key == K_d:<br class="calibre7" />65.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;moveRight = False<br class="calibre7" />66.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if event.key == K_UP or event.key == K_w:<br class="calibre7" />67.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;moveUp = False<br class="calibre7" />68.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if event.key == K_DOWN or event.key == K_s:<br class="calibre7" />69.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;moveDown = False</p>
+<p class="indent">Setting the movement variable to <span class="literal1">False</span> through a <span class="literal1">KEYUP</span> event makes the box stop moving.</p>
+<h3 class="h2" id="calibre_link-744"><strong class="calibre2">Teleporting the Player</strong></h3>
+<p class="noindent">You can also add teleportation to the game. If the player presses the X key, lines 71 and 72 set the position of the player’s box to a random place on the window:</p>
+<p class="programs">70.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if event.key == K_x:<br class="calibre7" />71.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;player.top = random.randint(0, WINDOWHEIGHT -<br class="calibre7" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;player.height)<br class="calibre7" />72.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;player.left = random.randint(0, WINDOWWIDTH -<br class="calibre7" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;player.width)</p>
+<p class="indent">Line 70 checks whether the player pressed the X key. Then, line 71 sets a random x-coordinate to teleport the player to between <span class="literal1">0</span> and the window’s height minus the player rectangle’s height. Line 72 executes similar code, but for the y-coordinate. This enables the player to teleport around the window by pushing the X key, but they can’t control where they will teleport&mdash;it’s completely random.</p>
+<h3 class="h2" id="calibre_link-140"><strong class="calibre2">Adding New Food Squares</strong></h3>
+<p class="noindent">There are two ways the player can add new food squares to the screen. They can click a spot in the window where they want the new food square to appear, or they can wait until the game loop has iterated <span class="literal1">NEWFOOD</span> number of times, in which case a new food square will be randomly generated on the window.</p>
+<p class="indent"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-248"></span>We’ll look at how food is added through the player’s mouse input first:</p>
+<p class="programs">74.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if event.type == MOUSEBUTTONUP:<br class="calibre7" />75.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;foods.append(pygame.Rect(event.pos[0], event.pos[1],<br class="calibre7" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOODSIZE, FOODSIZE))</p>
+<p class="indent">Mouse input is handled by events just like keyboard input. The <span class="literal1">MOUSEBUTTONUP</span> event occurs when the player releases the mouse button after clicking it.</p>
+<p class="indent">On line 75, the x-coordinate is stored in <span class="literal1">event.pos[0]</span>, and the y-coordinate is stored in <span class="literal1">event.pos[1]</span>. Line 75 creates a new <span class="literal1">Rect</span> object to represent a new food square and places it where the <span class="literal1">MOUSEBUTTONUP</span> event occurred. By adding a new <span class="literal1">Rect</span> object to the <span class="literal1">foods</span> list, the code displays a new food square on the screen.</p>
+<p class="indent">In addition to being added manually at the player’s discretion, food squares are generated automatically through the code on lines 77 to 81:</p>
+<p class="programs">77.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;foodCounter += 1<br class="calibre7" />78.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if foodCounter &gt;= NEWFOOD:<br class="calibre7" />79.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Add new food.<br class="calibre7" />80.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;foodCounter = 0<br class="calibre7" />81.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;foods.append(pygame.Rect(random.randint(0, WINDOWWIDTH -<br class="calibre7" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOODSIZE), random.randint(0, WINDOWHEIGHT - FOODSIZE),<br class="calibre7" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOODSIZE, FOODSIZE))</p>
+<p class="indent">The variable <span class="literal1">foodCounter</span> keeps track of how often food should be added. Each time the game loop iterates, <span class="literal1">foodCounter</span> is incremented by <span class="literal1">1</span> on line 77.</p>
+<p class="indent">Once <span class="literal1">foodCounter</span> is greater than or equal to the constant <span class="literal1">NEWFOOD</span>, <span class="literal1">foodCounter</span> is reset and a new food square is generated by line 81. You can change the rate at which new food squares are added by adjusting <span class="literal1">NEWFOOD</span> back on line 21.</p>
+<p class="indent">Line 84 just fills the window surface with white, which we covered in “<a href="#calibre_link-132" class="calibre4">Handling When the Player Quits</a>” on <a href="#calibre_link-133" class="calibre4">page 279</a>, so we’ll move on to discussing how the player moves around the screen.</p>
+<h3 class="h2" id="calibre_link-745"><strong class="calibre2">Moving the Player Around the Window</strong></h3>
+<p class="noindent">We’ve set the movement variables (<span class="literal1">moveDown</span>, <span class="literal1">moveUp</span>, <span class="literal1">moveLeft</span>, and <span class="literal1">moveRight</span>) to <span class="literal1">True</span> or <span class="literal1">False</span> depending on what keys the player has pressed. Now we need to move the player’s box, which is represented by the <span class="literal1">pygame.Rect</span> object stored in <span class="literal1">player</span>. We’ll do this by adjusting the x- and y-coordinates of <span class="literal1">player</span>.</p>
+<p class="programs">86.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Move the player.<br class="calibre7" />87.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if moveDown and player.bottom &lt; WINDOWHEIGHT:<br class="calibre7" />88.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;player.top += MOVESPEED<br class="calibre7" />89.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if moveUp and player.top &gt; 0:<br class="calibre7" />90.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;player.top -= MOVESPEED<br class="calibre7" />91.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if moveLeft and player.left &gt; 0:<br class="calibre7" />92.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;player.left -= MOVESPEED<br class="calibre7" />93.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if moveRight and player.right &lt; WINDOWWIDTH:<br class="calibre7" />94.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;player.right += MOVESPEED</p>
+<p class="indent"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-245"></span>If <span class="literal1">moveDown</span> is set to <span class="literal1">True</span> (and the bottom of the player’s box isn’t below the bottom edge of the window), then line 88 moves the player’s box down by adding <span class="literal1">MOVESPEED</span> to the player’s current <span class="literal1">top</span> attribute. Lines 89 to 94 do the same thing for the other three directions.</p>
+<h4 class="h3" id="calibre_link-746"><em class="calibre10"><strong class="calibre2">Drawing the Player on the Window</strong></em></h4>
+<p class="noindenta">Line 97 draws the player’s box on the window:</p>
+<p class="programs">96.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Draw the player onto the surface.<br class="calibre7" />97.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pygame.draw.rect(windowSurface, BLACK, player)</p>
+<p class="indent">After the box is moved, line 97 draws it in its new position. The <span class="literal1">windowSurface</span> passed for the first parameter tells Python which <span class="literal1">Surface</span> object to draw the rectangle on. The <span class="literal1">BLACK</span> variable, which has <span class="literal1">(0, 0, 0)</span> stored in it, tells Python to draw a black rectangle. The <span class="literal1">Rect</span> object stored in the <span class="literal1">player</span> variable tells Python the position and size of the rectangle to draw.</p>
+<h4 class="h3" id="calibre_link-747"><em class="calibre10"><strong class="calibre2">Checking for Collisions</strong></em></h4>
+<p class="noindenta">Before drawing the food squares, the program needs to check whether the player’s box has overlapped with any of the squares. If it has, then that square needs to be removed from the <span class="literal1">foods</span> list. This way, Python won’t draw any food squares that the box has already eaten.</p>
+<p class="indent">We’ll use the collision detection method that all <span class="literal1">Rect</span> objects have, <span class="literal1">colliderect()</span>, in line 101:</p>
+<p class="programs">&nbsp;99.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Check whether the player has intersected with any food squares.<br class="calibre7" />100.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for food in foods[:]:<br class="calibre7" />101.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if player.colliderect(food):<br class="calibre7" />102.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;foods.remove(food)</p>
+<p class="indent">On each iteration through the <span class="literal1">for</span> loop, the current food square from the <span class="literal1">foods</span> (plural) list is placed in the variable <span class="literal1">food</span> (singular). The <span class="literal1">colliderect()</span> method for <span class="literal1">pygame.Rect</span> objects is passed the player rectangle’s <span class="literal1">pygame.Rect</span> object as an argument and returns <span class="literal1">True</span> if the two rectangles collide and <span class="literal1">False</span> if they do not. If <span class="literal1">True</span>, line 102 removes the overlapping food square from the <span class="literal1">foods</span> list.</p>
+<div class="sidebar">
+<p class="sidebart"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-247" class="calibre1"></span><strong class="calibre2">DON’T CHANGE A LIST WHILE ITERATING OVER IT</strong></p>
+<p class="noindent">Notice that this <span class="literal1">for</span> loop is slightly different from any other <span class="literal1">for</span> loop we’ve seen. If you look carefully at line 100, it isn’t iterating over <span class="literal1">foods</span> but actually over <span class="literal1">foods[:]</span>.</p>
+<p class="indent">Remember how slices work. <span class="literal1">foods[:2]</span> evaluates to a copy of the list with the items from the start and up to (but not including) the item at index <span class="literal1">2</span>. <span class="literal1">foods[:]</span> will give you a copy of the list with the items from the start to the end. Basically, <span class="literal1">foods[:]</span> creates a new list with a copy of all the items in <span class="literal1">foods</span>. This is a shorter way to copy a list than, say, what the <span class="literal1">getBoardCopy()</span> function did in <a href="#calibre_link-12" class="calibre4">Chapter 10</a>’s Tic-Tac-Toe game.</p>
+<p class="indent">You can’t add or remove items from a list while you’re iterating over it. Python can lose track of what the next value of the <span class="literal1">food</span> variable should be if the size of the <span class="literal1">foods</span> list is always changing. Think of how difficult it would be to count the number of jelly beans in a jar while someone was adding or removing jelly beans.</p>
+<p class="indent">But if you iterate over a copy of the list (and the copy never changes), adding or removing items from the original list won’t be a problem.</p>
+</div>
+<h3 class="h2" id="calibre_link-748"><strong class="calibre2">Drawing the Food Squares on the Window</strong></h3>
+<p class="noindent">The code on lines 105 and 106 is similar to the code we used to draw the black box for the player:</p>
+<p class="programs">104.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Draw the food.<br class="calibre7" />105.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for i in range(len(foods)):<br class="calibre7" />106.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pygame.draw.rect(windowSurface, GREEN, foods[i])</p>
+<p class="indent">Line 105 loops through each food square in the <span class="literal1">foods</span> list, and line 106 draws the food square onto <span class="literal1">windowSurface</span>.</p>
+<p class="indent">Now that the player and food squares are on the screen, the window is ready to be updated, so we call the <span class="literal1">update()</span> method on line 109 and finish the program by calling the <span class="literal1">tick()</span> method on the <span class="literal1">Clock</span> object we created earlier:</p>
+<p class="programs">108.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Draw the window onto the screen.<br class="calibre7" />109.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pygame.display.update()<br class="calibre7" />110.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mainClock.tick(40)</p>
+<p class="indent">The program will continue through the game loop and keep updating until the player quits.</p>
+<h3 class="h2" id="calibre_link-749"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-931" class="calibre1"></span><strong class="calibre2">Summary</strong></h3>
+<p class="noindent">This chapter introduced the concept of collision detection. Detecting collisions between two rectangles is so common in graphical games that <span class="literal1">pygame</span> provides its own collision detection method named <span class="literal1">colliderect()</span> for <span class="literal1">pygame.Rect</span> objects.</p>
+<p class="indent">The first several games in this book were text based. The program’s output was text printed to the screen, and the input was text typed by the player on the keyboard. But graphical programs can also accept keyboard and mouse inputs.</p>
+<p class="indent">Furthermore, these programs can respond to single keystrokes when the player presses or releases a single key. The player doesn’t have to type in an entire response and press <small class="calibre11">ENTER</small>. This allows for immediate feedback and much more interactive games.</p>
+<p class="indent">This interactive program is fun, but let’s move beyond drawing rectangles. In <a href="#calibre_link-98" class="calibre4">Chapter 20</a>, you’ll learn how to load images and play sound effects with <span class="literal1">pygame</span>.<span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-932"></span></p>
+</div>

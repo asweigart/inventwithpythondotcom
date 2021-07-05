@@ -1,0 +1,97 @@
+
+<div id="calibre_link-816" class="calibre">
+<h2 class="h1" id="calibre_link-21"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-330" class="calibre1"></span><span class="big"><strong class="calibre2">4</strong></span><br class="calibre9" /><strong class="calibre2">A JOKE-TELLING PROGRAM</strong></h2>
+<div class="imagec"><img src="images/00016.jpeg" alt="image" class="calibre3" /></div>
+<p class="noindent">This chapter’s program tells a few jokes to the user and demonstrates more advanced ways to use strings with the <span class="literal1">print()</span> function. Most of the games in this book will have simple text for input and output. The input is typed on the keyboard by the user, and the output is the text displayed on the screen.</p>
+<div class="sidebar">
+<p class="sidebart"><strong class="calibre2">TOPICS COVERED IN THIS CHAPTER</strong></p>
+<p class="bull">• Escape characters</p>
+<p class="bull">• Using single quotes and double quotes for strings</p>
+<p class="bull">• Using <span class="literal1">print()</span>’s <span class="literal1">end</span> keyword parameter to skip newlines</p>
+</div>
+<p class="indent"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-331"></span>You’ve already learned how to display simple text output with the <span class="literal1">print()</span> function. Now let’s take a deeper look at how strings and <span class="literal1">print()</span> work in Python.</p>
+<h3 class="h2" id="calibre_link-453"><strong class="calibre2">Sample Run of Jokes</strong></h3>
+<p class="noindent">Here’s what the user sees when they run the Jokes program:</p>
+<p class="programs">What do you get when you cross a snowman with a vampire?<br class="calibre7" />Frostbite!<br class="calibre7" /><br class="calibre7" />What do dentists call an astronaut's cavity?<br class="calibre7" />A black hole!<br class="calibre7" /><br class="calibre7" />Knock knock.<br class="calibre7" />Who's there?<br class="calibre7" />Interrupting cow.<br class="calibre7" />Interrupting cow wh-MOO!</p>
+<h3 class="h2" id="calibre_link-454"><strong class="calibre2">Source Code for Jokes</strong></h3>
+<p class="noindent">Open a new file editor window by clicking <strong class="calibre5">File</strong> <img src="images/00042.jpeg" alt="image" class="calibre3" /> <strong class="calibre5">New Window</strong>. In the blank window that appears, enter the source code and save it as <em class="calibre6">jokes.py</em>. Then run the program by pressing F5.</p>
+<div class="image"><img src="images/00060.jpeg" alt="image" class="calibre3" /></div>
+<p class="indent">If you get errors after entering this code, compare the code you typed to the book’s code with the online diff tool at <em class="calibre6"><a href="https://www.nostarch.com/inventwithpython#diff" class="calibre4">https://www.nostarch.com/inventwithpython#diff</a></em>.</p>
+<p class="sidenote"><em class="calibre6">jokes.py</em></p>
+<p class="programs">&nbsp;1. print('What do you get when you cross a snowman with a vampire?')<br class="calibre7" />&nbsp;2. input()<br class="calibre7" />&nbsp;3. print('Frostbite!')<br class="calibre7" />&nbsp;4. print()<br class="calibre7" />&nbsp;5. print('What do dentists call an astronaut\'s cavity?')<br class="calibre7" />&nbsp;6. input()<br class="calibre7" />&nbsp;7. print('A black hole!')<br class="calibre7" />&nbsp;8. print()<br class="calibre7" />&nbsp;9. print('Knock knock.')<br class="calibre7" />10. input()<br class="calibre7" />11. print("Who's there?")<br class="calibre7" />12. input()<br class="calibre7" />13. print('Interrupting cow.')<br class="calibre7" />14. input()<br class="calibre7" />15. print('Interrupting cow wh', end='')<br class="calibre7" />16. print('-MOO!')</p>
+<h3 class="h2" id="calibre_link-455"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-154" class="calibre1"></span><strong class="calibre2">How the Code Works</strong></h3>
+<p class="noindent">Let’s start by looking at the first four lines of code:</p>
+<p class="programs">1. print('What do you get when you cross a snowman with a vampire?')<br class="calibre7" />2. input()<br class="calibre7" />3. print('Frostbite!')<br class="calibre7" />4. print()</p>
+<p class="indent">Lines 1 and 3 use the <span class="literal1">print()</span> function call to ask and give the answer to the first joke. You don’t want the user to immediately read the joke’s punchline, so there’s a call to the <span class="literal1">input()</span> function after the first <span class="literal1">print()</span> instance. The user will read the joke, press <small class="calibre11">ENTER</small>, and then read the punchline.</p>
+<p class="indent">The user can still type in a string and press <small class="calibre11">ENTER</small>, but this returned string isn’t being stored in any variable. The program will just forget about it and move to the next line of code.</p>
+<p class="indent">The last <span class="literal1">print()</span> function call doesn’t have a string argument. This tells the program to just print a blank line. Blank lines are useful to keep the text from looking crowded.</p>
+<h3 class="h2" id="calibre_link-456"><strong class="calibre2">Escape Characters</strong></h3>
+<p class="noindent">Lines 5 to 8 print the question and answer to the next joke:</p>
+<p class="programs">5. print('What do dentists call an astronaut\'s cavity?')<br class="calibre7" />6. input()<br class="calibre7" />7. print('A black hole!')<br class="calibre7" />8. print()</p>
+<p class="indent">On line 5, there’s a backslash right before the single quote: <span class="literal1">\'</span>. (Note that <span class="literal1">\</span> is a backslash, and <span class="literal1">/</span> is a forward slash.) This backslash tells you that the letter right after it is an escape character. An <em class="calibre6">escape character</em> lets you print special characters that are difficult or impossible to enter into the source code, such as the single quote in a string value that begins and ends with single quotes.</p>
+<p class="indent">In this case, if we didn’t include the backslash, the single quote in <span class="literal1">astronaut\'s</span> would be interpreted as the end of the string. But this quote needs to be <em class="calibre6">part of</em> the string. The escaped single quote tells Python that it should include the single quote in the string.</p>
+<p class="indent">But what if you actually want to display a backslash?</p>
+<p class="indent">Switch from your <em class="calibre6">jokes.py</em> program to the interactive shell and enter this <span class="literal1">print()</span> statement:</p>
+<p class="programs">&gt;&gt;&gt; <span class="codestrong">print('They flew away in a green\teal helicopter.')</span><br class="calibre7" />They flew away in a green&nbsp;&nbsp;&nbsp;&nbsp;eal helicopter.</p>
+<p class="indent"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-160"></span>This instruction didn’t print a backslash because the <span class="literal1">t</span> in <span class="literal1">teal</span> was interpreted as an escape character since it came after a backslash. The <span class="literal1">\t</span> simulates pressing <small class="calibre11">TAB</small> on your keyboard.</p>
+<p class="indent">This line will give you the correct output:</p>
+<p class="programs">&gt;&gt;&gt; <span class="codestrong">print('They flew away in a green\\teal helicopter.')</span><br class="calibre7" />They flew away in a green\teal helicopter.</p>
+<p class="indent">This way the <span class="literal1">\\</span> is a backslash character, and there is no <span class="literal1">\t</span> to interpret as <small class="calibre11">TAB</small>.</p>
+<p class="indent"><a href="#calibre_link-817" class="calibre4">Table 4-1</a> is a list of some escape characters in Python, including <span class="literal1">\n</span>, which is the newline escape character that you have used before.</p>
+<p class="tablecap"><a id="calibre_link-817" class="calibre4"></a><strong class="calibre5">Table 4-1:</strong> Escape Characters</p>
+<table class="topbot">
+<thead class="calibre14">
+<tr class="calibre15">
+<td class="table_th"><p class="table"><strong class="calibre5">Escape character</strong></p></td>
+<td class="table_th"><p class="table"><strong class="calibre5">What is actually printed</strong></p></td>
+</tr>
+</thead>
+<tbody class="calibre16">
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">\\</span></p></td>
+<td class="table_3a"><p class="table">Backslash (<span class="literal1">\</span>)</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">\'</span></p></td>
+<td class="table_3a"><p class="table">Single quote (<span class="literal1">'</span>)</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">\"</span></p></td>
+<td class="table_3a"><p class="table">Double quote (<span class="literal1">"</span>)</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">\n</span></p></td>
+<td class="table_3a"><p class="table">Newline</p></td>
+</tr>
+<tr class="calibre15">
+<td class="table_3a"><p class="table"><span class="literal1">\t</span></p></td>
+<td class="table_3a"><p class="table">Tab</p></td>
+</tr>
+</tbody>
+</table>
+<p class="indent">There are a few more escape characters in Python, but these are the characters you will most likely need for creating games.</p>
+<h3 class="h2" id="calibre_link-457"><strong class="calibre2">Single and Double Quotes</strong></h3>
+<p class="noindent">While we’re still in the interactive shell, let’s take a closer look at quotes. Strings don’t always have to be between single quotes in Python. You can also put them between double quotes. These two lines print the same thing:</p>
+<p class="programs">&gt;&gt;&gt; <span class="codestrong">print('Hello world')</span><br class="calibre7" />Hello world<br class="calibre7" />&gt;&gt;&gt; <span class="codestrong">print("Hello world")</span><br class="calibre7" />Hello world</p>
+<p class="indent">But you cannot mix quotes. This line will give you an error because it uses both quote types at once:</p>
+<p class="programs">&gt;&gt;&gt; <span class="codestrong">print('Hello world")</span><br class="calibre7" />SyntaxError: EOL while scanning single-quoted string</p>
+<p class="indent">I like to use single quotes so I don’t have to hold down <small class="calibre11">SHIFT</small> to type them. They’re easier to type, and Python doesn’t care either way.</p>
+<p class="indent"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-292"></span>Also, note that just as you need the <span class="literal1">\'</span> to have a single quote in a string surrounded by single quotes, you need the <span class="literal1">\"</span> to have a double quote in a string surrounded by double quotes. Look at this example:</p>
+<p class="programs">&gt;&gt;&gt; <span class="codestrong">print('I asked to borrow Abe\'s car for a week. He said, "Sure."')</span><br class="calibre7" />I asked to borrow Abe's car for a week. He said, "Sure."</p>
+<p class="indent">You use single quotes to surround the string, so you need to add a backslash before the single quote in <span class="literal1">Abe\'s</span>. But the double quotes in <span class="literal1">"Sure."</span> don’t need backslashes. The Python interpreter is smart enough to know that if a string starts with one type of quote, the other type of quote doesn’t mean the string is ending.</p>
+<p class="indent">Now check out another example:</p>
+<p class="programs">&gt;&gt;&gt; <span class="codestrong">print("She said, \"I can't believe you let them borrow your car.\"")</span><br class="calibre7" />She said, "I can't believe you let them borrow your car."</p>
+<p class="indent">The string is surrounded in double quotes, so you need to add backslashes for all of the double quotes within the string. You don’t need to escape the single quote in <span class="literal1">can't</span>.</p>
+<p class="indent">To summarize, in the single-quote strings, you don’t need to escape double quotes but do need to escape single quotes, and in the double-quote strings, you don’t need to escape single quotes but do need to escape double quotes.</p>
+<h3 class="h2" id="calibre_link-458"><strong class="calibre2">The print() Function’s end Keyword Parameter</strong></h3>
+<p class="noindent">Now let’s go back to <em class="calibre6">jokes.py</em> and take a look at lines 9 to 16:</p>
+<p class="programs">&nbsp;9. print('Knock knock.')<br class="calibre7" />10. input()<br class="calibre7" />11. print("Who's there?")<br class="calibre7" />12. input()<br class="calibre7" />13. print('Interrupting cow.')<br class="calibre7" />14. input()<br class="calibre7" />15. print('Interrupting cow wh', end='')<br class="calibre7" />16. print('-MOO!')</p>
+<p class="indent">Did you notice the second argument in line 15’s <span class="literal1">print()</span> function? Normally, <span class="literal1">print()</span> adds a newline character to the end of the string it prints. This is why a blank <span class="literal1">print()</span> function will just print a newline. But <span class="literal1">print()</span> can optionally have a second parameter: <span class="literal1">end</span>.</p>
+<p class="indent">Remember that an argument is the value passed in a function call. The blank string passed to <span class="literal1">print()</span> is called a <em class="calibre6">keyword argument</em>. The <span class="literal1">end</span> in <span class="literal1">end=''</span> is called a <em class="calibre6">keyword parameter</em>. To pass a keyword argument to this keyword parameter, you must type <span class="literal1">end=</span> before it.</p>
+<p class="indent"><span {http://www.idpf.org/2007/ops}type="pagebreak" id="calibre_link-860"></span>When we run this section of code, the output is</p>
+<p class="programs">Knock knock.<br class="calibre7" />Who's there?<br class="calibre7" />Interrupting cow.<br class="calibre7" />Interrupting cow wh-MOO!</p>
+<p class="indent">Because we passed a blank string to the <span class="literal1">end</span> parameter, the <span class="literal1">print()</span> function will add a blank string instead of adding a newline. This is why <span class="literal1">'-MOO!'</span> appears next to the previous line, instead of on its own line. There was no newline after the <span class="literal1">'Interrupting cow wh'</span> string was printed.</p>
+<h3 class="h2" id="calibre_link-459"><strong class="calibre2">Summary</strong></h3>
+<p class="noindent">This chapter explores the different ways you can use the <span class="literal1">print()</span> function. Escape characters are used for characters that are difficult to type into the code with the keyboard. If you want to use special characters in a string, you must use a backslash escape character, <span class="literal1">\</span>, followed by another letter for the special character. For example, <span class="literal1">\n</span> would be a newline. If your special character is a backslash itself, you use <span class="literal1">\\</span>.</p>
+<p class="indent">The <span class="literal1">print()</span> function automatically appends a newline character to the end of a string. Most of the time, this is a helpful shortcut. But sometimes you don’t want a newline character. To change this, you can pass a blank string as the keyword argument for <span class="literal1">print()</span>’s <span class="literal1">end</span> keyword parameter. For example, to print <span class="literal1">spam</span> to the screen without a newline character, you would call <span class="literal1">print('spam', end='')</span>.</p>
+</div>
