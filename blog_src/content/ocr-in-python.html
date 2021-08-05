@@ -1,127 +1,57 @@
 <html>
     <head>
-        <title>What is a Filesystem?</title>
+        <title>Text Recognition in Python with pytesseract</title>
         <meta name="tags" content="" />
         <meta name="date" content="2021-01-11 12:01" />
         <meta name="summary" content="" />
     </head>
     <body>
 
-<p><em>This is an excerpt from Chapter 2 of "Beyond the Basic Stuff with Python". This book is released under a Creative Commons license, and you can read it for free at <a href="https://inventwithpython.com/beyond/">https://inventwithpython.com/beyond/</a> or get an ebook for free with print book purchase from <a href="">No Starch Press</a>.</em></p>
+<p>Extracting text as string values from images is called <em>optical character recognition</em> (OCR) or simply <em>text recognition</em>. This blog post tells you how to run the Tesseract OCR engine from Python. For example, if you have the following image stored in <a href="/blogstatic/diploma_legal_notes.png">diploma_legal_notes.png</a>, you can run OCR over it to extract the string of text.</p>
 
+<p><img src="/blogstatic/diploma_legal_notes.png" /></p>
 
-<h2>The Filesystem</h2>
+<blockquote><code>' \n\n \n\nCLASS OF 2019!\n\nYOUR DIPLOMA GRANTS YOU MANY NEW\nPOWERS AND PRIVILEGES. THESE INCLUDE:\n\n+ YOU MAY NOW LEGALLY PERFORM\nMARRIAGES AND ARREST PEOPLE.\n\n+ IF YOU HAVE YOUR DIPLOMA WITH YOU,\nYOU CAN USE. GROCERY STORE EXPRESS\nLANES WITH ANY NUMBER OF ITEMS.\n\n+ ALL GRADUATES ARE ENTITLED To\nDELETE ONE WORD OF THEIR CHOICE.\nFROM THE OXFORD ENGUSH DICTIONARY.\n+ THE UNIVERSITY WILL MAIL YOU YOUR’\nWORKING LIGHTSABER WITHIN 6-8 WEEKS.\n* YOU CAN SEND MAIL WITHOUT STAMPS.\n+ YOU HAVE EARNED THE RIGHT TO\nCHALLENGE THE BRITISH ROYAL FAMILY\nTO TRIAL BY COMBAT. IF YOU DEFEAT\nTHEM ALL, THE THRONE |S YOURS.\n\n* YOU MAY NOL IGNORE. "DO NOT PET”\nWARNINGS ON AIRPORT SECURITY DOGS.\n\n= CONGRATULATIONS,\n\n \n\n \n\x0c'</code></blockquote>
 
-The filesystem is how your operating system organizes data to be stored and
-retrieved. A file has two key properties: a filename (usually written as one word)
-and a path. The path specifies the location of a file on the computer. For exam-
-ple, a file on my Windows 10 laptop has the filename project.docx in the path
-C:\Users\Al\Documents. The part of the filename after the last period is the file’s
-extension and tells you a file’s type. The filename project.docx is a Word docu-
-ment, and Users, Al, and Documents all refer to folders (also called directories).
-Folders can contain files and other folders. For example, project.docx is in
-the Documents folder, which is in the Al folder, which is in the Users folder.
-Figure 2-1 shows this folder organization.
-Figure 2-1: A file in a hierarchy of folders
-The C:\ part of the path is the root folder, which contains all other folders.
-On Windows, the root folder is named C:\ and is also called the C: drive. On
-macOS and Linux, the root folder is /. In this book, I’ll use the Windows-
-style root folder, C:\. If you’re entering the interactive shell examples on
-macOS or Linux, enter / instead.
-Additional volumes, such as a DVD drive or USB flash drive, will appear
-differently on different operating systems. On Windows, they appear as new,
-lettered root drives, such as D:\ or E:\. On macOS, they appear as new folders
-within the /Volumes folder. On Linux, they appear as new folders within the
-/mnt (“mount”) folder. Note that folder names and filenames are not case
-sensitive on Windows and macOS, but they’re case sensitive on Linux.
-Paths in Python
-On Windows, the backslash (\) separates folders and filenames, but on
-macOS and Linux, the forward slash (/) separates them. Instead of writing
-code both ways to make your Python scripts cross-platform compatible, you
-can use the pathlib module and / operator instead.
-The typical way to import pathlib is with the statement from pathlib
-import Path . Because the Path class is the most frequently used class in
-Environment Setup and the Command Line     19
-pathlib , this form lets you type Path instead of pathlib.Path . You can pass a
-string of a folder or filename to Path() to create a Path object of that folder
-or filename. As long as the leftmost object in an expression is a Path object,
-you can use the / operator to join together Path objects or strings. Enter the
-following into the interactive shell:
->>> from pathlib import Path
->>> Path('spam') / 'bacon' / 'eggs'
-WindowsPath('spam/bacon/eggs')
->>> Path('spam') / Path('bacon/eggs')
-WindowsPath('spam/bacon/eggs')
->>> Path('spam') / Path('bacon', 'eggs')
-WindowsPath('spam/bacon/eggs')
-Note that because I ran this code on a Windows machine, Path()
-returns WindowsPath objects. On macOS and Linux, a PosixPath object is
-returned. (POSIX is a set of standards for Unix-like operating systems and
-is beyond the scope of this book.) For our purposes, there’s no difference
-between these two types.
-You can pass a Path object to any function in the Python stan-
-dard library that expects a filename. For example, the function call
-open(Path('C:\\') / 'Users' / 'Al' / 'Desktop' / 'spam.py') is equivalent to
-open(r'C:\Users\Al\Desktop\spam.py') .
-The Home Directory
-All users have a folder called the home folder or home directory for their own
-files on the computer. You can get a Path object of the home folder by call-
-ing Path.home() :
->>> Path.home()
-WindowsPath('C:/Users/Al')
-The home directories are located in a set place depending on your
-operating system:
-• On Windows, home directories are in C:\Users.
-• On Mac, home directories are in /Users.
-• On Linux, home directories are often in /home.
-Your scripts will almost certainly have permissions to read from and
-write to the files in your home directory, so it’s an ideal place to store the
-files that your Python programs will work with.
-The Current Working Directory
-Every program that runs on your computer has a current working directory
-(cwd). Any filenames or paths that don’t begin with the root folder you can
-assume are in the cwd. Although “folder” is the more modern name for a
-20     Chapter 2
-directory, note that cwd (or just working directory) is the standard term,
-not “current working folder.”
-You can get the cwd as a Path object using the Path.cwd() function and
-change it using os.chdir() . Enter the following into the interactive shell:
->>> from pathlib import Path
->>> import os
-1>>> Path.cwd()
-WindowsPath('C:/Users/Al/AppData/Local/Programs/Python/Python38')
-2>>> os.chdir('C:\\Windows\\System32')
->>> Path.cwd()
-WindowsPath('C:/Windows/System32')
-Here, the cwd was set to C:\Users\Al\AppData\Local\Programs\Python\
-Python38 1, so the filename project.docx would refer to C:\Users\Al\AppData\
-Local\Programs\Python\Python38\project.docx. When we change the cwd to
-C:\Windows\System32 2, the filename project.docx would refer to C:\Windows\
-System32\project.docx.
-Python displays an error if you try to change to a directory that doesn’t
-exist:
->>> os.chdir('C:/ThisFolderDoesNotExist')
-Traceback (most recent call last):
-File "<stdin>", line 1, in <module>
-FileNotFoundError: [WinError 2] The system cannot find the file specified:
-'C:/ThisFolderDoesNotExist'
-The os.getcwd() function in the os module is a former way of getting the
-cwd as a string.
-Absolute vs. Relative Paths
-There are two ways to specify a file path:
-• An absolute path, which always begins with the root folder
-• A relative path, which is relative to the program’s cwd
-There are also the dot (.) and dot-dot (..) folders. These are not real fold-
-ers but special names that you can use in a path. A single period (.) for a
-folder name is shorthand for “this directory.” Two periods (..) means “the
-parent folder.”
-Figure 2-2 shows an example of some folders and files. When the cwd
-is set to C:\bacon, the relative paths for the other folders and files are set as
-they are in the figure.
-The .\ at the start of a relative path is optional. For example, .\spam.txt
-and spam.txt refer to the same file.
-Environment Setup and the Command Line     21
-Figure 2-2: The relative paths for folders and files in the working directory C:\bacon
+<p>Notice that the text recognition isn't quite perfect. The "CONGRATULATIONS" at the top is mistakenly placed at the bottom, the word "NOW" is recognized as "NOL", the word "IS" has a vertical pipe character "|" instead of a capital "I", and there seems to be some confusing punctuation marks added in. Cleaning up your OCR scans depends on your particular project. This blog post will simply show you the code to do OCR from Python.</p>
+
+<h2>Installing Tesseract</h2>
+
+<p>First, run <code>pip install pytesseract</code>. The <a href="https://pypi.org/project/pytesseract/">pytesseract</a> package is a Python wrapper for the Tesseract OCR engine. If you need help running pip, see <a href="https://inventwithpython.com/blog/2021/01/11/a-quick-pip-guide-how-to-install-python-modules/">A Quick Pip Guide</a> or <a href="https://realpython.com/what-is-pip/">What Is Pip? A Guide for New Pythonistas</a>.</p>
+
+<p>At this point, if you tried to use the <code>pytesseract</code> module, you'd get a <code>TesseractNotFoundError</code> message that says, <code>tesseract is not installed or it's not in your path</code>. (You can learn about the PATH environment variable in <a href="">Chapter 2 of my free book, Beyond the Basic Stuff with Python</a>.) Let's install the Tesseract OCR engine itself next.</p>
+
+<p>On Windows, you can download <a href="https://digi.bib.uni-mannheim.de/tesseract/tesseract-ocr-w64-setup-v5.0.0-alpha.20201127.exe">the installer for version 5.0.0 of Tesseract</a> and run the installer. (To get the latest version of Tesseract, go to the <a href="https://github.com/UB-Mannheim/tesseract/wiki">Tesseract at UB Mannheim web page</a>.)</p>
+
+<p>On macOS, according to <a href="https://guides.library.illinois.edu/c.php?g=347520&p=4121425">this article</a>, you can install Tesseract with Brew by opening a Terminal window and running <code>brew install tesseract --all-languages</code>. You can also install Tesseract on macOS with MacPorts by running <code>sudo port install Tesseract</code>, then run <code>sudo port install tesseract-eng</code> to install the English language. For other languages, <a href="https://ports.macports.org/?search=tesseract-&search_by=name">use the language codes listed in this link</a>.</p>
+
+<p>On Linux, Tesseract may already be installed. If it isn't, according to <a href="https://linuxhint.com/install-tesseract-ocr-linux/">this article</a>, you can run the following:</p>
+
+<p>On Ubuntu, run <code>sudo apt-get install tesseract-ocr</code> and then <code>sudo apt-get install tesseract-ocr-all</code> to install all languages. You also need to install ImageMagick for its <code>convert</code> program by running <code>sudo apt-get install imagemagick</code>.</p>
+
+<p>On Fedora, run <code>sudo dnf install tesseract</code></p>
+
+<p>On Manjaro, run <code>sudo pacman -Syu tesseract</code></p>
+
+<h2>Installing Pillow</h2>
+
+<p>The pytesseract module also requires the Pillow module for Python. You can install with pip by running <code>pip install pillow</code> on Windows or <code>pip3 install pillow</code> on macOS and Linux.</p>
+
+<h2>Running Tesseract from Python</h2>
+
+<p>To extract text from an image file named <em>image.png</em>, run the following code:</p>
+
+<pre>import pytesseract as tess
+from PIL import Image
+img = Image.open('image.png')
+text = tess.image_to_string(img)
+print(text)</pre>
+
+<p>The recognized text in the image is returned as a string value from <code>image_to_string()</code>.</p>
+
+<h2>Additional Resources</h2>
+
+<p>To see an example of all of these steps, check out this YouTube video: <a href="https://www.youtube.com/watch?v=4DrCIVS5U3Y">Image to Text with pytesseract</a></p>
 
 </body>
 </html>
