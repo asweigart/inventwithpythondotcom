@@ -1,0 +1,226 @@
+<html>
+    <head>
+        <title>What is a Python Generator? (Implementing Your Own range() Function)</title>
+        <meta name="tags" content="" />
+        <meta name="date" content="2021-09-24 12:00" />
+        <meta name="summary" content="" />
+    </head>
+    <body>
+
+<p>Generators in Python (also called generator functions) are used to create a series of values one at a time. This can keep your program from requiring the large amounts of memory needed if you generated all the values in the series at once. For example, in Python 2 running <code>for i in range(1000000):</code> the <code>range()</code> function would create and return a list with one million integers in it. This takes up a large amount of memory even though the for loop only needs one integer at a time. This was fixed in Python 3, where <code>range()</code> now produces one integer at a time. Generator functions let you create one value at a time with any sort of data, not just ranges of integers.</p>
+
+<p>If you find yourself creating a large list of values with, say, a list comprehension or <code>for</code> loop, but you only need one value at a time, you should consider using a generator instead. This is especially true if you are creating large lists with hundreds of thousands of items or more. Using a generator is like using the <code>readline()</code> method to read a text file one line at a time, instead of using the <code>read()</code> method to read in the entire file all at once.</p>
+
+<p>As a side note, generator functions return generator objects and generator objects are iterables. (Iterables are beyond the scope of this blog post, but see <a href="https://treyhunner.com/2016/12/python-iterator-protocol-how-for-loops-work/">The Iterator Protocol: How "For Loops" Work in Python</a> for more details.)</p>
+
+<p>You can download a single .py file of all the examples from <a href="/blogstatic/whatIsAGenerator.py">whatIsAGenerator.py</a>. This blog post assumes you have a basic beginner's level of understanding of Python.</p>
+
+<p>First, let's take a look at a regular function that you're already familiar with:</p>
+
+<pre>### A regular function:
+def aRegularFunction(param):
+    print('Hello', param)
+    return 42
+
+print("Calling aRegularFunction('Alice'):")
+returnedValue = aRegularFunction('Alice')
+print('Returned value:', returnedValue)</pre>
+
+<p>When you run this code, the output looks like this:</p>
+
+<pre>Calling aRegularFunction('Alice'):
+Hello Alice
+Returned value: 42</pre>
+
+<p>This is familiar and unsurprising. A function takes arguments for its parameters, runs some code, and then returns some return value.</p>
+
+<p>Now let's take a look at a generator function. You can tell a function is a generator function because it'll have the <code>yield</code> keyword somewhere in the function body:</p>
+
+<pre>### A generator (aka generator function):
+def aGeneratorFunction(param):
+    print('Hello', param)
+    yield 42
+    print('How are you,', param)
+    yield 99
+    print('Goodbye', param)
+    return 86  # Raises StopIteration with value 86.
+
+print("Calling aGeneratorFunction('Bob'):")
+generatorObj = aGeneratorFunction('Bob')  # Does not run the code, but returns a generator object.
+print('Calling next():')
+yieldedValue = next(generatorObj)
+print('Yielded value:', yieldedValue)
+print('Calling next():')
+yieldedValue = next(generatorObj)
+print('Yielded value:', yieldedValue)
+print('Calling next():')
+try:
+    next(generatorObj)
+except StopIteration as excObj:
+    print('type(excObj) is', type(excObj))
+    print('excObj.value is', excObj.value)
+    print('type(excObj.value) is', type(excObj.value))</pre>
+
+<p>When you run this code, the output looks like this:</p>
+
+<pre>Calling aGeneratorFunction('Bob'):
+Calling next():
+Hello Bob
+Yielded value: 42
+Calling next():
+How are you, Bob
+Yielded value: 99
+Calling next():
+Goodbye Bob
+type(excObj) is &lt;class 'StopIteration'&gt;
+excObj.value is 86
+type(excObj.value) is &lt;class 'int'&gt;</pre>
+
+<p>What you need to know is that <strong>one does not simply call a generator function</strong>. Calling a generator function does not run it's code. Instead, calling a generator function returns a <em>generator object</em>. You can see this in the interactive shell:</p>
+
+<pre>&gt;&gt;&gt; aGeneratorFunction('Eve')
+&lt;generator object aGeneratorFunction at 0x0000013470179580&gt;</pre>
+
+<p>To run the code inside a generator function, you must call Python's built-in <code>next()</code> function and pass it the generator object. This will run the code up until a <code>yield</code> statement, which acts like a <code>return</code> statement and makes the <code>next()</code> call return a value. The next time <code>next()</code> is called, the execution resumes from the yield statement with all the same values for the local variables.</p>
+
+<p>When a <code>return</code> statement is reached, the generator function raises a <code>StopIteration</code> exception. Usually there's no value returned, but if so it is set to the exception object's <code>value</code> attribute.</p>
+
+<p>The <code>next()</code> function usually isn't used with generators, but rather the generator function is used in a <code>for</code> loop. On each iteration, the <code>for</code> loop sets the loop variable to the yielded value. The <code>StopIteration</code> exception tells the <code>for</code> loop that the generator object has exhausted its values. For example:</p>
+
+<pre>### Using a generator function with a for loop or list() call:
+for yieldedValue in aGeneratorFunction('Carol'):
+    print('Yielded value:', yieldedValue)
+
+listOfGeneratedValues = list(aGeneratorFunction('David'))
+print('List of generated values:', listOfGeneratedValues)</pre>
+
+<p>When you run this code, the output looks like this:</p>
+
+<pre>Hello Carol
+Yielded value: 42
+How are you, Carol
+Yielded value: 99
+Goodbye Carol
+Hello David
+How are you, David
+Goodbye David
+List of generated values: [42, 99]</pre>
+
+<p>Rememebr that generators are mainly used to generate a series of values, but one at a time. Let's use an example of a Fibonacci sequence number generator. The Fibonacci sequence begins with 0 and 1, and then the next number in the sequence is the sum of the previous two numbers: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, and so on.</p>
+
+<p>A generator can produce these numbers (up to a given maximum) one at a time. This generator can be used with a <code>for</code> loop or a <code>list()</code> call:</p>
+
+<pre>### A practical example of a generator using the Fibonacci sequence:
+def fibonacciSequence(maxNum=50):
+    a = 0
+    b = 1
+    yield a
+    yield b
+    while True:
+        a, b = b, b + a
+        if b >= maxNum:
+            return b  # Raise StopIteration.
+        else:
+            yield b
+
+
+for fibNum in fibonacciSequence():
+    print('Next number in the Fibonacci sequence:', fibNum)
+
+
+fibNumsUpTo500 = list(fibonacciSequence(500))
+print('List of fib numbers up to 500:', fibNumsUpTo500)</pre>
+
+<p>When you run this code, the output looks like this:</p>
+
+<pre>Next number in the Fibonacci sequence: 0
+Next number in the Fibonacci sequence: 1
+Next number in the Fibonacci sequence: 1
+Next number in the Fibonacci sequence: 2
+Next number in the Fibonacci sequence: 3
+Next number in the Fibonacci sequence: 5
+Next number in the Fibonacci sequence: 8
+Next number in the Fibonacci sequence: 13
+Next number in the Fibonacci sequence: 21
+Next number in the Fibonacci sequence: 34
+List of fib numbers up to 500: [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377]</pre>
+
+<p>To summarize, Python generators look like functions that contain the <code>yield</code> keyword. They're used for producing a series of values one at a time so that your program doesn't consume a lot of memory by producing all the values at once. When a generator function is called, it doesn't run the code inside it but rather returns a generator object. This generator object can be passed to the built-in <code>next()</code> function. This runs the code in the generator function up until a <code>yield</code> statement (which gives a value for <code>next()</code> to return) or a <code>return</code> statement (which raises the <code>StopIteration</code> to signal that there are no more values to generate). However, generators are usually used in <code>for</code> loops, which automatically handle them.</p>
+
+<p>That's it! Generators aren't all that complicated. I recommend you learn about iterables and iterators in general by checking out Trey Hunner's blog post, <a href="https://treyhunner.com/2016/12/python-iterator-protocol-how-for-loops-work/">The Iterator Protocol: How "For Loops" Work in Python</a>.</p>
+
+
+<h2>Implementing Your Own range() Function</h2>
+
+<p>Let's put our knowledge to the test by creating our own <code>range()</code> function. Instead of <code>for i in range(10):</code>, we'll be able to use <code>for i in mySimpleImplementationOfRange(10):</code>. We'll use a generator function that takes a single integer argument, and yields values starting from <code>0</code> up to but not including the argument:</p>
+
+<pre>### Using generator functions to re-implement range():
+def mySimpleImplementationOfRange(stop):
+    i = 0
+    while i < stop:
+        yield i
+        i += 1
+    return  # Raise StopIteration.
+
+for i in mySimpleImplementationOfRange(5):
+    print(i)</pre>
+
+<p>When you run this code, the output looks like this:</p>
+
+<pre>0
+1
+2
+3
+4</pre>
+
+<p>Of course, the <code>range()</code> function is a bit more complicated than that. It can take up to three arguments to specify a starting integer, stopping integer, and a "step" integer to indicate how much the yielded integers should change by. Also, <code>range()</code> only accepts integer arguments and the step argument cannot be <code>0</code>. A fuller implementation is below:</p>
+
+<pre>### Using generator functions for a more complete range() re-implementation:
+def myImplementationOfRange(firstParam, secondParam=None, thirdParam=None):
+    if secondParam is None:
+        if not isinstance(firstParam, int):
+            raise TypeError("'" + firstParam.__class__.__name__ + "' object cannot be interpreted as an integer")
+        start = 0
+        stop = firstParam
+        step = 1
+    elif thirdParam is None:
+        if not isinstance(secondParam, int):
+            raise TypeError("'" + secondParam.__class__.__name__ + "' object cannot be interpreted as an integer")
+        start = firstParam
+        stop = secondParam
+        step = 1
+    else:
+        if not isinstance(thirdParam, int):
+            raise TypeError("'" + thirdParam.__class__.__name__ + "' object cannot be interpreted as an integer")
+        if thirdParam == 0:
+            raise ValueError('myImplementationOfRange() arg 3 must not be zero')
+        start = firstParam
+        stop = secondParam
+        step = thirdParam
+
+    i = start
+    if step > 0:  # step arg is increasing
+        while i < stop:
+            yield i
+            i += step
+        return i
+    elif step < 0:  # step arg is decreasing
+        while i > stop:
+            yield i
+            i += step  # Adding a negative to decrease
+        return i
+
+for i in myImplementationOfRange(4, 12, 2):
+    print(i)</pre>
+
+<p>When you run this code, the output looks like this:</p>
+
+<pre>4
+6
+8
+10</pre>
+
+<p>There's a bit more to it than that, as <code>range</code> is actually a class which implements several dunder methods (which you can learn about from Nina Zakharenko's PyCon 2018 talk, <a href="https://www.youtube.com/watch?v=WiQqqB9MlkA">Elegant Solutions for Everyday Python Problems</a>. But now you can see how something like Python's built-in <code>range()</code> is implemented.</p>
+
+</body>
+</html>
