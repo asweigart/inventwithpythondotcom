@@ -14,11 +14,17 @@ TIMEZONE = 'America/Los_Angeles'
 DEFAULT_LANG = 'en'
 
 # Feed generation is usually not desired when developing
-FEED_ALL_ATOM = None
-CATEGORY_FEED_ATOM = None
-TRANSLATION_FEED_ATOM = None
-AUTHOR_FEED_ATOM = None
-AUTHOR_FEED_RSS = None
+#FEED_ALL_ATOM = None
+#CATEGORY_FEED_ATOM = None
+#TRANSLATION_FEED_ATOM = None
+#AUTHOR_FEED_ATOM = None
+#AUTHOR_FEED_RSS = None
+
+FEED_ALL_ATOM = 'all.atom.xml'
+CATEGORY_FEED_ATOM = '{slug}.atom.xml'
+
+FEED_ALL_RSS = 'all.rss.xml'
+CATEGORY_FEED_RSS = '{slug}.rss.xml'
 
 # Blogroll
 LINKS = ()
