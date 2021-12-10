@@ -10,18 +10,5 @@ import sys
 sys.path.append(os.curdir)
 from pelicanconf import *
 
-SITEURL = 'https://inventwithpython.com/blog'
-RELATIVE_URLS = False
+SITEURL = 'http://localhost:8000'
 
-FEED_ALL_ATOM = 'atom.xml'
-CATEGORY_FEED_ATOM = '%s.atom.xml'
-
-FEED_ALL_RSS = 'rss.xml'
-CATEGORY_FEED_RSS = '%s.rss.xml'
-
-DELETE_OUTPUT_DIRECTORY = True
-
-# Following items are often useful when publishing
-
-#DISQUS_SITENAME = 'inventwithpython'
-#GOOGLE_ANALYTICS = 'UA-5459430-3'
