@@ -1,0 +1,30 @@
+<html>
+    <head>
+        <title>CircleMUD Data in XML Format for Your Text Adventure Game</title>
+        <meta name="tags" content="" />
+        <meta name="date" content="2012-03-19 12:00" />
+        <meta name="summary" content="<p>CircleMUD was a popular piece of server software for running a MUD, and it came with a sizeable virtual world (which the admin could modify/append to customize their fantasy world.) It would be pretty handy to use parts of this data if you were creating your own virtual world for a text adventure game, but the format of CircleMUD's data files is kind of obtuse and not amenable to manipulation.</p>
+<p>So I wrote a few scripts to convert these files into a single XML file which is 4MB when unzipped. You can parse this file and modify it to suit your needs. It contains 1979 rooms across 30 different areas (called zones in the file), with 46 shops and 569 different &quot;mobs&quot; (mobile objects, which are the monsters and NPCs). There are 678 different types of objects, including 116 weapons and 154 types of armor.</p>" />
+    </head>
+    <body>
+
+
+			<p>Long before World of Warcraft, people played text-based MMORPGs called MUDs (Multi-User Dungeon). These were basically multiplayer text adventure games where people could wander through a virtual world fighting monsters and exploring. They had several RPG elements to them.</p>
+<p>CircleMUD was a popular piece of server software for running a MUD, and it came with a sizeable virtual world (which the admin could modify/append to customize their fantasy world.) It would be pretty handy to use parts of this data if you were creating your own virtual world for a text adventure game, but the format of CircleMUD's data files is kind of obtuse and not amenable to manipulation.</p>
+<p>So I wrote a few scripts to convert these files into a single XML file which is 4MB when unzipped. You can parse this file and modify it to suit your needs. It contains 1979 rooms across 30 different areas (called zones in the file), with 46 shops and 569 different "mobs" (mobile objects, which are the monsters and NPCs). There are 678 different types of objects, including 116 weapons and 154 types of armor.</p>
+<p>The scripts and original CircleMUD data (along with descriptions of the data formats) are included in the zip:</p>
+<p><a href="http://inventwithpython.com/circlemuddata.zip?27f655" style="font-size:150%">Download CircleMUD XML Data (1.3 MB zipped)</a><br />
+<span id="more-629"></span><br />
+Use Python's XML parsing libraries rather than trying to write your own code to parse it. <a href="http://diveintopython3.ep.io/xml.html" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://diveintopython3.ep.io/xml.html', 'Dive into Python']);" >Dive into Python</a> has a chapter on XML parsing and Effbot's <a href="http://effbot.org/zone/element.htm" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://effbot.org/zone/element.htm', 'ElementTree']);" >ElementTree</a> module can parse XML. The zip file also comes with a small script that loads the data as a giant Python dict.</p>
+<p>Here's an example of what this textual data looks like:</p>
+<p><span style="color: blue; line-height: 1.1em"> &lt;mob&nbsp;vnum=&quot;907&quot;&nbsp;alignment=&quot;-1000&quot;&nbsp;type=&quot;S&quot;&nbsp;level=&quot;26&quot;&nbsp;thac0=&quot;0&quot;&nbsp;ac=&quot;-2&quot;&nbsp;<br />
+<br />maxhp=&quot;12d8+590&quot;&nbsp;barehanddmg=&quot;4d6+10&quot;&nbsp;gold=&quot;0&quot;&nbsp;xp=&quot;160000&quot;&nbsp;<br />
+<br />loadposition=&quot;standing&quot;&nbsp;defaultposition=&quot;standing&quot;&nbsp;sex=&quot;male&quot;&gt;<br />&nbsp;&nbsp;&lt;alias&nbsp;name=&quot;minos&quot;&nbsp;/&gt;<br />&nbsp;&nbsp;&lt;alias&nbsp;name=&quot;king&quot;&nbsp;/&gt;<br />&nbsp;&nbsp;&lt;alias&nbsp;name=&quot;minotaur&quot;&nbsp;/&gt;<br />&nbsp;&nbsp;&lt;shortdesc&gt;King&nbsp;Minos&nbsp;the&nbsp;Minotaur&lt;/shortdesc&gt;<br />&nbsp;&nbsp;&lt;longdesc&gt;King&nbsp;Minos&nbsp;the&nbsp;Minotaur&nbsp;is&nbsp;ready&nbsp;and&nbsp;waiting&nbsp;to&nbsp;gore&nbsp;you&nbsp;to&nbsp;death.&lt;/longdesc&gt;<br />&nbsp;&nbsp;&lt;detaileddesc&gt;He&nbsp;smells&nbsp;something&nbsp;awful.&lt;/detaileddesc&gt;<br />&nbsp;&nbsp;&lt;action&nbsp;sentinel=&quot;true&quot;&nbsp;aggressive=&quot;true&quot;&nbsp;memory=&quot;true&quot;&nbsp;helper=&quot;true&quot;&nbsp;<br />
+<br />nocharm=&quot;true&quot;&nbsp;nosummon=&quot;true&quot;&nbsp;nobash=&quot;true&quot;&nbsp;/&gt;<br />&nbsp;&nbsp;&lt;affection&nbsp;detectinvis=&quot;true&quot;&nbsp;senselife=&quot;true&quot;&nbsp;sanctuary=&quot;true&quot;&nbsp;infravision=&quot;true&quot;&nbsp;<br />
+<br />notrack=&quot;true&quot;&nbsp;/&gt;<br />&lt;/mob&gt;</span></p>
+<p>If you'd like to play a MUD for yourself, there are still many that are run on the Internet. The website <a href="http://mudconnect.com/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://mudconnect.com/', 'mudconnect.com']);" >mudconnect.com</a> lists over a thousand of them. Just search for "CircleMUD" to find a server that runs the CircleMUD software.</p>
+<p>Enjoy!</p>
+
+
+    </body>
+</html>

@@ -1,0 +1,39 @@
+<html>
+    <head>
+        <title>A Quick Pip Guide: How to Install Python Modules</title>
+        <meta name="tags" content="" />
+        <meta name="date" content="2021-01-11 12:00" />
+        <meta name="summary" content="<p>This tutorial teaches you about Pip, a <em>package manager</em> that installs third-party packages for Python.</p>" />
+    </head>
+    <body>
+
+<p>Pip is a <em>package manager</em> that installs third-party packages (such as <a href="https://pypi.org/project/PyAutoGUI/">PyAutoGUI</a>, <a href="https://pypi.org/project/matplotlib/">Matplotlib</a>, or <a href="https://pypi.org/project/pygame/">Pygame</a>) from <a href="https://pypi.org/">https://pypi.org/</a>, the Python Package Index. For a more detailed blog post on how pip works, see <a href="https://realpython.com/what-is-pip/">What Is Pip? A Guide for New Pythonistas</a></p>
+
+<p>On Windows, to install a module named <em>module_name</em> open a Command Prompt window and run:</p>
+
+<p><code><strong>pip install --user <em>module_name</em></strong></code></p>
+
+<p>On macOS and Linux, <code>pip</code> is for the older Python 2 version, so you need to open a Terminal window and run <code>pip3</code> instead:</p>
+
+<p><code><strong>pip3 install --user <em>module_name</em></strong></code></p>
+
+<p>(If you get a <code>'pip' is not recognized as an internal or external command, operable program or batch file.</code> or <code>pip3: command not found</code> error message, then the folder that the pip tool is listed in must be added to the PATH environment variable. You can find out about hte command line and environment variables in <a href="https://inventwithpython.com/beyond/chapter2.html">Chapter 2: Environment Setup and the Command Line in my free book, Beyond the Basic Stuff with Python</a>.</p>
+
+<p>If you can run <code>python</code> or <code>python3</code> from the terminal/command prompt window without errors, you can use Python itself to run pip by entering the following on Windows:</p>
+
+<p><code><strong>python -m pip install --user <em>module_name</em></strong></code></p>
+
+<p>On macOS and Linux, run:</p>
+
+<p><code><strong>python3 -m pip install --user <em>module_name</em></strong></code></p>
+
+<p>Remember to run <code>pip</code> or <code>python</code> from the <em>command line</em> (either Terminal or Command Prompt) and not from the Python interactive shell. The Python interactive shell will have the <code>&gt;&gt;&gt;</code> prompt. However, you can run pip from the Python interactive shell by running the following Python code:</p>
+
+<p><code><strong>import sys, os; os.system(sys.executable + ' -m pip install --user <em>module_name</em>')</strong></code></p>
+
+<p>Note the space before the <code>-m</code> is required. Replace <em>module_name</em> with the name of the module you wish to install, but type everything else exactly as shown.</p>
+
+<p>You can find packages to install by browsing <a href="https://pypi.org/">PyPI, the Python Package Index, at https://pypi.org/</a></p>
+
+    </body>
+</html>

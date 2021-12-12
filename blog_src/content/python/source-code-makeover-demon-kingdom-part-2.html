@@ -3,7 +3,7 @@
         <title>Source Code Makeover: Demon Kingdom, Part 2</title>
         <meta name="tags" content="" />
         <meta name="date" content="2013-06-13 12:00" />
-        <meta name="summary" content="" />
+        <meta name="summary" content="<p>This is a continuation of <a href=&quot;http://inventwithpython.com/blog/2013/06/12/source-code-makeover-demon-kingdom-part-1/&quot;>Part 1</a>.</p>" />
     </head>
     <body>
 
@@ -15,54 +15,95 @@
 <p>Since the <code>AnimatedSprite</code> class's <code>update()</code> method is <strong>always</strong> called after the <code>Monster</code> constructor, so we might as well get rid of that method and put its code directly in the constructor function.</p>
 <p>Also, there was a slight bug with my last check-in. In Python, a tuple with just one item in it needs a trailing comma to be recognized as a tuple. (Otherwise it'll just be seen as a value inside parentheses.) The values in the <code>MONSTER_RATIOS</code> variable need this comma added.</p>
 <p>You can see this in the interactive shell:</p>
-<pre>>>> type( (42, 99) )
-&lt;type 'tuple'&gt;
->>> type( (42) )
-&lt;type 'int'&gt;
->>> type( (42,) )
+<pre>>>> type( (42, 99) )
+
+&lt;type 'tuple'&gt;
+
+>>> type( (42) )
+
+&lt;type 'int'&gt;
+
+>>> type( (42,) )
+
 &lt;type 'tuple'&gt;</pre>
 <h3>Simplying the "final wave" Variables</h3>
 <p>Diff of these changes: <a href="https://github.com/asweigart/source_code_makeover/commit/75cb5e43eb17c925af91503801a13fc1abbe3ee8#DemonKingdom/demonkingdom_makeover.py" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/75cb5e43eb17c925af91503801a13fc1abbe3ee8#DemonKingdom/demonkingdom_makeover.py', 'Got rid of a lot of redundant code by adding a FINAL_WAVE_MONSTERS data structure and a populateFinalWave() function.']);" >Got rid of a lot of redundant code by adding a FINAL_WAVE_MONSTERS data structure and a populateFinalWave() function.</a></p>
 <p>There are quite a few "finalWave" variables that have a <code>for</code> loop set up to add various monsters to a list. They look like this:</p>
-<pre>for i in range(21):
-    if i - 4 <= 0:
-        type = "bat"
-        min = -1
-        max = -100
-    elif i - 13 <= 0:
-        type = "plant"
-        min = -20
-        max = -70
-    elif i - 17 <= 0:
-        min = -30
-        max = -60
-        type = "tree"
-    elif i >= 18:
-        type = "genie"
-        min = -30
-        max = -60
+<pre>for i in range(21):
+
+    if i - 4 <= 0:
+
+        type = "bat"
+
+        min = -1
+
+        max = -100
+
+    elif i - 13 <= 0:
+
+        type = "plant"
+
+        min = -20
+
+        max = -70
+
+    elif i - 17 <= 0:
+
+        min = -30
+
+        max = -60
+
+        type = "tree"
+
+    elif i >= 18:
+
+        type = "genie"
+
+        min = -30
+
+        max = -60
+
     # monster adding code here</pre>
 <p>I can see what they were doing, but they do it in an overly complicated way. When <code>i</code> is between 0 and 4 then the type is "bat", <strong>else if</strong> <code>i</code> is 13 or less (but greater than 4, because of the elif) then the type is "plant".</p>
 <p>But the <code>if</code> statements that check the value of <code>i</code> inside this loop aren't necessary. It would be better to just have several loops without them, which makes the number of each type of monster much more obvious:</p>
-<pre>for i in range(5):
-    type = 'bat'
-    min = -1
-    max = -100
-    # monster adding code here
-for i in range(9):
-    type = 'plant'
-    min = -20
-    max = -70
-    # monster adding code here
-for i in range(4):
-    type = 'tree'
-    min = -30
-    max = -60
-    # monster adding code here
-for i in range(3):
-    type = 'genie'
-    min = -30
-    max = -60
+<pre>for i in range(5):
+
+    type = 'bat'
+
+    min = -1
+
+    max = -100
+
+    # monster adding code here
+
+for i in range(9):
+
+    type = 'plant'
+
+    min = -20
+
+    max = -70
+
+    # monster adding code here
+
+for i in range(4):
+
+    type = 'tree'
+
+    min = -30
+
+    max = -60
+
+    # monster adding code here
+
+for i in range(3):
+
+    type = 'genie'
+
+    min = -30
+
+    max = -60
+
     # monster adding code here</pre>
 <p>This code would be used for each "final wave" variable. But we can reduce this even further by just setting up a function with this code and a data structure for each final wave. The new <code>FINAL_WAVE_MONSTERS</code> variable will hold the data for each level's final wave of monsters. The new <code>populateFinalWave()</code> function has this code typed out just once.</p>
 <h3>Put Sequential Variables into a Single List</h3>
@@ -71,19 +112,27 @@ for i in range(3):
 <h3>Adding a Function to Replace Redundant Code</h3>
 <p>Diff of these changes: <a href="https://github.com/asweigart/source_code_makeover/commit/76c05b8f6d678e223eab3f1e119b1e24effd891a#DemonKingdom/demonkingdom_makeover.py" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/76c05b8f6d678e223eab3f1e119b1e24effd891a#DemonKingdom/demonkingdom_makeover.py', 'Got rid of redundant code by adding a populateRandomMonsters() function.']);" >Got rid of redundant code by adding a populateRandomMonsters() function.</a></p>
 <p>There's a lot of code in the program that is a copy/pasted form of this:</p>
-<pre>for i in range(random.randint(10, 20)):
-    type = random.choice(MONSTER_RATIOS[0])
-    m = Monster(screen, *MONSTER_STATS[type]["image"])
-    m.set_rect(random.randint( - 500, -1), random.randint(25, WINDOW_HEIGHT - 70 - SIDEBAR_HEIGHT))
-    m.set_speed(MONSTER_STATS[type]["speed"])
-    m.set_life(MONSTER_STATS[type]["life"])
+<pre>for i in range(random.randint(10, 20)):
+
+    type = random.choice(MONSTER_RATIOS[0])
+
+    m = Monster(screen, *MONSTER_STATS[type]["image"])
+
+    m.set_rect(random.randint( - 500, -1), random.randint(25, WINDOW_HEIGHT - 70 - SIDEBAR_HEIGHT))
+
+    m.set_speed(MONSTER_STATS[type]["speed"])
+
+    m.set_life(MONSTER_STATS[type]["life"])
+
     monsters1.add(m)</pre>
 <p>We can put this code in a single function, and replace all these redundant lines of code with a function call. The new <code>populateRandomMonsters()</code> function does the same thing as these loops.</p>
 <h3>Put Repeated Code in a Loop</h3>
 <p>Diff of these changes: <a href="https://github.com/asweigart/source_code_makeover/commit/fb3b2bd221eae805176796488ef1d5e367c28aac#DemonKingdom/demonkingdom_makeover.py" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/fb3b2bd221eae805176796488ef1d5e367c28aac#DemonKingdom/demonkingdom_makeover.py', 'Put duplicate code into a loop to populate monster sprite groups.']);" >Put duplicate code into a loop to populate monster sprite groups.</a></p>
 <p>We see this code repeated for each level:</p>
-<pre>#Level 1
-randomMonsters[0] = populateRandomMonsters(1)
+<pre>#Level 1
+
+randomMonsters[0] = populateRandomMonsters(1)
+
 finalWaves[0] = populateFinalWave(1)</pre>
 <p>By putting this code inside a <code>for</code> loop, we only need it typed out once.</p>
 <h3>Remove fireballsOff Variable</h3>
@@ -102,7 +151,7 @@ finalWaves[0] = populateFinalWave(1)</pre>
 <p></p>
 <p>There are a few more changes that we can make in part 3. But so far we've reduced a program that had 773 lines of code down to 504 lines of code, which is a huge improvement! A good rule of thumb is that the less code there is, the easier it will be to understand and debug.</p>
 <p>(UPDATE: I actually probably won't be finishing part 3, which wouldn't have that many novel changes anyway.)</p>
-					
+
 
     </body>
 </html>

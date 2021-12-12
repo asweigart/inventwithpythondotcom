@@ -1,9 +1,9 @@
 <html>
     <head>
-        <title>16 Common Python Runtime Errors Beginners Find</title>
+        <title>16 Common Python Runtime Errors That Beginners Find</title>
         <meta name="tags" content="" />
         <meta name="date" content="2012-07-09 12:00" />
-        <meta name="summary" content="" />
+        <meta name="summary" content="<p>Figuring out what Python's error messages mean can be kind of tricky when you are first learning the language. Here's a list of common errors that result in runtime error messages which will crash your program.</p>" />
     </head>
     <body>
 
@@ -12,54 +12,69 @@
 <p>&nbsp;</p>
 <p><strong>1)</strong> Forgetting to put a : at the end of an <code>if</code>, <code>elif</code>, <code>else</code>, <code>for</code>, <code>while</code>, <code>class</code>, or <code>def</code> statement. (Causes “<code>SyntaxError: invalid syntax</code>”)</p>
 <p>This error happens with code like this:</p>
-<pre>if spam == 42
+<pre>if spam == 42
+
     print('Hello!')</pre>
 <p>&nbsp;</p>
 <p><strong>2)</strong> Using <code>=</code> instead of <code>==</code>. (Causes “<code>SyntaxError: invalid syntax</code>”)</p>
 <p>The <code>=</code> is the assignment operator while <code>==</code> is the "is equal to" comparison operator. This error happens with code like this:</p>
-<pre>if spam = 42:
+<pre>if spam = 42:
+
     print('Hello!')</pre>
 <p>&nbsp;</p>
 <p><strong>3)</strong> Using the wrong amount of indentation. (Causes “<code>IndentationError: unexpected indent</code>” and “<code>IndentationError: unindent does not match any outer indentation level</code>” and “<code>IndentationError: expected an indented block</code>”)</p>
 <p>Remember that the indentation only increases after a statement ending with a <code>:</code> colon, and afterwards must return to the previous indentation. This error happens with code like this:</p>
-<pre>print('Hello!')
+<pre>print('Hello!')
+
     print('Howdy!')</pre>
 <p>...and this:</p>
-<pre>if spam == 42:
-    print('Hello!')
+<pre>if spam == 42:
+
+    print('Hello!')
+
   print('Howdy!')</pre>
 <p>...and this:</p>
-<pre>if spam == 42:
+<pre>if spam == 42:
+
 print('Hello!')</pre>
 <p>&nbsp;</p>
 <p><span id="more-798"></span></p>
 <p><strong>4)</strong> Forgetting the <code>len()</code> call in a <code>for</code> loop statement. (Causes “<code>TypeError: 'list' object cannot be interpreted as an integer</code>”)</p>
 <p>Commonly you want to iterate over the indexes of items in a list or string, which requires calling the <code>range()</code> function. Just remember to pass the return value of <code>len(someList)</code>, instead of passing just <code>someList</code>.</p>
 <p>This error happens with code like this:</p>
-<pre>spam = ['cat', 'dog', 'mouse']
-for i in range(spam):
+<pre>spam = ['cat', 'dog', 'mouse']
+
+for i in range(spam):
+
     print(spam[i])</pre>
 <p>(Update: As a few have pointed out, what you might need is just <code>for i in spam:</code> rather than the above code. But the above is for the very legitimate case where you need the index in the body of the loop, rather than just the value itself.)</p>
 <p>&nbsp;</p>
 <p><strong>5)</strong> Trying to modify a string value.  (Causes “<code>TypeError: 'str' object does not support item assignment</code>”)</p>
 <p>Strings are an immutable data type. This error happens with code like this:</p>
-<pre>spam = 'I have a pet cat.'
-spam[13] = 'r'
+<pre>spam = 'I have a pet cat.'
+
+spam[13] = 'r'
+
 print(spam)</pre>
 <p>What you probably want is this:</p>
-<pre>spam = 'I have a pet cat.'
-spam = spam[:13] + 'r' + spam[14:]
+<pre>spam = 'I have a pet cat.'
+
+spam = spam[:13] + 'r' + spam[14:]
+
 print(spam)</pre>
 <p>&nbsp;</p>
 <p><strong>6)</strong> Trying to concatenate a non-string value to a string value. (Causes “<code>TypeError: Can't convert 'int' object to str implicitly</code>”)</p>
 <p>This error happens with code like this:</p>
-<pre>numEggs = 12
+<pre>numEggs = 12
+
 print('I have ' + numEggs + ' eggs.')</pre>
 <p>What you want to do is this:</p>
-<pre>numEggs = 12
+<pre>numEggs = 12
+
 print('I have ' + str(numEggs) + ' eggs.')</pre>
 <p>...or this:</p>
-<pre>numEggs = 12
+<pre>numEggs = 12
+
 print('I have %s eggs.' % (numEggs))</pre>
 <p>&nbsp;</p>
 <p><strong>7)</strong> Forgetting a quote to begin or end a string value. (Causes “<code>SyntaxError: EOL while scanning string literal</code>”)</p>
@@ -68,12 +83,14 @@ print('I have %s eggs.' % (numEggs))</pre>
 <p>...or this:</p>
 <pre>print('Hello!)</pre>
 <p>...or this:</p>
-<pre>myName = 'Al'
+<pre>myName = 'Al'
+
 print('My name is ' + myName + . How are you?')</pre>
 <p>&nbsp;</p>
 <p><strong>8)</strong> A typo for a variable or function name. (Causes “<code>NameError: name 'fooba' is not defined</code>”)</p>
 <p>This error happens with code like this:</p>
-<pre>foobar = 'Al'
+<pre>foobar = 'Al'
+
 print('My name is ' + fooba)</pre>
 <p>...or this:</p>
 <pre>spam = ruond(4.2)</pre>
@@ -82,17 +99,20 @@ print('My name is ' + fooba)</pre>
 <p>&nbsp;</p>
 <p><strong>9)</strong> A typo for a method name. (Causes “<code>AttributeError: 'str' object has no attribute 'lowerr'</code>”)</p>
 <p>This error happens with code like this:</p>
-<pre>spam = 'THIS IS IN LOWERCASE.'
+<pre>spam = 'THIS IS IN LOWERCASE.'
+
 spam = spam.lowerr()</pre>
 <p>&nbsp;</p>
 <p><strong>10)</strong> Going past the last index of a list. (Causes “<code>IndexError: list index out of range</code>”)</p>
 <p>This error happens with code like this:</p>
-<pre>spam = ['cat', 'dog', 'mouse']
+<pre>spam = ['cat', 'dog', 'mouse']
+
 print(spam[6])</pre>
 <p>&nbsp;</p>
 <p><strong>11)</strong> Using a non-existent dictionary key. (Causes “<code>KeyError: 'spam'</code>”)</p>
 <p>This error happens with code like this:</p>
-<pre>spam = {'cat': 'Zophie', 'dog': 'Basil', 'mouse': 'Whiskers'}
+<pre>spam = {'cat': 'Zophie', 'dog': 'Basil', 'mouse': 'Whiskers'}
+
 print('The name of my pet zebra is ' + spam['zebra'])</pre>
 <p>&nbsp;</p>
 <p><strong>12)</strong> Trying to use a Python keyword for a variable name. (Causes “<code>SyntaxError: invalid syntax</code>”)</p>
@@ -103,52 +123,69 @@ print('The name of my pet zebra is ' + spam['zebra'])</pre>
 <p><strong>13)</strong> Using an augmented assignment operator on a new variable. (Causes “<code>NameError: name 'foobar' is not defined</code>”)</p>
 <p>Do not assume that variables start off with a value such as <code>0</code> or the blank string. A statement with an augmented operator like <code>spam += 1</code> is equivalent to <code>spam = spam + 1</code>. This means that there must be a value in <code>spam</code> to begin with.</p>
 <p>This error happens with code like this:</p>
-<pre>spam = 0
-spam += 42
+<pre>spam = 0
+
+spam += 42
+
 eggs += 42</pre>
 <p>&nbsp;</p>
 <p><strong>14)</strong> Using a local variable (with the same name as a global variable) in a function before assigning the local variable. (Causes “<code>UnboundLocalError: local variable 'foobar' referenced before assignment</code>”)</p>
 <p>Using a local variable in a function that has the same name as a global variable is tricky. The rule is: if a variable in a function is ever assigned something, it is always a local variable when used inside that function. Otherwise, it is the global variable inside that function.</p>
 <p>This means you cannot use it as a global variable in the function before assigning it.</p>
 <p>This error happens with code like this:</p>
-<pre>someVar = 42
-
-def myFunction():
-    print(someVar)
-    someVar = 100
-
+<pre>someVar = 42
+
+
+
+def myFunction():
+
+    print(someVar)
+
+    someVar = 100
+
+
+
 myFunction()</pre>
 <p>&nbsp;</p>
 <p><strong>15)</strong> Trying to use <code>range()</code> to create a list of integers. (Causes “<code>TypeError: 'range' object does not support item assignment</code>”)</p>
 <p>Sometimes you want a list of integer values in order, so <code>range()</code> seems like a good way to generate this list. However, you must remember that <code>range()</code> returns a "range object", and not an actual list value.</p>
 <p>This error happens with code like this:</p>
-<pre>spam = range(10)
+<pre>spam = range(10)
+
 spam[4] = -1</pre>
 <p>What you probably want to do is this:</p>
-<pre>spam = list(range(10))
+<pre>spam = list(range(10))
+
 spam[4] = -1</pre>
 <p>(Update: This works in Python 2, because Python 2's <code>range()</code> does return a list value. However, trying to do this in Python 3 will result in the above error.)</p>
 <p>&nbsp;</p>
 <p><strong>16)</strong> There is no <code>++</code> increment or <code>–-</code> decrement operator. (Causes “<code>SyntaxError: invalid syntax</code>”)</p>
 <p>If you come from a different programming language like C++, Java, or PHP, you may try to increment or decrement a variable with <code>++</code> or <code>--</code>. There are no such operators in Python.</p>
 <p>This error happens with code like this:</p>
-<pre>spam = 0
+<pre>spam = 0
+
 spam++</pre>
 <p>What you want to do is this:</p>
-<pre>spam = 0
+<pre>spam = 0
+
 spam += 1</pre>
 <p>&nbsp;</p>
 <p><strong>17)</strong> Update: As Luciano points out in the comments, it is also common to forget adding <code>self</code> as the first parameter for a method. (Causes “<code>TypeError: myMethod() takes no arguments (1 given)</code>”)</p>
 <p>This error happens with code like this:</p>
-<pre>class Foo():
-    def myMethod():
-        print('Hello!')
-
-a = Foo()
+<pre>class Foo():
+
+    def myMethod():
+
+        print('Hello!')
+
+
+
+a = Foo()
+
 a.myMethod()</pre>
 <p>&nbsp;</p>
 <p>A short explanation of various error messages appears in <a href="http://inventwithpython.com/appendixd.html">Appendix D of the "Invent with Python" book</a>.</p>
-					
+
 
     </body>
 </html>

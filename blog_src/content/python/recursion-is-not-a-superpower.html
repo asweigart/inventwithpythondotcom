@@ -1,0 +1,91 @@
+<html>
+    <head>
+        <title>Recursion Is Not A Superpower: An Iterative Ackermann</title>
+        <meta name="tags" content="recursion" />
+        <meta name="date" content="2021-09-05 12:00" />
+        <meta name="summary" content="This post has the Python code for the infamously recursive Ackermann function, but without using recursion." />
+    </head>
+    <body>
+
+<p>This post has the Python code for the infamously recursive Ackermann function, but without using recursion. Many people think that recursive algorithms hold some special power that can do computations beyond the reach of iterative algorithms. But recursion is not a superpower: there's nothing you can do with recurison that you can't do with a loop and a stack.</p>
+
+<blockquote><em>This blog post contains information from Al Sweigart's next book, <a href="https://nostarch.com/book-recursion">The Recursive Book of Recurson</a> from No Starch Press. The book will be released in February 2022. You can use the discount code PREORDERRECURSION to get 30% off your preorder, and receive the ebook free when you buy a print book. This book will also be freely available under a Creative Commons license on the <a href="https://inventwithpython.com/recursion/">Invent with Python</a> website. Al Sweigart also gave a conference talk on recursion at North Bay Python 2018 titled, <a href="https://www.youtube.com/watch?v=AfBqVVKg4GE">Recursion for Beginners: A Beginner's Guide to Recursion</a>.</em></blockquote>
+
+<p>A <em>stack</em> is one of the simplest data structures in computing. It stores multiple values like a list or an array does, but unlike lists or arrays, it limits you to adding to or removing values from the “top” of the stack only. Adding values is called pushing values onto the stack, while removing values is called popping values off the stack.</p>
+
+<p>The <em>call stack</em> is a stack data structure your programming language's compiler or interpreter uses to keep track of where in your program the execution should return to when a function call finishes. When your program calls a function, this return address information is pushed onto the stack. When the function call returns, the information is popped off the stack. If your function call makes a function call which makes another function call, you'll have three things pushed onto the call stack.</p>
+
+<p>Recursion is confusing for beginner because instructors and tutorials often don't explicitly explain what the call stack is. The call stack is managed by the compiler or interpreter automatically in the background. You can't point to a place in your source code and say, "this is the call stack" like you can with other variables. This makes the call stack an invisible gap in the understanding of students.</p>
+
+<p>Recursive functions use the call stack as their stack data structure, but you can use a list or array as a stack data structure by restricting yourself to adding or removing things only from the end. For example, Python's <code>append()</code> and <code>pop()</code> list methods are effectively the "push" and "pop" operations to treat a Python list as a stack.</p>
+
+<p><strong>There is nothing special about recursion. Anything you can do with recursion can be done with a loop and a stack. Further, recursion is not automatically more "elegant" than an iterative solution. Quite the opposite: recursion is often produces overengineered and less readable code than a straightforward iterative solution.</strong></p>
+
+<p>To prove this, I'll use the famous Ackermann recursive function as an example. The Ackermann function doesn't have much practical use aside from an example of a recursive function that is extremely recursive. Even small inputs to this function can result in an amount of computation that takes years or lifetimes to finish. <a href="https://github.com/asweigart/recursion_examples/blob/master/ackermann.py">Here's the code to the recursive Ackermann function in Python:</a></p>
+
+<pre>def ackermann(m, n):
+    if m == 0:
+        # BASE CASE
+        return n + 1
+    elif m > 0 and n == 0:
+        # RECURSIVE CASE
+        return ackermann(m - 1, 1)
+    elif m > 0 and n > 0:
+        # RECURSIVE CASE
+        return ackermann(m - 1, ackermann(m, n - 1))</pre>
+
+<p>For example, calling <code>ackermann(1, 1)</code> will take less than a second to complete. Calling <code>ackermann(4,1)</code> will take a couple minutes. But calling <code>ackermann(15, 20)</code> will take longer than the universe has existed to finish calculating. The Ackermann function becomes untennable very quickly.</p>
+
+<p>But recursion is not a superpower. Even Ackermann, one the most recursive of recursive functions, can be written with a loop and a stack. <a href="https://github.com/asweigart/recursion_examples/blob/master/ackermann_iterative.py">Here's an iterative Ackermann implementation in Python:</a></p>
+
+<pre>print('Starting with m = 2, n = 3:')
+callStack = [{'m': 2, 'n': 3, 'indentation': 0, 'instrPtr': 'start'}]
+returnValue = None
+
+while len(callStack) != 0:
+    m = callStack[-1]['m']
+    n = callStack[-1]['n']
+    indentation = callStack[-1]['indentation']
+    instrPtr = callStack[-1]['instrPtr']
+
+    if instrPtr == 'start':
+        print('%sackermann(%s, %s)' % (' ' * indentation, m, n))
+
+        if m == 0:
+            # BASE CASE
+            returnValue = n + 1
+            callStack.pop()
+            continue
+        elif m > 0 and n == 0:
+            # RECURSIVE CASE
+            callStack[-1]['instrPtr'] = 'after first recursive case'
+            callStack.append({'m': m - 1, 'n': 1, 'indentation': indentation + 1, 'instrPtr': 'start'})
+            continue
+        elif m > 0 and n > 0:
+            # RECURSIVE CASE
+            callStack[-1]['instrPtr'] = 'after second recursive case, inner call'
+            callStack.append({'m': m, 'n': n - 1, 'indentation': indentation + 1, 'instrPtr': 'start'})
+            continue
+    elif instrPtr == 'after first recursive case':
+        returnValue = returnValue
+        callStack.pop()
+        continue
+    elif instrPtr == 'after second recursive case, inner call':
+        callStack[-1]['innerCallResult'] = returnValue
+        callStack[-1]['instrPtr'] = 'after second recursive case, outer call'
+        callStack.append({'m': m - 1, 'n': returnValue, 'indentation': indentation + 1, 'instrPtr': 'start'})
+        continue
+    elif instrPtr == 'after second recursive case, outer call':
+        returnValue = returnValue
+        callStack.pop()
+        continue
+print(returnValue)</pre>
+
+<p>Try running both programs. You'll see that they produce identical output. But the iterative version doesn't use recursive functions. In fact, it doesn't use functions at all: there's no <code>def</code> statement anywhere in the program.</p>
+
+<p>If you find recursion confusing or wonder why you "should" use recursion, don't despair. Recursion is an inappropriate approach just as often as it is appropriate (or even more). Just remember that recursion, while a useful technique that every programmer should understand, is not a superpower.</p>
+
+<p><em>If you'd like to learn how to use recursion, check out Al Sweigart's upcoming book, <a href="https://nostarch.com/book-recursion">The Recursive Book of Recursion</a> from No Starch Press. This book will also be freely available under a Creative Commons license on the <a href="https://inventwithpython.com/recursion/">Invent with Python</a> website. Al Sweigart also gave a conference talk on recursion at North Bay Python 2018 titled, <a href="https://www.youtube.com/watch?v=AfBqVVKg4GE">Recursion for Beginners: A Beginner's Guide to Recursion</a>.</em></p>
+
+</body>
+</html>

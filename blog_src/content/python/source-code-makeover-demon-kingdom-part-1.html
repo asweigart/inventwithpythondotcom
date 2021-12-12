@@ -3,12 +3,12 @@
         <title>Source Code Makeover: Demon Kingdom, Part 1</title>
         <meta name="tags" content="" />
         <meta name="date" content="2013-06-12 12:00" />
-        <meta name="summary" content="" />
+        <meta name="summary" content="<p>In this blog post, I’m taking a game off of <a href=&quot;http://pygame.org&quot;>Pygame.org</a> and going through it to make it more readable and extend its functionality.</p>" />
     </head>
     <body>
 
 
-			<p>In this blog post, I’m taking a game off of <a href="http://pygame.org" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://pygame.org', 'Pygame.org']);" >Pygame.org</a> and going through it to make it more readable and extend its functionality. This is an intermediate level tutorial and assumes some familiarity with Python. This can be pretty helpful if you know programming basics but want to know, “How can I write better code?" (<strong>And because someone always brings it up, I have this disclaimer:</strong> Of course, these changes are my own subjective idea of "better" and not necessarily changes that another developer would make.)</p>
+			<p>In this blog post, I’m taking a game off of <a href="http://pygame.org">Pygame.org</a> and going through it to make it more readable and extend its functionality. This is an intermediate level tutorial and assumes some familiarity with Python. This can be pretty helpful if you know programming basics but want to know, “How can I write better code?" (<strong>And because someone always brings it up, I have this disclaimer:</strong> Of course, these changes are my own subjective idea of "better" and not necessarily changes that another developer would make.)</p>
 <p><a href="/blog/images/demon-kingdom_screenshot.jpg?27f655"><img src="/blog/images/demon-kingdom_screenshot.jpg?27f655" width="300" /></a></p>
 <p><a href="http://www.pygame.org/project-Demon+Kingdom-2403-.html" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.pygame.org/project-Demon+Kingdom-2403-.html', 'Demon Kingdom']);" >Demon Kingdom</a> by <a href="http://sourceforge.net/users/logi540" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://sourceforge.net/users/logi540', 'Logi540']);" >Logi540</a> is a defense game where monsters walk from the left side of the screen. The player needs to attack them by clicking on them, and can pick up gems to use for spells. If any monster reaches the right side of the screen, the player loses. <a href="/DemonKingdom.zip?27f655">Download source code.</a></p>
 <p>The main theme of my changes is:</p>
@@ -76,7 +76,7 @@
 <p>Diff of these changes: <a href="https://github.com/asweigart/source_code_makeover/commit/4c5224f1c3bb98ec6b3cbd3771987eee2fea06ad#DemonKingdom/demonkingdom_makeover.py" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/4c5224f1c3bb98ec6b3cbd3771987eee2fea06ad#DemonKingdom/demonkingdom_makeover.py', 'Moved the monster proportion data to a new MONSTER_RATIOS variable.']);" >Moved the monster proportion data to a new MONSTER_RATIOS variable.</a></p>
 <p>Each level has a group of randomly selected monsters from code like <code>type = random.choice(["bat", "bat", "bat", "bat", "plant", "plant", "plant", "orc", "orc", "orc2", "slime"])</code>. The <code>random.choice()</code> function will randomly pick a monster from the list. Instead of having these values hard-coded across the source code, we can put them all into a single <code>MONSTER_RATIOS</code> variable.</p>
 <p>That's it for Part 1. In the next part, I'll continue to remove duplicate code and make some readability changes.</p>
-					
+
 
     </body>
 </html>

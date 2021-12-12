@@ -3,13 +3,13 @@
         <title>Programming AI Bots for Zombie Dice</title>
         <meta name="tags" content="" />
         <meta name="date" content="2012-11-21 12:00" />
-        <meta name="summary" content="" />
+        <meta name="summary" content="(This blog post may be obsolete. Please read <a href=&quot;https://inventwithpython.com/blog/2018/10/17/writing-bots-to-play-zombie-dice/&quot;>&quot;Writing Bots to Play Zombie Dice&quot;</a> instead." />
     </head>
     <body>
 
+<blockquote>NOTE: This blog post may be obsolete. Please read <a href="https://inventwithpython.com/blog/2018/10/17/writing-bots-to-play-zombie-dice/">Writing Bots to Play Zombie Dice</a> instead.</blockquote>
 
-			<p><strong>UPDATE: I've set up a wiki for posting your own Zombie Dice bots: <a href="http://zombiedice.inventwithpython.com/">http://zombiedice.inventwithpython.com/</a></strong></p>
-<p><a href="https://github.com/asweigart/zombiedice" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/zombiedice', 'Download the Zombie Dice Python code from GitHub']);" >Download the Zombie Dice Python code from GitHub</a> or as a <a href="/files/zombiedicesim.zip?27f655">zip file</a>.</p>
+
 <p>This tutorial outlines how to create a tournament simulation program for the Zombie Dice game in <a href="http://python.org" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://python.org', 'Python']);" >Python</a>. With this tournament program, you can also code your own AI bots to play Zombie Dice against each other. You can quickly test out how the different strategies the bots use compare against each other over thousands of simulated games. This tutorial assumes you know basic Python programming. (You can learn to program from the free book on this site, <a href="http://inventwithpython.com/chapters">"Invent Your Own Computer Games with Python"</a>.</p>
 <p>Computer game simulations make for great science fair experiments, and since the rules to Zombie Dice are so simple it's fairly easy to program a simulation for it.</p>
 <h2>The Rules of Zombie Dice</h2>
@@ -53,18 +53,30 @@
 <li>Optionally you can have a <code>newGame()</code> and/or <code>endGame()</code> methods that are called so that the bot can know when a game has started and ended (in case the bot should change its strategy if it is winning or losing a multi-game tournament.)</li>
 </ul>
 <p><code></p>
-<pre># A "skeleton" zombie class. Get it? Skeleton? Heh heh heh... eh... nevermind.
-class MyZombie(object):
-    def __init__(self, name):
-        self.name = name
-
-    def newGame(self):
-        pass # do nothing
-
-    def endGame(self, gameState):
-        pass # do nothing
-
-    def turn(gameState):
+<pre># A "skeleton" zombie class. Get it? Skeleton? Heh heh heh... eh... nevermind.
+
+class MyZombie(object):
+
+    def __init__(self, name):
+
+        self.name = name
+
+
+
+    def newGame(self):
+
+        pass # do nothing
+
+
+
+    def endGame(self, gameState):
+
+        pass # do nothing
+
+
+
+    def turn(gameState):
+
         results = roll()</pre>
 <p></code></p>
 <p>The <code>gameState</code> parameter is a dictionary with the following keys:</p>
@@ -79,24 +91,42 @@ class MyZombie(object):
 <code>[{COLOR: GREEN, ICON: SHOTGUN}, {COLOR: RED, ICON: FOOTSTEPS}, {COLOR: YELLOW, ICON: BRAINS}]</code></p>
 <p>For example, here's the code for a Zombie Dice bot that keeps rolling until they have at least 3 brains:</p>
 <p><code></p>
-<pre>class ThreeBrainsThenStops(object):
-    def __init__(self, name):
-        self.name = name
-    
-    def newGame(self):
-        pass # do nothing
-
-    def endGame(self, gameState):
-        pass # do nothing
-
-    def turn(self, gameState):
-        brains = 0
-        while brains < 3:
-            results = roll()
-            if results = []:
-                return
-            for i in results:
-                if i[ICON] == BRAINS:
+<pre>class ThreeBrainsThenStops(object):
+
+    def __init__(self, name):
+
+        self.name = name
+
+
+
+    def newGame(self):
+
+        pass # do nothing
+
+
+
+    def endGame(self, gameState):
+
+        pass # do nothing
+
+
+
+    def turn(self, gameState):
+
+        brains = 0
+
+        while brains < 3:
+
+            results = roll()
+
+            if results = []:
+
+                return
+
+            for i in results:
+
+                if i[ICON] == BRAINS:
+
                     brains += 1</pre>
 <p></code></p>
 <h2>Loading Bots into the Tournament Program</h2>
@@ -121,12 +151,18 @@ class MyZombie(object):
 <code>max_turn_time</code> - if None, there is no time limit for a bot's turn. Otherwise, the number of seconds the bot has per turn before forfeiting the current game.
 </ul>
 <p>Example config.py file:</p>
-<pre>games = 100
-ui = 'web'
-bots = [
-    ['zombieBotExamples.py', 'RandomCoinFlipZombie', 'Random Bot'],
-    ['zombieBotExamples.py', 'MonteCarloZombie', 'Monte Carlo Bot', 40, 20],
-    ['zombieBotExamples.py', 'MinNumShotgunsThenStopsZombie', 'Min Shotguns Bot', 2],
+<pre>games = 100
+
+ui = 'web'
+
+bots = [
+
+    ['zombieBotExamples.py', 'RandomCoinFlipZombie', 'Random Bot'],
+
+    ['zombieBotExamples.py', 'MonteCarloZombie', 'Monte Carlo Bot', 40, 20],
+
+    ['zombieBotExamples.py', 'MinNumShotgunsThenStopsZombie', 'Min Shotguns Bot', 2],
+
 ]</pre>
 <h2>The Included Bots</h2>
 <p>The zombiedice.py program has some basic bots:</p>
@@ -138,7 +174,7 @@ bots = [
 <li>The <code>ZombieBot_MonteCarlo</code> bot is the most sophisticated of all the bots. It basically runs several random experiments to see if the next roll would result in 3 or more shotguns. You can pass different values to the constructors to tell it how many experiments to run on each turn and what percentage of them must not result in death to roll again.</li>
 </ul>
 <p>Write your own bots and then see how they do against these simple bots. You can post your code to <a href="https://gist.github.com" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://gist.github.com', 'https://gist.github.com']);" >https://gist.github.com</a> and post a link to it in the comments section below.</p>
-					
+
 
     </body>
 </html>

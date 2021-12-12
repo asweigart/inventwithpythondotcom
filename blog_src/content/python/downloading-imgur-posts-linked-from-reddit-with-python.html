@@ -3,7 +3,7 @@
         <title>Downloading Imgur Posts Linked From Reddit with Python</title>
         <meta name="tags" content="" />
         <meta name="date" content="2013-09-30 12:00" />
-        <meta name="summary" content="" />
+        <meta name="summary" content="<p>This tutorial tells you how to write a Python script that can scan Reddit and download images from Imgur submissions you find.</p>" />
     </head>
     <body>
 
@@ -24,24 +24,34 @@
 <p><span id="more-1560"></span></p>
 <h2>Installing the PRAW, Requests, and Beautiful Soup Modules</h2>
 <p><a href="https://github.com/praw-dev/praw" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/praw-dev/praw', 'The PRAW (Python Reddit API Wrapper) module is available on GitHub,']);" >The PRAW (Python Reddit API Wrapper) module is available on GitHub,</a> but you can also install it using <a href="http://stackoverflow.com/questions/5585875/what-is-the-official-preferred-way-to-install-pip-and-virtualenv-systemwide" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://stackoverflow.com/questions/5585875/what-is-the-official-preferred-way-to-install-pip-and-virtualenv-systemwide', 'pip']);" >pip</a> or <a href="http://pythonhosted.org/distribute/easy_install.html" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://pythonhosted.org/distribute/easy_install.html', 'easy_install']);" >easy_install</a> (on Windows, these programs will be in the C:\Python27\Scripts folder). You can also <a href="http://www.python-requests.org/en/latest/user/install/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.python-requests.org/en/latest/user/install/', 'install Requests']);" >install Requests</a> and <a href="http://www.crummy.com/software/BeautifulSoup/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.crummy.com/software/BeautifulSoup/', 'Beautiful Soup']);" >Beautiful Soup</a> using pip and easy_install:</p>
-<pre>pip install praw
-pip install requests
+<pre>pip install praw
+
+pip install requests
+
 pip install beautifulsoup</pre>
 <p>or</p>
-<pre>easy_install praw
-easy_install requests
+<pre>easy_install praw
+
+easy_install requests
+
 easy_install beautifulsoup</pre>
 <p>To make sure that these were install successfully, try to import them from the Python interactive shell:</p>
-<pre>Python 2.7.1 (r271:86832, Nov 27 2010, 18:30:46) [MSC v.1500 32 bit (Intel)] on win32
-Type "help", "copyright", "credits" or "license" for more information.
->>> import praw
->>> import requests
->>> from bs4 import BeautifulSoup
+<pre>Python 2.7.1 (r271:86832, Nov 27 2010, 18:30:46) [MSC v.1500 32 bit (Intel)] on win32
+
+Type "help", "copyright", "credits" or "license" for more information.
+
+>>> import praw
+
+>>> import requests
+
+>>> from bs4 import BeautifulSoup
+
 >>></pre>
 <p>If you see no error messages, than the installation worked.</p>
 <p>The full set of modules that our script will import are:</p>
 <div class="highlight" >
-<pre><span style="color: #007020; font-weight: bold">import</span> <span style="color: #0e84b5; font-weight: bold">re</span><span style="color: #666666">,</span> <span style="color: #0e84b5; font-weight: bold">praw</span><span style="color: #666666">,</span> <span style="color: #0e84b5; font-weight: bold">requests</span><span style="color: #666666">,</span> <span style="color: #0e84b5; font-weight: bold">os</span><span style="color: #666666">,</span> <span style="color: #0e84b5; font-weight: bold">glob</span><span style="color: #666666">,</span> <span style="color: #0e84b5; font-weight: bold">sys</span>
+<pre><span style="color: #007020; font-weight: bold">import</span> <span style="color: #0e84b5; font-weight: bold">re</span><span style="color: #666666">,</span> <span style="color: #0e84b5; font-weight: bold">praw</span><span style="color: #666666">,</span> <span style="color: #0e84b5; font-weight: bold">requests</span><span style="color: #666666">,</span> <span style="color: #0e84b5; font-weight: bold">os</span><span style="color: #666666">,</span> <span style="color: #0e84b5; font-weight: bold">glob</span><span style="color: #666666">,</span> <span style="color: #0e84b5; font-weight: bold">sys</span>
+
 </pre>
 </div>
 <h2>Command Line Options with sys.argv</h2>
@@ -51,18 +61,30 @@ Type "help", "copyright", "credits" or "license" for more information.
 <p>The <code>sys.argv</code> list contains the arguments passed from the command line. <code>sys.argv[0]</code> will be set to the string <code>'imgur-hosted-reddit-posted-downloader.py</code>, and each subsequent item in the list will be an argument.</p>
 <p>The following code displays help (and then exits the program) if no arguments were passed. Otherwise, the target subreddit is set to <code>sys.argv[1]</code> and the minimum score is set to <code>sys.argv[2]</code> (otherwise it defaults to 100).</p>
 <div class="highlight" >
-<pre>MIN_SCORE <span style="color: #666666">=</span> <span style="color: #40a070">100</span> <span style="color: #60a0b0; font-style: italic"># the default minimum score before it is downloaded</span>
-<span style="color: #007020; font-weight: bold">if</span> <span style="color: #007020">len</span>(sys<span style="color: #666666">.</span>argv) <span style="color: #666666">&lt;</span> <span style="color: #40a070">2</span>:
-    <span style="color: #60a0b0; font-style: italic"># no command line options sent:</span>
-    <span style="color: #007020; font-weight: bold">print</span>(<span style="color: #4070a0">&#39;Usage:&#39;</span>) 
-    <span style="color: #007020; font-weight: bold">print</span>(<span style="color: #4070a0">&#39;  python </span><span style="color: #70a0d0; font-style: italic">%s</span><span style="color: #4070a0"> subreddit [minimum score]&#39;</span> <span style="color: #666666">%</span> (sys<span style="color: #666666">.</span>argv[<span style="color: #40a070">0</span>]))
-    sys<span style="color: #666666">.</span>exit()
-<span style="color: #007020; font-weight: bold">elif</span> <span style="color: #007020">len</span>(sys<span style="color: #666666">.</span>argv) <span style="color: #666666">&gt;=</span> <span style="color: #40a070">2</span>:
-    <span style="color: #60a0b0; font-style: italic"># the subreddit was specified:</span>
-    targetSubreddit <span style="color: #666666">=</span> sys<span style="color: #666666">.</span>argv[<span style="color: #40a070">1</span>]
-    <span style="color: #007020; font-weight: bold">if</span> <span style="color: #007020">len</span>(sys<span style="color: #666666">.</span>argv) <span style="color: #666666">&gt;=</span> <span style="color: #40a070">3</span>:
-        <span style="color: #60a0b0; font-style: italic"># the desired minimum score was also specified:</span>
-        MIN_SCORE <span style="color: #666666">=</span> sys<span style="color: #666666">.</span>argv[<span style="color: #40a070">2</span>]
+<pre>MIN_SCORE <span style="color: #666666">=</span> <span style="color: #40a070">100</span> <span style="color: #60a0b0; font-style: italic"># the default minimum score before it is downloaded</span>
+
+<span style="color: #007020; font-weight: bold">if</span> <span style="color: #007020">len</span>(sys<span style="color: #666666">.</span>argv) <span style="color: #666666">&lt;</span> <span style="color: #40a070">2</span>:
+
+    <span style="color: #60a0b0; font-style: italic"># no command line options sent:</span>
+
+    <span style="color: #007020; font-weight: bold">print</span>(<span style="color: #4070a0">&#39;Usage:&#39;</span>)
+
+    <span style="color: #007020; font-weight: bold">print</span>(<span style="color: #4070a0">&#39;  python </span><span style="color: #70a0d0; font-style: italic">%s</span><span style="color: #4070a0"> subreddit [minimum score]&#39;</span> <span style="color: #666666">%</span> (sys<span style="color: #666666">.</span>argv[<span style="color: #40a070">0</span>]))
+
+    sys<span style="color: #666666">.</span>exit()
+
+<span style="color: #007020; font-weight: bold">elif</span> <span style="color: #007020">len</span>(sys<span style="color: #666666">.</span>argv) <span style="color: #666666">&gt;=</span> <span style="color: #40a070">2</span>:
+
+    <span style="color: #60a0b0; font-style: italic"># the subreddit was specified:</span>
+
+    targetSubreddit <span style="color: #666666">=</span> sys<span style="color: #666666">.</span>argv[<span style="color: #40a070">1</span>]
+
+    <span style="color: #007020; font-weight: bold">if</span> <span style="color: #007020">len</span>(sys<span style="color: #666666">.</span>argv) <span style="color: #666666">&gt;=</span> <span style="color: #40a070">3</span>:
+
+        <span style="color: #60a0b0; font-style: italic"># the desired minimum score was also specified:</span>
+
+        MIN_SCORE <span style="color: #666666">=</span> sys<span style="color: #666666">.</span>argv[<span style="color: #40a070">2</span>]
+
 </pre>
 </div>
 <h2>The 3 Types of Submissions for Imgur</h2>
@@ -75,11 +97,14 @@ Type "help", "copyright", "credits" or "license" for more information.
 <p>We can tell what kind of submission it is from the URL. Albums will always have /a/ in them, direct links to images are in the i.imgur.com domain, and single image pages are in the imgur.com domain but don't have /a/ in them.</p>
 <h2>Parsing the HTML</h2>
 <p>Open the example album URL, <a href="http://imgur.com/a/VqUKy" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://imgur.com/a/VqUKy', 'http://imgur.com/a/VqUKy']);" >http://imgur.com/a/VqUKy</a>, in a web browser and then right-click on the page and select View Source. This will display the HTML source for the page. We need to figure out the pattern in the HTML for links to the images on this page. Notice that for each image in the album, there is the HTML:</p>
-<pre><div class="item view album-view-image-link">
-            <a href="//i.imgur.com/RkydnOs.png?27f655" target="_blank">View full resolution</a>
+<pre><div class="item view album-view-image-link">
+
+            <a href="//i.imgur.com/RkydnOs.png?27f655" target="_blank">View full resolution</a>
+
         </div></pre>
 <p>This pattern does not happen anywhere else except for images in the album. This is important, because we don't want false positives and accidentally download non-featured images (such as the Imgur.com logo or other images on the page). We can have Beautiful Soup parse this HTML for us by creating a BeautifulSoup object (passing in the HTML) and then using the <code>select()</code> and passing a CSS selector string to specify the HTML elements we want to grab:</p>
-<pre>soup = BeautifulSoup(htmlSource)
+<pre>soup = BeautifulSoup(htmlSource)
+
 matches = soup.select('.album-view-image-link a')</pre>
 <p>This CSS selector is used for the web pages of albums. CSS selectors are beyond the scope of this article, but <a href="http://www.crummy.com/software/BeautifulSoup/bs4/doc/#css-selectors" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.crummy.com/software/BeautifulSoup/bs4/doc/#css-selectors', 'the Beautiful Soup documentation']);" >the Beautiful Soup documentation</a> has great examples. Suffice it to say, <code>'.album-view-image-link a'</code> will find all the HTML tags that are &lt;a&gt; tags that are descended from a tag with the <code>album-view-image-link</code> CSS class. (The dot means it is a CSS class name.)</p>
 <p>The CSS selector string you need to use will need to be customized for the site you are downloading from. If the site ever changes their web page's HTML format, you may need to update the CSS selector strings you use.</p>
@@ -89,26 +114,33 @@ matches = soup.select('.album-view-image-link a')</pre>
 <p><strong>Note:</strong> Also, regular expressions are great for finding general patterns in text, but for HTML you are always much better off using an HTML-specific pattern matching library such as <a href="http://www.crummy.com/software/BeautifulSoup/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.crummy.com/software/BeautifulSoup/', 'BeautifulSoup']);" >BeautifulSoup</a>. (<a href="http://stackoverflow.com/questions/1732348/regex-match-open-tags-except-xhtml-self-contained-tags/1732454#1732454" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://stackoverflow.com/questions/1732348/regex-match-open-tags-except-xhtml-self-contained-tags/1732454#1732454', 'This guy explains why you shouldn\'t use regexes to parse HTML better than I can.']);" >This guy explains why you shouldn't use regexes to parse HTML better than I can.</a>)</p>
 <p>The regex we use will match the image filename in a directly-linked image URL:</p>
 <div class="highlight" >
-<pre>imgurUrlPattern <span style="color: #666666">=</span> re<span style="color: #666666">.</span>compile(<span style="color: #4070a0">r&#39;(http://i.imgur.com/(.*))(\?.*)?&#39;</span>)
+<pre>imgurUrlPattern <span style="color: #666666">=</span> re<span style="color: #666666">.</span>compile(<span style="color: #4070a0">r&#39;(http://i.imgur.com/(.*))(\?.*)?&#39;</span>)
+
 </pre>
 </div>
 <h2>Downloading Image Files with the Requests Module</h2>
 <p>The Requests module is an incredibly easy to use module for downloading files off the web via HTTP. A string of the URL is passed to the <code>requests.get()</code> function, which returns a "Response" object containing the downloaded file. We'll create a separate <code>downloadImage()</code> function for our program to use that takes the url of the image and the filename to use when we save it locally to our computer:</p>
 <div class="highlight" >
-<pre><span style="color: #007020; font-weight: bold">def</span> <span style="color: #06287e">downloadImage</span>(imageUrl, localFileName):
-    response <span style="color: #666666">=</span> requests<span style="color: #666666">.</span>get(imageUrl)
+<pre><span style="color: #007020; font-weight: bold">def</span> <span style="color: #06287e">downloadImage</span>(imageUrl, localFileName):
+
+    response <span style="color: #666666">=</span> requests<span style="color: #666666">.</span>get(imageUrl)
+
 </pre>
 </div>
 <p>We can examine the <code>status_code</code> attribute to see if the download was successful. An integer value of 200 indicates success. (<a href="http://en.wikipedia.org/wiki/List_of_HTTP_status_codes" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://en.wikipedia.org/wiki/List_of_HTTP_status_codes', 'A full list of HTTP status codes can be found on Wikipedia.']);" >A full list of HTTP status codes can be found on Wikipedia.</a>)</p>
 <div class="highlight" >
-<pre><span style="color: #007020; font-weight: bold">if</span> response<span style="color: #666666">.</span>status_code <span style="color: #666666">==</span> <span style="color: #40a070">200</span>:
-    <span style="color: #007020; font-weight: bold">print</span>(<span style="color: #4070a0">&#39;Downloading </span><span style="color: #70a0d0; font-style: italic">%s</span><span style="color: #4070a0">...&#39;</span> <span style="color: #666666">%</span> (localFileName))
+<pre><span style="color: #007020; font-weight: bold">if</span> response<span style="color: #666666">.</span>status_code <span style="color: #666666">==</span> <span style="color: #40a070">200</span>:
+
+    <span style="color: #007020; font-weight: bold">print</span>(<span style="color: #4070a0">&#39;Downloading </span><span style="color: #70a0d0; font-style: italic">%s</span><span style="color: #4070a0">...&#39;</span> <span style="color: #666666">%</span> (localFileName))
+
 </pre>
 </div>
 <p>The only output from our program is a single line telling us the file that it is downloading. Now that the downloaded image exists in our Python program in the Response object, we need to write it out to a file on the hard drive:</p>
 <div class="highlight" >
-<pre><span style="color: #007020; font-weight: bold">with</span> <span style="color: #007020">open</span>(localFileName, <span style="color: #4070a0">&#39;wb&#39;</span>) <span style="color: #007020; font-weight: bold">as</span> fo:
-    <span style="color: #007020; font-weight: bold">for</span> chunk <span style="color: #007020; font-weight: bold">in</span> response<span style="color: #666666">.</span>iter_content(<span style="color: #40a070">4096</span>):
+<pre><span style="color: #007020; font-weight: bold">with</span> <span style="color: #007020">open</span>(localFileName, <span style="color: #4070a0">&#39;wb&#39;</span>) <span style="color: #007020; font-weight: bold">as</span> fo:
+
+    <span style="color: #007020; font-weight: bold">for</span> chunk <span style="color: #007020; font-weight: bold">in</span> response<span style="color: #666666">.</span>iter_content(<span style="color: #40a070">4096</span>):
+
         fo<span style="color: #666666">.</span>write(chunk)</pre>
 </div>
 <p>The <code>with</code> statement handles opening and closing the file (Effbot has a good tutorial called <a href="http://effbot.org/zone/python-with-statement.htm" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://effbot.org/zone/python-with-statement.htm', '&quot;Understanding Python\'s with Statement&quot;']);" >"Understanding Python's with Statement"</a>. The response object's <code>iter_content()</code> method can return "chunks" of 4096 bytes of the image at a time, which are written to the opened file. (This part of the code may be a bit confusing, but just understand that it writes the image information in the Response object to the hard drive.)</p>
@@ -123,9 +155,12 @@ matches = soup.select('.album-view-image-link a')</pre>
 <p>(<a href="https://praw.readthedocs.org/en/latest/index.html" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://praw.readthedocs.org/en/latest/index.html', 'You can also read the full documentation for PRAW.']);" >You can also read the full documentation for PRAW.</a>)</p>
 <p>The code looks like this:</p>
 <div class="highlight" >
-<pre><span style="color: #60a0b0; font-style: italic"># Connect to reddit and download the subreddit front page</span>
-r <span style="color: #666666">=</span> praw<span style="color: #666666">.</span>Reddit(user_agent<span style="color: #666666">=</span><span style="color: #4070a0">&#39;CHANGE THIS TO A UNIQUE VALUE&#39;</span>) <span style="color: #60a0b0; font-style: italic"># Note: Be sure to change the user-agent to something unique.</span>
-submissions <span style="color: #666666">=</span> r<span style="color: #666666">.</span>get_subreddit(targetSubreddit)<span style="color: #666666">.</span>get_hot(limit<span style="color: #666666">=</span><span style="color: #40a070">25</span>)
+<pre><span style="color: #60a0b0; font-style: italic"># Connect to reddit and download the subreddit front page</span>
+
+r <span style="color: #666666">=</span> praw<span style="color: #666666">.</span>Reddit(user_agent<span style="color: #666666">=</span><span style="color: #4070a0">&#39;CHANGE THIS TO A UNIQUE VALUE&#39;</span>) <span style="color: #60a0b0; font-style: italic"># Note: Be sure to change the user-agent to something unique.</span>
+
+submissions <span style="color: #666666">=</span> r<span style="color: #666666">.</span>get_subreddit(targetSubreddit)<span style="color: #666666">.</span>get_hot(limit<span style="color: #666666">=</span><span style="color: #40a070">25</span>)
+
 </pre>
 </div>
 <p>A <a href="http://en.wikipedia.org/wiki/User_agent" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://en.wikipedia.org/wiki/User_agent', 'user agent']);" >user agent</a> is a string of text that identifies what type of web browser (or type of software in general) is accessing a web site. One of the <a href="https://github.com/reddit/reddit/wiki/API#rules" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/reddit/reddit/wiki/API#rules', 'Reddit API rules']);" >Reddit API rules</a> is to use a unique value for your user agent, preferably one that references your Reddit username (if you have one). The PRAW module handles throttling the rate of requests you make, so you don't have to worry about that</p>
@@ -146,15 +181,24 @@ submissions <span style="color: #666666">=</span> r<span style="color: #666666">
 </ol>
 <p>The code for looping through all the submissions and the checks to continue to the next submission is:</p>
 <div class="highlight" >
-<pre><span style="color: #60a0b0; font-style: italic"># Process all the submissions from the front page</span>
-<span style="color: #007020; font-weight: bold">for</span> submission <span style="color: #007020; font-weight: bold">in</span> submissions:
-    <span style="color: #60a0b0; font-style: italic"># Check for all the cases where we will skip a submission:</span>
-    <span style="color: #007020; font-weight: bold">if</span> <span style="color: #4070a0">&quot;imgur.com/&quot;</span> <span style="color: #007020; font-weight: bold">not</span> <span style="color: #007020; font-weight: bold">in</span> submission<span style="color: #666666">.</span>url:
-        <span style="color: #007020; font-weight: bold">continue</span> <span style="color: #60a0b0; font-style: italic"># skip non-imgur submissions</span>
-    <span style="color: #007020; font-weight: bold">if</span> submission<span style="color: #666666">.</span>score <span style="color: #666666">&lt;</span> MIN_SCORE:
-        <span style="color: #007020; font-weight: bold">continue</span> <span style="color: #60a0b0; font-style: italic"># skip submissions that haven&#39;t even reached 100 (thought this should be rare if we&#39;re collecting the &quot;hot&quot; submission)</span>
-    <span style="color: #007020; font-weight: bold">if</span> <span style="color: #007020">len</span>(glob<span style="color: #666666">.</span>glob(<span style="color: #4070a0">&#39;reddit_</span><span style="color: #70a0d0; font-style: italic">%s</span><span style="color: #4070a0">_*&#39;</span> <span style="color: #666666">%</span> (submission<span style="color: #666666">.</span>id))) <span style="color: #666666">&gt;</span> <span style="color: #40a070">0</span>:
-        <span style="color: #007020; font-weight: bold">continue</span> <span style="color: #60a0b0; font-style: italic"># we&#39;ve already downloaded files for this reddit submission</span>
+<pre><span style="color: #60a0b0; font-style: italic"># Process all the submissions from the front page</span>
+
+<span style="color: #007020; font-weight: bold">for</span> submission <span style="color: #007020; font-weight: bold">in</span> submissions:
+
+    <span style="color: #60a0b0; font-style: italic"># Check for all the cases where we will skip a submission:</span>
+
+    <span style="color: #007020; font-weight: bold">if</span> <span style="color: #4070a0">&quot;imgur.com/&quot;</span> <span style="color: #007020; font-weight: bold">not</span> <span style="color: #007020; font-weight: bold">in</span> submission<span style="color: #666666">.</span>url:
+
+        <span style="color: #007020; font-weight: bold">continue</span> <span style="color: #60a0b0; font-style: italic"># skip non-imgur submissions</span>
+
+    <span style="color: #007020; font-weight: bold">if</span> submission<span style="color: #666666">.</span>score <span style="color: #666666">&lt;</span> MIN_SCORE:
+
+        <span style="color: #007020; font-weight: bold">continue</span> <span style="color: #60a0b0; font-style: italic"># skip submissions that haven&#39;t even reached 100 (thought this should be rare if we&#39;re collecting the &quot;hot&quot; submission)</span>
+
+    <span style="color: #007020; font-weight: bold">if</span> <span style="color: #007020">len</span>(glob<span style="color: #666666">.</span>glob(<span style="color: #4070a0">&#39;reddit_</span><span style="color: #70a0d0; font-style: italic">%s</span><span style="color: #4070a0">_*&#39;</span> <span style="color: #666666">%</span> (submission<span style="color: #666666">.</span>id))) <span style="color: #666666">&gt;</span> <span style="color: #40a070">0</span>:
+
+        <span style="color: #007020; font-weight: bold">continue</span> <span style="color: #60a0b0; font-style: italic"># we&#39;ve already downloaded files for this reddit submission</span>
+
 </pre>
 </div>
 <h2>The glob Module</h2>
@@ -165,66 +209,93 @@ submissions <span style="color: #666666">=</span> r<span style="color: #666666">
 <p>First we will handle the album downloads. The id for the album is the part of the url right after "http://imgur.com/a/", so we can use list slicing to extract it from <code>submission.url</code>. (We will use the album id later in the local filename.)</p>
 <p>The Submission object's url string is passed to <code>requests.get()</code> to download the album page's html. We immediately save the text of this download to a variable <code>htmlSource</code>:</p>
 <div class="highlight" >
-<pre><span style="color: #007020; font-weight: bold">if</span> <span style="color: #4070a0">&#39;http://imgur.com/a/&#39;</span> <span style="color: #007020; font-weight: bold">in</span> submission<span style="color: #666666">.</span>url:
-    <span style="color: #60a0b0; font-style: italic"># This is an album submission.</span>
-    albumId <span style="color: #666666">=</span> submission<span style="color: #666666">.</span>url[<span style="color: #007020">len</span>(<span style="color: #4070a0">&#39;http://imgur.com/a/&#39;</span>):]
+<pre><span style="color: #007020; font-weight: bold">if</span> <span style="color: #4070a0">&#39;http://imgur.com/a/&#39;</span> <span style="color: #007020; font-weight: bold">in</span> submission<span style="color: #666666">.</span>url:
+
+    <span style="color: #60a0b0; font-style: italic"># This is an album submission.</span>
+
+    albumId <span style="color: #666666">=</span> submission<span style="color: #666666">.</span>url[<span style="color: #007020">len</span>(<span style="color: #4070a0">&#39;http://imgur.com/a/&#39;</span>):]
+
     htmlSource <span style="color: #666666">=</span> requests<span style="color: #666666">.</span>get(submission<span style="color: #666666">.</span>url)<span style="color: #666666">.</span>text</pre>
 </div>
 <p>This code finds all the instances of the image url pattern in the html source:</p>
-<pre>soup = BeautifulSoup(htmlSource)
-        matches = soup.select('.album-view-image-link a')
-        for match in matches:
-            imageUrl = match['href']
-            if '?' in imageUrl:
-                imageFile = imageUrl[imageUrl.rfind('/') + 1:imageUrl.rfind('?')]
-            else:
+<pre>soup = BeautifulSoup(htmlSource)
+
+        matches = soup.select('.album-view-image-link a')
+
+        for match in matches:
+
+            imageUrl = match['href']
+
+            if '?' in imageUrl:
+
+                imageFile = imageUrl[imageUrl.rfind('/') + 1:imageUrl.rfind('?')]
+
+            else:
+
                 imageFile = imageUrl[imageUrl.rfind('/') + 1:]</pre>
 <p>(Some URLs end with <code>?=1</code> on the imgur site, so we cut those off.)</p>
 <p>The <code>findall()</code> method returns a list of all the matches found in the string it is passed (in our case, this is <code>htmlSource</code>). We pass this returned list to <code>frozenset()</code> to convert it to the frozen set type, which is essentially a list with only unique values. This will remove any duplicate matches. The returned frozen set is then passed to <code>list()</code> to convert it back to a list.</p>
 <p>We use the <code>match['href']</code> string to get the URL of the image, which is then used for the local filename and telling the Requests module what to download on the next couple of lines:</p>
 <div class="highlight" >
-<pre>localFileName <span style="color: #666666">=</span> <span style="color: #4070a0">&#39;reddit_</span><span style="color: #70a0d0; font-style: italic">%s</span><span style="color: #4070a0">_</span><span style="color: #70a0d0; font-style: italic">%s</span><span style="color: #4070a0">_album_</span><span style="color: #70a0d0; font-style: italic">%s</span><span style="color: #4070a0">_imgur_</span><span style="color: #70a0d0; font-style: italic">%s</span><span style="color: #4070a0">&#39;</span> <span style="color: #666666">%</span> (targetSubreddit, submission<span style="color: #666666">.</span>id, albumId, imageFilename)
-downloadImage(<span style="color: #4070a0">&#39;http:&#39;</span> <span style="color: #666666">+</span> match[<span style="color: #40a070">'href'</span>], localFileName)
+<pre>localFileName <span style="color: #666666">=</span> <span style="color: #4070a0">&#39;reddit_</span><span style="color: #70a0d0; font-style: italic">%s</span><span style="color: #4070a0">_</span><span style="color: #70a0d0; font-style: italic">%s</span><span style="color: #4070a0">_album_</span><span style="color: #70a0d0; font-style: italic">%s</span><span style="color: #4070a0">_imgur_</span><span style="color: #70a0d0; font-style: italic">%s</span><span style="color: #4070a0">&#39;</span> <span style="color: #666666">%</span> (targetSubreddit, submission<span style="color: #666666">.</span>id, albumId, imageFilename)
+
+downloadImage(<span style="color: #4070a0">&#39;http:&#39;</span> <span style="color: #666666">+</span> match[<span style="color: #40a070">'href'</span>], localFileName)
+
 </pre>
 </div>
 <h2>Downloading Directly-Linked Images</h2>
 <p>The next type of download will be for directly-linked images. For this type, <code>submission.url</code> is already the complete url of the file to download, but we need the filename on Imgur.com to use in the local filename. The <code>imgurUrlPattern</code> regex will be used to grab this part from <code>submission.url</code>:</p>
 <div class="highlight" >
-<pre><span style="color: #007020; font-weight: bold">elif</span> <span style="color: #4070a0">&#39;http://i.imgur.com/&#39;</span> <span style="color: #007020; font-weight: bold">in</span> submission<span style="color: #666666">.</span>url:
-    <span style="color: #60a0b0; font-style: italic"># The URL is a direct link to the image.</span>
-    mo <span style="color: #666666">=</span> imgurUrlPattern<span style="color: #666666">.</span>search(submission<span style="color: #666666">.</span>url)
-
+<pre><span style="color: #007020; font-weight: bold">elif</span> <span style="color: #4070a0">&#39;http://i.imgur.com/&#39;</span> <span style="color: #007020; font-weight: bold">in</span> submission<span style="color: #666666">.</span>url:
+
+    <span style="color: #60a0b0; font-style: italic"># The URL is a direct link to the image.</span>
+
+    mo <span style="color: #666666">=</span> imgurUrlPattern<span style="color: #666666">.</span>search(submission<span style="color: #666666">.</span>url)
+
+
+
     imgurFilename <span style="color: #666666">=</span> mo<span style="color: #666666">.</span>group(<span style="color: #40a070">2</span>)</pre>
 </div>
 <p>For some reason, some of the images on Imgur.com have an additional "?1" at the end of their filenames. We'll need some code to check for this and strip it out of <code>imgurFileanme</code> using slicing:</p>
 <div class="highlight" >
-<pre><span style="color: #007020; font-weight: bold">if</span> <span style="color: #4070a0">&#39;?&#39;</span> <span style="color: #007020; font-weight: bold">in</span> imgurFilename:
-    <span style="color: #60a0b0; font-style: italic"># The regex doesn&#39;t catch a &quot;?&quot; at the end of the filename, so we remove it here.</span>
+<pre><span style="color: #007020; font-weight: bold">if</span> <span style="color: #4070a0">&#39;?&#39;</span> <span style="color: #007020; font-weight: bold">in</span> imgurFilename:
+
+    <span style="color: #60a0b0; font-style: italic"># The regex doesn&#39;t catch a &quot;?&quot; at the end of the filename, so we remove it here.</span>
+
     imgurFilename <span style="color: #666666">=</span> imgurFilename[:imgurFilename<span style="color: #666666">.</span>find(<span style="color: #4070a0">&#39;?&#39;</span>)]</pre>
 </div>
 <p>Now that we have the <code>imgurFilename</code> correctly formatted, we can download the image:</p>
 <div class="highlight" >
-<pre>localFileName <span style="color: #666666">=</span> <span style="color: #4070a0">&#39;reddit_</span><span style="color: #70a0d0; font-style: italic">%s</span><span style="color: #4070a0">_</span><span style="color: #70a0d0; font-style: italic">%s</span><span style="color: #4070a0">_album_None_imgur_</span><span style="color: #70a0d0; font-style: italic">%s</span><span style="color: #4070a0">&#39;</span> <span style="color: #666666">%</span> (targetSubreddit, submission<span style="color: #666666">.</span>id, imgurFilename)
+<pre>localFileName <span style="color: #666666">=</span> <span style="color: #4070a0">&#39;reddit_</span><span style="color: #70a0d0; font-style: italic">%s</span><span style="color: #4070a0">_</span><span style="color: #70a0d0; font-style: italic">%s</span><span style="color: #4070a0">_album_None_imgur_</span><span style="color: #70a0d0; font-style: italic">%s</span><span style="color: #4070a0">&#39;</span> <span style="color: #666666">%</span> (targetSubreddit, submission<span style="color: #666666">.</span>id, imgurFilename)
+
 downloadImage(submission<span style="color: #666666">.</span>url, localFileName)</pre>
 </div>
 <h2>Downloading Images Off a Single-Image Web Page</h2>
 <p>The third type of download is when the Reddit post links to an Imgur page that contains one image.</p>
-<pre>soup = BeautifulSoup(htmlSource)
+<pre>soup = BeautifulSoup(htmlSource)
+
 imageUrl = soup.select('.image a')[0]['href']</pre>
 <p>Otherwise, the program downloads the image (which is in group 2 of the match object returned by <code>search()</code>):</p>
 <div class="highlight" >
-<pre>localFileName <span style="color: #666666">=</span> <span style="color: #4070a0">&#39;reddit_</span><span style="color: #70a0d0; font-style: italic">%s</span><span style="color: #4070a0">_</span><span style="color: #70a0d0; font-style: italic">%s</span><span style="color: #4070a0">_album_None_imgur_</span><span style="color: #70a0d0; font-style: italic">%s</span><span style="color: #4070a0">&#39;</span> <span style="color: #666666">%</span> (targetSubreddit, submission<span style="color: #666666">.</span>id, imageFile)
+<pre>localFileName <span style="color: #666666">=</span> <span style="color: #4070a0">&#39;reddit_</span><span style="color: #70a0d0; font-style: italic">%s</span><span style="color: #4070a0">_</span><span style="color: #70a0d0; font-style: italic">%s</span><span style="color: #4070a0">_album_None_imgur_</span><span style="color: #70a0d0; font-style: italic">%s</span><span style="color: #4070a0">&#39;</span> <span style="color: #666666">%</span> (targetSubreddit, submission<span style="color: #666666">.</span>id, imageFile)
+
 downloadImage(imageUrl, localFileName)</pre>
 </div>
 <p>Once the loop has gone through all the submissions, the program terminates. All of the files it found will have been downloaded.</p>
 <h2>Example Run</h2>
 <p>Here's the output when I ran the program:</p>
-<pre>C&gt; python imgur-hosted-reddit-posted-downloader.py cats 100
-Downloading reddit_cats_1n8zs8_album_None_imgur_ktHbtZL.jpg...
-Downloading reddit_cats_1n836l_album_None_imgur_tWNf47w.jpg...
-Downloading reddit_cats_1n8p3g_album_None_imgur_nrRNoiF.jpg...
-Downloading reddit_cats_1n6cr0_album_None_imgur_rA10E3s.jpg...
-Downloading reddit_cats_1n89mg_album_None_imgur_0UqnMd6.png...
+<pre>C&gt; python imgur-hosted-reddit-posted-downloader.py cats 100
+
+Downloading reddit_cats_1n8zs8_album_None_imgur_ktHbtZL.jpg...
+
+Downloading reddit_cats_1n836l_album_None_imgur_tWNf47w.jpg...
+
+Downloading reddit_cats_1n8p3g_album_None_imgur_nrRNoiF.jpg...
+
+Downloading reddit_cats_1n6cr0_album_None_imgur_rA10E3s.jpg...
+
+Downloading reddit_cats_1n89mg_album_None_imgur_0UqnMd6.png...
+
 Downloading reddit_cats_1n80j6_album_None_imgur_ZuRbyxp.jpg...</pre>
 <p>Voila! Now you can use <a href="http://en.wikipedia.org/wiki/Cron" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://en.wikipedia.org/wiki/Cron', 'cron']);" >cron</a> or <a href="http://windows.microsoft.com/en-US/windows7/schedule-a-task" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://windows.microsoft.com/en-US/windows7/schedule-a-task', 'Windows Task Scheduler']);" >Windows Task Scheduler</a> to automatically download images from your favorite subreddit! Some of my recommendations:</p>
 <ul>
@@ -236,7 +307,7 @@ Downloading reddit_cats_1n80j6_album_None_imgur_ZuRbyxp.jpg...</pre>
 <li><a href="http://www.reddit.com/r/LightGraffiti/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.reddit.com/r/LightGraffiti/', 'LightGraffiti']);" >LightGraffiti</a></li>
 </ul>
 <p>Good luck!</p>
-					
+
 
     </body>
 </html>

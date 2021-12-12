@@ -3,13 +3,13 @@
         <title>Source Code Makeover: Square Shooter, Part 2</title>
         <meta name="tags" content="" />
         <meta name="date" content="2012-08-10 12:00" />
-        <meta name="summary" content="" />
+        <meta name="summary" content="<p>This is a continuation from <a href=&quot;http://inventwithpython.com/blog/2012/08/09/source-code-makeover-square-shooter-part-1/&quot;>Part 1</a>, where I go through the source code of <a href=&quot;http://www.pygame.org/project-Square+Shooter-2430-4094.html&quot;>Square Shooter</a>, an Asteroids clone, and try to redesign the code to be more readable.</p>" />
     </head>
     <body>
 
 
 			<p>UPDATE: Felix, the original author of Square Shooter, has made some comments in the comment section that are pretty insightful. I recommend you check them out.</p>
-<p>This is a continuation from <a href="http://inventwithpython.com/blog/2012/08/09/source-code-makeover-square-shooter-part-1/">Part 1</a>, where I go through the source code of <a href="http://www.pygame.org/project-Square+Shooter-2430-4094.html" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.pygame.org/project-Square+Shooter-2430-4094.html', 'Square Shooter']);" >Square Shooter</a>, an Asteroids clone, and try to redesign the code to be more readable. (<a href="http://inventwithpython.com/blog/2012/08/13/source-code-makeover-square-shooter-part-3/">Part 3</a> is also up.</a>)</p>
+<p>This is a continuation from <a href="http://inventwithpython.com/blog/2012/08/09/source-code-makeover-square-shooter-part-1/">Part 1</a>, where I go through the source code of <a href="http://www.pygame.org/project-Square+Shooter-2430-4094.html">Square Shooter</a>, an Asteroids clone, and try to redesign the code to be more readable. (<a href="http://inventwithpython.com/blog/2012/08/13/source-code-makeover-square-shooter-part-3/">Part 3</a> is also up.</a>)</p>
 <p>All of the changes I make <a href="https://github.com/asweigart/source_code_makeover/tree/master/square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/tree/master/square-shooter', 'can be viewed on github']);" >can be viewed on github</a>. You can also <a href="http://inventwithpython.com/square-shooter_original.py">download the original source code for Square Shooter</a>.<br />
 <span id="more-945"></span><br />
 Just to say this again, readability and software design have an element of subjectivity. The changes I make here aren't necessarily the one true way for this code to be written, and may even be worse (I'm sure you'll be able to check the comments section for people pointing out my errors.)</p>
@@ -19,23 +19,32 @@ Just to say this again, readability and software design have an element of subje
 <p>Grepping to see where <code>GameWorld</code> gets instantiated, I see that the constructor is only called once from line 528 and placed into a global variable named <code>model</code>. Hmmm. I get how the <code>GameWorld</code> is a sort of model, but since the class name is <code>GameWorld</code>, let's rename the <code>model</code> variable to "<code>world</code>" by doing a find-and-replace.</p>
 <p>Now let's look at the <code>init_level()</code> method. I'm going to change line 142 from a combination <code>if</code> statment and block to separate lines for the <code>if</code> statement and block:</p>
 <blockquote>
-<pre>if (level > self.max_level):
+<pre>if (level > self.max_level):
+
     self.max_level = level</pre>
 </blockquote>
 <p>I think this is a bit more readable. I used the combined approach for the <code>if</code> statement and blocks in the <code>wrap_around()</code> method because the blocks were almost identical to each other, having them on the same line (and lined up) makes it easier to compare each other:</p>
 <blockquote>
-<pre>def wrap_around(self):
-    """Change the position of the bubble to toroidally "wrap around" if it goes off one edge of the map."""
-    if self.pos.x < 0: self.pos.x += 1
-    if self.pos.y < 0: self.pos.y += 1
-    if self.pos.x > 1: self.pos.x -= 1
+<pre>def wrap_around(self):
+
+    """Change the position of the bubble to toroidally "wrap around" if it goes off one edge of the map."""
+
+    if self.pos.x < 0: self.pos.x += 1
+
+    if self.pos.y < 0: self.pos.y += 1
+
+    if self.pos.x > 1: self.pos.x -= 1
+
     if self.pos.y > 1: self.pos.y -= 1</pre>
 </blockquote>
 <p>In fact, I'll do the same thing to the <code>Ship</code>'s <code>update()</code> method for those timer decrements (and update the comment, something I forgot to do last time):</p>
 <blockquote>
-<pre># powerups degrade over time until it reaches 0.
-if self.has_shield():        self._shield_timer       -= delta_t
-if self.has_super_bullets(): self._super_bullet_timer -= delta_t
+<pre># powerups degrade over time until it reaches 0.
+
+if self.has_shield():        self._shield_timer       -= delta_t
+
+if self.has_super_bullets(): self._super_bullet_timer -= delta_t
+
 if self.has_freeze():        self._freeze_timer       -= delta_t</pre>
 </blockquote>
 <p>The <code>death_timer</code> member in <code>GameWorld</code> is the timer that is set after the player dies but before the level is restarted. This name is a bit ambiguous, so I'll rename it to <code>afterdeath_timer</code>. I'll do the same with <code>finish_timer</code>, which counts down after the last bubble has been shot but before the next level begins.</p>
@@ -44,60 +53,114 @@ if self.has_freeze():        self._freeze_timer       -= delta_t</pre>
 <p><a href="https://github.com/asweigart/source_code_makeover/commit/da250f068ebce73925a417a3f101d9248635295a#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/da250f068ebce73925a417a3f101d9248635295a#square-shooter', '(These changes can be seen in the github history.)']);" >(These changes can be seen in the github history.)</a></p>
 <p>Now let's look at the <code>GameWorld</code> class's <code>update()</code> method (which is separate from the <code>Ship</code> class's <code>update()</code> method). This is a lot of code that has no comments to help summarize them. All the comments below are mine:</p>
 <blockquote>
-<pre>def update(self, delta_t):
-    self.handle_collisions(delta_t)
-
-    # expand the explosions and delete them once they get too big
-    if len(self.explosions) > 0:
-        if self.explosions[0].radius > 0.5:
-            self.explosions.pop(0)
-    for i in self.explosions:
-        i.radius += delta_t
-
-    # "age" the powerups on the map, and delete them if they get too old
-    if len(self.powerups) > 0:
-        if self.powerups[0].age > 9:
-            self.powerups.pop(0)
-    for i in self.powerups:
-        i.age += delta_t
-
-    # check if all the bubbles have been destroyed
-    if len(self.bubbles) == 0:
-        if self.afterfinish_timer > 0:
-            # the afterfinish timer is still counting down
-            self.afterfinish_timer -= delta_t;
-        else:
-            # the afterfinish timer is done, add a life and set up the next level
-            self.level += 1
-            self.lives += 1
-            self.init_level(self.level)
-            return
-    elif not self.ship.has_freeze():
-        # update all the bubbles
-        for i in self.bubbles:
-            i.update(delta_t)
-
-    # update the bullet
-    if self.bullet != None:
-        bullet_wrapped = self.bullet.update(delta_t)
-        if bullet_wrapped:
-            # delete the bullet if it has hit the edge of the map
-            self.bullet = None
-
-    # update the ship
-    if self.ship == None:
-        if self.afterdeath_timer > 0:
-            # player is dead and afterdeath timer is still counting down
-            self.afterdeath_timer -= delta_t
-        elif self.lives > 0:
-            # create a new Ship for the next level
-            self.ship = Ship()
-            self.ship.add_shield() # add shields at the start of a life
-        else:
-            # player has run out of lives, level 0 will make the start screen display
-            self.level = 0 # Game over
-        return
-
+<pre>def update(self, delta_t):
+
+    self.handle_collisions(delta_t)
+
+
+
+    # expand the explosions and delete them once they get too big
+
+    if len(self.explosions) > 0:
+
+        if self.explosions[0].radius > 0.5:
+
+            self.explosions.pop(0)
+
+    for i in self.explosions:
+
+        i.radius += delta_t
+
+
+
+    # "age" the powerups on the map, and delete them if they get too old
+
+    if len(self.powerups) > 0:
+
+        if self.powerups[0].age > 9:
+
+            self.powerups.pop(0)
+
+    for i in self.powerups:
+
+        i.age += delta_t
+
+
+
+    # check if all the bubbles have been destroyed
+
+    if len(self.bubbles) == 0:
+
+        if self.afterfinish_timer > 0:
+
+            # the afterfinish timer is still counting down
+
+            self.afterfinish_timer -= delta_t;
+
+        else:
+
+            # the afterfinish timer is done, add a life and set up the next level
+
+            self.level += 1
+
+            self.lives += 1
+
+            self.init_level(self.level)
+
+            return
+
+    elif not self.ship.has_freeze():
+
+        # update all the bubbles
+
+        for i in self.bubbles:
+
+            i.update(delta_t)
+
+
+
+    # update the bullet
+
+    if self.bullet != None:
+
+        bullet_wrapped = self.bullet.update(delta_t)
+
+        if bullet_wrapped:
+
+            # delete the bullet if it has hit the edge of the map
+
+            self.bullet = None
+
+
+
+    # update the ship
+
+    if self.ship == None:
+
+        if self.afterdeath_timer > 0:
+
+            # player is dead and afterdeath timer is still counting down
+
+            self.afterdeath_timer -= delta_t
+
+        elif self.lives > 0:
+
+            # create a new Ship for the next level
+
+            self.ship = Ship()
+
+            self.ship.add_shield() # add shields at the start of a life
+
+        else:
+
+            # player has run out of lives, level 0 will make the start screen display
+
+            self.level = 0 # Game over
+
+        return
+
+
+
     self.ship.update(delta_t)</pre>
 </blockquote>
 <p>Checking this in with log message, <a href="https://github.com/asweigart/source_code_makeover/commit/da250f068ebce73925a417a3f101d9248635295a#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/da250f068ebce73925a417a3f101d9248635295a#square-shooter', '&quot;Added comments to GameWorld.update().&quot;']);" >"Added comments to GameWorld.update()."</a></p>
@@ -105,71 +168,116 @@ if self.has_freeze():        self._freeze_timer       -= delta_t</pre>
 <p><a href="https://github.com/asweigart/source_code_makeover/commit/17b99c9cbeca7f38e0b084aea3eeb8b7278a3bc0#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/17b99c9cbeca7f38e0b084aea3eeb8b7278a3bc0#square-shooter', '(These changes can be seen in the github history.)']);" >(These changes can be seen in the github history.)</a></p>
 <p>Now that it has some documentation, let's see how we can improve the <code>GameWorld</code> class. One thing that is odd is that the powerups and explosions are removed if they are too old, and then they are aged. This means that old explosions and powerups won't be removed until the next call to <code>update()</code>. Let's swap the order of that and age them first before doing the age check:</p>
 <blockquote>
-<pre># expand the explosions and delete them once they get too big
-for i in self.explosions:
-    i.radius += delta_t
-if len(self.explosions) > 0:
-    if self.explosions[0].radius > 0.5:
-        self.explosions.pop(0)
-
-# "age" the powerups on the map, and delete them if they get too old
-for i in self.powerups:
-    i.age += delta_t
-if len(self.powerups) > 0:
-    if self.powerups[0].age > 9:
+<pre># expand the explosions and delete them once they get too big
+
+for i in self.explosions:
+
+    i.radius += delta_t
+
+if len(self.explosions) > 0:
+
+    if self.explosions[0].radius > 0.5:
+
+        self.explosions.pop(0)
+
+
+
+# "age" the powerups on the map, and delete them if they get too old
+
+for i in self.powerups:
+
+    i.age += delta_t
+
+if len(self.powerups) > 0:
+
+    if self.powerups[0].age > 9:
+
         self.powerups.pop(0)</pre>
 </blockquote>
 <p>Also, there seems to be a slight bug with this code. It only checks if the <strong>first</strong> explosion or power up in the <code>explosions</code> and <code>powerups</code> lists is too old. (You can tell by the <code>self.explosions[0]</code> and <code>self.powerups[0]</code> part.) We should add a loop to these <code>if</code> statements so that every explosion and powerup is checked. (The reason we don't see this bug in the game is because <code>update()</code> is called so frequently that the powerups and explosions are quickly removed in future <code>update()</code> calls.) Notice that we iterate from the end of the <code>self.explosions</code> and <code>self.powerups</code> list to the beginning, because we are modifying the items in the list as we iterate.</p>
 <blockquote>
-<pre># expand the explosions and delete them once they get too big
-for i in self.explosions:
-    i.radius += delta_t
-for i in range(len(self.explosions - 1, -1, -1)):
-    if self.explosions[i].radius > 0.5:
-        self.explosions.pop(i)
-
-# "age" the powerups on the map, and delete them if they get too old
-for i in self.powerups:
-    i.age += delta_t
-for i in range(len(self.powerups - 1, -1, -1)):
-    if self.powerups[i].age > 9:
+<pre># expand the explosions and delete them once they get too big
+
+for i in self.explosions:
+
+    i.radius += delta_t
+
+for i in range(len(self.explosions - 1, -1, -1)):
+
+    if self.explosions[i].radius > 0.5:
+
+        self.explosions.pop(i)
+
+
+
+# "age" the powerups on the map, and delete them if they get too old
+
+for i in self.powerups:
+
+    i.age += delta_t
+
+for i in range(len(self.powerups - 1, -1, -1)):
+
+    if self.powerups[i].age > 9:
+
         self.powerups.pop(i)</pre>
 </blockquote>
 <p>Let's also replace the <code>0.5</code> and <code>9</code> magic numbers with global constants <code>MAX_EXPLOSION_SIZE</code> and <code>MAX_POWERUP_AGE</code>:</p>
 <blockquote>
-<pre>MAX_EXPLOSION_SIZE = 0.5 # set between 0.0 and 1.0
-MAX_POWERUP_AGE = 9 # in seconds
-
-...
-
-        # expand the explosions and delete them once they get too big
-        for i in self.explosions:
-            i.radius += delta_t
-        for i in range(len(self.explosions) - 1, -1, -1):
-            if self.explosions[i].radius > MAX_EXPLOSION_SIZE:
-                self.explosions.pop(i)
-
-        # "age" the powerups on the map, and delete them if they get too old
-        for i in self.powerups:
-            i.age += delta_t
-        for i in range(len(self.powerups) - 1, -1, -1):
-            if self.powerups[i].age > MAX_POWERUP_AGE:
+<pre>MAX_EXPLOSION_SIZE = 0.5 # set between 0.0 and 1.0
+
+MAX_POWERUP_AGE = 9 # in seconds
+
+
+
+...
+
+
+
+        # expand the explosions and delete them once they get too big
+
+        for i in self.explosions:
+
+            i.radius += delta_t
+
+        for i in range(len(self.explosions) - 1, -1, -1):
+
+            if self.explosions[i].radius > MAX_EXPLOSION_SIZE:
+
+                self.explosions.pop(i)
+
+
+
+        # "age" the powerups on the map, and delete them if they get too old
+
+        for i in self.powerups:
+
+            i.age += delta_t
+
+        for i in range(len(self.powerups) - 1, -1, -1):
+
+            if self.powerups[i].age > MAX_POWERUP_AGE:
+
                 self.powerups.pop(i)</pre>
 </blockquote>
 <p>It is more Pythonic to just use not <code>len(self.bubbles)</code> instead of <code>len(self.bubbles) == 0</code> for conditions, since the integer value <code>0</code> evaluates to <code>False</code> anyway:</p>
 <blockquote>
-<pre># check if all the bubbles have been destroyed
+<pre># check if all the bubbles have been destroyed
+
 if not len(self.bubbles):</pre>
 </blockquote>
 <p>And the variable name <code>i</code> is usually used to mean "index". Since the for loop for updating the bubbles is iterating over <code>Bubble</code> objects instead of an integer index, let's rename <code>i</code> to <code>bubble</code>:</p>
 <blockquote>
-<pre># update all the bubbles
-for bubble in self.bubbles:
+<pre># update all the bubbles
+
+for bubble in self.bubbles:
+
     bubble.update(delta_t)</pre>
 </blockquote>
 <p>Let's put the <code>self.ship.update()</code> call into an <code>else</code> block. Technically, if we call <code>self.ship.update()</code> unconditionally, then we're simulating <code>delta_t</code> seconds for the ship even though it was just created (on line 205). (This is such a small bug, though, that we haven't noticed it before.)</p>
 <blockquote>
-<pre>else:
+<pre>else:
+
     self.ship.update(delta_t)</pre>
 </blockquote>
 <p>I'll check in these changes with the comment <a href="https://github.com/asweigart/source_code_makeover/commit/17b99c9cbeca7f38e0b084aea3eeb8b7278a3bc0#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/17b99c9cbeca7f38e0b084aea3eeb8b7278a3bc0#square-shooter', '&quot;Improved the GameWorld.update() code.&quot;']);" >"Improved the GameWorld.update() code."</a> after testing my changes.</p>
@@ -177,18 +285,26 @@ for bubble in self.bubbles:
 <p><a href="https://github.com/asweigart/source_code_makeover/commit/ed966a15f7a4a922321d029786a85beb40160554#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/ed966a15f7a4a922321d029786a85beb40160554#square-shooter', '(These changes can be seen in the github history.)']);" >(These changes can be seen in the github history.)</a></p>
 <p>Going back to the <code>init_level()</code> code, I realize that rather than use <code>del</code> on the items in the <code>bubbles</code>, <code>explosions</code>, and <code>powerups</code> lists, we can just set those members to blank lists and Python's garbage collector will delete the objects for us.</p>
 <blockquote>
-<pre># clear out the bubbles, explosions, and power ups from the last level.
-self.bubbles    = []
-self.explosions = []
+<pre># clear out the bubbles, explosions, and power ups from the last level.
+
+self.bubbles    = []
+
+self.explosions = []
+
 self.powerups   = []</pre>
 </blockquote>
 <p>Also, we can get rid of the <code>for</code> loop and simply use a list comprehension to create all the starting bubbles. This shows us that the <code>self.bubbles = []</code> line wasn't need before:</p>
 <blockquote>
-<pre># clear out the explosions, and power ups from the last level.
-self.explosions = []
-self.powerups   = []
-
-# create a number of starting big bubbles as the level number.
+<pre># clear out the explosions, and power ups from the last level.
+
+self.explosions = []
+
+self.powerups   = []
+
+
+
+# create a number of starting big bubbles as the level number.
+
 self.bubbles = [Bubble("big") for i in range(level)]</pre>
 </blockquote>
 <p>Checking this in with the message, <a href="https://github.com/asweigart/source_code_makeover/commit/ed966a15f7a4a922321d029786a85beb40160554#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/ed966a15f7a4a922321d029786a85beb40160554#square-shooter', '&quot;Simplifying init_level() code.&quot;']);" >"Simplifying init_level() code."</a></p>
@@ -197,7 +313,8 @@ self.bubbles = [Bubble("big") for i in range(level)]</pre>
 <p>I didn't test my changes too thoroughly, and introduced a couple of bugs. There are some times when the player has died and the <code>self.ship</code> member in <code>GameWorld</code> is set to <code>None</code>, but an attribute of <code>self.ship</code> is checked. I've added some <code>self.ship != None</code> checks to these <code>if</code> statements.</p>
 <p>The <code>render_ship()</code> method also has a place where we need to do a check for the ship being set to <code>None</code>.</p>
 <blockquote>
-<pre>if self.world.ship != None and self.world.ship.has_super_bullets():
+<pre>if self.world.ship != None and self.world.ship.has_super_bullets():
+
     pygame.draw.rect(self.screen, RED, bbox, 1)</pre>
 </blockquote>
 <p>I got ahead of myself by accident, I also checked in a change I made to <code>handle_collisions()</code>. Instead of calling <code>b.collides_with(self.bullet)</code> I changed it to <code>self.bullet.collides_with(b)</code>, since it reads better as "the bullet collided with the bubble" rather than "the bubble collided with the bullet".</p>
@@ -210,26 +327,37 @@ self.bubbles = [Bubble("big") for i in range(level)]</pre>
 </blockquote>
 <p>Also, there's another place we can change <code>len(self.bubbles) == 0</code> to just <code>not len(self.bubbles)</code>:</p>
 <blockquote>
-<pre>if not len(self.bubbles):
+<pre>if not len(self.bubbles):
+
    self.afterfinish_timer = 3</pre>
 </blockquote>
 <p>The code that follows the <code>elif self.ship != None:</code> statement can be simplified. This code checks that if a bubble has hit the ship and handles the player dying. Let's simplify lines 235 to 244:</p>
 <blockquote>
-<pre># check if the bubble has hit the ship
-if self.ship != None and b.collides_with(self.ship) and not self.ship.has_shield():
-    self.spawn_explosion(self.ship)
-    self.ship = None
-    self.lives -= 1
-    self.afterdeath_timer = 3;
+<pre># check if the bubble has hit the ship
+
+if self.ship != None and b.collides_with(self.ship) and not self.ship.has_shield():
+
+    self.spawn_explosion(self.ship)
+
+    self.ship = None
+
+    self.lives -= 1
+
+    self.afterdeath_timer = 3;
+
     break</pre>
 </blockquote>
 <p>We can also get rid of the if <code>self.ship == None:</code> return line on line 246. The point of this line is to exit the function if <code>ship</code> is set to <code>None</code>, that way the code that checks if the ship and powerups have collided won't cause errors. But if we want to add code after the powerups collision check, then this function might prematurely exit.</p>
 <p>Instead of returning, let's set the code to just skip the powerups collision checks:</p>
 <blockquote>
-<pre>if self.ship != None:
-    for p in self.powerups[:]:
-        if p.collides_with(self.ship):
-            self.apply_powerup(p)
+<pre>if self.ship != None:
+
+    for p in self.powerups[:]:
+
+        if p.collides_with(self.ship):
+
+            self.apply_powerup(p)
+
             self.powerups.remove(p)</pre>
 </blockquote>
 <p>That's good for now. Let's check this in with the log message, <a href="https://github.com/asweigart/source_code_makeover/commit/63baedb58bbaaf4730606e4ba36c2534fd8e1156#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/63baedb58bbaaf4730606e4ba36c2534fd8e1156#square-shooter', '&quot;Refactoring handle_collisions()&quot;']);" >"Refactoring handle_collisions()"</a></p>
@@ -238,25 +366,36 @@ if self.ship != None and b.collides_with(self.ship) and not self.ship.has_shield
 <p>The <code>spawn_explosion()</code> method looks okay. We'll leave it as is.</p>
 <p>The code in <code>mark_score()</code> is a bunch of <code>if</code>-<code>elif</code> statements that change the same variable by different values. Let's put this info in a "kinds" dictionary like we did in the Bubble class:</p>
 <blockquote>
-<pre>def mark_score(self, bubble):
-    #                   score
-    kinds  = {'big':    1,
-              'medium': 2,
-              'small':  5}
+<pre>def mark_score(self, bubble):
+
+    #                   score
+
+    kinds  = {'big':    1,
+
+              'medium': 2,
+
+              'small':  5}
+
     self.score += kinds[bubble.kind]</pre>
 </blockquote>
 <p>We'll do the same thing for the <code>apply_powerup()</code> method, but instead of mapping a bubble kind string value to a score integer value, we will use a dictionary to map a powerup kind string value to a function. (Python lets us store functions just like any other value.)</p>
 <blockquote>
-<pre>def apply_powerup(self, powerup):
-    #                  function to call
-    kinds = {'shield': self.ship.add_shield,
-             'bullet': self.ship.add_super_bullets,
-             'freeze': self.ship.add_freeze}
+<pre>def apply_powerup(self, powerup):
+
+    #                  function to call
+
+    kinds = {'shield': self.ship.add_shield,
+
+             'bullet': self.ship.add_super_bullets,
+
+             'freeze': self.ship.add_freeze}
+
     kinds[powerup.kind]()</pre>
 </blockquote>
 <p>I thought about replacing this code:</p>
 <blockquote>
-<pre>if self.score > self.high_score:
+<pre>if self.score > self.high_score:
+
     self.high_score = self.score</pre>
 </blockquote>
 <p>...with this code:</p>
@@ -269,18 +408,24 @@ if self.ship != None and b.collides_with(self.ship) and not self.ship.has_shield
 <p><a href="https://github.com/asweigart/source_code_makeover/commit/5e0957e41bf115a8b358e528a14b8b8ad3c79302#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/5e0957e41bf115a8b358e528a14b8b8ad3c79302#square-shooter', '(These changes can be seen in the github history.)']);" >(These changes can be seen in the github history.)</a></p>
 <p>In the process of fixing a bug, I've accidentally introduced a new bug. These kinds of bugs are known as regressions. In GameWorld's update() method, I have this code:</p>
 <blockquote>
-<pre>elif self.ship != None and not self.ship.has_freeze():
-    # update all the bubbles
-    for bubble in self.bubbles:
+<pre>elif self.ship != None and not self.ship.has_freeze():
+
+    # update all the bubbles
+
+    for bubble in self.bubbles:
+
         bubble.update(delta_t)</pre>
 </blockquote>
 <p>This updates the position of all the bubbles, causing them to move around the game map. I added the <code>self.ship != None</code> check so that the <code>not self.ship.has_freeze()</code> wouldn't cause an exception due to the value of <code>self.ship</code> being <code>None</code> (and thus attempting to call <code>None.has_freeze()</code>).</p>
 <p>(The second part of the condition, not self.ship.has_freeze(), is not evaluated if the first part, self.ship != None, is True because of <a href="http://inventwithpython.com/chapter10.html#ShortCircuitEvaluation">short-circuit evaluation</a>. In the expression <code>False and blahblahblah</code>, it doesn't matter if <code>blahblahblah</code> is <code>True</code> or <code>False</code> because the first part is <code>False</code>, so Python skips checking the second part.)</p>
 <p>However, this means that when the ship doesn't exist, the bubble positions don't update. You can see this when the ship gets destroyed: all the bubbles freeze until the player's next life begins. The code should be changed to this:</p>
 <blockquote>
-<pre>elif self.ship == None or not self.ship.has_freeze():
-    # update all the bubbles
-    for bubble in self.bubbles:
+<pre>elif self.ship == None or not self.ship.has_freeze():
+
+    # update all the bubbles
+
+    for bubble in self.bubbles:
+
         bubble.update(delta_t)</pre>
 </blockquote>
 <p>Because of <a href="http://inventwithpython.com/chapter10.html#ShortCircuitEvaluation">short-circuiting</a>, if <code>self.ship</code> is <code>None</code>, then the <code>not self.ship.has_freeze()</code> part of the condition won't be evaluated. (There's no reason to check: the expression <code>True or blahblahblah</code> will evaluate to <code>True</code> no matter if <code>blahblahblah</code> is <code>True</code> or <code>False</code>, so Python skips it.)</p>
@@ -294,18 +439,25 @@ if self.ship != None and b.collides_with(self.ship) and not self.ship.has_shield
 </blockquote>
 <p>We can just delete this line since we don't need it anymore, and replace the uses of <code>self.height</code> with <code>WINDOW_HEIGHT</code>.</p>
 <blockquote>
-<pre>self.hud_font =    pygame.font.SysFont(
-    font_name, WINDOW_HEIGHT / 10)
-self.msg_font = pygame.font.SysFont(
+<pre>self.hud_font =    pygame.font.SysFont(
+
+    font_name, WINDOW_HEIGHT / 10)
+
+self.msg_font = pygame.font.SysFont(
+
     font_name, WINDOW_HEIGHT / 20)</pre>
 </blockquote>
 <p>The code that bases the font size on the window height isn't ideal, because the font sizes are in points and the window size is in pixels, and they don't increase proportional. You can see this for yourself by increasing <code>WINDOW_HEIGHT</code> (and <code>MAP_HEIGHT</code>) and running the program.</p>
 <p>Actually, it's a bit annoying that we have to change both <code>WINDOW_HEIGHT</code> and <code>MAP_HEIGHT</code>. Let's add code to the top of the file that sets <code>MAP_WIDTH</code> and <code>MAP_HEIGHT</code> based on the values of <code>WINDOW_WIDTH</code> and <code>WINDOW_HEIGHT</code>:</p>
 <blockquote>
-<pre>WINDOW_WIDTH = 640
-WINDOW_HEIGHT = 480
-
-MAP_WIDTH = WINDOW_WIDTH - 160
+<pre>WINDOW_WIDTH = 640
+
+WINDOW_HEIGHT = 480
+
+
+
+MAP_WIDTH = WINDOW_WIDTH - 160
+
 MAP_HEIGHT = WINDOW_HEIGHT</pre>
 </blockquote>
 <p>Also, the <code>render_backround()</code> method is misspelled. Let's fix that.</p>
@@ -320,13 +472,20 @@ MAP_HEIGHT = WINDOW_HEIGHT</pre>
 <p>The same bit of syntactic sugar is in <code>render_game_world()</code>, so we'll replace <code>m</code> with <code>self.world</code> there too.</p>
 <p>The <code>render()</code> code has this weird green-box drawing code:</p>
 <blockquote>
-<pre>if self.world.level == 0:
-    self.render_title_screen()
-    # Hide the [P]ause text.
-    self.screen.fill(GREEN, (MAP_WIDTH + 20, 424, 140, 24))
-else:
-    self.render_game_world()
-    # Hide the [P]lay text.
+<pre>if self.world.level == 0:
+
+    self.render_title_screen()
+
+    # Hide the [P]ause text.
+
+    self.screen.fill(GREEN, (MAP_WIDTH + 20, 424, 140, 24))
+
+else:
+
+    self.render_game_world()
+
+    # Hide the [P]lay text.
+
     self.screen.fill(GREEN, (MAP_WIDTH + 20, 400, 140, 24))</pre>
 </blockquote>
 <p>This code is here because the background layer <code>pygame.Surface</code> object has both [P]lay and [P]ause drawn on it, but it only makes sense to show one or the other while the game runs. So this code draws a green box to hide one of the pieces of text.</p>
@@ -334,37 +493,59 @@ else:
 <p>Let's add a call to <code>self.render_background()</code> in <code>render()</code>, and also modify the <code>render_background()</code> method to have a parameter that tells it whether or not to render [P]lay or [P]ause. That way we can skip this silly green-box drawing code. (Also, this means we can remove the <code>self.render_background()</code> line from <code>__init__()</code>, since now the background is rendered with the rest of the map.)</p>
 <p>Also, I'm going to separate the combined if-and-block line on line 380 into two lines.</p>
 <blockquote>
-<pre>def render(self):
-    self.screen.blit(self.bglayer, (0, 0))
-    self.render_background(self.world.level)
-
-    if self.world.level == 0:
-        self.render_title_screen()
-    else:
-        self.render_game_world()
-        if self.game_paused:
+<pre>def render(self):
+
+    self.screen.blit(self.bglayer, (0, 0))
+
+    self.render_background(self.world.level)
+
+
+
+    if self.world.level == 0:
+
+        self.render_title_screen()
+
+    else:
+
+        self.render_game_world()
+
+        if self.game_paused:
+
             self.render_pause_text()</pre>
 </blockquote>
 <p>(Ideally, we'd have some other variable set to track the state of whether or not we show the status screen or the game play screen. But I'll just leave in the convention of level 0 being the status screen for now.)</p>
 <p>The <code>render_background()</code> method is altered to either display [P]lay or [P]ause:</p>
 <blockquote>
-<pre>def render_background(self, level):
-
-...
-
-    text = self.msg_font.render('[Q]uit', False, WHITE)
-    self.bglayer.blit(text, (MAP_WIDTH + 20, 424))
-
-    if level == 0:
-        msg = '[P]lay'
-    else:
-        msg = '[P]ause'
-    text = self.msg_font.render(msg, False, WHITE)
+<pre>def render_background(self, level):
+
+
+
+...
+
+
+
+    text = self.msg_font.render('[Q]uit', False, WHITE)
+
+    self.bglayer.blit(text, (MAP_WIDTH + 20, 424))
+
+
+
+    if level == 0:
+
+        msg = '[P]lay'
+
+    else:
+
+        msg = '[P]ause'
+
+    text = self.msg_font.render(msg, False, WHITE)
+
     self.bglayer.blit(text, (MAP_WIDTH + 20, 400))</pre>
 </blockquote>
 <p>Also, let's delete these two commented out lines, since even if we uncomment them they wouldn't work due to a lack of a <code>self.fps</code> variable:</p>
 <blockquote>
-<pre>#fps_text = self.msg_font.render(str(self.fps), False, GREEN)
+<pre>#fps_text = self.msg_font.render(str(self.fps), False, GREEN)
+
 #self.screen.blit(fps_text, (0, 0))</pre>
 </blockquote>
 <p>I'll check this in with the log message, <a href="https://github.com/asweigart/source_code_makeover/commit/2657bd7ec349b982d4c07c84de1471a35cef83aa#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/2657bd7ec349b982d4c07c84de1471a35cef83aa#square-shooter', '&quot;Refactored the GameScreen.render() method, and got rid of the green box drawing code.&quot;']);" >"Refactored the GameScreen.render() method, and got rid of the green box drawing code."</a></p>
@@ -376,35 +557,56 @@ else:
 <p>The <code>render_title_screen()</code> method looks fine. But the other render methods like <code>render_ship()</code>, <code>render_bullet()</code>, and <code>render_powerup()</code> would be better if they were in the <code>Ship</code>, <code>Bullet</code>, and <code>Powerup</code> classes respectively. I'll move them there and simply rename them all <code>render()</code> (just like how the <code>update()</code> name is used by the <code>ObjectOnMap</code> subclasses.) These <code>render()</code> methods will need a parameter for the <code>pygame.Surface</code> object to draw themselves on.</p>
 <p>These lines in <code>render_ship()</code> can be removed once this method can be removed after the code is moved to the <code>Ship</code> class, since <code>self.world.ship</code> will just be <code>self</code> and <code>ship.pos</code> will simply be <code>self.pos</code>.</p>
 <blockquote>
-<pre>ship = self.world.ship
+<pre>ship = self.world.ship
+
 pos = ship.pos</pre>
 </blockquote>
 <p>Here's the code for the <code>Ship.render()</code> method, compare it to the old <code>render_ship()</code> code:</p>
 <blockquote>
-<pre>def render(self, surface):
-    bbox = pygame.draw.circle(
-        surface,
-        SILVER,
-        scale_and_round(self.pos.x, self.pos.y),
-        int(round(self.radius * MAP_SIZE)))
-    pygame.draw.circle(
-        surface,
-        BLACK,
-        scale_and_round(self.pos.x, self.pos.y),
-        int(round(self.radius * 0.5 * MAP_SIZE)),
-        1)
-    if self.has_shield():
+<pre>def render(self, surface):
+
+    bbox = pygame.draw.circle(
+
+        surface,
+
+        SILVER,
+
+        scale_and_round(self.pos.x, self.pos.y),
+
+        int(round(self.radius * MAP_SIZE)))
+
+    pygame.draw.circle(
+
+        surface,
+
+        BLACK,
+
+        scale_and_round(self.pos.x, self.pos.y),
+
+        int(round(self.radius * 0.5 * MAP_SIZE)),
+
+        1)
+
+    if self.has_shield():
+
         pygame.draw.rect(surface, SILVER, bbox, 1)</pre>
 </blockquote>
 <p>And here's the code to the new <code>Bullet.render()</code> method, compare it to the old <code>render_bullet()</code> code:</p>
 <blockquote>
-<pre>def render(self, surface):
-    bbox = pygame.draw.circle(
-        surface,
-        RED,
-        scale_and_round(self.pos.x, self.pos.y),
-        int(round(self.radius * MAP_SIZE)))
-    if self.shield:
+<pre>def render(self, surface):
+
+    bbox = pygame.draw.circle(
+
+        surface,
+
+        RED,
+
+        scale_and_round(self.pos.x, self.pos.y),
+
+        int(round(self.radius * MAP_SIZE)))
+
+    if self.shield:
+
         pygame.draw.rect(surface, RED, bbox, 1)</pre>
 </blockquote>
 <p>I'll check this in as <a href="https://github.com/asweigart/source_code_makeover/commit/bacff96189ad000e9df677011e46d2fa9a637aab#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/bacff96189ad000e9df677011e46d2fa9a637aab#square-shooter', '&quot;Moved render_bullet() and render_ship() to the Bullet and Ship classes.&quot;']);" >"Moved render_bullet() and render_ship() to the Bullet and Ship classes."</a></p>
@@ -412,30 +614,49 @@ pos = ship.pos</pre>
 <p><a href="https://github.com/asweigart/source_code_makeover/commit/798ece1b88b5735e8c43d849150a6b084da5d8f5#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/798ece1b88b5735e8c43d849150a6b084da5d8f5#square-shooter', '(These changes can be seen in the github history.)']);" >(These changes can be seen in the github history.)</a></p>
 <p>Let's continue the trend of giving classes their own <code>render()</code> methods with the <code>Bubble</code> class:</p>
 <blockquote>
-<pre>def render(self, surface):
-    pygame.draw.circle(
-        surface,
-        self.color,
-        scale_and_round(self.pos.x, self.pos.y),
-        int(round(self.radius * MAP_SIZE)),
+<pre>def render(self, surface):
+
+    pygame.draw.circle(
+
+        surface,
+
+        self.color,
+
+        scale_and_round(self.pos.x, self.pos.y),
+
+        int(round(self.radius * MAP_SIZE)),
+
         1)</pre>
 </blockquote>
 <p>Currently explosions are just <code>ObjectOnMap</code> objects, since we only needed them to have a radius and position. But we should give them their own class so they can have their own <code>render()</code> and <code>update()</code> methods. Currently this code is handled by the <code>GameWorld</code> and <code>GameScreen</code> classes instead of a unified place.</p>
 <p>The new <code>Explosion</code> class looks like this:</p>
 <blockquote>
-<pre>class Explosion(ObjectOnMap):
-    def __init__(self):
-        super(Explosion, self).__init__(0) # explosions start at size 0
-
-    def update(self, delta_t):
-        self.radius += delta_t
-
-    def render(self, surface):
-        pygame.draw.circle(
-            surface,
-            RED,
-            scale_and_round(self.pos.x, self.pos.y),
-            int(round(self.radius * MAP_SIZE)),
+<pre>class Explosion(ObjectOnMap):
+
+    def __init__(self):
+
+        super(Explosion, self).__init__(0) # explosions start at size 0
+
+
+
+    def update(self, delta_t):
+
+        self.radius += delta_t
+
+
+
+    def render(self, surface):
+
+        pygame.draw.circle(
+
+            surface,
+
+            RED,
+
+            scale_and_round(self.pos.x, self.pos.y),
+
+            int(round(self.radius * MAP_SIZE)),
+
             1)</pre>
 </blockquote>
 <p>I'll check in these changes with the log message, <a href="https://github.com/asweigart/source_code_makeover/commit/798ece1b88b5735e8c43d849150a6b084da5d8f5#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/798ece1b88b5735e8c43d849150a6b084da5d8f5#square-shooter', '&quot;Added an Explosion class, and created Bubble.render()&quot;']);" >"Added an Explosion class, and created Bubble.render()"</a></p>
@@ -445,30 +666,48 @@ pos = ship.pos</pre>
 <p>I've created a <code>scaled_x</code> and <code>scaled_y</code> variable inside <code>render()</code> to replace all the <code>scale_and_round(self.pos.x, self.pos.y)</code> calls. The utility of this is negligible. I almost made a <code>scaled_r</code> to replace the <code>int(round(self.radius * MAP_SIZE))</code> expressions. Other than that, the code is mostly untouched.</p>
 <p>I've also replaced the <code>i</code> in the <code>for</code> loop with "<code>powerup</code>" since it is not an index:</p>
 <blockquote>
-<pre>for powerup in self.world.powerups:
+<pre>for powerup in self.world.powerups:
+
     powerup.render(self.screen)</pre>
 </blockquote>
 <p><a href="https://github.com/asweigart/source_code_makeover/commit/deeff180566bfededaa8db445bf3c485e2a7f157#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/deeff180566bfededaa8db445bf3c485e2a7f157#square-shooter', '&quot;Created a render() method for Powerup.&quot;']);" >"Created a render() method for Powerup."</a></p>
 <p>And I made another check in: <a href="https://github.com/asweigart/source_code_makeover/commit/3603a9e4b0cffba11f6302567687e3828a92daac#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/3603a9e4b0cffba11f6302567687e3828a92daac#square-shooter', '&quot;Whoops. Left in a high powerup chance while testing.&quot;']);" >"Whoops. Left in a high powerup chance while testing."</a></p>
 <p>At this point, our <code>render_game_world()</code> method in the <code>GameScreen</code> class looks very straightforward:</p>
 <blockquote>
-<pre>def render_game_world(self):
-    self.screen.set_clip((0, 0, MAP_WIDTH, MAP_HEIGHT))
-
-    if self.world.ship != None:
-        self.world.ship.render(self.screen)
-    if self.world.bullet != None:
-        self.world.bullet.render(self.screen)
-
-    for bubble in self.world.bubbles:
-        bubble.render(self.screen)
-
-    for explosion in self.world.explosions:
-        explosion.render(self.screen)
-
-    for powerup in self.world.powerups:
-        powerup.render(self.screen)
-
+<pre>def render_game_world(self):
+
+    self.screen.set_clip((0, 0, MAP_WIDTH, MAP_HEIGHT))
+
+
+
+    if self.world.ship != None:
+
+        self.world.ship.render(self.screen)
+
+    if self.world.bullet != None:
+
+        self.world.bullet.render(self.screen)
+
+
+
+    for bubble in self.world.bubbles:
+
+        bubble.render(self.screen)
+
+
+
+    for explosion in self.world.explosions:
+
+        explosion.render(self.screen)
+
+
+
+    for powerup in self.world.powerups:
+
+        powerup.render(self.screen)
+
+
+
     self.screen.set_clip(None)</pre>
 </blockquote>
 <p>The code in the <code>render_pause_text()</code> method looks fine, I'll just leave it like that.</p>
@@ -477,17 +716,28 @@ pos = ship.pos</pre>
 <p>Whoops. Those two commented out lines actually did do something useful. The catch is it required you to uncomment a third line that was in the main game loop.</p>
 <p>This code displays the current frames per second (FPS) in the upper left corner, which can be useful for measuring performance. Instead of commenting and uncommenting these lines whenever you want to see them, let's add a <code>DISPLAY_FPS</code> global variable that can be set to <code>True</code> or <code>False</code>, and then put an <code>if DISPLAY_FPS:</code> statement in front of these lines:</p>
 <blockquote>
-<pre>DISPLAY_FPS = True
-
-...
-
-if DISPLAY_FPS:
-    fps_text = self.msg_font.render(str(self.fps), False, GREEN)
-    self.screen.blit(fps_text, (0, 0))
-
-...
-
-if DISPLAY_FPS:
+<pre>DISPLAY_FPS = True
+
+
+
+...
+
+
+
+if DISPLAY_FPS:
+
+    fps_text = self.msg_font.render(str(self.fps), False, GREEN)
+
+    self.screen.blit(fps_text, (0, 0))
+
+
+
+...
+
+
+
+if DISPLAY_FPS:
+
     renderer.fps = int(round(clock.get_fps()))</pre>
 </blockquote>
 <p>I'll check in this code with the log message, <a href="https://github.com/asweigart/source_code_makeover/commit/5cdd7f00e457f85d54e465231f3cec86e4a412f3#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/5cdd7f00e457f85d54e465231f3cec86e4a412f3#square-shooter', '&quot;Adding DISPLAY_FPS for debugging.&quot;']);" >"Adding DISPLAY_FPS for debugging."</a></p>
@@ -499,7 +749,7 @@ if DISPLAY_FPS:
 <h3>End of Part 2</h3>
 <p>That's all for now. We're almost done refactoring the code. I think the <code>GameScreen</code> code should probably be merged into <code>GameWorld</code>, and I'd like to take a lot of the <code>GameWorld</code>-specific code out of the globally-scoped game loop. We'll cover that in <a href="http://inventwithpython.com/blog/2012/08/13/source-code-makeover-square-shooter-part-3/">Part 3</a>, as well as making UX (user experience) design changes (instead of just the code design changes we've made in the first two Parts.)</p>
 <p>Remember, you can see the full list of git check ins I've made for the code changes on <a href="https://github.com/asweigart/source_code_makeover/commits/master/square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commits/master/square-shooter', 'the github page for this blog post']);" >the github page for this blog post</a> and compare it to <a href="http://inventwithpython.com/square-shooter_original.py">the original source code for Square Shooter</a>.</p>
-					
+
 
     </body>
 </html>

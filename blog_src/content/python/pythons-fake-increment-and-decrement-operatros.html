@@ -1,0 +1,62 @@
+<html>
+    <head>
+        <title>Python's Fake Increment and Decrement Operators</title>
+        <meta name="tags" content="" />
+        <meta name="date" content="2018-05-21 12:00" />
+        <meta name="summary" content="<p>In Python, you can increase the value of a variable by <code>1</code> or reduce it by <code>1</code> using the augmented assignment operators. The code <code>spam += 1</code> and <code>spam -= 1</code> increments and decrements the numeric values in <code>spam</code> by <code>1</code>, respectively.</p>
+
+<p>Other languages such as C++ and Java have the <code>++</code> and <code>--</code> operators for incrementing and decrementing variables. (The name of C++ itself reflects this; the name is a tongue-in-cheek joke that indicates it's an enhanced form of the C language.) Code in C++ and Java could have <code>++spam</code> or <code>spam++</code>. Python wisely doesn't include these operators; <a href=&quot;https://softwareengineering.stackexchange.com/q/59880&quot;>they are notoriously susceptible to subtle bugs.</a></p>" />
+    </head>
+    <body>
+
+
+<p>In Python, you can increase the value of a variable by <code>1</code> or reduce it by <code>1</code> using the augmented assignment operators. The code <code>spam += 1</code> and <code>spam -= 1</code> increments and decrements the numeric values in <code>spam</code> by <code>1</code>, respectively.</p>
+
+<p>Other languages such as C++ and Java have the <code>++</code> and <code>--</code> operators for incrementing and decrementing variables. (The name of C++ itself reflects this; the name is a tongue-in-cheek joke that indicates it's an enhanced form of the C language.) Code in C++ and Java could have <code>++spam</code> or <code>spam++</code>. Python wisely doesn't include these operators; <a href="https://softwareengineering.stackexchange.com/q/59880">they are notoriously susceptible to subtle bugs.</a></p>
+
+<p>However, it is perfectly legal to have the following Python code:</p>
+
+<pre>&gt;&gt;&gt; spam = 42
+&gt;&gt;&gt; spam = ++spam
+&gt;&gt;&gt; spam
+42
+&gt;&gt;&gt; spam = --spam
+&gt;&gt;&gt; spam
+42</pre>
+
+<p>The first thing you notice is that the <code>++</code> and <code>--</code> "operators" in Python don't actually increment or decrement the value in <code>spam</code>. Rather, the leading <code>-</code> is Python's unary negation operator. It allows you to have code like this:</p>
+
+<pre>&gt;&gt;&gt; spam = 42
+&gt;&gt;&gt; print(-spam)
+-42</pre>
+
+It's legal to have multiple unary negative operators in front of a value. With two of them, you'd get the negative of the negative of the value, which for integer values just evaluates to the original value:
+
+<pre>&gt;&gt;&gt; print(--spam)
+42
+&gt;&gt;&gt; --42
+42</pre>
+
+<p>This is a quite silly thing to do, and you won't ever see a unary negation operator used twice in real-world code. (Though if you did, it's probably because the programmer learned to program in another language has just written buggy Python code!) There is also a <code>+</code> unary operator. It evaluates an integer value to the same sign as the original value, which is to say, it does absolutely nothing:</p>
+
+<pre>&gt;&gt;&gt; +42
+42
+&gt;&gt;&gt; spam = -42
+&gt;&gt;&gt; print(+spam) # +spam is not the same as abs(spam)
+-42</pre>
+
+<p>Being able to write <code>+42</code> (or <code>++42</code>) seems just as silly as <code>--42</code>, so why does Python even have this unary operator? It exists only to complement the <code>–</code> operator if you need to overload these operators for your own classes. (See the documentation for the <code>__pos__</code> special method.)</p>
+
+<p>The <code>+</code> and <code>–</code> unary operators are only valid when in front of a Python value, not after it. While <code>spam++</code> and <code>spam--</code> might be legal code in C++ or Java, they produce syntax errors in Python:</p>
+
+<pre>&gt;&gt;&gt; spam++
+  File "&lt;stdin&gt;", line 1
+    spam++
+         ^
+SyntaxError: invalid syntax</pre>
+
+<p>Python doesn't have increment and decrement operators, it's only a quirk of the langauge syntax that can make it seem like it does.</p>
+
+
+    </body>
+</html>

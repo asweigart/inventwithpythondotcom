@@ -3,12 +3,12 @@
         <title>Source Code Makeover: Square Shooter, Part 3</title>
         <meta name="tags" content="" />
         <meta name="date" content="2012-08-13 12:00" />
-        <meta name="summary" content="" />
+        <meta name="summary" content="<p>This is a continuation from <a href=&quot;http://inventwithpython.com/blog/2012/08/09/source-code-makeover-square-shooter-part-1/&quot;>Part 1</a> and <a href=&quot;http://inventwithpython.com/blog/2012/08/10/source-code-makeover-square-shooter-part-2/&quot;>Part 2</a>, where I go through the source code of <a href=&quot;http://www.pygame.org/project-Square+Shooter-2430-4094.html&quot;>Square Shooter</a>, an Asteroids clone, and try to redesign the code to be more readable.</p>" />
     </head>
     <body>
 
 
-			<p>This is a continuation from <a href="http://inventwithpython.com/blog/2012/08/09/source-code-makeover-square-shooter-part-1/">Part 1</a> and <a href="http://inventwithpython.com/blog/2012/08/10/source-code-makeover-square-shooter-part-2/">Part 2</a>, where I go through the source code of <a href="http://www.pygame.org/project-Square+Shooter-2430-4094.html" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.pygame.org/project-Square+Shooter-2430-4094.html', 'Square Shooter']);" >Square Shooter</a>, an Asteroids clone, and try to redesign the code to be more readable.</p>
+			<p>This is a continuation from <a href="http://inventwithpython.com/blog/2012/08/09/source-code-makeover-square-shooter-part-1/">Part 1</a> and <a href="http://inventwithpython.com/blog/2012/08/10/source-code-makeover-square-shooter-part-2/">Part 2</a>, where I go through the source code of <a href="http://www.pygame.org/project-Square+Shooter-2430-4094.html">Square Shooter</a>, an Asteroids clone, and try to redesign the code to be more readable.</p>
 <p>Now that I've refactored the code, I'll try adding three new features: multiple bullets, a shotgun powerup and a UI change to show the remaining time for each powerup.</p>
 <p><span id="more-965"></span></p>
 <h3>Adding support for multiple bullets</h3>
@@ -17,16 +17,22 @@
 <p>Any place where the <code>bullet</code> member is set to None (to delete the bullet) will instead either be set to <code>[]</code> or have a <code>del</code> statement called on a <code>Bullet</code> item in the list. Any place where the <code>bullet</code> member was set to a <code>Bullet</code> object will be changed instead to have an <code>append()</code> method call to add a new <code>Bullet</code> object to the list.</p>
 <p>Now that there can be more than one bullet on the map, we have to change the <code>if</code> statement that checks if the bullet has collided with a bubble to a loop that checks each bullet for colliding with a bubble. We will change this line:</p>
 <blockquote>
-<pre>if self.bullet != None and self.bullet.collides_with(b):<pre></blockquote>
-
-...to these lines:
-
-<blockquote><pre>for i in range(len(self.bullets) - 1, -1, -1):
+<pre>if self.bullet != None and self.bullet.collides_with(b):<pre></blockquote>
+
+
+
+...to these lines:
+
+
+
+<blockquote><pre>for i in range(len(self.bullets) - 1, -1, -1):
+
     if self.bullets[i].collides_with(b):</pre>
 </blockquote>
 <p>Note that in an earlier change, we modified the <code>shoot_at()</code> method of the <code>Ship</code> class to return a list of <code>Bullet</code> objects rather than just a single <code>Bullet</code> object. This was done in anticipation of this future multi-bullet feature. We need to modify the caller of <code>shoot_at()</code> to append all of the <code>Bullet</code> objects to the <code>world.bullet</code> list. That is where this code comes from:</p>
 <blockquote>
-<pre>if len(world.bullets) < 5:
+<pre>if len(world.bullets) < 5:
+
     world.bullets.extend(world.ship.shoot_at(x / float(MAP_WIDTH), y / float(MAP_HEIGHT)))</pre>
 </blockquote>
 <p>The <code>extend()</code> list method is kind of like <code>append()</code>, except it appends all the items in a list instead of appending just one value.</p>
@@ -44,32 +50,53 @@
 </ul>
 <p>These changes are pretty much just copying the code used for the other powerups. We'll need to add some custom code to the shoot_at() method so that it returns multiple bullets if <code>has_shotgun()</code> returns <code>True</code>. Here's the new code that does this (and also replaces the previous code that only created a single <code>Bullet</code> object.)</p>
 <blockquote>
-<pre>bullets = []
-for i in range(5):
-    b = Bullet()
-    b.pos.copy(self.pos);
-    b.speed.x = x * 3
-    b.speed.y = y * 3
-
-    # Help out the poor sods who click on their
-    # own ship and get stuck with a non-moving
-    # bullet. (2009-11-14)
-    if abs(x) < 0.1 and abs(y) < 0.1:
-        b.speed.x *= 30
-        b.speed.y *= 30
-
-    if not self.has_shotgun():
-        return [b] # just return the one bullet
-    b.speed.x += random.uniform(-0.15, 0.15)
-    b.speed.y += random.uniform(-0.15, 0.15)
-
-    bullets.append(b)
+<pre>bullets = []
+
+for i in range(5):
+
+    b = Bullet()
+
+    b.pos.copy(self.pos);
+
+    b.speed.x = x * 3
+
+    b.speed.y = y * 3
+
+
+
+    # Help out the poor sods who click on their
+
+    # own ship and get stuck with a non-moving
+
+    # bullet. (2009-11-14)
+
+    if abs(x) < 0.1 and abs(y) < 0.1:
+
+        b.speed.x *= 30
+
+        b.speed.y *= 30
+
+
+
+    if not self.has_shotgun():
+
+        return [b] # just return the one bullet
+
+    b.speed.x += random.uniform(-0.15, 0.15)
+
+    b.speed.y += random.uniform(-0.15, 0.15)
+
+
+
+    bullets.append(b)
+
 return bullets</pre>
 </blockquote>
 <p>Note that even though we loop 5 times, if <code>has_shotgun()</code> returns <code>False</code>, we just return the first <code>Bullet</code> object in a single-item list (since the caller is expecting a list of <code>Bullet</code> objects, not just a single <code>Bullet</code> object value.) Otherwise, a list of 5 <code>Bullet</code> objects will be returned.</p>
 <p>Also notice that the <code>return</code> statement for the non-shotgun case occurs before this code:</p>
 <blockquote>
-<pre>    b.speed.x += random.uniform(-0.15, 0.15)
+<pre>    b.speed.x += random.uniform(-0.15, 0.15)
+
     b.speed.y += random.uniform(-0.15, 0.15)</pre>
 </blockquote>
 <p>This code alters the trajectory of the bullet very slightly. This is what causes the "spread" of bullets.</p>
@@ -84,16 +111,26 @@ return bullets</pre>
 <p>Just to make sure that a negative value is returned from these methods (a negative float value is non-zero, so it will be equivalent to <code>True</code>), we will also add a check for a negative value and return <code>0</code> in that case.</p>
 <p>Here's the code that we add to the <code>GameScreen</code> class's <code>render()</code> method (which draws the other parts of the green sidebar):</p>
 <blockquote>
-<pre>text_y = 48 * 6
-if self.world.ship:
-    powerup_status = ((self.world.ship.has_shield(), 'Shield ' + str(int(self.world.ship.has_shield()))),
-                      (self.world.ship.has_super_bullets(), 'Super Bullet ' + str(int(self.world.ship.has_super_bullets()))),
-                      (self.world.ship.has_freeze(), 'Freeze ' + str(int(self.world.ship.has_freeze()))),
-                      (self.world.ship.has_shotgun(), 'Shotgun ' + str(int(self.world.ship.has_shotgun()))))
-    for seconds_left, text in powerup_status:
-        if seconds_left:
-            text = self.msg_font.render(text, False, BLACK)
-            self.screen.blit(text, (MAP_WIDTH + 20, text_y))
+<pre>text_y = 48 * 6
+
+if self.world.ship:
+
+    powerup_status = ((self.world.ship.has_shield(), 'Shield ' + str(int(self.world.ship.has_shield()))),
+
+                      (self.world.ship.has_super_bullets(), 'Super Bullet ' + str(int(self.world.ship.has_super_bullets()))),
+
+                      (self.world.ship.has_freeze(), 'Freeze ' + str(int(self.world.ship.has_freeze()))),
+
+                      (self.world.ship.has_shotgun(), 'Shotgun ' + str(int(self.world.ship.has_shotgun()))))
+
+    for seconds_left, text in powerup_status:
+
+        if seconds_left:
+
+            text = self.msg_font.render(text, False, BLACK)
+
+            self.screen.blit(text, (MAP_WIDTH + 20, text_y))
+
             text_y += 25</pre>
 </blockquote>
 <p><img src="/images/squareshooter_shotgun_screenshot.png?27f655" width="500" /></p>
@@ -104,7 +141,7 @@ if self.world.ship:
 <p>That's all I'll do for now. With the code organized, making new features becomes slightly easier. I'll leave you with one last bit of advice: you might not always have to go back and refactor code. Code doesn't rust if you don't modify it: the Square Shooter game worked perfectly fine without bugs before I made these changes. Refactoring is for the benefit of human programmers, not the computer. Any time you make changes (even improvements) you run the risk of adding new bugs.</p>
 <p>You only need to go back and refactor if it will make future changes easier to do. Of course, since code almost always has bugs, you are pretty much guaranteed to need to change it. (The code, as opposed to UI and feature, changes are covered in <a href="http://inventwithpython.com/blog/2012/08/09/source-code-makeover-square-shooter-part-1/">Part 1</a> and <a href="http://inventwithpython.com/blog/2012/08/10/source-code-makeover-square-shooter-part-2/">Part 2</a>.)</p>
 <p>Either way, I hope this blog series has given you ideas on how you can write cleaner and more readable code (and what makes code "clean" and "readable".) Keep an eye out for future Source Code Makeover blog posts, and thanks for reading!</p>
-					
+
 
     </body>
 </html>

@@ -3,7 +3,7 @@
         <title>“How much math do I need to know to program?” Not That Much, Actually.</title>
         <meta name="tags" content="" />
         <meta name="date" content="2012-03-18 12:00" />
-        <meta name="summary" content="" />
+        <meta name="summary" content="<p>Math and programming have a somewhat misunderstood relationship. Many people think that you have to be good at math or made good grades in math class before you can even begin to learn programming. But how much math does a person need to know in order to program?</p>" />
     </head>
     <body>
 
@@ -63,79 +63,148 @@
 <p>Here’s such a program written in Python: (<a href="/dnd_simulator.py">Download source</a>)</p>
 <div class="hlcode" style="font-size: 120%">
 <div class="syntax">
-<pre><span class="kn">import</span> <span class="nn">random</span><span class="o">,</span> <span class="nn">copy</span>
-
-<span class="n">NUM_FIGHTS</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="n">VERBOSE</span> <span class="o">=</span> <span class="bp">True</span>
-
-<span class="c"># Lower thac0 and lower ac values are better. Higher damage &amp; hp values are better.</span>
-<span class="n">aliceTemplate</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Alice&#39;</span><span class="p">,</span> <span class="s">&#39;hp&#39;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span> <span class="s">&#39;ac&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s">&#39;thac0&#39;</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span> <span class="s">&#39;dmgnum&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;dmgsize&#39;</span><span class="p">:</span><span class="mi">6</span><span class="p">,</span> <span class="s">&#39;dmgmod&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
-<span class="n">bobTemplate</span>   <span class="o">=</span> <span class="p">{</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Bob&#39;</span><span class="p">,</span>   <span class="s">&#39;hp&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span> <span class="s">&#39;ac&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="s">&#39;thac0&#39;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span> <span class="s">&#39;dmgnum&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s">&#39;dmgsize&#39;</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span> <span class="s">&#39;dmgmod&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
-
-<span class="k">def</span> <span class="nf">display</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">VERBOSE</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">attack</span><span class="p">(</span><span class="n">attacker</span><span class="p">,</span> <span class="n">defender</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">attacker</span><span class="p">[</span><span class="s">&#39;thac0&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">defender</span><span class="p">[</span><span class="s">&#39;ac&#39;</span><span class="p">]:</span>
-        <span class="n">damage</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">attacker</span><span class="p">[</span><span class="s">&#39;dmgnum&#39;</span><span class="p">]):</span>
-            <span class="n">damage</span> <span class="o">+=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">attacker</span><span class="p">[</span><span class="s">&#39;dmgsize&#39;</span><span class="p">])</span>
-        <span class="n">damage</span> <span class="o">+=</span> <span class="n">attacker</span><span class="p">[</span><span class="s">&#39;dmgmod&#39;</span><span class="p">]</span>
-        <span class="n">display</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s"> (</span><span class="si">%s</span><span class="s"> hp) hits </span><span class="si">%s</span><span class="s"> (</span><span class="si">%s</span><span class="s"> hp) for </span><span class="si">%s</span><span class="s"> points of damage. </span><span class="si">%s</span><span class="s"> is reduced to </span><span class="si">%s</span><span class="s"> hp.&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">attacker</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">],</span> <span class="n">attacker</span><span class="p">[</span><span class="s">&#39;hp&#39;</span><span class="p">],</span> <span class="n">defender</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">],</span> <span class="n">defender</span><span class="p">[</span><span class="s">&#39;hp&#39;</span><span class="p">],</span> <span class="n">damage</span><span class="p">,</span> <span class="n">defender</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">],</span> <span class="n">defender</span><span class="p">[</span><span class="s">&#39;hp&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">damage</span><span class="p">))</span>
-        <span class="n">defender</span><span class="p">[</span><span class="s">&#39;hp&#39;</span><span class="p">]</span> <span class="o">-=</span> <span class="n">damage</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">display</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s"> misses </span><span class="si">%s</span><span class="s">.&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">attacker</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">],</span> <span class="n">defender</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]))</span>
-
-<span class="n">aliceWins</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="n">bobWins</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">NUM_FIGHTS</span><span class="p">):</span>
-    <span class="n">display</span><span class="p">(</span><span class="s">&#39;======================&#39;</span><span class="p">)</span>
-    <span class="n">display</span><span class="p">(</span><span class="s">&#39;Start of combat #</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
-    <span class="n">alice</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">aliceTemplate</span><span class="p">)</span>
-    <span class="n">bob</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">bobTemplate</span><span class="p">)</span>
-    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-        <span class="n">attack</span><span class="p">(</span><span class="n">alice</span><span class="p">,</span> <span class="n">bob</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">bob</span><span class="p">[</span><span class="s">&#39;hp&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">break</span>
-
-        <span class="n">attack</span><span class="p">(</span><span class="n">bob</span><span class="p">,</span> <span class="n">alice</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">alice</span><span class="p">[</span><span class="s">&#39;hp&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">break</span>
-    <span class="k">if</span> <span class="n">alice</span><span class="p">[</span><span class="s">&#39;hp&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">display</span><span class="p">(</span><span class="s">&#39;Alice has died.&#39;</span><span class="p">)</span>
-        <span class="n">bobWins</span> <span class="o">+=</span> <span class="mi">1</span>
-    <span class="k">if</span> <span class="n">bob</span><span class="p">[</span><span class="s">&#39;hp&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">display</span><span class="p">(</span><span class="s">&#39;Bob has died.&#39;</span><span class="p">)</span>
-        <span class="n">aliceWins</span> <span class="o">+=</span> <span class="mi">1</span>
-
-<span class="k">print</span><span class="p">()</span>
-<span class="k">print</span><span class="p">(</span><span class="s">&#39;Alice won </span><span class="si">%s</span><span class="s"> (</span><span class="si">%s%%</span><span class="s">) fights. Bob won </span><span class="si">%s</span><span class="s"> (</span><span class="si">%s%%</span><span class="s">) fights.&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">aliceWins</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">aliceWins</span> <span class="o">/</span> <span class="n">NUM_FIGHTS</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">bobWins</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">bobWins</span> <span class="o">/</span> <span class="n">NUM_FIGHTS</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
+<pre><span class="kn">import</span> <span class="nn">random</span><span class="o">,</span> <span class="nn">copy</span>
+
+
+
+<span class="n">NUM_FIGHTS</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="n">VERBOSE</span> <span class="o">=</span> <span class="bp">True</span>
+
+
+
+<span class="c"># Lower thac0 and lower ac values are better. Higher damage &amp; hp values are better.</span>
+
+<span class="n">aliceTemplate</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Alice&#39;</span><span class="p">,</span> <span class="s">&#39;hp&#39;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span> <span class="s">&#39;ac&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s">&#39;thac0&#39;</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span> <span class="s">&#39;dmgnum&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;dmgsize&#39;</span><span class="p">:</span><span class="mi">6</span><span class="p">,</span> <span class="s">&#39;dmgmod&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+
+<span class="n">bobTemplate</span>   <span class="o">=</span> <span class="p">{</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Bob&#39;</span><span class="p">,</span>   <span class="s">&#39;hp&#39;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span> <span class="s">&#39;ac&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="s">&#39;thac0&#39;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span> <span class="s">&#39;dmgnum&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s">&#39;dmgsize&#39;</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span> <span class="s">&#39;dmgmod&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+
+
+
+<span class="k">def</span> <span class="nf">display</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+
+    <span class="k">if</span> <span class="n">VERBOSE</span><span class="p">:</span>
+
+        <span class="k">print</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+
+
+<span class="k">def</span> <span class="nf">attack</span><span class="p">(</span><span class="n">attacker</span><span class="p">,</span> <span class="n">defender</span><span class="p">):</span>
+
+    <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">attacker</span><span class="p">[</span><span class="s">&#39;thac0&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">defender</span><span class="p">[</span><span class="s">&#39;ac&#39;</span><span class="p">]:</span>
+
+        <span class="n">damage</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">attacker</span><span class="p">[</span><span class="s">&#39;dmgnum&#39;</span><span class="p">]):</span>
+
+            <span class="n">damage</span> <span class="o">+=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">attacker</span><span class="p">[</span><span class="s">&#39;dmgsize&#39;</span><span class="p">])</span>
+
+        <span class="n">damage</span> <span class="o">+=</span> <span class="n">attacker</span><span class="p">[</span><span class="s">&#39;dmgmod&#39;</span><span class="p">]</span>
+
+        <span class="n">display</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s"> (</span><span class="si">%s</span><span class="s"> hp) hits </span><span class="si">%s</span><span class="s"> (</span><span class="si">%s</span><span class="s"> hp) for </span><span class="si">%s</span><span class="s"> points of damage. </span><span class="si">%s</span><span class="s"> is reduced to </span><span class="si">%s</span><span class="s"> hp.&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">attacker</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">],</span> <span class="n">attacker</span><span class="p">[</span><span class="s">&#39;hp&#39;</span><span class="p">],</span> <span class="n">defender</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">],</span> <span class="n">defender</span><span class="p">[</span><span class="s">&#39;hp&#39;</span><span class="p">],</span> <span class="n">damage</span><span class="p">,</span> <span class="n">defender</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">],</span> <span class="n">defender</span><span class="p">[</span><span class="s">&#39;hp&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">damage</span><span class="p">))</span>
+
+        <span class="n">defender</span><span class="p">[</span><span class="s">&#39;hp&#39;</span><span class="p">]</span> <span class="o">-=</span> <span class="n">damage</span>
+
+    <span class="k">else</span><span class="p">:</span>
+
+        <span class="n">display</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s"> misses </span><span class="si">%s</span><span class="s">.&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">attacker</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">],</span> <span class="n">defender</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]))</span>
+
+
+
+<span class="n">aliceWins</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="n">bobWins</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">NUM_FIGHTS</span><span class="p">):</span>
+
+    <span class="n">display</span><span class="p">(</span><span class="s">&#39;======================&#39;</span><span class="p">)</span>
+
+    <span class="n">display</span><span class="p">(</span><span class="s">&#39;Start of combat #</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="n">alice</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">aliceTemplate</span><span class="p">)</span>
+
+    <span class="n">bob</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">bobTemplate</span><span class="p">)</span>
+
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+
+        <span class="n">attack</span><span class="p">(</span><span class="n">alice</span><span class="p">,</span> <span class="n">bob</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">bob</span><span class="p">[</span><span class="s">&#39;hp&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+
+            <span class="k">break</span>
+
+
+
+        <span class="n">attack</span><span class="p">(</span><span class="n">bob</span><span class="p">,</span> <span class="n">alice</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">alice</span><span class="p">[</span><span class="s">&#39;hp&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+
+            <span class="k">break</span>
+
+    <span class="k">if</span> <span class="n">alice</span><span class="p">[</span><span class="s">&#39;hp&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+
+        <span class="n">display</span><span class="p">(</span><span class="s">&#39;Alice has died.&#39;</span><span class="p">)</span>
+
+        <span class="n">bobWins</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="n">bob</span><span class="p">[</span><span class="s">&#39;hp&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+
+        <span class="n">display</span><span class="p">(</span><span class="s">&#39;Bob has died.&#39;</span><span class="p">)</span>
+
+        <span class="n">aliceWins</span> <span class="o">+=</span> <span class="mi">1</span>
+
+
+
+<span class="k">print</span><span class="p">()</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">&#39;Alice won </span><span class="si">%s</span><span class="s"> (</span><span class="si">%s%%</span><span class="s">) fights. Bob won </span><span class="si">%s</span><span class="s"> (</span><span class="si">%s%%</span><span class="s">) fights.&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">aliceWins</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">aliceWins</span> <span class="o">/</span> <span class="n">NUM_FIGHTS</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">bobWins</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">bobWins</span> <span class="o">/</span> <span class="n">NUM_FIGHTS</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
+
 </pre>
 </div>
 </div>
 <p>When you run this program, it produces output like this:</p>
-<pre style="font-size: 120%">======================
-Start of combat #1
-Alice misses Bob.
-Bob (12 hp) hits Alice (14 hp) for 6 points of damage. Alice is reduced to 8 hp.
-Alice misses Bob.
-Bob misses Alice.
-Alice misses Bob.
-Bob misses Alice.
-Alice misses Bob.
-Bob misses Alice.
-Alice (8 hp) hits Bob (12 hp) for 5 points of damage. Bob is reduced to 7 hp.
-Bob misses Alice.
-Alice misses Bob.
-Bob misses Alice.
-Alice misses Bob.
-Bob (7 hp) hits Alice (8 hp) for 2 points of damage. Alice is reduced to 6 hp.
-Alice (6 hp) hits Bob (7 hp) for 6 points of damage. Bob is reduced to 1 hp.
-Bob misses Alice.
-Alice (6 hp) hits Bob (1 hp) for 1 points of damage. Bob is reduced to 0 hp.
-Bob has died.
-
+<pre style="font-size: 120%">======================
+
+Start of combat #1
+
+Alice misses Bob.
+
+Bob (12 hp) hits Alice (14 hp) for 6 points of damage. Alice is reduced to 8 hp.
+
+Alice misses Bob.
+
+Bob misses Alice.
+
+Alice misses Bob.
+
+Bob misses Alice.
+
+Alice misses Bob.
+
+Bob misses Alice.
+
+Alice (8 hp) hits Bob (12 hp) for 5 points of damage. Bob is reduced to 7 hp.
+
+Bob misses Alice.
+
+Alice misses Bob.
+
+Bob misses Alice.
+
+Alice misses Bob.
+
+Bob (7 hp) hits Alice (8 hp) for 2 points of damage. Alice is reduced to 6 hp.
+
+Alice (6 hp) hits Bob (7 hp) for 6 points of damage. Bob is reduced to 1 hp.
+
+Bob misses Alice.
+
+Alice (6 hp) hits Bob (1 hp) for 1 points of damage. Bob is reduced to 0 hp.
+
+Bob has died.
+
+
+
 Alice won 1 (100.0%) fights. Bob won 0 (0.0%) fights.</pre>
 <p>But maybe Alice just got lucky in this one fight. Let’s reprogram this program to turn off the verbose output (displaying text on the screen takes a lot more time than running the simulation) and up the number of fights to 30,000 (this is just changing the NUM_FIGHTS variable to 30000 and the VERBOSE variable to False):</p>
 <pre style="font-size: 120%">Alice won 12909 (43.03%) fights. Bob won 17091 (56.97%) fights.</pre>
@@ -164,7 +233,7 @@ Alice won 1 (100.0%) fights. Bob won 0 (0.0%) fights.</pre>
 <li><a href="http://www.reddit.com/r/learnprogramming/comments/i5kyd/what_is_a_better_supplement_to_a_bs_in_computer/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.reddit.com/r/learnprogramming/comments/i5kyd/what_is_a_better_supplement_to_a_bs_in_computer/', 'What is a better supplement to a BS in Computer Science? Math or Physics? (11 comments)']);" >What is a better supplement to a BS in Computer Science? Math or Physics? (11 comments)</a></li>
 <li><a href="http://www.reddit.com/r/learnprogramming/comments/bdwfq/the_importance_of_math_for_programming/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.reddit.com/r/learnprogramming/comments/bdwfq/the_importance_of_math_for_programming/', 'The importance of Math for Programming? (6 comments)']);" >The importance of Math for Programming? (6 comments)</a></li>
 </ul>
-					
+
 
     </body>
 </html>
