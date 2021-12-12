@@ -7,10 +7,10 @@
     </head>
     <body>
 
-            <p>Text adventures are an old game genre where the entire world is textually described as a series of rooms. Play involves entering simple text commands such as "move north" or "eat pie". Each room in the game world has its own text description, items on the ground, and exits to adjacent rooms. "Room" is a general name for a single area in the game world: a room can be a large open canyon or the inside of a wardrobe. Multi-user text adventures, called MUDs or Multi-User Dungeons, were the precursor to modern MMORPGs. You can still play MUDs today by finding them on <a href="http://www.mudconnect.com/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.mudconnect.com/', 'The Mud Connector']);" >The Mud Connector</a>.</p>
+            <p>Text adventures are an old game genre where the entire world is textually described as a series of rooms. Play involves entering simple text commands such as "move north" or "eat pie". Each room in the game world has its own text description, items on the ground, and exits to adjacent rooms. "Room" is a general name for a single area in the game world: a room can be a large open canyon or the inside of a wardrobe. Multi-user text adventures, called MUDs or Multi-User Dungeons, were the precursor to modern MMORPGs. You can still play MUDs today by finding them on <a href="http://www.mudconnect.com/">The Mud Connector</a>.</p>
 <p><img src="http://inventwithpython.com/blogstatic/esotera.png?27f655" alt="Screenshot of an old text adventure game." /></p>
 <p>Text adventures are easyto make because they don't require graphics. This tutorial uses two Python modules, <code>cmd</code> and <code>textwrap</code> and makes minimal use of object-oriented programming, but you don't have to know OOP concepts to follow. (But in general, text adventures would do very well with an object-oriented approach.) This tutorial is for beginner Python 3 programmers.</p>
-<p><a href="https://github.com/asweigart/textadventuredemo" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/textadventuredemo', 'The code for Text Adventure Demo is available on GitHub.']);" >The code for Text Adventure Demo is available on GitHub.</a></p>
+<p><a href="https://github.com/asweigart/textadventuredemo">The code for Text Adventure Demo is available on GitHub.</a></p>
 <p><span id="more-1623"></span></p>
 <p>The <code>cmd</code> module provides a generic command-line interface that has several useful features:</p>
 <ul>
@@ -18,9 +18,9 @@
 <li><strong>History browsing</strong> - Press the up arrow key to bring up the previously entered commands.</li>
 <li><strong>Automatic help</strong> - A help system for commands is automatically generated for your commands.</li>
 </ul>
-<p>The Python Debugger (<a href="http://pythonconquerstheuniverse.wordpress.com/2009/09/10/debugging-in-python/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://pythonconquerstheuniverse.wordpress.com/2009/09/10/debugging-in-python/', 'tutorial here']);" >tutorial here</a>) in the <code>pdb</code> module makes use of the <code>cmd</code> module for its command line interface.</p>
-<p>To get tab-completion to work on Windows, download and install this module: <a href="https://pypi.python.org/pypi/pyreadline/2.0" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://pypi.python.org/pypi/pyreadline/2.0', 'https://pypi.python.org/pypi/pyreadline/2.0']);" >https://pypi.python.org/pypi/pyreadline/2.0</a> (On Windows with Python 3, open a command window and type <code>cd c:\Python34\Scripts</code> and then <code>pip install pyreadline</code>.</p>
-<p>Our program will be about turn-based, single-player, and about 800 lines long. You can download the complete version from here: <a href="https://raw.githubusercontent.com/asweigart/textadventuredemo/master/textadventuredemo.py" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://raw.githubusercontent.com/asweigart/textadventuredemo/master/textadventuredemo.py', 'Download textadventuredemo.py']);" >Download textadventuredemo.py</a> or look at the <a href="https://raw.githubusercontent.com/asweigart/textadventuredemo" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://raw.githubusercontent.com/asweigart/textadventuredemo', 'GitHub page']);" >GitHub page</a>.</p>
+<p>The Python Debugger (<a href="http://pythonconquerstheuniverse.wordpress.com/2009/09/10/debugging-in-python/">tutorial here</a>) in the <code>pdb</code> module makes use of the <code>cmd</code> module for its command line interface.</p>
+<p>To get tab-completion to work on Windows, download and install this module: <a href="https://pypi.python.org/pypi/pyreadline/2.0">https://pypi.python.org/pypi/pyreadline/2.0</a> (On Windows with Python 3, open a command window and type <code>cd c:\Python34\Scripts</code> and then <code>pip install pyreadline</code>.</p>
+<p>Our program will be about turn-based, single-player, and about 800 lines long. You can download the complete version from here: <a href="https://raw.githubusercontent.com/asweigart/textadventuredemo/master/textadventuredemo.py">Download textadventuredemo.py</a> or look at the <a href="https://raw.githubusercontent.com/asweigart/textadventuredemo">GitHub page</a>.</p>
 <h3>Demo of Game Play</h3>
 <p>Here's what our text adventure game will look like. It won't have combat, but will have a small town that you can navigate while picking up and looking at different things. Money isn't implemented, but shops to buy and sell at are.</p>
 <blockquote style="font-family: monospace;"><p>Text Adventure Demo!<br />
@@ -195,7 +195,7 @@ Thanks for playing!</p></blockquote>
         +---------+    +---------+</pre>
 <p>(Data structures like these are normally put into classes in objet-oriented programming. To keep this text adventure demo simple, I'm using dictionaries and lists.)</p>
 <h3>Constant Variables and Global Variables</h3>
-<p>Start from scratch with a blank <code>textadventuredemo.py</code> file. Add a <code>#! python3</code> <a href="https://stackoverflow.com/questions/2429511/why-do-people-write-usr-bin-env-python-on-the-first-line-of-a-python-script" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://stackoverflow.com/questions/2429511/why-do-people-write-usr-bin-env-python-on-the-first-line-of-a-python-script', 'shebang line']);" >shebang line</a>, some comments describing the program, and the <code>worldRooms</code> and <code>worldItems</code> data structures. Since this is mostly text and not code, you might want to just copy and paste the code from <a href="https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/datastructures.py" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/datastructures.py', 'the snippet on GitHub']);" >the snippet on GitHub</a>.</p>
+<p>Start from scratch with a blank <code>textadventuredemo.py</code> file. Add a <code>#! python3</code> <a href="https://stackoverflow.com/questions/2429511/why-do-people-write-usr-bin-env-python-on-the-first-line-of-a-python-script">shebang line</a>, some comments describing the program, and the <code>worldRooms</code> and <code>worldItems</code> data structures. Since this is mostly text and not code, you might want to just copy and paste the code from <a href="https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/datastructures.py">the snippet on GitHub</a>.</p>
 <p>The keys in the above data structures are constant variables:</p>
 <div class="highlight">
 <pre><span class="n">DESC</span> <span class="o">=</span> <span class="s">&#39;desc&#39;</span>
@@ -341,7 +341,7 @@ West: West X Street
         <span class="n">moveDirection</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
 </pre>
 </div>
-<p>Your program will now look like <a href="https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/movement.py" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/movement.py', 'this source code on GitHub']);" >this source code on GitHub</a>. When you run this program, you will be able to move around the game world by typing <code>north</code>, <code>south</code>, <code>east</code>, <code>west</code>, <code>up</code>, and <code>down</code>.</p>
+<p>Your program will now look like <a href="https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/movement.py">this source code on GitHub</a>. When you run this program, you will be able to move around the game world by typing <code>north</code>, <code>south</code>, <code>east</code>, <code>west</code>, <code>up</code>, and <code>down</code>.</p>
 <p>Notice a few things about this game world:</p>
 <ul>
 <li>Moving in an invalid direction results in <code>'You cannot move in that direction'</code> printed to the screen.</li>
@@ -447,7 +447,7 @@ West: West X Street
     <span class="k">print</span><span class="p">(</span><span class="s">&#39;Thanks for playing!&#39;</span><span class="p">)</span>
 </pre>
 </div>
-<p>Your program should now look like <a href="https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/basiccmdloop.py" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/basiccmdloop.py', 'this file on GitHub']);" >this file on GitHub</a>.</p>
+<p>Your program should now look like <a href="https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/basiccmdloop.py">this file on GitHub</a>.</p>
 <h3>The cmd Help System</h3>
 <p>When you run this program, the movement commands won't work (they were implemented in the temporary <code>while</code> loop you removed) but you can run the "help", "help quit", and "help combat" commands:</p>
 <blockquote style="font-family: monospace;"><p>&gt; <strong>help</strong></p>
@@ -516,7 +516,7 @@ Combat is not implemented in this program.</p></blockquote>
             <span class="k">print</span><span class="p">(</span><span class="s">&#39;Showing brief exit descriptions.&#39;</span><span class="p">)</span>
 </pre>
 </div>
-<p>With this code, your program should look like <a href="https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/cmdmovement.py" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/cmdmovement.py', 'this file on GitHub']);" >this file on GitHub</a>. When you run this program, the north/south/east/west/up/down commands will all work.</p>
+<p>With this code, your program should look like <a href="https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/cmdmovement.py">this file on GitHub</a>. When you run this program, the north/south/east/west/up/down commands will all work.</p>
 <h3>Inventory</h3>
 <p>The "inventory" command will display the contents of the <code>inventory</code> global variable. Rather than just a <code>do_inventory()</code> method that runs <code>print(inventory)</code>, there's additional code that checks if the player has more than one of a type of item. So an <code>inventory</code> value of <code>['Donut', 'Donut', 'Donut']</code> will display a single line: <code>Donut (3)</code>.</p>
 <p>Add the following code to your program:</p>
@@ -611,7 +611,7 @@ Combat is not implemented in this program.</p></blockquote>
             <span class="n">inventory</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="c"># remove from inventory</span>
             <span class="n">worldRooms</span><span class="p">[</span><span class="n">location</span><span class="p">][</span><span class="n">GROUND</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="c"># add to the ground</span></pre>
 </div>
-<p>After you are finished, your program will look like <a href="https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/takedrop.py" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/takedrop.py', 'this file on GitHub']);" >this file on GitHub</a>. When you run the program, you will be able to drop and take items (provided they have the <code>TAKEABLE</code> setting).</p>
+<p>After you are finished, your program will look like <a href="https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/takedrop.py">this file on GitHub</a>. When you run the program, you will be able to drop and take items (provided they have the <code>TAKEABLE</code> setting).</p>
 <h3>Tab Completion</h3>
 <p>if the player types a partial command, such as "nor", they can press the Tab key and the command line interface will complete the command: "north". The command line  interface knows this because "north" is the only command that begins with "nor". If there were other commands that began with "nor", pressing Tab would bring up a list of possible complete commands.</p>
 <p>However, say that the player has an <code>inventory</code> value of <code>['sword', 'swingset', 'swampwater']</code> and had entered "drop sw" and pressed Tab. The command line interface knows all the commands because it can see what <code>do_%lt;command&gt;()</code> functions there are. But items on the ground or in the inventory are specific to your program, so you will need a way to tell the command line interface what it should return for possible tab completions.</p>
@@ -665,7 +665,7 @@ Combat is not implemented in this program.</p></blockquote>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">possibleItems</span><span class="p">))</span> <span class="c"># make list unique</span>
 </pre>
 </div>
-<p>Your program will look like <a href="https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/takedrop_complete.py" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/takedrop_complete.py', 'this file on GitHub']);" >this file on GitHub</a>. When you run the program, you will be able to type "drop sw", then press Tab, and the command will complete to "drop sword".</p>
+<p>Your program will look like <a href="https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/takedrop_complete.py">this file on GitHub</a>. When you run the program, you will be able to type "drop sw", then press Tab, and the command will complete to "drop sword".</p>
 <h3>Looking at Things</h3>
 <p>The "look" command will have similar <code>do_look()</code> and <code>complete_look()</code> methods. Typing "look" will print the current room's <code>DEC</code> key's value. Typing "look exits" will print the names of all the adjacent rooms, while "look <direction>" will print the name of the room in that direction. The player can also type "look <item>" to look at a item that is either on the ground or in their inventory.</p>
 <p>Enter the following code for the "look" command:</p>
@@ -766,7 +766,7 @@ Combat is not implemented in this program.</p></blockquote>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">possibleItems</span><span class="p">))</span> <span class="c"># make list unique</span>
 </pre>
 </div>
-<p>The program will now look like <a href="https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/look.py" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/look.py', 'this file on GitHub']);" >this file on GitHub</a>.</p>
+<p>The program will now look like <a href="https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/look.py">this file on GitHub</a>.</p>
 <h3>Shops</h3>
 <p>Shops are rooms that have a <code>SHOP</code> key, such as the Bakery room:</p>
 <div class="highlight">
@@ -883,7 +883,7 @@ Combat is not implemented in this program.</p></blockquote>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">possibleItems</span><span class="p">))</span> <span class="c"># make list unique</span>
 </pre>
 </div>
-<p>When you are finished typing in this code, your program will look like <a href="https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/shops.py" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/shops.py', 'this file on GitHub']);" >this file on GitHub</a>.</p>
+<p>When you are finished typing in this code, your program will look like <a href="https://raw.githubusercontent.com/asweigart/textadventuredemo/master/snippets/shops.py">this file on GitHub</a>.</p>
 <h3>Eating</h3>
 <p>Some items are marked as edible by having an <code>EDIBLE</code> key set to <code>True</code> For example, Meat Pies, Bagels, and Donuts are all edible items:</p>
 <div class="highlight">
@@ -952,7 +952,7 @@ Combat is not implemented in this program.</p></blockquote>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">possibleItems</span><span class="p">))</span> <span class="c"># make list unique</span>
 </pre>
 </div>
-<p>With the above code added, you will have finished the entire text adventure program. This program can be downloaded from GitHub: <a href="https://raw.githubusercontent.com/asweigart/textadventuredemo/master/textadventuredemo.py" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://raw.githubusercontent.com/asweigart/textadventuredemo/master/textadventuredemo.py', 'https://raw.githubusercontent.com/asweigart/textadventuredemo/master/textadventuredemo.py']);" >https://raw.githubusercontent.com/asweigart/textadventuredemo/master/textadventuredemo.py</a></p>
+<p>With the above code added, you will have finished the entire text adventure program. This program can be downloaded from GitHub: <a href="https://raw.githubusercontent.com/asweigart/textadventuredemo/master/textadventuredemo.py">https://raw.githubusercontent.com/asweigart/textadventuredemo/master/textadventuredemo.py</a></p>
 <h3>Ideas for New Features</h3>
 <p>That's it for this text adventure tutorial. Because of the <code>cmd</code> module's command line interface features, it is fairly easy to add new commands to your game. From here, there are several things you could add to your game:</p>
 <ul>
@@ -964,9 +964,9 @@ Combat is not implemented in this program.</p></blockquote>
 <li>Money, including different types of currencies that shops can accept or deny.</li>
 <li>Several new rooms to expand the world.</li>
 </ul>
-<p>If you are interested in creating a <a href="http://www.roguebasin.com/index.php?title=Main_Page" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.roguebasin.com/index.php?title=Main_Page', 'roguelike']);" >roguelike</a> (a genre that is sort of like the Diablo games except with ASCII-art graphics), the libtcod module will be very helpful. There are tutorials <a href="http://www.roguebasin.com/index.php?title=Complete_Roguelike_Tutorial,_using_python%2Blibtcod" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.roguebasin.com/index.php?title=Complete_Roguelike_Tutorial,_using_python%2Blibtcod', 'here']);" >here</a> and <a href="http://kooneiform.wordpress.com/2009/03/29/241/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://kooneiform.wordpress.com/2009/03/29/241/', 'here']);" >here</a>.</p>
+<p>If you are interested in creating a <a href="http://www.roguebasin.com/index.php?title=Main_Page">roguelike</a> (a genre that is sort of like the Diablo games except with ASCII-art graphics), the libtcod module will be very helpful. There are tutorials <a href="http://www.roguebasin.com/index.php?title=Complete_Roguelike_Tutorial,_using_python%2Blibtcod">here</a> and <a href="http://kooneiform.wordpress.com/2009/03/29/241/">here</a>.</p>
 <p>I detail the differences between these genre of text-based games in my blog post, <a href="http://inventwithpython.com/blog/2013/06/05/text-adventure-vs-mud-vs-roguelike-vs-dwarf-fortress/">Text Adventure vs. MUD vs. Roguelike vs. Dwarf Fortress</a>.</p>
-<p>You can try playing MUDs you find through <a href="http://www.mudconnect.com/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.mudconnect.com/', 'The Mud Connector']);" >The Mud Connector</a> to get new ideas for additional features you'd like to add. Good luck, and have fun!</p>
+<p>You can try playing MUDs you find through <a href="http://www.mudconnect.com/">The Mud Connector</a> to get new ideas for additional features you'd like to add. Good luck, and have fun!</p>
 
     </body>
 </html>

@@ -10,12 +10,12 @@
 
 			<p>UPDATE: Felix, the original author of Square Shooter, has made some comments in the comment section that are pretty insightful. I recommend you check them out.</p>
 <p>This is a continuation from <a href="http://inventwithpython.com/blog/2012/08/09/source-code-makeover-square-shooter-part-1/">Part 1</a>, where I go through the source code of <a href="http://www.pygame.org/project-Square+Shooter-2430-4094.html">Square Shooter</a>, an Asteroids clone, and try to redesign the code to be more readable. (<a href="http://inventwithpython.com/blog/2012/08/13/source-code-makeover-square-shooter-part-3/">Part 3</a> is also up.</a>)</p>
-<p>All of the changes I make <a href="https://github.com/asweigart/source_code_makeover/tree/master/square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/tree/master/square-shooter', 'can be viewed on github']);" >can be viewed on github</a>. You can also <a href="http://inventwithpython.com/square-shooter_original.py">download the original source code for Square Shooter</a>.<br />
+<p>All of the changes I make <a href="https://github.com/asweigart/source_code_makeover/tree/master/square-shooter">can be viewed on github</a>. You can also <a href="http://inventwithpython.com/square-shooter_original.py">download the original source code for Square Shooter</a>.<br />
 <span id="more-945"></span><br />
 Just to say this again, readability and software design have an element of subjectivity. The changes I make here aren't necessarily the one true way for this code to be written, and may even be worse (I'm sure you'll be able to check the comments section for people pointing out my errors.)</p>
 <p>Note that any line numbers mentioned refer to the line numbers in the <a href="http://inventwithpython.com/square-shooter_original.py">original source code</a>.</p>
 <h3>Renaming some variables and re-spacing code</h3>
-<p><a href="https://github.com/asweigart/source_code_makeover/commit/3acad0029d66c17707ab31da7d88e24ad7577c84#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/3acad0029d66c17707ab31da7d88e24ad7577c84#square-shooter', '(These changes can be seen in the github history.)']);" >(These changes can be seen in the github history.)</a></p>
+<p><a href="https://github.com/asweigart/source_code_makeover/commit/3acad0029d66c17707ab31da7d88e24ad7577c84#square-shooter">(These changes can be seen in the github history.)</a></p>
 <p>Grepping to see where <code>GameWorld</code> gets instantiated, I see that the constructor is only called once from line 528 and placed into a global variable named <code>model</code>. Hmmm. I get how the <code>GameWorld</code> is a sort of model, but since the class name is <code>GameWorld</code>, let's rename the <code>model</code> variable to "<code>world</code>" by doing a find-and-replace.</p>
 <p>Now let's look at the <code>init_level()</code> method. I'm going to change line 142 from a combination <code>if</code> statment and block to separate lines for the <code>if</code> statement and block:</p>
 <blockquote>
@@ -48,9 +48,9 @@ if self.has_super_bullets(): self._super_bullet_timer -= delta_t
 if self.has_freeze():        self._freeze_timer       -= delta_t</pre>
 </blockquote>
 <p>The <code>death_timer</code> member in <code>GameWorld</code> is the timer that is set after the player dies but before the level is restarted. This name is a bit ambiguous, so I'll rename it to <code>afterdeath_timer</code>. I'll do the same with <code>finish_timer</code>, which counts down after the last bubble has been shot but before the next level begins.</p>
-<p>That looks pretty good. I'll just add some comments to <code>init_level()</code> and then check in my changes with the log message, <a href="https://github.com/asweigart/source_code_makeover/commit/3acad0029d66c17707ab31da7d88e24ad7577c84#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/3acad0029d66c17707ab31da7d88e24ad7577c84#square-shooter', '&quot;Formatting changes and comments to init_level().&quot;']);" >"Formatting changes and comments to init_level()."</a></p>
+<p>That looks pretty good. I'll just add some comments to <code>init_level()</code> and then check in my changes with the log message, <a href="https://github.com/asweigart/source_code_makeover/commit/3acad0029d66c17707ab31da7d88e24ad7577c84#square-shooter">"Formatting changes and comments to init_level()."</a></p>
 <h3>Added comments to the GameWorld class</h3>
-<p><a href="https://github.com/asweigart/source_code_makeover/commit/da250f068ebce73925a417a3f101d9248635295a#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/da250f068ebce73925a417a3f101d9248635295a#square-shooter', '(These changes can be seen in the github history.)']);" >(These changes can be seen in the github history.)</a></p>
+<p><a href="https://github.com/asweigart/source_code_makeover/commit/da250f068ebce73925a417a3f101d9248635295a#square-shooter">(These changes can be seen in the github history.)</a></p>
 <p>Now let's look at the <code>GameWorld</code> class's <code>update()</code> method (which is separate from the <code>Ship</code> class's <code>update()</code> method). This is a lot of code that has no comments to help summarize them. All the comments below are mine:</p>
 <blockquote>
 <pre>def update(self, delta_t):
@@ -163,9 +163,9 @@ if self.has_freeze():        self._freeze_timer       -= delta_t</pre>
 
     self.ship.update(delta_t)</pre>
 </blockquote>
-<p>Checking this in with log message, <a href="https://github.com/asweigart/source_code_makeover/commit/da250f068ebce73925a417a3f101d9248635295a#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/da250f068ebce73925a417a3f101d9248635295a#square-shooter', '&quot;Added comments to GameWorld.update().&quot;']);" >"Added comments to GameWorld.update()."</a></p>
+<p>Checking this in with log message, <a href="https://github.com/asweigart/source_code_makeover/commit/da250f068ebce73925a417a3f101d9248635295a#square-shooter">"Added comments to GameWorld.update()."</a></p>
 <h3>Refactoring the GameWorld class</h3>
-<p><a href="https://github.com/asweigart/source_code_makeover/commit/17b99c9cbeca7f38e0b084aea3eeb8b7278a3bc0#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/17b99c9cbeca7f38e0b084aea3eeb8b7278a3bc0#square-shooter', '(These changes can be seen in the github history.)']);" >(These changes can be seen in the github history.)</a></p>
+<p><a href="https://github.com/asweigart/source_code_makeover/commit/17b99c9cbeca7f38e0b084aea3eeb8b7278a3bc0#square-shooter">(These changes can be seen in the github history.)</a></p>
 <p>Now that it has some documentation, let's see how we can improve the <code>GameWorld</code> class. One thing that is odd is that the powerups and explosions are removed if they are too old, and then they are aged. This means that old explosions and powerups won't be removed until the next call to <code>update()</code>. Let's swap the order of that and age them first before doing the age check:</p>
 <blockquote>
 <pre># expand the explosions and delete them once they get too big
@@ -280,9 +280,9 @@ for bubble in self.bubbles:
 
     self.ship.update(delta_t)</pre>
 </blockquote>
-<p>I'll check in these changes with the comment <a href="https://github.com/asweigart/source_code_makeover/commit/17b99c9cbeca7f38e0b084aea3eeb8b7278a3bc0#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/17b99c9cbeca7f38e0b084aea3eeb8b7278a3bc0#square-shooter', '&quot;Improved the GameWorld.update() code.&quot;']);" >"Improved the GameWorld.update() code."</a> after testing my changes.</p>
+<p>I'll check in these changes with the comment <a href="https://github.com/asweigart/source_code_makeover/commit/17b99c9cbeca7f38e0b084aea3eeb8b7278a3bc0#square-shooter">"Improved the GameWorld.update() code."</a> after testing my changes.</p>
 <h3>Refactoring init_level()</h3>
-<p><a href="https://github.com/asweigart/source_code_makeover/commit/ed966a15f7a4a922321d029786a85beb40160554#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/ed966a15f7a4a922321d029786a85beb40160554#square-shooter', '(These changes can be seen in the github history.)']);" >(These changes can be seen in the github history.)</a></p>
+<p><a href="https://github.com/asweigart/source_code_makeover/commit/ed966a15f7a4a922321d029786a85beb40160554#square-shooter">(These changes can be seen in the github history.)</a></p>
 <p>Going back to the <code>init_level()</code> code, I realize that rather than use <code>del</code> on the items in the <code>bubbles</code>, <code>explosions</code>, and <code>powerups</code> lists, we can just set those members to blank lists and Python's garbage collector will delete the objects for us.</p>
 <blockquote>
 <pre># clear out the bubbles, explosions, and power ups from the last level.
@@ -307,9 +307,9 @@ self.powerups   = []
 
 self.bubbles = [Bubble("big") for i in range(level)]</pre>
 </blockquote>
-<p>Checking this in with the message, <a href="https://github.com/asweigart/source_code_makeover/commit/ed966a15f7a4a922321d029786a85beb40160554#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/ed966a15f7a4a922321d029786a85beb40160554#square-shooter', '&quot;Simplifying init_level() code.&quot;']);" >"Simplifying init_level() code."</a></p>
+<p>Checking this in with the message, <a href="https://github.com/asweigart/source_code_makeover/commit/ed966a15f7a4a922321d029786a85beb40160554#square-shooter">"Simplifying init_level() code."</a></p>
 <h3>Fixing some bugs I introduced</h3>
-<p><a href="https://github.com/asweigart/source_code_makeover/commit/bedae2d8525803ef00356dc58f65dcde0e969ae6#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/bedae2d8525803ef00356dc58f65dcde0e969ae6#square-shooter', '(These changes can be seen in the github history.)']);" >(These changes can be seen in the github history.)</a></p>
+<p><a href="https://github.com/asweigart/source_code_makeover/commit/bedae2d8525803ef00356dc58f65dcde0e969ae6#square-shooter">(These changes can be seen in the github history.)</a></p>
 <p>I didn't test my changes too thoroughly, and introduced a couple of bugs. There are some times when the player has died and the <code>self.ship</code> member in <code>GameWorld</code> is set to <code>None</code>, but an attribute of <code>self.ship</code> is checked. I've added some <code>self.ship != None</code> checks to these <code>if</code> statements.</p>
 <p>The <code>render_ship()</code> method also has a place where we need to do a check for the ship being set to <code>None</code>.</p>
 <blockquote>
@@ -318,9 +318,9 @@ self.bubbles = [Bubble("big") for i in range(level)]</pre>
     pygame.draw.rect(self.screen, RED, bbox, 1)</pre>
 </blockquote>
 <p>I got ahead of myself by accident, I also checked in a change I made to <code>handle_collisions()</code>. Instead of calling <code>b.collides_with(self.bullet)</code> I changed it to <code>self.bullet.collides_with(b)</code>, since it reads better as "the bullet collided with the bubble" rather than "the bubble collided with the bullet".</p>
-<p>I've checked these in <a href="https://github.com/asweigart/source_code_makeover/commit/bedae2d8525803ef00356dc58f65dcde0e969ae6#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/bedae2d8525803ef00356dc58f65dcde0e969ae6#square-shooter', 'here']);" >here</a> and <a href="https://github.com/asweigart/source_code_makeover/commit/4348aba88dc2013f27774aad991f8672ae01e6a8#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/4348aba88dc2013f27774aad991f8672ae01e6a8#square-shooter', 'here']);" >here</a> and <a href="https://github.com/asweigart/source_code_makeover/commit/70f7b17855f9213952f6db49300e3c3cf2292fea#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/70f7b17855f9213952f6db49300e3c3cf2292fea#square-shooter', 'here']);" >here</a>.</p>
+<p>I've checked these in <a href="https://github.com/asweigart/source_code_makeover/commit/bedae2d8525803ef00356dc58f65dcde0e969ae6#square-shooter">here</a> and <a href="https://github.com/asweigart/source_code_makeover/commit/4348aba88dc2013f27774aad991f8672ae01e6a8#square-shooter">here</a> and <a href="https://github.com/asweigart/source_code_makeover/commit/70f7b17855f9213952f6db49300e3c3cf2292fea#square-shooter">here</a>.</p>
 <h3>Improving handle_collisions()</h3>
-<p><a href="https://github.com/asweigart/source_code_makeover/commit/63baedb58bbaaf4730606e4ba36c2534fd8e1156#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/63baedb58bbaaf4730606e4ba36c2534fd8e1156#square-shooter', '(These changes can be seen in the github history.)']);" >(These changes can be seen in the github history.)</a></p>
+<p><a href="https://github.com/asweigart/source_code_makeover/commit/63baedb58bbaaf4730606e4ba36c2534fd8e1156#square-shooter">(These changes can be seen in the github history.)</a></p>
 <p>I'm going to add a new comment that explains that non-super bullets go away when they hit a bubble:</p>
 <blockquote>
 <pre>self.bullet = None # delete the non-super bullet when it hits a bubble</pre>
@@ -360,9 +360,9 @@ if self.ship != None and b.collides_with(self.ship) and not self.ship.has_shield
 
             self.powerups.remove(p)</pre>
 </blockquote>
-<p>That's good for now. Let's check this in with the log message, <a href="https://github.com/asweigart/source_code_makeover/commit/63baedb58bbaaf4730606e4ba36c2534fd8e1156#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/63baedb58bbaaf4730606e4ba36c2534fd8e1156#square-shooter', '&quot;Refactoring handle_collisions()&quot;']);" >"Refactoring handle_collisions()"</a></p>
+<p>That's good for now. Let's check this in with the log message, <a href="https://github.com/asweigart/source_code_makeover/commit/63baedb58bbaaf4730606e4ba36c2534fd8e1156#square-shooter">"Refactoring handle_collisions()"</a></p>
 <h3>Refactoring the rest of GameWorld</h3>
-<p><a href="https://github.com/asweigart/source_code_makeover/commit/60fd1e751b3b72f0cd98a7c812d8d4e25ad2a93e#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/60fd1e751b3b72f0cd98a7c812d8d4e25ad2a93e#square-shooter', '(These changes can be seen in the github history.)']);" >(These changes can be seen in the github history.)</a></p>
+<p><a href="https://github.com/asweigart/source_code_makeover/commit/60fd1e751b3b72f0cd98a7c812d8d4e25ad2a93e#square-shooter">(These changes can be seen in the github history.)</a></p>
 <p>The <code>spawn_explosion()</code> method looks okay. We'll leave it as is.</p>
 <p>The code in <code>mark_score()</code> is a bunch of <code>if</code>-<code>elif</code> statements that change the same variable by different values. Let's put this info in a "kinds" dictionary like we did in the Bubble class:</p>
 <blockquote>
@@ -403,9 +403,9 @@ if self.ship != None and b.collides_with(self.ship) and not self.ship.has_shield
 <pre>self.high_score = max(self.score, self.high_score)</pre>
 </blockquote>
 <p>...but decided against it. It's one less line, but it doesn't necessarily improve readability.</p>
-<p>Checking these changes in with the log message, <a href="https://github.com/asweigart/source_code_makeover/commit/60fd1e751b3b72f0cd98a7c812d8d4e25ad2a93e#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/60fd1e751b3b72f0cd98a7c812d8d4e25ad2a93e#square-shooter', '&quot;Refactored mark_score() and apply_powerup()&quot;']);" >"Refactored mark_score() and apply_powerup()"</a></p>
+<p>Checking these changes in with the log message, <a href="https://github.com/asweigart/source_code_makeover/commit/60fd1e751b3b72f0cd98a7c812d8d4e25ad2a93e#square-shooter">"Refactored mark_score() and apply_powerup()"</a></p>
 <h3>Fixing a regression</h3>
-<p><a href="https://github.com/asweigart/source_code_makeover/commit/5e0957e41bf115a8b358e528a14b8b8ad3c79302#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/5e0957e41bf115a8b358e528a14b8b8ad3c79302#square-shooter', '(These changes can be seen in the github history.)']);" >(These changes can be seen in the github history.)</a></p>
+<p><a href="https://github.com/asweigart/source_code_makeover/commit/5e0957e41bf115a8b358e528a14b8b8ad3c79302#square-shooter">(These changes can be seen in the github history.)</a></p>
 <p>In the process of fixing a bug, I've accidentally introduced a new bug. These kinds of bugs are known as regressions. In GameWorld's update() method, I have this code:</p>
 <blockquote>
 <pre>elif self.ship != None and not self.ship.has_freeze():
@@ -430,9 +430,9 @@ if self.ship != None and b.collides_with(self.ship) and not self.ship.has_shield
 </blockquote>
 <p>Because of <a href="http://inventwithpython.com/chapter10.html#ShortCircuitEvaluation">short-circuiting</a>, if <code>self.ship</code> is <code>None</code>, then the <code>not self.ship.has_freeze()</code> part of the condition won't be evaluated. (There's no reason to check: the expression <code>True or blahblahblah</code> will evaluate to <code>True</code> no matter if <code>blahblahblah</code> is <code>True</code> or <code>False</code>, so Python skips it.)</p>
 <p>Now when we run the program and die, you can see the bubbles keep moving.</p>
-<p>I'll check these changes in under the log message, <a href="https://github.com/asweigart/source_code_makeover/commit/5e0957e41bf115a8b358e528a14b8b8ad3c79302#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/5e0957e41bf115a8b358e528a14b8b8ad3c79302#square-shooter', '&quot;Fixed a regression where the bubbles freeze after the player dies.&quot;']);" >"Fixed a regression where the bubbles freeze after the player dies."</a></p>
+<p>I'll check these changes in under the log message, <a href="https://github.com/asweigart/source_code_makeover/commit/5e0957e41bf115a8b358e528a14b8b8ad3c79302#square-shooter">"Fixed a regression where the bubbles freeze after the player dies."</a></p>
 <h3>Refactoring GameScreen</h3>
-<p><a href="https://github.com/asweigart/source_code_makeover/commit/577b420a3dadb11719c22117b56e2e98de97c482#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/577b420a3dadb11719c22117b56e2e98de97c482#square-shooter', '(These changes can be seen in the github history.)']);" >(These changes can be seen in the github history.)</a></p>
+<p><a href="https://github.com/asweigart/source_code_makeover/commit/577b420a3dadb11719c22117b56e2e98de97c482#square-shooter">(These changes can be seen in the github history.)</a></p>
 <p>The first thing I notice is that there is code that does exactly what our <code>WINDOW_WIDTH</code> and <code>WINDOW_HEIGHT</code> constants do:</p>
 <blockquote>
 <pre>self.width, self.height = screen.get_size()</pre>
@@ -461,9 +461,9 @@ MAP_WIDTH = WINDOW_WIDTH - 160
 MAP_HEIGHT = WINDOW_HEIGHT</pre>
 </blockquote>
 <p>Also, the <code>render_backround()</code> method is misspelled. Let's fix that.</p>
-<p>Checking this in with the log message, <a href="https://github.com/asweigart/source_code_makeover/commit/577b420a3dadb11719c22117b56e2e98de97c482#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/577b420a3dadb11719c22117b56e2e98de97c482#square-shooter', '&quot;Refactoring GameScreen\'s constructor.&quot;']);" >"Refactoring GameScreen's constructor."</a></p>
+<p>Checking this in with the log message, <a href="https://github.com/asweigart/source_code_makeover/commit/577b420a3dadb11719c22117b56e2e98de97c482#square-shooter">"Refactoring GameScreen's constructor."</a></p>
 <h3>Refactoring GameScreen.render()</h3>
-<p><a href="https://github.com/asweigart/source_code_makeover/commit/2657bd7ec349b982d4c07c84de1471a35cef83aa#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/2657bd7ec349b982d4c07c84de1471a35cef83aa#square-shooter', '(These changes can be seen in the github history.)']);" >(These changes can be seen in the github history.)</a></p>
+<p><a href="https://github.com/asweigart/source_code_makeover/commit/2657bd7ec349b982d4c07c84de1471a35cef83aa#square-shooter">(These changes can be seen in the github history.)</a></p>
 <p>The first line in the <code>render()</code> method is a bit of syntactic sugar:</p>
 <blockquote>
 <pre>m = self.world</pre>
@@ -548,12 +548,12 @@ else:
 
 #self.screen.blit(fps_text, (0, 0))</pre>
 </blockquote>
-<p>I'll check this in with the log message, <a href="https://github.com/asweigart/source_code_makeover/commit/2657bd7ec349b982d4c07c84de1471a35cef83aa#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/2657bd7ec349b982d4c07c84de1471a35cef83aa#square-shooter', '&quot;Refactored the GameScreen.render() method, and got rid of the green box drawing code.&quot;']);" >"Refactored the GameScreen.render() method, and got rid of the green box drawing code."</a></p>
+<p>I'll check this in with the log message, <a href="https://github.com/asweigart/source_code_makeover/commit/2657bd7ec349b982d4c07c84de1471a35cef83aa#square-shooter">"Refactored the GameScreen.render() method, and got rid of the green box drawing code."</a></p>
 <h3>Whoops.</h3>
-<p><a href="https://github.com/asweigart/source_code_makeover/commit/c0600c6c7da4cef00d8934c29f7c6eb15b045f3d#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/c0600c6c7da4cef00d8934c29f7c6eb15b045f3d#square-shooter', '(These changes can be seen in the github history.)']);" >(These changes can be seen in the github history.)</a></p>
+<p><a href="https://github.com/asweigart/source_code_makeover/commit/c0600c6c7da4cef00d8934c29f7c6eb15b045f3d#square-shooter">(These changes can be seen in the github history.)</a></p>
 <p>I accidentally checked in the code before deleting those commented out lines. I'll remove them in this check in.</p>
 <h3>Moving render_ship() and render_bullet()</h3>
-<p><a href="https://github.com/asweigart/source_code_makeover/commit/bacff96189ad000e9df677011e46d2fa9a637aab#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/bacff96189ad000e9df677011e46d2fa9a637aab#square-shooter', '(These changes can be seen in the github history.)']);" >(These changes can be seen in the github history.)</a></p>
+<p><a href="https://github.com/asweigart/source_code_makeover/commit/bacff96189ad000e9df677011e46d2fa9a637aab#square-shooter">(These changes can be seen in the github history.)</a></p>
 <p>The <code>render_title_screen()</code> method looks fine. But the other render methods like <code>render_ship()</code>, <code>render_bullet()</code>, and <code>render_powerup()</code> would be better if they were in the <code>Ship</code>, <code>Bullet</code>, and <code>Powerup</code> classes respectively. I'll move them there and simply rename them all <code>render()</code> (just like how the <code>update()</code> name is used by the <code>ObjectOnMap</code> subclasses.) These <code>render()</code> methods will need a parameter for the <code>pygame.Surface</code> object to draw themselves on.</p>
 <p>These lines in <code>render_ship()</code> can be removed once this method can be removed after the code is moved to the <code>Ship</code> class, since <code>self.world.ship</code> will just be <code>self</code> and <code>ship.pos</code> will simply be <code>self.pos</code>.</p>
 <blockquote>
@@ -609,9 +609,9 @@ pos = ship.pos</pre>
 
         pygame.draw.rect(surface, RED, bbox, 1)</pre>
 </blockquote>
-<p>I'll check this in as <a href="https://github.com/asweigart/source_code_makeover/commit/bacff96189ad000e9df677011e46d2fa9a637aab#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/bacff96189ad000e9df677011e46d2fa9a637aab#square-shooter', '&quot;Moved render_bullet() and render_ship() to the Bullet and Ship classes.&quot;']);" >"Moved render_bullet() and render_ship() to the Bullet and Ship classes."</a></p>
+<p>I'll check this in as <a href="https://github.com/asweigart/source_code_makeover/commit/bacff96189ad000e9df677011e46d2fa9a637aab#square-shooter">"Moved render_bullet() and render_ship() to the Bullet and Ship classes."</a></p>
 <h3>Creating render() methods for Bubble and a new Explosion class</h3>
-<p><a href="https://github.com/asweigart/source_code_makeover/commit/798ece1b88b5735e8c43d849150a6b084da5d8f5#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/798ece1b88b5735e8c43d849150a6b084da5d8f5#square-shooter', '(These changes can be seen in the github history.)']);" >(These changes can be seen in the github history.)</a></p>
+<p><a href="https://github.com/asweigart/source_code_makeover/commit/798ece1b88b5735e8c43d849150a6b084da5d8f5#square-shooter">(These changes can be seen in the github history.)</a></p>
 <p>Let's continue the trend of giving classes their own <code>render()</code> methods with the <code>Bubble</code> class:</p>
 <blockquote>
 <pre>def render(self, surface):
@@ -659,9 +659,9 @@ pos = ship.pos</pre>
 
             1)</pre>
 </blockquote>
-<p>I'll check in these changes with the log message, <a href="https://github.com/asweigart/source_code_makeover/commit/798ece1b88b5735e8c43d849150a6b084da5d8f5#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/798ece1b88b5735e8c43d849150a6b084da5d8f5#square-shooter', '&quot;Added an Explosion class, and created Bubble.render()&quot;']);" >"Added an Explosion class, and created Bubble.render()"</a></p>
+<p>I'll check in these changes with the log message, <a href="https://github.com/asweigart/source_code_makeover/commit/798ece1b88b5735e8c43d849150a6b084da5d8f5#square-shooter">"Added an Explosion class, and created Bubble.render()"</a></p>
 <h3>Creatind a render() method for Powerup.</h3>
-<p><a href="https://github.com/asweigart/source_code_makeover/commit/deeff180566bfededaa8db445bf3c485e2a7f157#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/deeff180566bfededaa8db445bf3c485e2a7f157#square-shooter', '(These changes can be seen in the github history.)']);" >(These changes can be seen in the github history.)</a></p>
+<p><a href="https://github.com/asweigart/source_code_makeover/commit/deeff180566bfededaa8db445bf3c485e2a7f157#square-shooter">(These changes can be seen in the github history.)</a></p>
 <p>The render() method for Powerup has a lot of code in it since it has to draw three different types of Powerup. We could split the Powerup class into three subclasses, but I think that's object-oriented overkill.</p>
 <p>I've created a <code>scaled_x</code> and <code>scaled_y</code> variable inside <code>render()</code> to replace all the <code>scale_and_round(self.pos.x, self.pos.y)</code> calls. The utility of this is negligible. I almost made a <code>scaled_r</code> to replace the <code>int(round(self.radius * MAP_SIZE))</code> expressions. Other than that, the code is mostly untouched.</p>
 <p>I've also replaced the <code>i</code> in the <code>for</code> loop with "<code>powerup</code>" since it is not an index:</p>
@@ -670,8 +670,8 @@ pos = ship.pos</pre>
 
     powerup.render(self.screen)</pre>
 </blockquote>
-<p><a href="https://github.com/asweigart/source_code_makeover/commit/deeff180566bfededaa8db445bf3c485e2a7f157#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/deeff180566bfededaa8db445bf3c485e2a7f157#square-shooter', '&quot;Created a render() method for Powerup.&quot;']);" >"Created a render() method for Powerup."</a></p>
-<p>And I made another check in: <a href="https://github.com/asweigart/source_code_makeover/commit/3603a9e4b0cffba11f6302567687e3828a92daac#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/3603a9e4b0cffba11f6302567687e3828a92daac#square-shooter', '&quot;Whoops. Left in a high powerup chance while testing.&quot;']);" >"Whoops. Left in a high powerup chance while testing."</a></p>
+<p><a href="https://github.com/asweigart/source_code_makeover/commit/deeff180566bfededaa8db445bf3c485e2a7f157#square-shooter">"Created a render() method for Powerup."</a></p>
+<p>And I made another check in: <a href="https://github.com/asweigart/source_code_makeover/commit/3603a9e4b0cffba11f6302567687e3828a92daac#square-shooter">"Whoops. Left in a high powerup chance while testing."</a></p>
 <p>At this point, our <code>render_game_world()</code> method in the <code>GameScreen</code> class looks very straightforward:</p>
 <blockquote>
 <pre>def render_game_world(self):
@@ -712,7 +712,7 @@ pos = ship.pos</pre>
 </blockquote>
 <p>The code in the <code>render_pause_text()</code> method looks fine, I'll just leave it like that.</p>
 <h3>Adding a debug switch for displaying FPS</h3>
-<p><a href="https://github.com/asweigart/source_code_makeover/commit/5cdd7f00e457f85d54e465231f3cec86e4a412f3#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/5cdd7f00e457f85d54e465231f3cec86e4a412f3#square-shooter', '(These changes can be seen in the github history.)']);" >(These changes can be seen in the github history.)</a></p>
+<p><a href="https://github.com/asweigart/source_code_makeover/commit/5cdd7f00e457f85d54e465231f3cec86e4a412f3#square-shooter">(These changes can be seen in the github history.)</a></p>
 <p>Whoops. Those two commented out lines actually did do something useful. The catch is it required you to uncomment a third line that was in the main game loop.</p>
 <p>This code displays the current frames per second (FPS) in the upper left corner, which can be useful for measuring performance. Instead of commenting and uncommenting these lines whenever you want to see them, let's add a <code>DISPLAY_FPS</code> global variable that can be set to <code>True</code> or <code>False</code>, and then put an <code>if DISPLAY_FPS:</code> statement in front of these lines:</p>
 <blockquote>
@@ -740,15 +740,15 @@ if DISPLAY_FPS:
 
     renderer.fps = int(round(clock.get_fps()))</pre>
 </blockquote>
-<p>I'll check in this code with the log message, <a href="https://github.com/asweigart/source_code_makeover/commit/5cdd7f00e457f85d54e465231f3cec86e4a412f3#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/5cdd7f00e457f85d54e465231f3cec86e4a412f3#square-shooter', '&quot;Adding DISPLAY_FPS for debugging.&quot;']);" >"Adding DISPLAY_FPS for debugging."</a></p>
+<p>I'll check in this code with the log message, <a href="https://github.com/asweigart/source_code_makeover/commit/5cdd7f00e457f85d54e465231f3cec86e4a412f3#square-shooter">"Adding DISPLAY_FPS for debugging."</a></p>
 <h3>No need for a running variable</h3>
-<p><a href="https://github.com/asweigart/source_code_makeover/commit/bdb64d21e5dc6535dfcb8e89a20b84b60df72add#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/bdb64d21e5dc6535dfcb8e89a20b84b60df72add#square-shooter', '(These changes can be seen in the github history.)']);" >(These changes can be seen in the github history.)</a></p>
+<p><a href="https://github.com/asweigart/source_code_makeover/commit/bdb64d21e5dc6535dfcb8e89a20b84b60df72add#square-shooter">(These changes can be seen in the github history.)</a></p>
 <p>The main game loop in the global scope at the bottom of the file continues handling events as long as the <code>running</code> variable is set to <code>True</code>. All of the code that needs to end the program do so by setting <code>running</code> to <code>False</code>. However, since there is no code that runs inside the loop if <code>running</code> is set to <code>False</code>, we can get rid of this variable entirely.</p>
 <p>Instead, we'll just have the loop be a <code>while True:</code> infinite loop and the code that previously set running to <code>False</code> will just execute a <code>break</code> instead. That's one less variable we have to deal with.</p>
-<p>Checked in with log message, <a href="https://github.com/asweigart/source_code_makeover/commit/bdb64d21e5dc6535dfcb8e89a20b84b60df72add#square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commit/bdb64d21e5dc6535dfcb8e89a20b84b60df72add#square-shooter', '&quot;Get rid of the running variable.&quot;']);" >"Get rid of the running variable."</a></p>
+<p>Checked in with log message, <a href="https://github.com/asweigart/source_code_makeover/commit/bdb64d21e5dc6535dfcb8e89a20b84b60df72add#square-shooter">"Get rid of the running variable."</a></p>
 <h3>End of Part 2</h3>
 <p>That's all for now. We're almost done refactoring the code. I think the <code>GameScreen</code> code should probably be merged into <code>GameWorld</code>, and I'd like to take a lot of the <code>GameWorld</code>-specific code out of the globally-scoped game loop. We'll cover that in <a href="http://inventwithpython.com/blog/2012/08/13/source-code-makeover-square-shooter-part-3/">Part 3</a>, as well as making UX (user experience) design changes (instead of just the code design changes we've made in the first two Parts.)</p>
-<p>Remember, you can see the full list of git check ins I've made for the code changes on <a href="https://github.com/asweigart/source_code_makeover/commits/master/square-shooter" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/source_code_makeover/commits/master/square-shooter', 'the github page for this blog post']);" >the github page for this blog post</a> and compare it to <a href="http://inventwithpython.com/square-shooter_original.py">the original source code for Square Shooter</a>.</p>
+<p>Remember, you can see the full list of git check ins I've made for the code changes on <a href="https://github.com/asweigart/source_code_makeover/commits/master/square-shooter">the github page for this blog post</a> and compare it to <a href="http://inventwithpython.com/square-shooter_original.py">the original source code for Square Shooter</a>.</p>
 
 
     </body>

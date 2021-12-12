@@ -10,11 +10,11 @@
 <blockquote>NOTE: This blog post may be obsolete. Please read <a href="https://inventwithpython.com/blog/2018/10/17/writing-bots-to-play-zombie-dice/">Writing Bots to Play Zombie Dice</a> instead.</blockquote>
 
 
-<p>This tutorial outlines how to create a tournament simulation program for the Zombie Dice game in <a href="http://python.org" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://python.org', 'Python']);" >Python</a>. With this tournament program, you can also code your own AI bots to play Zombie Dice against each other. You can quickly test out how the different strategies the bots use compare against each other over thousands of simulated games. This tutorial assumes you know basic Python programming. (You can learn to program from the free book on this site, <a href="http://inventwithpython.com/chapters">"Invent Your Own Computer Games with Python"</a>.</p>
+<p>This tutorial outlines how to create a tournament simulation program for the Zombie Dice game in <a href="http://python.org">Python</a>. With this tournament program, you can also code your own AI bots to play Zombie Dice against each other. You can quickly test out how the different strategies the bots use compare against each other over thousands of simulated games. This tutorial assumes you know basic Python programming. (You can learn to program from the free book on this site, <a href="http://inventwithpython.com/chapters">"Invent Your Own Computer Games with Python"</a>.</p>
 <p>Computer game simulations make for great science fair experiments, and since the rules to Zombie Dice are so simple it's fairly easy to program a simulation for it.</p>
 <h2>The Rules of Zombie Dice</h2>
 <p>Zombie Dice is a dice rolling game that is fun for groups, quick to play, and can be learned in a couple minutes. It has a "push your luck" game mechanic.</p>
-<p>Each of the players is a zombie. Each of the dice represents a human victim. You want to eat brains and avoid shotgun blasts. If the footsteps come up, the human has eluded you. The rules are summarized below: (Or <a href="http://www.sjgames.com/dice/zombiedice/img/ZDRules_English.pdf" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.sjgames.com/dice/zombiedice/img/ZDRules_English.pdf', 'view the official rules PDF']);" >view the official rules PDF</a> or <a href="http://www.sjgames.com/dice/zombiedice/demo.html" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.sjgames.com/dice/zombiedice/demo.html', 'view the Flash tutorial']);" >view the Flash tutorial</a>.)</p>
+<p>Each of the players is a zombie. Each of the dice represents a human victim. You want to eat brains and avoid shotgun blasts. If the footsteps come up, the human has eluded you. The rules are summarized below: (Or <a href="http://www.sjgames.com/dice/zombiedice/img/ZDRules_English.pdf">view the official rules PDF</a> or <a href="http://www.sjgames.com/dice/zombiedice/demo.html">view the Flash tutorial</a>.)</p>
 <p><span id="more-1159"></span></p>
 <ol>
 <li>On your turn grab 3 dice from the cup and roll them. Dice are colored red, yellow, and green and have footsteps, brains, or shotgun icons.</li>
@@ -30,10 +30,10 @@
 <li>Also, if you run out of dice for your turn, note the number of brain dice you've rolled and place those brain dice back into the cup. Then continue as normal.</li>
 <p>The colors note your odds of winning. The entire dice set has 6 green, 4 yellow, and 3 red dice.</p>
 <p><img src="/blog/images/zombiedice_diceset.png?27f655" /></p>
-<p><a href="http://youtu.be/PlYAcsJxLM4?t=1m10s" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://youtu.be/PlYAcsJxLM4?t=1m10s', 'Here\'s a video of gameplay:\n']);" >Here's a video of gameplay:</p>
+<p><a href="http://youtu.be/PlYAcsJxLM4?t=1m10s">Here's a video of gameplay:</p>
 <p><img src="/blog/images/zombie_dice_youtube.png?27f655" /></a></p>
 <h2>Running the Tournament Program</h2>
-<p><a href="/files/zombiedicesim.zip?27f655">Download the Zombie Dice simulation code.</a> This should run with Python 2 and Python 3. You can also find it on <a href="https://github.com/asweigart/zombiedice" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/zombiedice', 'GitHub']);" >GitHub</a>. The two main files are:</p>
+<p><a href="/files/zombiedicesim.zip?27f655">Download the Zombie Dice simulation code.</a> This should run with Python 2 and Python 3. You can also find it on <a href="https://github.com/asweigart/zombiedice">GitHub</a>. The two main files are:</p>
 <ul>
 <li><strong>zombiedice.py</strong> is the basic simulator and outputs text results when the tournament is finished.</li>
 <li><strong>zombiedice_web.py</strong> runs a web server and launches your browser to provide a GUI and real-time updates while the tournament is in progress.</li>
@@ -173,7 +173,7 @@ bots = [
 <li>The <code>ZombieBot_RollsUntilInTheLead</code> bot will keep rolling until it gets into the lead compared to the other bots. This bot takes higher risks once it starts trailing.</li>
 <li>The <code>ZombieBot_MonteCarlo</code> bot is the most sophisticated of all the bots. It basically runs several random experiments to see if the next roll would result in 3 or more shotguns. You can pass different values to the constructors to tell it how many experiments to run on each turn and what percentage of them must not result in death to roll again.</li>
 </ul>
-<p>Write your own bots and then see how they do against these simple bots. You can post your code to <a href="https://gist.github.com" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://gist.github.com', 'https://gist.github.com']);" >https://gist.github.com</a> and post a link to it in the comments section below.</p>
+<p>Write your own bots and then see how they do against these simple bots. You can post your code to <a href="https://gist.github.com">https://gist.github.com</a> and post a link to it in the comments section below.</p>
 
 
     </body>

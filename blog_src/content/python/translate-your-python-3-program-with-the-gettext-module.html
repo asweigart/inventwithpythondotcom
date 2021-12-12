@@ -40,13 +40,13 @@ https://www.gnu.org/software/gawk/manual/html_node/Explaining-gettext.html
         return frenchStrings[s]
     if LANGUAGE == 'German':
         return germanStrings[s]</pre>
-<p>This would work, but you'd be reinventing the wheel. This is pretty much what Python's <code>gettext</code> module does. <a href="https://en.wikipedia.org/wiki/Gettext" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://en.wikipedia.org/wiki/Gettext', 'gettext']);" >gettext</a> is a set of tools and file formats created in the early 1990s to standardize software internationalization (also called I18N). gettext was designed as a system for all programming languages, but we'll focus on Python in this article.</p>
+<p>This would work, but you'd be reinventing the wheel. This is pretty much what Python's <code>gettext</code> module does. <a href="https://en.wikipedia.org/wiki/Gettext">gettext</a> is a set of tools and file formats created in the early 1990s to standardize software internationalization (also called I18N). gettext was designed as a system for all programming languages, but we'll focus on Python in this article.</p>
 <h3>The Example Program</h3>
 <p>Say you have a simple "Guess the Number" game written in Python 3 that you want to translate. The <a href="/blogstatic/gettext/guess_original.py">source code to this program is here</a>. There are four steps to internationalizing this program:</p>
 <ol>
 <li>Modify the .py file's source code so that the strings are passed to a function named <code>_()</code>.</li>
 <li>Use the <em>pygettext.py</em> script that comes installed with Python to create a "pot" file from the source code.</li>
-<li>Use the free cross-platform <a href="http://poedit.net/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://poedit.net/', 'Poedit']);" >Poedit</a> software to create the .po and .mo files from the pot file.</li>
+<li>Use the free cross-platform <a href="http://poedit.net/">Poedit</a> software to create the .po and .mo files from the pot file.</li>
 <li>Modify your .py file's source code again to import the <code>gettext</code> module and set up the language setting.</li>
 </ol>
 <h3>Step 1: Add the _() Function</h3>
@@ -66,11 +66,11 @@ print(_('Good job, %s! You guessed my number in %s guesses!') % (myName, guesses
 <pre>C:\>py -3.4 C:\Python34\Tools\i18n\pygettext.py -d guess guess.py</pre>
 <p><!-- TODO explain the -d and domains -->This creates a pot file named <em>guess.pot</em>. This is just a normal plaintext file that lists all the translated strings it found in the source code by search for <code>_()</code> calls. You can <a href="/blogstatic/gettext/guess.pot?27f655">view the <em>guess.pot</em> file here</a>.</p>
 <h3>Step 3: Translate the Strings using Poedit</h3>
-<p>You could fill in the translation using a text editor, but the free Poedit software makes it easier. <a href="http://poedit.net" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://poedit.net', 'Download it from http://poedit.net']);" >Download it from http://poedit.net</a>. Select <strong>File > New from POT/PO file...</strong> and select your <em>guess.po</em> file.</p>
+<p>You could fill in the translation using a text editor, but the free Poedit software makes it easier. <a href="http://poedit.net">Download it from http://poedit.net</a>. Select <strong>File > New from POT/PO file...</strong> and select your <em>guess.po</em> file.</p>
 <p><img src="/blogstatic/gettext/poedit_new.jpg?27f655" /></p>
 <p>Poedit will ask what language you want to translate the strings to. For this example, we'll use Spanish:</p>
 <p><img src="/blogstatic/gettext/poedit_translate.jpg?27f655" /></p>
-<p>Then fill in the translations. (I'm using <a href="http://translate.google.com" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://translate.google.com', 'http://translate.google.com']);" >http://translate.google.com</a>, so it probably sounds a bit odd to actual Spanish-speakers.)</p>
+<p>Then fill in the translations. (I'm using <a href="http://translate.google.com">http://translate.google.com</a>, so it probably sounds a bit odd to actual Spanish-speakers.)</p>
 <p><img src="/blogstatic/gettext/poedit_filledin.jpg?27f655" /></p>
 <p>And now save the file in it's gettext-formatted folder. Saving will create the .po file (a human-readable text file identical to the original .pot file, except with the Spanish translations) and a .mo file (a machine-readable version which the <code>gettext</code> module will read. These files have to be saved in a certain folder structure for <code>gettext</code> to be able to find them. They look like this (say I have "es" Spanish files and "de" German files):</p>
 <pre>./guess.py
@@ -79,7 +79,7 @@ print(_('Good job, %s! You guessed my number in %s guesses!') % (myName, guesses
 ./locale/es/LC_MESSAGES/guess.po
 ./locale/de/LC_MESSAGES/guess.mo
 ./locale/de/LC_MESSAGES/guess.po</pre>
-<p><!-- TODO Explain that this folder structure is specified in the gettext.translation() function call -->These two-character language names like "es" for Spanish and "de" for German are called <a href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes', 'ISO 639-1 codes']);" >ISO 639-1 codes</a> and are standard abbreviations for languages. You don't <em>have</em> to use them, but it makes sense to follow that naming standard.</p>
+<p><!-- TODO Explain that this folder structure is specified in the gettext.translation() function call -->These two-character language names like "es" for Spanish and "de" for German are called <a href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes">ISO 639-1 codes</a> and are standard abbreviations for languages. You don't <em>have</em> to use them, but it makes sense to follow that naming standard.</p>
 <h3>Step 4: Add gettext Code to Your Program</h3>
 <p>Now that you have the .mo file that contains the translations, modify your Python script to use it. Add the following to your program:</p>
 <pre>import gettext

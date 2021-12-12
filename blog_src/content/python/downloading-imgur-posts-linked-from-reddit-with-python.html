@@ -8,9 +8,9 @@
     <body>
 
 
-			<p><strong>UPDATE</strong> - I have updated this article to use <a href="http://www.crummy.com/software/BeautifulSoup/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.crummy.com/software/BeautifulSoup/', 'BeautifulSoup']);" >BeautifulSoup</a> to parse the HTML rather than regular expressions. This makes it much easier.</p>
-<p><a href="http://reddit.com" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://reddit.com', 'Reddit']);" >Reddit</a> is a popular site that allows users to post and vote on interesting web links. It is divided into several topical subreddits. Many Redditors use <a href="https://imgur.com" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://imgur.com', 'Imgur']);" >Imgur</a> to host their images (and I highly recommend it: Imgur is free and easy to use). This tutorial tells you how to write a Python script that can scan Reddit and download images from Imgur submissions you find. This tutorial is for beginner-level programmers with a small amount of Python experience.</p>
-<p>You can <a href="https://raw.githubusercontent.com/asweigart/imgur-hosted-reddit-posted-downloader/master/imgur-hosted-reddit-posted-downloader.py" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://raw.githubusercontent.com/asweigart/imgur-hosted-reddit-posted-downloader/master/imgur-hosted-reddit-posted-downloader.py', 'download the source code directly']);" >download the source code directly</a> or view the <a href="https://github.com/asweigart/imgur-hosted-reddit-posted-downloader" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/imgur-hosted-reddit-posted-downloader', 'GitHub repo']);" >GitHub repo</a>.</p>
+			<p><strong>UPDATE</strong> - I have updated this article to use <a href="http://www.crummy.com/software/BeautifulSoup/">BeautifulSoup</a> to parse the HTML rather than regular expressions. This makes it much easier.</p>
+<p><a href="http://reddit.com">Reddit</a> is a popular site that allows users to post and vote on interesting web links. It is divided into several topical subreddits. Many Redditors use <a href="https://imgur.com">Imgur</a> to host their images (and I highly recommend it: Imgur is free and easy to use). This tutorial tells you how to write a Python script that can scan Reddit and download images from Imgur submissions you find. This tutorial is for beginner-level programmers with a small amount of Python experience.</p>
+<p>You can <a href="https://raw.githubusercontent.com/asweigart/imgur-hosted-reddit-posted-downloader/master/imgur-hosted-reddit-posted-downloader.py">download the source code directly</a> or view the <a href="https://github.com/asweigart/imgur-hosted-reddit-posted-downloader">GitHub repo</a>.</p>
 <p>This post will cover:</p>
 <ul>
 <li>Basic web scraping concepts.</li>
@@ -23,7 +23,7 @@
 </ul>
 <p><span id="more-1560"></span></p>
 <h2>Installing the PRAW, Requests, and Beautiful Soup Modules</h2>
-<p><a href="https://github.com/praw-dev/praw" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/praw-dev/praw', 'The PRAW (Python Reddit API Wrapper) module is available on GitHub,']);" >The PRAW (Python Reddit API Wrapper) module is available on GitHub,</a> but you can also install it using <a href="http://stackoverflow.com/questions/5585875/what-is-the-official-preferred-way-to-install-pip-and-virtualenv-systemwide" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://stackoverflow.com/questions/5585875/what-is-the-official-preferred-way-to-install-pip-and-virtualenv-systemwide', 'pip']);" >pip</a> or <a href="http://pythonhosted.org/distribute/easy_install.html" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://pythonhosted.org/distribute/easy_install.html', 'easy_install']);" >easy_install</a> (on Windows, these programs will be in the C:\Python27\Scripts folder). You can also <a href="http://www.python-requests.org/en/latest/user/install/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.python-requests.org/en/latest/user/install/', 'install Requests']);" >install Requests</a> and <a href="http://www.crummy.com/software/BeautifulSoup/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.crummy.com/software/BeautifulSoup/', 'Beautiful Soup']);" >Beautiful Soup</a> using pip and easy_install:</p>
+<p><a href="https://github.com/praw-dev/praw">The PRAW (Python Reddit API Wrapper) module is available on GitHub,</a> but you can also install it using <a href="http://stackoverflow.com/questions/5585875/what-is-the-official-preferred-way-to-install-pip-and-virtualenv-systemwide">pip</a> or <a href="http://pythonhosted.org/distribute/easy_install.html">easy_install</a> (on Windows, these programs will be in the C:\Python27\Scripts folder). You can also <a href="http://www.python-requests.org/en/latest/user/install/">install Requests</a> and <a href="http://www.crummy.com/software/BeautifulSoup/">Beautiful Soup</a> using pip and easy_install:</p>
 <pre>pip install praw
 
 pip install requests
@@ -90,13 +90,13 @@ Type "help", "copyright", "credits" or "license" for more information.
 <h2>The 3 Types of Submissions for Imgur</h2>
 <p>There are three types of Imgur links on Reddit that we are interested in:</p>
 <ol>
-<li>Links to albums, such as <a href="http://imgur.com/a/VqUKy" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://imgur.com/a/VqUKy', 'http://imgur.com/a/VqUKy']);" >http://imgur.com/a/VqUKy</a></li>
-<li>Links to a page with a single image, such as <a href="http://imgur.com/4fVCo5v" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://imgur.com/4fVCo5v', 'http://imgur.com/4fVCo5v']);" >http://imgur.com/4fVCo5v</a></li>
-<li>Links that go directly to the image file, such as <a href="http://i.imgur.com/4fVCo5v.jpg" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://i.imgur.com/4fVCo5v.jpg', 'http://i.imgur.com/4fVCo5v.jpg']);" >http://i.imgur.com/4fVCo5v.jpg</a></li>
+<li>Links to albums, such as <a href="http://imgur.com/a/VqUKy">http://imgur.com/a/VqUKy</a></li>
+<li>Links to a page with a single image, such as <a href="http://imgur.com/4fVCo5v">http://imgur.com/4fVCo5v</a></li>
+<li>Links that go directly to the image file, such as <a href="http://i.imgur.com/4fVCo5v.jpg">http://i.imgur.com/4fVCo5v.jpg</a></li>
 </ol>
 <p>We can tell what kind of submission it is from the URL. Albums will always have /a/ in them, direct links to images are in the i.imgur.com domain, and single image pages are in the imgur.com domain but don't have /a/ in them.</p>
 <h2>Parsing the HTML</h2>
-<p>Open the example album URL, <a href="http://imgur.com/a/VqUKy" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://imgur.com/a/VqUKy', 'http://imgur.com/a/VqUKy']);" >http://imgur.com/a/VqUKy</a>, in a web browser and then right-click on the page and select View Source. This will display the HTML source for the page. We need to figure out the pattern in the HTML for links to the images on this page. Notice that for each image in the album, there is the HTML:</p>
+<p>Open the example album URL, <a href="http://imgur.com/a/VqUKy">http://imgur.com/a/VqUKy</a>, in a web browser and then right-click on the page and select View Source. This will display the HTML source for the page. We need to figure out the pattern in the HTML for links to the images on this page. Notice that for each image in the album, there is the HTML:</p>
 <pre><div class="item view album-view-image-link">
 
             <a href="//i.imgur.com/RkydnOs.png?27f655" target="_blank">View full resolution</a>
@@ -106,12 +106,12 @@ Type "help", "copyright", "credits" or "license" for more information.
 <pre>soup = BeautifulSoup(htmlSource)
 
 matches = soup.select('.album-view-image-link a')</pre>
-<p>This CSS selector is used for the web pages of albums. CSS selectors are beyond the scope of this article, but <a href="http://www.crummy.com/software/BeautifulSoup/bs4/doc/#css-selectors" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.crummy.com/software/BeautifulSoup/bs4/doc/#css-selectors', 'the Beautiful Soup documentation']);" >the Beautiful Soup documentation</a> has great examples. Suffice it to say, <code>'.album-view-image-link a'</code> will find all the HTML tags that are &lt;a&gt; tags that are descended from a tag with the <code>album-view-image-link</code> CSS class. (The dot means it is a CSS class name.)</p>
+<p>This CSS selector is used for the web pages of albums. CSS selectors are beyond the scope of this article, but <a href="http://www.crummy.com/software/BeautifulSoup/bs4/doc/#css-selectors">the Beautiful Soup documentation</a> has great examples. Suffice it to say, <code>'.album-view-image-link a'</code> will find all the HTML tags that are &lt;a&gt; tags that are descended from a tag with the <code>album-view-image-link</code> CSS class. (The dot means it is a CSS class name.)</p>
 <p>The CSS selector string you need to use will need to be customized for the site you are downloading from. If the site ever changes their web page's HTML format, you may need to update the CSS selector strings you use.</p>
 <p>The return value of <code>soup.select()</code> will be a <strong>list</strong> of BeautifulSoup "tag" objects. If you want to get the href attribute of the first match, your code will look like this:</p>
 <pre>matches[0]['href']</pre>
-<p>For parsing the URLs of directly-linked imgur images, we need to use regular expressions. (Beautiful Soup is used for parsing HTML, but not for general text like regexes.) Regular expressions are beyond the scope of this article, but <a href="https://developers.google.com/edu/python/regular-expressions" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://developers.google.com/edu/python/regular-expressions', 'Google has a good tutorial on Python regular expressions']);" >Google has a good tutorial on Python regular expressions</a>.</p>
-<p><strong>Note:</strong> Also, regular expressions are great for finding general patterns in text, but for HTML you are always much better off using an HTML-specific pattern matching library such as <a href="http://www.crummy.com/software/BeautifulSoup/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.crummy.com/software/BeautifulSoup/', 'BeautifulSoup']);" >BeautifulSoup</a>. (<a href="http://stackoverflow.com/questions/1732348/regex-match-open-tags-except-xhtml-self-contained-tags/1732454#1732454" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://stackoverflow.com/questions/1732348/regex-match-open-tags-except-xhtml-self-contained-tags/1732454#1732454', 'This guy explains why you shouldn\'t use regexes to parse HTML better than I can.']);" >This guy explains why you shouldn't use regexes to parse HTML better than I can.</a>)</p>
+<p>For parsing the URLs of directly-linked imgur images, we need to use regular expressions. (Beautiful Soup is used for parsing HTML, but not for general text like regexes.) Regular expressions are beyond the scope of this article, but <a href="https://developers.google.com/edu/python/regular-expressions">Google has a good tutorial on Python regular expressions</a>.</p>
+<p><strong>Note:</strong> Also, regular expressions are great for finding general patterns in text, but for HTML you are always much better off using an HTML-specific pattern matching library such as <a href="http://www.crummy.com/software/BeautifulSoup/">BeautifulSoup</a>. (<a href="http://stackoverflow.com/questions/1732348/regex-match-open-tags-except-xhtml-self-contained-tags/1732454#1732454">This guy explains why you shouldn't use regexes to parse HTML better than I can.</a>)</p>
 <p>The regex we use will match the image filename in a directly-linked image URL:</p>
 <div class="highlight" >
 <pre>imgurUrlPattern <span style="color: #666666">=</span> re<span style="color: #666666">.</span>compile(<span style="color: #4070a0">r&#39;(http://i.imgur.com/(.*))(\?.*)?&#39;</span>)
@@ -127,7 +127,7 @@ matches = soup.select('.album-view-image-link a')</pre>
 
 </pre>
 </div>
-<p>We can examine the <code>status_code</code> attribute to see if the download was successful. An integer value of 200 indicates success. (<a href="http://en.wikipedia.org/wiki/List_of_HTTP_status_codes" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://en.wikipedia.org/wiki/List_of_HTTP_status_codes', 'A full list of HTTP status codes can be found on Wikipedia.']);" >A full list of HTTP status codes can be found on Wikipedia.</a>)</p>
+<p>We can examine the <code>status_code</code> attribute to see if the download was successful. An integer value of 200 indicates success. (<a href="http://en.wikipedia.org/wiki/List_of_HTTP_status_codes">A full list of HTTP status codes can be found on Wikipedia.</a>)</p>
 <div class="highlight" >
 <pre><span style="color: #007020; font-weight: bold">if</span> response<span style="color: #666666">.</span>status_code <span style="color: #666666">==</span> <span style="color: #40a070">200</span>:
 
@@ -143,7 +143,7 @@ matches = soup.select('.album-view-image-link a')</pre>
 
         fo<span style="color: #666666">.</span>write(chunk)</pre>
 </div>
-<p>The <code>with</code> statement handles opening and closing the file (Effbot has a good tutorial called <a href="http://effbot.org/zone/python-with-statement.htm" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://effbot.org/zone/python-with-statement.htm', '&quot;Understanding Python\'s with Statement&quot;']);" >"Understanding Python's with Statement"</a>. The response object's <code>iter_content()</code> method can return "chunks" of 4096 bytes of the image at a time, which are written to the opened file. (This part of the code may be a bit confusing, but just understand that it writes the image information in the Response object to the hard drive.)</p>
+<p>The <code>with</code> statement handles opening and closing the file (Effbot has a good tutorial called <a href="http://effbot.org/zone/python-with-statement.htm">"Understanding Python's with Statement"</a>. The response object's <code>iter_content()</code> method can return "chunks" of 4096 bytes of the image at a time, which are written to the opened file. (This part of the code may be a bit confusing, but just understand that it writes the image information in the Response object to the hard drive.)</p>
 <p>We will call this function whenever we get the URL of an image to download.</p>
 <h2>Accessing Reddit with the PRAW Module</h2>
 <p>Using the PRAW module to get a subreddit's front page is simple:</p>
@@ -152,7 +152,7 @@ matches = soup.select('.album-view-image-link a')</pre>
 <li>Create a <code>Reddit</code> object with a unique user agent.</li>
 <li>Call the <code>get_subreddit()</code> and <code>get_hot()</code> methods.</li>
 </ol>
-<p>(<a href="https://praw.readthedocs.org/en/latest/index.html" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://praw.readthedocs.org/en/latest/index.html', 'You can also read the full documentation for PRAW.']);" >You can also read the full documentation for PRAW.</a>)</p>
+<p>(<a href="https://praw.readthedocs.org/en/latest/index.html">You can also read the full documentation for PRAW.</a>)</p>
 <p>The code looks like this:</p>
 <div class="highlight" >
 <pre><span style="color: #60a0b0; font-style: italic"># Connect to reddit and download the subreddit front page</span>
@@ -163,7 +163,7 @@ submissions <span style="color: #666666">=</span> r<span style="color: #666666">
 
 </pre>
 </div>
-<p>A <a href="http://en.wikipedia.org/wiki/User_agent" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://en.wikipedia.org/wiki/User_agent', 'user agent']);" >user agent</a> is a string of text that identifies what type of web browser (or type of software in general) is accessing a web site. One of the <a href="https://github.com/reddit/reddit/wiki/API#rules" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/reddit/reddit/wiki/API#rules', 'Reddit API rules']);" >Reddit API rules</a> is to use a unique value for your user agent, preferably one that references your Reddit username (if you have one). The PRAW module handles throttling the rate of requests you make, so you don't have to worry about that</p>
+<p>A <a href="http://en.wikipedia.org/wiki/User_agent">user agent</a> is a string of text that identifies what type of web browser (or type of software in general) is accessing a web site. One of the <a href="https://github.com/reddit/reddit/wiki/API#rules">Reddit API rules</a> is to use a unique value for your user agent, preferably one that references your Reddit username (if you have one). The PRAW module handles throttling the rate of requests you make, so you don't have to worry about that</p>
 <p>You can type <code><a href="javascript:alert(navigator.userAgent);">javascript:alert(navigator.userAgent);</a></code> into your browser's address bar (or just click the link) to see what your current user agent is.</p>
 <p>The <code>get_subreddit()</code> method returns a "Subreddit" object, which has a <code>get_hot()</code> method which will return a list of "Submission" objects. (Actually, it returns a generator for Submission objects, but you can effectively think of it as a list.)</p>
 <p>The Submission attributes we are interested in are:</p>
@@ -203,7 +203,7 @@ submissions <span style="color: #666666">=</span> r<span style="color: #666666">
 </div>
 <h2>The glob Module</h2>
 <p>The images that we download will have filenames formatted as reddit_[subreddit name]_[reddit submission id]_album_[album id]_imgur_[imgur id]. A glob is sort of a simplified regular expression, where the * asterisk is a "wildcard character" that matches any text. The <code>glob.glob()</code> function will return a list of files that match the glob string it is passed.</p>
-<p>For example, say one of the submissions in the cats subreddit has an id of 1n3p6o (which is <a href="http://www.reddit.com/r/cats/comments/1n3p6o/accidentally_took_a_pic_of_my_cat_licking_his_nose/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.reddit.com/r/cats/comments/1n3p6o/accidentally_took_a_pic_of_my_cat_licking_his_nose/', 'this submission']);" >this submission</a>) then the filenames we use for it will begin with "reddit_cats_1n3p6o_".</p>
+<p>For example, say one of the submissions in the cats subreddit has an id of 1n3p6o (which is <a href="http://www.reddit.com/r/cats/comments/1n3p6o/accidentally_took_a_pic_of_my_cat_licking_his_nose/">this submission</a>) then the filenames we use for it will begin with "reddit_cats_1n3p6o_".</p>
 <p>Calling <code>glob.glob('reddit_cats_1n3p6o_*')</code> will return a list of filenames that match this pattern. If this returned list is not empty (that is, it's length is greater than zero) then we know that these files already exist on the hard drive and should not be downloaded again.</p>
 <h2>Parsing Imgur Album Pages</h2>
 <p>First we will handle the album downloads. The id for the album is the part of the url right after "http://imgur.com/a/", so we can use list slicing to extract it from <code>submission.url</code>. (We will use the album id later in the local filename.)</p>
@@ -297,14 +297,14 @@ Downloading reddit_cats_1n6cr0_album_None_imgur_rA10E3s.jpg...
 Downloading reddit_cats_1n89mg_album_None_imgur_0UqnMd6.png...
 
 Downloading reddit_cats_1n80j6_album_None_imgur_ZuRbyxp.jpg...</pre>
-<p>Voila! Now you can use <a href="http://en.wikipedia.org/wiki/Cron" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://en.wikipedia.org/wiki/Cron', 'cron']);" >cron</a> or <a href="http://windows.microsoft.com/en-US/windows7/schedule-a-task" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://windows.microsoft.com/en-US/windows7/schedule-a-task', 'Windows Task Scheduler']);" >Windows Task Scheduler</a> to automatically download images from your favorite subreddit! Some of my recommendations:</p>
+<p>Voila! Now you can use <a href="http://en.wikipedia.org/wiki/Cron">cron</a> or <a href="http://windows.microsoft.com/en-US/windows7/schedule-a-task">Windows Task Scheduler</a> to automatically download images from your favorite subreddit! Some of my recommendations:</p>
 <ul>
-<li><a href="http://www.reddit.com/r/cats/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.reddit.com/r/cats/', 'cats']);" >cats</a></li>
-<li><a href="http://www.reddit.com/r/gifs/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.reddit.com/r/gifs/', 'gifs']);" >gifs</a></li>
-<li><a href="http://www.reddit.com/r/itookapicture/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.reddit.com/r/itookapicture/', 'itookapicture']);" >itookapicture</a></li>
-<li><a href="http://www.reddit.com/r/urbanexploration/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.reddit.com/r/urbanexploration/', 'urbanexploration']);" >urbanexploration</a></li>
-<li><a href="http://www.reddit.com/r/earthporn/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.reddit.com/r/earthporn/', 'earthporn']);" >earthporn</a> (it's not literally porn)</li>
-<li><a href="http://www.reddit.com/r/LightGraffiti/" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://www.reddit.com/r/LightGraffiti/', 'LightGraffiti']);" >LightGraffiti</a></li>
+<li><a href="http://www.reddit.com/r/cats/">cats</a></li>
+<li><a href="http://www.reddit.com/r/gifs/">gifs</a></li>
+<li><a href="http://www.reddit.com/r/itookapicture/">itookapicture</a></li>
+<li><a href="http://www.reddit.com/r/urbanexploration/">urbanexploration</a></li>
+<li><a href="http://www.reddit.com/r/earthporn/">earthporn</a> (it's not literally porn)</li>
+<li><a href="http://www.reddit.com/r/LightGraffiti/">LightGraffiti</a></li>
 </ul>
 <p>Good luck!</p>
 

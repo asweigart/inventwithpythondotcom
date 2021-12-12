@@ -8,12 +8,12 @@
     <body>
 
 
-			<p><a href="http://pygame.org" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://pygame.org', 'Pygame']);" >Pygame</a> is a 2D graphics and gaming library for Python. It's pretty nifty because it essentially gives you a blank window that you can draw any shapes or lines or images you want on it. But it doesn't come with any UI elements like buttons, scrollbars, or check boxes. This post will go through not only creating a button class for Pygame, but also the reasoning behind why I've set up the code as it is. This is more of a "how to create a module other people can use" tutorial than a UI or Pygame tutorial.</p>
+			<p><a href="http://pygame.org">Pygame</a> is a 2D graphics and gaming library for Python. It's pretty nifty because it essentially gives you a blank window that you can draw any shapes or lines or images you want on it. But it doesn't come with any UI elements like buttons, scrollbars, or check boxes. This post will go through not only creating a button class for Pygame, but also the reasoning behind why I've set up the code as it is. This is more of a "how to create a module other people can use" tutorial than a UI or Pygame tutorial.</p>
 <p>This tutorial assumes you know the basics of Pygame and Python programming. If you don't, it's probably easy enough to follow anyway.</p>
 <p>A button is a common user interface (UI) control that is used in many software applications. It seems simple enough: there's a button on the window and you click on it and something happens. But there's a lot of details we should plan out ahead of time. Remember, we want to make a generic button class so that other programmers can use this in their games and programs. Once you've read through the process here, you'll be familiar with how to make your own modules for UI elements.</p>
 <p>Designing a UI button class is good a good programming practice exercise.</p>
 <p><span style="font-size: 1.4em">Download the PygButton module from PyPI by running "pip install pygbutton". You can also look at just the <a href="http://inventwithpython.com/pygbutton.py">pygbutton.py</a> file itself.</span></p>
-<p>Or <a href="https://github.com/asweigart/pygbutton" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'https://github.com/asweigart/pygbutton', 'download it from the git repository on GitHub']);" >download it from the git repository on GitHub</a>.</p>
+<p>Or <a href="https://github.com/asweigart/pygbutton">download it from the git repository on GitHub</a>.</p>
 <h2>The Feature List (and the Non-Feature List)</h2>
 <p>First, let's create a list of design details for the buttons:<br />
 <span id="more-1054"></span></p>
@@ -502,7 +502,7 @@ LIGHTGRAY = (212, 208, 200)</pre>
     return retVal</pre>
 <p></code></p>
 <h2>PygButton Properties</h2>
-<p>Instead of having simple member variables for the caption, rect, visible, fgcolor, bgcolor, and font, we can use <a href="http://docs.python.org/3.2/library/functions.html#property" onclick="_gaq.push(['_trackEvent', 'outbound-article', 'http://docs.python.org/3.2/library/functions.html#property', 'Python properties']);" >Python properties</a> instead. This is better, because each time these values get updated we need to run some code that updates the Surface objects that hold the button's look. In other languages, this would require the use of bulky get and set methods. Python's property() function lets us assign methods to be called whenever the member variables need to be get or set.</p>
+<p>Instead of having simple member variables for the caption, rect, visible, fgcolor, bgcolor, and font, we can use <a href="http://docs.python.org/3.2/library/functions.html#property">Python properties</a> instead. This is better, because each time these values get updated we need to run some code that updates the Surface objects that hold the button's look. In other languages, this would require the use of bulky get and set methods. Python's property() function lets us assign methods to be called whenever the member variables need to be get or set.</p>
 <p><code></p>
 <pre>    def _propGetCaption(self):
 
