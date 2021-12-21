@@ -1,0 +1,164 @@
+<html>
+  <head>
+    <title>How to Test Multiple Variables Against a Single Value and a Single Variable Against Multiple Values in Python</title>
+    <meta name="tags" content="" />
+    <meta name="date" content="2021-12-20 12:00" />
+    <meta name="summary" content="<p>Python has a more concise syntax that uses the <code>in</code> operator and the multiple values packaged in a tuple. To check if one of multiple variables is one of many values, you can use a list comprehension and the <code>any()</code> function.</p>" />
+  </head>
+  <body>
+
+<h2>TL;DR: Version</h2>
+
+<p>To test if a variable is one of many values, use the <code>in</code> operator:</p>
+
+<pre>
+&gt;&gt;&gt; spam = 42
+&gt;&gt;&gt; if spam in (3.1415, 'hello', 42, False):
+...   print("spam is either 3.1415, 'hello', 42, or False")
+...
+spam is either 3.1415, 'hello', 42, or False
+</pre>
+
+<p>To test if one of multiple variables is one of many values, use a list comprehension and the <code>any()</code> function:</p>
+
+<pre>
+&gt;&gt;&gt; a, b, c = 1, 42, 3
+&gt;&gt;&gt; any([x in (100, 3.1415, 'Hello', 42, 'cheese') for x in (a, b, c)])
+True
+</pre>
+
+<h2>Testing Multiple Variables Against a Single Value And Vice Versa</h2>
+
+<p>In Python, if you want to see if a variable is one of many possible values, you could use the <code>or</code> operator like this:</p>
+
+<pre>
+&gt;&gt;&gt; spam = 42
+&gt;&gt;&gt; if spam == 3.1415 or spam == 'hello' or spam == 42 or spam == False:
+...   print("spam is either 3.1415, 'hello', 42, or False")
+...
+spam is either 3.1415, 'hello', 42, or False
+</pre>
+
+<p>Python has a more concise syntax that uses the <code>in</code> operator and the multiple values are packaged in a tuple:</p>
+
+<pre>
+&gt;&gt;&gt; spam = 42
+&gt;&gt;&gt; if spam in (3.1415, 'hello', 42, False):
+...   print("spam is either 3.1415, 'hello', 42, or False")
+...
+spam is either 3.1415, 'hello', 42, or False
+</pre>
+
+<p>The <code>in</code> operator literally checks if the value in <code>spam</code> is in the tuple on the right side of the <code>in</code> operator. This code is more readable and in most cases code readability is more important than performance. But using the <code>in</code> does perform slightly faster than the series of <code>or</code> operators. We can use Python's built-in <code>timeit</code> modules to see how many seconds running this code ten million times takes:</p>
+
+<pre>
+&gt;&gt;&gt; timeit.timeit("spam = 42; spam == 3.1415 or spam == 'hello' or spam == 42 or spam == False", number=10000000)
+1.527424699976109
+
+&gt;&gt;&gt; timeit.timeit("spam = 42; spam in (3.1415, 'hello', 42, False)", number=10000000)
+0.8834100000094622
+</pre>
+
+<p>If you have the opposite case and you have multiple variables you need to check against one value, you can swap the left and right sides of the <code>in</code> operator. So instead of using <code>or</code> operators like this:</p>
+
+<pre>
+&gt;&gt;&gt; a, b, c = 3.1415, 'hello', 42
+&gt;&gt;&gt; if a == 'hello' or b == 'hello' or c == 'hello':
+...   print("One of a, b, or c is equal to 'hello'.")
+...
+One of a, b, or c is equal to 'hello'.
+</pre>
+
+<p>...you can write code using an <code>in</code> operator like this:
+
+<pre>
+&gt;&gt;&gt; if 'hello' in (a, b, c):
+...   print("One of a, b, or c is equal to 'hello'.")
+...
+One of a, b, or c is equal to 'hello'.
+</pre>
+
+
+<h2>Testing Multiple Variables Against Multiple Values</h2>
+
+<p>If you have multiple variables and you want to see if any of these variables matches one of several values, you can use a list comprehension and the built-in <code>any()</code> function. Let's take a moment to learn about these two concepts first.</p>
+
+<p>The <code>any()</code> function takes a list or tuple (or any other <a href="https://treyhunner.com/2016/12/python-iterator-protocol-how-for-loops-work/">iterable value</a>) and returns <code>True</code> if <em>any</em> of the values in that list are <code>True</code>. If the list only has <code>False</code> values or is empty, it returns <code>False</code>:</p>
+
+<pre>
+&gt;&gt;&gt; any([False, False, True, False])
+True
+&gt;&gt;&gt; any([True, True])
+True
+&gt;&gt;&gt; any([False, False, False, False, False])
+False
+&gt;&gt;&gt; any([])
+False
+</pre>
+
+<p>There is also a built-in <code>all()</code> function that returns <code>True</code> if the list only contains <code>True</code> values, or is an empty list. Otherwise, <code>all()</code> returns <code>False</code>.</p>
+
+<p>List comprehensions are a short Python syntax for creating list values based on another list or tuple (or any other <a href="https://treyhunner.com/2016/12/python-iterator-protocol-how-for-loops-work/">iterable value</a>).</p>
+
+<p>Normally you would use a <code>for</code> loop to create a new list based on another list's values. For example, I'm creating a list called <code>doubles</code> which contains the integers in the <code>numbers</code> list, but multiplied by <code>2</code>:</p>
+
+<pre>
+&gt;&gt;&gt; numbers = [3, 7, 15]
+&gt;&gt;&gt; doubles = []
+&gt;&gt;&gt; for number in numbers:
+...   doubles.append(number * 2)
+...
+&gt;&gt;&gt; doubles
+[6, 14, 30]
+</pre>
+
+<p>A more concise way to write this code in Python is with a list comprehension. Note the similarities between the single-line list comprehension and the multi-line <code>for</code> loop code:</p>
+
+<pre>
+&gt;&gt;&gt; numbers = [3, 7, 15]
+&gt;&gt;&gt; doubles = [number * 2 for number in numbers]
+&gt;&gt;&gt; doubles
+[6, 14, 30]
+</pre>
+
+<p>To check if any one of multiple variables contains any one of multiple values, we can use list comprehensions and the <code>in</code> operator to create a list of Boolean <code>True</code> and <code>False</code> values. The list of Booleans created by the list comprehension are based on if the variables' value is in the tuple of values:</p>
+
+<pre>
+&gt;&gt;&gt; a, b, c = 1, 2, 3
+&gt;&gt;&gt; [x in (100, 3.1415, 'Hello', 42, 'cheese') for x in (a, b, c)]
+[False, False, False]
+&gt;&gt;&gt; b = 42
+&gt;&gt;&gt; [x in (100, 3.1415, 'Hello', 42, 'cheese') for x in (a, b, c)]
+[False, True, False]
+</pre>
+
+<p>We can pass this list of Booleans to the <code>any()</code> function and determine if any of the variables matches any of the values:</p>
+
+<pre>
+&gt;&gt;&gt; a, b, c = 1, 2, 3
+&gt;&gt;&gt; any([x in (100, 3.1415, 'Hello', 42, 'cheese') for x in (a, b, c)])
+False
+&gt;&gt;&gt; b = 42
+&gt;&gt;&gt; any([x in (100, 3.1415, 'Hello', 42, 'cheese') for x in (a, b, c)])
+True
+</pre>
+
+<p>Putting this much code into a single line stretches the limits of code readability, but it is more concise than not using list comprehensions and <code>any()</code>. Without them, you'd have to use nested <code>for</code> loops and so many lines of code that it's not necessarily more
+
+<pre>
+>>> a, b, c = 1, 2, 3
+>>> match = False
+>>> for variable in (a, b, c):
+...   for value in (100, 3.1415, 'Hello', 42, 'cheese'):
+...     if variable == value:
+...       match = True
+...
+>>> match
+False
+</pre>
+
+<p>That's a lot of code to do a simple task. The list comprehension and <code>any()</code> approach is more concise and readable.</p>
+
+  </body>
+</html>
+

@@ -1,76 +1,102 @@
 <html>
     <head>
-        <title>Stop Using "print" for Debugging: A 5 Minute Quickstart Guide to Python’s logging Module</title>
+        <title>Stop Using "print()" for Debugging: A 5 Minute Quickstart Guide to Python’s logging Module</title>
         <meta name="tags" content="" />
         <meta name="date" content="2012-04-06 12:00" />
         <meta name="summary" content="<p>To figure out bugs in your code, you might put in <code>print</code> statements/<code>print()</code> calls to display the value of variables. Don’t do this. Use the Python <code>logging</code> module.</p>" />
     </head>
     <body>
 
+<!-- add a pycon talk about logging here, also Nina's debugger talk
 
-			<ul>
-<li>This tutorial is short.</li>
-<li>To figure out bugs in your code, you might put in <code>print</code> statements/<code>print()</code> calls to display the value of variables.</li>
-<li>Don’t do this. Use the Python <code>logging</code> module.</li>
-</ul>
+Why do I use ch instead of sh for the streamhandler object?-->
+
+<p>To debug your program, you may be tempted to pepper your source code with <code>print()</code> calls to display the values of variables as your program runs. It's quick and easy to do this, but the problem is that once you see the values in the variables, that'll give you ideas for more places to put <code>print()</code> calls, then you run the program again to learn where to put other <code>print()</code> calls. The "quick" solution of adding <code>print()</code> eats up a lot of time as you get sucked into this add <code>print()</code>/run/add more <code>print()</code>s loop.</p>
+
+<p>To become a better programmer, you should learn how to use the debugger and Python's <code>logging</code> module. Nina Zakharenko's PyCon US 2020 talk, "Goodbye Print, Hello Debugger" is an excellent introduction to the debugger. This blog post covers Python's built-in <code>logging</code> module.</p>
+
+
 <p>The <code>logging</code> is better than printing because:</p>
 <ul>
+<li>You can save the log to a text file instead of just on the screen where you could easily lose it.</li>
 <li>It's easy to put a timestamp in each message, which is very handy.</li>
 <li>You can have different levels of urgency for messages, and filter out less urgent messages.</li>
-<li>When you want to later find/remove log messages, you won't get them confused for real <code>print()</code> calls.</li>
-<li>If you just print to a log file, it's easy to leave the log function calls in and just ignore them when you don't need them. (You don't have to constantly pull out print() calls.)</li>
+<li>When you want to later find log messages in or remove log messages from your source code, you won't get them confused with the real <code>print()</code> calls used for program output.</li>
+<li>If you just print to a log file, it's easy to leave the log function calls in and just ignore them when you don't need them. (You don't have to constantly pull out and add in <code>print()</code> calls.)</li>
 </ul>
-<p>Using print is for coders with too much time on their hands. Use logging instead. Also, learn to use <a href="http://mihirknows.blogspot.com/2007/10/debugging-with-python-pdb-quick-and.html">the Python debugger</a> to debug bugs and <a href="http://www.logilab.org/857">Pylint</a> to prevent bugs and make your code readable.</p>
+
+<h2>The <code>logging</code> Code to Copy and Paste</h2>
+
 <p>To <strong>print log messages to the screen</strong>, copy and paste this code:</p>
-<blockquote><p><code>import logging<br />
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')<br />
-logging.debug('This is a log message.')</code></p></blockquote>
+
+<pre>import logging
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.debug('This log message appears on the screen.')</pre>
+
 <p>To <strong>write log messages to a file</strong>, you can copy and paste this code (the only difference is <strong>in bold</strong>):</p>
-<blockquote><p><code>import logging<br />
-logging.basicConfig(<strong>filename='log_filename.txt', </strong>level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')<br />
-logging.debug('This is a log message.')</code></p></blockquote>
+
+<pre>import logging
+logging.basicConfig(<strong>filename='log_filename.txt', </strong>level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.debug('This log message appears in log_filename.txt.')</pre>
+
 <p>Later runs of the program will append to the end of the log file, rather than overwrite the file.</p>
-<p>To log messages to a file <strong>AND</strong> printed to the screen, copy and paste the following:<br />
-<span id="more-675"></span></p>
-<blockquote><p><code>import logging<br />
-logger = logging.getLogger()<br />
-logger.setLevel(logging.DEBUG)</p>
-<p>formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')</p>
-<p>fh = logging.FileHandler('log_filename.txt')<br />
-fh.setLevel(logging.DEBUG)<br />
-fh.setFormatter(formatter)<br />
-logger.addHandler(fh)</p>
-<p>ch = logging.StreamHandler()<br />
-ch.setLevel(logging.DEBUG)<br />
-ch.setFormatter(formatter)<br />
-logger.addHandler(ch)</p>
-<p>logger.debug('This is a test log message.')</code></p></blockquote>
+
+<p>To log messages to a file <strong>AND</strong> printed to the screen, copy and paste the following:</p>
+
+<pre>import logging
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
+
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+
+fh = logging.FileHandler('log_filename.txt')
+fh.setLevel(logging.DEBUG)
+fh.setFormatter(formatter)
+logger.addHandler(fh)
+
+sh = logging.StreamHandler()
+sh.setLevel(logging.DEBUG)
+sh.setFormatter(formatter)
+logger.addHandler(sh)
+
+logger.debug('This log message appears on the screen and in log_filename.txt.')</pre>
+
+<p>The <code>logging.Formatter</code> object determines how the log messages are displayed. The handlers specify the destination for the log message: <code>FileHandler</code> send them to a text file and <code>StreamHandler</code> sends them to the stderr stream <a href="https://en.wikipedia.org/wiki/Standard_streams">which often means the screen</a>.</p>
+
 <p>Make sure that the <code>logger</code> variable is global, so that you can use it in functions. (You don't need the "<code>global logger</code>" at the top of the function, because the <code>logger</code> variable is only read, not modified.)</p>
 <hr />
 <p>The different levels of logging, from highest urgency to lowest urgency, are:</p>
 <ol>
-<li>CRITICAL</li>
-<li>ERROR</li>
-<li>WARNING</li>
-<li>INFO</li>
-<li>DEBUG</li>
+<li>CRITICAL - For errors that cannot be recovered from or cause a system to fail.</li>
+<li>ERROR - For preventable errors that happen.</li>
+<li>WARNING - For situations where nothing has gone wrong yet, but could potentially cause errors in the future.</li>
+<li>INFO - For general informative messages about something that happened in the program. (Examples: A file being read, an email being sent, etc.)</li>
+<li>DEBUG - For low-level details that concern the source code. (Examples: A function being called, the value in a particular variable, etc.)</li>
 </ol>
+
 <p>The <code>setLevel()</code> call sets the minimum log level of messages it actually logs. So if you <code>fh.setLevel(logging.ERROR)</code>, then WARNING, INFO, and DEBUG log messages will not be written to the log file (since <code>fh</code> is the log handler for the log file, as opposed to <code>ch</code> which is the handler for the console screen.)</p>
+
 <p>To write a log message in one of these five levels, use the following functions:</p>
 <ol>
-<li><code>logger.critical('This is a critical message.')</code></li>
-<li><code>logger.error('This is an error message.')</code></li>
-<li><code>logger.warning('This is a warning message.')</code></li>
-<li><code>logger.info('This is an informative message.')</code></li>
-<li><code>logger.debug('This is a low-level debug message.')</code></li>
+<li><code>logger.critical('The system encountered an unknown error and cannot continue.')</code></li>
+<li><code>logger.error('No response from server.')</code></li>
+<li><code>logger.warning('Protocol problem. Connection was reset.')</code></li>
+<li><code>logger.info('System started at ' + str(datetime.datetime.now()))</code></li>
+<li><code>logger.debug('accountID = ' + str(accountID))</code></li>
 </ol>
+
 <p>There's plenty more you can do, but this all you need to know to never again use <code>print()</code> calls to do your debugging work.</p>
 <p>The <a href="http://docs.python.org/library/logging.html">Python documentation</a> has more info, including a <a href="http://docs.python.org/howto/logging.html#logging-basic-tutorial">Basic Tutorial</a>, an <a href="http://docs.python.org/howto/logging.html#logging-advanced-tutorial">Advanced Tutorial</a>, and a <a href="http://docs.python.org/howto/logging-cookbook.html#logging-cookbook">Logging Cookbook</a>.</p>
+
 <p>Also, the <a href="http://docs.python.org/library/pprint.html#pprint.pprint">pprint.pprint() function</a> is great for "pretty printing" dictionaries and lists that have nested dictionaries and lists in them. The <a href="http://docs.python.org/library/pprint.html#pprint.pformat">pprint.pformat() function</a> returns the string of this content, rather than printing it to the screen.</p>
+
 <hr />
 <p>One final tip: You can use the <code>tail -f logfile.txt</code> command to show a file as it is being written to. The -f stands for "follow". Just leave a terminal/console window open with this command running, and new text in the log file will appear as it is written. This way, you don't have to keep opening/reloading a text editor to view the latest text in the log file.</p>
+
 <p>The tail command comes on Mac OS X and Linux OSes. On Windows, you can download the <a href="http://www.cygwin.com/install.html">Cygwin project</a> to get the tail command.</p>
 
+<p>(But also: you can still use <code>print()</code> for quick debugging if you <em>really</em> want to. Just remember that short cuts often make longer trips.)</p>
 
+<p>UPDATED 2021/12/17: Rewrote large parts of the blog post. Added link to Nina's PyCon talk.</p>
     </body>
 </html>
