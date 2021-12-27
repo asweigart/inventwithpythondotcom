@@ -10,5 +10,5 @@ import sys
 sys.path.append(os.curdir)
 from pelicanconf import *
 
-SITEURL = 'http://localhost:8000'
+SITEURL = 'https://inventwithpython.com/blog'
 

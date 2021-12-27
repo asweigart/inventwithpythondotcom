@@ -4,16 +4,16 @@ from __future__ import unicode_literals
 
 AUTHOR = 'Al Sweigart'
 SITENAME = 'The Invent with Python Blog'
-SITEURL = 'http://localhost:8000'
+SITEURL = 'http://localhost:8000/blog'
 PATH = 'content'
 TIMEZONE = 'America/Chicago'
 DEFAULT_LANG = 'en'
-DEFAULT_PAGINATION = 10
+DEFAULT_PAGINATION = 20
 
 FEED_ALL_ATOM = 'atom.xml'
-CATEGORY_FEED_ATOM = '%s.atom.xml'
+CATEGORY_FEED_ATOM = '{slug}.atom.xml'
 FEED_ALL_RSS = 'rss.xml'
-CATEGORY_FEED_RSS = '%s.rss.xml'
+CATEGORY_FEED_RSS = '{slug}.rss.xml'
 
 # Blogroll
 LINKS = ()
@@ -28,18 +28,22 @@ SOCIAL = (
          'fab fa-github-square fa-fw fa-lg'),
         )
 
-STATIC_PATHS = ['blogstatic']
-STATIC_CHECK_IF_MODIFIED = True
+
+# NOTE: Changes to the theme's voidybootstrap.css file need to happen to
+# C:\Users\Al\AppData\Local\Programs\Python\Python310\Lib\site-packages\pelican\themes\voidy-bootstrap-inventwithpython\static\css\voidybootstrap.css
+# and pelican doesn't seem to have a way to change this? Not any way
+# that actually works as far as I can tell.
 THEME = "voidy-bootstrap-inventwithpython"
+#THEME_STATIC_DIR = '/blogstatic/theme'
 
 ARTICLE_URL = '{date:%Y}/{date:%m}/{date:%d}/{slug}/'
 ARTICLE_SAVE_AS = '{date:%Y}/{date:%m}/{date:%d}/{slug}/index.html'
 FILENAME_METADATA = '(?P<slug>.*?)\.html'
 OUTPUT_PATH = '../output/blog'
+FAVICON = '../favicon.ico'
 
 
-
-SITESUBTITLE ="Al Sweigart's writings on programming."
+SITESUBTITLE ="Writings from the author of Automate the Boring Stuff."
 #SITETAG = "Text that's displayed in the title on the home page."
 
 FONT_AWESOME_CDN_LINK = {
@@ -60,3 +64,8 @@ STYLESHEET_FILES = ("pygment.css", "voidybootstrap.css",)
 
 CUSTOM_ARTICLE_FOOTERS = ('./inventblogfooter.html', )
 SKIP_COLOPHON = True
+
+
+#STATIC_PATHS = ['blogstatic']  # Don't use this, it causes the local pelican server to use locahost:8000 instead of localhost:8000/blog and makes it useless for testing.
+STATIC_PATHS = []  # Get rid of " Watched path does not exist" warning for the images folder, which I don't use.
+DELETE_OUTPUT_DIRECTORY = True
