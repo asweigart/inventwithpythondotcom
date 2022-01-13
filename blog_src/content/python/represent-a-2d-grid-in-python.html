@@ -1,0 +1,248 @@
+<html>
+    <head>
+        <title>How to Represent a 2D Grid in Python Code</title>
+        <meta name="tags" content="" />
+        <meta name="date" content="2021-12-28 12:00" />
+        <meta name="summary" content="<p>This blog post examines different ways that Python lists and dictionaries can be used to represent a 2D data structure. I also write some test programs to measure the performance of each data structure.</p>" />
+    </head>
+    <body>
+
+<h2>Introduction</h2>
+
+<p>This blog post examines different ways that Python lists and dictionaries can be used to represent a 2D data structure. I also write some test programs to measure the performance of each data structure.</p>
+
+<p>A two-dimensional or 2D grid is used in a variety of applications. Think of chess boards, top-down video games, spreadsheets, <a href="https://inventwithpython.com/bigbookpython/project13.html">Conway's Game of Life simulation</a> are all examples of data that is stored in a two-dimensional grid. We can use a Cartesian coordinate system to create unique "addresses" for each item in the grid. The <em>x coordinate</em> is the horizontal address and the <em>y coordinate</em> is the vertical address.</p>
+
+<p>The Cartesian coordinate system in programming is different from the one you may have learned about in math class. The origin (that is, the (0, 0) coordinate) is in the top-left corner of the screen, and while the <em>x</em> coordinates increase going to the right as in mathematics, the <em>y</em> coordinates increase going down rather than increase going up. In a spreadsheet program like Excel, the <em>x</em> coordinates may be represented by letters instead of numbers, but we'll use numbers for both the <em>x</em> and <em>y</em> coordinates. When listed together, the <em>x</em> coordinate comes first. In the coordinates (2, -5), 2 is the <em>x</em> coordinate and -5 is the <em>y</em> coordinate.</p>
+
+<p>As an aside, here's a list of Python projects that utilize a 2D data structure that come from my free book, <a href="">The Big Book of Small Python Projects</a>:</p>
+
+<ul>
+<li><a href="https://inventwithpython.com/bigbookpython/project13.html">Project #13 - Conway's Game of Life</a></li>
+<li><a href="https://inventwithpython.com/bigbookpython/project23.html">Project #23 - Etching Drawer</a></li>
+<li><a href="https://inventwithpython.com/bigbookpython/project37.html">Project #37 - Hungry Robots</a></li>
+<li><a href="https://inventwithpython.com/bigbookpython/project39.html">Project #39 - Langton's Ants</a></li>
+<li><a href="https://inventwithpython.com/bigbookpython/project44.html">Project #44 - Maze Runner 2D</a></li>
+<li><a href="https://inventwithpython.com/bigbookpython/project73.html">Project #73 - Sudoku Puzzle</a></li>
+<li><a href="https://inventwithpython.com/bigbookpython/project79.html">Project #79 - 2048</a></li>
+</ul>
+
+<h2>The 2D Data Structures</h2>
+
+<p>By "2D data structure" I mean a data structure that contains other values the way that lists and dictionaries contain other values. While the data in lists can be accessed by an integer index and the data in dictionaries can be accessed by a key value, the data in our 2D data structures will be accessed by two integers: the <em>x</em> and <em>y</em> coordinates. </p>
+
+<p>I'll be comparing three different data structures in this blog post:</p>
+
+<ol>
+    <li>A "1D list", where the data is stored in a Python list. The data at the coordinates (<em>x</em>, <em>y</em>) are stored at the index <code>grid[y * WIDTH + x]</code>.</li>
+    <li>A "2D list", where the data is stored in a Python list of lists. The data at the coordinates (<em>x</em>, <em>y</em>) are stored at <code>grid[x][y]</code>.</li>
+    <li>A dictionary, where the data is stored in... a Python dictioanry. The data at the coordiantes (<em>x</em>, <em>y</em>) are stored at <code>grid[(x, y)]</code>. (We can just specify <code>grid[x, y]</code> and Python will automaticall interpret this as a tuple containing <code>x</code> and <code>y</code>.)</li>
+</ol>
+
+<p>There are a few advantages and disadvantages that I can see off the top of my head:</p>
+
+<ul>
+    <li>The 1D list and 2d list must have a fixed width and height. The dictionary can store data at any arbitrary coordinates.</li>
+    <li>The 1D list and 2d list use the same full amount of memory no matter how empty or full they are. The dictionary only uses up as much memory as it contains data.</li>
+    <li>The 2D lists can be tricky to work with, especially mixing the x and y coordinates with each other.</li>
+    <li>This is conjecture, but I think that as the dictionary becomes full, it uses up more memory than the 1D or 2D lists.</li>
+    <li>This is conjectue, but I think the dictionary might be slower than the lists at accessing and storing data.</li>
+</ul>
+
+<p>Performance Tests</p>
+
+<p>Without going into the specifics of Big O algorithm analysis (which you can learn about in <a href="https://inventwithpython.com/beyond/chapter13.html">Chapter 13 of my free book, Beyond the Basic Stuff with Python</a>), accessing and storing data is a <em>constant</em> time operation for lists, lists of lists, and dictionaries. This means that it generally doesn't take longer to access or store data in lists or dictionaries as they fill up with data.</p>
+
+<p>However, I'm more interested in the specific performance metrics of these as well as the memory usage. I'm going to write tests to measure these for these three different approaches to storing data in a grid. You can download and run these tests yourself on your computer. I'm running them with Python 3.10.0 on my T480s Thinkpad laptop running Windows 10.</p>
+
+<p>I use Python's <code>timeit</code> module to measure the performance of the test code. You can also learn about this module in <a href="https://inventwithpython.com/beyond/chapter13.html">Beyond the Basic Stuff with Python</a>.</p>
+
+<p>Here's the <a href="https://inventwithpython.com/blogstatic/gridtest.py">gridtest.py</a> program I wrote to measure the runtime speed and memory usage of these three 2D grid data structures. I put the output I got next to its respective <code>print()</code> call:</p>
+
+<p><textarea rows=20 style="width: 100%">
+import timeit
+from sys import getsizeof, stderr
+from itertools import chain
+from collections import deque
+
+# These constants are the size of the grid used in the tests:
+WIDTH = 150
+HEIGHT = 50
+
+# Function to determine memory usage from https://code.activestate.com/recipes/577504-compute-memory-footprint-of-an-object-and-its-cont/?in=user-178123
+def memoryUsage(o, handlers={}, verbose=False):
+    dict_handler = lambda d: chain.from_iterable(d.items())
+    all_handlers = {tuple: iter,
+                    list: iter,
+                    deque: iter,
+                    dict: dict_handler,
+                    set: iter,
+                    frozenset: iter,
+                   }
+    all_handlers.update(handlers)     # user handlers take precedence
+    seen = set()                      # track which object id's have already been seen
+    default_size = getsizeof(0)       # estimate sizeof object without __sizeof__
+
+    def sizeof(o):
+        if id(o) in seen:       # do not double count the same object
+            return 0
+        seen.add(id(o))
+        s = getsizeof(o, default_size)
+
+        for typ, handler in all_handlers.items():
+            if isinstance(o, typ):
+                s += sum(map(sizeof, handler(o)))
+                break
+        return s
+
+    return sizeof(o)
+
+
+def createAndFillDict():
+    # Create a 2D grid from scratch using a dictionary and completely fill it with data.
+    dictGrid = {}
+    for x in range(WIDTH):
+        for y in range(HEIGHT):
+            dictGrid[(x, y)] = 'A'
+    return dictGrid
+
+
+def createAndFillDictComp():
+    # Create a 2D grid from scratch using a dictionary comprehension and completely fill it with data.
+    return {(x, y): 'A' for x in range(WIDTH) for y in range(HEIGHT)}
+
+
+def createAndFill1DList():
+    # Create a 2D grid from scratch using a list and completely fill it with data.
+    list1DGrid = []
+    for i in range(WIDTH * HEIGHT):
+        list1DGrid.append('A')
+    return list1DGrid
+
+
+def createAndFill1DListComp():
+    # Create a 2D grid from scratch using a list comprehension and completely fill it with data.
+    return ['A' for i in range(WIDTH * HEIGHT)]
+
+
+def createAndFill2DList():
+    # Create a 2D grid from scratch using a list of lists and completely fill it with data.
+    list2DGrid = []
+    for x in range(WIDTH):
+        list2DGrid.append([])
+        for y in range(HEIGHT):
+            list2DGrid[-1].append('A')
+    return list2DGrid
+
+
+def createAndFill2DListComp():
+    # Create a 2D grid from scratch using a list comprehension of list comprehensions and completely fill it with data.
+    list2DGrid = [['A' for y in range(HEIGHT)] for x in range(WIDTH)]
+    return list2DGrid
+
+
+def read1DList(grid):
+    # Read every coordinate in the list 2D grid.
+    for x in range(WIDTH):
+        for y in range(HEIGHT):
+            data = grid[y * WIDTH + x]
+
+
+def read2DList(grid):
+    # Read every coordinate in the list of lists 2D grid.
+    for x in range(WIDTH):
+        for y in range(HEIGHT):
+            data = grid[x][y]
+
+
+def readDict(grid):
+    # Read every coordinate in the dictionary 2D grid.
+    for x in range(WIDTH):
+        for y in range(HEIGHT):
+            data = grid[x, y]
+
+
+def write1DList(grid):
+    # Write to every coordinate in the list 2D grid.
+    for x in range(WIDTH):
+        for y in range(HEIGHT):
+            grid[y * WIDTH + x] = 'A'
+
+
+def write2DList(grid):
+    # Write to every coordinate in the list to lists 2D grid.
+    for x in range(WIDTH):
+        for y in range(HEIGHT):
+            grid[x][y] = 'A'
+
+
+def writeDict(grid):
+    # Write to every coordinate in the dictionary 2D grid.
+    for x in range(WIDTH):
+        for y in range(HEIGHT):
+            grid[x, y] = 'A'
+
+
+print('Compare the 1D list and 1D list comprehension creations:')
+print(timeit.timeit('createAndFill1DList()', number=10000, globals=globals()))      # 5.796480499964673
+print(timeit.timeit('createAndFill1DListComp()', number=10000, globals=globals()))  # 3.3725536999991164
+# Conclusion: Using list comprehensions to create the list is faster than a for loop.
+
+print('Compare the 2D list and 2D list comprehension creations:')
+print(timeit.timeit('createAndFill2DList()', number=10000, globals=globals()))      # 7.913099199999124
+print(timeit.timeit('createAndFill2DListComp()', number=10000, globals=globals()))  # 3.83729699999094
+# Conclusion: Using list comprehensions to creat the 2D list is faster than nested for loops.
+
+print('Compare the dictionary and dictionary comprehension creations:')
+print(timeit.timeit('createAndFillDict()', number=10000, globals=globals()))      # 9.804479899990838
+print(timeit.timeit('createAndFillDictComp()', number=10000, globals=globals()))  # 10.132151499972679
+# Conclusion: With repeated trials, there isn't a significant difference.
+
+print('Compare the 1D list, 2D list, and dictionary creations:')
+print(timeit.timeit('createAndFill1DListComp()', number=10000, globals=globals()))  # 3.2536532999947667
+print(timeit.timeit('createAndFill2DListComp()', number=10000, globals=globals()))  # 3.1561911000171676
+print(timeit.timeit('createAndFillDict()', number=10000, globals=globals()))        # 9.759650700027123
+# Conclusion: The dictionary is slowest to create, and the 1D and 2D lists are about the same.
+
+print('Compare the memory usage of a full grid of each of the three approaches:')
+print(memoryUsage(createAndFill1DListComp()))  # 67274
+print(memoryUsage(createAndFill2DListComp()))  # 72282
+print(memoryUsage(createAndFillDict()))        # 719246
+# Conclusion: The 1D and 2D list use about the same amount, the 1D list less so. The dictionary uses 10x the memory though.
+
+print('Compare the speed of reading grid data:')
+list1dGrid = createAndFill1DListComp()
+list2dGrid = createAndFill2DListComp()
+dictGrid = createAndFillDict()
+print(timeit.timeit('read1DList(list1dGrid)', number=10000, globals=globals()))  # 8.444686400005594
+print(timeit.timeit('read2DList(list2dGrid)', number=10000, globals=globals()))  # 3.76759669999592
+print(timeit.timeit('readDict(dictGrid)', number=10000, globals=globals()))        # 7.19706789997872
+# Conclusion: The 2D list is twice as fast as the others at reading data. The 1D list is slower than the dictionary.
+
+print('Compare the speed of writing grid data:')
+print(timeit.timeit('write1DList(list1dGrid)', number=10000, globals=globals()))  # 8.487390499969479
+print(timeit.timeit('write2DList(list2dGrid)', number=10000, globals=globals()))  # 4.278829399961978
+print(timeit.timeit('writeDict(dictGrid)', number=10000, globals=globals()))        # 7.716881500033196
+# Conclusion: As with the read test, the 2D list is twice as fast as the others. The 1D list is slower than the dictionary.
+
+</textarea></p>
+
+<h2>Conclusions</h2>
+
+<p>The 2D list approach was the fastest and the dictionary approach was the slowest and used 10x as much memory as the 1D and 2D lists. But the dictionary approach gives you the flexibility of unbounded grids while the 1D and 2D lists have fixed width and height. The 1D list's requirement to calculate the index actually made it slower than the dictionary.</p>
+
+<p>So if you need to have a 2D grid data structure, use the list-of-lists approach, unless you need an unbounded grid. In that case, the dictionary approach is significantly slower but offers this flexibility. Or, if performance isn't important, the dictionary approach has the easiest implementation.</p>
+
+<p>In my personal view, ease of implementation and debuggability are the most important factors and my use cases don't tend to be at large enough scales where the performance differences are significant. I'd go with the dictionary approach.</p>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
