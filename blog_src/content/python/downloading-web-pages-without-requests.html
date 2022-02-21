@@ -1,0 +1,70 @@
+<html>
+  <head>
+    <title>Downloading Web Pages and Files in Python 3 and 2 Without the Requests Module</title>
+    <meta name="tags" content="" />
+    <meta name="date" content="2022-02-21 12:00" />
+    <meta name="summary" content="How to download web pages and files off the internet only using Python 3 and 2's standard library." />
+</head>
+<body>
+
+<p>I created a Python module called <a href="https://pypi.org/project/WhatIsMyIP/">whatismyip</a> that allows Python programs to easily figure out what their internet protocol (IP) address is. It works by connecting to one of several public websites that return this information, such as <a href="https://icanhazip.com/">https://icanhazip.com/</a>.</p>
+
+<p>Because it was a module to be included in other programs, I wanted it to have as few dependencies as possible. Normally I would use the <a href="https://pypi.org/project/requests/"><code>requests</code></a> module to download these web pages, but I wanted to stick to just the Python standard library. Here's how I used only the standard library on Python 3 and 2 to download the HTML of a webpage:</p>
+
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>  <span class="c1"># Python 3</span>
+    <span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">Request</span><span class="p">,</span> <span class="n">urlopen</span>
+<span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>  <span class="c1"># Python 2</span>
+    <span class="kn">from</span> <span class="nn">urllib2</span> <span class="kn">import</span> <span class="n">Request</span><span class="p">,</span> <span class="n">urlopen</span>
+
+<span class="c1"># Supply a user-agent header of a common browser, since some web servers will refuse to reply to scripts without one.</span>
+<span class="c1"># &#39;https://ifconfig.me&#39; is a website that returns simple info about your request. Replace this with the page you want to download.</span>
+<span class="n">requestObj</span> <span class="o">=</span> <span class="n">Request</span><span class="p">(</span><span class="s1">&#39;https://ifconfig.me/all&#39;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;User-agent&#39;</span> <span class="p">:</span> <span class="s1">&#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/97.0&#39;</span><span class="p">})</span>
+<span class="n">responseObj</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="n">requestObj</span><span class="p">)</span>
+
+<span class="c1"># To figure out how to decode the downloaded binary data to text, we need to get the character set encoding:</span>
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>  <span class="c1"># Python 3</span>
+    <span class="n">charsets</span> <span class="o">=</span> <span class="n">responseObj</span><span class="o">.</span><span class="n">info</span><span class="p">()</span><span class="o">.</span><span class="n">get_charsets</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">charsets</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">charsets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Character set encoding could not be determined.</span>
+        <span class="n">charset</span> <span class="o">=</span> <span class="s1">&#39;utf-8&#39;</span>  <span class="c1"># Use the utf-8 encoding by default.</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Use the first character set encoding listed. (It&#39;s often the only one.)</span>
+        <span class="n">charset</span> <span class="o">=</span> <span class="n">charsets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>  <span class="c1"># Python 2</span>
+    <span class="n">charset</span> <span class="o">=</span> <span class="n">responseObj</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">getencoding</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">charset</span> <span class="o">==</span> <span class="s1">&#39;7bit&#39;</span><span class="p">:</span>
+        <span class="c1"># Even though getencoding() returns &#39;7bit&#39;, this is an unknown encoding to decode(). &#39;7bit&#39; is the same as &#39;ascii&#39;</span>
+        <span class="n">charset</span> <span class="o">=</span> <span class="s1">&#39;ascii&#39;</span>
+
+<span class="n">content</span> <span class="o">=</span> <span class="n">responseObj</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">charset</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>  <span class="c1"># The HTML of the web page.</span>
+</pre></div>
+
+<p>And here is code for downloading a binary file (such as a <em>.png</em> image or <em>.zip</em> file) from a URL:</p>
+
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>  <span class="c1"># Python 3</span>
+    <span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">Request</span><span class="p">,</span> <span class="n">urlopen</span>
+<span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>  <span class="c1"># Python 2</span>
+    <span class="kn">from</span> <span class="nn">urllib2</span> <span class="kn">import</span> <span class="n">Request</span><span class="p">,</span> <span class="n">urlopen</span>
+
+<span class="c1"># Replace https://inventwithpython.com/images/cover_automate2_thumb.jpg with the file you want to download.</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://inventwithpython.com/images/cover_automate2_thumb.jpg&#39;</span>
+
+<span class="c1"># Supply a user-agent header of a common browser, since some web servers will refuse to reply to scripts without one.</span>
+<span class="n">requestObj</span> <span class="o">=</span> <span class="n">Request</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;User-agent&#39;</span> <span class="p">:</span> <span class="s1">&#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/97.0&#39;</span><span class="p">})</span>
+<span class="n">responseObj</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="n">requestObj</span><span class="p">)</span>
+
+<span class="n">content</span> <span class="o">=</span> <span class="n">responseObj</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="c1"># Replace foo.jpg with the local filename you want to use:</span>
+<span class="n">filename</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Use the filename from the url.</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fileObj</span><span class="p">:</span>
+    <span class="n">fileObj</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+</pre></div>
+
+<p>The <code>urllib</code> module in Python 2 was the original downloading module in the Python standard library added in Python 1.2. The <code>urllib2</code> module in Python 2 had additional features and was added in Python 1.6. In Python 3, there is a new module just called <code>urllib</code>. There are also third-party modules named <a href="https://pypi.org/project/urllib3/"><code>urllib3</code></a> and <a href="https://pypi.org/project/requests/"><code>requests</code></a> (which uses <code>urllib3</code>) but these aren't in the Python standard library nor will they be added to it.</p>
+
+</body></html>
