@@ -1,0 +1,136 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>ROT 13 Cipher</title></head><body style="background-color: #fffeee;">
+
+<script type="text/javascript">
+//<![CDATA[
+
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5459430-3']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
+//]]>
+</script>
+
+
+<div style="background-color: #eeeddd; float: right; height: 310px; font-family: sans-serif;" id="otherbooks">
+  <a href="#" onclick="document.getElementById('otherbooks').outerHTML='';" style="vertical-align: top;">(close)</a><br />
+
+  <a target="_blank" href="https://nostarch.com/automatestuff2" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_automate.link');"><img src="/images/cover_automate2_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/big-book-small-python-projects" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_bigbookpython.link');"><img src="/images/cover_bigbookpython_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/beyond-basic-stuff-python" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_beyond.link');"><img src="/images/cover_beyond_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/inventwithpython" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_invent.link');"><img src="/images/cover_invent4th_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://www.amazon.com/Making-Games-Python-Pygame-Sweigart/dp/1469901730?ie=UTF8&amp;tag=playwithpyth-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1469901730" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_pygame.link');"><img src="/images/cover_makinggames_thumb.png" style="height: 200px; border: solid black 1px; /"></a>
+  <a target="_blank" href="https://nostarch.com/crackingcodes" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_hacking.link');"><img src="/images/cover_crackingcodes_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/scratchplayground"><img src="/images/cover_scratchprogrammingplayground_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/codingwithminecraft"><img src="/images/cover_codingwithminecraft_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <br />
+  <a href="https://inventwithpython.com/automateudemy">Use this link to get 70% off the Automate the Boring Stuff online video course.</a><br />
+  <a href="https://www.patreon.com/AlSweigart">Support me on Patreon</a>
+</div>
+
+<a href="project60.html">Prev: Rock Paper Scissors (Always-Win Version)</a> | <a href="project62.html">Next: Rotating Cube</a>
+
+
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-255">
+<section class="toclist">
+<header class="calibre10">
+<h1 class="chapter">
+<span class="chapternumber"><span type="pagebreak" title="290" id="calibre_link-658" class="calibre11"></span>#61</span><br class="calibre14" />
+<span class="chaptertitle">ROT13 Cipher</span></h1>
+</header>
+<figure class="opener">
+<img src="images/000002.png" alt="" class="calibre12" />
+</figure>
+<p class="chapterintro">The ROT13 cipher, one of the simplest encryption algorithms, stands for “rotate 13 spaces.” The cypher represents the letters <em class="calibre9">A</em> to <em class="calibre9">Z</em> as the numbers 0 to 25 in such a way that the encrypted letter is 13 spaces from the plaintext letter: <em class="calibre9">A</em> becomes <em class="calibre9">N</em>, <em class="calibre9">B</em> becomes <em class="calibre9">O</em>, and so on. The encryption process is identical to the decryption process, making it trivial to program. However, the encryption is also trivial to break. Because of this, you’ll most often find ROT13 used to conceal non-sensitive information, such as spoilers or trivia answers, so it’s not read unintentionally. More information about the ROT13 cipher can be found at <a href="https://en.wikipedia.org/wiki/ROT13" class="linkurl">https://en.wikipedia.org/wiki/ROT13</a>. If you’d like to learn about ciphers and code breaking more generally, you can read my book <em class="calibre9">Cracking Codes with Python</em> (No Starch Press, 2018; <a href="https://nostarch.com/crackingcodes/" class="linkurl">https://nostarch.com/crackingcodes/</a>).</p>
+<h2 id="calibre_link-256" class="calibre5"><span type="pagebreak" title="291" id="calibre_link-659" class="calibre15"></span>The Program in Action</h2>
+<p class="bodyfirst">When you run <em class="calibre9">rot13cipher.py</em>, the output will look like this:</p>
+<pre class="calibre24"><code class="calibre22">ROT13 Cipher, by Al Sweigart al@inventwithpython.com
+
+Enter a message to encrypt/decrypt (or QUIT):
+&gt; <b class="calibre6">Meet me by the rose bushes tonight.</b>
+The translated message is:
+Zrrg zr ol gur ebfr ohfurf gbavtug.
+
+(Copied to clipboard.)
+Enter a message to encrypt/decrypt (or QUIT):
+<var class="calibre27">--snip--</var></code></pre>
+<h2 id="calibre_link-257" class="calibre5">How It Works</h2>
+<p class="bodyfirst">ROT13 shares a lot of code with Project 6, “Caesar Cipher,” although it’s much simpler because it always uses the key 13. Since the same code performs both the encryption and decryption (lines 27 to 39), there’s no need to ask the player which mode they want to use.</p>
+<p class="calibre19">One difference is that this program maintains the casing of the original message instead of automatically converting the message to uppercase. For example, “Hello” encrypts to “Uryyb,” whereas “HELLO” encrypts to “URYYB.”</p>
+<pre class="calibre24"><code class="calibre22"> 1. """ROT13 Cipher, by Al Sweigart al@inventwithpython.com
+ 2. The simplest shift cipher for encrypting and decrypting text.
+ 3. More info at https://en.wikipedia.org/wiki/ROT13
+ 4. View this code at https://nostarch.com/big-book-small-python-projects
+ 5. Tags: tiny, cryptography"""
+ 6.
+ 7. try:
+ 8.     import pyperclip  # pyperclip copies text to the clipboard.
+ 9. except ImportError:
+10.     pass  # If pyperclip is not installed, do nothing. It's no big deal.
+11.
+12. # Set up the constants:
+13. UPPER_LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+14. LOWER_LETTERS = 'abcdefghijklmnopqrstuvwxyz'
+15.
+16. print('ROT13 Cipher, by Al Sweigart al@inventwithpython.com')
+17. print()
+18.
+19. while True:  # Main program loop.
+20.     print('Enter a message to encrypt/decrypt (or QUIT):')
+21.     message = input('&gt; ')
+22.
+23.     if message.upper() == 'QUIT':
+24.         break  # Break out of the main program loop.
+25.
+26.     # Rotate the letters in message by 13 characters.
+<span type="pagebreak" title="292" id="calibre_link-660" class="calibre13"></span>27.     translated = ''
+28.     for character in message:
+29.         if character.isupper():
+30.             # Concatenate uppercase translated character.
+31.             transCharIndex = (UPPER_LETTERS.find(character) + 13) % 26
+32.             translated += UPPER_LETTERS[transCharIndex]
+33.         elif character.islower():
+34.             # Concatenate lowercase translated character.
+35.             transCharIndex = (LOWER_LETTERS.find(character) + 13) % 26
+36.             translated += LOWER_LETTERS[transCharIndex]
+37.         else:
+38.             # Concatenate the character untranslated.
+39.             translated += character
+40.
+41.     # Display the translation:
+42.     print('The translated message is:')
+43.     print(translated)
+44.     print()
+45.
+46.     try:
+47.         # Copy the translation to the clipboard:
+48.         pyperclip.copy(translated)
+49.         print('(Copied to clipboard.)')
+50.     except:
+51.         pass</code></pre>
+<h2 id="calibre_link-258" class="calibre5">Exploring the Program</h2>
+<p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
+<ol class="decimal">
+<li value="1" class="calibre8">What happens if you change <code class="calibre22">character.isupper()</code> on line 29 to <code class="calibre22">character.islower()</code>?</li>
+<li value="2" class="calibre8">What happens if you change <code class="calibre22">print(translated)</code> on line 43 to <code class="calibre22">print(message)</code>?</li>
+</ol>
+</section>
+</div>
+
+
+
+
+
+
+
+
+<a href="project60.html">Prev: Rock Paper Scissors (Always-Win Version)</a> | <a href="project62.html">Next: Rotating Cube</a>
+</body></html>

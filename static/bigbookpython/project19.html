@@ -1,0 +1,131 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Digital Clock</title></head><body style="background-color: #fffeee;">
+
+<script type="text/javascript">
+//<![CDATA[
+
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5459430-3']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
+//]]>
+</script>
+
+
+<div style="background-color: #eeeddd; float: right; height: 310px; font-family: sans-serif;" id="otherbooks">
+  <a href="#" onclick="document.getElementById('otherbooks').outerHTML='';" style="vertical-align: top;">(close)</a><br />
+
+  <a target="_blank" href="https://nostarch.com/automatestuff2" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_automate.link');"><img src="/images/cover_automate2_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/big-book-small-python-projects" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_bigbookpython.link');"><img src="/images/cover_bigbookpython_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/beyond-basic-stuff-python" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_beyond.link');"><img src="/images/cover_beyond_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/inventwithpython" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_invent.link');"><img src="/images/cover_invent4th_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://www.amazon.com/Making-Games-Python-Pygame-Sweigart/dp/1469901730?ie=UTF8&amp;tag=playwithpyth-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1469901730" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_pygame.link');"><img src="/images/cover_makinggames_thumb.png" style="height: 200px; border: solid black 1px; /"></a>
+  <a target="_blank" href="https://nostarch.com/crackingcodes" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_hacking.link');"><img src="/images/cover_crackingcodes_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/scratchplayground"><img src="/images/cover_scratchprogrammingplayground_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/codingwithminecraft"><img src="/images/cover_codingwithminecraft_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <br />
+  <a href="https://inventwithpython.com/automateudemy">Use this link to get 70% off the Automate the Boring Stuff online video course.</a><br />
+  <a href="https://www.patreon.com/AlSweigart">Support me on Patreon</a>
+</div>
+
+<a href="project18.html">Prev: Dice Roller</a> | <a href="project20.html">Next: Digital Stream</a>
+
+
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-28">
+<section class="toclist">
+<header class="calibre10">
+<h1 class="chapter">
+<span class="chapternumber"><span type="pagebreak" title="83" id="calibre_link-451" class="calibre11"></span>#19</span><br class="calibre14" />
+<span class="chaptertitle">Digital Clock</span></h1>
+</header>
+<figure class="opener">
+<img src="images/000002.png" alt="" class="calibre12" />
+</figure>
+<p class="chapterintro">This program displays a digital clock with the current time. Rather than render numeric characters directly, the <em class="calibre9">sevseg.py</em> module from Project 64, “Seven-Segment Display Module,” generates the drawings for each digit. This program is similar to Project 14, “Countdown.”</p>
+<h2 id="calibre_link-102" class="calibre5"><span type="pagebreak" title="84" id="calibre_link-452" class="calibre15"></span>The Program in Action</h2>
+<p class="bodyfirst">When you run <em class="calibre9">digitalclock.py</em>, the output will look like this:</p>
+<pre class="calibre24"><code class="calibre22"> __   __       __   __       __   __
+|  | |__|  *   __|  __|  *   __| |__
+|__|  __|  *   __|  __|  *   __| |__|
+
+Press Ctrl-C to quit.</code></pre>
+<h2 id="calibre_link-103" class="calibre5">How It Works</h2>
+<p class="bodyfirst">The digital clock program looks similar to Project 14, “Countdown.” Not only do they both import the <em class="calibre9">sevseg.py</em> module, but they must split up the multiline strings returned by <code class="calibre22">sevseg.getSevSegStr()</code> with the <code class="calibre22">splitlines()</code> method. This allows us to put a colon made of asterisks in between the digits for the hour, minute, and second sections of the clock. Compare this code with the code in Countdown to see how it is similar and how it is different.</p>
+<pre class="calibre24"><code class="calibre22"> 1. """Digital Clock, by Al Sweigart al@inventwithpython.com
+ 2. Displays a digital clock of the current time with a seven-segment
+ 3. display. Press Ctrl-C to stop.
+ 4. More info at https://en.wikipedia.org/wiki/Seven-segment_display
+ 5. Requires sevseg.py to be in the same folder.
+ 6. View this code at https://nostarch.com/big-book-small-python-projects
+ 7. Tags: tiny, artistic"""
+ 8.
+ 9. import sys, time
+10. import sevseg  # Imports our sevseg.py program.
+11.
+12. try:
+13.     while True:  # Main program loop.
+14.         # Clear the screen by printing several newlines:
+15.         print('\n' * 60)
+16.
+17.         # Get the current time from the computer's clock:
+18.         currentTime = time.localtime()
+19.         # % 12 so we use a 12-hour clock, not 24:
+20.         hours = str(currentTime.tm_hour % 12)
+21.         if hours == '0':
+22.             hours = '12'  # 12-hour clocks show 12:00, not 00:00.
+23.         minutes = str(currentTime.tm_min)
+24.         seconds = str(currentTime.tm_sec)
+25.
+26.         # Get the digit strings from the sevseg module:
+27.         hDigits = sevseg.getSevSegStr(hours, 2)
+28.         hTopRow, hMiddleRow, hBottomRow = hDigits.splitlines()
+29.
+30.         mDigits = sevseg.getSevSegStr(minutes, 2)
+31.         mTopRow, mMiddleRow, mBottomRow = mDigits.splitlines()
+32.
+33.         sDigits = sevseg.getSevSegStr(seconds, 2)
+<span type="pagebreak" title="85" id="calibre_link-453" class="calibre13"></span>34.         sTopRow, sMiddleRow, sBottomRow = sDigits.splitlines()
+35.
+36.         # Display the digits:
+37.         print(hTopRow    + '     ' + mTopRow    + '     ' + sTopRow)
+38.         print(hMiddleRow + '  *  ' + mMiddleRow + '  *  ' + sMiddleRow)
+39.         print(hBottomRow + '  *  ' + mBottomRow + '  *  ' + sBottomRow)
+40.         print()
+41.         print('Press Ctrl-C to quit.')
+42.
+43.         # Keep looping until the second changes:
+44.         while True:
+45.             time.sleep(0.01)
+46.             if time.localtime().tm_sec != currentTime.tm_sec:
+47.                 break
+48. except KeyboardInterrupt:
+49.     print('Digital Clock, by Al Sweigart al@inventwithpython.com')
+50.     sys.exit()  # When Ctrl-C is pressed, end the program.</code></pre>
+<h2 id="calibre_link-104" class="calibre5">Exploring the Program</h2>
+<p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
+<ol class="decimal">
+<li value="1" class="calibre8">What happens if you change <code class="calibre22">time.sleep(0.01)</code> on line 45 to <code class="calibre22">time.sleep(2)</code>?</li>
+<li value="2" class="calibre8">What happens if you change the <code class="calibre22">2</code> on lines 27, 30, and 33 to <code class="calibre22">1</code>?</li>
+<li value="3" class="calibre8">What happens if you delete or comment out <code class="calibre22">print('\n' * 60)</code> on line 15?</li>
+<li value="4" class="calibre8">What error message do you get if you delete or comment out <code class="calibre22">import sevseg</code> on line 10?</li>
+</ol>
+</section>
+</div>
+
+
+
+
+
+
+
+
+<a href="project18.html">Prev: Dice Roller</a> | <a href="project20.html">Next: Digital Stream</a>
+</body></html>

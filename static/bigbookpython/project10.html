@@ -1,0 +1,187 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Cho-Han</title></head><body style="background-color: #fffeee;">
+
+<script type="text/javascript">
+//<![CDATA[
+
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5459430-3']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
+//]]>
+</script>
+
+
+<div style="background-color: #eeeddd; float: right; height: 310px; font-family: sans-serif;" id="otherbooks">
+  <a href="#" onclick="document.getElementById('otherbooks').outerHTML='';" style="vertical-align: top;">(close)</a><br />
+
+  <a target="_blank" href="https://nostarch.com/automatestuff2" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_automate.link');"><img src="/images/cover_automate2_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/big-book-small-python-projects" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_bigbookpython.link');"><img src="/images/cover_bigbookpython_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/beyond-basic-stuff-python" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_beyond.link');"><img src="/images/cover_beyond_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/inventwithpython" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_invent.link');"><img src="/images/cover_invent4th_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://www.amazon.com/Making-Games-Python-Pygame-Sweigart/dp/1469901730?ie=UTF8&amp;tag=playwithpyth-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1469901730" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_pygame.link');"><img src="/images/cover_makinggames_thumb.png" style="height: 200px; border: solid black 1px; /"></a>
+  <a target="_blank" href="https://nostarch.com/crackingcodes" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_hacking.link');"><img src="/images/cover_crackingcodes_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/scratchplayground"><img src="/images/cover_scratchprogrammingplayground_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/codingwithminecraft"><img src="/images/cover_codingwithminecraft_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <br />
+  <a href="https://inventwithpython.com/automateudemy">Use this link to get 70% off the Automate the Boring Stuff online video course.</a><br />
+  <a href="https://www.patreon.com/AlSweigart">Support me on Patreon</a>
+</div>
+
+<a href="project9.html">Prev: Carrot in a Box</a> | <a href="project11.html">Next: Clickbait Headline Generator</a>
+
+
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-72">
+<section class="toclist">
+<header class="calibre10">
+<h1 class="chapter">
+<span class="chapternumber"><span type="pagebreak" title="47" id="calibre_link-415" class="calibre11"></span>#10</span><br class="calibre14" />
+<span class="chaptertitle">Cho-Han</span></h1>
+</header>
+<figure class="opener">
+<img src="images/000002.png" alt="" class="calibre12" />
+</figure>
+<p class="chapterintro">Cho-han is a dice game played in gambling houses of feudal Japan. Two six-sided dice are rolled in a cup, and gamblers must guess if the sum is even (cho) or odd (han). The house takes a small cut of all winnings. The simple random number generation and basic math used to determine odd or even sums make this project especially suitable for beginners. More information about Cho-han can be found at <a href="https://en.wikipedia.org/wiki/Cho-han" class="linkurl">https://en.wikipedia.org/wiki/Cho-han</a>.</p>
+<h2 id="calibre_link-73" class="calibre5"><span type="pagebreak" title="48" id="calibre_link-416" class="calibre15"></span>The Program in Action</h2>
+<p class="bodyfirst">When you run <em class="calibre9">chohan.py</em>, the output will look like this:</p>
+<pre class="calibre24"><code class="calibre22">Cho-Han, by Al Sweigart al@inventwithpython.com
+
+In this traditional Japanese dice game, two dice are rolled in a bamboo
+cup by the dealer sitting on the floor. The player must guess if the
+dice total to an even (cho) or odd (han) number.
+
+You have 5000 mon. How much do you bet? (or QUIT)
+&gt; <b class="calibre6">400</b>
+The dealer swirls the cup and you hear the rattle of dice.
+The dealer slams the cup on the floor, still covering the
+dice and asks for your bet.
+
+    CHO (even) or HAN (odd)?
+&gt; <b class="calibre6">cho</b>
+The dealer lifts the cup to reveal:
+   GO - GO
+     5 - 5
+You won! You take 800 mon.
+The house collects a 40 mon fee.
+<var class="calibre27">--snip--</var></code></pre>
+<h2 id="calibre_link-74" class="calibre5">How It Works</h2>
+<p class="bodyfirst">The <code class="calibre22">random.randint(1, 6)</code> call returns a random integer between <code class="calibre22">1</code> and <code class="calibre22">6</code>, making it ideal for representing a six-sided die roll. However, we also need to display the Japanese words for the numbers one to six. Instead of having an <code class="calibre22">if</code> statement followed by five <code class="calibre22">elif</code> statements, we have a dictionary, stored in <code class="calibre22">JAPANESE_NUMBERS</code>, that maps the integers <code class="calibre22">1</code> to <code class="calibre22">6</code> to strings of the Japanese words. This is how line 57’s <code class="calibre22">JAPANESE_NUMBERS[dice1]</code> and <code class="calibre22">JAPANESE_NUMBERS[dice2]</code> can display the Japanese words for the dice results in just one line of code.</p>
+<pre class="calibre24"><code class="calibre22"> 1. """Cho-Han, by Al Sweigart al@inventwithpython.com
+ 2. The traditional Japanese dice game of even-odd.
+ 3. View this code at https://nostarch.com/big-book-small-python-projects
+ 4. Tags: short, beginner, game"""
+ 5.
+ 6. import random, sys
+ 7.
+ 8. JAPANESE_NUMBERS = {1: 'ICHI', 2: 'NI', 3: 'SAN',
+ 9.                     4: 'SHI', 5: 'GO', 6: 'ROKU'}
+10.
+11. print('''Cho-Han, by Al Sweigart al@inventwithpython.com
+12.
+13. In this traditional Japanese dice game, two dice are rolled in a bamboo
+14. cup by the dealer sitting on the floor. The player must guess if the
+15. dice total to an even (cho) or odd (han) number.
+16. ''')
+17.
+18. purse = 5000
+<span type="pagebreak" title="49" id="calibre_link-417" class="calibre13"></span>19. while True:  # Main game loop.
+20.     # Place your bet:
+21.     print('You have', purse, 'mon. How much do you bet? (or QUIT)')
+22.     while True:
+23.         pot = input('&gt; ')
+24.         if pot.upper() == 'QUIT':
+25.             print('Thanks for playing!')
+26.             sys.exit()
+27.         elif not pot.isdecimal():
+28.             print('Please enter a number.')
+29.         elif int(pot) &gt; purse:
+30.             print('You do not have enough to make that bet.')
+31.         else:
+32.             # This is a valid bet.
+33.             pot = int(pot)  # Convert pot to an integer.
+34.             break  # Exit the loop once a valid bet is placed.
+35.
+36.     # Roll the dice.
+37.     dice1 = random.randint(1, 6)
+38.     dice2 = random.randint(1, 6)
+39.
+40.     print('The dealer swirls the cup and you hear the rattle of dice.')
+41.     print('The dealer slams the cup on the floor, still covering the')
+42.     print('dice and asks for your bet.')
+43.     print()
+44.     print('    CHO (even) or HAN (odd)?')
+45.
+46.     # Let the player bet cho or han:
+47.     while True:
+48.         bet = input('&gt; ').upper()
+49.         if bet != 'CHO' and bet != 'HAN':
+50.             print('Please enter either "CHO" or "HAN".')
+51.             continue
+52.         else:
+53.             break
+54.
+55.     # Reveal the dice results:
+56.     print('The dealer lifts the cup to reveal:')
+57.     print('  ', JAPANESE_NUMBERS[dice1], '-', JAPANESE_NUMBERS[dice2])
+58.     print('    ', dice1, '-', dice2)
+59.
+60.     # Determine if the player won:
+61.     rollIsEven = (dice1 + dice2) % 2 == 0
+62.     if rollIsEven:
+63.         correctBet = 'CHO'
+64.     else:
+65.         correctBet = 'HAN'
+66.
+67.     playerWon = bet == correctBet
+68.
+69.     # Display the bet results:
+70.     if playerWon:
+71.         print('You won! You take', pot, 'mon.')
+72.         purse = purse + pot  # Add the pot from player's purse.
+73.         print('The house collects a', pot // 10, 'mon fee.')
+<span type="pagebreak" title="50" id="calibre_link-418" class="calibre13"></span>74.         purse = purse - (pot // 10)  # The house fee is 10%.
+75.     else:
+76.         purse = purse - pot  # Subtract the pot from player's purse.
+77.         print('You lost!')
+78.
+79.     # Check if the player has run out of money:
+80.     if purse == 0:
+81.         print('You have run out of money!')
+82.         print('Thanks for playing!')
+83.         sys.exit()</code></pre>
+<p class="calibre19">After entering the source code and running it a few times, try making experimental changes to it. On your own, you can also try to figure out how to do the following:</p>
+<ul class="calibre25">
+<li class="calibre8">Implement one of the variations of this game, described in the Wikipedia article, where multiple players bet against each other. Add computer-controlled gamblers with their own purses to play against.</li>
+<li class="calibre8">Add extra bonuses for certain rolls, such as 7 or snake eyes.</li>
+<li class="calibre8">Allow the player to bet on a specific number to get a bonus to their wager.</li>
+</ul>
+<h2 id="calibre_link-75" class="calibre5">Exploring the Program</h2>
+<p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
+<ol class="decimal">
+<li value="1" class="calibre8">How can you make the player start with a different amount of money?</li>
+<li value="2" class="calibre8">How does the program prevent the player from betting more money than they have?</li>
+<li value="3" class="calibre8">How does the program know if the sum of the two dice is even or odd?</li>
+<li value="4" class="calibre8">What happens if you change <code class="calibre22">random.randint(1, 6)</code> on line 37 to <code class="calibre22">random.randint(1, 1)</code>?</li>
+<li value="5" class="calibre8">Does the house still collect a 10 percent fee if you change <code class="calibre22">pot // 10</code> on line 73 (not line 74) to <code class="calibre22">0</code>?</li>
+<li value="6" class="calibre8">What happens if you delete or comment out lines 80, 81, 82, and 83?</li>
+</ol>
+</section>
+</div>
+
+
+
+
+
+
+
+
+<a href="project9.html">Prev: Carrot in a Box</a> | <a href="project11.html">Next: Clickbait Headline Generator</a>
+</body></html>

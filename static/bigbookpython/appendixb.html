@@ -1,0 +1,647 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Appendix B</title></head><body style="background-color: #fffeee;">
+
+<script type="text/javascript">
+//<![CDATA[
+
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5459430-3']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
+//]]>
+</script>
+
+
+<div style="background-color: #eeeddd; float: right; height: 310px; font-family: sans-serif;" id="otherbooks">
+  <a href="#" onclick="document.getElementById('otherbooks').outerHTML='';" style="vertical-align: top;">(close)</a><br />
+
+  <a target="_blank" href="https://nostarch.com/automatestuff2" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_automate.link');"><img src="/images/cover_automate2_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/big-book-small-python-projects" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_bigbookpython.link');"><img src="/images/cover_bigbookpython_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/beyond-basic-stuff-python" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_beyond.link');"><img src="/images/cover_beyond_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/inventwithpython" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_invent.link');"><img src="/images/cover_invent4th_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://www.amazon.com/Making-Games-Python-Pygame-Sweigart/dp/1469901730?ie=UTF8&amp;tag=playwithpyth-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1469901730" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_pygame.link');"><img src="/images/cover_makinggames_thumb.png" style="height: 200px; border: solid black 1px; /"></a>
+  <a target="_blank" href="https://nostarch.com/crackingcodes" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_hacking.link');"><img src="/images/cover_crackingcodes_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/scratchplayground"><img src="/images/cover_scratchprogrammingplayground_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/codingwithminecraft"><img src="/images/cover_codingwithminecraft_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <br />
+  <a href="https://inventwithpython.com/automateudemy">Use this link to get 70% off the Automate the Boring Stuff online video course.</a><br />
+  <a href="https://www.patreon.com/AlSweigart">Support me on Patreon</a>
+</div>
+
+<a href="appendixa.html">Prev: Appendix A</a>
+
+
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" />
+<title>Appendix B - Character Map</title></head><body>
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-7">
+<section class="toclist">
+<header class="calibre10">
+<h1 class="chapter">
+<span class="chapternumber"><span type="pagebreak" title="398" id="calibre_link-766" class="calibre11"></span>B</span><br class="calibre14" />
+<span class="chaptertitle">Character Map</span></h1>
+</header>
+<figure class="opener">
+<img src="images/000002.png" alt="" class="calibre12" />
+</figure>
+<p class="chapterintro">The <code class="calibre17">print(</code><code class="calibre17">)</code> function allows you to easily make any character you can type on the keyboard appear on the screen. However, there are many other characters you may like to display: the hearts, diamonds, clubs, and spades card suits; lines; shaded boxes; arrows; music notes; and so on. You can obtain string values of these characters by passing their numeric code, called a Unicode code point, to the <code class="calibre17">chr(</code><code class="calibre17">)</code> function. Text is stored on computers as a series of numbers, with each character represented by a different number. This appendix contains a list of such code points.</p>
+<h2 id="calibre_link-334" class="calibre5"><span type="pagebreak" title="399" id="calibre_link-767" class="calibre15"></span>Using the chr() and ord() Functions</h2>
+<p class="bodyfirst">Python’s built-in <code class="calibre22">chr()</code> function accepts an integer argument and returns a string of the number’s character. The <code class="calibre22">ord()</code> function does the opposite: it accepts a string argument of a single character and returns the character’s number. This number is the code point for the character in the Unicode standard.</p>
+<p class="calibre19">For example, enter the following into the interactive shell:</p>
+<pre class="calibre24"><code class="calibre22">&gt;&gt;&gt; chr(65)
+'A'
+&gt;&gt;&gt; ord('A')
+65
+&gt;&gt;&gt; chr(66)
+'B'
+&gt;&gt;&gt; chr(9829)
+'♥'</code></pre>
+<p class="calibre19">Not all numbers are valid code points for printable characters. The terminal windows that show the text output of programs may be limited in which characters they can display. The font the terminal window uses also must support the character your program prints. The terminal window prints a Unicode replacement character, <span class="graphicinline"><img src="images/000009.png" alt="b02001" class="calibre33" /></span>, for any character it is unable to print.</p>
+<p class="calibre19">Windows’ terminal window has a far more limited range of characters it can display. This set is known as the Windows Glyph List 4, and it appears in this appendix and on Wikipedia at <a href="https://en.wikipedia.org/wiki/Windows_Glyph_List_4" class="linkurl">https://en.wikipedia.org/wiki/Windows_Glyph_List_4</a>.</p>
+<p class="calibre19">The code points for characters are often listed with a base-16 hexadecimal number, as opposed to the base-10 decimal numbers we are used to. Instead of the decimal digits <code class="calibre22">0</code> to <code class="calibre22">9</code>, hexadecimal has the digits <code class="calibre22">0</code> to <code class="calibre22">9</code> and then continues with the letters <code class="calibre22">A</code> to <code class="calibre22">F</code>. Hexadecimal numbers are often written with a <code class="calibre22">0x</code> prefix to denote that the number that follows is in hex.</p>
+<p class="calibre19">You can convert a decimal integer value to a string of the hexadecimal number with the <code class="calibre22">hex()</code> function. You can convert a string of the hexadecimal number to a decimal integer with the <code class="calibre22">int()</code> function, passing <code class="calibre22">16</code> as the second argument. For example, enter the following into the interactive shell:</p>
+<pre class="calibre24"><code class="calibre22">&gt;&gt;&gt; hex(9)
+'0x9'
+&gt;&gt;&gt; hex(10)
+'0xa'
+&gt;&gt;&gt; hex(15)
+'0xf'
+&gt;&gt;&gt; hex(16)
+'0x10'
+&gt;&gt;&gt; hex(17)
+'0x11'
+&gt;&gt;&gt; int('0x11', 16)
+17
+<span type="pagebreak" title="400" id="calibre_link-768" class="calibre13"></span>&gt;&gt;&gt; int('11', 16)
+17</code></pre>
+<p class="calibre19">When calling the <code class="calibre22">chr()</code> function, you must pass a decimal integer as the argument, not a hexadecimal string.</p>
+<h2 id="calibre_link-335" class="calibre5">Table of Code Points</h2>
+<p class="bodyfirst">The following are all the Unicode code points in the set known as Windows Glyph List 4, which are the characters supported by the Windows terminal program, Command Prompt. Both macOS and Linux can display more characters than are in this list, but to keep your Python programs compatible, I recommend you stick to the characters in this table.</p>
+<ol class="none">
+<li class="calibre8">32 &lt;space&gt;</li>
+<li class="calibre8">33 !</li>
+<li class="calibre8">34 "</li>
+<li class="calibre8">35 #</li>
+<li class="calibre8">36 $</li>
+<li class="calibre8">37 %</li>
+<li class="calibre8">38 &amp;</li>
+<li class="calibre8">39 '</li>
+<li class="calibre8">40 (</li>
+<li class="calibre8">41 )</li>
+<li class="calibre8">42 *</li>
+<li class="calibre8">43 +</li>
+<li class="calibre8">44 ,</li>
+<li class="calibre8">45 -</li>
+<li class="calibre8">46 .</li>
+<li class="calibre8">47 /</li>
+<li class="calibre8">48 0</li>
+<li class="calibre8">49 1</li>
+<li class="calibre8">50 2</li>
+<li class="calibre8">51 3</li>
+<li class="calibre8">52 4</li>
+<li class="calibre8">53 5</li>
+<li class="calibre8">54 6</li>
+<li class="calibre8">55 7</li>
+<li class="calibre8">56 8</li>
+<li class="calibre8">57 9</li>
+<li class="calibre8">58 :</li>
+<li class="calibre8">59 ;</li>
+<li class="calibre8">60 &lt;</li>
+<li class="calibre8">61 =</li>
+<li class="calibre8">62 &gt;</li>
+<li class="calibre8">63 ?</li>
+<li class="calibre8">64 @</li>
+<li class="calibre8">65 A</li>
+<li class="calibre8">66 B</li>
+<li class="calibre8">67 C</li>
+<li class="calibre8">68 D</li>
+<li class="calibre8">69 E</li>
+<li class="calibre8">70 F</li>
+<li class="calibre8">71 G</li>
+<li class="calibre8">72 H</li>
+<li class="calibre8">73 I</li>
+<li class="calibre8">74 J</li>
+<li class="calibre8">75 K</li>
+<li class="calibre8">76 L</li>
+<li class="calibre8">77 M</li>
+<li class="calibre8">78 N</li>
+<li class="calibre8">79 O</li>
+<li class="calibre8">80 P</li>
+<li class="calibre8">81 Q</li>
+<li class="calibre8">82 R</li>
+<li class="calibre8">83 S</li>
+<li class="calibre8">84 T</li>
+<li class="calibre8">85 U</li>
+<li class="calibre8">86 V</li>
+<li class="calibre8">87 W</li>
+<li class="calibre8">88 X</li>
+<li class="calibre8">89 Y</li>
+<li class="calibre8">90 Z</li>
+<li class="calibre8">91 [</li>
+<li class="calibre8">92 \</li>
+<li class="calibre8">93 ]</li>
+<li class="calibre8">94 ^</li>
+<li class="calibre8">95 _</li>
+<li class="calibre8">96 `</li>
+<li class="calibre8">97 a</li>
+<li class="calibre8">98 b</li>
+<li class="calibre8">99 c</li>
+<li class="calibre8">100 d</li>
+<li class="calibre8">101 e</li>
+<li class="calibre8">102 f</li>
+<li class="calibre8">103 g</li>
+<li class="calibre8">104 h</li>
+<li class="calibre8">105 i</li>
+<li class="calibre8">106 j</li>
+<li class="calibre8">107 k</li>
+<li class="calibre8">108 l</li>
+<li class="calibre8">109 m</li>
+<li class="calibre8">110 n</li>
+<li class="calibre8">111 o</li>
+<li class="calibre8">112 p</li>
+<li class="calibre8">113 q</li>
+<li class="calibre8">114 r</li>
+<li class="calibre8">115 s</li>
+<li class="calibre8">116 t</li>
+<li class="calibre8">117 u</li>
+<li class="calibre8">118 v</li>
+<li class="calibre8">119 w</li>
+<li class="calibre8">120 x</li>
+<li class="calibre8">121 y</li>
+<li class="calibre8">122 z</li>
+<li class="calibre8">123 {</li>
+<li class="calibre8">124 |</li>
+<li class="calibre8">125 }</li>
+<li class="calibre8">126 ~</li>
+<li class="calibre8">161 ¡</li>
+<li class="calibre8">162 ¢</li>
+<li class="calibre8">163 £</li>
+<li class="calibre8">164 ¤</li>
+<li class="calibre8">165 ¥</li>
+<li class="calibre8">166 ¦</li>
+<li class="calibre8">167 §</li>
+<li class="calibre8">168 ¨</li>
+<li class="calibre8">169 ©</li>
+<li class="calibre8">170 ª</li>
+<li class="calibre8">171 «</li>
+<li class="calibre8">172 ¬</li>
+<li class="calibre8">173 -</li>
+<li class="calibre8">174 ®</li>
+<li class="calibre8">175 ¯</li>
+<li class="calibre8">176 °</li>
+<li class="calibre8">177 ±</li>
+<li class="calibre8"><span type="pagebreak" title="401" id="calibre_link-769" class="calibre20"></span>178 ²</li>
+<li class="calibre8">179 ³</li>
+<li class="calibre8">180 ´</li>
+<li class="calibre8">181 µ</li>
+<li class="calibre8">182 ¶</li>
+<li class="calibre8">183 ·</li>
+<li class="calibre8">184 ¸</li>
+<li class="calibre8">185 ¹</li>
+<li class="calibre8">186 º</li>
+<li class="calibre8">187 »</li>
+<li class="calibre8">188 ¼</li>
+<li class="calibre8">189 ½</li>
+<li class="calibre8">190 ¾</li>
+<li class="calibre8">191 ¿</li>
+<li class="calibre8">192 À</li>
+<li class="calibre8">193 Á</li>
+<li class="calibre8">194 Â</li>
+<li class="calibre8">195 Ã</li>
+<li class="calibre8">196 Ä</li>
+<li class="calibre8">197 Å</li>
+<li class="calibre8">198 Æ</li>
+<li class="calibre8">199 Ç</li>
+<li class="calibre8">200 È</li>
+<li class="calibre8">201 É</li>
+<li class="calibre8">202 Ê</li>
+<li class="calibre8">203 Ë</li>
+<li class="calibre8">204 Ì</li>
+<li class="calibre8">205 Í</li>
+<li class="calibre8">206 Î</li>
+<li class="calibre8">207 Ï</li>
+<li class="calibre8">209 Ñ</li>
+<li class="calibre8">210 Ò</li>
+<li class="calibre8">211 Ó</li>
+<li class="calibre8">212 Ô</li>
+<li class="calibre8">213 Õ</li>
+<li class="calibre8">214 Ö</li>
+<li class="calibre8">215 ×</li>
+<li class="calibre8">216 Ø</li>
+<li class="calibre8">217 Ù</li>
+<li class="calibre8">218 Ú</li>
+<li class="calibre8">219 Û</li>
+<li class="calibre8">220 Ü</li>
+<li class="calibre8">221 Ý</li>
+<li class="calibre8">223 ß</li>
+<li class="calibre8">224 à</li>
+<li class="calibre8">225 á</li>
+<li class="calibre8">226 â</li>
+<li class="calibre8">227 ã</li>
+<li class="calibre8">228 ä</li>
+<li class="calibre8">229 å</li>
+<li class="calibre8">230 æ</li>
+<li class="calibre8">231 ç</li>
+<li class="calibre8">232 è</li>
+<li class="calibre8">233 é</li>
+<li class="calibre8">234 ê</li>
+<li class="calibre8">235 ë</li>
+<li class="calibre8">236 ì</li>
+<li class="calibre8">237 í</li>
+<li class="calibre8">238 î</li>
+<li class="calibre8">239 ï</li>
+<li class="calibre8">241 ñ</li>
+<li class="calibre8">242 ò</li>
+<li class="calibre8">243 ó</li>
+<li class="calibre8">244 ô</li>
+<li class="calibre8">245 õ</li>
+<li class="calibre8">246 ö</li>
+<li class="calibre8">247 ÷</li>
+<li class="calibre8">248 ø</li>
+<li class="calibre8">249 ù</li>
+<li class="calibre8">250 ú</li>
+<li class="calibre8">251 û</li>
+<li class="calibre8">252 ü</li>
+<li class="calibre8">253 ý</li>
+<li class="calibre8">255 ÿ</li>
+<li class="calibre8">256 Ā</li>
+<li class="calibre8">257 ā</li>
+<li class="calibre8">258 Ă</li>
+<li class="calibre8">259 ă</li>
+<li class="calibre8">260 Ą</li>
+<li class="calibre8">261 ą</li>
+<li class="calibre8">262 Ć</li>
+<li class="calibre8">263 ć</li>
+<li class="calibre8">268 Č</li>
+<li class="calibre8">269 č</li>
+<li class="calibre8">270 Ď</li>
+<li class="calibre8">271 ď</li>
+<li class="calibre8">272 Đ</li>
+<li class="calibre8">273 đ</li>
+<li class="calibre8">274 Ē</li>
+<li class="calibre8">275 ē</li>
+<li class="calibre8">278 Ė</li>
+<li class="calibre8">279 ė</li>
+<li class="calibre8">280 Ę</li>
+<li class="calibre8">281 ę</li>
+<li class="calibre8">282 Ě</li>
+<li class="calibre8">283 ě</li>
+<li class="calibre8">286 Ğ</li>
+<li class="calibre8">287 ğ</li>
+<li class="calibre8">290 Ģ</li>
+<li class="calibre8">291 ģ</li>
+<li class="calibre8">298 Ī</li>
+<li class="calibre8">299 ī</li>
+<li class="calibre8">302 Į</li>
+<li class="calibre8">303 į</li>
+<li class="calibre8">304 İ</li>
+<li class="calibre8">305 ı</li>
+<li class="calibre8">310 Ķ</li>
+<li class="calibre8">311 ķ</li>
+<li class="calibre8">313 Ĺ</li>
+<li class="calibre8">314 ĺ</li>
+<li class="calibre8">315 Ļ</li>
+<li class="calibre8">316 ļ</li>
+<li class="calibre8">317 Ľ</li>
+<li class="calibre8">318 ľ</li>
+<li class="calibre8">321 Ł</li>
+<li class="calibre8">322 ł</li>
+<li class="calibre8">323 Ń</li>
+<li class="calibre8">324 ń</li>
+<li class="calibre8">325 Ņ</li>
+<li class="calibre8">326 ņ</li>
+<li class="calibre8">327 Ň</li>
+<li class="calibre8">328 ň</li>
+<li class="calibre8">332 Ō</li>
+<li class="calibre8">333 ō</li>
+<li class="calibre8">336 Ő</li>
+<li class="calibre8">337 ő</li>
+<li class="calibre8">338 Œ</li>
+<li class="calibre8">339 œ</li>
+<li class="calibre8">340 Ŕ</li>
+<li class="calibre8">341 ŕ</li>
+<li class="calibre8">342 Ŗ</li>
+<li class="calibre8">343 ŗ</li>
+<li class="calibre8">344 Ř</li>
+<li class="calibre8">345 ř</li>
+<li class="calibre8">346 Ś</li>
+<li class="calibre8">347 ś</li>
+<li class="calibre8">350 Ş</li>
+<li class="calibre8">351 ş</li>
+<li class="calibre8">352 Š</li>
+<li class="calibre8">353 š</li>
+<li class="calibre8">354 Ţ</li>
+<li class="calibre8">355 ţ</li>
+<li class="calibre8">356 Ť</li>
+<li class="calibre8">357 ť</li>
+<li class="calibre8">362 Ū</li>
+<li class="calibre8">363 ū</li>
+<li class="calibre8">366 Ů</li>
+<li class="calibre8">367 ů</li>
+<li class="calibre8">368 Ű</li>
+<li class="calibre8">369 ű</li>
+<li class="calibre8">370 Ų</li>
+<li class="calibre8">371 ų</li>
+<li class="calibre8"><span type="pagebreak" title="402" id="calibre_link-770" class="calibre20"></span>376 Ÿ</li>
+<li class="calibre8">377 Ź</li>
+<li class="calibre8">378 ź</li>
+<li class="calibre8">379 Ż</li>
+<li class="calibre8">380 ż</li>
+<li class="calibre8">381 Ž</li>
+<li class="calibre8">382 ž</li>
+<li class="calibre8">402 ƒ</li>
+<li class="calibre8">710 ˆ</li>
+<li class="calibre8">711 ˇ</li>
+<li class="calibre8">728 ˘</li>
+<li class="calibre8">729 ˙</li>
+<li class="calibre8">731 ˛</li>
+<li class="calibre8">732 ˜</li>
+<li class="calibre8">733 ˝</li>
+<li class="calibre8">900 ΄</li>
+<li class="calibre8">901 ΅</li>
+<li class="calibre8">902 Ά</li>
+<li class="calibre8">904 Έ</li>
+<li class="calibre8">905 Ή</li>
+<li class="calibre8">906 Ί</li>
+<li class="calibre8">908 Ό</li>
+<li class="calibre8">910 Ύ</li>
+<li class="calibre8">911 Ώ</li>
+<li class="calibre8">912 ΐ</li>
+<li class="calibre8">913 Α</li>
+<li class="calibre8">914 Β</li>
+<li class="calibre8">915 Γ</li>
+<li class="calibre8">916 Δ</li>
+<li class="calibre8">917 Ε</li>
+<li class="calibre8">918 Ζ</li>
+<li class="calibre8">919 Η</li>
+<li class="calibre8">920 Θ</li>
+<li class="calibre8">921 Ι</li>
+<li class="calibre8">922 Κ</li>
+<li class="calibre8">923 Λ</li>
+<li class="calibre8">924 Μ</li>
+<li class="calibre8">925 Ν</li>
+<li class="calibre8">926 Ξ</li>
+<li class="calibre8">927 Ο</li>
+<li class="calibre8">928 Π</li>
+<li class="calibre8">929 Ρ</li>
+<li class="calibre8">931 Σ</li>
+<li class="calibre8">932 Τ</li>
+<li class="calibre8">933 Υ</li>
+<li class="calibre8">934 Φ</li>
+<li class="calibre8">935 Χ</li>
+<li class="calibre8">936 Ψ</li>
+<li class="calibre8">937 Ω</li>
+<li class="calibre8">938 Ϊ</li>
+<li class="calibre8">939 Ϋ</li>
+<li class="calibre8">940 ά</li>
+<li class="calibre8">941 έ</li>
+<li class="calibre8">942 ή</li>
+<li class="calibre8">943 ί</li>
+<li class="calibre8">944 ΰ</li>
+<li class="calibre8">945 α</li>
+<li class="calibre8">946 β</li>
+<li class="calibre8">947 γ</li>
+<li class="calibre8">948 δ</li>
+<li class="calibre8">949 ε</li>
+<li class="calibre8">950 ζ</li>
+<li class="calibre8">951 η</li>
+<li class="calibre8">952 θ</li>
+<li class="calibre8">953 ι</li>
+<li class="calibre8">954 κ</li>
+<li class="calibre8">955 λ</li>
+<li class="calibre8">956 μ</li>
+<li class="calibre8">957 ν</li>
+<li class="calibre8">958 ξ</li>
+<li class="calibre8">959 ο</li>
+<li class="calibre8">960 π</li>
+<li class="calibre8">961 ρ</li>
+<li class="calibre8">962 ς</li>
+<li class="calibre8">963 σ</li>
+<li class="calibre8">964 τ</li>
+<li class="calibre8">965 υ</li>
+<li class="calibre8">966 φ</li>
+<li class="calibre8">967 χ</li>
+<li class="calibre8">968 ψ</li>
+<li class="calibre8">969 ω</li>
+<li class="calibre8">970 ϊ</li>
+<li class="calibre8">971 ϋ</li>
+<li class="calibre8">972 ό</li>
+<li class="calibre8">973 ύ</li>
+<li class="calibre8">974 ώ</li>
+<li class="calibre8">1025 Ё</li>
+<li class="calibre8">1026 Ђ</li>
+<li class="calibre8">1027 Ѓ</li>
+<li class="calibre8">1028 Є</li>
+<li class="calibre8">1029 Ѕ</li>
+<li class="calibre8">1030 І</li>
+<li class="calibre8">1031 Ї</li>
+<li class="calibre8">1032 Ј</li>
+<li class="calibre8">1033 Љ</li>
+<li class="calibre8">1034 Њ</li>
+<li class="calibre8">1035 Ћ</li>
+<li class="calibre8">1036 Ќ</li>
+<li class="calibre8">1038 Ў</li>
+<li class="calibre8">1039 Џ</li>
+<li class="calibre8">1040 А</li>
+<li class="calibre8">1041 Б</li>
+<li class="calibre8">1042 В</li>
+<li class="calibre8">1043 Г</li>
+<li class="calibre8">1044 Д</li>
+<li class="calibre8">1045 Е</li>
+<li class="calibre8">1046 Ж</li>
+<li class="calibre8">1047 З</li>
+<li class="calibre8">1048 И</li>
+<li class="calibre8">1049 Й</li>
+<li class="calibre8">1050 К</li>
+<li class="calibre8">1051 Л</li>
+<li class="calibre8">1052 М</li>
+<li class="calibre8">1053 Н</li>
+<li class="calibre8">1054 О</li>
+<li class="calibre8">1055 П</li>
+<li class="calibre8">1056 Р</li>
+<li class="calibre8">1057 С</li>
+<li class="calibre8">1058 Т</li>
+<li class="calibre8">1059 У</li>
+<li class="calibre8">1060 Ф</li>
+<li class="calibre8">1061 Х</li>
+<li class="calibre8">1062 Ц</li>
+<li class="calibre8">1063 Ч</li>
+<li class="calibre8">1064 Ш</li>
+<li class="calibre8">1065 Щ</li>
+<li class="calibre8">1066 Ъ</li>
+<li class="calibre8">1067 Ы</li>
+<li class="calibre8">1068 Ь</li>
+<li class="calibre8">1069 Э</li>
+<li class="calibre8">1070 Ю</li>
+<li class="calibre8">1071 Я</li>
+<li class="calibre8">1072 а</li>
+<li class="calibre8">1073 б</li>
+<li class="calibre8">1074 в</li>
+<li class="calibre8">1075 г</li>
+<li class="calibre8">1076 д</li>
+<li class="calibre8">1077 е</li>
+<li class="calibre8">1078 ж</li>
+<li class="calibre8">1079 з</li>
+<li class="calibre8">1080 и</li>
+<li class="calibre8">1081 й</li>
+<li class="calibre8">1082 к</li>
+<li class="calibre8">1083 л</li>
+<li class="calibre8">1084 м</li>
+<li class="calibre8">1085 н</li>
+<li class="calibre8">1086 о</li>
+<li class="calibre8">1087 п</li>
+<li class="calibre8">1088 р</li>
+<li class="calibre8">1089 с</li>
+<li class="calibre8">1090 т</li>
+<li class="calibre8">1091 у</li>
+<li class="calibre8"><span type="pagebreak" title="403" id="calibre_link-771" class="calibre20"></span>1092 ф</li>
+<li class="calibre8">1093 х</li>
+<li class="calibre8">1094 ц</li>
+<li class="calibre8">1095 ч</li>
+<li class="calibre8">1096 ш</li>
+<li class="calibre8">1097 щ</li>
+<li class="calibre8">1098 ъ</li>
+<li class="calibre8">1099 ы</li>
+<li class="calibre8">1100 ь</li>
+<li class="calibre8">1101 э</li>
+<li class="calibre8">1102 ю</li>
+<li class="calibre8">1103 я</li>
+<li class="calibre8">1105 ё</li>
+<li class="calibre8">1106 ђ</li>
+<li class="calibre8">1107 ѓ</li>
+<li class="calibre8">1108 є</li>
+<li class="calibre8">1109 ѕ</li>
+<li class="calibre8">1110 і</li>
+<li class="calibre8">1111 ї</li>
+<li class="calibre8">1112 ј</li>
+<li class="calibre8">1113 љ</li>
+<li class="calibre8">1114 њ</li>
+<li class="calibre8">1115 ћ</li>
+<li class="calibre8">1116 ќ</li>
+<li class="calibre8">1118 ў</li>
+<li class="calibre8">1119 џ</li>
+<li class="calibre8">1168 Ґ</li>
+<li class="calibre8">1169 ґ</li>
+<li class="calibre8">8211 &ndash;</li>
+<li class="calibre8">8212 &mdash;</li>
+<li class="calibre8">8213 ―</li>
+<li class="calibre8">8216 ‘</li>
+<li class="calibre8">8217 ’</li>
+<li class="calibre8">8218 ‚</li>
+<li class="calibre8">8220 “</li>
+<li class="calibre8">8221 ”</li>
+<li class="calibre8">8222 „</li>
+<li class="calibre8">8224 †</li>
+<li class="calibre8">8225 ‡</li>
+<li class="calibre8">8226 •</li>
+<li class="calibre8">8230 …</li>
+<li class="calibre8">8240 ‰</li>
+<li class="calibre8">8249 ‹</li>
+<li class="calibre8">8250 ›</li>
+<li class="calibre8">8319 <span class="mathinline">ⁿ</span></li>
+<li class="calibre8">8359 ₧</li>
+<li class="calibre8">8364 €</li>
+<li class="calibre8">8470 №</li>
+<li class="calibre8">8482 ™</li>
+<li class="calibre8">8729 <span class="mathinline">∙</span></li>
+<li class="calibre8">8730 √</li>
+<li class="calibre8">8734 ∞</li>
+<li class="calibre8">8745 <span class="mathinline">∩</span></li>
+<li class="calibre8">8776 ≈</li>
+<li class="calibre8">8801 <span class="mathinline">≡</span></li>
+<li class="calibre8">8804 ≤</li>
+<li class="calibre8">8805 ≥</li>
+<li class="calibre8">8976 <span class="mathinline">⌐</span></li>
+<li class="calibre8">8992 <span class="mathinline">⌠</span></li>
+<li class="calibre8">8993 <span class="mathinline">⌡</span></li>
+<li class="calibre8">9472 ─</li>
+<li class="calibre8">9474 │</li>
+<li class="calibre8">9484 ┌</li>
+<li class="calibre8">9488 ┐</li>
+<li class="calibre8">9492 └</li>
+<li class="calibre8">9496 ┘</li>
+<li class="calibre8">9500 ├</li>
+<li class="calibre8">9508 ┤</li>
+<li class="calibre8">9516 ┬</li>
+<li class="calibre8">9524 ┴</li>
+<li class="calibre8">9532 ┼</li>
+<li class="calibre8">9552 ═</li>
+<li class="calibre8">9553 ║</li>
+<li class="calibre8">9554 ╒</li>
+<li class="calibre8">9555 ╓</li>
+<li class="calibre8">9556 ╔</li>
+<li class="calibre8">9557 ╕</li>
+<li class="calibre8">9558 ╖</li>
+<li class="calibre8">9559 ╗</li>
+<li class="calibre8">9560 ╘</li>
+<li class="calibre8">9561 ╙</li>
+<li class="calibre8">9562 ╚</li>
+<li class="calibre8">9563 ╛</li>
+<li class="calibre8">9564 ╜</li>
+<li class="calibre8">9565 ╝</li>
+<li class="calibre8">9566 ╞</li>
+<li class="calibre8">9567 ╟</li>
+<li class="calibre8">9568 ╠</li>
+<li class="calibre8">9569 ╡</li>
+<li class="calibre8">9570 ╢</li>
+<li class="calibre8">9571 ╣</li>
+<li class="calibre8">9572 ╤</li>
+<li class="calibre8">9573 ╥</li>
+<li class="calibre8">9574 ╦</li>
+<li class="calibre8">9575 ╧</li>
+<li class="calibre8">9576 ╨</li>
+<li class="calibre8">9577 ╩</li>
+<li class="calibre8">9578 ╪</li>
+<li class="calibre8">9579 ╫</li>
+<li class="calibre8">9580 ╬</li>
+<li class="calibre8">9600 ▀</li>
+<li class="calibre8">9604 ▄</li>
+<li class="calibre8">9608 █</li>
+<li class="calibre8">9612 ▌</li>
+<li class="calibre8">9616 ▐</li>
+<li class="calibre8">9617 ░</li>
+<li class="calibre8">9618 ▒</li>
+<li class="calibre8">9619 ▓</li>
+<li class="calibre8">9632 ■</li>
+<li class="calibre8">9633 □</li>
+<li class="calibre8">9642 ▪</li>
+<li class="calibre8">9643 ▫</li>
+<li class="calibre8">9644 ▬</li>
+<li class="calibre8">9650 ▲</li>
+<li class="calibre8">9658 ►</li>
+<li class="calibre8">9660 ▼</li>
+<li class="calibre8">9668 ◄</li>
+<li class="calibre8">9674 ◊</li>
+<li class="calibre8">9675 ○</li>
+<li class="calibre8">9679 ●</li>
+<li class="calibre8">9688 ◘</li>
+<li class="calibre8">9689 ◙</li>
+<li class="calibre8">9702 ◦</li>
+<li class="calibre8">9786 ☺</li>
+<li class="calibre8">9787 ☻</li>
+<li class="calibre8">9788 ☼</li>
+<li class="calibre8">9792 ♀</li>
+<li class="calibre8">9794 ♂</li>
+<li class="calibre8">9824 ♠</li>
+<li class="calibre8">9827 ♣</li>
+<li class="calibre8">9829 ♥</li>
+<li class="calibre8">9830 ♦</li>
+<li class="calibre8">9834 ♪</li>
+<li class="calibre8">9835 ♫</li>
+</ol>
+</section>
+</div>
+
+
+</body></html>
+
+
+<a href="appendixa.html">Prev: Appendix A</a>
+</body></html>

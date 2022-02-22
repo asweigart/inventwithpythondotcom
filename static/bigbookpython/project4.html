@@ -1,0 +1,376 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Blackjack</title></head><body style="background-color: #fffeee;">
+
+<script type="text/javascript">
+//<![CDATA[
+
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5459430-3']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
+//]]>
+</script>
+
+
+<div style="background-color: #eeeddd; float: right; height: 310px; font-family: sans-serif;" id="otherbooks">
+  <a href="#" onclick="document.getElementById('otherbooks').outerHTML='';" style="vertical-align: top;">(close)</a><br />
+
+  <a target="_blank" href="https://nostarch.com/automatestuff2" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_automate.link');"><img src="/images/cover_automate2_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/big-book-small-python-projects" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_bigbookpython.link');"><img src="/images/cover_bigbookpython_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/beyond-basic-stuff-python" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_beyond.link');"><img src="/images/cover_beyond_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/inventwithpython" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_invent.link');"><img src="/images/cover_invent4th_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://www.amazon.com/Making-Games-Python-Pygame-Sweigart/dp/1469901730?ie=UTF8&amp;tag=playwithpyth-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1469901730" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_pygame.link');"><img src="/images/cover_makinggames_thumb.png" style="height: 200px; border: solid black 1px; /"></a>
+  <a target="_blank" href="https://nostarch.com/crackingcodes" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_hacking.link');"><img src="/images/cover_crackingcodes_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/scratchplayground"><img src="/images/cover_scratchprogrammingplayground_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/codingwithminecraft"><img src="/images/cover_codingwithminecraft_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <br />
+  <a href="https://inventwithpython.com/automateudemy">Use this link to get 70% off the Automate the Boring Stuff online video course.</a><br />
+  <a href="https://www.patreon.com/AlSweigart">Support me on Patreon</a>
+</div>
+
+<a href="project3.html">Prev: Bitmap Message</a> | <a href="project5.html">Next: Bouncing DVD Logo</a>
+
+
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-48">
+<section class="toclist">
+<header class="calibre10">
+<h1 class="chapter">
+<span class="chapternumber"><span type="pagebreak" title="15" id="calibre_link-383" class="calibre11"></span>#4</span><br class="calibre14" />
+<span class="chaptertitle">Blackjack</span></h1>
+</header>
+<figure class="opener">
+<img src="images/000002.png" alt="" class="calibre12" />
+</figure>
+<p class="chapterintro">Blackjack, also known as 21, is a card game where players try to get as close to 21 points as possible without going over. This program uses images drawn with text characters, called <em class="calibre9">ASCII art</em>. American Standard Code for Information Interchange (ASCII) is a mapping of text characters to numeric codes that computers used before Unicode replaced it. The playing cards in this program are an example of ASCII art:</p>
+<pre class="calibre24"><code class="calibre22"> ___   ___
+|A  | |10 |
+| ♣ | | ♦ |
+|__A| |_10|</code></pre>
+<p class="calibre19">You can find other rules and the history of this card game at <a href="https://en.wikipedia.org/wiki/Blackjack" class="linkurl">https://en.wikipedia.org/wiki/Blackjack</a>.</p>
+<h2 id="calibre_link-49" class="calibre5"><span type="pagebreak" title="16" id="calibre_link-384" class="calibre15"></span>The Program in Action</h2>
+<p class="bodyfirst">When you run <em class="calibre9">blackjack.py</em>, the output will look like this:</p>
+<pre class="calibre24"><code class="calibre22">Blackjack, by Al Sweigart al@inventwithpython.com
+
+    Rules:
+      Try to get as close to 21 without going over.
+      Kings, Queens, and Jacks are worth 10 points.
+      Aces are worth 1 or 11 points.
+      Cards 2 through 10 are worth their face value.
+      (H)it to take another card.
+      (S)tand to stop taking cards.
+      On your first play, you can (D)ouble down to increase your bet
+      but must hit exactly one more time before standing.
+      In case of a tie, the bet is returned to the player.
+      The dealer stops hitting at 17.
+Money: 5000
+How much do you bet? (1-5000, or QUIT)
+&gt; <b class="calibre6">400</b>
+Bet: 400
+
+DEALER: ???
+ ___   ___
+|## | |2  |
+|###| | ♥ |
+|_##| |__2|
+
+PLAYER: 17
+ ___   ___
+|K  | |7  |
+| ♠ | | ♦ |
+|__K| |__7|
+
+
+(H)it, (S)tand, (D)ouble down
+&gt; <b class="calibre6">h</b>
+You drew a 4 of ♦.
+<var class="calibre27">--snip--</var>
+DEALER: 18
+ ___   ___   ___
+|K  | |2  | |6  |
+| ♦ | | ♥ | | ♠ |
+|__K| |__2| |__6|
+
+PLAYER: 21
+ ___   ___   ___
+|K  | |7  | |4  |
+| ♠ | | ♦ | | ♦ |
+|__K| |__7| |__4|
+
+You won $400!
+<var class="calibre27">--snip&mdash;</var></code></pre>
+<h2 id="calibre_link-50" class="calibre5"><span type="pagebreak" title="17" id="calibre_link-385" class="calibre15"></span>How It Works</h2>
+<p class="bodyfirst">The card suit symbols don’t exist on your keyboard, which is why we call the <code class="calibre22">chr()</code> function to create them. The integer passed to <code class="calibre22">chr()</code> is called a Unicode <em class="calibre9">code point</em>, a unique number that identifies a character according to the Unicode standard. Unicode is often misunderstood. However, Ned Batchelder’s 2012 PyCon US talk “Pragmatic Unicode, or How Do I Stop the Pain?” is an excellent introduction to Unicode, and you can find it at <a href="https://youtu.be/sgHbC6udIqc/" class="linkurl">https://youtu.be/sgHbC6udIqc/</a>. Appendix B gives a full list of Unicode characters you can use in your Python programs.</p>
+<pre class="calibre24"><code class="calibre22">  1. """Blackjack, by Al Sweigart al@inventwithpython.com
+  2. The classic card game also known as 21. (This version doesn't have
+  3. splitting or insurance.)
+  4. More info at: https://en.wikipedia.org/wiki/Blackjack
+  5. View this code at https://nostarch.com/big-book-small-python-projects
+  6. Tags: large, game, card game"""
+  7.
+  8. import random, sys
+  9.
+ 10. # Set up the constants:
+ 11. HEARTS   = chr(9829) # Character 9829 is '♥'.
+ 12. DIAMONDS = chr(9830) # Character 9830 is '♦'.
+ 13. SPADES   = chr(9824) # Character 9824 is '♠'.
+ 14. CLUBS    = chr(9827) # Character 9827 is '♣'.
+ 15. # (A list of chr codes is at https://inventwithpython.com/charactermap)
+ 16. BACKSIDE = 'backside'
+ 17.
+ 18.
+ 19. def main():
+ 20.     print('''Blackjack, by Al Sweigart al@inventwithpython.com
+ 21.
+ 22.     Rules:
+ 23.       Try to get as close to 21 without going over.
+ 24.       Kings, Queens, and Jacks are worth 10 points.
+ 25.       Aces are worth 1 or 11 points.
+ 26.       Cards 2 through 10 are worth their face value.
+ 27.       (H)it to take another card.
+ 28.       (S)tand to stop taking cards.
+ 29.       On your first play, you can (D)ouble down to increase your bet
+ 30.       but must hit exactly one more time before standing.
+ 31.       In case of a tie, the bet is returned to the player.
+ 32.       The dealer stops hitting at 17.''')
+ 33.
+ 34.     money = 5000
+ 35.     while True:  # Main game loop.
+ 36.         # Check if the player has run out of money:
+ 37.         if money &lt;= 0:
+ 38.             print("You're broke!")
+ 39.             print("Good thing you weren't playing with real money.")
+ 40.             print('Thanks for playing!')
+ 41.             sys.exit()
+ 42.
+ 43.         # Let the player enter their bet for this round:
+<span type="pagebreak" title="18" id="calibre_link-386" class="calibre13"></span> 44.         print('Money:', money)
+ 45.         bet = getBet(money)
+ 46.
+ 47.         # Give the dealer and player two cards from the deck each:
+ 48.         deck = getDeck()
+ 49.         dealerHand = [deck.pop(), deck.pop()]
+ 50.         playerHand = [deck.pop(), deck.pop()]
+ 51.
+ 52.         # Handle player actions:
+ 53.         print('Bet:', bet)
+ 54.         while True:  # Keep looping until player stands or busts.
+ 55.             displayHands(playerHand, dealerHand, False)
+ 56.             print()
+ 57.
+ 58.             # Check if the player has bust:
+ 59.             if getHandValue(playerHand) &gt; 21:
+ 60.                 break
+ 61.
+ 62.             # Get the player's move, either H, S, or D:
+ 63.             move = getMove(playerHand, money - bet)
+ 64.
+ 65.             # Handle the player actions:
+ 66.             if move == 'D':
+ 67.                 # Player is doubling down, they can increase their bet:
+ 68.                 additionalBet = getBet(min(bet, (money - bet)))
+ 69.                 bet += additionalBet
+ 70.                 print('Bet increased to {}.'.format(bet))
+ 71.                 print('Bet:', bet)
+ 72.
+ 73.             if move in ('H', 'D'):
+ 74.                 # Hit/doubling down takes another card.
+ 75.                 newCard = deck.pop()
+ 76.                 rank, suit = newCard
+ 77.                 print('You drew a {} of {}.'.format(rank, suit))
+ 78.                 playerHand.append(newCard)
+ 79.
+ 80.                 if getHandValue(playerHand) &gt; 21:
+ 81.                     # The player has busted:
+ 82.                     continue
+ 83.
+ 84.             if move in ('S', 'D'):
+ 85.                 # Stand/doubling down stops the player's turn.
+ 86.                 break
+ 87.
+ 88.         # Handle the dealer's actions:
+ 89.         if getHandValue(playerHand) &lt;= 21:
+ 90.             while getHandValue(dealerHand) &lt; 17:
+ 91.                 # The dealer hits:
+ 92.                 print('Dealer hits...')
+ 93.                 dealerHand.append(deck.pop())
+ 94.                 displayHands(playerHand, dealerHand, False)
+ 95.
+ 96.                 if getHandValue(dealerHand) &gt; 21:
+ 97.                     break  # The dealer has busted.
+ 98.                 input('Press Enter to continue...')
+<span type="pagebreak" title="19" id="calibre_link-387" class="calibre13"></span> 99.                 print('\n\n')
+100.
+101.         # Show the final hands:
+102.         displayHands(playerHand, dealerHand, True)
+103.
+104.         playerValue = getHandValue(playerHand)
+105.         dealerValue = getHandValue(dealerHand)
+106.         # Handle whether the player won, lost, or tied:
+107.         if dealerValue &gt; 21:
+108.             print('Dealer busts! You win ${}!'.format(bet))
+109.             money += bet
+110.         elif (playerValue &gt; 21) or (playerValue &lt; dealerValue):
+111.             print('You lost!')
+112.             money -= bet
+113.         elif playerValue &gt; dealerValue:
+114.             print('You won ${}!'.format(bet))
+115.             money += bet
+116.         elif playerValue == dealerValue:
+117.             print('It\'s a tie, the bet is returned to you.')
+118.
+119.         input('Press Enter to continue...')
+120.         print('\n\n')
+121.
+122.
+123. def getBet(maxBet):
+124.     """Ask the player how much they want to bet for this round."""
+125.     while True:  # Keep asking until they enter a valid amount.
+126.         print('How much do you bet? (1-{}, or QUIT)'.format(maxBet))
+127.         bet = input('&gt; ').upper().strip()
+128.         if bet == 'QUIT':
+129.             print('Thanks for playing!')
+130.             sys.exit()
+131.
+132.         if not bet.isdecimal():
+133.             continue  # If the player didn't enter a number, ask again.
+134.
+135.         bet = int(bet)
+136.         if 1 &lt;= bet &lt;= maxBet:
+137.             return bet  # Player entered a valid bet.
+138.
+139.
+140. def getDeck():
+141.     """Return a list of (rank, suit) tuples for all 52 cards."""
+142.     deck = []
+143.     for suit in (HEARTS, DIAMONDS, SPADES, CLUBS):
+144.         for rank in range(2, 11):
+145.             deck.append((str(rank), suit))  # Add the numbered cards.
+146.         for rank in ('J', 'Q', 'K', 'A'):
+147.             deck.append((rank, suit))  # Add the face and ace cards.
+148.     random.shuffle(deck)
+149.     return deck
+150.
+151.
+152. def displayHands(playerHand, dealerHand, showDealerHand):
+153.     """Show the player's and dealer's cards. Hide the dealer's first
+<span type="pagebreak" title="20" id="calibre_link-388" class="calibre13"></span>154.     card if showDealerHand is False."""
+155.     print()
+156.     if showDealerHand:
+157.         print('DEALER:', getHandValue(dealerHand))
+158.         displayCards(dealerHand)
+159.     else:
+160.         print('DEALER: ???')
+161.         # Hide the dealer's first card:
+162.         displayCards([BACKSIDE] + dealerHand[1:])
+163.
+164.     # Show the player's cards:
+165.     print('PLAYER:', getHandValue(playerHand))
+166.     displayCards(playerHand)
+167.
+168.
+169. def getHandValue(cards):
+170.     """Returns the value of the cards. Face cards are worth 10, aces are
+171.     worth 11 or 1 (this function picks the most suitable ace value)."""
+172.     value = 0
+173.     numberOfAces = 0
+174.
+175.     # Add the value for the non-ace cards:
+176.     for card in cards:
+177.         rank = card[0]  # card is a tuple like (rank, suit)
+178.         if rank == 'A':
+179.             numberOfAces += 1
+180.         elif rank in ('K', 'Q', 'J'):  # Face cards are worth 10 points.
+181.             value += 10
+182.         else:
+183.             value += int(rank)  # Numbered cards are worth their number.
+184.
+185.     # Add the value for the aces:
+186.     value += numberOfAces  # Add 1 per ace.
+187.     for i in range(numberOfAces):
+188.         # If another 10 can be added with busting, do so:
+189.         if value + 10 &lt;= 21:
+190.             value += 10
+191.
+192.     return value
+193.
+194.
+195. def displayCards(cards):
+196.     """Display all the cards in the cards list."""
+197.     rows = ['', '', '', '', '']  # The text to display on each row.
+198.
+199.     for i, card in enumerate(cards):
+200.         rows[0] += ' ___  '  # Print the top line of the card.
+201.         if card == BACKSIDE:
+202.             # Print a card's back:
+203.             rows[1] += '|## | '
+204.             rows[2] += '|###| '
+205.             rows[3] += '|_##| '
+206.         else:
+207.             # Print the card's front:
+208.             rank, suit = card  # The card is a tuple data structure.
+<span type="pagebreak" title="21" id="calibre_link-389" class="calibre13"></span>209.             rows[1] += '|{} | '.format(rank.ljust(2))
+210.             rows[2] += '| {} | '.format(suit)
+211.             rows[3] += '|_{}| '.format(rank.rjust(2, '_'))
+212.
+213.     # Print each row on the screen:
+214.     for row in rows:
+215.         print(row)
+216.
+217.
+218. def getMove(playerHand, money):
+219.     """Asks the player for their move, and returns 'H' for hit, 'S' for
+220.     stand, and 'D' for double down."""
+221.     while True:  # Keep looping until the player enters a correct move.
+222.         # Determine what moves the player can make:
+223.         moves = ['(H)it', '(S)tand']
+224.
+225.         # The player can double down on their first move, which we can
+226.         # tell because they'll have exactly two cards:
+227.         if len(playerHand) == 2 and money &gt; 0:
+228.             moves.append('(D)ouble down')
+229.
+230.         # Get the player's move:
+231.         movePrompt = ', '.join(moves) + '&gt; '
+232.         move = input(movePrompt).upper()
+233.         if move in ('H', 'S'):
+234.             return move  # Player has entered a valid move.
+235.         if move == 'D' and '(D)ouble down' in moves:
+236.             return move  # Player has entered a valid move.
+237.
+238.
+239. # If the program is run (instead of imported), run the game:
+240. if __name__ == '__main__':
+241.     main()</code></pre>
+<p class="calibre19">After entering the source code and running it a few times, try making experimental changes to it. Blackjack has several custom rules that you could implement. For example, if the first two cards have the same value, a player can split them into two hands and wager on them separately. Also, if the player receives a “blackjack” (the ace of spades and a black jack) for their first two cards, the player wins a ten-to-one payout. You can find out more about the game from <a href="https://en.wikipedia.org/wiki/Blackjack" class="linkurl">https://en.wikipedia.org/wiki/Blackjack</a>.</p>
+<h2 id="calibre_link-51" class="calibre5">Exploring the Program</h2>
+<p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
+<ol class="decimal">
+<li value="1" class="calibre8">How can you make the player start with a different amount of money?</li>
+<li value="2" class="calibre8">How does the program prevent the player from betting more money than they have?</li>
+<li value="3" class="calibre8"><span type="pagebreak" title="22" id="calibre_link-390" class="calibre20"></span>How does the program represent a single card?</li>
+<li value="4" class="calibre8">How does the program represent a hand of cards?</li>
+<li value="5" class="calibre8">What do each of the strings in the <code class="calibre22">rows</code> list (created on line 197) represent?</li>
+<li value="6" class="calibre8">What happens if you delete or comment out <code class="calibre22">random.shuffle(deck)</code> on line 148?</li>
+<li value="7" class="calibre8">What happens if you change <code class="calibre22">money -= bet</code> on line 112 to <code class="calibre22">money += bet</code>?</li>
+<li value="8" class="calibre8">What happens when <code class="calibre22">showDealerHand</code> in the <code class="calibre22">displayHands()</code> function is set to <code class="calibre22">True</code>? What happens when it is <code class="calibre22">False</code>?</li>
+</ol>
+</section>
+</div>
+
+
+
+
+
+
+
+
+<a href="project3.html">Prev: Bitmap Message</a> | <a href="project5.html">Next: Bouncing DVD Logo</a>
+</body></html>

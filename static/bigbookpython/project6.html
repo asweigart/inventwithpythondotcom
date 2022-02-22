@@ -1,0 +1,186 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Caesar Cipher</title></head><body style="background-color: #fffeee;">
+
+<script type="text/javascript">
+//<![CDATA[
+
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5459430-3']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
+//]]>
+</script>
+
+
+<div style="background-color: #eeeddd; float: right; height: 310px; font-family: sans-serif;" id="otherbooks">
+  <a href="#" onclick="document.getElementById('otherbooks').outerHTML='';" style="vertical-align: top;">(close)</a><br />
+
+  <a target="_blank" href="https://nostarch.com/automatestuff2" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_automate.link');"><img src="/images/cover_automate2_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/big-book-small-python-projects" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_bigbookpython.link');"><img src="/images/cover_bigbookpython_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/beyond-basic-stuff-python" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_beyond.link');"><img src="/images/cover_beyond_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/inventwithpython" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_invent.link');"><img src="/images/cover_invent4th_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://www.amazon.com/Making-Games-Python-Pygame-Sweigart/dp/1469901730?ie=UTF8&amp;tag=playwithpyth-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1469901730" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_pygame.link');"><img src="/images/cover_makinggames_thumb.png" style="height: 200px; border: solid black 1px; /"></a>
+  <a target="_blank" href="https://nostarch.com/crackingcodes" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_hacking.link');"><img src="/images/cover_crackingcodes_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/scratchplayground"><img src="/images/cover_scratchprogrammingplayground_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/codingwithminecraft"><img src="/images/cover_codingwithminecraft_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <br />
+  <a href="https://inventwithpython.com/automateudemy">Use this link to get 70% off the Automate the Boring Stuff online video course.</a><br />
+  <a href="https://www.patreon.com/AlSweigart">Support me on Patreon</a>
+</div>
+
+<a href="project5.html">Prev: Bouncing DVD Logo</a> | <a href="project7.html">Next: Caesar Hacker</a>
+
+
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-56">
+<section class="toclist">
+<header class="calibre10">
+<h1 class="chapter">
+<span class="chapternumber"><span type="pagebreak" title="29" id="calibre_link-397" class="calibre11"></span>#6</span><br class="calibre14" />
+<span class="chaptertitle">Caesar Cipher</span></h1>
+</header>
+<figure class="opener">
+<img src="images/000002.png" alt="" class="calibre12" />
+</figure>
+<p class="chapterintro">The Caesar cipher is an ancient encryption algorithm used by Julius Caesar. It encrypts letters by shifting them over by a certain number of places in the alphabet. We call the length of shift the <em class="calibre9">key</em>. For example, if the key is 3, then <em class="calibre9">A</em> becomes <em class="calibre9">D</em>, <em class="calibre9">B</em> becomes <em class="calibre9">E</em>, <em class="calibre9">C</em> becomes <em class="calibre9">F</em>, and so on. To decrypt the message, you must shift the encrypted letters in the opposite direction. This program lets the user encrypt and decrypt messages according to this algorithm.</p>
+<p class="calibre18">In modern times, the Caesar cipher isn’t very sophisticated, but that makes it ideal for beginners. The program in Project 7, “Caesar Hacker,” can brute-force through all 26 possible keys to decrypt messages, even if you don’t know the original key. Also, if you encrypt the message with the key 13, the Caesar cipher becomes identical to Project 61, “ROT 13 Cipher.” <span type="pagebreak" title="30" id="calibre_link-398" class="calibre20"></span>Learn more about the Caesar cipher at <a href="https://en.wikipedia.org/wiki/Caesar_cipher" class="linkurl">https://en.wikipedia.org/wiki/Caesar_cipher</a>. If you’d like to learn about ciphers and code breaking in general, you can read my book <em class="calibre9">Cracking Codes with Python</em> (No Starch Press, 2018; <a href="https://nostarch.com/crackingcodes/" class="linkurl">https://nostarch.com/crackingcodes/</a>).</p>
+<h2 id="calibre_link-57" class="calibre5">The Program in Action</h2>
+<p class="bodyfirst">When you run <em class="calibre9">caesarcipher.py</em>, the output will look like this:</p>
+<pre class="calibre24"><code class="calibre22">Caesar Cipher, by Al Sweigart al@inventwithpython.com
+Do you want to (e)ncrypt or (d)ecrypt?
+&gt; <b class="calibre6">e</b>
+Please enter the key (0 to 25) to use.
+&gt; <b class="calibre6">4</b>
+Enter the message to encrypt.
+&gt; <b class="calibre6">Meet me by the rose bushes tonight.</b>
+QIIX QI FC XLI VSWI FYWLIW XSRMKLX.
+Full encrypted text copied to clipboard.
+
+Caesar Cipher, by Al Sweigart al@inventwithpython.com
+Do you want to (e)ncrypt or (d)ecrypt?
+&gt; <b class="calibre6">d</b>
+Please enter the key (0 to 26) to use.
+&gt; <b class="calibre6">4</b>
+Enter the message to decrypt.
+&gt; <b class="calibre6">QIIX QI FC XLI VSWI FYWLIW XSRMKLX.</b>
+MEET ME BY THE ROSE BUSHES TONIGHT.
+Full decrypted text copied to clipboard.</code></pre>
+<h2 id="calibre_link-58" class="calibre5">How It Works</h2>
+<p class="bodyfirst">Like most cipher programs, the Caesar cipher works by translating characters into numbers, performing some math operations on those numbers, and translating the numbers back into text characters. In the context of ciphers, we call these text characters <em class="calibre9">symbols</em>. Symbols can include letters, numeric digits, and punctuation marks, each of which gets assigned a unique integer. In the case of the Caesar cipher program, the symbols are all letters, and their integers are their position in the <code class="calibre22">SYMBOLS</code> string: <code class="calibre22">'ABCDEFGHIJKLMNOPQRSTUVWXYZ'</code>.</p>
+<pre class="calibre24"><code class="calibre22"> 1. """Caesar Cipher, by Al Sweigart al@inventwithpython.com
+ 2. The Caesar cipher is a shift cipher that uses addition and subtraction
+ 3. to encrypt and decrypt letters.
+ 4. More info at: https://en.wikipedia.org/wiki/Caesar_cipher
+ 5. View this code at https://nostarch.com/big-book-small-python-projects
+ 6. Tags: short, beginner, cryptography, math"""
+ 7.
+ 8. try:
+ 9.     import pyperclip  # pyperclip copies text to the clipboard.
+10. except ImportError:
+11.     pass  # If pyperclip is not installed, do nothing. It's no big deal.
+<span type="pagebreak" title="31" id="calibre_link-399" class="calibre13"></span>12.
+13. # Every possible symbol that can be encrypted/decrypted:
+14. # (!) You can add numbers and punctuation marks to encrypt those
+15. # symbols as well.
+16. SYMBOLS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+17.
+18. print('Caesar Cipher, by Al Sweigart al@inventwithpython.com')
+19. print('The Caesar cipher encrypts letters by shifting them over by a')
+20. print('key number. For example, a key of 2 means the letter A is')
+21. print('encrypted into C, the letter B encrypted into D, and so on.')
+22. print()
+23.
+24. # Let the user enter if they are encrypting or decrypting:
+25. while True:  # Keep asking until the user enters e or d.
+26.     print('Do you want to (e)ncrypt or (d)ecrypt?')
+27.     response = input('&gt; ').lower()
+28.     if response.startswith('e'):
+29.         mode = 'encrypt'
+30.         break
+31.     elif response.startswith('d'):
+32.         mode = 'decrypt'
+33.         break
+34.     print('Please enter the letter e or d.')
+35.
+36. # Let the user enter the key to use:
+37. while True:  # Keep asking until the user enters a valid key.
+38.     maxKey = len(SYMBOLS) - 1
+39.     print('Please enter the key (0 to {}) to use.'.format(maxKey))
+40.     response = input('&gt; ').upper()
+41.     if not response.isdecimal():
+42.         continue
+43.
+44.     if 0 &lt;= int(response) &lt; len(SYMBOLS):
+45.         key = int(response)
+46.         break
+47.
+48. # Let the user enter the message to encrypt/decrypt:
+49. print('Enter the message to {}.'.format(mode))
+50. message = input('&gt; ')
+51.
+52. # Caesar cipher only works on uppercase letters:
+53. message = message.upper()
+54.
+55. # Stores the encrypted/decrypted form of the message:
+56. translated = ''
+57.
+58. # Encrypt/decrypt each symbol in the message:
+59. for symbol in message:
+60.     if symbol in SYMBOLS:
+61.         # Get the encrypted (or decrypted) number for this symbol.
+62.         num = SYMBOLS.find(symbol)  # Get the number of the symbol.
+63.         if mode == 'encrypt':
+64.             num = num + key
+65.         elif mode == 'decrypt':
+66.             num = num - key
+<span type="pagebreak" title="32" id="calibre_link-400" class="calibre13"></span>67.
+68.         # Handle the wrap-around if num is larger than the length of
+69.         # SYMBOLS or less than 0:
+70.         if num &gt;= len(SYMBOLS):
+71.             num = num - len(SYMBOLS)
+72.         elif num &lt; 0:
+73.             num = num + len(SYMBOLS)
+74.
+75.         # Add encrypted/decrypted number's symbol to translated:
+76.         translated = translated + SYMBOLS[num]
+77.     else:
+78.         # Just add the symbol without encrypting/decrypting:
+79.         translated = translated + symbol
+80.
+81. # Display the encrypted/decrypted string to the screen:
+82. print(translated)
+83.
+84. try:
+85.     pyperclip.copy(translated)
+86.     print('Full {}ed text copied to clipboard.'.format(mode))
+87. except:
+88.     pass  # Do nothing if pyperclip wasn't installed.</code></pre>
+<p class="calibre19">After entering the source code and running it a few times, try making experimental changes to it. The comments marked with <code class="calibre22">(!)</code> have suggestions for small changes you can make. You can expand the encryptable symbols by adding characters to the <code class="calibre22">SYMBOLS</code> string.</p>
+<h2 id="calibre_link-59" class="calibre5">Exploring the Program</h2>
+<p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
+<ol class="decimal">
+<li value="1" class="calibre8">What happens if you change <code class="calibre22">SYMBOLS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'</code> on line 16 to <code class="calibre22">SYMBOLS = 'ABC'</code>?</li>
+<li value="2" class="calibre8">What happens when you encrypt a message with key <code class="calibre22">0</code>?</li>
+<li value="3" class="calibre8">What error message do you get if you delete or comment out <code class="calibre22">translated = ''</code> on line 56?</li>
+<li value="4" class="calibre8">What error message do you get if you delete or comment out <code class="calibre22">key = int(response)</code> on line 45?</li>
+<li value="5" class="calibre8">What happens if you change <code class="calibre22">translated = translated + SYMBOLS[num]</code> on line 76 to <code class="calibre22">translated = translated + symbol</code>?</li>
+</ol>
+</section>
+</div>
+
+
+
+
+
+
+
+
+<a href="project5.html">Prev: Bouncing DVD Logo</a> | <a href="project7.html">Next: Caesar Hacker</a>
+</body></html>

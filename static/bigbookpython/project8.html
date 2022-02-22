@@ -1,0 +1,224 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Calendar Maker</title></head><body style="background-color: #fffeee;">
+
+<script type="text/javascript">
+//<![CDATA[
+
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5459430-3']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
+//]]>
+</script>
+
+
+<div style="background-color: #eeeddd; float: right; height: 310px; font-family: sans-serif;" id="otherbooks">
+  <a href="#" onclick="document.getElementById('otherbooks').outerHTML='';" style="vertical-align: top;">(close)</a><br />
+
+  <a target="_blank" href="https://nostarch.com/automatestuff2" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_automate.link');"><img src="/images/cover_automate2_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/big-book-small-python-projects" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_bigbookpython.link');"><img src="/images/cover_bigbookpython_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/beyond-basic-stuff-python" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_beyond.link');"><img src="/images/cover_beyond_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/inventwithpython" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_invent.link');"><img src="/images/cover_invent4th_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://www.amazon.com/Making-Games-Python-Pygame-Sweigart/dp/1469901730?ie=UTF8&amp;tag=playwithpyth-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1469901730" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_pygame.link');"><img src="/images/cover_makinggames_thumb.png" style="height: 200px; border: solid black 1px; /"></a>
+  <a target="_blank" href="https://nostarch.com/crackingcodes" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_hacking.link');"><img src="/images/cover_crackingcodes_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/scratchplayground"><img src="/images/cover_scratchprogrammingplayground_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/codingwithminecraft"><img src="/images/cover_codingwithminecraft_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <br />
+  <a href="https://inventwithpython.com/automateudemy">Use this link to get 70% off the Automate the Boring Stuff online video course.</a><br />
+  <a href="https://www.patreon.com/AlSweigart">Support me on Patreon</a>
+</div>
+
+<a href="project7.html">Prev: Caesar Hacker</a> | <a href="project9.html">Next: Carrot in a Box</a>
+
+
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-64">
+<section class="toclist">
+<header class="calibre10">
+<h1 class="chapter">
+<span class="chapternumber"><span type="pagebreak" title="36" id="calibre_link-404" class="calibre11"></span>#8</span><br class="calibre14" />
+<span class="chaptertitle">Calendar Maker</span></h1>
+</header>
+<figure class="opener">
+<img src="images/000002.png" alt="" class="calibre12" />
+</figure>
+<p class="chapterintro">This program generates printable text files of monthly calendars for the month and year you enter. Dates and calendars are a tricky topic in programming because there are so many different rules for determining the number of days in a month, which years are leap years, and which day of the week a particular date falls on. Fortunately, Python’s <code class="calibre17">datetime</code> module handles these details for you. This program focuses on generating the multiline string for the monthly calendar page.</p>
+<h2 id="calibre_link-65" class="calibre5"><span type="pagebreak" title="37" id="calibre_link-405" class="calibre15"></span>The Program in Action</h2>
+<p class="bodyfirst">When you run <em class="calibre9">calendarmaker.py</em>, the output will look like this:</p>
+<pre class="calibre24"><code class="calibre22">Calendar Maker, by Al Sweigart al@inventwithpython.com
+Enter the year for the calendar:
+&gt; <b class="calibre6">2029</b>
+Enter the month for the calendar, 1-12:
+&gt; <b class="calibre6">12</b>
+                                  December 2029
+...Sunday.....Monday....Tuesday...Wednesday...Thursday....Friday....Saturday..
++----------+----------+----------+----------+----------+----------+----------+
+|25        |26        |27        |28        |29        |30        | 1        |
+|          |          |          |          |          |          |          |
+|          |          |          |          |          |          |          |
+|          |          |          |          |          |          |          |
++----------+----------+----------+----------+----------+----------+----------+
+| 2        | 3        | 4        | 5        | 6        | 7        | 8        |
+|          |          |          |          |          |          |          |
+|          |          |          |          |          |          |          |
+|          |          |          |          |          |          |          |
++----------+----------+----------+----------+----------+----------+----------+
+| 9        |10        |11        |12        |13        |14        |15        |
+|          |          |          |          |          |          |          |
+|          |          |          |          |          |          |          |
+|          |          |          |          |          |          |          |
++----------+----------+----------+----------+----------+----------+----------+
+|16        |17        |18        |19        |20        |21        |22        |
+|          |          |          |          |          |          |          |
+|          |          |          |          |          |          |          |
+|          |          |          |          |          |          |          |
++----------+----------+----------+----------+----------+----------+----------+
+|23        |24        |25        |26        |27        |28        |29        |
+|          |          |          |          |          |          |          |
+|          |          |          |          |          |          |          |
+|          |          |          |          |          |          |          |
++----------+----------+----------+----------+----------+----------+----------+
+|30        |31        | 1        | 2        | 3        | 4        | 5        |
+|          |          |          |          |          |          |          |
+|          |          |          |          |          |          |          |
+|          |          |          |          |          |          |          |
++----------+----------+----------+----------+----------+----------+----------+
+
+Saved to calendar_2029_12.txt</code></pre>
+<h2 id="calibre_link-66" class="calibre5">How It Works</h2>
+<p class="bodyfirst">Note that the <code class="calibre22">getCalendarFor()</code> function returns a giant multiline string of the calendar for the given month and year. In this function, the <code class="calibre22">calText</code> variable stores this string, which adds the lines, spaces, and dates to it. To track the date, the <code class="calibre22">currentDate</code> variable holds a <code class="calibre22">datetime.date()</code> object, which gets <span type="pagebreak" title="38" id="calibre_link-406" class="calibre20"></span>set to the next or previous date by adding or subtracting <code class="calibre22">datetime.timedelta()</code> objects. You can learn about Python’s date and time modules by reading Chapter 17 of <em class="calibre9">Automate the Boring Stuff with Python</em> at <a href="https://automatetheboringstuff.com/2e/chapter17/" class="linkurl">https://automatetheboringstuff.com/2e/chapter17/</a>.</p>
+<pre class="calibre24"><code class="calibre22">  1. """Calendar Maker, by Al Sweigart al@inventwithpython.com
+  2. Create monthly calendars, saved to a text file and fit for printing.
+  3. View this code at https://nostarch.com/big-book-small-python-projects
+  4. Tags: short"""
+  5.
+  6. import datetime
+  7.
+  8. # Set up the constants:
+  9. DAYS = ('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday',
+ 10.         'Friday', 'Saturday')
+ 11. MONTHS = ('January', 'February', 'March', 'April', 'May', 'June', 'July',
+ 12.           'August', 'September', 'October', 'November', 'December')
+ 13.
+ 14. print('Calendar Maker, by Al Sweigart al@inventwithpython.com')
+ 15.
+ 16. while True:  # Loop to get a year from the user.
+ 17.     print('Enter the year for the calendar:')
+ 18.     response = input('&gt; ')
+ 19.
+ 20.     if response.isdecimal() and int(response) &gt; 0:
+ 21.         year = int(response)
+ 22.         break
+ 23.
+ 24.     print('Please enter a numeric year, like 2023.')
+ 25.     continue
+ 26.
+ 27. while True:  # Loop to get a month from the user.
+ 28.     print('Enter the month for the calendar, 1-12:')
+ 29.     response = input('&gt; ')
+ 30.
+ 31.     if not response.isdecimal():
+ 32.         print('Please enter a numeric month, like 3 for March.')
+ 33.         continue
+ 34.
+ 35.     month = int(response)
+ 36.     if 1 &lt;= month &lt;= 12:
+ 37.         break
+ 38.
+ 39.     print('Please enter a number from 1 to 12.')
+ 40.
+ 41.
+ 42. def getCalendarFor(year, month):
+ 43.     calText = ''  # calText will contain the string of our calendar.
+ 44.
+ 45.     # Put the month and year at the top of the calendar:
+ 46.     calText += (' ' * 34) + MONTHS[month - 1] + ' ' + str(year) + '\n'
+ 47.
+ 48.     # Add the days of the week labels to the calendar:
+ 49.     # (!) Try changing this to abbreviations: SUN, MON, TUE, etc.
+<span type="pagebreak" title="39" id="calibre_link-407" class="calibre13"></span> 50.     calText += '...Sunday.....Monday....Tuesday...Wednesday...Thursday....
+         Friday....Saturday..\n'
+ 51.
+ 52.     # The horizontal line string that separate weeks:
+ 53.     weekSeparator = ('+----------' * 7) + '+\n'
+ 54.
+ 55.     # The blank rows have ten spaces in between the | day separators:
+ 56.     blankRow = ('|          ' * 7) + '|\n'
+ 57.
+ 58.     # Get the first date in the month. (The datetime module handles all
+ 59.     # the complicated calendar stuff for us here.)
+ 60.     currentDate = datetime.date(year, month, 1)
+ 61.
+ 62.     # Roll back currentDate until it is Sunday. (weekday() returns 6
+ 63.     # for Sunday, not 0.)
+ 64.     while currentDate.weekday() != 6:
+ 65.         currentDate -= datetime.timedelta(days=1)
+ 66.
+ 67.     while True:  # Loop over each week in the month.
+ 68.         calText += weekSeparator
+ 69.
+ 70.         # dayNumberRow is the row with the day number labels:
+ 71.         dayNumberRow = ''
+ 72.         for i in range(7):
+ 73.             dayNumberLabel = str(currentDate.day).rjust(2)
+ 74.             dayNumberRow += '|' + dayNumberLabel + (' ' * 8)
+ 75.             currentDate += datetime.timedelta(days=1) # Go to next day.
+ 76.         dayNumberRow += '|\n'  # Add the vertical line after Saturday.
+ 77.
+ 78.         # Add the day number row and 3 blank rows to the calendar text.
+ 79.         calText += dayNumberRow
+ 80.         for i in range(3):  # (!) Try changing the 4 to a 5 or 10.
+ 81.             calText += blankRow
+ 82.
+ 83.         # Check if we're done with the month:
+ 84.         if currentDate.month != month:
+ 85.             break
+ 86.
+ 87.     # Add the horizontal line at the very bottom of the calendar.
+ 88.     calText += weekSeparator
+ 89.     return calText
+ 90.
+ 91.
+ 92. calText = getCalendarFor(year, month)
+ 93. print(calText)  # Display the calendar.
+ 94.
+ 95. # Save the calendar to a text file:
+ 96. calendarFilename = 'calendar_{}_{}.txt'.format(year, month)
+ 97. with open(calendarFilename, 'w') as fileObj:
+ 98.     fileObj.write(calText)
+ 99.
+100. print('Saved to ' + calendarFilename)</code></pre>
+<p class="calibre19"><span type="pagebreak" title="40" id="calibre_link-408" class="calibre20"></span>After you’ve entered the code and run it a few times, try re-creating this program from scratch without looking at the source code in this book. It doesn’t have to be exactly the same as this program; you can invent your own version! On your own, you can also try to figure out how to do the following:</p>
+<ul class="calibre25">
+<li class="calibre8">Add text inside some of the boxes for holidays.</li>
+<li class="calibre8">Add text inside some of the boxes for reoccurring events.</li>
+<li class="calibre8">Print a “mini” calendar that has dates without boxes.</li>
+</ul>
+<h2 id="calibre_link-67" class="calibre5">Exploring the Program</h2>
+<p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
+<ol class="decimal">
+<li value="1" class="calibre8">How can you make the calendar display abbreviated months? For example, show <code class="calibre22">'Jan'</code> instead of <code class="calibre22">'January'</code>?</li>
+<li value="2" class="calibre8">What error message do you get if you delete or comment out <code class="calibre22">year = int(response)</code> on line 21?</li>
+<li value="3" class="calibre8">How can you make the calendar not display the days of the week at the top?</li>
+<li value="4" class="calibre8">How can you make the program not save the calendar to a file?</li>
+<li value="5" class="calibre8">What happens if you delete or comment out <code class="calibre22">print(calText)</code> on line 93?</li>
+</ol>
+</section>
+</div>
+
+
+
+
+
+
+
+
+<a href="project7.html">Prev: Caesar Hacker</a> | <a href="project9.html">Next: Carrot in a Box</a>
+</body></html>

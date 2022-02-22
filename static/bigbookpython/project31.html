@@ -1,0 +1,143 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Guess the Number</title></head><body style="background-color: #fffeee;">
+
+<script type="text/javascript">
+//<![CDATA[
+
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5459430-3']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
+//]]>
+</script>
+
+
+<div style="background-color: #eeeddd; float: right; height: 310px; font-family: sans-serif;" id="otherbooks">
+  <a href="#" onclick="document.getElementById('otherbooks').outerHTML='';" style="vertical-align: top;">(close)</a><br />
+
+  <a target="_blank" href="https://nostarch.com/automatestuff2" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_automate.link');"><img src="/images/cover_automate2_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/big-book-small-python-projects" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_bigbookpython.link');"><img src="/images/cover_bigbookpython_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/beyond-basic-stuff-python" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_beyond.link');"><img src="/images/cover_beyond_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/inventwithpython" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_invent.link');"><img src="/images/cover_invent4th_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://www.amazon.com/Making-Games-Python-Pygame-Sweigart/dp/1469901730?ie=UTF8&amp;tag=playwithpyth-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1469901730" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_pygame.link');"><img src="/images/cover_makinggames_thumb.png" style="height: 200px; border: solid black 1px; /"></a>
+  <a target="_blank" href="https://nostarch.com/crackingcodes" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_hacking.link');"><img src="/images/cover_crackingcodes_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/scratchplayground"><img src="/images/cover_scratchprogrammingplayground_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/codingwithminecraft"><img src="/images/cover_codingwithminecraft_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <br />
+  <a href="https://inventwithpython.com/automateudemy">Use this link to get 70% off the Automate the Boring Stuff online video course.</a><br />
+  <a href="https://www.patreon.com/AlSweigart">Support me on Patreon</a>
+</div>
+
+<a href="project30.html">Prev: Four in a Row</a> | <a href="project32.html">Next: Gullible</a>
+
+
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-149">
+<section class="toclist">
+<header class="calibre10">
+<h1 class="chapter">
+<span class="chapternumber"><span type="pagebreak" title="143" id="calibre_link-511" class="calibre11"></span>#31</span><br class="calibre14" />
+<span class="chaptertitle">Guess the Number</span></h1>
+</header>
+<figure class="opener">
+<img src="images/000002.png" alt="" class="calibre12" />
+</figure>
+<p class="chapterintro">Guess the Number is a classic game for beginners to practice basic programming techniques. In this game, the computer thinks of a random number between 1 and 100. The player has 10 chances to guess the number. After each guess, the computer tells the player if it was too high or too low.</p>
+<h2 id="calibre_link-150" class="calibre5"><span type="pagebreak" title="144" id="calibre_link-512" class="calibre15"></span>The Program in Action</h2>
+<p class="bodyfirst">When you run <em class="calibre9">guess.py</em>, the output will look like this:</p>
+<pre class="calibre24"><code class="calibre22">Guess the Number, by Al Sweigart al@inventwithpython.com
+
+I am thinking of a number between 1 and 100.
+You have 10 guesses left. Take a guess.
+&gt; <b class="calibre6">50</b>
+Your guess is too high.
+You have 9 guesses left. Take a guess.
+&gt; <b class="calibre6">25</b>
+Your guess is too low.
+<var class="calibre27">--snip--</var>
+You have 5 guesses left. Take a guess.
+&gt; <b class="calibre6">42</b>
+Yay! You guessed my number!</code></pre>
+<h2 id="calibre_link-151" class="calibre5">How It Works</h2>
+<p class="bodyfirst">Guess the Number uses several basic programming concepts: loops, if-else statements, functions, method calls, and random numbers. Python’s <code class="calibre22">random</code> module generates pseudorandom numbers&mdash;numbers that look random but are technically predictable. Pseudorandom numbers are easier for computers to generate than truly random numbers, and they’re considered “random enough” for applications such as video games and some scientific simulations.</p>
+<p class="calibre19">Python’s <code class="calibre22">random</code> module produces pseudorandom numbers from a seed value, and each stream of pseudorandom numbers generated from the same seed will be the same. For example, enter the following into the interactive shell:</p>
+<pre class="calibre24"><code class="calibre22">&gt;&gt;&gt; <b class="calibre6">import random</b>
+&gt;&gt;&gt; <b class="calibre6">random.seed(42)</b>
+&gt;&gt;&gt; <b class="calibre6">random.randint(1, 10); random.randint(1, 10); random.randint(1, 10)</b>
+2
+1
+5</code></pre>
+<p class="calibre19">If you restart the interactive shell and run this code again, it produces the same pseudorandom numbers: <code class="calibre22">2</code>, <code class="calibre22">1</code>, <code class="calibre22">5</code>. The video game <em class="calibre9">Minecraft</em> generates its pseudorandom virtual worlds from a starting seed value, which is why different players can re-create the same world by using the same seed.</p>
+<pre class="calibre24"><code class="calibre22"> 1. """Guess the Number, by Al Sweigart al@inventwithpython.com
+ 2. Try to guess the secret number based on hints.
+ 3. View this code at https://nostarch.com/big-book-small-python-projects
+ 4. Tags: tiny, beginner, game"""
+ 5.
+ 6. import random
+ 7.
+<span type="pagebreak" title="145" id="calibre_link-513" class="calibre13"></span> 8.
+ 9. def askForGuess():
+10.     while True:
+11.         guess = input('&gt; ')  # Enter the guess.
+12.
+13.         if guess.isdecimal():
+14.             return int(guess)  # Convert string guess to an integer.
+15.         print('Please enter a number between 1 and 100.')
+16.
+17.
+18. print('Guess the Number, by Al Sweigart al@inventwithpython.com')
+19. print()
+20. secretNumber = random.randint(1, 100)  # Select a random number.
+21. print('I am thinking of a number between 1 and 100.')
+22.
+23. for i in range(10):  # Give the player 10 guesses.
+24.     print('You have {} guesses left. Take a guess.'.format(10 - i))
+25.
+26.     guess = askForGuess()
+27.     if guess == secretNumber:
+28.         break  # Break out of the for loop if the guess is correct.
+29.
+30.     # Offer a hint:
+31.     if guess &lt; secretNumber:
+32.         print('Your guess is too low.')
+33.     if guess &gt; secretNumber:
+34.         print('Your guess is too high.')
+35.
+36. # Reveal the results:
+37. if guess == secretNumber:
+38.     print('Yay! You guessed my number!')
+39. else:
+40.     print('Game over. The number I was thinking of was', secretNumber)</code></pre>
+<p class="calibre19">After entering the source code and running it a few times, try making experimental changes to it. On your own, you can also try to figure out how to do the following:</p>
+<ul class="calibre25">
+<li class="calibre8">Create a “Guess the Letter” variant that gives hints based on the alphabetical order of the player’s guess.</li>
+<li class="calibre8">Make the hints after each guess say “warmer” or “colder” based on the player’s previous guess.</li>
+</ul>
+<h2 id="calibre_link-152" class="calibre5">Exploring the Program</h2>
+<p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
+<ol class="decimal">
+<li value="1" class="calibre8">What happens if you change <code class="calibre22">input('&gt; ')</code> on line 11 to <code class="calibre22">input(secretNumber)</code>?</li>
+<li value="2" class="calibre8">What error message do you get if you change <code class="calibre22">return int(guess)</code> on line 14 to <code class="calibre22">return guess</code>?</li>
+<li value="3" class="calibre8"><span type="pagebreak" title="146" id="calibre_link-514" class="calibre20"></span>What happens if you change <code class="calibre22">random.randint(1, 100)</code> on line 20 to <code class="calibre22">random.randint(1, 1)</code>?</li>
+<li value="4" class="calibre8">What happens if you change <code class="calibre22">format(10 - i)</code> on line 24 to <code class="calibre22">format(i)</code>?</li>
+<li value="5" class="calibre8">What error message do you get if you change <code class="calibre22">guess == secretNumber</code> on line 37 to <code class="calibre22">guess = secretNumber</code>?</li>
+</ol>
+</section>
+</div>
+
+
+
+
+
+
+
+
+<a href="project30.html">Prev: Four in a Row</a> | <a href="project32.html">Next: Gullible</a>
+</body></html>

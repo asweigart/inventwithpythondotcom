@@ -1,0 +1,148 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Digital Stream</title></head><body style="background-color: #fffeee;">
+
+<script type="text/javascript">
+//<![CDATA[
+
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5459430-3']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
+//]]>
+</script>
+
+
+<div style="background-color: #eeeddd; float: right; height: 310px; font-family: sans-serif;" id="otherbooks">
+  <a href="#" onclick="document.getElementById('otherbooks').outerHTML='';" style="vertical-align: top;">(close)</a><br />
+
+  <a target="_blank" href="https://nostarch.com/automatestuff2" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_automate.link');"><img src="/images/cover_automate2_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/big-book-small-python-projects" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_bigbookpython.link');"><img src="/images/cover_bigbookpython_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/beyond-basic-stuff-python" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_beyond.link');"><img src="/images/cover_beyond_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/inventwithpython" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_invent.link');"><img src="/images/cover_invent4th_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://www.amazon.com/Making-Games-Python-Pygame-Sweigart/dp/1469901730?ie=UTF8&amp;tag=playwithpyth-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1469901730" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_pygame.link');"><img src="/images/cover_makinggames_thumb.png" style="height: 200px; border: solid black 1px; /"></a>
+  <a target="_blank" href="https://nostarch.com/crackingcodes" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_hacking.link');"><img src="/images/cover_crackingcodes_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/scratchplayground"><img src="/images/cover_scratchprogrammingplayground_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/codingwithminecraft"><img src="/images/cover_codingwithminecraft_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <br />
+  <a href="https://inventwithpython.com/automateudemy">Use this link to get 70% off the Automate the Boring Stuff online video course.</a><br />
+  <a href="https://www.patreon.com/AlSweigart">Support me on Patreon</a>
+</div>
+
+<a href="project19.html">Prev: Digital Clock</a> | <a href="project21.html">Next: DNA Visualization</a>
+
+
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-105">
+<section class="toclist">
+<header class="calibre10">
+<h1 class="chapter">
+<span class="chapternumber"><span type="pagebreak" title="86" id="calibre_link-454" class="calibre11"></span>#20</span><br class="calibre14" />
+<span class="chaptertitle">Digital Stream</span></h1>
+</header>
+<figure class="opener">
+<img src="images/000002.png" alt="" class="calibre12" />
+</figure>
+<p class="chapterintro">This program mimics the “digital stream” visualization from the science fiction movie <em class="calibre9">The Matrix</em>. Random beads of binary “rain” stream up from the bottom of the screen, creating a cool, hacker-like visualization. (Unfortunately, due to the way text moves as the screen scrolls down, it’s not possible to make the streams fall downward without using a module such as <code class="calibre17">bext</code>.)</p>
+<h2 id="calibre_link-106" class="calibre5"><span type="pagebreak" title="87" id="calibre_link-455" class="calibre15"></span>The Program in Action</h2>
+<p class="bodyfirst">When you run <em class="calibre9">digitalstream.py</em>, the output will look like this:</p>
+<pre class="calibre24"><code class="calibre22">Digital Stream Screensaver, by Al Sweigart al@inventwithpython.com
+Press Ctrl-C to quit.
+                     0                      0
+                     0                      0
+   1            0    0    1               1 0                             1
+   0            0    0    1         0     0 0        0                    0
+   0            1    0    0         0     1 0 0      1               0    1
+   0            1    0    0         1     011 1      1               0    1 0
+   0            1    0    0         0     000 11     0               0  1 1 0
+   1     1      0 1  0    1         1     110 10  1  0               1  0 1 0
+         1    101 0       0         1     000 11  1  1               11 1 1 1
+         0    100 1       0               11  00  0  1               01     0
+      1  1    001 1       1               0   1  10  0               10     0
+      0  0    010 0       1                   1  11  11              0      0
+<var class="calibre27">--snip--</var></code></pre>
+<h2 id="calibre_link-107" class="calibre5">How It Works</h2>
+<p class="bodyfirst">Like Project 15, “Deep Cave,” this program uses the scrolling caused by <code class="calibre22">print()</code> calls to create an animation. Each column is represented by an integer in the columns list: <code class="calibre22">columns[0]</code> is an integer for the leftmost column, <code class="calibre22">columns[1]</code> is an integer for the column to the right of that one, and so on. The program initially sets these integers to <code class="calibre22">0</code>, meaning it prints <code class="calibre22">' '</code> (an empty space string) instead of a stream in that column. Randomly, it changes each integer to a value between <code class="calibre22">MIN_STREAM_LENGTH</code> and <code class="calibre22">MAX_STREAM_LENGTH</code>. That integer decreases by <code class="calibre22">1</code> each time a line is printed. As long as a column’s integer is greater than <code class="calibre22">0</code>, the program prints a random <code class="calibre22">1</code> or <code class="calibre22">0</code> in that column. This produces the “digital stream” effect you see on the screen.</p>
+<pre class="calibre24"><code class="calibre22"> 1. """Digital Stream, by Al Sweigart al@inventwithpython.com
+ 2. A screensaver in the style of The Matrix movie's visuals.
+ 3. View this code at https://nostarch.com/big-book-small-python-projects
+ 4. Tags: tiny, artistic, beginner, scrolling"""
+ 5.
+ 6. import random, shutil, sys, time
+ 7.
+ 8. # Set up the constants:
+ 9. MIN_STREAM_LENGTH = 6  # (!) Try changing this to 1 or 50.
+10. MAX_STREAM_LENGTH = 14  # (!) Try changing this to 100.
+11. PAUSE = 0.1  # (!) Try changing this to 0.0 or 2.0.
+12. STREAM_CHARS = ['0', '1']  # (!) Try changing this to other characters.
+13.
+14. # Density can range from 0.0 to 1.0:
+15. DENSITY = 0.02  # (!) Try changing this to 0.10 or 0.30.
+16.
+17. # Get the size of the terminal window:
+18. WIDTH = shutil.get_terminal_size()[0]
+<span type="pagebreak" title="88" id="calibre_link-456" class="calibre13"></span>19. # We can't print to the last column on Windows without it adding a
+20. # newline automatically, so reduce the width by one:
+21. WIDTH -= 1
+22.
+23. print('Digital Stream, by Al Sweigart al@inventwithpython.com')
+24. print('Press Ctrl-C to quit.')
+25. time.sleep(2)
+26.
+27. try:
+28.     # For each column, when the counter is 0, no stream is shown.
+29.     # Otherwise, it acts as a counter for how many times a 1 or 0
+30.     # should be displayed in that column.
+31.     columns = [0] * WIDTH
+32.     while True:
+33.         # Set up the counter for each column:
+34.         for i in range(WIDTH):
+35.             if columns[i] == 0:
+36.                 if random.random() &lt;= DENSITY:
+37.                     # Restart a stream on this column.
+38.                     columns[i] = random.randint(MIN_STREAM_LENGTH,
+39.                                                 MAX_STREAM_LENGTH)
+40.
+41.             # Display an empty space or a 1/0 character.
+42.             if columns[i] &gt; 0:
+43.                 print(random.choice(STREAM_CHARS), end='')
+44.                 columns[i] -= 1
+45.             else:
+46.                 print(' ', end='')
+47.         print()  # Print a newline at the end of the row of columns.
+48.         sys.stdout.flush()  # Make sure text appears on the screen.
+49.         time.sleep(PAUSE)
+50. except KeyboardInterrupt:
+51.     sys.exit()  # When Ctrl-C is pressed, end the program.</code></pre>
+<p class="calibre19">After entering the source code and running it a few times, try making experimental changes to it. The comments marked with <code class="calibre22">(!)</code> have suggestions for small changes you can make. On your own, you can also try to figure out how to do the following:</p>
+<ul class="calibre25">
+<li class="calibre8">Include characters besides just 1s and 0s.</li>
+<li class="calibre8">Include shapes besides lines, including rectangles, triangles, and diamonds.</li>
+</ul>
+<h2 id="calibre_link-108" class="calibre5">Exploring the Program</h2>
+<p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
+<ol class="decimal">
+<li value="1" class="calibre8">What happens if you change <code class="calibre22">print(' ', end='')</code> on line 46 to <code class="calibre22">print('.', end='')</code>?</li>
+<li value="2" class="calibre8"><span type="pagebreak" title="89" id="calibre_link-457" class="calibre20"></span>What error message do your get if you change <code class="calibre22">PAUSE = 0.1</code> on line 11 to <code class="calibre22">PAUSE = -0.1</code>?</li>
+<li value="3" class="calibre8">What happens if you change <code class="calibre22">columns[i] &gt; 0</code> on line 42 to <code class="calibre22">columns[i] &lt; 0</code>?</li>
+<li value="4" class="calibre8">What happens if you change <code class="calibre22">columns[i] &gt; 0</code> on line 42 to <code class="calibre22">columns[i] &lt;= 0</code>?</li>
+<li value="5" class="calibre8">What happens if you change <code class="calibre22">columns[i] -= 1</code> on line 44 to <code class="calibre22">columns[i] += 1</code>?</li>
+</ol>
+</section>
+</div>
+
+
+
+
+
+
+
+
+<a href="project19.html">Prev: Digital Clock</a> | <a href="project21.html">Next: DNA Visualization</a>
+</body></html>

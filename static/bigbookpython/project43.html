@@ -1,0 +1,330 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Mancala</title></head><body style="background-color: #fffeee;">
+
+<script type="text/javascript">
+//<![CDATA[
+
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5459430-3']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
+//]]>
+</script>
+
+
+<div style="background-color: #eeeddd; float: right; height: 310px; font-family: sans-serif;" id="otherbooks">
+  <a href="#" onclick="document.getElementById('otherbooks').outerHTML='';" style="vertical-align: top;">(close)</a><br />
+
+  <a target="_blank" href="https://nostarch.com/automatestuff2" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_automate.link');"><img src="/images/cover_automate2_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/big-book-small-python-projects" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_bigbookpython.link');"><img src="/images/cover_bigbookpython_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/beyond-basic-stuff-python" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_beyond.link');"><img src="/images/cover_beyond_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/inventwithpython" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_invent.link');"><img src="/images/cover_invent4th_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://www.amazon.com/Making-Games-Python-Pygame-Sweigart/dp/1469901730?ie=UTF8&amp;tag=playwithpyth-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1469901730" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_pygame.link');"><img src="/images/cover_makinggames_thumb.png" style="height: 200px; border: solid black 1px; /"></a>
+  <a target="_blank" href="https://nostarch.com/crackingcodes" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_hacking.link');"><img src="/images/cover_crackingcodes_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/scratchplayground"><img src="/images/cover_scratchprogrammingplayground_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/codingwithminecraft"><img src="/images/cover_codingwithminecraft_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <br />
+  <a href="https://inventwithpython.com/automateudemy">Use this link to get 70% off the Automate the Boring Stuff online video course.</a><br />
+  <a href="https://www.patreon.com/AlSweigart">Support me on Patreon</a>
+</div>
+
+<a href="project42.html">Prev: Magic Fortune Ball</a> | <a href="project44.html">Next: Maze Runner 2D</a>
+
+
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-190">
+<section class="toclist">
+<header class="calibre10">
+<h1 class="chapter">
+<span class="chapternumber"><span type="pagebreak" title="206" id="calibre_link-574" class="calibre11"></span>#43</span><br class="calibre14" />
+<span class="chaptertitle">Mancala</span></h1>
+</header>
+<figure class="opener">
+<img src="images/000002.png" alt="" class="calibre12" />
+</figure>
+<p class="chapterintro">The board game Mancala is at least 2,000 years old, making it almost as old as Project 63, “Royal Game of Ur.” It is a “seed-sowing” game in which two players select pockets of seeds to spread across the other pockets on the board while trying to collect as many in their store as possible. There are several variants of this game across different cultures. The name comes from the Arab word <em class="calibre9">naqala</em>, meaning “to move.”</p>
+<p class="calibre18">To play, grab the seeds from a pit on your side of the board and place one in each subsequent pit, going counterclockwise and skipping your opponent’s store. If your last seed lands in an empty pit of yours, move the opposite pit’s seeds into that pit. If the last placed seed is in your store, you get a free turn.</p>
+<p class="calibre19"><span type="pagebreak" title="207" id="calibre_link-575" class="calibre20"></span>The game ends when all of one player’s pits are empty. The other player claims the remaining seeds for their store, and the winner is the one with the most seeds. More information about Mancala and its variants can be found at <a href="https://en.wikipedia.org/wiki/Mancala" class="linkurl">https://en.wikipedia.org/wiki/Mancala</a>.</p>
+<h2 id="calibre_link-191" class="calibre5">The Program in Action</h2>
+<p class="bodyfirst">When you run <em class="calibre9">mancala.py</em>, the output will look like this:</p>
+<pre class="calibre24"><code class="calibre22">Mancala, by Al Sweigart al@inventwithpython.com
+<var class="calibre27">--snip--</var>
+
++------+------+--&lt;&lt;&lt;&lt;&lt;-Player 2----+------+------+------+
+2      |G     |H     |I     |J     |K     |L     |      1
+       |   4  |   4  |   4  |   4  |   4  |   4  |
+S      |      |      |      |      |      |      |      S
+T   0  +------+------+------+------+------+------+   0  T
+O      |A     |B     |C     |D     |E     |F     |      O
+R      |   4  |   4  |   4  |   4  |   4  |   4  |      R
+E      |      |      |      |      |      |      |      E
++------+------+------+-Player 1-&gt;&gt;&gt;&gt;&gt;-----+------+------+
+
+
+Player 1, choose move: A-F (or QUIT)
+&gt; <b class="calibre6">f</b>
+
++------+------+--&lt;&lt;&lt;&lt;&lt;-Player 2----+------+------+------+
+2      |G     |H     |I     |J     |K     |L     |      1
+       |   4  |   4  |   4  |   5  |   5  |   5  |
+S      |      |      |      |      |      |      |      S
+T   0  +------+------+------+------+------+------+   1  T
+O      |A     |B     |C     |D     |E     |F     |      O
+R      |   4  |   4  |   4  |   4  |   4  |   0  |      R
+E      |      |      |      |      |      |      |      E
++------+------+------+-Player 1-&gt;&gt;&gt;&gt;&gt;-----+------+------+
+Player 2, choose move: G-L (or QUIT)
+<var class="calibre27">--snip--</var></code></pre>
+<h2 id="calibre_link-192" class="calibre5">How It Works</h2>
+<p class="bodyfirst">Mancala uses ASCII art to display the board. Notice that each pocket needs to have not only the number of seeds in it but a label as well. To avoid confusion, the labels use the letters <var class="calibre26">A</var> through <var class="calibre26">L</var> so they won’t be mistaken for the number of seeds in each pocket. The dictionaries <code class="calibre22">NEXT_PIT</code> and <code class="calibre22">OPPOSITE_PIT</code> map the letter of one pocket to the letter of the pit next to or opposite it, respectively. This lets the expression <code class="calibre22">NEXT_PIT['A']</code> evaluate to <code class="calibre22">'B'</code> and the expression <code class="calibre22">OPPOSITE_PIT['A']</code> evaluate to <code class="calibre22">'G'</code>. Pay attention to how the code uses these dictionaries. Without them, our Mancala program would require long series of <code class="calibre22">if</code> and <code class="calibre22">elif</code> statements to carry out the same game steps.</p>
+<pre class="calibre24"><code class="calibre22"><span type="pagebreak" title="208" id="calibre_link-576" class="calibre13"></span>  1. """Mancala, by Al Sweigart al@inventwithpython.com
+  2. The ancient seed-sowing game.
+  3. View this code at https://nostarch.com/big-book-small-python-projects
+  4. Tags: large, board game, game, two-player"""
+  5.
+  6. import sys
+  7.
+  8. # A tuple of the player's pits:
+  9. PLAYER_1_PITS = ('A', 'B', 'C', 'D', 'E', 'F')
+ 10. PLAYER_2_PITS = ('G', 'H', 'I', 'J', 'K', 'L')
+ 11.
+ 12. # A dictionary whose keys are pits and values are opposite pit:
+ 13. OPPOSITE_PIT = {'A': 'G', 'B': 'H', 'C': 'I', 'D': 'J', 'E': 'K',
+ 14.                    'F': 'L', 'G': 'A', 'H': 'B', 'I': 'C', 'J': 'D',
+ 15.                    'K': 'E', 'L': 'F'}
+ 16.
+ 17. # A dictionary whose keys are pits and values are the next pit in order:
+ 18. NEXT_PIT = {'A': 'B', 'B': 'C', 'C': 'D', 'D': 'E', 'E': 'F', 'F': '1',
+ 19.             '1': 'L', 'L': 'K', 'K': 'J', 'J': 'I', 'I': 'H', 'H': 'G',
+ 20.             'G': '2', '2': 'A'}
+ 21.
+ 22. # Every pit label, in counterclockwise order starting with A:
+ 23. PIT_LABELS = 'ABCDEF1LKJIHG2'
+ 24.
+ 25. # How many seeds are in each pit at the start of a new game:
+ 26. STARTING_NUMBER_OF_SEEDS = 4  # (!) Try changing this to 1 or 10.
+ 27.
+ 28.
+ 29. def main():
+ 30.     print('''Mancala, by Al Sweigart al@inventwithpython.com
+ 31.
+ 32. The ancient two-player seed-sowing game. Grab the seeds from a pit on
+ 33. your side and place one in each following pit, going counterclockwise
+ 34. and skipping your opponent's store. If your last seed lands in an empty
+ 35. pit of yours, move the opposite pit's seeds into that pit. The
+ 36. goal is to get the most seeds in your store on the side of the board.
+ 37. If the last placed seed is in your store, you get a free turn.
+ 38.
+ 39. The game ends when all of one player's pits are empty. The other player
+ 40. claims the remaining seeds for their store, and the winner is the one
+ 41. with the most seeds.
+ 42.
+ 43. More info at https://en.wikipedia.org/wiki/Mancala
+ 44. ''')
+ 45.     input('Press Enter to begin...')
+ 46.
+ 47.     gameBoard = getNewBoard()
+ 48.     playerTurn = '1'  # Player 1 goes first.
+ 49.
+ 50.     while True:  # Run a player's turn.
+ 51.         # "Clear" the screen by printing many newlines, so the old
+ 52.         # board isn't visible anymore.
+ 53.         print('\n' * 60)
+ 54.         # Display board and get the player's move:
+<span type="pagebreak" title="209" id="calibre_link-577" class="calibre13"></span> 55.         displayBoard(gameBoard)
+ 56.         playerMove = askForPlayerMove(playerTurn, gameBoard)
+ 57.
+ 58.         # Carry out the player's move:
+ 59.         playerTurn = makeMove(gameBoard, playerTurn, playerMove)
+ 60.
+ 61.         # Check if the game ended and a player has won:
+ 62.         winner = checkForWinner(gameBoard)
+ 63.         if winner == '1' or winner == '2':
+ 64.             displayBoard(gameBoard)  # Display the board one last time.
+ 65.             print('Player ' + winner + ' has won!')
+ 66.             sys.exit()
+ 67.         elif winner == 'tie':
+ 68.             displayBoard(gameBoard)  # Display the board one last time.
+ 69.             print('There is a tie!')
+ 70.             sys.exit()
+ 71.
+ 72.
+ 73. def getNewBoard():
+ 74.     """Return a dictionary representing a Mancala board in the starting
+ 75.     state: 4 seeds in each pit and 0 in the stores."""
+ 76.
+ 77.     # Syntactic sugar - Use a shorter variable name:
+ 78.     s = STARTING_NUMBER_OF_SEEDS
+ 79.
+ 80.     # Create the data structure for the board, with 0 seeds in the
+ 81.     # stores and the starting number of seeds in the pits:
+ 82.     return {'1': 0, '2': 0, 'A': s, 'B': s, 'C': s, 'D': s, 'E': s,
+ 83.             'F': s, 'G': s, 'H': s, 'I': s, 'J': s, 'K': s, 'L': s}
+ 84.
+ 85.
+ 86. def displayBoard(board):
+ 87.     """Displays the game board as ASCII-art based on the board
+ 88.     dictionary."""
+ 89.
+ 90.     seedAmounts = []
+ 91.     # This 'GHIJKL21ABCDEF' string is the order of the pits left to
+ 92.     # right and top to bottom:
+ 93.     for pit in 'GHIJKL21ABCDEF':
+ 94.         numSeedsInThisPit = str(board[pit]).rjust(2)
+ 95.         seedAmounts.append(numSeedsInThisPit)
+ 96.
+ 97.     print("""
+ 98. +------+------+--&lt;&lt;&lt;&lt;&lt;-Player 2----+------+------+------+
+ 99. 2      |G     |H     |I     |J     |K     |L     |      1
+100.        |  {}  |  {}  |  {}  |  {}  |  {}  |  {}  |
+101. S      |      |      |      |      |      |      |      S
+102. T  {}  +------+------+------+------+------+------+  {}  T
+103. O      |A     |B     |C     |D     |E     |F     |      O
+104. R      |  {}  |  {}  |  {}  |  {}  |  {}  |  {}  |      R
+105. E      |      |      |      |      |      |      |      E
+106. +------+------+------+-Player 1-&gt;&gt;&gt;&gt;&gt;-----+------+------+
+107.
+108. """.format(*seedAmounts))
+109.
+<span type="pagebreak" title="210" id="calibre_link-578" class="calibre13"></span>110.
+111. def askForPlayerMove(playerTurn, board):
+112.     """Asks the player which pit on their side of the board they
+113.     select to sow seeds from. Returns the uppercase letter label of the
+114.     selected pit as a string."""
+115.
+116.     while True:  # Keep asking the player until they enter a valid move.
+117.         # Ask the player to select a pit on their side:
+118.         if playerTurn == '1':
+119.             print('Player 1, choose move: A-F (or QUIT)')
+120.         elif playerTurn == '2':
+121.             print('Player 2, choose move: G-L (or QUIT)')
+122.         response = input('&gt; ').upper().strip()
+123.
+124.         # Check if the player wants to quit:
+125.         if response == 'QUIT':
+126.             print('Thanks for playing!')
+127.             sys.exit()
+128.
+129.         # Make sure it is a valid pit to select:
+130.         if (playerTurn == '1' and response not in PLAYER_1_PITS) or (
+131.             playerTurn == '2' and response not in PLAYER_2_PITS
+132.         ):
+133.             print('Please pick a letter on your side of the board.')
+134.             continue  # Ask player again for their move.
+135.         if board.get(response) == 0:
+136.             print('Please pick a non-empty pit.')
+137.             continue  # Ask player again for their move.
+138.         return response
+139.
+140.
+141. def makeMove(board, playerTurn, pit):
+142.     """Modify the board data structure so that the player 1 or 2 in
+143.     turn selected pit as their pit to sow seeds from. Returns either
+144.     '1' or '2' for whose turn it is next."""
+145.
+146.     seedsToSow = board[pit]  # Get number of seeds from selected pit.
+147.     board[pit] = 0  # Empty out the selected pit.
+148.
+149.     while seedsToSow &gt; 0:  # Continue sowing until we have no more seeds.
+150.         pit = NEXT_PIT[pit]  # Move on to the next pit.
+151.         if (playerTurn == '1' and pit == '2') or (
+152.             playerTurn == '2' and pit == '1'
+153.         ):
+154.             continue  # Skip opponent's store.
+155.         board[pit] += 1
+156.         seedsToSow -= 1
+157.
+158.     # If the last seed went into the player's store, they go again.
+159.     if (pit == playerTurn == '1') or (pit == playerTurn == '2'):
+160.         # The last seed landed in the player's store; take another turn.
+161.         return playerTurn
+162.
+163.     # Check if last seed was in an empty pit; take opposite pit's seeds.
+164.     if playerTurn == '1' and pit in PLAYER_1_PITS and board[pit] == 1:
+<span type="pagebreak" title="211" id="calibre_link-579" class="calibre13"></span>165.         oppositePit = OPPOSITE_PIT[pit]
+166.         board['1'] += board[oppositePit]
+167.         board[oppositePit] = 0
+168.     elif playerTurn == '2' and pit in PLAYER_2_PITS and board[pit] == 1:
+169.         oppositePit = OPPOSITE_PIT[pit]
+170.         board['2'] += board[oppositePit]
+171.         board[oppositePit] = 0
+172.
+173.     # Return the other player as the next player:
+174.     if playerTurn == '1':
+175.         return '2'
+176.     elif playerTurn == '2':
+177.         return '1'
+178.
+179.
+180. def checkForWinner(board):
+181.     """Looks at board and returns either '1' or '2' if there is a
+182.     winner or 'tie' or 'no winner' if there isn't. The game ends when a
+183.     player's pits are all empty; the other player claims the remaining
+184.     seeds for their store. The winner is whoever has the most seeds."""
+185.
+186.     player1Total = board['A'] + board['B'] + board['C']
+187.     player1Total += board['D'] + board['E'] + board['F']
+188.     player2Total = board['G'] + board['H'] + board['I']
+189.     player2Total += board['J'] + board['K'] + board['L']
+190.
+191.     if player1Total == 0:
+192.         # Player 2 gets all the remaining seeds on their side:
+193.         board['2'] += player2Total
+194.         for pit in PLAYER_2_PITS:
+195.             board[pit] = 0  # Set all pits to 0.
+196.     elif player2Total == 0:
+197.         # Player 1 gets all the remaining seeds on their side:
+198.         board['1'] += player1Total
+199.         for pit in PLAYER_1_PITS:
+200.             board[pit] = 0  # Set all pits to 0.
+201.     else:
+202.         return 'no winner'  # No one has won yet.
+203.
+204.     # Game is over, find player with largest score.
+205.     if board['1'] &gt; board['2']:
+206.         return '1'
+207.     elif board['2'] &gt; board['1']:
+208.         return '2'
+209.     else:
+210.         return 'tie'
+211.
+212.
+213. # If the program is run (instead of imported), run the game:
+214. if __name__ == '__main__':
+215.     main()</code></pre>
+<p class="calibre19"><span type="pagebreak" title="212" id="calibre_link-580" class="calibre20"></span>After entering the source code and running it a few times, try making experimental changes to it. On your own, you can also try to figure out how to do the following:</p>
+<ul class="calibre25">
+<li class="calibre8">Change the board to have more pits.</li>
+<li class="calibre8">Randomly select a bonus pit that, when the last seed lands in it, lets the player take another turn.</li>
+<li class="calibre8">Create a square-shaped board for four players instead of two.</li>
+</ul>
+<h2 id="calibre_link-193" class="calibre5">Exploring the Program</h2>
+<p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
+<ol class="decimal">
+<li value="1" class="calibre8">What happens if you change <code class="calibre22">return '2'</code> on line 175 to <code class="calibre22">return '1'</code>?</li>
+<li value="2" class="calibre8">What happens if you change <code class="calibre22">return '2'</code> on line 208 to <code class="calibre22">return '1'</code>?</li>
+<li value="3" class="calibre8">What happens if you change <code class="calibre22">response == 'QUIT'</code> on line 125 to <code class="calibre22">response == 'quit'</code>?</li>
+<li value="4" class="calibre8">What happens if you change <code class="calibre22">board[pit] = 0</code> on line 147 to <code class="calibre22">board[pit] = 1</code>?</li>
+<li value="5" class="calibre8">What happens if you change <code class="calibre22">print('\n' * 60)</code> on line 53 to <code class="calibre22">print('\n' * 0)</code>?</li>
+<li value="6" class="calibre8">What happens if you change <code class="calibre22">playerTurn = '1'</code> on line 48 to <code class="calibre22">playerTurn = '2'</code>?</li>
+<li value="7" class="calibre8">What happens if you change <code class="calibre22">board.get(response) == 0</code> on line 135 to <code class="calibre22">board.get(response) == -1</code>?</li>
+</ol>
+</section>
+</div>
+
+
+
+
+
+
+
+
+<a href="project42.html">Prev: Magic Fortune Ball</a> | <a href="project44.html">Next: Maze Runner 2D</a>
+</body></html>

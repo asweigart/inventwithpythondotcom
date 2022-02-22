@@ -1,0 +1,163 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Fibonacci</title></head><body style="background-color: #fffeee;">
+
+<script type="text/javascript">
+//<![CDATA[
+
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5459430-3']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
+//]]>
+</script>
+
+
+<div style="background-color: #eeeddd; float: right; height: 310px; font-family: sans-serif;" id="otherbooks">
+  <a href="#" onclick="document.getElementById('otherbooks').outerHTML='';" style="vertical-align: top;">(close)</a><br />
+
+  <a target="_blank" href="https://nostarch.com/automatestuff2" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_automate.link');"><img src="/images/cover_automate2_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/big-book-small-python-projects" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_bigbookpython.link');"><img src="/images/cover_bigbookpython_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/beyond-basic-stuff-python" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_beyond.link');"><img src="/images/cover_beyond_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/inventwithpython" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_invent.link');"><img src="/images/cover_invent4th_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://www.amazon.com/Making-Games-Python-Pygame-Sweigart/dp/1469901730?ie=UTF8&amp;tag=playwithpyth-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1469901730" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_pygame.link');"><img src="/images/cover_makinggames_thumb.png" style="height: 200px; border: solid black 1px; /"></a>
+  <a target="_blank" href="https://nostarch.com/crackingcodes" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_hacking.link');"><img src="/images/cover_crackingcodes_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/scratchplayground"><img src="/images/cover_scratchprogrammingplayground_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/codingwithminecraft"><img src="/images/cover_codingwithminecraft_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <br />
+  <a href="https://inventwithpython.com/automateudemy">Use this link to get 70% off the Automate the Boring Stuff online video course.</a><br />
+  <a href="https://www.patreon.com/AlSweigart">Support me on Patreon</a>
+</div>
+
+<a href="project25.html">Prev: Fast Draw</a> | <a href="project27.html">Next: Fish Tank</a>
+
+
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-129">
+<section class="toclist">
+<header class="calibre10">
+<h1 class="chapter">
+<span class="chapternumber"><span type="pagebreak" title="113" id="calibre_link-481" class="calibre11"></span>#26</span><br class="calibre14" />
+<span class="chaptertitle">Fibonacci</span></h1>
+</header>
+<figure class="opener">
+<img src="images/000002.png" alt="" class="calibre12" />
+</figure>
+<p class="chapterintro">The Fibonacci sequence is a famous mathematical pattern credited to Italian mathematician Fibonacci in the 13th century (though others had discovered it even earlier). The sequence begins with 0 and 1, and the next number is always the sum of the previous two numbers. The sequence continues forever:</p>
+<p class="calibre18">0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987 . . .</p>
+<p class="calibre19">The Fibonacci sequence has applications in music composition, stock market prediction, the pattern of florets in the head of sunflowers, and many other areas. This program lets you calculate the sequence as high as you are willing to go. More information about the Fibonacci sequence can be found at <a href="https://en.wikipedia.org/wiki/Fibonacci_number" class="linkurl">https://en.wikipedia.org/wiki/Fibonacci_number</a>.</p>
+<h2 id="calibre_link-130" class="calibre5"><span type="pagebreak" title="114" id="calibre_link-482" class="calibre15"></span>The Program in Action</h2>
+<p class="bodyfirst">When you run <em class="calibre9">fibonacci.py</em>, the output will look like this:</p>
+<pre class="calibre24"><code class="calibre22">Fibonacci Sequence, by Al Sweigart al@inventwithpython.com
+<var class="calibre27">--snip--</var>
+Enter the Nth Fibonacci number you wish to
+calculate (such as 5, 50, 1000, 9999), or QUIT to quit:
+&gt; <b class="calibre6">50</b>
+
+0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765, 10946, 17711, 28657, 46368, 75025, 121393, 196418, 317811, 514229, 832040, 1346269, 2178309, 3524578, 5702887, 9227465, 14930352, 24157817, 39088169, 63245986, 102334155, 165580141, 267914296, 433494437, 701408733, 1134903170, 1836311903, 2971215073, 4807526976, 7778742049</code></pre>
+<h2 id="calibre_link-131" class="calibre5">How It Works</h2>
+<p class="bodyfirst">Because Fibonacci numbers quickly become very large, lines 46 to 50 check if the user has entered a number that’s 10,000 or larger and displays a warning that it may take some time for the output to finish displaying on the screen. While your programs can quickly do millions of calculations almost instantly, printing text to the screen is relatively slow and could take several seconds. The warning in our program reminds the user they can always terminate the program by pressing <span class="keycaps">ctrl-c</span>.</p>
+<pre class="calibre24"><code class="calibre22"> 1. """Fibonacci Sequence, by Al Sweigart al@inventwithpython.com
+ 2. Calculates numbers of the Fibonacci sequence: 0, 1, 1, 2, 3, 5, 8, 13...
+ 3. View this code at https://nostarch.com/big-book-small-python-projects
+ 4. Tags: short, math"""
+ 5.
+ 6. import sys
+ 7.
+ 8. print('''Fibonacci Sequence, by Al Sweigart al@inventwithpython.com
+ 9.
+10. The Fibonacci sequence begins with 0 and 1, and the next number is the
+11. sum of the previous two numbers. The sequence continues forever:
+12.
+13. 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987...
+14. ''')
+15.
+16. while True:  # Main program loop.
+17.     while True:  # Keep asking until the user enters valid input.
+18.         print('Enter the Nth Fibonacci number you wish to')
+19.         print('calculate (such as 5, 50, 1000, 9999), or QUIT to quit:')
+20.         response = input('&gt; ').upper()
+21.
+22.         if response == 'QUIT':
+23.             print('Thanks for playing!')
+24.             sys.exit()
+25.
+26.         if response.isdecimal() and int(response) != 0:
+27.             nth = int(response)
+<span type="pagebreak" title="115" id="calibre_link-483" class="calibre13"></span>28.             break  # Exit the loop when the user enters a valid number.
+29.
+30.         print('Please enter a number greater than 0, or QUIT.')
+31.     print()
+32.
+33.     # Handle the special cases if the user entered 1 or 2:
+34.     if nth == 1:
+35.         print('0')
+36.         print()
+37.         print('The #1 Fibonacci number is 0.')
+38.         continue
+39.     elif nth == 2:
+40.         print('0, 1')
+41.         print()
+42.         print('The #2 Fibonacci number is 1.')
+43.         continue
+44.
+45.     # Display warning if the user entered a large number:
+46.     if nth &gt;= 10000:
+47.         print('WARNING: This will take a while to display on the')
+48.         print('screen. If you want to quit this program before it is')
+49.         print('done, press Ctrl-C.')
+50.         input('Press Enter to begin...')
+51.
+52.     # Calculate the Nth Fibonacci number:
+53.     secondToLastNumber = 0
+54.     lastNumber = 1
+55.     fibNumbersCalculated = 2
+56.     print('0, 1, ', end='')  # Display the first two Fibonacci numbers.
+57.
+58.     # Display all the later numbers of the Fibonacci sequence:
+59.     while True:
+60.         nextNumber = secondToLastNumber + lastNumber
+61.         fibNumbersCalculated += 1
+62.
+63.         # Display the next number in the sequence:
+64.         print(nextNumber, end='')
+65.
+66.         # Check if we've found the Nth number the user wants:
+67.         if fibNumbersCalculated == nth:
+68.             print()
+69.             print()
+70.             print('The #', fibNumbersCalculated, ' Fibonacci ',
+71.                   'number is ', nextNumber, sep='')
+72.             break
+73.
+74.         # Print a comma in between the sequence numbers:
+75.         print(', ', end='')
+76.
+77.         # Shift the last two numbers:
+78.         secondToLastNumber = lastNumber
+79.         lastNumber = nextNumber</code></pre>
+<p class="calibre19"><span type="pagebreak" title="116" id="calibre_link-484" class="calibre20"></span>After entering the source code and running it a few times, try making experimental changes to it. On your own, you can also try to figure out how to do the following:</p>
+<ul class="calibre25">
+<li class="calibre8">Use different starting numbers than 0 and 1.</li>
+<li class="calibre8">Create the next number by adding the previous three numbers instead of the previous two.</li>
+</ul>
+<h2 id="calibre_link-132" class="calibre5">Exploring the Program</h2>
+<p class="bodyfirst">This is a base program, so there aren’t many options to customize it. Instead, consider: how could you use this program? What other useful sequences could be programmed?</p>
+</section>
+</div>
+
+
+
+
+
+
+
+
+<a href="project25.html">Prev: Fast Draw</a> | <a href="project27.html">Next: Fish Tank</a>
+</body></html>

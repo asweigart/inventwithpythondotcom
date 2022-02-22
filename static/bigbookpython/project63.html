@@ -1,0 +1,371 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Royal Game of Ur</title></head><body style="background-color: #fffeee;">
+
+<script type="text/javascript">
+//<![CDATA[
+
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5459430-3']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
+//]]>
+</script>
+
+
+<div style="background-color: #eeeddd; float: right; height: 310px; font-family: sans-serif;" id="otherbooks">
+  <a href="#" onclick="document.getElementById('otherbooks').outerHTML='';" style="vertical-align: top;">(close)</a><br />
+
+  <a target="_blank" href="https://nostarch.com/automatestuff2" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_automate.link');"><img src="/images/cover_automate2_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/big-book-small-python-projects" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_bigbookpython.link');"><img src="/images/cover_bigbookpython_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/beyond-basic-stuff-python" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_beyond.link');"><img src="/images/cover_beyond_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/inventwithpython" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_invent.link');"><img src="/images/cover_invent4th_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://www.amazon.com/Making-Games-Python-Pygame-Sweigart/dp/1469901730?ie=UTF8&amp;tag=playwithpyth-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1469901730" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_pygame.link');"><img src="/images/cover_makinggames_thumb.png" style="height: 200px; border: solid black 1px; /"></a>
+  <a target="_blank" href="https://nostarch.com/crackingcodes" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_hacking.link');"><img src="/images/cover_crackingcodes_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/scratchplayground"><img src="/images/cover_scratchprogrammingplayground_thumb.png" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/codingwithminecraft"><img src="/images/cover_codingwithminecraft_thumb.jpg" style="height: 200px; border: solid black 1px;" /></a>
+  <br />
+  <a href="https://inventwithpython.com/automateudemy">Use this link to get 70% off the Automate the Boring Stuff online video course.</a><br />
+  <a href="https://www.patreon.com/AlSweigart">Support me on Patreon</a>
+</div>
+
+<a href="project62.html">Prev: Rotating Cube</a> | <a href="project64.html">Next: Seven-Segment Display Module</a>
+
+
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-263">
+<section class="toclist">
+<header class="calibre10">
+<h1 class="chapter">
+<span class="chapternumber"><span type="pagebreak" title="300" id="calibre_link-668" class="calibre11"></span>#63</span><br class="calibre14" />
+<span class="chaptertitle">Royal Game of Ur</span></h1>
+</header>
+<figure class="opener">
+<img src="images/000002.png" alt="" class="calibre12" />
+</figure>
+<p class="chapterintro">The Royal Game of Ur is a 5,000-year-old game from Mesopotamia. Archeologists rediscovered the game in the Royal Cemetery at Ur, in modern-day southern Iraq, during excavations between 1922 and 1934. The rules were reconstructed from the game board (shown in <a href="#calibre_link-349" id="calibre_link-811" class="linkurl">Figure 63-1</a>) and a Babylonian clay tablet, and they’re similar to Parcheesi. You’ll need both luck and skill to win.</p>
+<span type="pagebreak" title="301" id="calibre_link-669" class="calibre20"></span><figure class="calibre28">
+<img src="images/000018.png" alt="f63001" class="calibre12" />
+<figcaption class="calibre29"><p class="calibre30"><a id="calibre_link-349" class="linkurl">Figure 63-1</a>: One of the five game boards found in the Royal Cemetery at Ur</p></figcaption>
+</figure>
+<p class="calibre19">Two players each begin with seven tokens in their home, and the first player to move all seven to the goal is the winner. Players take turns throwing four dice. These dice are four-pointed pyramid shapes called tetrahedrons. Each die has two marked points, giving an even chance that the dice come up marked or unmarked. Instead of dice, our game uses coins whose heads act as the marked point. The player can move a token one space for each marked point that comes up. This means they can move a single token between zero and four spaces, though they’re most likely to roll two spaces.</p>
+<p class="calibre19">The tokens travel along the path indicated in <a href="#calibre_link-350" id="calibre_link-812" class="linkurl">Figure 63-2</a>. Only one token may exist on a space at a time. If a token lands on an opponent’s token while in the shared middle path, the opponent’s token is sent back home. If a token lands on the middle flower square, it is safe from being landed on. If a token lands on any of the other four flower tiles, the player gets to roll again. Our game will represent the tokens with the letters <em class="calibre9">X</em> and <em class="calibre9">O</em>.</p>
+<figure class="calibre28">
+<img src="images/000016.png" alt="f63002" class="calibre12" />
+<figcaption class="calibre29"><p class="calibre30"><a id="calibre_link-350" class="linkurl">Figure 63-2</a>: The path each player’s token takes from their home to their goal</p></figcaption>
+</figure>
+<p class="calibre19">A video featuring YouTuber Tom Scott and British Museum curator Irving Finkel discussing the Royal Game of Ur can be found at <a href="https://www.youtube.com/watch?v=WZskjLq040I" class="linkurl">https://www.youtube.com/watch?v=WZskjLq040I</a>.</p>
+<h2 id="calibre_link-264" class="calibre5"><span type="pagebreak" title="302" id="calibre_link-670" class="calibre15"></span>The Program in Action</h2>
+<p class="bodyfirst">When you run <em class="calibre9">royalgameofur.py</em>, the output will look like this:</p>
+<pre class="calibre24"><code class="calibre22">The Royal Game of Ur, by Al Sweigart
+<var class="calibre27">--snip--</var>
+                   XXXXXXX           .......
+                   Home              Goal
+                     v                 ^
++-----+-----+-----+--v--+           +--^--+-----+
+|*****|     |     |     |           |*****|     |
+|*   *&lt;     &lt;     &lt;     |           |*   *&lt;     |
+|****h|    g|    f|    e|           |****t|    s|
++--v--+-----+-----+-----+-----+-----+-----+--^--+
+|     |     |     |*****|     |     |     |     |
+|     &gt;     &gt;     &gt;*   *&gt;     &gt;     &gt;     &gt;     |
+|    i|    j|    k|****l|    m|    n|    o|    p|
++--^--+-----+-----+-----+-----+-----+-----+--v--+
+|*****|     |     |     |           |*****|     |
+|*   *&lt;     &lt;     &lt;     |           |*   *&lt;     |
+|****d|    c|    b|    a|           |****r|    q|
++-----+-----+-----+--^--+           +--v--+-----+
+                     ^                 v
+                   Home              Goal
+                   OOOOOOO           .......
+
+It is O's turn. Press Enter to flip...
+Flips: H-H-H-H  Select token to move 4 spaces: home quit
+&gt; <b class="calibre6">home</b>
+O landed on a flower space and gets to go again.
+Press Enter to continue...
+<var class="calibre27">--snip--</var></code></pre>
+<h2 id="calibre_link-265" class="calibre5">How It Works</h2>
+<p class="bodyfirst">Like in Project 43, “Mancala,” the spaces on the ASCII-art game board are labeled with the letters <em class="calibre9">a</em> through <em class="calibre9">t</em>. After rolling, the player can select a space that contains their token to move that token, or they can select <code class="calibre22">home</code> to begin moving a token from their home to the board. The program represents the board as a dictionary with the keys <code class="calibre22">'a'</code> to <code class="calibre22">'t'</code> and the values of <code class="calibre22">'X'</code> and <code class="calibre22">'O'</code> for the tokens (or <code class="calibre22">' '</code> for a blank space).</p>
+<p class="calibre19">Additionally, this dictionary has keys <code class="calibre22">'x_home'</code>, <code class="calibre22">'o_home'</code>, <code class="calibre22">'x_goal'</code>, and <code class="calibre22">'o_goal'</code>, and the values for these keys are seven-character strings that represent how full the homes and goals are. The <code class="calibre22">'X'</code> or <code class="calibre22">'O'</code> characters in these strings represent tokens at the home or goal, and <code class="calibre22">'.'</code> represents an empty slot. The <code class="calibre22">displayBoard()</code> function displays these seven-character strings on the screen.</p>
+<pre class="calibre24"><code class="calibre22">  1. """The Royal Game of Ur, by Al Sweigart al@inventwithpython.com
+  2. A 5,000 year old board game from Mesopotamia. Two players knock each
+  3. other back as they race for the goal.
+  4. More info https://en.wikipedia.org/wiki/Royal_Game_of_Ur
+  5. View this code at https://nostarch.com/big-book-small-python-projects
+<span type="pagebreak" title="303" id="calibre_link-671" class="calibre13"></span>  6. Tags: large, board game, game, two-player
+  7. """
+  8.
+  9. import random, sys
+ 10.
+ 11. X_PLAYER = 'X'
+ 12. O_PLAYER = 'O'
+ 13. EMPTY = ' '
+ 14.
+ 15. # Set up constants for the space labels:
+ 16. X_HOME = 'x_home'
+ 17. O_HOME = 'o_home'
+ 18. X_GOAL = 'x_goal'
+ 19. O_GOAL = 'o_goal'
+ 20.
+ 21. # The spaces in left to right, top to bottom order:
+ 22. ALL_SPACES = 'hgfetsijklmnopdcbarq'
+ 23. X_TRACK = 'HefghijklmnopstG'  # (H stands for Home, G stands for Goal.)
+ 24. O_TRACK = 'HabcdijklmnopqrG'
+ 25.
+ 26. FLOWER_SPACES = ('h', 't', 'l', 'd', 'r')
+ 27.
+ 28. BOARD_TEMPLATE = """
+ 29.                    {}           {}
+ 30.                    Home              Goal
+ 31.                      v                 ^
+ 32. +-----+-----+-----+--v--+           +--^--+-----+
+ 33. |*****|     |     |     |           |*****|     |
+ 34. |* {} *&lt;  {}  &lt;  {}  &lt;  {}  |           |* {} *&lt;  {}  |
+ 35. |****h|    g|    f|    e|           |****t|    s|
+ 36. +--v--+-----+-----+-----+-----+-----+-----+--^--+
+ 37. |     |     |     |*****|     |     |     |     |
+ 38. |  {}  &gt;  {}  &gt;  {}  &gt;* {} *&gt;  {}  &gt;  {}  &gt;  {}  &gt;  {}  |
+ 39. |    i|    j|    k|****l|    m|    n|    o|    p|
+ 40. +--^--+-----+-----+-----+-----+-----+-----+--v--+
+ 41. |*****|     |     |     |           |*****|     |
+ 42. |* {} *&lt;  {}  &lt;  {}  &lt;  {}  |           |* {} *&lt;  {}  |
+ 43. |****d|    c|    b|    a|           |****r|    q|
+ 44. +-----+-----+-----+--^--+           +--v--+-----+
+ 45.                      ^                 v
+ 46.                    Home              Goal
+ 47.                    {}           {}
+ 48. """
+ 49.
+ 50.
+ 51. def main():
+ 52.     print('''The Royal Game of Ur, by Al Sweigart
+ 53.
+ 54. This is a 5,000 year old game. Two players must move their tokens
+ 55. from their home to their goal. On your turn you flip four coins and can
+ 56. move one token a number of spaces equal to the heads you got.
+ 57.
+ 58. Ur is a racing game; the first player to move all seven of their tokens
+ 59. to their goal wins. To do this, tokens must travel from their home to
+ 60. their goal:
+<span type="pagebreak" title="304" id="calibre_link-672" class="calibre13"></span> 61.
+ 62.             X Home      X Goal
+ 63.               v           ^
+ 64. +---+---+---+-v-+       +-^-+---+
+ 65. |v&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; |       | ^&lt;|&lt;&lt; |
+ 66. |v  |   |   |   |       |   | ^ |
+ 67. +v--+---+---+---+---+---+---+-^-+
+ 68. |&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;^ |
+ 69. |&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;v |
+ 70. +^--+---+---+---+---+---+---+-v-+
+ 71. |^  |   |   |   |       |   | v |
+ 72. |^&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; |       | v&lt;&lt;&lt;&lt; |
+ 73. +---+---+---+-^-+       +-v-+---+
+ 74.               ^           v
+ 75.             O Home      O Goal
+ 76.
+ 77. If you land on an opponent's token in the middle track, it gets sent
+ 78. back home. The **flower** spaces let you take another turn. Tokens in
+ 79. the middle flower space are safe and cannot be landed on.''')
+ 80.     input('Press Enter to begin...')
+ 81.
+ 82.     gameBoard = getNewBoard()
+ 83.     turn = O_PLAYER
+ 84.     while True:  # Main game loop.
+ 85.         # Set up some variables for this turn:
+ 86.         if turn == X_PLAYER:
+ 87.             opponent = O_PLAYER
+ 88.             home = X_HOME
+ 89.             track = X_TRACK
+ 90.             goal = X_GOAL
+ 91.             opponentHome = O_HOME
+ 92.         elif turn == O_PLAYER:
+ 93.             opponent = X_PLAYER
+ 94.             home = O_HOME
+ 95.             track = O_TRACK
+ 96.             goal = O_GOAL
+ 97.             opponentHome = X_HOME
+ 98.
+ 99.         displayBoard(gameBoard)
+100.
+101.         input('It is ' + turn + '\'s turn. Press Enter to flip...')
+102.
+103.         flipTally = 0
+104.         print('Flips: ', end='')
+105.         for i in range(4):  # Flip 4 coins.
+106.             result = random.randint(0, 1)
+107.             if result == 0:
+108.                 print('T', end='')  # Tails.
+109.             else:
+110.                 print('H', end='')  # Heads.
+111.             if i != 3:
+112.                 print('-', end='')  # Print separator.
+113.             flipTally += result
+114.         print('  ', end='')
+115.
+<span type="pagebreak" title="305" id="calibre_link-673" class="calibre13"></span>116.         if flipTally == 0:
+117.             input('You lose a turn. Press Enter to continue...')
+118.             turn = opponent  # Swap turns to the other player.
+119.             continue
+120.
+121.         # Ask the player for their move:
+122.         validMoves = getValidMoves(gameBoard, turn, flipTally)
+123.
+124.         if validMoves == []:
+125.             print('There are no possible moves, so you lose a turn.')
+126.             input('Press Enter to continue...')
+127.             turn = opponent  # Swap turns to the other player.
+128.             continue
+129.
+130.         while True:
+131.             print('Select move', flipTally, 'spaces: ', end='')
+132.             print(' '.join(validMoves) + ' quit')
+133.             move = input('&gt; ').lower()
+134.
+135.             if move == 'quit':
+136.                 print('Thanks for playing!')
+137.                 sys.exit()
+138.             if move in validMoves:
+139.                 break  # Exit the loop when a valid move is selected.
+140.
+141.             print('That is not a valid move.')
+142.
+143.         # Perform the selected move on the board:
+144.         if move == 'home':
+145.             # Subtract tokens at home if moving from home:
+146.             gameBoard[home] -= 1
+147.             nextTrackSpaceIndex = flipTally
+148.         else:
+149.             gameBoard[move] = EMPTY  # Set the "from" space to empty.
+150.             nextTrackSpaceIndex = track.index(move) + flipTally
+151.
+152.         movingOntoGoal = nextTrackSpaceIndex == len(track) - 1
+153.         if movingOntoGoal:
+154.             gameBoard[goal] += 1
+155.             # Check if the player has won:
+156.             if gameBoard[goal] == 7:
+157.                 displayBoard(gameBoard)
+158.                 print(turn, 'has won the game!')
+159.                 print('Thanks for playing!')
+160.                 sys.exit()
+161.         else:
+162.             nextBoardSpace = track[nextTrackSpaceIndex]
+163.             # Check if the opponent has a tile there:
+164.             if gameBoard[nextBoardSpace] == opponent:
+165.                 gameBoard[opponentHome] += 1
+166.
+167.             # Set the "to" space to the player's token:
+168.             gameBoard[nextBoardSpace] = turn
+169.
+170.         # Check if the player landed on a flower space and can go again:
+<span type="pagebreak" title="306" id="calibre_link-674" class="calibre13"></span>171.         if nextBoardSpace in FLOWER_SPACES:
+172.             print(turn, 'landed on a flower space and goes again.')
+173.             input('Press Enter to continue...')
+174.         else:
+175.             turn = opponent  # Swap turns to the other player.
+176.
+177. def getNewBoard():
+178.     """
+179.     Returns a dictionary that represents the state of the board. The
+180.     keys are strings of the space labels, the values are X_PLAYER,
+181.     O_PLAYER, or EMPTY. There are also counters for how many tokens are
+182.     at the home and goal of both players.
+183.     """
+184.     board = {X_HOME: 7, X_GOAL: 0, O_HOME: 7, O_GOAL: 0}
+185.     # Set each space as empty to start:
+186.     for spaceLabel in ALL_SPACES:
+187.         board[spaceLabel] = EMPTY
+188.     return board
+189.
+190.
+191. def displayBoard(board):
+192.     """Display the board on the screen."""
+193.     # "Clear" the screen by printing many newlines, so the old
+194.     # board isn't visible anymore.
+195.     print('\n' * 60)
+196.
+197.     xHomeTokens = ('X' * board[X_HOME]).ljust(7, '.')
+198.     xGoalTokens = ('X' * board[X_GOAL]).ljust(7, '.')
+199.     oHomeTokens = ('O' * board[O_HOME]).ljust(7, '.')
+200.     oGoalTokens = ('O' * board[O_GOAL]).ljust(7, '.')
+201.
+202.     # Add the strings that should populate BOARD_TEMPLATE in order,
+203.     # going from left to right, top to bottom.
+204.     spaces = []
+205.     spaces.append(xHomeTokens)
+206.     spaces.append(xGoalTokens)
+207.     for spaceLabel in ALL_SPACES:
+208.         spaces.append(board[spaceLabel])
+209.     spaces.append(oHomeTokens)
+210.     spaces.append(oGoalTokens)
+211.
+212.     print(BOARD_TEMPLATE.format(*spaces))
+213.
+214.
+215. def getValidMoves(board, player, flipTally):
+216.     validMoves = []  # Contains the spaces with tokens that can move.
+217.     if player == X_PLAYER:
+218.         opponent = O_PLAYER
+219.         track = X_TRACK
+220.         home = X_HOME
+221.     elif player == O_PLAYER:
+222.         opponent = X_PLAYER
+223.         track = O_TRACK
+224.         home = O_HOME
+225.
+<span type="pagebreak" title="307" id="calibre_link-675" class="calibre13"></span>226.     # Check if the player can move a token from home:
+227.     if board[home] &gt; 0 and board[track[flipTally]] == EMPTY:
+228.         validMoves.append('home')
+229.
+230.     # Check which spaces have a token the player can move:
+231.     for trackSpaceIndex, space in enumerate(track):
+232.         if space == 'H' or space == 'G' or board[space] != player:
+233.             continue
+234.         nextTrackSpaceIndex = trackSpaceIndex + flipTally
+235.         if nextTrackSpaceIndex &gt;= len(track):
+236.             # You must flip an exact number of moves onto the goal,
+237.             # otherwise you can't move on the goal.
+238.             continue
+239.         else:
+240.             nextBoardSpaceKey = track[nextTrackSpaceIndex]
+241.             if nextBoardSpaceKey == 'G':
+242.                 # This token can move off the board:
+243.                 validMoves.append(space)
+244.                 continue
+245.         if board[nextBoardSpaceKey] in (EMPTY, opponent):
+246.             # If the next space is the protected middle space, you
+247.             # can only move there if it is empty:
+248.             if nextBoardSpaceKey == 'l' and board['l'] == opponent:
+249.                 continue  # Skip this move, the space is protected.
+250.             validMoves.append(space)
+251.
+252.     return validMoves
+253.
+254.
+255. if __name__ == '__main__':
+256.     main()</code></pre>
+<h2 id="calibre_link-266" class="calibre5">Exploring the Program</h2>
+<p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
+<ol class="decimal">
+<li value="1" class="calibre8">What happens if you change <code class="calibre22">nextTrackSpaceIndex == len(track) - 1</code> on line 152 to <code class="calibre22">nextTrackSpaceIndex == 1</code>?</li>
+<li value="2" class="calibre8">What happens if you change <code class="calibre22">result = random.randint(0, 1)</code> on line 106 to <code class="calibre22">result = 1</code>?</li>
+<li value="3" class="calibre8">What error do you cause if you change <code class="calibre22">board = {X_HOME: 7, X_GOAL: 0, O_HOME: 7, O_GOAL: 0}</code> on line 184 to <code class="calibre22">board = {}</code>?</li>
+</ol>
+</section>
+</div>
+
+
+
+
+
+
+
+
+<a href="project62.html">Prev: Rotating Cube</a> | <a href="project64.html">Next: Seven-Segment Display Module</a>
+</body></html>
