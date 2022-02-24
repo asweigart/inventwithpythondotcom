@@ -43,7 +43,7 @@ _gaq.push(['_trackPageview']);
 <section class="toclist">
 <header class="calibre10">
 <h1 class="chapter">
-<span class="chapternumber"><span type="pagebreak" title="171" id="calibre_link-539" class="calibre11"></span>#37</span><br class="calibre14" />
+<span class="chapternumber">#37</span><br class="calibre14" />
 <span class="chaptertitle">Hungry Robots</span></h1>
 </header>
 <figure class="opener">
@@ -51,7 +51,7 @@ _gaq.push(['_trackPageview']);
 </figure>
 <p class="chapterintro">You are trapped in a maze with hungry robots! You don’t know why robots need to eat, but you don’t want to find out. The robots are badly programmed and will move directly toward you, even if blocked by walls. You must trick the robots into crashing into each other (or dead robots) without being caught.</p>
 <p class="calibre18">You have a personal teleporter device that can send you to a random new place, but it only has enough battery for two trips. Also, you and the robots can slip through corners!</p>
-<h2 id="calibre_link-169" class="calibre5"><span type="pagebreak" title="172" id="calibre_link-540" class="calibre15"></span>The Program in Action</h2>
+<h2 id="calibre_link-169" class="calibre5">The Program in Action</h2>
 <p class="bodyfirst">When you run <em class="calibre9">hungryrobots.py</em>, the output will look like this:</p>
 <pre class="calibre24"><code class="calibre22">Hungry Robots, by Al Sweigart al@inventwithpython.com
 <var class="calibre27">--snip--</var>
@@ -90,7 +90,7 @@ Enter move or QUIT: (Z) (X) ( )
   6. import random, sys
   7.
   8. # Set up the constants:
-<span type="pagebreak" title="173" id="calibre_link-541" class="calibre13"></span>  9. WIDTH = 40           # (!) Try changing this to 70 or 10.
+  9. WIDTH = 40           # (!) Try changing this to 70 or 10.
  10. HEIGHT = 20          # (!) Try changing this to 10.
  11. NUM_ROBOTS = 10      # (!) Try changing this to 1 or 30.
  12. NUM_TELEPORTS = 2    # (!) Try changing this to 0 or 9999.
@@ -145,7 +145,7 @@ Enter move or QUIT: (Z) (X) ( )
  61.
  62. def getNewBoard():
  63.     """Returns a dictionary that represents the board. The keys are
-<span type="pagebreak" title="174" id="calibre_link-542" class="calibre13"></span> 64.     (x, y) tuples of integer indexes for board positions, the values are
+ 64.     (x, y) tuples of integer indexes for board positions, the values are
  65.     WALL, EMPTY_SPACE, or DEAD_ROBOT. The dictionary also has the key
  66.     'teleports' for the number of teleports the player has left.
  67.     The living robots are stored separately from the board dictionary."""
@@ -200,7 +200,7 @@ Enter move or QUIT: (Z) (X) ( )
 116.         x, y = getRandomEmptySpace(board, robots)
 117.         robots.append((x, y))
 118.     return robots
-<span type="pagebreak" title="175" id="calibre_link-543" class="calibre13"></span>119.
+119.
 120.
 121. def displayBoard(board, robots, playerPosition):
 122.     """Display the board, robots, and player on the screen."""
@@ -255,7 +255,7 @@ Enter move or QUIT: (Z) (X) ( )
 171.         elif move != '' and move in allMoves:
 172.             # Return the new player position based on their move:
 173.             return {'Q': (playerX - 1, playerY - 1),
-<span type="pagebreak" title="176" id="calibre_link-544" class="calibre13"></span>174.                     'W': (playerX + 0, playerY - 1),
+174.                     'W': (playerX + 0, playerY - 1),
 175.                     'E': (playerX + 1, playerY - 1),
 176.                     'D': (playerX + 1, playerY + 0),
 177.                     'C': (playerX + 1, playerY + 1),
@@ -310,7 +310,7 @@ Enter move or QUIT: (Z) (X) ( )
 226.             continue
 227.
 228.         # Check if it moves into a robot, then destroy both robots:
-<span type="pagebreak" title="177" id="calibre_link-545" class="calibre13"></span>229.         if (newRobotx, newRoboty) in nextRobotPositions:
+229.         if (newRobotx, newRoboty) in nextRobotPositions:
 230.             board[(newRobotx, newRoboty)] = DEAD_ROBOT
 231.             nextRobotPositions.remove((newRobotx, newRoboty))
 232.         else:

@@ -43,7 +43,7 @@ _gaq.push(['_trackPageview']);
 <section class="toclist">
 <header class="calibre10">
 <h1 class="chapter">
-<span class="chapternumber"><span type="pagebreak" title="15" id="calibre_link-383" class="calibre11"></span>#4</span><br class="calibre14" />
+<span class="chapternumber">#4</span><br class="calibre14" />
 <span class="chaptertitle">Blackjack</span></h1>
 </header>
 <figure class="opener">
@@ -55,7 +55,7 @@ _gaq.push(['_trackPageview']);
 | ♣ | | ♦ |
 |__A| |_10|</code></pre>
 <p class="calibre19">You can find other rules and the history of this card game at <a href="https://en.wikipedia.org/wiki/Blackjack" class="linkurl">https://en.wikipedia.org/wiki/Blackjack</a>.</p>
-<h2 id="calibre_link-49" class="calibre5"><span type="pagebreak" title="16" id="calibre_link-384" class="calibre15"></span>The Program in Action</h2>
+<h2 id="calibre_link-49" class="calibre5">The Program in Action</h2>
 <p class="bodyfirst">When you run <em class="calibre9">blackjack.py</em>, the output will look like this:</p>
 <pre class="calibre24"><code class="calibre22">Blackjack, by Al Sweigart al@inventwithpython.com
 
@@ -106,7 +106,7 @@ PLAYER: 21
 
 You won $400!
 <var class="calibre27">--snip&mdash;</var></code></pre>
-<h2 id="calibre_link-50" class="calibre5"><span type="pagebreak" title="17" id="calibre_link-385" class="calibre15"></span>How It Works</h2>
+<h2 id="calibre_link-50" class="calibre5">How It Works</h2>
 <p class="bodyfirst">The card suit symbols don’t exist on your keyboard, which is why we call the <code class="calibre22">chr()</code> function to create them. The integer passed to <code class="calibre22">chr()</code> is called a Unicode <em class="calibre9">code point</em>, a unique number that identifies a character according to the Unicode standard. Unicode is often misunderstood. However, Ned Batchelder’s 2012 PyCon US talk “Pragmatic Unicode, or How Do I Stop the Pain?” is an excellent introduction to Unicode, and you can find it at <a href="https://youtu.be/sgHbC6udIqc/" class="linkurl">https://youtu.be/sgHbC6udIqc/</a>. Appendix B gives a full list of Unicode characters you can use in your Python programs.</p>
 <pre class="calibre24"><code class="calibre22">  1. """Blackjack, by Al Sweigart al@inventwithpython.com
   2. The classic card game also known as 21. (This version doesn't have
@@ -151,7 +151,7 @@ You won $400!
  41.             sys.exit()
  42.
  43.         # Let the player enter their bet for this round:
-<span type="pagebreak" title="18" id="calibre_link-386" class="calibre13"></span> 44.         print('Money:', money)
+ 44.         print('Money:', money)
  45.         bet = getBet(money)
  46.
  47.         # Give the dealer and player two cards from the deck each:
@@ -206,7 +206,7 @@ You won $400!
  96.                 if getHandValue(dealerHand) &gt; 21:
  97.                     break  # The dealer has busted.
  98.                 input('Press Enter to continue...')
-<span type="pagebreak" title="19" id="calibre_link-387" class="calibre13"></span> 99.                 print('\n\n')
+ 99.                 print('\n\n')
 100.
 101.         # Show the final hands:
 102.         displayHands(playerHand, dealerHand, True)
@@ -261,7 +261,7 @@ You won $400!
 151.
 152. def displayHands(playerHand, dealerHand, showDealerHand):
 153.     """Show the player's and dealer's cards. Hide the dealer's first
-<span type="pagebreak" title="20" id="calibre_link-388" class="calibre13"></span>154.     card if showDealerHand is False."""
+154.     card if showDealerHand is False."""
 155.     print()
 156.     if showDealerHand:
 157.         print('DEALER:', getHandValue(dealerHand))
@@ -316,7 +316,7 @@ You won $400!
 206.         else:
 207.             # Print the card's front:
 208.             rank, suit = card  # The card is a tuple data structure.
-<span type="pagebreak" title="21" id="calibre_link-389" class="calibre13"></span>209.             rows[1] += '|{} | '.format(rank.ljust(2))
+209.             rows[1] += '|{} | '.format(rank.ljust(2))
 210.             rows[2] += '| {} | '.format(suit)
 211.             rows[3] += '|_{}| '.format(rank.rjust(2, '_'))
 212.
@@ -355,7 +355,7 @@ You won $400!
 <ol class="decimal">
 <li value="1" class="calibre8">How can you make the player start with a different amount of money?</li>
 <li value="2" class="calibre8">How does the program prevent the player from betting more money than they have?</li>
-<li value="3" class="calibre8"><span type="pagebreak" title="22" id="calibre_link-390" class="calibre20"></span>How does the program represent a single card?</li>
+<li value="3" class="calibre8">How does the program represent a single card?</li>
 <li value="4" class="calibre8">How does the program represent a hand of cards?</li>
 <li value="5" class="calibre8">What do each of the strings in the <code class="calibre22">rows</code> list (created on line 197) represent?</li>
 <li value="6" class="calibre8">What happens if you delete or comment out <code class="calibre22">random.shuffle(deck)</code> on line 148?</li>

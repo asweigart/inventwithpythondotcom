@@ -43,7 +43,7 @@ _gaq.push(['_trackPageview']);
 <section class="toclist">
 <header class="calibre10">
 <h1 class="chapter">
-<span class="chapternumber"><span type="pagebreak" title="206" id="calibre_link-574" class="calibre11"></span>#43</span><br class="calibre14" />
+<span class="chapternumber">#43</span><br class="calibre14" />
 <span class="chaptertitle">Mancala</span></h1>
 </header>
 <figure class="opener">
@@ -51,7 +51,7 @@ _gaq.push(['_trackPageview']);
 </figure>
 <p class="chapterintro">The board game Mancala is at least 2,000 years old, making it almost as old as Project 63, “Royal Game of Ur.” It is a “seed-sowing” game in which two players select pockets of seeds to spread across the other pockets on the board while trying to collect as many in their store as possible. There are several variants of this game across different cultures. The name comes from the Arab word <em class="calibre9">naqala</em>, meaning “to move.”</p>
 <p class="calibre18">To play, grab the seeds from a pit on your side of the board and place one in each subsequent pit, going counterclockwise and skipping your opponent’s store. If your last seed lands in an empty pit of yours, move the opposite pit’s seeds into that pit. If the last placed seed is in your store, you get a free turn.</p>
-<p class="calibre19"><span type="pagebreak" title="207" id="calibre_link-575" class="calibre20"></span>The game ends when all of one player’s pits are empty. The other player claims the remaining seeds for their store, and the winner is the one with the most seeds. More information about Mancala and its variants can be found at <a href="https://en.wikipedia.org/wiki/Mancala" class="linkurl">https://en.wikipedia.org/wiki/Mancala</a>.</p>
+<p class="calibre19">The game ends when all of one player’s pits are empty. The other player claims the remaining seeds for their store, and the winner is the one with the most seeds. More information about Mancala and its variants can be found at <a href="https://en.wikipedia.org/wiki/Mancala" class="linkurl">https://en.wikipedia.org/wiki/Mancala</a>.</p>
 <h2 id="calibre_link-191" class="calibre5">The Program in Action</h2>
 <p class="bodyfirst">When you run <em class="calibre9">mancala.py</em>, the output will look like this:</p>
 <pre class="calibre24"><code class="calibre22">Mancala, by Al Sweigart al@inventwithpython.com
@@ -84,7 +84,7 @@ Player 2, choose move: G-L (or QUIT)
 <var class="calibre27">--snip--</var></code></pre>
 <h2 id="calibre_link-192" class="calibre5">How It Works</h2>
 <p class="bodyfirst">Mancala uses ASCII art to display the board. Notice that each pocket needs to have not only the number of seeds in it but a label as well. To avoid confusion, the labels use the letters <var class="calibre26">A</var> through <var class="calibre26">L</var> so they won’t be mistaken for the number of seeds in each pocket. The dictionaries <code class="calibre22">NEXT_PIT</code> and <code class="calibre22">OPPOSITE_PIT</code> map the letter of one pocket to the letter of the pit next to or opposite it, respectively. This lets the expression <code class="calibre22">NEXT_PIT['A']</code> evaluate to <code class="calibre22">'B'</code> and the expression <code class="calibre22">OPPOSITE_PIT['A']</code> evaluate to <code class="calibre22">'G'</code>. Pay attention to how the code uses these dictionaries. Without them, our Mancala program would require long series of <code class="calibre22">if</code> and <code class="calibre22">elif</code> statements to carry out the same game steps.</p>
-<pre class="calibre24"><code class="calibre22"><span type="pagebreak" title="208" id="calibre_link-576" class="calibre13"></span>  1. """Mancala, by Al Sweigart al@inventwithpython.com
+<pre class="calibre24"><code class="calibre22">  1. """Mancala, by Al Sweigart al@inventwithpython.com
   2. The ancient seed-sowing game.
   3. View this code at https://nostarch.com/big-book-small-python-projects
   4. Tags: large, board game, game, two-player"""
@@ -138,7 +138,7 @@ Player 2, choose move: G-L (or QUIT)
  52.         # board isn't visible anymore.
  53.         print('\n' * 60)
  54.         # Display board and get the player's move:
-<span type="pagebreak" title="209" id="calibre_link-577" class="calibre13"></span> 55.         displayBoard(gameBoard)
+ 55.         displayBoard(gameBoard)
  56.         playerMove = askForPlayerMove(playerTurn, gameBoard)
  57.
  58.         # Carry out the player's move:
@@ -193,7 +193,7 @@ Player 2, choose move: G-L (or QUIT)
 107.
 108. """.format(*seedAmounts))
 109.
-<span type="pagebreak" title="210" id="calibre_link-578" class="calibre13"></span>110.
+110.
 111. def askForPlayerMove(playerTurn, board):
 112.     """Asks the player which pit on their side of the board they
 113.     select to sow seeds from. Returns the uppercase letter label of the
@@ -248,7 +248,7 @@ Player 2, choose move: G-L (or QUIT)
 162.
 163.     # Check if last seed was in an empty pit; take opposite pit's seeds.
 164.     if playerTurn == '1' and pit in PLAYER_1_PITS and board[pit] == 1:
-<span type="pagebreak" title="211" id="calibre_link-579" class="calibre13"></span>165.         oppositePit = OPPOSITE_PIT[pit]
+165.         oppositePit = OPPOSITE_PIT[pit]
 166.         board['1'] += board[oppositePit]
 167.         board[oppositePit] = 0
 168.     elif playerTurn == '2' and pit in PLAYER_2_PITS and board[pit] == 1:
@@ -299,7 +299,7 @@ Player 2, choose move: G-L (or QUIT)
 213. # If the program is run (instead of imported), run the game:
 214. if __name__ == '__main__':
 215.     main()</code></pre>
-<p class="calibre19"><span type="pagebreak" title="212" id="calibre_link-580" class="calibre20"></span>After entering the source code and running it a few times, try making experimental changes to it. On your own, you can also try to figure out how to do the following:</p>
+<p class="calibre19">After entering the source code and running it a few times, try making experimental changes to it. On your own, you can also try to figure out how to do the following:</p>
 <ul class="calibre25">
 <li class="calibre8">Change the board to have more pits.</li>
 <li class="calibre8">Randomly select a bonus pit that, when the last seed lands in it, lets the player take another turn.</li>

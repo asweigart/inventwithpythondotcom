@@ -43,14 +43,14 @@ _gaq.push(['_trackPageview']);
 <section class="toclist">
 <header class="calibre10">
 <h1 class="chapter">
-<span class="chapternumber"><span type="pagebreak" title="377" id="calibre_link-745" class="calibre11"></span>#79</span><br class="calibre14" />
+<span class="chapternumber">#79</span><br class="calibre14" />
 <span class="chaptertitle">Twenty Forty-Eight</span></h1>
 </header>
 <figure class="opener">
 <img src="images/000002.webp" alt="" class="calibre12" />
 </figure>
 <p class="chapterintro">Gabriele Cirulli, a web developer, invented the game 2048 in one weekend. It was inspired by Veewo Studios’ 1024 game, which in turn was inspired by Threes!, a game by the development team Sirvo. In 2048, you must merge numbers on a 4 × 4 board to clear them from the screen. Two 2s merge into a 4, two 4s merge into an 8, and so on. The game adds a new 2 to the board on each merging. The objective is to reach 2048 before the entire board fills up.</p>
-<h2 id="calibre_link-325" class="calibre5"><span type="pagebreak" title="378" id="calibre_link-746" class="calibre15"></span>The Program in Action</h2>
+<h2 id="calibre_link-325" class="calibre5">The Program in Action</h2>
 <p class="bodyfirst">When you run <em class="calibre9">twentyfortyeight.py</em>, the output will look like this:</p>
 <pre class="calibre24"><code class="calibre22">Twenty Forty-Eight, by Al Sweigart al@inventwithpython.com
 <var class="calibre27">--snip--</var>
@@ -84,7 +84,7 @@ Enter move: (WASD or Q to quit)
 <li class="calibre8"><code class="calibre22">[' ', ' ', ' ', ' ']</code></li>
 </ul>
 <p class="calibre19">The <code class="calibre22">combineTilesInColumn()</code> function accepts one column list and returns another, with the matching numbers combined and shifted toward the bottom. The code that calls <code class="calibre22">combineTilesInColumn()</code> handles creating the column lists in the appropriate direction and updating the game board with the returned list.</p>
-<span type="pagebreak" title="379" id="calibre_link-747" class="calibre20"></span><figure class="calibre28">
+<figure class="calibre28">
 <img src="images/000014.webp" alt="f79001" class="calibre12" />
 <figcaption class="calibre29"><p class="calibre30"><a id="calibre_link-353" class="linkurl">Figure 79-1</a>: Columns (highlighted) when a game board is sliding to the right</p></figcaption>
 </figure>
@@ -120,7 +120,7 @@ Enter move: (WASD or Q to quit)
  30.         gameBoard = makeMove(gameBoard, playerMove)
  31.         addTwoToBoard(gameBoard)
  32.
-<span type="pagebreak" title="380" id="calibre_link-748" class="calibre13"></span> 33.         if isFull(gameBoard):
+ 33.         if isFull(gameBoard):
  34.             drawBoard(gameBoard)
  35.             print('Game Over - Thanks for playing!')
  36.             sys.exit()
@@ -175,7 +175,7 @@ Enter move: (WASD or Q to quit)
  85.             labels.append(labelForThisTile)
  86.
  87.     # The {} are replaced with the label for that tile:
-<span type="pagebreak" title="381" id="calibre_link-749" class="calibre13"></span> 88.     print("""
+ 88.     print("""
  89. +-----+-----+-----+-----+
  90. |     |     |     |     |
  91. |{}|{}|{}|{}|
@@ -230,7 +230,7 @@ Enter move: (WASD or Q to quit)
 140.             combinedTiles[i] *= 2  # Double the number in the tile.
 141.             # Move the tiles above it down one space:
 142.             for aboveIndex in range(i + 1, 3):
-<span type="pagebreak" title="382" id="calibre_link-750" class="calibre13"></span>143.                 combinedTiles[aboveIndex] = combinedTiles[aboveIndex + 1]
+143.                 combinedTiles[aboveIndex] = combinedTiles[aboveIndex + 1]
 144.             combinedTiles[3] = BLANK  # Topmost space is always BLANK.
 145.     return combinedTiles
 146.
@@ -285,7 +285,7 @@ Enter move: (WASD or Q to quit)
 195.
 196.         # Set up the new board data structure with the combined tiles:
 197.         boardAfterMove[firstTileSpace] = combinedTilesColumn[0]
-<span type="pagebreak" title="383" id="calibre_link-751" class="calibre13"></span>198.         boardAfterMove[secondTileSpace] = combinedTilesColumn[1]
+198.         boardAfterMove[secondTileSpace] = combinedTilesColumn[1]
 199.         boardAfterMove[thirdTileSpace] = combinedTilesColumn[2]
 200.         boardAfterMove[fourthTileSpace] = combinedTilesColumn[3]
 201.
@@ -337,7 +337,7 @@ Enter move: (WASD or Q to quit)
 247.         main()
 248.     except KeyboardInterrupt:
 249.         sys.exit()  # When Ctrl-C is pressed, end the program.</code></pre>
-<h2 id="calibre_link-327" class="calibre5"><span type="pagebreak" title="384" id="calibre_link-752" class="calibre15"></span>Exploring the Program</h2>
+<h2 id="calibre_link-327" class="calibre5">Exploring the Program</h2>
 <p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
 <ol class="decimal">
 <li value="1" class="calibre8">What happens if you change <code class="calibre22">return score</code> on line 118 to <code class="calibre22">return 9999</code>?</li>
