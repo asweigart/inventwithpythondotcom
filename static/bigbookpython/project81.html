@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Water Bucket Puzzle</title></head><body style="background-color: #fffeee;">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><link rel="stylesheet" type="text/css" href="pygments.css"><title>Water Bucket Puzzle</title></head><body style="background-color: #fffeee;">
 
 <script type="text/javascript">
 //<![CDATA[
@@ -96,135 +96,138 @@ buckets:
 <h2 id="calibre_link-332" class="calibre5">How It Works</h2>
 <p class="bodyfirst">The <code class="calibre22">waterInBucket</code> variable stores a dictionary that represents the state of the water buckets. The keys to this dictionary are the strings <code class="calibre22">'8'</code>, <code class="calibre22">'5'</code>, and <code class="calibre22">'3'</code> (representing the buckets), and their values are integers (representing the liters of water in that bucket).</p>
 <p class="calibre19">Lines 48 to 59 use this dictionary to render the buckets and water on the screen. The <code class="calibre22">waterDisplay</code> list contains either <code class="calibre22">'WWWWWW'</code> (representing water) or <code class="calibre22">'      '</code> (representing air) and is passed to the <code class="calibre22">format()</code> string method. The first eight strings in the <code class="calibre22">waterDisplay</code> list fill the eight-liter bucket, the next five strings the five-liter bucket, and the final three strings the three-liter bucket.</p>
-<pre class="calibre24"><code class="calibre22">  1. """Water Bucket Puzzle, by Al Sweigart al@inventwithpython.com
-  2. A water pouring puzzle.
-  3. More info: https://en.wikipedia.org/wiki/Water_pouring_puzzle
-  4. View this code at https://nostarch.com/big-book-small-python-projects
-  5. Tags: large, game, math, puzzle"""
-  6.
-  7. import sys
-  8.
-  9.
- 10. print('Water Bucket Puzzle, by Al Sweigart al@inventwithpython.com')
- 11.
- 12. GOAL = 4  # The exact amount of water to have in a bucket to win.
- 13. steps = 0  # Keep track of how many steps the player made to solve this.
- 14.
- 15. # The amount of water in each bucket:
- 16. waterInBucket = {'8': 0, '5': 0, '3': 0}
- 17.
- 18. while True:  # Main game loop.
- 19.     # Display the current state of the buckets:
- 20.     print()
- 21.     print('Try to get ' + str(GOAL) + 'L of water into one of these')
- 22.     print('buckets:')
- 23.
- 24.     waterDisplay = []  # Contains strings for water or empty space.
- 25.
- 26.     # Get the strings for the 8L bucket:
- 27.     for i in range(1, 9):
- 28.         if waterInBucket['8'] &lt; i:
- 29.             waterDisplay.append('      ')  # Add empty space.
- 30.         else:
- 31.             waterDisplay.append('WWWWWW')  # Add water.
- 32.
- 33.     # Get the strings for the 5L bucket:
- 34.     for i in range(1, 6):
- 35.         if waterInBucket['5'] &lt; i:
- 36.             waterDisplay.append('      ')  # Add empty space.
- 37.         else:
- 38.             waterDisplay.append('WWWWWW')  # Add water.
- 39.
- 40.     # Get the strings for the 3L bucket:
- 41.     for i in range(1, 4):
- 42.         if waterInBucket['3'] &lt; i:
- 43.             waterDisplay.append('      ')  # Add empty space.
- 44.         else:
- 45.             waterDisplay.append('WWWWWW')  # Add water.
- 46.
- 47.     # Display the buckets with the amount of water in each one:
- 48.     print('''
- 49. 8|{7}|
- 50. 7|{6}|
- 51. 6|{5}|
- 52. 5|{4}|  5|{12}|
- 53. 4|{3}|  4|{11}|
- 54. 3|{2}|  3|{10}|  3|{15}|
- 55. 2|{1}|  2|{9}|  2|{14}|
- 56. 1|{0}|  1|{8}|  1|{13}|
- 57.  +------+   +------+   +------+
- 58.     8L         5L         3L
- 59. '''.format(*waterDisplay))
- 60.
- 61.     # Check if any of the buckets has the goal amount of water:
- 62.     for waterAmount in waterInBucket.values():
- 63.         if waterAmount == GOAL:
- 64.             print('Good job! You solved it in', steps, 'steps!')
- 65.             sys.exit()
- 66.
- 67.     # Let the player select an action to do with a bucket:
- 68.     print('You can:')
- 69.     print('  (F)ill the bucket')
- 70.     print('  (E)mpty the bucket')
- 71.     print('  (P)our one bucket into another')
- 72.     print('  (Q)uit')
- 73.
- 74.     while True:  # Keep asking until the player enters a valid action.
- 75.         move = input('&gt; ').upper()
- 76.         if move == 'QUIT' or move == 'Q':
- 77.             print('Thanks for playing!')
- 78.             sys.exit()
- 79.
- 80.         if move in ('F', 'E', 'P'):
- 81.             break  # Player has selected a valid action.
- 82.         print('Enter F, E, P, or Q')
- 83.
- 84.     # Let the player select a bucket:
- 85.     while True:  # Keep asking until valid bucket entered.
- 86.         print('Select a bucket 8, 5, 3, or QUIT:')
- 87.         srcBucket = input('&gt; ').upper()
- 88.
- 89.         if srcBucket == 'QUIT':
- 90.             print('Thanks for playing!')
- 91.             sys.exit()
- 92.
- 93.         if srcBucket in ('8', '5', '3'):
- 94.             break  # Player has selected a valid bucket.
- 95.
- 96.     # Carry out the selected action:
- 97.     if move == 'F':
- 98.         # Set the amount of water to the max size.
- 99.         srcBucketSize = int(srcBucket)
-100.         waterInBucket[srcBucket] = srcBucketSize
-101.         steps += 1
-102.
-103.     elif move == 'E':
-104.         waterInBucket[srcBucket] = 0  # Set water amount to nothing.
-105.         steps += 1
-106.
-107.     elif move == 'P':
-108.         # Let the player select a bucket to pour into:
-109.         while True:  # Keep asking until valid bucket entered.
-110.             print('Select a bucket to pour into: 8, 5, or 3')
-111.             dstBucket = input('&gt; ').upper()
-112.             if dstBucket in ('8', '5', '3'):
-113.                 break  # Player has selected a valid bucket.
-114.
-115.         # Figure out the amount to pour:
-116.         dstBucketSize = int(dstBucket)
-117.         emptySpaceInDstBucket = dstBucketSize - waterInBucket[dstBucket]
-118.         waterInSrcBucket = waterInBucket[srcBucket]
-119.         amountToPour = min(emptySpaceInDstBucket, waterInSrcBucket)
-120.
-121.         # Pour out water from this bucket:
-122.         waterInBucket[srcBucket] -= amountToPour
-123.
-124.         # Put the poured out water into the other bucket:
-125.         waterInBucket[dstBucket] += amountToPour
-126.         steps += 1
-127.
-128.     elif move == 'C':
-129.         pass  # If the player selected Cancel, do nothing.</code></pre>
+<div class="highlight"><pre><span></span>
+<span class="c">  1. </span><span class="sd">&quot;&quot;&quot;Water Bucket Puzzle, by Al Sweigart al@inventwithpython.com</span>
+<span class="c">  2. </span><span class="sd">A water pouring puzzle.</span>
+<span class="c">  3. </span><span class="sd">More info: https://en.wikipedia.org/wiki/Water_pouring_puzzle</span>
+<span class="c">  4. </span><span class="sd">This code is available at https://nostarch.com/big-book-small-python-programming</span>
+<span class="c">  5. </span><span class="sd">Tags: large, game, math, puzzle&quot;&quot;&quot;</span>
+<span class="c">  6. </span>
+<span class="c">  7. </span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="c">  8. </span>
+<span class="c">  9. </span>
+<span class="c"> 10. </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Water Bucket Puzzle, by Al Sweigart al@inventwithpython.com&#39;</span><span class="p">)</span>
+<span class="c"> 11. </span>
+<span class="c"> 12. </span><span class="n">GOAL</span> <span class="o">=</span> <span class="mi">4</span>  <span class="c1"># The exact amount of water to have in a bucket to win.</span>
+<span class="c"> 13. </span><span class="n">steps</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Keep track of how many steps the player made to solve this.</span>
+<span class="c"> 14. </span>
+<span class="c"> 15. </span><span class="c1"># The amount of water in each bucket:</span>
+<span class="c"> 16. </span><span class="n">waterInBucket</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;8&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;5&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+<span class="c"> 17. </span>
+<span class="c"> 18. </span><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>  <span class="c1"># Main game loop.</span>
+<span class="c"> 19. </span>    <span class="c1"># Display the current state of the buckets:</span>
+<span class="c"> 20. </span>    <span class="nb">print</span><span class="p">()</span>
+<span class="c"> 21. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Try to get &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">GOAL</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;L of water into one of these&#39;</span><span class="p">)</span>
+<span class="c"> 22. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;buckets:&#39;</span><span class="p">)</span>
+<span class="c"> 23. </span>
+<span class="c"> 24. </span>    <span class="n">waterDisplay</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Contains strings for water or empty space.</span>
+<span class="c"> 25. </span>
+<span class="c"> 26. </span>    <span class="c1"># Get the strings for the 8L bucket:</span>
+<span class="c"> 27. </span>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
+<span class="c"> 28. </span>        <span class="k">if</span> <span class="n">waterInBucket</span><span class="p">[</span><span class="s1">&#39;8&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">i</span><span class="p">:</span>
+<span class="c"> 29. </span>            <span class="n">waterDisplay</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;      &#39;</span><span class="p">)</span>  <span class="c1"># Add empty space.</span>
+<span class="c"> 30. </span>        <span class="k">else</span><span class="p">:</span>
+<span class="c"> 31. </span>            <span class="n">waterDisplay</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;WWWWWW&#39;</span><span class="p">)</span>  <span class="c1"># Add water.</span>
+<span class="c"> 32. </span>
+<span class="c"> 33. </span>    <span class="c1"># Get the strings for the 5L bucket:</span>
+<span class="c"> 34. </span>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">):</span>
+<span class="c"> 35. </span>        <span class="k">if</span> <span class="n">waterInBucket</span><span class="p">[</span><span class="s1">&#39;5&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">i</span><span class="p">:</span>
+<span class="c"> 36. </span>            <span class="n">waterDisplay</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;      &#39;</span><span class="p">)</span>  <span class="c1"># Add empty space.</span>
+<span class="c"> 37. </span>        <span class="k">else</span><span class="p">:</span>
+<span class="c"> 38. </span>            <span class="n">waterDisplay</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;WWWWWW&#39;</span><span class="p">)</span>  <span class="c1"># Add water.</span>
+<span class="c"> 39. </span>
+<span class="c"> 40. </span>    <span class="c1"># Get the strings for the 3L bucket:</span>
+<span class="c"> 41. </span>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span>
+<span class="c"> 42. </span>        <span class="k">if</span> <span class="n">waterInBucket</span><span class="p">[</span><span class="s1">&#39;3&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">i</span><span class="p">:</span>
+<span class="c"> 43. </span>            <span class="n">waterDisplay</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;      &#39;</span><span class="p">)</span>  <span class="c1"># Add empty space.</span>
+<span class="c"> 44. </span>        <span class="k">else</span><span class="p">:</span>
+<span class="c"> 45. </span>            <span class="n">waterDisplay</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;WWWWWW&#39;</span><span class="p">)</span>  <span class="c1"># Add water.</span>
+<span class="c"> 46. </span>
+<span class="c"> 47. </span>    <span class="c1"># Display the buckets with the amount of water in each one:</span>
+<span class="c"> 48. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="c"> 49. </span><span class="s1">8|</span><span class="si">{7}</span><span class="s1">|</span>
+<span class="c"> 50. </span><span class="s1">7|</span><span class="si">{6}</span><span class="s1">|</span>
+<span class="c"> 51. </span><span class="s1">6|</span><span class="si">{5}</span><span class="s1">|</span>
+<span class="c"> 52. </span><span class="s1">5|</span><span class="si">{4}</span><span class="s1">|  5|</span><span class="si">{12}</span><span class="s1">|</span>
+<span class="c"> 53. </span><span class="s1">4|</span><span class="si">{3}</span><span class="s1">|  4|</span><span class="si">{11}</span><span class="s1">|</span>
+<span class="c"> 54. </span><span class="s1">3|</span><span class="si">{2}</span><span class="s1">|  3|</span><span class="si">{10}</span><span class="s1">|  3|</span><span class="si">{15}</span><span class="s1">|</span>
+<span class="c"> 55. </span><span class="s1">2|</span><span class="si">{1}</span><span class="s1">|  2|</span><span class="si">{9}</span><span class="s1">|  2|</span><span class="si">{14}</span><span class="s1">|</span>
+<span class="c"> 56. </span><span class="s1">1|</span><span class="si">{0}</span><span class="s1">|  1|</span><span class="si">{8}</span><span class="s1">|  1|</span><span class="si">{13}</span><span class="s1">|</span>
+<span class="c"> 57. </span><span class="s1"> +------+   +------+   +------+</span>
+<span class="c"> 58. </span><span class="s1">    8L         5L         3L</span>
+<span class="c"> 59. </span><span class="s1">&#39;&#39;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="n">waterDisplay</span><span class="p">))</span>
+<span class="c"> 60. </span>
+<span class="c"> 61. </span>    <span class="c1"># Check if any of the buckets has the goal amount of water:</span>
+<span class="c"> 62. </span>    <span class="k">for</span> <span class="n">waterAmount</span> <span class="ow">in</span> <span class="n">waterInBucket</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+<span class="c"> 63. </span>        <span class="k">if</span> <span class="n">waterAmount</span> <span class="o">==</span> <span class="n">GOAL</span><span class="p">:</span>
+<span class="c"> 64. </span>            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Good job! You solved it in&#39;</span><span class="p">,</span> <span class="n">steps</span><span class="p">,</span> <span class="s1">&#39;steps!&#39;</span><span class="p">)</span>
+<span class="c"> 65. </span>            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+<span class="c"> 66. </span>
+<span class="c"> 67. </span>    <span class="c1"># Let the player select an action to do with a bucket:</span>
+<span class="c"> 68. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;You can:&#39;</span><span class="p">)</span>
+<span class="c"> 69. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  (F)ill the bucket&#39;</span><span class="p">)</span>
+<span class="c"> 70. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  (E)mpty the bucket&#39;</span><span class="p">)</span>
+<span class="c"> 71. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  (P)our one bucket into another&#39;</span><span class="p">)</span>
+<span class="c"> 72. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  (Q)uit&#39;</span><span class="p">)</span>
+<span class="c"> 73. </span>
+<span class="c"> 74. </span>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>  <span class="c1"># Keep asking until the player enters a valid action.</span>
+<span class="c"> 75. </span>        <span class="n">move</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;&gt; &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+<span class="c"> 76. </span>        <span class="k">if</span> <span class="n">move</span> <span class="o">==</span> <span class="s1">&#39;QUIT&#39;</span> <span class="ow">or</span> <span class="n">move</span> <span class="o">==</span> <span class="s1">&#39;Q&#39;</span><span class="p">:</span>
+<span class="c"> 77. </span>            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Thanks for playing!&#39;</span><span class="p">)</span>
+<span class="c"> 78. </span>            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+<span class="c"> 79. </span>
+<span class="c"> 80. </span>        <span class="k">if</span> <span class="n">move</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="s1">&#39;E&#39;</span><span class="p">,</span> <span class="s1">&#39;P&#39;</span><span class="p">):</span>
+<span class="c"> 81. </span>            <span class="k">break</span>  <span class="c1"># Player has selected a valid action.</span>
+<span class="c"> 82. </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Enter F, E, P, or Q&#39;</span><span class="p">)</span>
+<span class="c"> 83. </span>
+<span class="c"> 84. </span>    <span class="c1"># Let the player select a bucket:</span>
+<span class="c"> 85. </span>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>  <span class="c1"># Keep asking until valid bucket entered.</span>
+<span class="c"> 86. </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Select a bucket 8, 5, 3, or QUIT:&#39;</span><span class="p">)</span>
+<span class="c"> 87. </span>        <span class="n">srcBucket</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;&gt; &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+<span class="c"> 88. </span>
+<span class="c"> 89. </span>        <span class="k">if</span> <span class="n">srcBucket</span> <span class="o">==</span> <span class="s1">&#39;QUIT&#39;</span><span class="p">:</span>
+<span class="c"> 90. </span>            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Thanks for playing!&#39;</span><span class="p">)</span>
+<span class="c"> 91. </span>            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+<span class="c"> 92. </span>
+<span class="c"> 93. </span>        <span class="k">if</span> <span class="n">srcBucket</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;8&#39;</span><span class="p">,</span> <span class="s1">&#39;5&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">):</span>
+<span class="c"> 94. </span>            <span class="k">break</span>  <span class="c1"># Player has selected a valid bucket.</span>
+<span class="c"> 95. </span>
+<span class="c"> 96. </span>    <span class="c1"># Carry out the selected action:</span>
+<span class="c"> 97. </span>    <span class="k">if</span> <span class="n">move</span> <span class="o">==</span> <span class="s1">&#39;F&#39;</span><span class="p">:</span>
+<span class="c"> 98. </span>        <span class="c1"># Set the amount of water to the max size.</span>
+<span class="c"> 99. </span>        <span class="n">srcBucketSize</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">srcBucket</span><span class="p">)</span>
+<span class="c">100. </span>        <span class="n">waterInBucket</span><span class="p">[</span><span class="n">srcBucket</span><span class="p">]</span> <span class="o">=</span> <span class="n">srcBucketSize</span>
+<span class="c">101. </span>        <span class="n">steps</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="c">102. </span>
+<span class="c">103. </span>    <span class="k">elif</span> <span class="n">move</span> <span class="o">==</span> <span class="s1">&#39;E&#39;</span><span class="p">:</span>
+<span class="c">104. </span>        <span class="n">waterInBucket</span><span class="p">[</span><span class="n">srcBucket</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Set water amount to nothing.</span>
+<span class="c">105. </span>        <span class="n">steps</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="c">106. </span>
+<span class="c">107. </span>    <span class="k">elif</span> <span class="n">move</span> <span class="o">==</span> <span class="s1">&#39;P&#39;</span><span class="p">:</span>
+<span class="c">108. </span>        <span class="c1"># Let the player select a bucket to pour into:</span>
+<span class="c">109. </span>        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>  <span class="c1"># Keep asking until valid bucket entered.</span>
+<span class="c">110. </span>            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Select a bucket to pour into: 8, 5, or 3&#39;</span><span class="p">)</span>
+<span class="c">111. </span>            <span class="n">dstBucket</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;&gt; &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+<span class="c">112. </span>            <span class="k">if</span> <span class="n">dstBucket</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;8&#39;</span><span class="p">,</span> <span class="s1">&#39;5&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">):</span>
+<span class="c">113. </span>                <span class="k">break</span>  <span class="c1"># Player has selected a valid bucket.</span>
+<span class="c">114. </span>
+<span class="c">115. </span>        <span class="c1"># Figure out the amount to pour:</span>
+<span class="c">116. </span>        <span class="n">dstBucketSize</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">dstBucket</span><span class="p">)</span>
+<span class="c">117. </span>        <span class="n">emptySpaceInDstBucket</span> <span class="o">=</span> <span class="n">dstBucketSize</span> <span class="o">-</span> <span class="n">waterInBucket</span><span class="p">[</span><span class="n">dstBucket</span><span class="p">]</span>
+<span class="c">118. </span>        <span class="n">waterInSrcBucket</span> <span class="o">=</span> <span class="n">waterInBucket</span><span class="p">[</span><span class="n">srcBucket</span><span class="p">]</span>
+<span class="c">119. </span>        <span class="n">amountToPour</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">emptySpaceInDstBucket</span><span class="p">,</span> <span class="n">waterInSrcBucket</span><span class="p">)</span>
+<span class="c">120. </span>
+<span class="c">121. </span>        <span class="c1"># Pour out water from this bucket:</span>
+<span class="c">122. </span>        <span class="n">waterInBucket</span><span class="p">[</span><span class="n">srcBucket</span><span class="p">]</span> <span class="o">-=</span> <span class="n">amountToPour</span>
+<span class="c">123. </span>
+<span class="c">124. </span>        <span class="c1"># Put the poured out water into the other bucket:</span>
+<span class="c">125. </span>        <span class="n">waterInBucket</span><span class="p">[</span><span class="n">dstBucket</span><span class="p">]</span> <span class="o">+=</span> <span class="n">amountToPour</span>
+<span class="c">126. </span>        <span class="n">steps</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="c">127. </span>
+<span class="c">128. </span>    <span class="k">elif</span> <span class="n">move</span> <span class="o">==</span> <span class="s1">&#39;C&#39;</span><span class="p">:</span>
+<span class="c">129. </span>        <span class="k">pass</span>  <span class="c1"># If the player selected Cancel, do nothing.</span>
+</pre></div>
+
 <p class="calibre19">After entering the source code and running it a few times, try making experimental changes to it. On your own, you can also try to figure out how to do the following:</p>
 <ul class="calibre25">
 <li class="calibre8">Add variety by making the game configurable so you can specify any sizes for the three buckets and any amount for the goal quantity.</li>

@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Hourglass</title></head><body style="background-color: #fffeee;">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><link rel="stylesheet" type="text/css" href="pygments.css"><title>Hourglass</title></head><body style="background-color: #fffeee;">
 
 <script type="text/javascript">
 //<![CDATA[
@@ -58,197 +58,200 @@ _gaq.push(['_trackPageview']);
 </figure>
 <h2 id="calibre_link-167" class="calibre5">How It Works</h2>
 <p class="bodyfirst">The hourglass program implements a rudimentary physics engine. A <em class="calibre9">physics engine</em> is software that simulates physical objects falling under gravity, colliding with each other, and moving according to the laws of physics. You’ll find physics engines used in video games, computer animation, and scientific simulations. On lines 91 to 102, each “grain” of sand checks if the space beneath it is empty and moves down if it is. Otherwise, it checks if it can move down and to the left (lines 104 to 112) or down and to the right (lines 114 to 122). Of course, there is much more to <em class="calibre9">kinematics</em>, the branch of classical physics that deals with the motion of macroscopic objects, than this. However, you don’t need a degree in physics to make a primitive simulation of sand in an hourglass that is enjoyable to look at.</p>
-<pre class="calibre24"><code class="calibre22">  1. """Hourglass, by Al Sweigart al@inventwithpython.com
-  2. An animation of an hourglass with falling sand. Press Ctrl-C to stop.
-  3. View this code at https://nostarch.com/big-book-small-python-projects
-  4. Tags: large, artistic, bext, simulation"""
-  5.
-  6. import random, sys, time
-  7.
-  8. try:
-  9.     import bext
- 10. except ImportError:
- 11.     print('This program requires the bext module, which you')
- 12.     print('can install by following the instructions at')
- 13.     print('https://pypi.org/project/Bext/')
- 14.     sys.exit()
- 15.
- 16. # Set up the constants:
- 17. PAUSE_LENGTH = 0.2  # (!) Try changing this to 0.0 or 1.0.
- 18. # (!) Try changing this to any number between 0 and 100:
- 19. WIDE_FALL_CHANCE = 50
- 20.
- 21. SCREEN_WIDTH = 79
- 22. SCREEN_HEIGHT = 25
- 23. X = 0  # The index of X values in an (x, y) tuple is 0.
- 24. Y = 1  # The index of Y values in an (x, y) tuple is 1.
- 25. SAND = chr(9617)
- 26. WALL = chr(9608)
- 27.
- 28. # Set up the walls of the hourglass:
- 29. HOURGLASS = set()  # Has (x, y) tuples for where hourglass walls are.
- 30. # (!) Try commenting out some HOURGLASS.add() lines to erase walls:
- 31. for i in range(18, 37):
- 32.     HOURGLASS.add((i, 1))  # Add walls for the top cap of the hourglass.
- 33.     HOURGLASS.add((i, 23))  # Add walls for the bottom cap.
- 34. for i in range(1, 5):
- 35.     HOURGLASS.add((18, i))  # Add walls for the top left straight wall.
- 36.     HOURGLASS.add((36, i))  # Add walls for the top right straight wall.
- 37.     HOURGLASS.add((18, i + 19))  # Add walls for the bottom left.
- 38.     HOURGLASS.add((36, i + 19))  # Add walls for the bottom right.
- 39. for i in range(8):
- 40.     HOURGLASS.add((19 + i, 5 + i))  # Add the top left slanted wall.
- 41.     HOURGLASS.add((35 - i, 5 + i))  # Add the top right slanted wall.
- 42.     HOURGLASS.add((25 - i, 13 + i))  # Add the bottom left slanted wall.
- 43.     HOURGLASS.add((29 + i, 13 + i))  # Add the bottom right slanted wall.
- 44.
- 45. # Set up the initial sand at the top of the hourglass:
- 46. INITIAL_SAND = set()
- 47. for y in range(8):
- 48.     for x in range(19 + y, 36 - y):
- 49.         INITIAL_SAND.add((x, y + 4))
- 50.
- 51.
- 52. def main():
- 53.     bext.fg('yellow')
- 54.     bext.clear()
- 55.
- 56.     # Draw the quit message:
- 57.     bext.goto(0, 0)
- 58.     print('Ctrl-C to quit.', end='')
- 59.
- 60.     # Display the walls of the hourglass:
- 61.     for wall in HOURGLASS:
- 62.         bext.goto(wall[X], wall[Y])
- 63.         print(WALL, end='')
- 64.
- 65.     while True:  # Main program loop.
- 66.         allSand = list(INITIAL_SAND)
- 67.
- 68.         # Draw the initial sand:
- 69.         for sand in allSand:
- 70.             bext.goto(sand[X], sand[Y])
- 71.             print(SAND, end='')
- 72.
- 73.         runHourglassSimulation(allSand)
- 74.
- 75.
- 76. def runHourglassSimulation(allSand):
- 77.     """Keep running the sand falling simulation until the sand stops
- 78.     moving."""
- 79.     while True:  # Keep looping until sand has run out.
- 80.         random.shuffle(allSand)  # Random order of grain simulation.
- 81.
- 82.         sandMovedOnThisStep = False
- 83.         for i, sand in enumerate(allSand):
- 84.             if sand[Y] == SCREEN_HEIGHT - 1:
- 85.                 # Sand is on the very bottom, so it won't move:
- 86.                 continue
- 87.
- 88.             # If nothing is under this sand, move it down:
- 89.             noSandBelow = (sand[X], sand[Y] + 1) not in allSand
- 90.             noWallBelow = (sand[X], sand[Y] + 1) not in HOURGLASS
- 91.             canFallDown = noSandBelow and noWallBelow
- 92.
- 93.             if canFallDown:
- 94.                 # Draw the sand in its new position down one space:
- 95.                 bext.goto(sand[X], sand[Y])
- 96.                 print(' ', end='')  # Clear the old position.
- 97.                 bext.goto(sand[X], sand[Y] + 1)
- 98.                 print(SAND, end='')
- 99.
-100.                 # Set the sand in its new position down one space:
-101.                 allSand[i] = (sand[X], sand[Y] + 1)
-102.                 sandMovedOnThisStep = True
-103.             else:
-104.                 # Check if the sand can fall to the left:
-105.                 belowLeft = (sand[X] - 1, sand[Y] + 1)
-106.                 noSandBelowLeft = belowLeft not in allSand
-107.                 noWallBelowLeft = belowLeft not in HOURGLASS
-108.                 left = (sand[X] - 1, sand[Y])
-109.                 noWallLeft = left not in HOURGLASS
-110.                 notOnLeftEdge = sand[X] &gt; 0
-111.                 canFallLeft = (noSandBelowLeft and noWallBelowLeft
-112.                     and noWallLeft and notOnLeftEdge)
-113.
-114.                 # Check if the sand can fall to the right:
-115.                 belowRight = (sand[X] + 1, sand[Y] + 1)
-116.                 noSandBelowRight = belowRight not in allSand
-117.                 noWallBelowRight = belowRight not in HOURGLASS
-118.                 right = (sand[X] + 1, sand[Y])
-119.                 noWallRight = right not in HOURGLASS
-120.                 notOnRightEdge = sand[X] &lt; SCREEN_WIDTH - 1
-121.                 canFallRight = (noSandBelowRight and noWallBelowRight
-122.                     and noWallRight and notOnRightEdge)
-123.
-124.                 # Set the falling direction:
-125.                 fallingDirection = None
-126.                 if canFallLeft and not canFallRight:
-127.                     fallingDirection = -1  # Set the sand to fall left.
-128.                 elif not canFallLeft and canFallRight:
-129.                     fallingDirection = 1  # Set the sand to fall right.
-130.                 elif canFallLeft and canFallRight:
-131.                     # Both are possible, so randomly set it:
-132.                     fallingDirection = random.choice((-1, 1))
-133.
-134.                 # Check if the sand can "far" fall two spaces to
-135.                 # the left or right instead of just one space:
-136.                 if random.random() * 100 &lt;= WIDE_FALL_CHANCE:
-137.                     belowTwoLeft = (sand[X] - 2, sand[Y] + 1)
-138.                     noSandBelowTwoLeft = belowTwoLeft not in allSand
-139.                     noWallBelowTwoLeft = belowTwoLeft not in HOURGLASS
-140.                     notOnSecondToLeftEdge = sand[X] &gt; 1
-141.                     canFallTwoLeft = (canFallLeft and noSandBelowTwoLeft
-142.                         and noWallBelowTwoLeft and notOnSecondToLeftEdge)
-143.
-144.                     belowTwoRight = (sand[X] + 2, sand[Y] + 1)
-145.                     noSandBelowTwoRight = belowTwoRight not in allSand
-146.                     noWallBelowTwoRight = belowTwoRight not in HOURGLASS
-147.                     notOnSecondToRightEdge = sand[X] &lt; SCREEN_WIDTH - 2
-148.                     canFallTwoRight = (canFallRight
-149.                         and noSandBelowTwoRight and noWallBelowTwoRight
-150.                         and notOnSecondToRightEdge)
-151.
-152.                     if canFallTwoLeft and not canFallTwoRight:
-153.                         fallingDirection = -2
-154.                     elif not canFallTwoLeft and canFallTwoRight:
-155.                         fallingDirection = 2
-156.                     elif canFallTwoLeft and canFallTwoRight:
-157.                         fallingDirection = random.choice((-2, 2))
-158.
-159.                 if fallingDirection == None:
-160.                     # This sand can't fall, so move on.
-161.                     continue
-162.
-163.                 # Draw the sand in its new position:
-164.                 bext.goto(sand[X], sand[Y])
-165.                 print(' ', end='')  # Erase old sand.
-166.                 bext.goto(sand[X] + fallingDirection, sand[Y] + 1)
-167.                 print(SAND, end='')  # Draw new sand.
-168.
-169.                 # Move the grain of sand to its new position:
-170.                 allSand[i] = (sand[X] + fallingDirection, sand[Y] + 1)
-171.                 sandMovedOnThisStep = True
-172.
-173.         sys.stdout.flush()  # (Required for bext-using programs.)
-174.         time.sleep(PAUSE_LENGTH)  # Pause after this
-175.
-176.         # If no sand has moved on this step, reset the hourglass:
-177.         if not sandMovedOnThisStep:
-178.             time.sleep(2)
-179.             # Erase all of the sand:
-180.             for sand in allSand:
-181.                 bext.goto(sand[X], sand[Y])
-182.                 print(' ', end='')
-183.             break  # Break out of main simulation loop.
-184.
-185.
-186. # If this program was run (instead of imported), run the game:
-187. if __name__ == '__main__':
-188.     try:
-189.         main()
-190.     except KeyboardInterrupt:
-191.         sys.exit()  # When Ctrl-C is pressed, end the program.</code></pre>
+<div class="highlight"><pre><span></span>
+<span class="c">  1. </span><span class="sd">&quot;&quot;&quot;Hourglass, by Al Sweigart al@inventwithpython.com</span>
+<span class="c">  2. </span><span class="sd">An animation of an hourglass with falling sand. Press Ctrl-C to stop.</span>
+<span class="c">  3. </span><span class="sd">This code is available at https://nostarch.com/big-book-small-python-programming</span>
+<span class="c">  4. </span><span class="sd">Tags: large, artistic, bext, simulation&quot;&quot;&quot;</span>
+<span class="c">  5. </span>
+<span class="c">  6. </span><span class="kn">import</span> <span class="nn">random</span><span class="o">,</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">time</span>
+<span class="c">  7. </span>
+<span class="c">  8. </span><span class="k">try</span><span class="p">:</span>
+<span class="c">  9. </span>    <span class="kn">import</span> <span class="nn">bext</span>
+<span class="c"> 10. </span><span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+<span class="c"> 11. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;This program requires the bext module, which you&#39;</span><span class="p">)</span>
+<span class="c"> 12. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;can install by following the instructions at&#39;</span><span class="p">)</span>
+<span class="c"> 13. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;https://pypi.org/project/Bext/&#39;</span><span class="p">)</span>
+<span class="c"> 14. </span>    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+<span class="c"> 15. </span>
+<span class="c"> 16. </span><span class="c1"># Set up the constants:</span>
+<span class="c"> 17. </span><span class="n">PAUSE_LENGTH</span> <span class="o">=</span> <span class="mf">0.2</span>  <span class="c1"># (!) Try changing this to 0.0 or 1.0.</span>
+<span class="c"> 18. </span><span class="c1"># (!) Try changing this to any number between 0 and 100:</span>
+<span class="c"> 19. </span><span class="n">WIDE_FALL_CHANCE</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="c"> 20. </span>
+<span class="c"> 21. </span><span class="n">SCREEN_WIDTH</span> <span class="o">=</span> <span class="mi">79</span>
+<span class="c"> 22. </span><span class="n">SCREEN_HEIGHT</span> <span class="o">=</span> <span class="mi">25</span>
+<span class="c"> 23. </span><span class="n">X</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># The index of X values in an (x, y) tuple is 0.</span>
+<span class="c"> 24. </span><span class="n">Y</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># The index of Y values in an (x, y) tuple is 1.</span>
+<span class="c"> 25. </span><span class="n">SAND</span> <span class="o">=</span> <span class="nb">chr</span><span class="p">(</span><span class="mi">9617</span><span class="p">)</span>
+<span class="c"> 26. </span><span class="n">WALL</span> <span class="o">=</span> <span class="nb">chr</span><span class="p">(</span><span class="mi">9608</span><span class="p">)</span>
+<span class="c"> 27. </span>
+<span class="c"> 28. </span><span class="c1"># Set up the walls of the hour glass:</span>
+<span class="c"> 29. </span><span class="n">HOURGLASS</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>  <span class="c1"># Has (x, y) tuples for where hourglass walls are.</span>
+<span class="c"> 30. </span><span class="c1"># (!) Try commenting out some HOURGLASS.add() lines to erase walls:</span>
+<span class="c"> 31. </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">37</span><span class="p">):</span>
+<span class="c"> 32. </span>    <span class="n">HOURGLASS</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>  <span class="c1"># Add walls for the top cap of the hourglass.</span>
+<span class="c"> 33. </span>    <span class="n">HOURGLASS</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="mi">23</span><span class="p">))</span>  <span class="c1"># Add walls for the bottom cap.</span>
+<span class="c"> 34. </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">):</span>
+<span class="c"> 35. </span>    <span class="n">HOURGLASS</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="mi">18</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>  <span class="c1"># Add walls for the top left straight wall.</span>
+<span class="c"> 36. </span>    <span class="n">HOURGLASS</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="mi">36</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>  <span class="c1"># Add walls for the top right straight wall.</span>
+<span class="c"> 37. </span>    <span class="n">HOURGLASS</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="mi">18</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">19</span><span class="p">))</span>  <span class="c1"># Add walls for the bottom left.</span>
+<span class="c"> 38. </span>    <span class="n">HOURGLASS</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="mi">36</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">19</span><span class="p">))</span>  <span class="c1"># Add walls for the bottom right.</span>
+<span class="c"> 39. </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
+<span class="c"> 40. </span>    <span class="n">HOURGLASS</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="mi">19</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span> <span class="mi">5</span> <span class="o">+</span> <span class="n">i</span><span class="p">))</span>  <span class="c1"># Add the top left slanted wall.</span>
+<span class="c"> 41. </span>    <span class="n">HOURGLASS</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="mi">35</span> <span class="o">-</span> <span class="n">i</span><span class="p">,</span> <span class="mi">5</span> <span class="o">+</span> <span class="n">i</span><span class="p">))</span>  <span class="c1"># Add the top right slanted wall.</span>
+<span class="c"> 42. </span>    <span class="n">HOURGLASS</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="mi">25</span> <span class="o">-</span> <span class="n">i</span><span class="p">,</span> <span class="mi">13</span> <span class="o">+</span> <span class="n">i</span><span class="p">))</span>  <span class="c1"># Add the bottom left slanted wall.</span>
+<span class="c"> 43. </span>    <span class="n">HOURGLASS</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="mi">29</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span> <span class="mi">13</span> <span class="o">+</span> <span class="n">i</span><span class="p">))</span>  <span class="c1"># Add the bottom right slanted wall.</span>
+<span class="c"> 44. </span>
+<span class="c"> 45. </span><span class="c1"># Set up the initial sand at the top of the hourglass:</span>
+<span class="c"> 46. </span><span class="n">INITIAL_SAND</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+<span class="c"> 47. </span><span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
+<span class="c"> 48. </span>    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">19</span> <span class="o">+</span> <span class="n">y</span><span class="p">,</span> <span class="mi">36</span> <span class="o">-</span> <span class="n">y</span><span class="p">):</span>
+<span class="c"> 49. </span>        <span class="n">INITIAL_SAND</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">4</span><span class="p">))</span>
+<span class="c"> 50. </span>
+<span class="c"> 51. </span>
+<span class="c"> 52. </span><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<span class="c"> 53. </span>    <span class="n">bext</span><span class="o">.</span><span class="n">fg</span><span class="p">(</span><span class="s1">&#39;yellow&#39;</span><span class="p">)</span>
+<span class="c"> 54. </span>    <span class="n">bext</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+<span class="c"> 55. </span>
+<span class="c"> 56. </span>    <span class="c1"># Draw the quit message:</span>
+<span class="c"> 57. </span>    <span class="n">bext</span><span class="o">.</span><span class="n">goto</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="c"> 58. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ctrl-C to quit.&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c"> 59. </span>
+<span class="c"> 60. </span>    <span class="c1"># Display the walls of the hourglass:</span>
+<span class="c"> 61. </span>    <span class="k">for</span> <span class="n">wall</span> <span class="ow">in</span> <span class="n">HOURGLASS</span><span class="p">:</span>
+<span class="c"> 62. </span>        <span class="n">bext</span><span class="o">.</span><span class="n">goto</span><span class="p">(</span><span class="n">wall</span><span class="p">[</span><span class="n">X</span><span class="p">],</span> <span class="n">wall</span><span class="p">[</span><span class="n">Y</span><span class="p">])</span>
+<span class="c"> 63. </span>        <span class="nb">print</span><span class="p">(</span><span class="n">WALL</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c"> 64. </span>
+<span class="c"> 65. </span>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>  <span class="c1"># Main program loop.</span>
+<span class="c"> 66. </span>        <span class="n">allSand</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">INITIAL_SAND</span><span class="p">)</span>
+<span class="c"> 67. </span>
+<span class="c"> 68. </span>        <span class="c1"># Draw the initial sand:</span>
+<span class="c"> 69. </span>        <span class="k">for</span> <span class="n">sand</span> <span class="ow">in</span> <span class="n">allSand</span><span class="p">:</span>
+<span class="c"> 70. </span>            <span class="n">bext</span><span class="o">.</span><span class="n">goto</span><span class="p">(</span><span class="n">sand</span><span class="p">[</span><span class="n">X</span><span class="p">],</span> <span class="n">sand</span><span class="p">[</span><span class="n">Y</span><span class="p">])</span>
+<span class="c"> 71. </span>            <span class="nb">print</span><span class="p">(</span><span class="n">SAND</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c"> 72. </span>
+<span class="c"> 73. </span>        <span class="n">runHourglassSimulation</span><span class="p">(</span><span class="n">allSand</span><span class="p">)</span>
+<span class="c"> 74. </span>
+<span class="c"> 75. </span>
+<span class="c"> 76. </span><span class="k">def</span> <span class="nf">runHourglassSimulation</span><span class="p">(</span><span class="n">allSand</span><span class="p">):</span>
+<span class="c"> 77. </span>    <span class="sd">&quot;&quot;&quot;Keep running the sand falling simulation until the sand stops</span>
+<span class="c"> 78. </span><span class="sd">    moving.&quot;&quot;&quot;</span>
+<span class="c"> 79. </span>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>  <span class="c1"># Keep looping until sand has run out.</span>
+<span class="c"> 80. </span>        <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">allSand</span><span class="p">)</span>  <span class="c1"># Random order of grain simulation.</span>
+<span class="c"> 81. </span>
+<span class="c"> 82. </span>        <span class="n">sandMovedOnThisStep</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="c"> 83. </span>        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">sand</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">allSand</span><span class="p">):</span>
+<span class="c"> 84. </span>            <span class="k">if</span> <span class="n">sand</span><span class="p">[</span><span class="n">Y</span><span class="p">]</span> <span class="o">==</span> <span class="n">SCREEN_HEIGHT</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+<span class="c"> 85. </span>                <span class="c1"># Sand is on the very bottom, so it won&#39;t move:</span>
+<span class="c"> 86. </span>                <span class="k">continue</span>
+<span class="c"> 87. </span>
+<span class="c"> 88. </span>            <span class="c1"># If nothing is under this sand, move it down:</span>
+<span class="c"> 89. </span>            <span class="n">noSandBelow</span> <span class="o">=</span> <span class="p">(</span><span class="n">sand</span><span class="p">[</span><span class="n">X</span><span class="p">],</span> <span class="n">sand</span><span class="p">[</span><span class="n">Y</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">allSand</span>
+<span class="c"> 90. </span>            <span class="n">noWallBelow</span> <span class="o">=</span> <span class="p">(</span><span class="n">sand</span><span class="p">[</span><span class="n">X</span><span class="p">],</span> <span class="n">sand</span><span class="p">[</span><span class="n">Y</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">HOURGLASS</span>
+<span class="c"> 91. </span>            <span class="n">canFallDown</span> <span class="o">=</span> <span class="n">noSandBelow</span> <span class="ow">and</span> <span class="n">noWallBelow</span>
+<span class="c"> 92. </span>
+<span class="c"> 93. </span>            <span class="k">if</span> <span class="n">canFallDown</span><span class="p">:</span>
+<span class="c"> 94. </span>                <span class="c1"># Draw the sand in its new position down one space:</span>
+<span class="c"> 95. </span>                <span class="n">bext</span><span class="o">.</span><span class="n">goto</span><span class="p">(</span><span class="n">sand</span><span class="p">[</span><span class="n">X</span><span class="p">],</span> <span class="n">sand</span><span class="p">[</span><span class="n">Y</span><span class="p">])</span>
+<span class="c"> 96. </span>                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>  <span class="c1"># Clear the old position.</span>
+<span class="c"> 97. </span>                <span class="n">bext</span><span class="o">.</span><span class="n">goto</span><span class="p">(</span><span class="n">sand</span><span class="p">[</span><span class="n">X</span><span class="p">],</span> <span class="n">sand</span><span class="p">[</span><span class="n">Y</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="c"> 98. </span>                <span class="nb">print</span><span class="p">(</span><span class="n">SAND</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c"> 99. </span>
+<span class="c">100. </span>                <span class="c1"># Set the sand in its new position down one space:</span>
+<span class="c">101. </span>                <span class="n">allSand</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">sand</span><span class="p">[</span><span class="n">X</span><span class="p">],</span> <span class="n">sand</span><span class="p">[</span><span class="n">Y</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="c">102. </span>                <span class="n">sandMovedOnThisStep</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="c">103. </span>            <span class="k">else</span><span class="p">:</span>
+<span class="c">104. </span>                <span class="c1"># Check if the sand can fall to the left:</span>
+<span class="c">105. </span>                <span class="n">belowLeft</span> <span class="o">=</span> <span class="p">(</span><span class="n">sand</span><span class="p">[</span><span class="n">X</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sand</span><span class="p">[</span><span class="n">Y</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="c">106. </span>                <span class="n">noSandBelowLeft</span> <span class="o">=</span> <span class="n">belowLeft</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">allSand</span>
+<span class="c">107. </span>                <span class="n">noWallBelowLeft</span> <span class="o">=</span> <span class="n">belowLeft</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">HOURGLASS</span>
+<span class="c">108. </span>                <span class="n">left</span> <span class="o">=</span> <span class="p">(</span><span class="n">sand</span><span class="p">[</span><span class="n">X</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sand</span><span class="p">[</span><span class="n">Y</span><span class="p">])</span>
+<span class="c">109. </span>                <span class="n">noWallLeft</span> <span class="o">=</span> <span class="n">left</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">HOURGLASS</span>
+<span class="c">110. </span>                <span class="n">notOnLeftEdge</span> <span class="o">=</span> <span class="n">sand</span><span class="p">[</span><span class="n">X</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span>
+<span class="c">111. </span>                <span class="n">canFallLeft</span> <span class="o">=</span> <span class="p">(</span><span class="n">noSandBelowLeft</span> <span class="ow">and</span> <span class="n">noWallBelowLeft</span>
+<span class="c">112. </span>                    <span class="ow">and</span> <span class="n">noWallLeft</span> <span class="ow">and</span> <span class="n">notOnLeftEdge</span><span class="p">)</span>
+<span class="c">113. </span>
+<span class="c">114. </span>                <span class="c1"># Check if the sand can fall to the right:</span>
+<span class="c">115. </span>                <span class="n">belowRight</span> <span class="o">=</span> <span class="p">(</span><span class="n">sand</span><span class="p">[</span><span class="n">X</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sand</span><span class="p">[</span><span class="n">Y</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="c">116. </span>                <span class="n">noSandBelowRight</span> <span class="o">=</span> <span class="n">belowRight</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">allSand</span>
+<span class="c">117. </span>                <span class="n">noWallBelowRight</span> <span class="o">=</span> <span class="n">belowRight</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">HOURGLASS</span>
+<span class="c">118. </span>                <span class="n">right</span> <span class="o">=</span> <span class="p">(</span><span class="n">sand</span><span class="p">[</span><span class="n">X</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sand</span><span class="p">[</span><span class="n">Y</span><span class="p">])</span>
+<span class="c">119. </span>                <span class="n">noWallRight</span> <span class="o">=</span> <span class="n">right</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">HOURGLASS</span>
+<span class="c">120. </span>                <span class="n">notOnRightEdge</span> <span class="o">=</span> <span class="n">sand</span><span class="p">[</span><span class="n">X</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">SCREEN_WIDTH</span> <span class="o">-</span> <span class="mi">1</span>
+<span class="c">121. </span>                <span class="n">canFallRight</span> <span class="o">=</span> <span class="p">(</span><span class="n">noSandBelowRight</span> <span class="ow">and</span> <span class="n">noWallBelowRight</span>
+<span class="c">122. </span>                    <span class="ow">and</span> <span class="n">noWallRight</span> <span class="ow">and</span> <span class="n">notOnRightEdge</span><span class="p">)</span>
+<span class="c">123. </span>
+<span class="c">124. </span>                <span class="c1"># Set the falling direction:</span>
+<span class="c">125. </span>                <span class="n">fallingDirection</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="c">126. </span>                <span class="k">if</span> <span class="n">canFallLeft</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">canFallRight</span><span class="p">:</span>
+<span class="c">127. </span>                    <span class="n">fallingDirection</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>  <span class="c1"># Set the sand to fall left.</span>
+<span class="c">128. </span>                <span class="k">elif</span> <span class="ow">not</span> <span class="n">canFallLeft</span> <span class="ow">and</span> <span class="n">canFallRight</span><span class="p">:</span>
+<span class="c">129. </span>                    <span class="n">fallingDirection</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># Set the sand to fall right.</span>
+<span class="c">130. </span>                <span class="k">elif</span> <span class="n">canFallLeft</span> <span class="ow">and</span> <span class="n">canFallRight</span><span class="p">:</span>
+<span class="c">131. </span>                    <span class="c1"># Both are possible, so randomly set it:</span>
+<span class="c">132. </span>                    <span class="n">fallingDirection</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="c">133. </span>
+<span class="c">134. </span>                <span class="c1"># Check if the sand can &quot;far&quot; fall two spaces to</span>
+<span class="c">135. </span>                <span class="c1"># the left or right instead of just one space:</span>
+<span class="c">136. </span>                <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">100</span> <span class="o">&lt;=</span> <span class="n">WIDE_FALL_CHANCE</span><span class="p">:</span>
+<span class="c">137. </span>                    <span class="n">belowTwoLeft</span> <span class="o">=</span> <span class="p">(</span><span class="n">sand</span><span class="p">[</span><span class="n">X</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span> <span class="n">sand</span><span class="p">[</span><span class="n">Y</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="c">138. </span>                    <span class="n">noSandBelowTwoLeft</span> <span class="o">=</span> <span class="n">belowTwoLeft</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">allSand</span>
+<span class="c">139. </span>                    <span class="n">noWallBelowTwoLeft</span> <span class="o">=</span> <span class="n">belowTwoLeft</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">HOURGLASS</span>
+<span class="c">140. </span>                    <span class="n">notOnSecondToLeftEdge</span> <span class="o">=</span> <span class="n">sand</span><span class="p">[</span><span class="n">X</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span>
+<span class="c">141. </span>                    <span class="n">canFallTwoLeft</span> <span class="o">=</span> <span class="p">(</span><span class="n">canFallLeft</span> <span class="ow">and</span> <span class="n">noSandBelowTwoLeft</span>
+<span class="c">142. </span>                        <span class="ow">and</span> <span class="n">noWallBelowTwoLeft</span> <span class="ow">and</span> <span class="n">notOnSecondToLeftEdge</span><span class="p">)</span>
+<span class="c">143. </span>
+<span class="c">144. </span>                    <span class="n">belowTwoRight</span> <span class="o">=</span> <span class="p">(</span><span class="n">sand</span><span class="p">[</span><span class="n">X</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">sand</span><span class="p">[</span><span class="n">Y</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="c">145. </span>                    <span class="n">noSandBelowTwoRight</span> <span class="o">=</span> <span class="n">belowTwoRight</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">allSand</span>
+<span class="c">146. </span>                    <span class="n">noWallBelowTwoRight</span> <span class="o">=</span> <span class="n">belowTwoRight</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">HOURGLASS</span>
+<span class="c">147. </span>                    <span class="n">notOnSecondToRightEdge</span> <span class="o">=</span> <span class="n">sand</span><span class="p">[</span><span class="n">X</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">SCREEN_WIDTH</span> <span class="o">-</span> <span class="mi">2</span>
+<span class="c">148. </span>                    <span class="n">canFallTwoRight</span> <span class="o">=</span> <span class="p">(</span><span class="n">canFallRight</span>
+<span class="c">149. </span>                        <span class="ow">and</span> <span class="n">noSandBelowTwoRight</span> <span class="ow">and</span> <span class="n">noWallBelowTwoRight</span>
+<span class="c">150. </span>                        <span class="ow">and</span> <span class="n">notOnSecondToRightEdge</span><span class="p">)</span>
+<span class="c">151. </span>
+<span class="c">152. </span>                    <span class="k">if</span> <span class="n">canFallTwoLeft</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">canFallTwoRight</span><span class="p">:</span>
+<span class="c">153. </span>                        <span class="n">fallingDirection</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span>
+<span class="c">154. </span>                    <span class="k">elif</span> <span class="ow">not</span> <span class="n">canFallTwoLeft</span> <span class="ow">and</span> <span class="n">canFallTwoRight</span><span class="p">:</span>
+<span class="c">155. </span>                        <span class="n">fallingDirection</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="c">156. </span>                    <span class="k">elif</span> <span class="n">canFallTwoLeft</span> <span class="ow">and</span> <span class="n">canFallTwoRight</span><span class="p">:</span>
+<span class="c">157. </span>                        <span class="n">fallingDirection</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">((</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="c">158. </span>
+<span class="c">159. </span>                <span class="k">if</span> <span class="n">fallingDirection</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+<span class="c">160. </span>                    <span class="c1"># This sand can&#39;t fall, so move on.</span>
+<span class="c">161. </span>                    <span class="k">continue</span>
+<span class="c">162. </span>
+<span class="c">163. </span>                <span class="c1"># Draw the sand in its new position:</span>
+<span class="c">164. </span>                <span class="n">bext</span><span class="o">.</span><span class="n">goto</span><span class="p">(</span><span class="n">sand</span><span class="p">[</span><span class="n">X</span><span class="p">],</span> <span class="n">sand</span><span class="p">[</span><span class="n">Y</span><span class="p">])</span>
+<span class="c">165. </span>                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>  <span class="c1"># Erase old sand.</span>
+<span class="c">166. </span>                <span class="n">bext</span><span class="o">.</span><span class="n">goto</span><span class="p">(</span><span class="n">sand</span><span class="p">[</span><span class="n">X</span><span class="p">]</span> <span class="o">+</span> <span class="n">fallingDirection</span><span class="p">,</span> <span class="n">sand</span><span class="p">[</span><span class="n">Y</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="c">167. </span>                <span class="nb">print</span><span class="p">(</span><span class="n">SAND</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>  <span class="c1"># Draw new sand.</span>
+<span class="c">168. </span>
+<span class="c">169. </span>                <span class="c1"># Move the grain of sand to its new position:</span>
+<span class="c">170. </span>                <span class="n">allSand</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">sand</span><span class="p">[</span><span class="n">X</span><span class="p">]</span> <span class="o">+</span> <span class="n">fallingDirection</span><span class="p">,</span> <span class="n">sand</span><span class="p">[</span><span class="n">Y</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="c">171. </span>                <span class="n">sandMovedOnThisStep</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="c">172. </span>
+<span class="c">173. </span>        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>  <span class="c1"># (Required for bext-using programs.)</span>
+<span class="c">174. </span>        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">PAUSE_LENGTH</span><span class="p">)</span>  <span class="c1"># Pause after this</span>
+<span class="c">175. </span>
+<span class="c">176. </span>        <span class="c1"># If no sand has moved on this step, reset the hourglass:</span>
+<span class="c">177. </span>        <span class="k">if</span> <span class="ow">not</span> <span class="n">sandMovedOnThisStep</span><span class="p">:</span>
+<span class="c">178. </span>            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="c">179. </span>            <span class="c1"># Erase all of the sand:</span>
+<span class="c">180. </span>            <span class="k">for</span> <span class="n">sand</span> <span class="ow">in</span> <span class="n">allSand</span><span class="p">:</span>
+<span class="c">181. </span>                <span class="n">bext</span><span class="o">.</span><span class="n">goto</span><span class="p">(</span><span class="n">sand</span><span class="p">[</span><span class="n">X</span><span class="p">],</span> <span class="n">sand</span><span class="p">[</span><span class="n">Y</span><span class="p">])</span>
+<span class="c">182. </span>                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c">183. </span>            <span class="k">break</span>  <span class="c1"># Break out of main simulation loop.</span>
+<span class="c">184. </span>
+<span class="c">185. </span>
+<span class="c">186. </span><span class="c1"># If this program was run (instead of imported), run the game:</span>
+<span class="c">187. </span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="c">188. </span>    <span class="k">try</span><span class="p">:</span>
+<span class="c">189. </span>        <span class="n">main</span><span class="p">()</span>
+<span class="c">190. </span>    <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
+<span class="c">191. </span>        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>  <span class="c1"># When Ctrl-C is pressed, end the program.</span>
+</pre></div>
+
 <p class="calibre19">After entering the source code and running it a few times, try making experimental changes to it. The comments marked with <code class="calibre22">(!)</code> have suggestions for small changes you can make. On your own, you can also try to figure out how to do the following:</p>
 <ul class="calibre25">
 <li class="calibre8">Create wall shapes other than an hourglass.</li>

@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Vigenère Cipher</title></head><body style="background-color: #fffeee;">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><link rel="stylesheet" type="text/css" href="pygments.css"><title>Vigenère Cipher</title></head><body style="background-color: #fffeee;">
 
 <script type="text/javascript">
 //<![CDATA[
@@ -70,116 +70,119 @@ Bmds mt jx sht znre qcrgeh bnmivps.
 Full encrypted text copied to clipboard.</code></pre>
 <h2 id="calibre_link-329" class="calibre5">How It Works</h2>
 <p class="bodyfirst">Because the encryption and decryption processes are fairly similar, the <code class="calibre22">translateMessage()</code> function handles both of them. The <code class="calibre22">encryptMessage()</code> and <code class="calibre22">decryptMessage()</code> functions are merely <em class="calibre9">wrapper functions</em> for <code class="calibre22">translateMessage()</code>. In other words, they are functions that adjust their arguments, forward these to another function, and then return that function’s return value. This program uses these wrapper functions so that they can be called in a manner similar to <code class="calibre22">encryptMessage()</code> and <code class="calibre22">decryptMessage()</code> in Project 66, “Simple Substitution Cipher.” You can import these projects as modules in other programs to make use of their encryption code without having to copy and paste the code directly into your new program.</p>
-<pre class="calibre24"><code class="calibre22">  1. """Vigenère Cipher, by Al Sweigart al@inventwithpython.com
-  2. The Vigenère cipher is a polyalphabetic substitution cipher that was
-  3. powerful enough to remain unbroken for centuries.
-  4. More info at: https://en.wikipedia.org/wiki/Vigen%C3%A8re_cipher
-  5. View this code at https://nostarch.com/big-book-small-python-projects
-  6. Tags: short, cryptography, math"""
-  7.
-  8. try:
-  9.     import pyperclip  # pyperclip copies text to the clipboard.
- 10. except ImportError:
- 11.     pass  # If pyperclip is not installed, do nothing. It's no big deal.
- 12.
- 13. # Every possible symbol that can be encrypted/decrypted:
- 14. LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
- 15.
- 16.
- 17. def main():
- 18.     print('''Vigenère Cipher, by Al Sweigart al@inventwithpython.com
- 19. The Vigenère cipher is a polyalphabetic substitution cipher that was
- 20. powerful enough to remain unbroken for centuries.''')
- 21.
- 22.     # Let the user specify if they are encrypting or decrypting:
- 23.     while True:  # Keep asking until the user enters e or d.
- 24.         print('Do you want to (e)ncrypt or (d)ecrypt?')
- 25.         response = input('&gt; ').lower()
- 26.         if response.startswith('e'):
- 27.             myMode = 'encrypt'
- 28.             break
- 29.         elif response.startswith('d'):
- 30.             myMode = 'decrypt'
- 31.             break
- 32.         print('Please enter the letter e or d.')
- 33.
- 34.     # Let the user specify the key to use:
- 35.     while True:  # Keep asking until the user enters a valid key.
- 36.         print('Please specify the key to use.')
- 37.         print('It can be a word or any combination of letters:')
- 38.         response = input('&gt; ').upper()
- 39.         if response.isalpha():
- 40.             myKey = response
- 41.             break
- 42.
- 43.     # Let the user specify the message to encrypt/decrypt:
- 44.     print('Enter the message to {}.'.format(myMode))
- 45.     myMessage = input('&gt; ')
- 46.
- 47.     # Perform the encryption/decryption:
- 48.     if myMode == 'encrypt':
- 49.         translated = encryptMessage(myMessage, myKey)
- 50.     elif myMode == 'decrypt':
- 51.         translated = decryptMessage(myMessage, myKey)
- 52.
- 53.     print('%sed message:' % (myMode.title()))
- 54.     print(translated)
- 55.
- 56.     try:
- 57.         pyperclip.copy(translated)
- 58.         print('Full %sed text copied to clipboard.' % (myMode))
- 59.     except:
- 60.         pass  # Do nothing if pyperclip wasn't installed.
- 61.
- 62.
- 63. def encryptMessage(message, key):
- 64.     """Encrypt the message using the key."""
- 65.     return translateMessage(message, key, 'encrypt')
- 66.
- 67.
- 68. def decryptMessage(message, key):
- 69.     """Decrypt the message using the key."""
- 70.     return translateMessage(message, key, 'decrypt')
- 71.
- 72.
- 73. def translateMessage(message, key, mode):
- 74.     """Encrypt or decrypt the message using the key."""
- 75.     translated = []  # Stores the encrypted/decrypted message string.
- 76.
- 77.     keyIndex = 0
- 78.     key = key.upper()
- 79.
- 80.     for symbol in message:  # Loop through each character in message.
- 81.         num = LETTERS.find(symbol.upper())
- 82.         if num != -1:  # -1 means symbol.upper() was not in LETTERS.
- 83.             if mode == 'encrypt':
- 84.                 # Add if encrypting:
- 85.                 num += LETTERS.find(key[keyIndex])
- 86.             elif mode == 'decrypt':
- 87.                 # Subtract if decrypting:
- 88.                 num -= LETTERS.find(key[keyIndex])
- 89.
- 90.             num %= len(LETTERS)  # Handle the potential wrap-around.
- 91.
- 92.             # Add the encrypted/decrypted symbol to translated.
- 93.             if symbol.isupper():
- 94.                 translated.append(LETTERS[num])
- 95.             elif symbol.islower():
- 96.                 translated.append(LETTERS[num].lower())
- 97.
- 98.             keyIndex += 1  # Move to the next letter in the key.
- 99.             if keyIndex == len(key):
-100.                 keyIndex = 0
-101.         else:
-102.             # Just add the symbol without encrypting/decrypting:
-103.             translated.append(symbol)
-104.
-105.     return ''.join(translated)
-106.
-107.
-108. # If this program was run (instead of imported), run the program:
-109. if __name__ == '__main__':
-110.     main()</code></pre>
+<div class="highlight"><pre><span></span>
+<span class="c">  1. </span><span class="sd">&quot;&quot;&quot;Vigenère Cipher, by Al Sweigart al@inventwithpython.com</span>
+<span class="c">  2. </span><span class="sd">The Vigenère cipher is a polyalphabetic substitution cipher that was</span>
+<span class="c">  3. </span><span class="sd">powerful enough to remain unbroken for centuries.</span>
+<span class="c">  4. </span><span class="sd">More info at: https://en.wikipedia.org/wiki/Vigen%C3%A8re_cipher</span>
+<span class="c">  5. </span><span class="sd">This code is available at https://nostarch.com/big-book-small-python-programming</span>
+<span class="c">  6. </span><span class="sd">Tags: short, cryptography, math&quot;&quot;&quot;</span>
+<span class="c">  7. </span>
+<span class="c">  8. </span><span class="k">try</span><span class="p">:</span>
+<span class="c">  9. </span>    <span class="kn">import</span> <span class="nn">pyperclip</span>  <span class="c1"># pyperclip copies text to the clipboard.</span>
+<span class="c"> 10. </span><span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+<span class="c"> 11. </span>    <span class="k">pass</span>  <span class="c1"># If pyperclip is not installed, do nothing. It&#39;s no big deal.</span>
+<span class="c"> 12. </span>
+<span class="c"> 13. </span><span class="c1"># Every possible symbol that can be encrypted/decrypted:</span>
+<span class="c"> 14. </span><span class="n">LETTERS</span> <span class="o">=</span> <span class="s1">&#39;ABCDEFGHIJKLMNOPQRSTUVWXYZ&#39;</span>
+<span class="c"> 15. </span>
+<span class="c"> 16. </span>
+<span class="c"> 17. </span><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<span class="c"> 18. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;Vigenère Cipher, by Al Sweigart al@inventwithpython.com</span>
+<span class="c"> 19. </span><span class="s1">The Viegenère cipher is a polyalphabetic substitution cipher that was</span>
+<span class="c"> 20. </span><span class="s1">powerful enough to remain unbroken for centuries.&#39;&#39;&#39;</span><span class="p">)</span>
+<span class="c"> 21. </span>
+<span class="c"> 22. </span>    <span class="c1"># Let the user specify if they are encrypting or decrypting:</span>
+<span class="c"> 23. </span>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>  <span class="c1"># Keep asking until the user enters e or d.</span>
+<span class="c"> 24. </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Do you want to (e)ncrypt or (d)ecrypt?&#39;</span><span class="p">)</span>
+<span class="c"> 25. </span>        <span class="n">response</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;&gt; &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+<span class="c"> 26. </span>        <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;e&#39;</span><span class="p">):</span>
+<span class="c"> 27. </span>            <span class="n">myMode</span> <span class="o">=</span> <span class="s1">&#39;encrypt&#39;</span>
+<span class="c"> 28. </span>            <span class="k">break</span>
+<span class="c"> 29. </span>        <span class="k">elif</span> <span class="n">response</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;d&#39;</span><span class="p">):</span>
+<span class="c"> 30. </span>            <span class="n">myMode</span> <span class="o">=</span> <span class="s1">&#39;decrypt&#39;</span>
+<span class="c"> 31. </span>            <span class="k">break</span>
+<span class="c"> 32. </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Please enter the letter e or d.&#39;</span><span class="p">)</span>
+<span class="c"> 33. </span>
+<span class="c"> 34. </span>    <span class="c1"># Let the user specify the key to use:</span>
+<span class="c"> 35. </span>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>  <span class="c1"># Keep asking until the user enters a valid key.</span>
+<span class="c"> 36. </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Please specify the key to use.&#39;</span><span class="p">)</span>
+<span class="c"> 37. </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;It can be a word or any combination of letters:&#39;</span><span class="p">)</span>
+<span class="c"> 38. </span>        <span class="n">response</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;&gt; &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+<span class="c"> 39. </span>        <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">isalpha</span><span class="p">():</span>
+<span class="c"> 40. </span>            <span class="n">myKey</span> <span class="o">=</span> <span class="n">response</span>
+<span class="c"> 41. </span>            <span class="k">break</span>
+<span class="c"> 42. </span>
+<span class="c"> 43. </span>    <span class="c1"># Let the user specify the message to encrypt/decrypt:</span>
+<span class="c"> 44. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Enter the message to </span><span class="si">{}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">myMode</span><span class="p">))</span>
+<span class="c"> 45. </span>    <span class="n">myMessage</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;&gt; &#39;</span><span class="p">)</span>
+<span class="c"> 46. </span>
+<span class="c"> 47. </span>    <span class="c1"># Perform the encryption/decryption:</span>
+<span class="c"> 48. </span>    <span class="k">if</span> <span class="n">myMode</span> <span class="o">==</span> <span class="s1">&#39;encrypt&#39;</span><span class="p">:</span>
+<span class="c"> 49. </span>        <span class="n">translated</span> <span class="o">=</span> <span class="n">encryptMessage</span><span class="p">(</span><span class="n">myMessage</span><span class="p">,</span> <span class="n">myKey</span><span class="p">)</span>
+<span class="c"> 50. </span>    <span class="k">elif</span> <span class="n">myMode</span> <span class="o">==</span> <span class="s1">&#39;decrypt&#39;</span><span class="p">:</span>
+<span class="c"> 51. </span>        <span class="n">translated</span> <span class="o">=</span> <span class="n">decryptMessage</span><span class="p">(</span><span class="n">myMessage</span><span class="p">,</span> <span class="n">myKey</span><span class="p">)</span>
+<span class="c"> 52. </span>
+<span class="c"> 53. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">ed message:&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">myMode</span><span class="o">.</span><span class="n">title</span><span class="p">()))</span>
+<span class="c"> 54. </span>    <span class="nb">print</span><span class="p">(</span><span class="n">translated</span><span class="p">)</span>
+<span class="c"> 55. </span>
+<span class="c"> 56. </span>    <span class="k">try</span><span class="p">:</span>
+<span class="c"> 57. </span>        <span class="n">pyperclip</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">translated</span><span class="p">)</span>
+<span class="c"> 58. </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Full </span><span class="si">%s</span><span class="s1">ed text copied to clipboard.&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">myMode</span><span class="p">))</span>
+<span class="c"> 59. </span>    <span class="k">except</span><span class="p">:</span>
+<span class="c"> 60. </span>        <span class="k">pass</span>  <span class="c1"># Do nothing if pyperclip wasn&#39;t installed.</span>
+<span class="c"> 61. </span>
+<span class="c"> 62. </span>
+<span class="c"> 63. </span><span class="k">def</span> <span class="nf">encryptMessage</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+<span class="c"> 64. </span>    <span class="sd">&quot;&quot;&quot;Encrypt the message using the key.&quot;&quot;&quot;</span>
+<span class="c"> 65. </span>    <span class="k">return</span> <span class="n">translateMessage</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="s1">&#39;encrypt&#39;</span><span class="p">)</span>
+<span class="c"> 66. </span>
+<span class="c"> 67. </span>
+<span class="c"> 68. </span><span class="k">def</span> <span class="nf">decryptMessage</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+<span class="c"> 69. </span>    <span class="sd">&quot;&quot;&quot;Decrypt the message using the key.&quot;&quot;&quot;</span>
+<span class="c"> 70. </span>    <span class="k">return</span> <span class="n">translateMessage</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="s1">&#39;decrypt&#39;</span><span class="p">)</span>
+<span class="c"> 71. </span>
+<span class="c"> 72. </span>
+<span class="c"> 73. </span><span class="k">def</span> <span class="nf">translateMessage</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
+<span class="c"> 74. </span>    <span class="sd">&quot;&quot;&quot;Encrypt or decrypt the message using the key.&quot;&quot;&quot;</span>
+<span class="c"> 75. </span>    <span class="n">translated</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Stores the encrypted/decrypted message string.</span>
+<span class="c"> 76. </span>
+<span class="c"> 77. </span>    <span class="n">keyIndex</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="c"> 78. </span>    <span class="n">key</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+<span class="c"> 79. </span>
+<span class="c"> 80. </span>    <span class="k">for</span> <span class="n">symbol</span> <span class="ow">in</span> <span class="n">message</span><span class="p">:</span>  <span class="c1"># Loop through each character in message.</span>
+<span class="c"> 81. </span>        <span class="n">num</span> <span class="o">=</span> <span class="n">LETTERS</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">symbol</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span>
+<span class="c"> 82. </span>        <span class="k">if</span> <span class="n">num</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>  <span class="c1"># -1 means symbol.upper() was not in LETTERS.</span>
+<span class="c"> 83. </span>            <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;encrypt&#39;</span><span class="p">:</span>
+<span class="c"> 84. </span>                <span class="c1"># Add if encrypting:</span>
+<span class="c"> 85. </span>                <span class="n">num</span> <span class="o">+=</span> <span class="n">LETTERS</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="n">keyIndex</span><span class="p">])</span>
+<span class="c"> 86. </span>            <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;decrypt&#39;</span><span class="p">:</span>
+<span class="c"> 87. </span>                <span class="c1"># Subtract if decrypting:</span>
+<span class="c"> 88. </span>                <span class="n">num</span> <span class="o">-=</span> <span class="n">LETTERS</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="n">keyIndex</span><span class="p">])</span>
+<span class="c"> 89. </span>
+<span class="c"> 90. </span>            <span class="n">num</span> <span class="o">%=</span> <span class="nb">len</span><span class="p">(</span><span class="n">LETTERS</span><span class="p">)</span>  <span class="c1"># Handle the potential wrap-around.</span>
+<span class="c"> 91. </span>
+<span class="c"> 92. </span>            <span class="c1"># Add the encrypted/decrypted symbol to translated.</span>
+<span class="c"> 93. </span>            <span class="k">if</span> <span class="n">symbol</span><span class="o">.</span><span class="n">isupper</span><span class="p">():</span>
+<span class="c"> 94. </span>                <span class="n">translated</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">LETTERS</span><span class="p">[</span><span class="n">num</span><span class="p">])</span>
+<span class="c"> 95. </span>            <span class="k">elif</span> <span class="n">symbol</span><span class="o">.</span><span class="n">islower</span><span class="p">():</span>
+<span class="c"> 96. </span>                <span class="n">translated</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">LETTERS</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+<span class="c"> 97. </span>
+<span class="c"> 98. </span>            <span class="n">keyIndex</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># Move to the next letter in the key.</span>
+<span class="c"> 99. </span>            <span class="k">if</span> <span class="n">keyIndex</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+<span class="c">100. </span>                <span class="n">keyIndex</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="c">101. </span>        <span class="k">else</span><span class="p">:</span>
+<span class="c">102. </span>            <span class="c1"># Just add the symbol without encrypting/decrypting:</span>
+<span class="c">103. </span>            <span class="n">translated</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">symbol</span><span class="p">)</span>
+<span class="c">104. </span>
+<span class="c">105. </span>    <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">translated</span><span class="p">)</span>
+<span class="c">106. </span>
+<span class="c">107. </span>
+<span class="c">108. </span><span class="c1"># If this program was run (instead of imported), run the program:</span>
+<span class="c">109. </span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="c">110. </span>    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
 <h2 id="calibre_link-330" class="calibre5">Exploring the Program</h2>
 <p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
 <ol class="decimal">

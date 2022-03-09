@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>niNety nniinE BoOttels</title></head><body style="background-color: #fffeee;">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><link rel="stylesheet" type="text/css" href="pygments.css"><title>niNety nniinE BoOttels</title></head><body style="background-color: #fffeee;">
 
 <script type="text/javascript">
 //<![CDATA[
@@ -81,93 +81,96 @@ Taake on  d wn,  pAasSs itt au nn d,
 No more bottles of milk on the wall!</code></pre>
 <h2 id="calibre_link-223" class="calibre5">How It Works</h2>
 <p class="bodyfirst">String values in Python are <em class="calibre9">immutable</em>, meaning they cannot be changed. If the string <code class="calibre22">'Hello'</code> is stored in a variable called <code class="calibre22">greeting</code>, the code <code class="calibre22">greeting = greeting + ' world!'</code> doesn’t actually change the <code class="calibre22">'Hello'</code> string. Rather, it creates a new string, <code class="calibre22">'Hello world!'</code>, to replace the <code class="calibre22">'Hello'</code> string in <code class="calibre22">greeting</code>. The technical reasons for this are beyond the scope of this book, but it’s important to understand the distinction, because it means code like <code class="calibre22">greeting[0] = 'h'</code> isn’t allowed, since strings are immutable. However, since lists are mutable, we can create a list of single-character strings (as line 62 does), change the characters in the list, and then create a string from the list (line 85). This is how our program seemingly changes, or <em class="calibre9">mutates</em>, the strings containing the song lyrics.</p>
-<pre class="calibre24"><code class="calibre22"> 1. """niNety-nniinE BoOttels of Mlik On teh waLl
- 2. By Al Sweigart al@inventwithpython.com
- 3. Print the full lyrics to one of the longest songs ever! The song
- 4. gets sillier and sillier with each verse. Press Ctrl-C to stop.
- 5. View this code at https://nostarch.com/big-book-small-python-projects
- 6. Tags: short, scrolling, word"""
- 7.
- 8. import random, sys, time
- 9.
-10. # Set up the constants:
-11. # (!) Try changing both of these to 0 to print all the lyrics at once.
-12. SPEED = 0.01  # The pause in between printing letters.
-13. LINE_PAUSE = 1.5  # The pause at the end of each line.
-14.
-15.
-16. def slowPrint(text, pauseAmount=0.1):
-17.     """Slowly print out the characters in text one at a time."""
-18.     for character in text:
-19.         # Set flush=True here so the text is immediately printed:
-20.         print(character, flush=True, end='')  # end='' means no newline.
-21.         time.sleep(pauseAmount)  # Pause in between each character.
-22.     print()  # Print a newline.
-23.
-24.
-25. print('niNety-nniinE BoOttels, by Al Sweigart al@inventwithpython.com')
-26. print()
-27. print('(Press Ctrl-C to quit.)')
-28.
-29. time.sleep(2)
-30.
-31. bottles = 99  # This is the starting number of bottles.
-32.
-33. # This list holds the string used for the lyrics:
-34. lines = [' bottles of milk on the wall,',
-35.          ' bottles of milk,',
-36.          'Take one down, pass it around,',
-37.          ' bottles of milk on the wall!']
-38.
-39. try:
-40.     while bottles &gt; 0:  # Keep looping and display the lyrics.
-41.         slowPrint(str(bottles) + lines[0], SPEED)
-42.         time.sleep(LINE_PAUSE)
-43.         slowPrint(str(bottles) + lines[1], SPEED)
-44.         time.sleep(LINE_PAUSE)
-45.         slowPrint(lines[2], SPEED)
-46.         time.sleep(LINE_PAUSE)
-47.         bottles = bottles - 1  # Decrease the number of bottles by one.
-48.
-49.         if bottles &gt; 0:  # Print the last line of the current stanza.
-50.             slowPrint(str(bottles) + lines[3], SPEED)
-51.         else:  # Print the last line of the entire song.
-52.             slowPrint('No more bottles of milk on the wall!', SPEED)
-53.
-54.         time.sleep(LINE_PAUSE)
-55.         print()  # Print a newline.
-56.
-57.         # Choose a random line to make "sillier":
-58.         lineNum = random.randint(0, 3)
-59.
-60.         # Make a list from the line string so we can edit it. (Strings
-61.         # in Python are immutable.)
-62.         line = list(lines[lineNum])
-63.
-64.         effect = random.randint(0, 3)
-65.         if effect == 0:  # Replace a character with a space.
-66.             charIndex = random.randint(0, len(line) - 1)
-67.             line[charIndex] = ' '
-68.         elif effect == 1:  # Change the casing of a character.
-69.             charIndex = random.randint(0, len(line) - 1)
-70.             if line[charIndex].isupper():
-71.                 line[charIndex] = line[charIndex].lower()
-72.             elif line[charIndex].islower():
-73.                 line[charIndex] = line[charIndex].upper()
-74.         elif effect == 2:  # Transpose two characters.
-75.             charIndex = random.randint(0, len(line) - 2)
-76.             firstChar = line[charIndex]
-77.             secondChar = line[charIndex + 1]
-78.             line[charIndex] = secondChar
-79.             line[charIndex + 1] = firstChar
-80.         elif effect == 3:  # Double a character.
-81.             charIndex = random.randint(0, len(line) - 2)
-82.             line.insert(charIndex, line[charIndex])
-83.
-84.         # Convert the line list back to a string and put it in lines:
-85.         lines[lineNum] = ''.join(line)
-86. except KeyboardInterrupt:
-87.     sys.exit()  # When Ctrl-C is pressed, end the program.</code></pre>
+<div class="highlight"><pre><span></span>
+<span class="c"> 1. </span><span class="sd">&quot;&quot;&quot;niNety-nniinE BoOttels of Mlik On teh waLl</span>
+<span class="c"> 2. </span><span class="sd">By Al Sweigart al@inventwithpython.com</span>
+<span class="c"> 3. </span><span class="sd">Print the full lyrics to one of the longest songs ever! The song</span>
+<span class="c"> 4. </span><span class="sd">gets sillier and sillier with each verse. Press Ctrl-C to stop.</span>
+<span class="c"> 5. </span><span class="sd">This code is available at https://nostarch.com/big-book-small-python-programming</span>
+<span class="c"> 6. </span><span class="sd">Tags: short, scrolling, word&quot;&quot;&quot;</span>
+<span class="c"> 7. </span>
+<span class="c"> 8. </span><span class="kn">import</span> <span class="nn">random</span><span class="o">,</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">time</span>
+<span class="c"> 9. </span>
+<span class="c">10. </span><span class="c1"># Set up the constants:</span>
+<span class="c">11. </span><span class="c1"># (!) Try changing both of these to 0 to print all the lyrics at once.</span>
+<span class="c">12. </span><span class="n">SPEED</span> <span class="o">=</span> <span class="mf">0.01</span>  <span class="c1"># The pause in between printing letters.</span>
+<span class="c">13. </span><span class="n">LINE_PAUSE</span> <span class="o">=</span> <span class="mf">1.5</span>  <span class="c1"># The pause at the end of each line.</span>
+<span class="c">14. </span>
+<span class="c">15. </span>
+<span class="c">16. </span><span class="k">def</span> <span class="nf">slowPrint</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">pauseAmount</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+<span class="c">17. </span>    <span class="sd">&quot;&quot;&quot;Slowly print out the characters in text one at a time.&quot;&quot;&quot;</span>
+<span class="c">18. </span>    <span class="k">for</span> <span class="n">character</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+<span class="c">19. </span>        <span class="c1"># Set flush=True here so the text is immediately printed:</span>
+<span class="c">20. </span>        <span class="nb">print</span><span class="p">(</span><span class="n">character</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>  <span class="c1"># end=&#39;&#39; means no newline.</span>
+<span class="c">21. </span>        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">pauseAmount</span><span class="p">)</span>  <span class="c1"># Pause in between each character.</span>
+<span class="c">22. </span>    <span class="nb">print</span><span class="p">()</span>  <span class="c1"># Print a newline.</span>
+<span class="c">23. </span>
+<span class="c">24. </span>
+<span class="c">25. </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;niNety-nniinE BoOttels, by Al Sweigart al@inventwithpython.com&#39;</span><span class="p">)</span>
+<span class="c">26. </span><span class="nb">print</span><span class="p">()</span>
+<span class="c">27. </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;(Press Ctrl-C to quit.)&#39;</span><span class="p">)</span>
+<span class="c">28. </span>
+<span class="c">29. </span><span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="c">30. </span>
+<span class="c">31. </span><span class="n">bottles</span> <span class="o">=</span> <span class="mi">99</span>  <span class="c1"># This is the starting number of bottles.</span>
+<span class="c">32. </span>
+<span class="c">33. </span><span class="c1"># This list holds the string used for the lyrics:</span>
+<span class="c">34. </span><span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39; bottles of milk on the wall,&#39;</span><span class="p">,</span>
+<span class="c">35. </span>         <span class="s1">&#39; bottles of milk,&#39;</span><span class="p">,</span>
+<span class="c">36. </span>         <span class="s1">&#39;Take one down, pass it around,&#39;</span><span class="p">,</span>
+<span class="c">37. </span>         <span class="s1">&#39; bottles of milk on the wall!&#39;</span><span class="p">]</span>
+<span class="c">38. </span>
+<span class="c">39. </span><span class="k">try</span><span class="p">:</span>
+<span class="c">40. </span>    <span class="k">while</span> <span class="n">bottles</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># Keep looping and display the lyrics.</span>
+<span class="c">41. </span>        <span class="n">slowPrint</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">bottles</span><span class="p">)</span> <span class="o">+</span> <span class="n">lines</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">SPEED</span><span class="p">)</span>
+<span class="c">42. </span>        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">LINE_PAUSE</span><span class="p">)</span>
+<span class="c">43. </span>        <span class="n">slowPrint</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">bottles</span><span class="p">)</span> <span class="o">+</span> <span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">SPEED</span><span class="p">)</span>
+<span class="c">44. </span>        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">LINE_PAUSE</span><span class="p">)</span>
+<span class="c">45. </span>        <span class="n">slowPrint</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">SPEED</span><span class="p">)</span>
+<span class="c">46. </span>        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">LINE_PAUSE</span><span class="p">)</span>
+<span class="c">47. </span>        <span class="n">bottles</span> <span class="o">=</span> <span class="n">bottles</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># Decrease the number of bottles by one.</span>
+<span class="c">48. </span>
+<span class="c">49. </span>        <span class="k">if</span> <span class="n">bottles</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># Print the last line of the current stanza.</span>
+<span class="c">50. </span>            <span class="n">slowPrint</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">bottles</span><span class="p">)</span> <span class="o">+</span> <span class="n">lines</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">SPEED</span><span class="p">)</span>
+<span class="c">51. </span>        <span class="k">else</span><span class="p">:</span>  <span class="c1"># Print the last line of the entire song.</span>
+<span class="c">52. </span>            <span class="n">slowPrint</span><span class="p">(</span><span class="s1">&#39;No more bottles of milk on the wall!&#39;</span><span class="p">,</span> <span class="n">SPEED</span><span class="p">)</span>
+<span class="c">53. </span>
+<span class="c">54. </span>        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">LINE_PAUSE</span><span class="p">)</span>
+<span class="c">55. </span>        <span class="nb">print</span><span class="p">()</span>  <span class="c1"># Print a newline.</span>
+<span class="c">56. </span>
+<span class="c">57. </span>        <span class="c1"># Choose a random line to make &quot;sillier&quot;:</span>
+<span class="c">58. </span>        <span class="n">lineNum</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="c">59. </span>
+<span class="c">60. </span>        <span class="c1"># Make a list from the line string so we can edit it. (Strings</span>
+<span class="c">61. </span>        <span class="c1"># in Python are immutable.)</span>
+<span class="c">62. </span>        <span class="n">line</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="n">lineNum</span><span class="p">])</span>
+<span class="c">63. </span>
+<span class="c">64. </span>        <span class="n">effect</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="c">65. </span>        <span class="k">if</span> <span class="n">effect</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># Replace a character with a space.</span>
+<span class="c">66. </span>            <span class="n">charIndex</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+<span class="c">67. </span>            <span class="n">line</span><span class="p">[</span><span class="n">charIndex</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span>
+<span class="c">68. </span>        <span class="k">elif</span> <span class="n">effect</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># Change the casing of a character.</span>
+<span class="c">69. </span>            <span class="n">charIndex</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+<span class="c">70. </span>            <span class="k">if</span> <span class="n">line</span><span class="p">[</span><span class="n">charIndex</span><span class="p">]</span><span class="o">.</span><span class="n">isupper</span><span class="p">():</span>
+<span class="c">71. </span>                <span class="n">line</span><span class="p">[</span><span class="n">charIndex</span><span class="p">]</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="n">charIndex</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+<span class="c">72. </span>            <span class="k">elif</span> <span class="n">line</span><span class="p">[</span><span class="n">charIndex</span><span class="p">]</span><span class="o">.</span><span class="n">islower</span><span class="p">():</span>
+<span class="c">73. </span>                <span class="n">line</span><span class="p">[</span><span class="n">charIndex</span><span class="p">]</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="n">charIndex</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+<span class="c">74. </span>        <span class="k">elif</span> <span class="n">effect</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>  <span class="c1"># Transpose two characters.</span>
+<span class="c">75. </span>            <span class="n">charIndex</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span>
+<span class="c">76. </span>            <span class="n">firstChar</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="n">charIndex</span><span class="p">]</span>
+<span class="c">77. </span>            <span class="n">secondChar</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="n">charIndex</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+<span class="c">78. </span>            <span class="n">line</span><span class="p">[</span><span class="n">charIndex</span><span class="p">]</span> <span class="o">=</span> <span class="n">secondChar</span>
+<span class="c">79. </span>            <span class="n">line</span><span class="p">[</span><span class="n">charIndex</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">firstChar</span>
+<span class="c">80. </span>        <span class="k">elif</span> <span class="n">effect</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>  <span class="c1"># Double a character.</span>
+<span class="c">81. </span>            <span class="n">charIndex</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span>
+<span class="c">82. </span>            <span class="n">line</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">charIndex</span><span class="p">,</span> <span class="n">line</span><span class="p">[</span><span class="n">charIndex</span><span class="p">])</span>
+<span class="c">83. </span>
+<span class="c">84. </span>        <span class="c1"># Convert the line list back to a string and put it in lines:</span>
+<span class="c">85. </span>        <span class="n">lines</span><span class="p">[</span><span class="n">lineNum</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+<span class="c">86. </span><span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
+<span class="c">87. </span>    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>  <span class="c1"># When Ctrl-C is pressed, end the program.</span>
+</pre></div>
+
 <p class="calibre19">After entering the source code and running it a few times, try making experimental changes to it. The comments marked with <code class="calibre22">(!)</code> have suggestions for small changes you can make. On your own, you can also try to figure out how to do the following:</p>
 <ul class="calibre25">
 <li class="calibre8">Swap the order of two adjacent words, where a “word” is text separated by spaces.</li>

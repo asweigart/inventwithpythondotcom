@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Etching Drawer</title></head><body style="background-color: #fffeee;">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><link rel="stylesheet" type="text/css" href="pygments.css"><title>Etching Drawer</title></head><body style="background-color: #fffeee;">
 
 <script type="text/javascript">
 //<![CDATA[
@@ -59,183 +59,186 @@ _gaq.push(['_trackPageview']);
 <h2 id="calibre_link-119" class="calibre5">How It Works</h2>
 <p class="bodyfirst">Like Project 17, “Dice Math,” this program uses a dictionary stored in a variable named <code class="calibre22">canvas</code> to record the lines of the drawing. The keys are <code class="calibre22">(x, y)</code> tuples and the values are strings representing the line shape to draw at those x, y coordinates on the screen. A full list of Unicode characters you can use in your Python programs is given in Appendix B.</p>
 <p class="calibre19">Line 126 has a function call to <code class="calibre22">open()</code> that passes an <code class="calibre22">encoding='utf-8'</code> argument. The reasons are beyond the scope of this book, but this is necessary for Windows to write the line characters to a text file.</p>
-<pre class="calibre24"><code class="calibre22">  1. """Etching Drawer, by Al Sweigart al@inventwithpython.com
-  2. An art program that draws a continuous line around the screen using the
-  3. WASD keys. Inspired by Etch A Sketch toys.
-  4.
-  5. For example, you can draw Hilbert Curve fractal with:
-  6. SDWDDSASDSAAWASSDSASSDWDSDWWAWDDDSASSDWDSDWWAWDWWASAAWDWAWDDSDW
-  7.
-  8. Or an even larger Hilbert Curve fractal with:
-  9. DDSAASSDDWDDSDDWWAAWDDDDSDDWDDDDSAASDDSAAAAWAASSSDDWDDDDSAASDDSAAAAWA
- 10. ASAAAAWDDWWAASAAWAASSDDSAASSDDWDDDDSAASDDSAAAAWAASSDDSAASSDDWDDSDDWWA
- 11. AWDDDDDDSAASSDDWDDSDDWWAAWDDWWAASAAAAWDDWAAWDDDDSDDWDDSDDWDDDDSAASDDS
- 12. AAAAWAASSDDSAASSDDWDDSDDWWAAWDDDDDDSAASSDDWDDSDDWWAAWDDWWAASAAAAWDDWA
- 13. AWDDDDSDDWWAAWDDWWAASAAWAASSDDSAAAAWAASAAAAWDDWAAWDDDDSDDWWWAASAAAAWD
- 14. DWAAWDDDDSDDWDDDDSAASSDDWDDSDDWWAAWDD
- 15.
- 16. View this code at https://nostarch.com/big-book-small-python-projects
- 17. Tags: large, artistic"""
- 18.
- 19. import shutil, sys
- 20.
- 21. # Set up the constants for line characters:
- 22. UP_DOWN_CHAR         = chr(9474)  # Character 9474 is '│'
- 23. LEFT_RIGHT_CHAR      = chr(9472)  # Character 9472 is '─'
- 24. DOWN_RIGHT_CHAR      = chr(9484)  # Character 9484 is '┌'
- 25. DOWN_LEFT_CHAR       = chr(9488)  # Character 9488 is '┐'
- 26. UP_RIGHT_CHAR        = chr(9492)  # Character 9492 is '└'
- 27. UP_LEFT_CHAR         = chr(9496)  # Character 9496 is '┘'
- 28. UP_DOWN_RIGHT_CHAR   = chr(9500)  # Character 9500 is '├'
- 29. UP_DOWN_LEFT_CHAR    = chr(9508)  # Character 9508 is '┤'
- 30. DOWN_LEFT_RIGHT_CHAR = chr(9516)  # Character 9516 is '┬'
- 31. UP_LEFT_RIGHT_CHAR   = chr(9524)  # Character 9524 is '┴'
- 32. CROSS_CHAR           = chr(9532)  # Character 9532 is '┼'
- 33. # A list of chr() codes is at https://inventwithpython.com/chr
- 34.
- 35. # Get the size of the terminal window:
- 36. CANVAS_WIDTH, CANVAS_HEIGHT = shutil.get_terminal_size()
- 37. # We can't print to the last column on Windows without it adding a
- 38. # newline automatically, so reduce the width by one:
- 39. CANVAS_WIDTH -= 1
- 40. # Leave room at the bottom few rows for the command info lines.
- 41. CANVAS_HEIGHT -= 5
- 42.
- 43. """The keys for canvas will be (x, y) integer tuples for the coordinate,
- 44. and the value is a set of letters W, A, S, D that tell what kind of line
- 45. should be drawn."""
- 46. canvas = {}
- 47. cursorX = 0
- 48. cursorY = 0
- 49.
- 50.
- 51. def getCanvasString(canvasData, cx, cy):
- 52.     """Returns a multiline string of the line drawn in canvasData."""
- 53.     canvasStr = ''
- 54.
- 55.     """canvasData is a dictionary with (x, y) tuple keys and values that
- 56.     are sets of 'W', 'A', 'S', and/or 'D' strings to show which
- 57.     directions the lines are drawn at each xy point."""
- 58.     for rowNum in range(CANVAS_HEIGHT):
- 59.         for columnNum in range(CANVAS_WIDTH):
- 60.             if columnNum == cx and rowNum == cy:
- 61.                 canvasStr += '#'
- 62.                 continue
- 63.
- 64.             # Add the line character for this point to canvasStr.
- 65.             cell = canvasData.get((columnNum, rowNum))
- 66.             if cell in (set(['W', 'S']), set(['W']), set(['S'])):
- 67.                 canvasStr += UP_DOWN_CHAR
- 68.             elif cell in (set(['A', 'D']), set(['A']), set(['D'])):
- 69.                 canvasStr += LEFT_RIGHT_CHAR
- 70.             elif cell == set(['S', 'D']):
- 71.                 canvasStr += DOWN_RIGHT_CHAR
- 72.             elif cell == set(['A', 'S']):
- 73.                 canvasStr += DOWN_LEFT_CHAR
- 74.             elif cell == set(['W', 'D']):
- 75.                 canvasStr += UP_RIGHT_CHAR
- 76.             elif cell == set(['W', 'A']):
- 77.                 canvasStr += UP_LEFT_CHAR
- 78.             elif cell == set(['W', 'S', 'D']):
- 79.                 canvasStr += UP_DOWN_RIGHT_CHAR
- 80.             elif cell == set(['W', 'S', 'A']):
- 81.                 canvasStr += UP_DOWN_LEFT_CHAR
- 82.             elif cell == set(['A', 'S', 'D']):
- 83.                 canvasStr += DOWN_LEFT_RIGHT_CHAR
- 84.             elif cell == set(['W', 'A', 'D']):
- 85.                 canvasStr += UP_LEFT_RIGHT_CHAR
- 86.             elif cell == set(['W', 'A', 'S', 'D']):
- 87.                 canvasStr += CROSS_CHAR
- 88.             elif cell == None:
- 89.                 canvasStr += ' '
- 90.         canvasStr += '\n'  # Add a newline at the end of each row.
- 91.     return canvasStr
- 92.
- 93.
- 94. moves = []
- 95. while True:  # Main program loop.
- 96.     # Draw the lines based on the data in canvas:
- 97.     print(getCanvasString(canvas, cursorX, cursorY))
- 98.
- 99.     print('WASD keys to move, H for help, C to clear, '
-100.         + 'F to save, or QUIT.')
-101.     response = input('&gt; ').upper()
-102.
-103.     if response == 'QUIT':
-104.         print('Thanks for playing!')
-105.         sys.exit()  # Quit the program.
-106.     elif response == 'H':
-107.         print('Enter W, A, S, and D characters to move the cursor and')
-108.         print('draw a line behind it as it moves. For example, ddd')
-109.         print('draws a line going right and sssdddwwwaaa draws a box.')
-110.         print()
-111.         print('You can save your drawing to a text file by entering F.')
-112.         input('Press Enter to return to the program...')
-113.         continue
-114.     elif response == 'C':
-115.         canvas = {}  # Erase the canvas data.
-116.         moves.append('C')  # Record this move.
-117.     elif response == 'F':
-118.         # Save the canvas string to a text file:
-119.         try:
-120.             print('Enter filename to save to:')
-121.             filename = input('&gt; ')
-122.
-123.             # Make sure the filename ends with .txt:
-124.             if not filename.endswith('.txt'):
-125.                 filename += '.txt'
-126.             with open(filename, 'w', encoding='utf-8') as file:
-127.                 file.write(''.join(moves) + '\n')
-128.                 file.write(getCanvasString(canvas, None, None))
-129.         except:
-130.             print('ERROR: Could not save file.')
-131.
-132.     for command in response:
-133.         if command not in ('W', 'A', 'S', 'D'):
-134.             continue  # Ignore this letter and continue to the next one.
-135.         moves.append(command)  # Record this move.
-136.
-137.         # The first line we add needs to form a full line:
-138.         if canvas == {}:
-139.             if command in ('W', 'S'):
-140.                 # Make the first line a horizontal one:
-141.                 canvas[(cursorX, cursorY)] = set(['W', 'S'])
-142.             elif command in ('A', 'D'):
-143.                 # Make the first line a vertical one:
-144.                 canvas[(cursorX, cursorY)] = set(['A', 'D'])
-145.
-146.         # Update x and y:
-147.         if command == 'W' and cursorY &gt; 0:
-148.             canvas[(cursorX, cursorY)].add(command)
-149.             cursorY = cursorY - 1
-150.         elif command == 'S' and cursorY &lt; CANVAS_HEIGHT - 1:
-151.             canvas[(cursorX, cursorY)].add(command)
-152.             cursorY = cursorY + 1
-153.         elif command == 'A' and cursorX &gt; 0:
-154.             canvas[(cursorX, cursorY)].add(command)
-155.             cursorX = cursorX - 1
-156.         elif command == 'D' and cursorX &lt; CANVAS_WIDTH - 1:
-157.             canvas[(cursorX, cursorY)].add(command)
-158.             cursorX = cursorX + 1
-159.         else:
-160.             # If the cursor doesn't move because it would have moved off
-161.             # the edge of the canvas, then don't change the set at
-162.             # canvas[(cursorX, cursorY)].
-163.             continue
-164.
-165.         # If there's no set for (cursorX, cursorY), add an empty set:
-166.         if (cursorX, cursorY) not in canvas:
-167.             canvas[(cursorX, cursorY)] = set()
-168.
-169.         # Add the direction string to this xy point's set:
-170.         if command == 'W':
-171.             canvas[(cursorX, cursorY)].add('S')
-172.         elif command == 'S':
-173.             canvas[(cursorX, cursorY)].add('W')
-174.         elif command == 'A':
-175.             canvas[(cursorX, cursorY)].add('D')
-176.         elif command == 'D':
-177.             canvas[(cursorX, cursorY)].add('A')</code></pre>
+<div class="highlight"><pre><span></span>
+<span class="c">  1. </span><span class="sd">&quot;&quot;&quot;Etching Drawer, by Al Sweigart al@inventwithpython.com</span>
+<span class="c">  2. </span><span class="sd">An art program that draws a continuous line around the screen using the</span>
+<span class="c">  3. </span><span class="sd">WASD keys. Inspired by Etch A Sketch toys.</span>
+<span class="c">  4. </span>
+<span class="c">  5. </span><span class="sd">For example, you can draw Hilbert Curve fractal with:</span>
+<span class="c">  6. </span><span class="sd">SDWDDSASDSAAWASSDSASSDWDSDWWAWDDDSASSDWDSDWWAWDWWASAAWDWAWDDSDW</span>
+<span class="c">  7. </span>
+<span class="c">  8. </span><span class="sd">Or an even larger Hilbert Curve fractal with:</span>
+<span class="c">  9. </span><span class="sd">DDSAASSDDWDDSDDWWAAWDDDDSDDWDDDDSAASDDSAAAAWAASSSDDWDDDDSAASDDSAAAAWA</span>
+<span class="c"> 10. </span><span class="sd">ASAAAAWDDWWAASAAWAASSDDSAASSDDWDDDDSAASDDSAAAAWAASSDDSAASSDDWDDSDDWWA</span>
+<span class="c"> 11. </span><span class="sd">AWDDDDDDSAASSDDWDDSDDWWAAWDDWWAASAAAAWDDWAAWDDDDSDDWDDSDDWDDDDSAASDDS</span>
+<span class="c"> 12. </span><span class="sd">AAAAWAASSDDSAASSDDWDDSDDWWAAWDDDDDDSAASSDDWDDSDDWWAAWDDWWAASAAAAWDDWA</span>
+<span class="c"> 13. </span><span class="sd">AWDDDDSDDWWAAWDDWWAASAAWAASSDDSAAAAWAASAAAAWDDWAAWDDDDSDDWWWAASAAAAWD</span>
+<span class="c"> 14. </span><span class="sd">DWAAWDDDDSDDWDDDDSAASSDDWDDSDDWWAAWDD</span>
+<span class="c"> 15. </span>
+<span class="c"> 16. </span><span class="sd">This code is available at https://nostarch.com/big-book-small-python-programming</span>
+<span class="c"> 17. </span><span class="sd">Tags: large, artistic&quot;&quot;&quot;</span>
+<span class="c"> 18. </span>
+<span class="c"> 19. </span><span class="kn">import</span> <span class="nn">shutil</span><span class="o">,</span> <span class="nn">sys</span>
+<span class="c"> 20. </span>
+<span class="c"> 21. </span><span class="c1"># Set up the constants for line characters:</span>
+<span class="c"> 22. </span><span class="n">UP_DOWN_CHAR</span>         <span class="o">=</span> <span class="nb">chr</span><span class="p">(</span><span class="mi">9474</span><span class="p">)</span>  <span class="c1"># Character 9474 is &#39;│&#39;</span>
+<span class="c"> 23. </span><span class="n">LEFT_RIGHT_CHAR</span>      <span class="o">=</span> <span class="nb">chr</span><span class="p">(</span><span class="mi">9472</span><span class="p">)</span>  <span class="c1"># Character 9472 is &#39;─&#39;</span>
+<span class="c"> 24. </span><span class="n">DOWN_RIGHT_CHAR</span>      <span class="o">=</span> <span class="nb">chr</span><span class="p">(</span><span class="mi">9484</span><span class="p">)</span>  <span class="c1"># Character 9484 is &#39;┌&#39;</span>
+<span class="c"> 25. </span><span class="n">DOWN_LEFT_CHAR</span>       <span class="o">=</span> <span class="nb">chr</span><span class="p">(</span><span class="mi">9488</span><span class="p">)</span>  <span class="c1"># Character 9488 is &#39;┐&#39;</span>
+<span class="c"> 26. </span><span class="n">UP_RIGHT_CHAR</span>        <span class="o">=</span> <span class="nb">chr</span><span class="p">(</span><span class="mi">9492</span><span class="p">)</span>  <span class="c1"># Character 9492 is &#39;└&#39;</span>
+<span class="c"> 27. </span><span class="n">UP_LEFT_CHAR</span>         <span class="o">=</span> <span class="nb">chr</span><span class="p">(</span><span class="mi">9496</span><span class="p">)</span>  <span class="c1"># Character 9496 is &#39;┘&#39;</span>
+<span class="c"> 28. </span><span class="n">UP_DOWN_RIGHT_CHAR</span>   <span class="o">=</span> <span class="nb">chr</span><span class="p">(</span><span class="mi">9500</span><span class="p">)</span>  <span class="c1"># Character 9500 is &#39;├&#39;</span>
+<span class="c"> 29. </span><span class="n">UP_DOWN_LEFT_CHAR</span>    <span class="o">=</span> <span class="nb">chr</span><span class="p">(</span><span class="mi">9508</span><span class="p">)</span>  <span class="c1"># Character 9508 is &#39;┤&#39;</span>
+<span class="c"> 30. </span><span class="n">DOWN_LEFT_RIGHT_CHAR</span> <span class="o">=</span> <span class="nb">chr</span><span class="p">(</span><span class="mi">9516</span><span class="p">)</span>  <span class="c1"># Character 9516 is &#39;┬&#39;</span>
+<span class="c"> 31. </span><span class="n">UP_LEFT_RIGHT_CHAR</span>   <span class="o">=</span> <span class="nb">chr</span><span class="p">(</span><span class="mi">9524</span><span class="p">)</span>  <span class="c1"># Character 9524 is &#39;┴&#39;</span>
+<span class="c"> 32. </span><span class="n">CROSS_CHAR</span>           <span class="o">=</span> <span class="nb">chr</span><span class="p">(</span><span class="mi">9532</span><span class="p">)</span>  <span class="c1"># Character 9532 is &#39;┼&#39;</span>
+<span class="c"> 33. </span><span class="c1"># A list of chr() codes is at https://inventwithpython.com/chr</span>
+<span class="c"> 34. </span>
+<span class="c"> 35. </span><span class="c1"># Get the size of the terminal window:</span>
+<span class="c"> 36. </span><span class="n">CANVAS_WIDTH</span><span class="p">,</span> <span class="n">CANVAS_HEIGHT</span> <span class="o">=</span> <span class="n">shutil</span><span class="o">.</span><span class="n">get_terminal_size</span><span class="p">()</span>
+<span class="c"> 37. </span><span class="c1"># We can&#39;t print to the last column on Windows without it adding a</span>
+<span class="c"> 38. </span><span class="c1"># newline automatically, so reduce the width by one:</span>
+<span class="c"> 39. </span><span class="n">CANVAS_WIDTH</span> <span class="o">-=</span> <span class="mi">1</span>
+<span class="c"> 40. </span><span class="c1"># Leave room at the bottom few rows for the command info lines.</span>
+<span class="c"> 41. </span><span class="n">CANVAS_HEIGHT</span> <span class="o">-=</span> <span class="mi">5</span>
+<span class="c"> 42. </span>
+<span class="c"> 43. </span><span class="sd">&quot;&quot;&quot;The keys for canvas will be (x, y) integer tuples for the coordinate,</span>
+<span class="c"> 44. </span><span class="sd">and the value is a set of letters W, A, S, D that tell what kind of line</span>
+<span class="c"> 45. </span><span class="sd">should be drawn.&quot;&quot;&quot;</span>
+<span class="c"> 46. </span><span class="n">canvas</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="c"> 47. </span><span class="n">cursorX</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="c"> 48. </span><span class="n">cursorY</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="c"> 49. </span>
+<span class="c"> 50. </span>
+<span class="c"> 51. </span><span class="k">def</span> <span class="nf">getCanvasString</span><span class="p">(</span><span class="n">canvasData</span><span class="p">,</span> <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span><span class="p">):</span>
+<span class="c"> 52. </span>    <span class="sd">&quot;&quot;&quot;Returns a multiline string of the line drawn in canvasData.&quot;&quot;&quot;</span>
+<span class="c"> 53. </span>    <span class="n">canvasStr</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+<span class="c"> 54. </span>
+<span class="c"> 55. </span>    <span class="sd">&quot;&quot;&quot;canvasData is a dictionary with (x, y) tuple keys and values that</span>
+<span class="c"> 56. </span><span class="sd">    are sets of &#39;W&#39;, &#39;A&#39;, &#39;S&#39;, and/or &#39;D&#39; strings to show which</span>
+<span class="c"> 57. </span><span class="sd">    directions the lines are drawn at each xy point.&quot;&quot;&quot;</span>
+<span class="c"> 58. </span>    <span class="k">for</span> <span class="n">rowNum</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">CANVAS_HEIGHT</span><span class="p">):</span>
+<span class="c"> 59. </span>        <span class="k">for</span> <span class="n">columnNum</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">CANVAS_WIDTH</span><span class="p">):</span>
+<span class="c"> 60. </span>            <span class="k">if</span> <span class="n">columnNum</span> <span class="o">==</span> <span class="n">cx</span> <span class="ow">and</span> <span class="n">rowNum</span> <span class="o">==</span> <span class="n">cy</span><span class="p">:</span>
+<span class="c"> 61. </span>                <span class="n">canvasStr</span> <span class="o">+=</span> <span class="s1">&#39;#&#39;</span>
+<span class="c"> 62. </span>                <span class="k">continue</span>
+<span class="c"> 63. </span>
+<span class="c"> 64. </span>            <span class="c1"># Add the line character for this point to canvasStr.</span>
+<span class="c"> 65. </span>            <span class="n">cell</span> <span class="o">=</span> <span class="n">canvasData</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="n">columnNum</span><span class="p">,</span> <span class="n">rowNum</span><span class="p">))</span>
+<span class="c"> 66. </span>            <span class="k">if</span> <span class="n">cell</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">set</span><span class="p">([</span><span class="s1">&#39;W&#39;</span><span class="p">,</span> <span class="s1">&#39;S&#39;</span><span class="p">]),</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;W&#39;</span><span class="p">]),</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;S&#39;</span><span class="p">])):</span>
+<span class="c"> 67. </span>                <span class="n">canvasStr</span> <span class="o">+=</span> <span class="n">UP_DOWN_CHAR</span>
+<span class="c"> 68. </span>            <span class="k">elif</span> <span class="n">cell</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">set</span><span class="p">([</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">]),</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;A&#39;</span><span class="p">]),</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;D&#39;</span><span class="p">])):</span>
+<span class="c"> 69. </span>                <span class="n">canvasStr</span> <span class="o">+=</span> <span class="n">LEFT_RIGHT_CHAR</span>
+<span class="c"> 70. </span>            <span class="k">elif</span> <span class="n">cell</span> <span class="o">==</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;S&#39;</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">]):</span>
+<span class="c"> 71. </span>                <span class="n">canvasStr</span> <span class="o">+=</span> <span class="n">DOWN_RIGHT_CHAR</span>
+<span class="c"> 72. </span>            <span class="k">elif</span> <span class="n">cell</span> <span class="o">==</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;S&#39;</span><span class="p">]):</span>
+<span class="c"> 73. </span>                <span class="n">canvasStr</span> <span class="o">+=</span> <span class="n">DOWN_LEFT_CHAR</span>
+<span class="c"> 74. </span>            <span class="k">elif</span> <span class="n">cell</span> <span class="o">==</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;W&#39;</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">]):</span>
+<span class="c"> 75. </span>                <span class="n">canvasStr</span> <span class="o">+=</span> <span class="n">UP_RIGHT_CHAR</span>
+<span class="c"> 76. </span>            <span class="k">elif</span> <span class="n">cell</span> <span class="o">==</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;W&#39;</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">]):</span>
+<span class="c"> 77. </span>                <span class="n">canvasStr</span> <span class="o">+=</span> <span class="n">UP_LEFT_CHAR</span>
+<span class="c"> 78. </span>            <span class="k">elif</span> <span class="n">cell</span> <span class="o">==</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;W&#39;</span><span class="p">,</span> <span class="s1">&#39;S&#39;</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">]):</span>
+<span class="c"> 79. </span>                <span class="n">canvasStr</span> <span class="o">+=</span> <span class="n">UP_DOWN_RIGHT_CHAR</span>
+<span class="c"> 80. </span>            <span class="k">elif</span> <span class="n">cell</span> <span class="o">==</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;W&#39;</span><span class="p">,</span> <span class="s1">&#39;S&#39;</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">]):</span>
+<span class="c"> 81. </span>                <span class="n">canvasStr</span> <span class="o">+=</span> <span class="n">UP_DOWN_LEFT_CHAR</span>
+<span class="c"> 82. </span>            <span class="k">elif</span> <span class="n">cell</span> <span class="o">==</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;S&#39;</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">]):</span>
+<span class="c"> 83. </span>                <span class="n">canvasStr</span> <span class="o">+=</span> <span class="n">DOWN_LEFT_RIGHT_CHAR</span>
+<span class="c"> 84. </span>            <span class="k">elif</span> <span class="n">cell</span> <span class="o">==</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;W&#39;</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">]):</span>
+<span class="c"> 85. </span>                <span class="n">canvasStr</span> <span class="o">+=</span> <span class="n">UP_LEFT_RIGHT_CHAR</span>
+<span class="c"> 86. </span>            <span class="k">elif</span> <span class="n">cell</span> <span class="o">==</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;W&#39;</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;S&#39;</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">]):</span>
+<span class="c"> 87. </span>                <span class="n">canvasStr</span> <span class="o">+=</span> <span class="n">CROSS_CHAR</span>
+<span class="c"> 88. </span>            <span class="k">elif</span> <span class="n">cell</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+<span class="c"> 89. </span>                <span class="n">canvasStr</span> <span class="o">+=</span> <span class="s1">&#39; &#39;</span>
+<span class="c"> 90. </span>        <span class="n">canvasStr</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>  <span class="c1"># Add a newline at the end of each row.</span>
+<span class="c"> 91. </span>    <span class="k">return</span> <span class="n">canvasStr</span>
+<span class="c"> 92. </span>
+<span class="c"> 93. </span>
+<span class="c"> 94. </span><span class="n">moves</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="c"> 95. </span><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>  <span class="c1"># Main program loop.</span>
+<span class="c"> 96. </span>    <span class="c1"># Draw the lines based on the data in canvas:</span>
+<span class="c"> 97. </span>    <span class="nb">print</span><span class="p">(</span><span class="n">getCanvasString</span><span class="p">(</span><span class="n">canvas</span><span class="p">,</span> <span class="n">cursorX</span><span class="p">,</span> <span class="n">cursorY</span><span class="p">))</span>
+<span class="c"> 98. </span>
+<span class="c"> 99. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;WASD keys to move, H for help, C to clear, &#39;</span>
+<span class="c">100. </span>        <span class="o">+</span> <span class="s1">&#39;F to save, or QUIT.&#39;</span><span class="p">)</span>
+<span class="c">101. </span>    <span class="n">response</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;&gt; &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+<span class="c">102. </span>
+<span class="c">103. </span>    <span class="k">if</span> <span class="n">response</span> <span class="o">==</span> <span class="s1">&#39;QUIT&#39;</span><span class="p">:</span>
+<span class="c">104. </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Thanks for playing!&#39;</span><span class="p">)</span>
+<span class="c">105. </span>        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>  <span class="c1"># Quit the program.</span>
+<span class="c">106. </span>    <span class="k">elif</span> <span class="n">response</span> <span class="o">==</span> <span class="s1">&#39;H&#39;</span><span class="p">:</span>
+<span class="c">107. </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Enter W, A, S, and D characters to move the cursor and&#39;</span><span class="p">)</span>
+<span class="c">108. </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;draw a line behind it as it moves. For example, ddd&#39;</span><span class="p">)</span>
+<span class="c">109. </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;draws a line going right and sssdddwwwaaa draws a box.&#39;</span><span class="p">)</span>
+<span class="c">110. </span>        <span class="nb">print</span><span class="p">()</span>
+<span class="c">111. </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;You can save your drawing to a text file by entering F.&#39;</span><span class="p">)</span>
+<span class="c">112. </span>        <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;Press Enter to return to the program...&#39;</span><span class="p">)</span>
+<span class="c">113. </span>        <span class="k">continue</span>
+<span class="c">114. </span>    <span class="k">elif</span> <span class="n">response</span> <span class="o">==</span> <span class="s1">&#39;C&#39;</span><span class="p">:</span>
+<span class="c">115. </span>        <span class="n">canvas</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># Erase the canvas data.</span>
+<span class="c">116. </span>        <span class="n">moves</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">)</span>  <span class="c1"># Record this move.</span>
+<span class="c">117. </span>    <span class="k">elif</span> <span class="n">response</span> <span class="o">==</span> <span class="s1">&#39;F&#39;</span><span class="p">:</span>
+<span class="c">118. </span>        <span class="c1"># Save the canvas string to a text file:</span>
+<span class="c">119. </span>        <span class="k">try</span><span class="p">:</span>
+<span class="c">120. </span>            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Enter filename to save to:&#39;</span><span class="p">)</span>
+<span class="c">121. </span>            <span class="n">filename</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;&gt; &#39;</span><span class="p">)</span>
+<span class="c">122. </span>
+<span class="c">123. </span>            <span class="c1"># Make sure the filename ends with .txt:</span>
+<span class="c">124. </span>            <span class="k">if</span> <span class="ow">not</span> <span class="n">filename</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.txt&#39;</span><span class="p">):</span>
+<span class="c">125. </span>                <span class="n">filename</span> <span class="o">+=</span> <span class="s1">&#39;.txt&#39;</span>
+<span class="c">126. </span>            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+<span class="c">127. </span>                <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">moves</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="c">128. </span>                <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">getCanvasString</span><span class="p">(</span><span class="n">canvas</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+<span class="c">129. </span>        <span class="k">except</span><span class="p">:</span>
+<span class="c">130. </span>            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ERROR: Could not save file.&#39;</span><span class="p">)</span>
+<span class="c">131. </span>
+<span class="c">132. </span>    <span class="k">for</span> <span class="n">command</span> <span class="ow">in</span> <span class="n">response</span><span class="p">:</span>
+<span class="c">133. </span>        <span class="k">if</span> <span class="n">command</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;W&#39;</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;S&#39;</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">):</span>
+<span class="c">134. </span>            <span class="k">continue</span>  <span class="c1"># Ignore this letter and continue to the next one.</span>
+<span class="c">135. </span>        <span class="n">moves</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>  <span class="c1"># Record this move.</span>
+<span class="c">136. </span>
+<span class="c">137. </span>        <span class="c1"># The first line we add needs to form a full line:</span>
+<span class="c">138. </span>        <span class="k">if</span> <span class="n">canvas</span> <span class="o">==</span> <span class="p">{}:</span>
+<span class="c">139. </span>            <span class="k">if</span> <span class="n">command</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;W&#39;</span><span class="p">,</span> <span class="s1">&#39;S&#39;</span><span class="p">):</span>
+<span class="c">140. </span>                <span class="c1"># Make the first line a horizontal one:</span>
+<span class="c">141. </span>                <span class="n">canvas</span><span class="p">[(</span><span class="n">cursorX</span><span class="p">,</span> <span class="n">cursorY</span><span class="p">)]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;W&#39;</span><span class="p">,</span> <span class="s1">&#39;S&#39;</span><span class="p">])</span>
+<span class="c">142. </span>            <span class="k">elif</span> <span class="n">command</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">):</span>
+<span class="c">143. </span>                <span class="c1"># Make the first line a vertical one:</span>
+<span class="c">144. </span>                <span class="n">canvas</span><span class="p">[(</span><span class="n">cursorX</span><span class="p">,</span> <span class="n">cursorY</span><span class="p">)]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">])</span>
+<span class="c">145. </span>
+<span class="c">146. </span>        <span class="c1"># Update x and y:</span>
+<span class="c">147. </span>        <span class="k">if</span> <span class="n">command</span> <span class="o">==</span> <span class="s1">&#39;W&#39;</span> <span class="ow">and</span> <span class="n">cursorY</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+<span class="c">148. </span>            <span class="n">canvas</span><span class="p">[(</span><span class="n">cursorX</span><span class="p">,</span> <span class="n">cursorY</span><span class="p">)]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+<span class="c">149. </span>            <span class="n">cursorY</span> <span class="o">=</span> <span class="n">cursorY</span> <span class="o">-</span> <span class="mi">1</span>
+<span class="c">150. </span>        <span class="k">elif</span> <span class="n">command</span> <span class="o">==</span> <span class="s1">&#39;S&#39;</span> <span class="ow">and</span> <span class="n">cursorY</span> <span class="o">&lt;</span> <span class="n">CANVAS_HEIGHT</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+<span class="c">151. </span>            <span class="n">canvas</span><span class="p">[(</span><span class="n">cursorX</span><span class="p">,</span> <span class="n">cursorY</span><span class="p">)]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+<span class="c">152. </span>            <span class="n">cursorY</span> <span class="o">=</span> <span class="n">cursorY</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="c">153. </span>        <span class="k">elif</span> <span class="n">command</span> <span class="o">==</span> <span class="s1">&#39;A&#39;</span> <span class="ow">and</span> <span class="n">cursorX</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+<span class="c">154. </span>            <span class="n">canvas</span><span class="p">[(</span><span class="n">cursorX</span><span class="p">,</span> <span class="n">cursorY</span><span class="p">)]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+<span class="c">155. </span>            <span class="n">cursorX</span> <span class="o">=</span> <span class="n">cursorX</span> <span class="o">-</span> <span class="mi">1</span>
+<span class="c">156. </span>        <span class="k">elif</span> <span class="n">command</span> <span class="o">==</span> <span class="s1">&#39;D&#39;</span> <span class="ow">and</span> <span class="n">cursorX</span> <span class="o">&lt;</span> <span class="n">CANVAS_WIDTH</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+<span class="c">157. </span>            <span class="n">canvas</span><span class="p">[(</span><span class="n">cursorX</span><span class="p">,</span> <span class="n">cursorY</span><span class="p">)]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+<span class="c">158. </span>            <span class="n">cursorX</span> <span class="o">=</span> <span class="n">cursorX</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="c">159. </span>        <span class="k">else</span><span class="p">:</span>
+<span class="c">160. </span>            <span class="c1"># If the cursor doesn&#39;t move because it would have moved off</span>
+<span class="c">161. </span>            <span class="c1"># the edge of the canvas, then don&#39;t change the set at</span>
+<span class="c">162. </span>            <span class="c1"># canvas[(cursorX, cursorY)].</span>
+<span class="c">163. </span>            <span class="k">continue</span>
+<span class="c">164. </span>
+<span class="c">165. </span>        <span class="c1"># If there&#39;s no set for (cursorX, cursorY), add an empty set:</span>
+<span class="c">166. </span>        <span class="k">if</span> <span class="p">(</span><span class="n">cursorX</span><span class="p">,</span> <span class="n">cursorY</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">canvas</span><span class="p">:</span>
+<span class="c">167. </span>            <span class="n">canvas</span><span class="p">[(</span><span class="n">cursorX</span><span class="p">,</span> <span class="n">cursorY</span><span class="p">)]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+<span class="c">168. </span>
+<span class="c">169. </span>        <span class="c1"># Add the direction string to this xy point&#39;s set:</span>
+<span class="c">170. </span>        <span class="k">if</span> <span class="n">command</span> <span class="o">==</span> <span class="s1">&#39;W&#39;</span><span class="p">:</span>
+<span class="c">171. </span>            <span class="n">canvas</span><span class="p">[(</span><span class="n">cursorX</span><span class="p">,</span> <span class="n">cursorY</span><span class="p">)]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;S&#39;</span><span class="p">)</span>
+<span class="c">172. </span>        <span class="k">elif</span> <span class="n">command</span> <span class="o">==</span> <span class="s1">&#39;S&#39;</span><span class="p">:</span>
+<span class="c">173. </span>            <span class="n">canvas</span><span class="p">[(</span><span class="n">cursorX</span><span class="p">,</span> <span class="n">cursorY</span><span class="p">)]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;W&#39;</span><span class="p">)</span>
+<span class="c">174. </span>        <span class="k">elif</span> <span class="n">command</span> <span class="o">==</span> <span class="s1">&#39;A&#39;</span><span class="p">:</span>
+<span class="c">175. </span>            <span class="n">canvas</span><span class="p">[(</span><span class="n">cursorX</span><span class="p">,</span> <span class="n">cursorY</span><span class="p">)]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;D&#39;</span><span class="p">)</span>
+<span class="c">176. </span>        <span class="k">elif</span> <span class="n">command</span> <span class="o">==</span> <span class="s1">&#39;D&#39;</span><span class="p">:</span>
+<span class="c">177. </span>            <span class="n">canvas</span><span class="p">[(</span><span class="n">cursorX</span><span class="p">,</span> <span class="n">cursorY</span><span class="p">)]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">)</span>
+</pre></div>
+
 <h2 id="calibre_link-120" class="calibre5">Exploring the Program</h2>
 <p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
 <ol class="decimal">

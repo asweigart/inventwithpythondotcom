@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Conway's Game of Life</title></head><body style="background-color: #fffeee;">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><link rel="stylesheet" type="text/css" href="pygments.css"><title>Conway's Game of Life</title></head><body style="background-color: #fffeee;">
 
 <script type="text/javascript">
 //<![CDATA[
@@ -75,98 +75,101 @@ OO        OO                             O O    O                    OO
 OO            O                      O   OOO     O OOO        OOOO       O</code></pre>
 <h2 id="calibre_link-83" class="calibre5">How It Works</h2>
 <p class="bodyfirst">The state of the cells is stored in dictionaries in the <code class="calibre22">cells</code> and <code class="calibre22">nextCells</code> variables. Both dictionaries have <code class="calibre22">(x, y)</code> tuples for keys (where <code class="calibre22">x</code> and <code class="calibre22">y</code> are integers), <code class="calibre22">'O'</code> for living cells, and <code class="calibre22">' '</code> for dead cells. Lines 40 to 44 are set up to print a representation of these dictionaries onto the screen. The <code class="calibre22">cells</code> variable’s dictionary represents the current state of the cells, while <code class="calibre22">nextCells</code> stores the dictionary for the cells in the next step in the simulation.</p>
-<pre class="calibre24"><code class="calibre22"> 1. """Conway's Game of Life, by Al Sweigart al@inventwithpython.com
- 2. The classic cellular automata simulation. Press Ctrl-C to stop.
- 3. More info at: https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
- 4. View this code at https://nostarch.com/big-book-small-python-projects
- 5. Tags: short, artistic, simulation"""
- 6.
- 7. import copy, random, sys, time
- 8.
- 9. # Set up the constants:
-10. WIDTH = 79   # The width of the cell grid.
-11. HEIGHT = 20  # The height of the cell grid.
-12.
-13. # (!) Try changing ALIVE to '#' or another character:
-14. ALIVE = 'O'  # The character representing a living cell.
-15. # (!) Try changing DEAD to '.' or another character:
-16. DEAD = ' '   # The character representing a dead cell.
-17.
-18. # (!) Try changing ALIVE to '|' and DEAD to '-'.
-19.
-20. # The cells and nextCells are dictionaries for the state of the game.
-21. # Their keys are (x, y) tuples and their values are one of the ALIVE
-22. # or DEAD values.
-23. nextCells = {}
-24. # Put random dead and alive cells into nextCells:
-25. for x in range(WIDTH):  # Loop over every possible column.
-26.     for y in range(HEIGHT):  # Loop over every possible row.
-27.         # 50/50 chance for starting cells being alive or dead.
-28.         if random.randint(0, 1) == 0:
-29.             nextCells[(x, y)] = ALIVE  # Add a living cell.
-30.         else:
-31.             nextCells[(x, y)] = DEAD  # Add a dead cell.
-32.
-33. while True:  # Main program loop.
-34.     # Each iteration of this loop is a step of the simulation.
-35.
-36.     print('\n' * 50)  # Separate each step with newlines.
-37.     cells = copy.deepcopy(nextCells)
-38.
-39.     # Print cells on the screen:
-40.     for y in range(HEIGHT):
-41.         for x in range(WIDTH):
-42.             print(cells[(x, y)], end='')  # Print the # or space.
-43.         print()  # Print a newline at the end of the row.
-44.     print('Press Ctrl-C to quit.')
-45.
-46.     # Calculate the next step's cells based on current step's cells:
-47.     for x in range(WIDTH):
-48.         for y in range(HEIGHT):
-49.             # Get the neighboring coordinates of (x, y), even if they
-50.             # wrap around the edge:
-51.             left  = (x - 1) % WIDTH
-52.             right = (x + 1) % WIDTH
-53.             above = (y - 1) % HEIGHT
-54.             below = (y + 1) % HEIGHT
-55.
-56.             # Count the number of living neighbors:
-57.             numNeighbors = 0
-58.             if cells[(left, above)] == ALIVE:
-59.                 numNeighbors += 1  # Top-left neighbor is alive.
-60.             if cells[(x, above)] == ALIVE:
-61.                 numNeighbors += 1  # Top neighbor is alive.
-62.             if cells[(right, above)] == ALIVE:
-63.                 numNeighbors += 1  # Top-right neighbor is alive.
-64.             if cells[(left, y)] == ALIVE:
-65.                 numNeighbors += 1  # Left neighbor is alive.
-66.             if cells[(right, y)] == ALIVE:
-67.                 numNeighbors += 1  # Right neighbor is alive.
-68.             if cells[(left, below)] == ALIVE:
-69.                 numNeighbors += 1  # Bottom-left neighbor is alive.
-70.             if cells[(x, below)] == ALIVE:
-71.                 numNeighbors += 1  # Bottom neighbor is alive.
-72.             if cells[(right, below)] == ALIVE:
-73.                 numNeighbors += 1  # Bottom-right neighbor is alive.
-74.
-75.             # Set cell based on Conway's Game of Life rules:
-76.             if cells[(x, y)] == ALIVE and (numNeighbors == 2
-77.                 or numNeighbors == 3):
-78.                     # Living cells with 2 or 3 neighbors stay alive:
-79.                     nextCells[(x, y)] = ALIVE
-80.             elif cells[(x, y)] == DEAD and numNeighbors == 3:
-81.                 # Dead cells with 3 neighbors become alive:
-82.                 nextCells[(x, y)] = ALIVE
-83.             else:
-84.                 # Everything else dies or stays dead:
-85.                 nextCells[(x, y)] = DEAD
-86.
-87.     try:
-88.         time.sleep(1)  # Add a 1 second pause to reduce flickering.
-89.     except KeyboardInterrupt:
-90.         print("Conway's Game of Life")
-91.         print('By Al Sweigart al@inventwithpython.com')
-92.         sys.exit()  # When Ctrl-C is pressed, end the program.</code></pre>
+<div class="highlight"><pre><span></span>
+<span class="c"> 1. </span><span class="sd">&quot;&quot;&quot;Conway&#39;s Game of Life, by Al Sweigart al@inventwithpython.com</span>
+<span class="c"> 2. </span><span class="sd">The classic cellular automata simulation. Press Ctrl-C to stop.</span>
+<span class="c"> 3. </span><span class="sd">More info at: https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life</span>
+<span class="c"> 4. </span><span class="sd">This code is available at https://nostarch.com/big-book-small-python-programming</span>
+<span class="c"> 5. </span><span class="sd">Tags: short, artistic, simulation&quot;&quot;&quot;</span>
+<span class="c"> 6. </span>
+<span class="c"> 7. </span><span class="kn">import</span> <span class="nn">copy</span><span class="o">,</span> <span class="nn">random</span><span class="o">,</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">time</span>
+<span class="c"> 8. </span>
+<span class="c"> 9. </span><span class="c1"># Set up the constants:</span>
+<span class="c">10. </span><span class="n">WIDTH</span> <span class="o">=</span> <span class="mi">79</span>   <span class="c1"># The width of the cell grid.</span>
+<span class="c">11. </span><span class="n">HEIGHT</span> <span class="o">=</span> <span class="mi">20</span>  <span class="c1"># The height of the cell grid.</span>
+<span class="c">12. </span>
+<span class="c">13. </span><span class="c1"># (!) Try changing ALIVE to &#39;#&#39; or another character:</span>
+<span class="c">14. </span><span class="n">ALIVE</span> <span class="o">=</span> <span class="s1">&#39;O&#39;</span>  <span class="c1"># The character representing a living cell.</span>
+<span class="c">15. </span><span class="c1"># (!) Try changing DEAD to &#39;.&#39; or another character:</span>
+<span class="c">16. </span><span class="n">DEAD</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span>   <span class="c1"># The character representing a dead cell.</span>
+<span class="c">17. </span>
+<span class="c">18. </span><span class="c1"># (!) Try changing ALIVE to &#39;|&#39; and DEAD to &#39;-&#39;.</span>
+<span class="c">19. </span>
+<span class="c">20. </span><span class="c1"># The cells and nextCells are dictionaries for the state of the game.</span>
+<span class="c">21. </span><span class="c1"># Their keys are (x, y) tuples and their values are one of the ALIVE</span>
+<span class="c">22. </span><span class="c1"># or DEAD values.</span>
+<span class="c">23. </span><span class="n">nextCells</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="c">24. </span><span class="c1"># Put random dead and alive cells into nextCells:</span>
+<span class="c">25. </span><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">WIDTH</span><span class="p">):</span>  <span class="c1"># Loop over every possible column.</span>
+<span class="c">26. </span>    <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">HEIGHT</span><span class="p">):</span>  <span class="c1"># Loop over every possible row.</span>
+<span class="c">27. </span>        <span class="c1"># 50/50 chance for starting cells being alive or dead.</span>
+<span class="c">28. </span>        <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+<span class="c">29. </span>            <span class="n">nextCells</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">=</span> <span class="n">ALIVE</span>  <span class="c1"># Add a living cell.</span>
+<span class="c">30. </span>        <span class="k">else</span><span class="p">:</span>
+<span class="c">31. </span>            <span class="n">nextCells</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">=</span> <span class="n">DEAD</span>  <span class="c1"># Add a dead cell.</span>
+<span class="c">32. </span>
+<span class="c">33. </span><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>  <span class="c1"># Main program loop.</span>
+<span class="c">34. </span>    <span class="c1"># Each iteration of this loop is a step of the simulation.</span>
+<span class="c">35. </span>
+<span class="c">36. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">*</span> <span class="mi">50</span><span class="p">)</span>  <span class="c1"># Separate each step with newlines.</span>
+<span class="c">37. </span>    <span class="n">cells</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">nextCells</span><span class="p">)</span>
+<span class="c">38. </span>
+<span class="c">39. </span>    <span class="c1"># Print cells on the screen:</span>
+<span class="c">40. </span>    <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">HEIGHT</span><span class="p">):</span>
+<span class="c">41. </span>        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">WIDTH</span><span class="p">):</span>
+<span class="c">42. </span>            <span class="nb">print</span><span class="p">(</span><span class="n">cells</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)],</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>  <span class="c1"># Print the # or space.</span>
+<span class="c">43. </span>        <span class="nb">print</span><span class="p">()</span>  <span class="c1"># Print a newline at the end of the row.</span>
+<span class="c">44. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Press Ctrl-C to quit.&#39;</span><span class="p">)</span>
+<span class="c">45. </span>
+<span class="c">46. </span>    <span class="c1"># Calculate the next step&#39;s cells based on current step&#39;s cells:</span>
+<span class="c">47. </span>    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">WIDTH</span><span class="p">):</span>
+<span class="c">48. </span>        <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">HEIGHT</span><span class="p">):</span>
+<span class="c">49. </span>            <span class="c1"># Get the neighboring coordinates of (x, y), even if they</span>
+<span class="c">50. </span>            <span class="c1"># wrap around the edge:</span>
+<span class="c">51. </span>            <span class="n">left</span>  <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">WIDTH</span>
+<span class="c">52. </span>            <span class="n">right</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">WIDTH</span>
+<span class="c">53. </span>            <span class="n">above</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">HEIGHT</span>
+<span class="c">54. </span>            <span class="n">below</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">HEIGHT</span>
+<span class="c">55. </span>
+<span class="c">56. </span>            <span class="c1"># Count the number of living neighbors:</span>
+<span class="c">57. </span>            <span class="n">numNeighbors</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="c">58. </span>            <span class="k">if</span> <span class="n">cells</span><span class="p">[(</span><span class="n">left</span><span class="p">,</span> <span class="n">above</span><span class="p">)]</span> <span class="o">==</span> <span class="n">ALIVE</span><span class="p">:</span>
+<span class="c">59. </span>                <span class="n">numNeighbors</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># Top-left neighbor is alive.</span>
+<span class="c">60. </span>            <span class="k">if</span> <span class="n">cells</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">above</span><span class="p">)]</span> <span class="o">==</span> <span class="n">ALIVE</span><span class="p">:</span>
+<span class="c">61. </span>                <span class="n">numNeighbors</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># Top neighbor is alive.</span>
+<span class="c">62. </span>            <span class="k">if</span> <span class="n">cells</span><span class="p">[(</span><span class="n">right</span><span class="p">,</span> <span class="n">above</span><span class="p">)]</span> <span class="o">==</span> <span class="n">ALIVE</span><span class="p">:</span>
+<span class="c">63. </span>                <span class="n">numNeighbors</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># Top-right neighbor is alive.</span>
+<span class="c">64. </span>            <span class="k">if</span> <span class="n">cells</span><span class="p">[(</span><span class="n">left</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">==</span> <span class="n">ALIVE</span><span class="p">:</span>
+<span class="c">65. </span>                <span class="n">numNeighbors</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># Left neighbor is alive.</span>
+<span class="c">66. </span>            <span class="k">if</span> <span class="n">cells</span><span class="p">[(</span><span class="n">right</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">==</span> <span class="n">ALIVE</span><span class="p">:</span>
+<span class="c">67. </span>                <span class="n">numNeighbors</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># Right neighbor is alive.</span>
+<span class="c">68. </span>            <span class="k">if</span> <span class="n">cells</span><span class="p">[(</span><span class="n">left</span><span class="p">,</span> <span class="n">below</span><span class="p">)]</span> <span class="o">==</span> <span class="n">ALIVE</span><span class="p">:</span>
+<span class="c">69. </span>                <span class="n">numNeighbors</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># Bottom-left neighbor is alive.</span>
+<span class="c">70. </span>            <span class="k">if</span> <span class="n">cells</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">below</span><span class="p">)]</span> <span class="o">==</span> <span class="n">ALIVE</span><span class="p">:</span>
+<span class="c">71. </span>                <span class="n">numNeighbors</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># Bottom neighbor is alive.</span>
+<span class="c">72. </span>            <span class="k">if</span> <span class="n">cells</span><span class="p">[(</span><span class="n">right</span><span class="p">,</span> <span class="n">below</span><span class="p">)]</span> <span class="o">==</span> <span class="n">ALIVE</span><span class="p">:</span>
+<span class="c">73. </span>                <span class="n">numNeighbors</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># Bottom-right neighbor is alive.</span>
+<span class="c">74. </span>
+<span class="c">75. </span>            <span class="c1"># Set cell based on Conway&#39;s Game of Life rules:</span>
+<span class="c">76. </span>            <span class="k">if</span> <span class="n">cells</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">==</span> <span class="n">ALIVE</span> <span class="ow">and</span> <span class="p">(</span><span class="n">numNeighbors</span> <span class="o">==</span> <span class="mi">2</span>
+<span class="c">77. </span>                <span class="ow">or</span> <span class="n">numNeighbors</span> <span class="o">==</span> <span class="mi">3</span><span class="p">):</span>
+<span class="c">78. </span>                    <span class="c1"># Living cells with 2 or 3 neighbors stay alive:</span>
+<span class="c">79. </span>                    <span class="n">nextCells</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">=</span> <span class="n">ALIVE</span>
+<span class="c">80. </span>            <span class="k">elif</span> <span class="n">cells</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">==</span> <span class="n">DEAD</span> <span class="ow">and</span> <span class="n">numNeighbors</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+<span class="c">81. </span>                <span class="c1"># Dead cells with 3 neighbors become alive:</span>
+<span class="c">82. </span>                <span class="n">nextCells</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">=</span> <span class="n">ALIVE</span>
+<span class="c">83. </span>            <span class="k">else</span><span class="p">:</span>
+<span class="c">84. </span>                <span class="c1"># Everything else dies or stays dead:</span>
+<span class="c">85. </span>                <span class="n">nextCells</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">=</span> <span class="n">DEAD</span>
+<span class="c">86. </span>
+<span class="c">87. </span>    <span class="k">try</span><span class="p">:</span>
+<span class="c">88. </span>        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># Add a 1 second pause to reduce flickering.</span>
+<span class="c">89. </span>    <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
+<span class="c">90. </span>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Conway&#39;s Game of Life&quot;</span><span class="p">)</span>
+<span class="c">91. </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;By Al Sweigart al@inventwithpython.com&#39;</span><span class="p">)</span>
+<span class="c">92. </span>        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>  <span class="c1"># When Ctrl-C is pressed, end the program.</span>
+</pre></div>
+
 <p class="calibre19">After entering the source code and running it a few times, try making experimental changes to it. The comments marked with <code class="calibre22">(!)</code> have suggestions for small changes you can make. On your own, you can also try to figure out how to do the following:</p>
 <ul class="calibre25">
 <li class="calibre8">Adjust the percentage of cells that start as living, instead of always using 50 percent.</li>

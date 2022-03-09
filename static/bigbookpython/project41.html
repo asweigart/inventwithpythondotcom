@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Lucky Stars</title></head><body style="background-color: #fffeee;">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><link rel="stylesheet" type="text/css" href="pygments.css"><title>Lucky Stars</title></head><body style="background-color: #fffeee;">
 
 <script type="text/javascript">
 //<![CDATA[
@@ -85,249 +85,252 @@ Do you want to roll again? Y/N
 <var class="calibre27">--snip--</var></code></pre>
 <h2 id="calibre_link-184" class="calibre5">How It Works</h2>
 <p class="bodyfirst">The text-based graphics in this program are stored as strings in a list in the <code class="calibre22">STAR_FACE</code>, <code class="calibre22">SKULL_FACE</code>, and <code class="calibre22">QUESTION_FACE</code> variables. This format makes them easy to write in a code editor, while the code in lines 154 to 157 display them on the screen. Note that because three dice are shown together, this code must print each horizontal row of text on a die face at a time. Simply running code like <code class="calibre22">print(STAR_FACE)</code> would result in each of the three dice appearing on top of each other, instead of side by side.</p>
-<pre class="calibre24"><code class="calibre22">  1. """Lucky Stars, by Al Sweigart al@inventwithpython.com
-  2. A "press your luck" game where you roll dice to gather as many stars
-  3. as possible. You can roll as many times as you want, but if you roll
-  4. three skulls you lose all your stars.
-  5.
-  6. Inspired by the Zombie Dice game from Steve Jackson Games.
-  7. View this code at https://nostarch.com/big-book-small-python-projects
-  8. Tags: large, game, multiplayer"""
-  9.
- 10. import random
- 11.
- 12. # Set up the constants:
- 13. GOLD = 'GOLD'
- 14. SILVER = 'SILVER'
- 15. BRONZE = 'BRONZE'
- 16.
- 17. STAR_FACE = ["+-----------+",
- 18.              "|     .     |",
- 19.              "|    ,O,    |",
- 20.              "| 'ooOOOoo' |",
- 21.              "|   `OOO`   |",
- 22.              "|   O' 'O   |",
- 23.              "+-----------+"]
- 24. SKULL_FACE = ['+-----------+',
- 25.               '|    ___    |',
- 26.               '|   /   \\   |',
- 27.               '|  |() ()|  |',
- 28.               '|   \\ ^ /   |',
- 29.               '|    VVV    |',
- 30.               '+-----------+']
- 31. QUESTION_FACE = ['+-----------+',
- 32.                  '|           |',
- 33.                  '|           |',
- 34.                  '|     ?     |',
- 35.                  '|           |',
- 36.                  '|           |',
- 37.                  '+-----------+']
- 38. FACE_WIDTH = 13
- 39. FACE_HEIGHT = 7
- 40.
- 41. print("""Lucky Stars, by Al Sweigart al@inventwithpython.com
- 42.
- 43. A "press your luck" game where you roll dice with Stars, Skulls, and
- 44. Question Marks.
- 45.
- 46. On your turn, you pull three random dice from the dice cup and roll
- 47. them. You can roll Stars, Skulls, and Question Marks. You can end your
- 48. turn and get one point per Star. If you choose to roll again, you keep
- 49. the Question Marks and pull new dice to replace the Stars and Skulls.
- 50. If you collect three Skulls, you lose all your Stars and end your turn.
- 51.
- 52. When a player gets 13 points, everyone else gets one more turn before
- 53. the game ends. Whoever has the most points wins.
- 54.
- 55. There are 6 Gold dice, 4 Silver dice, and 3 Bronze dice in the cup.
- 56. Gold dice have more Stars, Bronze dice have more Skulls, and Silver is
- 57. even.
- 58. """)
- 59.
- 60. print('How many players are there?')
- 61. while True:  # Loop until the user enters a number.
- 62.     response = input('&gt; ')
- 63.     if response.isdecimal() and int(response) &gt; 1:
- 64.         numPlayers = int(response)
- 65.         break
- 66.     print('Please enter a number larger than 1.')
- 67.
- 68. playerNames = []  # List of strings of player names.
- 69. playerScores = {}  # Keys are player names, values are integer scores.
- 70. for i in range(numPlayers):
- 71.     while True:  # Keep looping until a name is entered.
- 72.         print('What is player #' + str(i + 1) + '\'s name?')
- 73.         response = input('&gt; ')
- 74.         if response != '' and response not in playerNames:
- 75.             playerNames.append(response)
- 76.             playerScores[response] = 0
- 77.             break
- 78.         print('Please enter a name.')
- 79. print()
- 80.
- 81. turn = 0  # The player at playerNames[0] will go first.
- 82. # (!) Uncomment to let a player named 'Al' start with three points:
- 83. #playerScores['Al'] = 3
- 84. endGameWith = None
- 85. while True:  # Main game loop.
- 86.     # Display everyone's score:
- 87.     print()
- 88.     print('SCORES: ', end='')
- 89.     for i, name in enumerate(playerNames):
- 90.         print(name + ' = ' + str(playerScores[name]), end='')
- 91.         if i != len(playerNames) - 1:
- 92.             # All but the last player have commas separating their names.
- 93.             print(', ', end='')
- 94.     print('\n')
- 95.
- 96.     # Start the number of collected stars and skulls at 0.
- 97.     stars = 0
- 98.     skulls = 0
- 99.     # A cup has 6 gold, 4 silver, and 3 bronze dice:
-100.     cup = ([GOLD] * 6) + ([SILVER] * 4) + ([BRONZE] * 3)
-101.     hand = []  # Your hand starts with no dice.
-102.     print('It is ' + playerNames[turn] + '\'s turn.')
-103.     while True:  # Each iteration of this loop is rolling the dice.
-104.         print()
-105.
-106.         # Check that there's enough dice left in the cup:
-107.         if (3 - len(hand)) &gt; len(cup):
-108.             # End this turn because there are not enough dice:
-109.             print('There aren\'t enough dice left in the cup to '
-110.                 + 'continue ' + playerNames[turn] + '\'s turn.')
-111.             break
-112.
-113.         # Pull dice from the cup until you have 3 in your hand:
-114.         random.shuffle(cup)  # Shuffle the dice in the cup.
-115.         while len(hand) &lt; 3:
-116.             hand.append(cup.pop())
-117.
-118.         # Roll the dice:
-119.         rollResults = []
-120.         for dice in hand:
-121.             roll = random.randint(1, 6)
-122.             if dice == GOLD:
-123.                 # Roll a gold die (3 stars, 2 questions, 1 skull):
-124.                 if 1 &lt;= roll &lt;= 3:
-125.                     rollResults.append(STAR_FACE)
-126.                     stars += 1
-127.                 elif 4 &lt;= roll &lt;= 5:
-128.                     rollResults.append(QUESTION_FACE)
-129.                 else:
-130.                     rollResults.append(SKULL_FACE)
-131.                     skulls += 1
-132.             if dice == SILVER:
-133.                 # Roll a silver die (2 stars, 2 questions, 2 skulls):
-134.                 if 1 &lt;= roll &lt;= 2:
-135.                     rollResults.append(STAR_FACE)
-136.                     stars += 1
-137.                 elif 3 &lt;= roll &lt;= 4:
-138.                     rollResults.append(QUESTION_FACE)
-139.                 else:
-140.                     rollResults.append(SKULL_FACE)
-141.                     skulls += 1
-142.             if dice == BRONZE:
-143.                 # Roll a bronze die (1 star, 2 questions, 3 skulls):
-144.                 if roll == 1:
-145.                     rollResults.append(STAR_FACE)
-146.                     stars += 1
-147.                 elif 2 &lt;= roll &lt;= 4:
-148.                     rollResults.append(QUESTION_FACE)
-149.                 else:
-150.                     rollResults.append(SKULL_FACE)
-151.                     skulls += 1
-152.
-153.         # Display roll results:
-154.         for lineNum in range(FACE_HEIGHT):
-155.             for diceNum in range(3):
-156.                 print(rollResults[diceNum][lineNum] + ' ', end='')
-157.             print()  # Print a newline.
-158.
-159.         # Display the type of dice each one is (gold, silver, bronze):
-160.         for diceType in hand:
-161.             print(diceType.center(FACE_WIDTH) + ' ', end='')
-162.         print()  # Print a newline.
-163.
-164.         print('Stars collected:', stars, '  Skulls collected:', skulls)
-165.
-166.         # Check if they've collected 3 or more skulls:
-167.         if skulls &gt;= 3:
-168.             print('3 or more skulls means you\'ve lost your stars!')
-169.             input('Press Enter to continue...')
-170.             break
-171.
-172.         print(playerNames[turn] + ', do you want to roll again? Y/N')
-173.         while True:  # Keep asking the player until they enter Y or N:
-174.             response = input('&gt; ').upper()
-175.             if response != '' and response[0] in ('Y', 'N'):
-176.                 break
-177.             print('Please enter Yes or No.')
-178.
-179.         if response.startswith('N'):
-180.             print(playerNames[turn], 'got', stars, 'stars!')
-181.             # Add stars to this player's point total:
-182.             playerScores[playerNames[turn]] += stars
-183.
-184.             # Check if they've reached 13 or more points:
-185.             # (!) Try changing this to 5 or 50 points.
-186.             if (endGameWith == None
-187.                 and playerScores[playerNames[turn]] &gt;= 13):
-188.                 # Since this player reached 13 points, play one more
-189.                 # round for all other players:
-190.                 print('\n\n' + ('!' * 60))
-191.                 print(playerNames[turn] + ' has reached 13 points!!!')
-192.                 print('Everyone else will get one more turn!')
-193.                 print(('!' * 60) + '\n\n')
-194.                 endGameWith = playerNames[turn]
-195.             input('Press Enter to continue...')
-196.             break
-197.
-198.         # Discard the stars and skulls, but keep the question marks:
-199.         nextHand = []
-200.         for i in range(3):
-201.             if rollResults[i] == QUESTION_FACE:
-202.                 nextHand.append(hand[i])  # Keep the question marks.
-203.         hand = nextHand
-204.
-205.     # Move on to the next player's turn:
-206.     turn = (turn + 1) % numPlayers
-207.
-208.     # If the game has ended, break out of this loop:
-209.     if endGameWith == playerNames[turn]:
-210.         break  # End the game.
-211.
-212. print('The game has ended...')
-213.
-214. # Display everyone's score:
-215. print()
-216. print('SCORES: ', end='')
-217. for i, name in enumerate(playerNames):
-218.     print(name + ' = ' + str(playerScores[name]), end='')
-219.     if i != len(playerNames) - 1:
-220.         # All but the last player have commas separating their names.
-221.         print(', ', end='')
-222. print('\n')
-223.
-224. # Find out who the winners are:
-225. highestScore = 0
-226. winners = []
-227. for name, score in playerScores.items():
-228.     if score &gt; highestScore:
-229.         # This player has the highest score:
-230.         highestScore = score
-231.         winners = [name]  # Overwrite any previous winners.
-232.     elif score == highestScore:
-233.         # This player is tied with the highest score.
-234.         winners.append(name)
-235.
-236. if len(winners) == 1:
-237.     # There is only one winner:
-238.     print('The winner is ' + winners[0] + '!!!')
-239. else:
-240.     # There are multiple tied winners:
-241.     print('The winners are: ' + ', '.join(winners))
-242.
-243. print('Thanks for playing!')</code></pre>
+<div class="highlight"><pre><span></span>
+<span class="c">  1. </span><span class="sd">&quot;&quot;&quot;Lucky Stars, by Al Sweigart al@inventwithpython.com</span>
+<span class="c">  2. </span><span class="sd">A &quot;press your luck&quot; game where you roll dice to gather as many stars</span>
+<span class="c">  3. </span><span class="sd">as possible. You can roll as many times as you want, but if you roll</span>
+<span class="c">  4. </span><span class="sd">three skulls you lose all your stars.</span>
+<span class="c">  5. </span>
+<span class="c">  6. </span><span class="sd">Inspired by the Zombie Dice game from Steve Jackson Games.</span>
+<span class="c">  7. </span><span class="sd">This code is available at https://nostarch.com/big-book-small-python-programming</span>
+<span class="c">  8. </span><span class="sd">Tags: large, game, multiplayer&quot;&quot;&quot;</span>
+<span class="c">  9. </span>
+<span class="c"> 10. </span><span class="kn">import</span> <span class="nn">random</span>
+<span class="c"> 11. </span>
+<span class="c"> 12. </span><span class="c1"># Set up the constants:</span>
+<span class="c"> 13. </span><span class="n">GOLD</span> <span class="o">=</span> <span class="s1">&#39;GOLD&#39;</span>
+<span class="c"> 14. </span><span class="n">SILVER</span> <span class="o">=</span> <span class="s1">&#39;SILVER&#39;</span>
+<span class="c"> 15. </span><span class="n">BRONZE</span> <span class="o">=</span> <span class="s1">&#39;BRONZE&#39;</span>
+<span class="c"> 16. </span>
+<span class="c"> 17. </span><span class="n">STAR_FACE</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;+-----------+&quot;</span><span class="p">,</span>
+<span class="c"> 18. </span>             <span class="s2">&quot;|     .     |&quot;</span><span class="p">,</span>
+<span class="c"> 19. </span>             <span class="s2">&quot;|    ,O,    |&quot;</span><span class="p">,</span>
+<span class="c"> 20. </span>             <span class="s2">&quot;| &#39;ooOOOoo&#39; |&quot;</span><span class="p">,</span>
+<span class="c"> 21. </span>             <span class="s2">&quot;|   `OOO`   |&quot;</span><span class="p">,</span>
+<span class="c"> 22. </span>             <span class="s2">&quot;|   O&#39; &#39;O   |&quot;</span><span class="p">,</span>
+<span class="c"> 23. </span>             <span class="s2">&quot;+-----------+&quot;</span><span class="p">]</span>
+<span class="c"> 24. </span><span class="n">SKULL_FACE</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;+-----------+&#39;</span><span class="p">,</span>
+<span class="c"> 25. </span>              <span class="s1">&#39;|    ___    |&#39;</span><span class="p">,</span>
+<span class="c"> 26. </span>              <span class="s1">&#39;|   /   </span><span class="se">\\</span><span class="s1">   |&#39;</span><span class="p">,</span>
+<span class="c"> 27. </span>              <span class="s1">&#39;|  |() ()|  |&#39;</span><span class="p">,</span>
+<span class="c"> 28. </span>              <span class="s1">&#39;|   </span><span class="se">\\</span><span class="s1"> ^ /   |&#39;</span><span class="p">,</span>
+<span class="c"> 29. </span>              <span class="s1">&#39;|    VVV    |&#39;</span><span class="p">,</span>
+<span class="c"> 30. </span>              <span class="s1">&#39;+-----------+&#39;</span><span class="p">]</span>
+<span class="c"> 31. </span><span class="n">QUESTION_FACE</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;+-----------+&#39;</span><span class="p">,</span>
+<span class="c"> 32. </span>                 <span class="s1">&#39;|           |&#39;</span><span class="p">,</span>
+<span class="c"> 33. </span>                 <span class="s1">&#39;|           |&#39;</span><span class="p">,</span>
+<span class="c"> 34. </span>                 <span class="s1">&#39;|     ?     |&#39;</span><span class="p">,</span>
+<span class="c"> 35. </span>                 <span class="s1">&#39;|           |&#39;</span><span class="p">,</span>
+<span class="c"> 36. </span>                 <span class="s1">&#39;|           |&#39;</span><span class="p">,</span>
+<span class="c"> 37. </span>                 <span class="s1">&#39;+-----------+&#39;</span><span class="p">]</span>
+<span class="c"> 38. </span><span class="n">FACE_WIDTH</span> <span class="o">=</span> <span class="mi">13</span>
+<span class="c"> 39. </span><span class="n">FACE_HEIGHT</span> <span class="o">=</span> <span class="mi">7</span>
+<span class="c"> 40. </span>
+<span class="c"> 41. </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;Lucky Stars, by Al Sweigart al@inventwithpython.com</span>
+<span class="c"> 42. </span>
+<span class="c"> 43. </span><span class="s2">A &quot;press your luck&quot; game where you roll dice with Stars, Skulls, and</span>
+<span class="c"> 44. </span><span class="s2">Question Marks.</span>
+<span class="c"> 45. </span>
+<span class="c"> 46. </span><span class="s2">On your turn, you pull three random dice from the dice cup and roll</span>
+<span class="c"> 47. </span><span class="s2">them. You can roll Stars, Skulls, and Question Marks. You can end your</span>
+<span class="c"> 48. </span><span class="s2">turn and get one point per Star. If you choose to roll again, you keep</span>
+<span class="c"> 49. </span><span class="s2">the Question Marks and pull new dice to replace the Stars and Skulls.</span>
+<span class="c"> 50. </span><span class="s2">If you collect three Skulls, you lose all your Stars and end your turn.</span>
+<span class="c"> 51. </span>
+<span class="c"> 52. </span><span class="s2">When a player gets 13 points, everyone else gets one more turn before</span>
+<span class="c"> 53. </span><span class="s2">the game ends. Whoever has the most points wins.</span>
+<span class="c"> 54. </span>
+<span class="c"> 55. </span><span class="s2">There are 6 Gold dice, 4 Silver dice, and 3 Bronze dice in the cup.</span>
+<span class="c"> 56. </span><span class="s2">Gold dice have more Stars, Bronze dice have more Skulls, and Silver is</span>
+<span class="c"> 57. </span><span class="s2">even.</span>
+<span class="c"> 58. </span><span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+<span class="c"> 59. </span>
+<span class="c"> 60. </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;How many players are there?&#39;</span><span class="p">)</span>
+<span class="c"> 61. </span><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>  <span class="c1"># Loop until the user enters a number.</span>
+<span class="c"> 62. </span>    <span class="n">response</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;&gt; &#39;</span><span class="p">)</span>
+<span class="c"> 63. </span>    <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">isdecimal</span><span class="p">()</span> <span class="ow">and</span> <span class="nb">int</span><span class="p">(</span><span class="n">response</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+<span class="c"> 64. </span>        <span class="n">numPlayers</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+<span class="c"> 65. </span>        <span class="k">break</span>
+<span class="c"> 66. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Please enter a number larger than 1.&#39;</span><span class="p">)</span>
+<span class="c"> 67. </span>
+<span class="c"> 68. </span><span class="n">playerNames</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># List of strings of player names.</span>
+<span class="c"> 69. </span><span class="n">playerScores</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># Keys are player names, values are integer scores.</span>
+<span class="c"> 70. </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numPlayers</span><span class="p">):</span>
+<span class="c"> 71. </span>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>  <span class="c1"># Keep looping until a name is entered.</span>
+<span class="c"> 72. </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;What is player #&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\&#39;</span><span class="s1">s name?&#39;</span><span class="p">)</span>
+<span class="c"> 73. </span>        <span class="n">response</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;&gt; &#39;</span><span class="p">)</span>
+<span class="c"> 74. </span>        <span class="k">if</span> <span class="n">response</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span> <span class="ow">and</span> <span class="n">response</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">playerNames</span><span class="p">:</span>
+<span class="c"> 75. </span>            <span class="n">playerNames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+<span class="c"> 76. </span>            <span class="n">playerScores</span><span class="p">[</span><span class="n">response</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="c"> 77. </span>            <span class="k">break</span>
+<span class="c"> 78. </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Please enter a name.&#39;</span><span class="p">)</span>
+<span class="c"> 79. </span><span class="nb">print</span><span class="p">()</span>
+<span class="c"> 80. </span>
+<span class="c"> 81. </span><span class="n">turn</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># The player at playerNames[0] will go first.</span>
+<span class="c"> 82. </span><span class="c1"># (!) Uncomment to let a player named &#39;Al&#39; start with three points:</span>
+<span class="c"> 83. </span><span class="c1">#playerScores[&#39;Al&#39;] = 3</span>
+<span class="c"> 84. </span><span class="n">endGameWith</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="c"> 85. </span><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>  <span class="c1"># Main game loop.</span>
+<span class="c"> 86. </span>    <span class="c1"># Display everyone&#39;s score:</span>
+<span class="c"> 87. </span>    <span class="nb">print</span><span class="p">()</span>
+<span class="c"> 88. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;SCORES: &#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c"> 89. </span>    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">playerNames</span><span class="p">):</span>
+<span class="c"> 90. </span>        <span class="nb">print</span><span class="p">(</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39; = &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">playerScores</span><span class="p">[</span><span class="n">name</span><span class="p">]),</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c"> 91. </span>        <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">playerNames</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+<span class="c"> 92. </span>            <span class="c1"># All but the last player have commas separating their names.</span>
+<span class="c"> 93. </span>            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;, &#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c"> 94. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="c"> 95. </span>
+<span class="c"> 96. </span>    <span class="c1"># Start the number of collected stars and skulls at 0.</span>
+<span class="c"> 97. </span>    <span class="n">stars</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="c"> 98. </span>    <span class="n">skulls</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="c"> 99. </span>    <span class="c1"># A cup has 6 gold, 4 silver, and 3 bronze dice:</span>
+<span class="c">100. </span>    <span class="n">cup</span> <span class="o">=</span> <span class="p">([</span><span class="n">GOLD</span><span class="p">]</span> <span class="o">*</span> <span class="mi">6</span><span class="p">)</span> <span class="o">+</span> <span class="p">([</span><span class="n">SILVER</span><span class="p">]</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="p">([</span><span class="n">BRONZE</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span>
+<span class="c">101. </span>    <span class="n">hand</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Your hand starts with no dice.</span>
+<span class="c">102. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;It is &#39;</span> <span class="o">+</span> <span class="n">playerNames</span><span class="p">[</span><span class="n">turn</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\&#39;</span><span class="s1">s turn.&#39;</span><span class="p">)</span>
+<span class="c">103. </span>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>  <span class="c1"># Each iteration of this loop is rolling the dice.</span>
+<span class="c">104. </span>        <span class="nb">print</span><span class="p">()</span>
+<span class="c">105. </span>
+<span class="c">106. </span>        <span class="c1"># Check that there&#39;s enough dice left in the cup:</span>
+<span class="c">107. </span>        <span class="k">if</span> <span class="p">(</span><span class="mi">3</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">hand</span><span class="p">))</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">cup</span><span class="p">):</span>
+<span class="c">108. </span>            <span class="c1"># End this turn because there are not enough dice:</span>
+<span class="c">109. </span>            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;There aren</span><span class="se">\&#39;</span><span class="s1">t enough dice left in the cup to &#39;</span>
+<span class="c">110. </span>                <span class="o">+</span> <span class="s1">&#39;continue &#39;</span> <span class="o">+</span> <span class="n">playerNames</span><span class="p">[</span><span class="n">turn</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\&#39;</span><span class="s1">s turn.&#39;</span><span class="p">)</span>
+<span class="c">111. </span>            <span class="k">break</span>
+<span class="c">112. </span>
+<span class="c">113. </span>        <span class="c1"># Pull dice from the cup until you have 3 in your hand:</span>
+<span class="c">114. </span>        <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">cup</span><span class="p">)</span>  <span class="c1"># Shuffle the dice in the cup.</span>
+<span class="c">115. </span>        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">hand</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+<span class="c">116. </span>            <span class="n">hand</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cup</span><span class="o">.</span><span class="n">pop</span><span class="p">())</span>
+<span class="c">117. </span>
+<span class="c">118. </span>        <span class="c1"># Roll the dice:</span>
+<span class="c">119. </span>        <span class="n">rollResults</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="c">120. </span>        <span class="k">for</span> <span class="n">dice</span> <span class="ow">in</span> <span class="n">hand</span><span class="p">:</span>
+<span class="c">121. </span>            <span class="n">roll</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+<span class="c">122. </span>            <span class="k">if</span> <span class="n">dice</span> <span class="o">==</span> <span class="n">GOLD</span><span class="p">:</span>
+<span class="c">123. </span>                <span class="c1"># Roll a gold die (3 stars, 2 questions, 1 skull):</span>
+<span class="c">124. </span>                <span class="k">if</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">roll</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">:</span>
+<span class="c">125. </span>                    <span class="n">rollResults</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">STAR_FACE</span><span class="p">)</span>
+<span class="c">126. </span>                    <span class="n">stars</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="c">127. </span>                <span class="k">elif</span> <span class="mi">4</span> <span class="o">&lt;=</span> <span class="n">roll</span> <span class="o">&lt;=</span> <span class="mi">5</span><span class="p">:</span>
+<span class="c">128. </span>                    <span class="n">rollResults</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">QUESTION_FACE</span><span class="p">)</span>
+<span class="c">129. </span>                <span class="k">else</span><span class="p">:</span>
+<span class="c">130. </span>                    <span class="n">rollResults</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">SKULL_FACE</span><span class="p">)</span>
+<span class="c">131. </span>                    <span class="n">skulls</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="c">132. </span>            <span class="k">if</span> <span class="n">dice</span> <span class="o">==</span> <span class="n">SILVER</span><span class="p">:</span>
+<span class="c">133. </span>                <span class="c1"># Roll a silver die (2 stars, 2 questions, 2 skulls):</span>
+<span class="c">134. </span>                <span class="k">if</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">roll</span> <span class="o">&lt;=</span> <span class="mi">2</span><span class="p">:</span>
+<span class="c">135. </span>                    <span class="n">rollResults</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">STAR_FACE</span><span class="p">)</span>
+<span class="c">136. </span>                    <span class="n">stars</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="c">137. </span>                <span class="k">elif</span> <span class="mi">3</span> <span class="o">&lt;=</span> <span class="n">roll</span> <span class="o">&lt;=</span> <span class="mi">4</span><span class="p">:</span>
+<span class="c">138. </span>                    <span class="n">rollResults</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">QUESTION_FACE</span><span class="p">)</span>
+<span class="c">139. </span>                <span class="k">else</span><span class="p">:</span>
+<span class="c">140. </span>                    <span class="n">rollResults</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">SKULL_FACE</span><span class="p">)</span>
+<span class="c">141. </span>                    <span class="n">skulls</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="c">142. </span>            <span class="k">if</span> <span class="n">dice</span> <span class="o">==</span> <span class="n">BRONZE</span><span class="p">:</span>
+<span class="c">143. </span>                <span class="c1"># Roll a bronze die (1 star, 2 questions, 3 skulls):</span>
+<span class="c">144. </span>                <span class="k">if</span> <span class="n">roll</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+<span class="c">145. </span>                    <span class="n">rollResults</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">STAR_FACE</span><span class="p">)</span>
+<span class="c">146. </span>                    <span class="n">stars</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="c">147. </span>                <span class="k">elif</span> <span class="mi">2</span> <span class="o">&lt;=</span> <span class="n">roll</span> <span class="o">&lt;=</span> <span class="mi">4</span><span class="p">:</span>
+<span class="c">148. </span>                    <span class="n">rollResults</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">QUESTION_FACE</span><span class="p">)</span>
+<span class="c">149. </span>                <span class="k">else</span><span class="p">:</span>
+<span class="c">150. </span>                    <span class="n">rollResults</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">SKULL_FACE</span><span class="p">)</span>
+<span class="c">151. </span>                    <span class="n">skulls</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="c">152. </span>
+<span class="c">153. </span>        <span class="c1"># Display roll results:</span>
+<span class="c">154. </span>        <span class="k">for</span> <span class="n">lineNum</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">FACE_HEIGHT</span><span class="p">):</span>
+<span class="c">155. </span>            <span class="k">for</span> <span class="n">diceNum</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+<span class="c">156. </span>                <span class="nb">print</span><span class="p">(</span><span class="n">rollResults</span><span class="p">[</span><span class="n">diceNum</span><span class="p">][</span><span class="n">lineNum</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c">157. </span>            <span class="nb">print</span><span class="p">()</span>  <span class="c1"># Print a newline.</span>
+<span class="c">158. </span>
+<span class="c">159. </span>        <span class="c1"># Display the type of dice each one is (gold, silver, bronze):</span>
+<span class="c">160. </span>        <span class="k">for</span> <span class="n">diceType</span> <span class="ow">in</span> <span class="n">hand</span><span class="p">:</span>
+<span class="c">161. </span>            <span class="nb">print</span><span class="p">(</span><span class="n">diceType</span><span class="o">.</span><span class="n">center</span><span class="p">(</span><span class="n">FACE_WIDTH</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c">162. </span>        <span class="nb">print</span><span class="p">()</span>  <span class="c1"># Print a newline.</span>
+<span class="c">163. </span>
+<span class="c">164. </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Stars collected:&#39;</span><span class="p">,</span> <span class="n">stars</span><span class="p">,</span> <span class="s1">&#39;  Skulls collected:&#39;</span><span class="p">,</span> <span class="n">skulls</span><span class="p">)</span>
+<span class="c">165. </span>
+<span class="c">166. </span>        <span class="c1"># Check if they&#39;ve collected 3 or more skulls:</span>
+<span class="c">167. </span>        <span class="k">if</span> <span class="n">skulls</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+<span class="c">168. </span>            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;3 or more skulls means you</span><span class="se">\&#39;</span><span class="s1">ve lost your stars!&#39;</span><span class="p">)</span>
+<span class="c">169. </span>            <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;Press Enter to continue...&#39;</span><span class="p">)</span>
+<span class="c">170. </span>            <span class="k">break</span>
+<span class="c">171. </span>
+<span class="c">172. </span>        <span class="nb">print</span><span class="p">(</span><span class="n">playerNames</span><span class="p">[</span><span class="n">turn</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;, do you want to roll again? Y/N&#39;</span><span class="p">)</span>
+<span class="c">173. </span>        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>  <span class="c1"># Keep asking the player until they enter Y or N:</span>
+<span class="c">174. </span>            <span class="n">response</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;&gt; &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+<span class="c">175. </span>            <span class="k">if</span> <span class="n">response</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span> <span class="ow">and</span> <span class="n">response</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="s1">&#39;N&#39;</span><span class="p">):</span>
+<span class="c">176. </span>                <span class="k">break</span>
+<span class="c">177. </span>            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Please enter Yes or No.&#39;</span><span class="p">)</span>
+<span class="c">178. </span>
+<span class="c">179. </span>        <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;N&#39;</span><span class="p">):</span>
+<span class="c">180. </span>            <span class="nb">print</span><span class="p">(</span><span class="n">playerNames</span><span class="p">[</span><span class="n">turn</span><span class="p">],</span> <span class="s1">&#39;got&#39;</span><span class="p">,</span> <span class="n">stars</span><span class="p">,</span> <span class="s1">&#39;stars!&#39;</span><span class="p">)</span>
+<span class="c">181. </span>            <span class="c1"># Add stars to this player&#39;s point total:</span>
+<span class="c">182. </span>            <span class="n">playerScores</span><span class="p">[</span><span class="n">playerNames</span><span class="p">[</span><span class="n">turn</span><span class="p">]]</span> <span class="o">+=</span> <span class="n">stars</span>
+<span class="c">183. </span>
+<span class="c">184. </span>            <span class="c1"># Check if they&#39;ve reached 13 or more points:</span>
+<span class="c">185. </span>            <span class="c1"># (!) Try changing this to 5 or 50 points.</span>
+<span class="c">186. </span>            <span class="k">if</span> <span class="p">(</span><span class="n">endGameWith</span> <span class="o">==</span> <span class="kc">None</span>
+<span class="c">187. </span>                <span class="ow">and</span> <span class="n">playerScores</span><span class="p">[</span><span class="n">playerNames</span><span class="p">[</span><span class="n">turn</span><span class="p">]]</span> <span class="o">&gt;=</span> <span class="mi">13</span><span class="p">):</span>
+<span class="c">188. </span>                <span class="c1"># Since this player reached 13 points, play one more</span>
+<span class="c">189. </span>                <span class="c1"># round for all other players:</span>
+<span class="c">190. </span>                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;!&#39;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">))</span>
+<span class="c">191. </span>                <span class="nb">print</span><span class="p">(</span><span class="n">playerNames</span><span class="p">[</span><span class="n">turn</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39; has reached 13 points!!!&#39;</span><span class="p">)</span>
+<span class="c">192. </span>                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Everyone else will get one more turn!&#39;</span><span class="p">)</span>
+<span class="c">193. </span>                <span class="nb">print</span><span class="p">((</span><span class="s1">&#39;!&#39;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="c">194. </span>                <span class="n">endGameWith</span> <span class="o">=</span> <span class="n">playerNames</span><span class="p">[</span><span class="n">turn</span><span class="p">]</span>
+<span class="c">195. </span>            <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;Press Enter to continue...&#39;</span><span class="p">)</span>
+<span class="c">196. </span>            <span class="k">break</span>
+<span class="c">197. </span>
+<span class="c">198. </span>        <span class="c1"># Discard the stars and skulls, but keep the question marks:</span>
+<span class="c">199. </span>        <span class="n">nextHand</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="c">200. </span>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+<span class="c">201. </span>            <span class="k">if</span> <span class="n">rollResults</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">QUESTION_FACE</span><span class="p">:</span>
+<span class="c">202. </span>                <span class="n">nextHand</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hand</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>  <span class="c1"># Keep the question marks.</span>
+<span class="c">203. </span>        <span class="n">hand</span> <span class="o">=</span> <span class="n">nextHand</span>
+<span class="c">204. </span>
+<span class="c">205. </span>    <span class="c1"># Move on to the next player&#39;s turn:</span>
+<span class="c">206. </span>    <span class="n">turn</span> <span class="o">=</span> <span class="p">(</span><span class="n">turn</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">numPlayers</span>
+<span class="c">207. </span>
+<span class="c">208. </span>    <span class="c1"># If the game has ended, break out of this loop:</span>
+<span class="c">209. </span>    <span class="k">if</span> <span class="n">endGameWith</span> <span class="o">==</span> <span class="n">playerNames</span><span class="p">[</span><span class="n">turn</span><span class="p">]:</span>
+<span class="c">210. </span>        <span class="k">break</span>  <span class="c1"># End the game.</span>
+<span class="c">211. </span>
+<span class="c">212. </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The game has ended...&#39;</span><span class="p">)</span>
+<span class="c">213. </span>
+<span class="c">214. </span><span class="c1"># Display everyone&#39;s score:</span>
+<span class="c">215. </span><span class="nb">print</span><span class="p">()</span>
+<span class="c">216. </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;SCORES: &#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c">217. </span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">playerNames</span><span class="p">):</span>
+<span class="c">218. </span>    <span class="nb">print</span><span class="p">(</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39; = &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">playerScores</span><span class="p">[</span><span class="n">name</span><span class="p">]),</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c">219. </span>    <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">playerNames</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+<span class="c">220. </span>        <span class="c1"># All but the last player have commas separating their names.</span>
+<span class="c">221. </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;, &#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c">222. </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="c">223. </span>
+<span class="c">224. </span><span class="c1"># Find out who the winners are:</span>
+<span class="c">225. </span><span class="n">highestScore</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="c">226. </span><span class="n">winners</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="c">227. </span><span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">score</span> <span class="ow">in</span> <span class="n">playerScores</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<span class="c">228. </span>    <span class="k">if</span> <span class="n">score</span> <span class="o">&gt;</span> <span class="n">highestScore</span><span class="p">:</span>
+<span class="c">229. </span>        <span class="c1"># This player has the highest score:</span>
+<span class="c">230. </span>        <span class="n">highestScore</span> <span class="o">=</span> <span class="n">score</span>
+<span class="c">231. </span>        <span class="n">winners</span> <span class="o">=</span> <span class="p">[</span><span class="n">name</span><span class="p">]</span>  <span class="c1"># Overwrite any previous winners.</span>
+<span class="c">232. </span>    <span class="k">elif</span> <span class="n">score</span> <span class="o">==</span> <span class="n">highestScore</span><span class="p">:</span>
+<span class="c">233. </span>        <span class="c1"># This player is tied with the highest score.</span>
+<span class="c">234. </span>        <span class="n">winners</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<span class="c">235. </span>
+<span class="c">236. </span><span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">winners</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+<span class="c">237. </span>    <span class="c1"># There is only one winner:</span>
+<span class="c">238. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The winner is &#39;</span> <span class="o">+</span> <span class="n">winners</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;!!!&#39;</span><span class="p">)</span>
+<span class="c">239. </span><span class="k">else</span><span class="p">:</span>
+<span class="c">240. </span>    <span class="c1"># There are multiple tied winners:</span>
+<span class="c">241. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The winners are: &#39;</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">winners</span><span class="p">))</span>
+<span class="c">242. </span>
+<span class="c">243. </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Thanks for playing!&#39;</span><span class="p">)</span>
+</pre></div>
+
 <p class="calibre19">After entering the source code and running it a few times, try making experimental changes to it. The comments marked with <code class="calibre22">(!)</code> have suggestions for small changes you can make.</p>
 <h2 id="calibre_link-185" class="calibre5">Exploring the Program</h2>
 <p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>

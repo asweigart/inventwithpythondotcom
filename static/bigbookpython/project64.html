@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Seven-Segment Display Module</title></head><body style="background-color: #fffeee;">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><link rel="stylesheet" type="text/css" href="pygments.css"><title>Seven-Segment Display Module</title></head><body style="background-color: #fffeee;">
 
 <script type="text/javascript">
 //<![CDATA[
@@ -68,104 +68,107 @@ Will print 42, zero-padded to three digits:
 |__|    | |__</code></pre>
 <h2 id="calibre_link-269" class="calibre5">How It Works</h2>
 <p class="bodyfirst">The <code class="calibre22">getSevSegStr()</code> function first creates a list of three strings. The strings represent the top, middle, and bottom row of the numeric digits. Lines 27 to 75 have a long list of <code class="calibre22">if</code>-<code class="calibre22">elif</code> statements for each digit (and the decimal point and minus sign) that concatenates the rows of each digit to these strings. These three strings are joined together with newlines on line 84 so that the function returns a single multiline string suitable to pass to <code class="calibre22">print()</code>.</p>
-<pre class="calibre24"><code class="calibre22"> 1. """Sevseg, by Al Sweigart al@inventwithpython.com
- 2. A seven-segment number display module, used by the Countdown and Digital
- 3. Clock programs.
- 4. More info at https://en.wikipedia.org/wiki/Seven-segment_display
- 5. View this code at https://nostarch.com/big-book-small-python-projects
- 6. Tags: short, module"""
- 7.
- 8. """A labeled seven-segment display, with each segment labeled A to G:
- 9.  __A__
-10. |     |    Each digit in a seven-segment display:
-11. F     B     __       __   __        __   __  __   __   __
-12. |__G__|    |  |   |  __|  __| |__| |__  |__    | |__| |__|
-13. |     |    |__|   | |__   __|    |  __| |__|   | |__|  __|
-14. E     C
-15. |__D__|"""
-16.
-17.
-18. def getSevSegStr(number, minWidth=0):
-19.     """Return a seven-segment display string of number. The returned
-20.     string will be padded with zeros if it is smaller than minWidth."""
-21.
-22.     # Convert number to string in case it's an int or float:
-23.     number = str(number).zfill(minWidth)
-24.
-25.     rows = ['', '', '']
-26.     for i, numeral in enumerate(number):
-27.         if numeral == '.':  # Render the decimal point.
-28.             rows[0] += ' '
-29.             rows[1] += ' '
-30.             rows[2] += '.'
-31.             continue  # Skip the space in between digits.
-32.         elif numeral == '-':  # Render the negative sign:
-33.             rows[0] += '    '
-34.             rows[1] += ' __ '
-35.             rows[2] += '    '
-36.         elif numeral == '0':  # Render the 0.
-37.             rows[0] += ' __ '
-38.             rows[1] += '|  |'
-39.             rows[2] += '|__|'
-40.         elif numeral == '1':  # Render the 1.
-41.             rows[0] += '    '
-42.             rows[1] += '   |'
-43.             rows[2] += '   |'
-44.         elif numeral == '2':  # Render the 2.
-45.             rows[0] += ' __ '
-46.             rows[1] += ' __|'
-47.             rows[2] += '|__ '
-48.         elif numeral == '3':  # Render the 3.
-49.             rows[0] += ' __ '
-50.             rows[1] += ' __|'
-51.             rows[2] += ' __|'
-52.         elif numeral == '4':  # Render the 4.
-53.             rows[0] += '    '
-54.             rows[1] += '|__|'
-55.             rows[2] += '   |'
-56.         elif numeral == '5':  # Render the 5.
-57.             rows[0] += ' __ '
-58.             rows[1] += '|__ '
-59.             rows[2] += ' __|'
-60.         elif numeral == '6':  # Render the 6.
-61.             rows[0] += ' __ '
-62.             rows[1] += '|__ '
-63.             rows[2] += '|__|'
-64.         elif numeral == '7':  # Render the 7.
-65.             rows[0] += ' __ '
-66.             rows[1] += '   |'
-67.             rows[2] += '   |'
-68.         elif numeral == '8':  # Render the 8.
-69.             rows[0] += ' __ '
-70.             rows[1] += '|__|'
-71.             rows[2] += '|__|'
-72.         elif numeral == '9':  # Render the 9.
-73.             rows[0] += ' __ '
-74.             rows[1] += '|__|'
-75.             rows[2] += ' __|'
-76.
-77.         # Add a space (for the space in between numerals) if this
-78.         # isn't the last numeral:
-79.         if i != len(number) - 1:
-80.             rows[0] += ' '
-81.             rows[1] += ' '
-82.             rows[2] += ' '
-83.
-84.     return '\n'.join(rows)
-85.
-86.
-87. # If this program isn't being imported, display the numbers 00 to 99.
-88. if __name__ == '__main__':
-89.     print('This module is meant to be imported rather than run.')
-90.     print('For example, this code:')
-91.     print('    import sevseg')
-92.     print('    myNumber = sevseg.getSevSegStr(42, 3)')
-93.     print('    print(myNumber)')
-94.     print()
-95.     print('...will print 42, zero-padded to three digits:')
-96.     print(' __        __ ')
-97.     print('|  | |__|  __|')
-98.     print('|__|    | |__ ')</code></pre>
+<div class="highlight"><pre><span></span>
+<span class="c">  1. </span><span class="sd">&quot;&quot;&quot;Sevseg, by Al Sweigart al@inventwithpython.com</span>
+<span class="c">  2. </span><span class="sd">A seven-segment number display module, used by the Countdown and Digital</span>
+<span class="c">  3. </span><span class="sd">Clock programs.</span>
+<span class="c">  4. </span><span class="sd">More info at https://en.wikipedia.org/wiki/Seven-segment_display</span>
+<span class="c">  5. </span><span class="sd">This code is available at https://nostarch.com/big-book-small-python-programming</span>
+<span class="c">  6. </span><span class="sd">Tags: short, module&quot;&quot;&quot;</span>
+<span class="c">  7. </span>
+<span class="c">  8. </span><span class="sd">&quot;&quot;&quot;A labeled seven-segment display, with each segment labeled A to G:</span>
+<span class="c">  9. </span><span class="sd"> __A__</span>
+<span class="c"> 10. </span><span class="sd">|     |    Each digit in a seven-segment display:</span>
+<span class="c"> 11. </span><span class="sd">F     B     __       __   __        __   __  __   __   __</span>
+<span class="c"> 12. </span><span class="sd">|__G__|    |  |   |  __|  __| |__| |__  |__    | |__| |__|</span>
+<span class="c"> 13. </span><span class="sd">|     |    |__|   | |__   __|    |  __| |__|   | |__|  __|</span>
+<span class="c"> 14. </span><span class="sd">E     C</span>
+<span class="c"> 15. </span><span class="sd">|__D__|&quot;&quot;&quot;</span>
+<span class="c"> 16. </span>
+<span class="c"> 17. </span>
+<span class="c"> 18. </span><span class="k">def</span> <span class="nf">getSevSegStr</span><span class="p">(</span><span class="n">number</span><span class="p">,</span> <span class="n">minWidth</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="c"> 19. </span>    <span class="sd">&quot;&quot;&quot;Return a seven-segment display string of number. The returned</span>
+<span class="c"> 20. </span><span class="sd">    string will be padded with zeros if it is smaller than minWidth.&quot;&quot;&quot;</span>
+<span class="c"> 21. </span>
+<span class="c"> 22. </span>    <span class="c1"># Convert number to string in case it&#39;s an int or float:</span>
+<span class="c"> 23. </span>    <span class="n">number</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">number</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="n">minWidth</span><span class="p">)</span>
+<span class="c"> 24. </span>
+<span class="c"> 25. </span>    <span class="n">rows</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">]</span>
+<span class="c"> 26. </span>    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">numeral</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">number</span><span class="p">):</span>
+<span class="c"> 27. </span>        <span class="k">if</span> <span class="n">numeral</span> <span class="o">==</span> <span class="s1">&#39;.&#39;</span><span class="p">:</span>  <span class="c1"># Render the decimal point.</span>
+<span class="c"> 28. </span>            <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39; &#39;</span>
+<span class="c"> 29. </span>            <span class="n">rows</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39; &#39;</span>
+<span class="c"> 30. </span>            <span class="n">rows</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39;.&#39;</span>
+<span class="c"> 31. </span>            <span class="k">continue</span>  <span class="c1"># Skip the space in between digits.</span>
+<span class="c"> 32. </span>        <span class="k">elif</span> <span class="n">numeral</span> <span class="o">==</span> <span class="s1">&#39;-&#39;</span><span class="p">:</span>  <span class="c1"># Render the negative sign:</span>
+<span class="c"> 33. </span>            <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39;    &#39;</span>
+<span class="c"> 34. </span>            <span class="n">rows</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39; __ &#39;</span>
+<span class="c"> 35. </span>            <span class="n">rows</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39;    &#39;</span>
+<span class="c"> 36. </span>        <span class="k">elif</span> <span class="n">numeral</span> <span class="o">==</span> <span class="s1">&#39;0&#39;</span><span class="p">:</span>  <span class="c1"># Render the 0.</span>
+<span class="c"> 37. </span>            <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39; __ &#39;</span>
+<span class="c"> 38. </span>            <span class="n">rows</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39;|  |&#39;</span>
+<span class="c"> 39. </span>            <span class="n">rows</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39;|__|&#39;</span>
+<span class="c"> 40. </span>        <span class="k">elif</span> <span class="n">numeral</span> <span class="o">==</span> <span class="s1">&#39;1&#39;</span><span class="p">:</span>  <span class="c1"># Render the 1.</span>
+<span class="c"> 41. </span>            <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39;    &#39;</span>
+<span class="c"> 42. </span>            <span class="n">rows</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39;   |&#39;</span>
+<span class="c"> 43. </span>            <span class="n">rows</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39;   |&#39;</span>
+<span class="c"> 44. </span>        <span class="k">elif</span> <span class="n">numeral</span> <span class="o">==</span> <span class="s1">&#39;2&#39;</span><span class="p">:</span>  <span class="c1"># Render the 2.</span>
+<span class="c"> 45. </span>            <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39; __ &#39;</span>
+<span class="c"> 46. </span>            <span class="n">rows</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39; __|&#39;</span>
+<span class="c"> 47. </span>            <span class="n">rows</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39;|__ &#39;</span>
+<span class="c"> 48. </span>        <span class="k">elif</span> <span class="n">numeral</span> <span class="o">==</span> <span class="s1">&#39;3&#39;</span><span class="p">:</span>  <span class="c1"># Render the 3.</span>
+<span class="c"> 49. </span>            <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39; __ &#39;</span>
+<span class="c"> 50. </span>            <span class="n">rows</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39; __|&#39;</span>
+<span class="c"> 51. </span>            <span class="n">rows</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39; __|&#39;</span>
+<span class="c"> 52. </span>        <span class="k">elif</span> <span class="n">numeral</span> <span class="o">==</span> <span class="s1">&#39;4&#39;</span><span class="p">:</span>  <span class="c1"># Render the 4.</span>
+<span class="c"> 53. </span>            <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39;    &#39;</span>
+<span class="c"> 54. </span>            <span class="n">rows</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39;|__|&#39;</span>
+<span class="c"> 55. </span>            <span class="n">rows</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39;   |&#39;</span>
+<span class="c"> 56. </span>        <span class="k">elif</span> <span class="n">numeral</span> <span class="o">==</span> <span class="s1">&#39;5&#39;</span><span class="p">:</span>  <span class="c1"># Render the 5.</span>
+<span class="c"> 57. </span>            <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39; __ &#39;</span>
+<span class="c"> 58. </span>            <span class="n">rows</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39;|__ &#39;</span>
+<span class="c"> 59. </span>            <span class="n">rows</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39; __|&#39;</span>
+<span class="c"> 60. </span>        <span class="k">elif</span> <span class="n">numeral</span> <span class="o">==</span> <span class="s1">&#39;6&#39;</span><span class="p">:</span>  <span class="c1"># Render the 6.</span>
+<span class="c"> 61. </span>            <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39; __ &#39;</span>
+<span class="c"> 62. </span>            <span class="n">rows</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39;|__ &#39;</span>
+<span class="c"> 63. </span>            <span class="n">rows</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39;|__|&#39;</span>
+<span class="c"> 64. </span>        <span class="k">elif</span> <span class="n">numeral</span> <span class="o">==</span> <span class="s1">&#39;7&#39;</span><span class="p">:</span>  <span class="c1"># Render the 7.</span>
+<span class="c"> 65. </span>            <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39; __ &#39;</span>
+<span class="c"> 66. </span>            <span class="n">rows</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39;   |&#39;</span>
+<span class="c"> 67. </span>            <span class="n">rows</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39;   |&#39;</span>
+<span class="c"> 68. </span>        <span class="k">elif</span> <span class="n">numeral</span> <span class="o">==</span> <span class="s1">&#39;8&#39;</span><span class="p">:</span>  <span class="c1"># Render the 8.</span>
+<span class="c"> 69. </span>            <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39; __ &#39;</span>
+<span class="c"> 70. </span>            <span class="n">rows</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39;|__|&#39;</span>
+<span class="c"> 71. </span>            <span class="n">rows</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39;|__|&#39;</span>
+<span class="c"> 72. </span>        <span class="k">elif</span> <span class="n">numeral</span> <span class="o">==</span> <span class="s1">&#39;9&#39;</span><span class="p">:</span>  <span class="c1"># Render the 9.</span>
+<span class="c"> 73. </span>            <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39; __ &#39;</span>
+<span class="c"> 74. </span>            <span class="n">rows</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39;|__|&#39;</span>
+<span class="c"> 75. </span>            <span class="n">rows</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39; __|&#39;</span>
+<span class="c"> 76. </span>
+<span class="c"> 77. </span>        <span class="c1"># Add a space (for the space in between numerals) if this</span>
+<span class="c"> 78. </span>        <span class="c1"># isn&#39;t the last numeral and the decimal point isn&#39;t next:</span>
+<span class="c"> 79. </span>        <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">number</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">number</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;.&#39;</span><span class="p">:</span>
+<span class="c"> 80. </span>            <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39; &#39;</span>
+<span class="c"> 81. </span>            <span class="n">rows</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39; &#39;</span>
+<span class="c"> 82. </span>            <span class="n">rows</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+=</span> <span class="s1">&#39; &#39;</span>
+<span class="c"> 83. </span>
+<span class="c"> 84. </span>    <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span>
+<span class="c"> 85. </span>
+<span class="c"> 86. </span>
+<span class="c"> 87. </span><span class="c1"># If this program isn&#39;t being imported, display the numbers 00 to 99.</span>
+<span class="c"> 88. </span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="c"> 89. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;This module is meant to be imported rather than run.&#39;</span><span class="p">)</span>
+<span class="c"> 90. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;For example, this code:&#39;</span><span class="p">)</span>
+<span class="c"> 91. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;    import sevseg&#39;</span><span class="p">)</span>
+<span class="c"> 92. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;    myNumber = sevseg.getSevSegStr(42, 3)&#39;</span><span class="p">)</span>
+<span class="c"> 93. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;    print(myNumber)&#39;</span><span class="p">)</span>
+<span class="c"> 94. </span>    <span class="nb">print</span><span class="p">()</span>
+<span class="c"> 95. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;...will print 42, zero-padded to three digits:&#39;</span><span class="p">)</span>
+<span class="c"> 96. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39; __        __ &#39;</span><span class="p">)</span>
+<span class="c"> 97. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;|  | |__|  __|&#39;</span><span class="p">)</span>
+<span class="c"> 98. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;|__|    | |__ &#39;</span><span class="p">)</span>
+</pre></div>
+
 <p class="calibre19">After entering the source code and running it a few times, try making experimental changes to it. On your own, you can also try to figure out how to do the following:</p>
 <ul class="calibre25">
 <li class="calibre8">Create new fonts for numbers, such as using five rows and the block character string returned by <code class="calibre22">chr(9608)</code>.</li>

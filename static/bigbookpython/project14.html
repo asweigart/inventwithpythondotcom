@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Countdown</title></head><body style="background-color: #fffeee;">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><link rel="stylesheet" type="text/css" href="pygments.css"><title>Countdown</title></head><body style="background-color: #fffeee;">
 
 <script type="text/javascript">
 //<![CDATA[
@@ -59,62 +59,65 @@ _gaq.push(['_trackPageview']);
 Press Ctrl-C to quit.</code></pre>
 <h2 id="calibre_link-86" class="calibre5">How It Works</h2>
 <p class="bodyfirst">After running <code class="calibre22">import sevseg</code>, you can call the <code class="calibre22">sevseg.getSevSegStr()</code> function to get a multiline string of the seven segment digits. However, the Countdown program needs to display a colon made out of asterisks in between the hours, minutes, and seconds. This requires splitting up the three lines of the multiline strings for these digits into three separate strings with the <code class="calibre22">splitlines()</code> method.</p>
-<pre class="calibre24"><code class="calibre22"> 1. """Countdown, by Al Sweigart al@inventwithpython.com
- 2. Show a countdown timer animation using a seven-segment display.
- 3. Press Ctrl-C to stop.
- 4. More info at https://en.wikipedia.org/wiki/Seven-segment_display
- 5. Requires sevseg.py to be in the same folder.
- 6. View this code at https://nostarch.com/big-book-small-python-projects
- 7. Tags: tiny, artistic"""
- 8.
- 9. import sys, time
-10. import sevseg  # Imports our sevseg.py program.
-11.
-12. # (!) Change this to any number of seconds:
-13. secondsLeft = 30
-14.
-15. try:
-16.     while True:  # Main program loop.
-17.         # Clear the screen by printing several newlines:
-18.         print('\n' * 60)
-19.
-20.         # Get the hours/minutes/seconds from secondsLeft:
-21.         # For example: 7265 is 2 hours, 1 minute, 5 seconds.
-22.         # So 7265 // 3600 is 2 hours:
-23.         hours = str(secondsLeft // 3600)
-24.         # And 7265 % 3600 is 65, and 65 // 60 is 1 minute:
-25.         minutes = str((secondsLeft % 3600) // 60)
-26.         # And 7265 % 60 is 5 seconds:
-27.         seconds = str(secondsLeft % 60)
-28.
-29.         # Get the digit strings from the sevseg module:
-30.         hDigits = sevseg.getSevSegStr(hours, 2)
-31.         hTopRow, hMiddleRow, hBottomRow = hDigits.splitlines()
-32.
-33.         mDigits = sevseg.getSevSegStr(minutes, 2)
-34.         mTopRow, mMiddleRow, mBottomRow = mDigits.splitlines()
-35.
-36.         sDigits = sevseg.getSevSegStr(seconds, 2)
-37.         sTopRow, sMiddleRow, sBottomRow = sDigits.splitlines()
-38.
-39.         # Display the digits:
-40.         print(hTopRow    + '     ' + mTopRow    + '     ' + sTopRow)
-41.         print(hMiddleRow + '  *  ' + mMiddleRow + '  *  ' + sMiddleRow)
-42.         print(hBottomRow + '  *  ' + mBottomRow + '  *  ' + sBottomRow)
-43.
-44.         if secondsLeft == 0:
-45.             print()
-46.             print('    * * * * BOOM * * * *')
-47.             break
-48.
-49.         print()
-50.         print('Press Ctrl-C to quit.')
-51.
-52.         time.sleep(1)  # Insert a one-second pause.
-53.         secondsLeft -= 1
-54. except KeyboardInterrupt:
-55.     print('Countdown, by Al Sweigart al@inventwithpython.com')
-56.     sys.exit()  # When Ctrl-C is pressed, end the program.)</code></pre>
+<div class="highlight"><pre><span></span>
+<span class="c"> 1. </span><span class="sd">&quot;&quot;&quot;Countdown, by Al Sweigart al@inventwithpython.com</span>
+<span class="c"> 2. </span><span class="sd">Show a countdown timer animation using a seven-segment display.</span>
+<span class="c"> 3. </span><span class="sd">Press Ctrl-C to stop.</span>
+<span class="c"> 4. </span><span class="sd">More info at https://en.wikipedia.org/wiki/Seven-segment_display</span>
+<span class="c"> 5. </span><span class="sd">Requires sevseg.py to be in the same folder.</span>
+<span class="c"> 6. </span><span class="sd">This code is available at https://nostarch.com/big-book-small-python-programming</span>
+<span class="c"> 7. </span><span class="sd">Tags: tiny, artistic&quot;&quot;&quot;</span>
+<span class="c"> 8. </span>
+<span class="c"> 9. </span><span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">time</span>
+<span class="c">10. </span><span class="kn">import</span> <span class="nn">sevseg</span>  <span class="c1"># Imports our sevseg.py program.</span>
+<span class="c">11. </span>
+<span class="c">12. </span><span class="c1"># (!) Change this to any number of seconds:</span>
+<span class="c">13. </span><span class="n">secondsLeft</span> <span class="o">=</span> <span class="mi">30</span>
+<span class="c">14. </span>
+<span class="c">15. </span><span class="k">try</span><span class="p">:</span>
+<span class="c">16. </span>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>  <span class="c1"># Main program loop.</span>
+<span class="c">17. </span>        <span class="c1"># Clear the screen by printing several newlines:</span>
+<span class="c">18. </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
+<span class="c">19. </span>
+<span class="c">20. </span>        <span class="c1"># Get the hours/minutes/seconds from secondsLeft:</span>
+<span class="c">21. </span>        <span class="c1"># For example: 7265 is 2 hours, 1 minute, 5 seconds.</span>
+<span class="c">22. </span>        <span class="c1"># So 7265 // 3600 is 2 hours:</span>
+<span class="c">23. </span>        <span class="n">hours</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">secondsLeft</span> <span class="o">//</span> <span class="mi">3600</span><span class="p">)</span>
+<span class="c">24. </span>        <span class="c1"># And 7265 % 3600 is 65, and 65 // 60 is 1 minute:</span>
+<span class="c">25. </span>        <span class="n">minutes</span> <span class="o">=</span> <span class="nb">str</span><span class="p">((</span><span class="n">secondsLeft</span> <span class="o">%</span> <span class="mi">3600</span><span class="p">)</span> <span class="o">//</span> <span class="mi">60</span><span class="p">)</span>
+<span class="c">26. </span>        <span class="c1"># And 7265 % 60 is 5 seconds:</span>
+<span class="c">27. </span>        <span class="n">seconds</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">secondsLeft</span> <span class="o">%</span> <span class="mi">60</span><span class="p">)</span>
+<span class="c">28. </span>
+<span class="c">29. </span>        <span class="c1"># Get the digit strings from the sevseg module:</span>
+<span class="c">30. </span>        <span class="n">hDigits</span> <span class="o">=</span> <span class="n">sevseg</span><span class="o">.</span><span class="n">getSevSegStr</span><span class="p">(</span><span class="n">hours</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="c">31. </span>        <span class="n">hTopRow</span><span class="p">,</span> <span class="n">hMiddleRow</span><span class="p">,</span> <span class="n">hBottomRow</span> <span class="o">=</span> <span class="n">hDigits</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+<span class="c">32. </span>
+<span class="c">33. </span>        <span class="n">mDigits</span> <span class="o">=</span> <span class="n">sevseg</span><span class="o">.</span><span class="n">getSevSegStr</span><span class="p">(</span><span class="n">minutes</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="c">34. </span>        <span class="n">mTopRow</span><span class="p">,</span> <span class="n">mMiddleRow</span><span class="p">,</span> <span class="n">mBottomRow</span> <span class="o">=</span> <span class="n">mDigits</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+<span class="c">35. </span>
+<span class="c">36. </span>        <span class="n">sDigits</span> <span class="o">=</span> <span class="n">sevseg</span><span class="o">.</span><span class="n">getSevSegStr</span><span class="p">(</span><span class="n">seconds</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="c">37. </span>        <span class="n">sTopRow</span><span class="p">,</span> <span class="n">sMiddleRow</span><span class="p">,</span> <span class="n">sBottomRow</span> <span class="o">=</span> <span class="n">sDigits</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+<span class="c">38. </span>
+<span class="c">39. </span>        <span class="c1"># Display the digits:</span>
+<span class="c">40. </span>        <span class="nb">print</span><span class="p">(</span><span class="n">hTopRow</span>    <span class="o">+</span> <span class="s1">&#39;     &#39;</span> <span class="o">+</span> <span class="n">mTopRow</span>    <span class="o">+</span> <span class="s1">&#39;     &#39;</span> <span class="o">+</span> <span class="n">sTopRow</span><span class="p">)</span>
+<span class="c">41. </span>        <span class="nb">print</span><span class="p">(</span><span class="n">hMiddleRow</span> <span class="o">+</span> <span class="s1">&#39;  *  &#39;</span> <span class="o">+</span> <span class="n">mMiddleRow</span> <span class="o">+</span> <span class="s1">&#39;  *  &#39;</span> <span class="o">+</span> <span class="n">sMiddleRow</span><span class="p">)</span>
+<span class="c">42. </span>        <span class="nb">print</span><span class="p">(</span><span class="n">hBottomRow</span> <span class="o">+</span> <span class="s1">&#39;  *  &#39;</span> <span class="o">+</span> <span class="n">mBottomRow</span> <span class="o">+</span> <span class="s1">&#39;  *  &#39;</span> <span class="o">+</span> <span class="n">sBottomRow</span><span class="p">)</span>
+<span class="c">43. </span>
+<span class="c">44. </span>        <span class="k">if</span> <span class="n">secondsLeft</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+<span class="c">45. </span>            <span class="nb">print</span><span class="p">()</span>
+<span class="c">46. </span>            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;    * * * * BOOM * * * *&#39;</span><span class="p">)</span>
+<span class="c">47. </span>            <span class="k">break</span>
+<span class="c">48. </span>
+<span class="c">49. </span>        <span class="nb">print</span><span class="p">()</span>
+<span class="c">50. </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Press Ctrl-C to quit.&#39;</span><span class="p">)</span>
+<span class="c">51. </span>
+<span class="c">52. </span>        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># Insert a one-second pause.</span>
+<span class="c">53. </span>        <span class="n">secondsLeft</span> <span class="o">-=</span> <span class="mi">1</span>
+<span class="c">54. </span><span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
+<span class="c">55. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Countdown, by Al Sweigart al@inventwithpython.com&#39;</span><span class="p">)</span>
+<span class="c">56. </span>    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>  <span class="c1"># When Ctrl-C is pressed, end the program.)</span>
+</pre></div>
+
 <p class="calibre19">After entering the source code and running it a few times, try making experimental changes to it. On your own, you can also try to figure out how to do the following:</p>
 <ul class="calibre25">
 <li class="calibre8">Prompt the user to enter the starting countdown time.</li>

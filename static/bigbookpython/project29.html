@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Forest Fire Sim</title></head><body style="background-color: #fffeee;">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><link rel="stylesheet" type="text/css" href="pygments.css"><title>Forest Fire Sim</title></head><body style="background-color: #fffeee;">
 
 <script type="text/javascript">
 //<![CDATA[
@@ -58,121 +58,124 @@ _gaq.push(['_trackPageview']);
 </figure>
 <h2 id="calibre_link-143" class="calibre5">How It Works</h2>
 <p class="bodyfirst">This simulation is an example of <em class="calibre9">emergent behavior</em>&mdash;the interaction between simple parts in a system creating complicated patterns. Empty spaces grow into trees, lightning turns trees into fire, and fire turns trees back into empty spaces while spreading to neighboring trees. By adjusting the tree growth and lightning strike rate, you can cause the forest to display different phenomena. For example, a low lightning chance but high growth rate causes large, constant forest fires, since the trees tend to be near each other and quickly replenish. A low growth rate but high lightning strike chance creates several small fires that quickly extinguish due to a lack of nearby trees. We don’t explicitly program any of this behavior; rather, it naturally emerges from the system that we created.</p>
-<pre class="calibre24"><code class="calibre22">  1. """Forest Fire Sim, by Al Sweigart al@inventwithpython.com
-  2. A simulation of wildfires spreading in a forest. Press Ctrl-C to stop.
-  3. Inspired by Nicky Case's Emoji Sim http://ncase.me/simulating/model/
-  4. View this code at https://nostarch.com/big-book-small-python-projects
-  5. Tags: short, bext, simulation"""
-  6.
-  7. import random, sys, time
-  8.
-  9. try:
- 10.     import bext
- 11. except ImportError:
- 12.     print('This program requires the bext module, which you')
- 13.     print('can install by following the instructions at')
- 14.     print('https://pypi.org/project/Bext/')
- 15.     sys.exit()
- 16.
- 17. # Set up the constants:
- 18. WIDTH = 79
- 19. HEIGHT = 22
- 20.
- 21. TREE = 'A'
- 22. FIRE = 'W'
- 23. EMPTY = ' '
- 24.
- 25. # (!) Try changing these settings to anything between 0.0 and 1.0:
- 26. INITIAL_TREE_DENSITY = 0.20  # Amount of forest that starts with trees.
- 27. GROW_CHANCE = 0.01  # Chance a blank space turns into a tree.
- 28. FIRE_CHANCE = 0.01  # Chance a tree is hit by lightning &amp; burns.
- 29.
- 30. # (!) Try setting the pause length to 1.0 or 0.0:
- 31. PAUSE_LENGTH = 0.5
- 32.
- 33.
- 34. def main():
- 35.     forest = createNewForest()
- 36.     bext.clear()
- 37.
- 38.     while True:  # Main program loop.
- 39.         displayForest(forest)
- 40.
- 41.         # Run a single simulation step:
- 42.         nextForest = {'width': forest['width'],
- 43.                       'height': forest['height']}
- 44.
- 45.         for x in range(forest['width']):
- 46.             for y in range(forest['height']):
- 47.                 if (x, y) in nextForest:
- 48.                     # If we've already set nextForest[(x, y)] on a
- 49.                     # previous iteration, just do nothing here:
- 50.                     continue
- 51.
- 52.                 if ((forest[(x, y)] == EMPTY)
- 53.                     and (random.random() &lt;= GROW_CHANCE)):
- 54.                     # Grow a tree in this empty space.
- 55.                     nextForest[(x, y)] = TREE
- 56.                 elif ((forest[(x, y)] == TREE)
- 57.                     and (random.random() &lt;= FIRE_CHANCE)):
- 58.                     # Lightning sets this tree on fire.
- 59.                     nextForest[(x, y)] = FIRE
- 60.                 elif forest[(x, y)] == FIRE:
- 61.                     # This tree is currently burning.
- 62.                     # Loop through all the neighboring spaces:
- 63.                     for ix in range(-1, 2):
- 64.                         for iy in range(-1, 2):
- 65.                             # Fire spreads to neighboring trees:
- 66.                             if forest.get((x + ix, y + iy)) == TREE:
- 67.                                 nextForest[(x + ix, y + iy)] = FIRE
- 68.                     # The tree has burned down now, so erase it:
- 69.                     nextForest[(x, y)] = EMPTY
- 70.                 else:
- 71.                     # Just copy the existing object:
- 72.                     nextForest[(x, y)] = forest[(x, y)]
- 73.         forest = nextForest
- 74.
- 75.         time.sleep(PAUSE_LENGTH)
- 76.
- 77.
- 78. def createNewForest():
- 79.     """Returns a dictionary for a new forest data structure."""
- 80.     forest = {'width': WIDTH, 'height': HEIGHT}
- 81.     for x in range(WIDTH):
- 82.         for y in range(HEIGHT):
- 83.             if (random.random() * 100) &lt;= INITIAL_TREE_DENSITY:
- 84.                 forest[(x, y)] = TREE  # Start as a tree.
- 85.             else:
- 86.                 forest[(x, y)] = EMPTY  # Start as an empty space.
- 87.     return forest
- 88.
- 89.
- 90. def displayForest(forest):
- 91.     """Display the forest data structure on the screen."""
- 92.     bext.goto(0, 0)
- 93.     for y in range(forest['height']):
- 94.         for x in range(forest['width']):
- 95.             if forest[(x, y)] == TREE:
- 96.                 bext.fg('green')
- 97.                 print(TREE, end='')
- 98.             elif forest[(x, y)] == FIRE:
- 99.                 bext.fg('red')
-100.                 print(FIRE, end='')
-101.             elif forest[(x, y)] == EMPTY:
-102.                 print(EMPTY, end='')
-103.         print()
-104.     bext.fg('reset')  # Use the default font color.
-105.     print('Grow chance: {}%  '.format(GROW_CHANCE * 100), end='')
-106.     print('Lightning chance: {}%  '.format(FIRE_CHANCE * 100), end='')
-107.     print('Press Ctrl-C to quit.')
-108.
-109.
-110. # If this program was run (instead of imported), run the game:
-111. if __name__ == '__main__':
-112.     try:
-113.         main()
-114.     except KeyboardInterrupt:
-115.         sys.exit()  # When Ctrl-C is pressed, end the program.</code></pre>
+<div class="highlight"><pre><span></span>
+<span class="c">  1. </span><span class="sd">&quot;&quot;&quot;Forest Fire Sim, by Al Sweigart al@inventwithpython.com</span>
+<span class="c">  2. </span><span class="sd">A simulation of wildfires spreading in a forest. Press Ctrl-C to stop.</span>
+<span class="c">  3. </span><span class="sd">Inspired by Nicky Case&#39;s Emoji Sim http://ncase.me/simulating/model/</span>
+<span class="c">  4. </span><span class="sd">This code is available at https://nostarch.com/big-book-small-python-programming</span>
+<span class="c">  5. </span><span class="sd">Tags: short, bext, simulation&quot;&quot;&quot;</span>
+<span class="c">  6. </span>
+<span class="c">  7. </span><span class="kn">import</span> <span class="nn">random</span><span class="o">,</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">time</span>
+<span class="c">  8. </span>
+<span class="c">  9. </span><span class="k">try</span><span class="p">:</span>
+<span class="c"> 10. </span>    <span class="kn">import</span> <span class="nn">bext</span>
+<span class="c"> 11. </span><span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+<span class="c"> 12. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;This program requires the bext module, which you&#39;</span><span class="p">)</span>
+<span class="c"> 13. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;can install by following the instructions at&#39;</span><span class="p">)</span>
+<span class="c"> 14. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;https://pypi.org/project/Bext/&#39;</span><span class="p">)</span>
+<span class="c"> 15. </span>    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+<span class="c"> 16. </span>
+<span class="c"> 17. </span><span class="c1"># Set up the constants:</span>
+<span class="c"> 18. </span><span class="n">WIDTH</span> <span class="o">=</span> <span class="mi">79</span>
+<span class="c"> 19. </span><span class="n">HEIGHT</span> <span class="o">=</span> <span class="mi">22</span>
+<span class="c"> 20. </span>
+<span class="c"> 21. </span><span class="n">TREE</span> <span class="o">=</span> <span class="s1">&#39;A&#39;</span>
+<span class="c"> 22. </span><span class="n">FIRE</span> <span class="o">=</span> <span class="s1">&#39;W&#39;</span>
+<span class="c"> 23. </span><span class="n">EMPTY</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span>
+<span class="c"> 24. </span>
+<span class="c"> 25. </span><span class="c1"># (!) Try changing these settings to anything between 0.0 and 1.0:</span>
+<span class="c"> 26. </span><span class="n">INITIAL_TREE_DENSITY</span> <span class="o">=</span> <span class="mf">0.20</span>  <span class="c1"># Amount of forest that starts with trees.</span>
+<span class="c"> 27. </span><span class="n">GROW_CHANCE</span> <span class="o">=</span> <span class="mf">0.01</span>  <span class="c1"># Chance a blank space turns into a tree.</span>
+<span class="c"> 28. </span><span class="n">FIRE_CHANCE</span> <span class="o">=</span> <span class="mf">0.01</span>  <span class="c1"># Chance a tree is hit by lightning &amp; burns.</span>
+<span class="c"> 29. </span>
+<span class="c"> 30. </span><span class="c1"># (!) Try setting the pause length to 1.0 or 0.0:</span>
+<span class="c"> 31. </span><span class="n">PAUSE_LENGTH</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="c"> 32. </span>
+<span class="c"> 33. </span>
+<span class="c"> 34. </span><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<span class="c"> 35. </span>    <span class="n">forest</span> <span class="o">=</span> <span class="n">createNewForest</span><span class="p">()</span>
+<span class="c"> 36. </span>    <span class="n">bext</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+<span class="c"> 37. </span>
+<span class="c"> 38. </span>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>  <span class="c1"># Main program loop.</span>
+<span class="c"> 39. </span>        <span class="n">displayForest</span><span class="p">(</span><span class="n">forest</span><span class="p">)</span>
+<span class="c"> 40. </span>
+<span class="c"> 41. </span>        <span class="c1"># Run a single simulation step:</span>
+<span class="c"> 42. </span>        <span class="n">nextForest</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="n">forest</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">],</span>
+<span class="c"> 43. </span>                      <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="n">forest</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">]}</span>
+<span class="c"> 44. </span>
+<span class="c"> 45. </span>        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">forest</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]):</span>
+<span class="c"> 46. </span>            <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">forest</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">]):</span>
+<span class="c"> 47. </span>                <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="n">nextForest</span><span class="p">:</span>
+<span class="c"> 48. </span>                    <span class="c1"># If we&#39;ve already set nextForest[(x, y)] on a</span>
+<span class="c"> 49. </span>                    <span class="c1"># previous iteration, just do nothing here:</span>
+<span class="c"> 50. </span>                    <span class="k">continue</span>
+<span class="c"> 51. </span>
+<span class="c"> 52. </span>                <span class="k">if</span> <span class="p">((</span><span class="n">forest</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">==</span> <span class="n">EMPTY</span><span class="p">)</span>
+<span class="c"> 53. </span>                    <span class="ow">and</span> <span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">GROW_CHANCE</span><span class="p">)):</span>
+<span class="c"> 54. </span>                    <span class="c1"># Grow a tree in this empty space.</span>
+<span class="c"> 55. </span>                    <span class="n">nextForest</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">=</span> <span class="n">TREE</span>
+<span class="c"> 56. </span>                <span class="k">elif</span> <span class="p">((</span><span class="n">forest</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">==</span> <span class="n">TREE</span><span class="p">)</span>
+<span class="c"> 57. </span>                    <span class="ow">and</span> <span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">FIRE_CHANCE</span><span class="p">)):</span>
+<span class="c"> 58. </span>                    <span class="c1"># Lightning sets this tree on fire.</span>
+<span class="c"> 59. </span>                    <span class="n">nextForest</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">=</span> <span class="n">FIRE</span>
+<span class="c"> 60. </span>                <span class="k">elif</span> <span class="n">forest</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">==</span> <span class="n">FIRE</span><span class="p">:</span>
+<span class="c"> 61. </span>                    <span class="c1"># This tree is currently burning.</span>
+<span class="c"> 62. </span>                    <span class="c1"># Loop through all the neighboring spaces:</span>
+<span class="c"> 63. </span>                    <span class="k">for</span> <span class="n">ix</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+<span class="c"> 64. </span>                        <span class="k">for</span> <span class="n">iy</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+<span class="c"> 65. </span>                            <span class="c1"># Fire spreads to neighboring trees:</span>
+<span class="c"> 66. </span>                            <span class="k">if</span> <span class="n">forest</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="n">x</span> <span class="o">+</span> <span class="n">ix</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">iy</span><span class="p">))</span> <span class="o">==</span> <span class="n">TREE</span><span class="p">:</span>
+<span class="c"> 67. </span>                                <span class="n">nextForest</span><span class="p">[(</span><span class="n">x</span> <span class="o">+</span> <span class="n">ix</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">iy</span><span class="p">)]</span> <span class="o">=</span> <span class="n">FIRE</span>
+<span class="c"> 68. </span>                    <span class="c1"># The tree has burned down now, so erase it:</span>
+<span class="c"> 69. </span>                    <span class="n">nextForest</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">=</span> <span class="n">EMPTY</span>
+<span class="c"> 70. </span>                <span class="k">else</span><span class="p">:</span>
+<span class="c"> 71. </span>                    <span class="c1"># Just copy the existing object:</span>
+<span class="c"> 72. </span>                    <span class="n">nextForest</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">=</span> <span class="n">forest</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span>
+<span class="c"> 73. </span>        <span class="n">forest</span> <span class="o">=</span> <span class="n">nextForest</span>
+<span class="c"> 74. </span>
+<span class="c"> 75. </span>        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">PAUSE_LENGTH</span><span class="p">)</span>
+<span class="c"> 76. </span>
+<span class="c"> 77. </span>
+<span class="c"> 78. </span><span class="k">def</span> <span class="nf">createNewForest</span><span class="p">():</span>
+<span class="c"> 79. </span>    <span class="sd">&quot;&quot;&quot;Returns a dictionary for a new forest data structure.&quot;&quot;&quot;</span>
+<span class="c"> 80. </span>    <span class="n">forest</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="n">WIDTH</span><span class="p">,</span> <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="n">HEIGHT</span><span class="p">}</span>
+<span class="c"> 81. </span>    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">WIDTH</span><span class="p">):</span>
+<span class="c"> 82. </span>        <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">HEIGHT</span><span class="p">):</span>
+<span class="c"> 83. </span>            <span class="k">if</span> <span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">INITIAL_TREE_DENSITY</span><span class="p">:</span>
+<span class="c"> 84. </span>                <span class="n">forest</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">=</span> <span class="n">TREE</span>  <span class="c1"># Start as a tree.</span>
+<span class="c"> 85. </span>            <span class="k">else</span><span class="p">:</span>
+<span class="c"> 86. </span>                <span class="n">forest</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">=</span> <span class="n">EMPTY</span>  <span class="c1"># Start as an empty space.</span>
+<span class="c"> 87. </span>    <span class="k">return</span> <span class="n">forest</span>
+<span class="c"> 88. </span>
+<span class="c"> 89. </span>
+<span class="c"> 90. </span><span class="k">def</span> <span class="nf">displayForest</span><span class="p">(</span><span class="n">forest</span><span class="p">):</span>
+<span class="c"> 91. </span>    <span class="sd">&quot;&quot;&quot;Display the forest data structure on the screen.&quot;&quot;&quot;</span>
+<span class="c"> 92. </span>    <span class="n">bext</span><span class="o">.</span><span class="n">goto</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="c"> 93. </span>    <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">forest</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">]):</span>
+<span class="c"> 94. </span>        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">forest</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]):</span>
+<span class="c"> 95. </span>            <span class="k">if</span> <span class="n">forest</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">==</span> <span class="n">TREE</span><span class="p">:</span>
+<span class="c"> 96. </span>                <span class="n">bext</span><span class="o">.</span><span class="n">fg</span><span class="p">(</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
+<span class="c"> 97. </span>                <span class="nb">print</span><span class="p">(</span><span class="n">TREE</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c"> 98. </span>            <span class="k">elif</span> <span class="n">forest</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">==</span> <span class="n">FIRE</span><span class="p">:</span>
+<span class="c"> 99. </span>                <span class="n">bext</span><span class="o">.</span><span class="n">fg</span><span class="p">(</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="c">100. </span>                <span class="nb">print</span><span class="p">(</span><span class="n">FIRE</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c">101. </span>            <span class="k">elif</span> <span class="n">forest</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">==</span> <span class="n">EMPTY</span><span class="p">:</span>
+<span class="c">102. </span>                <span class="nb">print</span><span class="p">(</span><span class="n">EMPTY</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c">103. </span>        <span class="nb">print</span><span class="p">()</span>
+<span class="c">104. </span>    <span class="n">bext</span><span class="o">.</span><span class="n">fg</span><span class="p">(</span><span class="s1">&#39;reset&#39;</span><span class="p">)</span>  <span class="c1"># Use the default font color.</span>
+<span class="c">105. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Grow chance: </span><span class="si">{}</span><span class="s1">%  &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">GROW_CHANCE</span> <span class="o">*</span> <span class="mi">100</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c">106. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Lightning chance: </span><span class="si">{}</span><span class="s1">%  &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">FIRE_CHANCE</span> <span class="o">*</span> <span class="mi">100</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c">107. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Press Ctrl-C to quit.&#39;</span><span class="p">)</span>
+<span class="c">108. </span>
+<span class="c">109. </span>
+<span class="c">110. </span><span class="c1"># If this program was run (instead of imported), run the game:</span>
+<span class="c">111. </span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="c">112. </span>    <span class="k">try</span><span class="p">:</span>
+<span class="c">113. </span>        <span class="n">main</span><span class="p">()</span>
+<span class="c">114. </span>    <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
+<span class="c">115. </span>        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>  <span class="c1"># When Ctrl-C is pressed, end the program.</span>
+</pre></div>
+
 <p class="calibre19">After entering the source code and running it a few times, try making experimental changes to it. The comments marked with <code class="calibre22">(!)</code> have suggestions for small changes you can make. On your own, you can also try to figure out how to do the following:</p>
 <ul class="calibre25">
 <li class="calibre8">Add randomly created lakes and rivers, which act as fire breaks that flames cannot cross.</li>

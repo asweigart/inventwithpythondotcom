@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Clickbait Headline Generator</title></head><body style="background-color: #fffeee;">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><link rel="stylesheet" type="text/css" href="pygments.css"><title>Clickbait Headline Generator</title></head><body style="background-color: #fffeee;">
 
 <script type="text/javascript">
 //<![CDATA[
@@ -68,142 +68,140 @@ What Robots Don't Want You To Know About Cats
 This Florida Telephone Psychic Didn't Think Robots Would Take Her Job. She Was Wrong.</code></pre>
 <h2 id="calibre_link-77" class="calibre5">How It Works</h2>
 <p class="bodyfirst">This program has several functions for generating different kinds of clickbait headlines. Each of them gets random words from <code class="calibre22">STATES</code>, <code class="calibre22">NOUNS</code>, <code class="calibre22">PLACES</code>, <code class="calibre22">WHEN</code>, and other lists. The functions then insert these words into a template string with the <code class="calibre22">format()</code> string method before returning this string. This is like a “Mad Libs” activity book, except the computer fills in the blanks, allowing the program to generate thousands of clickbait headlines in seconds.</p>
-<pre class="calibre24"><code class="calibre22">  1. """Clickbait Headline Generator, by Al Sweigart al@inventwithpython.com
-  2. A clickbait headline generator for your soulless content farm website.
-  3. View this code at https://nostarch.com/big-book-small-python-projects
-  4. Tags: large, beginner, humor, word"""
-  5.
-  6. import random
-  7.
-  8. # Set up the constants:
-  9. OBJECT_PRONOUNS = ['Her', 'Him', 'Them']
- 10. POSSESIVE_PRONOUNS = ['Her', 'His', 'Their']
- 11. PERSONAL_PRONOUNS = ['She', 'He', 'They']
- 12. STATES = ['California', 'Texas', 'Florida', 'New York', 'Pennsylvania',
- 13.           'Illinois', 'Ohio', 'Georgia', 'North Carolina', 'Michigan']
- 14. NOUNS = ['Athlete', 'Clown', 'Shovel', 'Paleo Diet', 'Doctor', 'Parent',
- 15.          'Cat', 'Dog', 'Chicken', 'Robot', 'Video Game', 'Avocado',
- 16.          'Plastic Straw','Serial Killer', 'Telephone Psychic']
- 17. PLACES = ['House', 'Attic', 'Bank Deposit Box', 'School', 'Basement',
- 18.           'Workplace', 'Donut Shop', 'Apocalypse Bunker']
- 19. WHEN = ['Soon', 'This Year', 'Later Today', 'RIGHT NOW', 'Next Week']
- 20.
- 21.
- 22. def main():
- 23.     print('Clickbait Headline Generator')
- 24.     print('By Al Sweigart al@inventwithpython.com')
- 25.     print()
- 26.
- 27.     print('Our website needs to trick people into looking at ads!')
- 28.     while True:
- 29.         print('Enter the number of clickbait headlines to generate:')
- 30.         response = input('&gt; ')
- 31.         if not response.isdecimal():
- 32.             print('Please enter a number.')
- 33.         else:
- 34.             numberOfHeadlines = int(response)
- 35.             break  # Exit the loop once a valid number is entered.
- 36.
- 37.     for i in range(numberOfHeadlines):
- 38.         clickbaitType = random.randint(1, 8)
- 39.
- 40.         if clickbaitType == 1:
- 41.             headline = generateAreMillennialsKillingHeadline()
- 42.         elif clickbaitType == 2:
- 43.             headline = generateWhatYouDontKnowHeadline()
- 44.         elif clickbaitType == 3:
- 45.             headline = generateBigCompaniesHateHerHeadline()
- 46.         elif clickbaitType == 4:
- 47.             headline = generateYouWontBelieveHeadline()
- 48.         elif clickbaitType == 5:
- 49.             headline = generateDontWantYouToKnowHeadline()
- 50.         elif clickbaitType == 6:
- 51.             headline = generateGiftIdeaHeadline()
- 52.         elif clickbaitType == 7:
- 53.             headline = generateReasonsWhyHeadline()
- 54.         elif clickbaitType == 8:
- 55.             headline = generateJobAutomatedHeadline()
- 56.
- 57.         print(headline)
- 58.     print()
- 59.
- 60.     website = random.choice(['wobsite', 'blag', 'Facebuuk', 'Googles',
- 61.                              'Facesbook', 'Tweedie', 'Pastagram'])
- 62.     when = random.choice(WHEN).lower()
- 63.     print('Post these to our', website, when, 'or you\'re fired!')
- 64.
- 65.
- 66. # Each of these functions returns a different type of headline:
- 67. def generateAreMillennialsKillingHeadline():
- 68.     noun = random.choice(NOUNS)
- 69.     return 'Are Millennials Killing the {} Industry?'.format(noun)
- 70.
- 71.
- 72. def generateWhatYouDontKnowHeadline():
- 73.     noun = random.choice(NOUNS)
- 74.     pluralNoun = random.choice(NOUNS) + 's'
- 75.     when = random.choice(WHEN)
- 76.     return 'Without This {}, {} Could Kill You {}'.format(noun, pluralNoun, when)
- 77.
- 78.
- 79. def generateBigCompaniesHateHerHeadline():
- 80.     pronoun = random.choice(OBJECT_PRONOUNS)
- 81.     state = random.choice(STATES)
- 82.     noun1 = random.choice(NOUNS)
- 83.     noun2 = random.choice(NOUNS)
- 84.     return 'Big Companies Hate {}! See How This {} {} Invented a Cheaper {}'.
-         format(pronoun, state, noun1, noun2)
- 85.
- 86.
- 87. def generateYouWontBelieveHeadline():
- 88.     state = random.choice(STATES)
- 89.     noun = random.choice(NOUNS)
- 90.     pronoun = random.choice(POSSESIVE_PRONOUNS)
- 91.     place = random.choice(PLACES)
- 92.     return 'You Won\'t Believe What This {} {} Found in {} {}'.format(state, noun,
-         pronoun, place)
- 93.
- 94.
- 95. def generateDontWantYouToKnowHeadline():
- 96.     pluralNoun1 = random.choice(NOUNS) + 's'
- 97.     pluralNoun2 = random.choice(NOUNS) + 's'
- 98.     return 'What {} Don\'t Want You To Know About {}'.format(pluralNoun1, pluralNoun2)
- 99.
-100.
-101. def generateGiftIdeaHeadline():
-102.     number = random.randint(7, 15)
-103.     noun = random.choice(NOUNS)
-104.     state = random.choice(STATES)
-105.     return '{} Gift Ideas to Give Your {} From {}'.format(number, noun, state)
-106.
-107.
-108. def generateReasonsWhyHeadline():
-109.     number1 = random.randint(3, 19)
-110.     pluralNoun = random.choice(NOUNS) + 's'
-111.     # number2 should be no larger than number1:
-112.     number2 = random.randint(1, number1)
-113.     return '{} Reasons Why {} Are More Interesting Than You Think (Number {} Will
-         Surprise You!)'.format(number1, pluralNoun, number2)
-114.
-115.
-116. def generateJobAutomatedHeadline():
-117.     state = random.choice(STATES)
-118.     noun = random.choice(NOUNS)
-119.
-120.     i = random.randint(0, 2)
-121.     pronoun1 = POSSESIVE_PRONOUNS[i]
-122.     pronoun2 = PERSONAL_PRONOUNS[i]
-123.     if pronoun1 == 'Their':
-124.         return 'This {} {} Didn\'t Think Robots Would Take {} Job. {} Were
-             Wrong.'.format(state, noun, pronoun1, pronoun2)
-125.     else:
-126.         return 'This {} {} Didn\'t Think Robots Would Take {} Job. {} Was
-             Wrong.'.format(state, noun, pronoun1, pronoun2)
-127.
-128.
-129. # If the program is run (instead of imported), run the game:
-130. if __name__ == '__main__':
-131.     main()</code></pre>
+<div class="highlight"><pre><span></span>
+<span class="c">  1. </span><span class="sd">&quot;&quot;&quot;Clickbait Headline Generator, by Al Sweigart al@inventwithpython.com</span>
+<span class="c">  2. </span><span class="sd">A clickbait headline generator for your soulless content farm website.</span>
+<span class="c">  3. </span><span class="sd">This code is available at https://nostarch.com/big-book-small-python-programming</span>
+<span class="c">  4. </span><span class="sd">Tags: large, beginner, humor, word&quot;&quot;&quot;</span>
+<span class="c">  5. </span>
+<span class="c">  6. </span><span class="kn">import</span> <span class="nn">random</span>
+<span class="c">  7. </span>
+<span class="c">  8. </span><span class="c1"># Set up the constants:</span>
+<span class="c">  9. </span><span class="n">OBJECT_PRONOUNS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Her&#39;</span><span class="p">,</span> <span class="s1">&#39;Him&#39;</span><span class="p">,</span> <span class="s1">&#39;Them&#39;</span><span class="p">]</span>
+<span class="c"> 10. </span><span class="n">POSSESIVE_PRONOUNS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Her&#39;</span><span class="p">,</span> <span class="s1">&#39;His&#39;</span><span class="p">,</span> <span class="s1">&#39;Their&#39;</span><span class="p">]</span>
+<span class="c"> 11. </span><span class="n">PERSONAL_PRONOUNS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;She&#39;</span><span class="p">,</span> <span class="s1">&#39;He&#39;</span><span class="p">,</span> <span class="s1">&#39;They&#39;</span><span class="p">]</span>
+<span class="c"> 12. </span><span class="n">STATES</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;California&#39;</span><span class="p">,</span> <span class="s1">&#39;Texas&#39;</span><span class="p">,</span> <span class="s1">&#39;Florida&#39;</span><span class="p">,</span> <span class="s1">&#39;New York&#39;</span><span class="p">,</span> <span class="s1">&#39;Pennsylvania&#39;</span><span class="p">,</span>
+<span class="c"> 13. </span>          <span class="s1">&#39;Illinois&#39;</span><span class="p">,</span> <span class="s1">&#39;Ohio&#39;</span><span class="p">,</span> <span class="s1">&#39;Georgia&#39;</span><span class="p">,</span> <span class="s1">&#39;North Carolina&#39;</span><span class="p">,</span> <span class="s1">&#39;Michigan&#39;</span><span class="p">]</span>
+<span class="c"> 14. </span><span class="n">NOUNS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Athlete&#39;</span><span class="p">,</span> <span class="s1">&#39;Clown&#39;</span><span class="p">,</span> <span class="s1">&#39;Shovel&#39;</span><span class="p">,</span> <span class="s1">&#39;Paleo Diet&#39;</span><span class="p">,</span> <span class="s1">&#39;Doctor&#39;</span><span class="p">,</span> <span class="s1">&#39;Parent&#39;</span><span class="p">,</span>
+<span class="c"> 15. </span>         <span class="s1">&#39;Cat&#39;</span><span class="p">,</span> <span class="s1">&#39;Dog&#39;</span><span class="p">,</span> <span class="s1">&#39;Chicken&#39;</span><span class="p">,</span> <span class="s1">&#39;Robot&#39;</span><span class="p">,</span> <span class="s1">&#39;Video Game&#39;</span><span class="p">,</span> <span class="s1">&#39;Avocado&#39;</span><span class="p">,</span>
+<span class="c"> 16. </span>         <span class="s1">&#39;Plastic Straw&#39;</span><span class="p">,</span><span class="s1">&#39;Serial Killer&#39;</span><span class="p">,</span> <span class="s1">&#39;Telephone Psychic&#39;</span><span class="p">]</span>
+<span class="c"> 17. </span><span class="n">PLACES</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;House&#39;</span><span class="p">,</span> <span class="s1">&#39;Attic&#39;</span><span class="p">,</span> <span class="s1">&#39;Bank Deposit Box&#39;</span><span class="p">,</span> <span class="s1">&#39;School&#39;</span><span class="p">,</span> <span class="s1">&#39;Basement&#39;</span><span class="p">,</span>
+<span class="c"> 18. </span>          <span class="s1">&#39;Workplace&#39;</span><span class="p">,</span> <span class="s1">&#39;Donut Shop&#39;</span><span class="p">,</span> <span class="s1">&#39;Apocalypse Bunker&#39;</span><span class="p">]</span>
+<span class="c"> 19. </span><span class="n">WHEN</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Soon&#39;</span><span class="p">,</span> <span class="s1">&#39;This Year&#39;</span><span class="p">,</span> <span class="s1">&#39;Later Today&#39;</span><span class="p">,</span> <span class="s1">&#39;RIGHT NOW&#39;</span><span class="p">,</span> <span class="s1">&#39;Next Week&#39;</span><span class="p">]</span>
+<span class="c"> 20. </span>
+<span class="c"> 21. </span>
+<span class="c"> 22. </span><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<span class="c"> 23. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Clickbait Headline Generator&#39;</span><span class="p">)</span>
+<span class="c"> 24. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;By Al Sweigart al@inventwithpython.com&#39;</span><span class="p">)</span>
+<span class="c"> 25. </span>    <span class="nb">print</span><span class="p">()</span>
+<span class="c"> 26. </span>
+<span class="c"> 27. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Our website needs to trick people into looking at ads!&#39;</span><span class="p">)</span>
+<span class="c"> 28. </span>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<span class="c"> 29. </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Enter the number of clickbait headlines to generate:&#39;</span><span class="p">)</span>
+<span class="c"> 30. </span>        <span class="n">response</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;&gt; &#39;</span><span class="p">)</span>
+<span class="c"> 31. </span>        <span class="k">if</span> <span class="ow">not</span> <span class="n">response</span><span class="o">.</span><span class="n">isdecimal</span><span class="p">():</span>
+<span class="c"> 32. </span>            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Please enter a number.&#39;</span><span class="p">)</span>
+<span class="c"> 33. </span>        <span class="k">else</span><span class="p">:</span>
+<span class="c"> 34. </span>            <span class="n">numberOfHeadlines</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+<span class="c"> 35. </span>            <span class="k">break</span>  <span class="c1"># Exit the loop once a valid number is entered.</span>
+<span class="c"> 36. </span>
+<span class="c"> 37. </span>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numberOfHeadlines</span><span class="p">):</span>
+<span class="c"> 38. </span>        <span class="n">clickbaitType</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+<span class="c"> 39. </span>
+<span class="c"> 40. </span>        <span class="k">if</span> <span class="n">clickbaitType</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+<span class="c"> 41. </span>            <span class="n">headline</span> <span class="o">=</span> <span class="n">generateAreMillenialsKillingHeadline</span><span class="p">()</span>
+<span class="c"> 42. </span>        <span class="k">elif</span> <span class="n">clickbaitType</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+<span class="c"> 43. </span>            <span class="n">headline</span> <span class="o">=</span> <span class="n">generateWhatYouDontKnowHeadline</span><span class="p">()</span>
+<span class="c"> 44. </span>        <span class="k">elif</span> <span class="n">clickbaitType</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+<span class="c"> 45. </span>            <span class="n">headline</span> <span class="o">=</span> <span class="n">generateBigCompaniesHateHerHeadline</span><span class="p">()</span>
+<span class="c"> 46. </span>        <span class="k">elif</span> <span class="n">clickbaitType</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+<span class="c"> 47. </span>            <span class="n">headline</span> <span class="o">=</span> <span class="n">generateYouWontBelieveHeadline</span><span class="p">()</span>
+<span class="c"> 48. </span>        <span class="k">elif</span> <span class="n">clickbaitType</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+<span class="c"> 49. </span>            <span class="n">headline</span> <span class="o">=</span> <span class="n">generateDontWantYouToKnowHeadline</span><span class="p">()</span>
+<span class="c"> 50. </span>        <span class="k">elif</span> <span class="n">clickbaitType</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span>
+<span class="c"> 51. </span>            <span class="n">headline</span> <span class="o">=</span> <span class="n">generateGiftIdeaHeadline</span><span class="p">()</span>
+<span class="c"> 52. </span>        <span class="k">elif</span> <span class="n">clickbaitType</span> <span class="o">==</span> <span class="mi">7</span><span class="p">:</span>
+<span class="c"> 53. </span>            <span class="n">headline</span> <span class="o">=</span> <span class="n">generateReasonsWhyHeadline</span><span class="p">()</span>
+<span class="c"> 54. </span>        <span class="k">elif</span> <span class="n">clickbaitType</span> <span class="o">==</span> <span class="mi">8</span><span class="p">:</span>
+<span class="c"> 55. </span>            <span class="n">headline</span> <span class="o">=</span> <span class="n">generateJobAutomatedHeadline</span><span class="p">()</span>
+<span class="c"> 56. </span>
+<span class="c"> 57. </span>        <span class="nb">print</span><span class="p">(</span><span class="n">headline</span><span class="p">)</span>
+<span class="c"> 58. </span>    <span class="nb">print</span><span class="p">()</span>
+<span class="c"> 59. </span>
+<span class="c"> 60. </span>    <span class="n">website</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="s1">&#39;wobsite&#39;</span><span class="p">,</span> <span class="s1">&#39;blag&#39;</span><span class="p">,</span> <span class="s1">&#39;Facebuuk&#39;</span><span class="p">,</span> <span class="s1">&#39;Googles&#39;</span><span class="p">,</span>
+<span class="c"> 61. </span>                             <span class="s1">&#39;Facesbook&#39;</span><span class="p">,</span> <span class="s1">&#39;Tweedie&#39;</span><span class="p">,</span> <span class="s1">&#39;Pastagram&#39;</span><span class="p">])</span>
+<span class="c"> 62. </span>    <span class="n">when</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">WHEN</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+<span class="c"> 63. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Post these to our&#39;</span><span class="p">,</span> <span class="n">website</span><span class="p">,</span> <span class="n">when</span><span class="p">,</span> <span class="s1">&#39;or you</span><span class="se">\&#39;</span><span class="s1">re fired!&#39;</span><span class="p">)</span>
+<span class="c"> 64. </span>
+<span class="c"> 65. </span>
+<span class="c"> 66. </span><span class="c1"># Each of these functions returns a different type of headline:</span>
+<span class="c"> 67. </span><span class="k">def</span> <span class="nf">generateAreMillenialsKillingHeadline</span><span class="p">():</span>
+<span class="c"> 68. </span>    <span class="n">noun</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">NOUNS</span><span class="p">)</span>
+<span class="c"> 69. </span>    <span class="k">return</span> <span class="s1">&#39;Are Millenials Killing the </span><span class="si">{}</span><span class="s1"> Industry?&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">noun</span><span class="p">)</span>
+<span class="c"> 70. </span>
+<span class="c"> 71. </span>
+<span class="c"> 72. </span><span class="k">def</span> <span class="nf">generateWhatYouDontKnowHeadline</span><span class="p">():</span>
+<span class="c"> 73. </span>    <span class="n">noun</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">NOUNS</span><span class="p">)</span>
+<span class="c"> 74. </span>    <span class="n">pluralNoun</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">NOUNS</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;s&#39;</span>
+<span class="c"> 75. </span>    <span class="n">when</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">WHEN</span><span class="p">)</span>
+<span class="c"> 76. </span>    <span class="k">return</span> <span class="s1">&#39;Without This </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1"> Could Kill You </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">noun</span><span class="p">,</span> <span class="n">pluralNoun</span><span class="p">,</span> <span class="n">when</span><span class="p">)</span>
+<span class="c"> 77. </span>
+<span class="c"> 78. </span>
+<span class="c"> 79. </span><span class="k">def</span> <span class="nf">generateBigCompaniesHateHerHeadline</span><span class="p">():</span>
+<span class="c"> 80. </span>    <span class="n">pronoun</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">OBJECT_PRONOUNS</span><span class="p">)</span>
+<span class="c"> 81. </span>    <span class="n">state</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">STATES</span><span class="p">)</span>
+<span class="c"> 82. </span>    <span class="n">noun1</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">NOUNS</span><span class="p">)</span>
+<span class="c"> 83. </span>    <span class="n">noun2</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">NOUNS</span><span class="p">)</span>
+<span class="c"> 84. </span>    <span class="k">return</span> <span class="s1">&#39;Big Companies Hate </span><span class="si">{}</span><span class="s1">! See How This </span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1"> Invented a Cheaper </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pronoun</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">noun1</span><span class="p">,</span> <span class="n">noun2</span><span class="p">)</span>
+<span class="c"> 85. </span>
+<span class="c"> 86. </span>
+<span class="c"> 87. </span><span class="k">def</span> <span class="nf">generateYouWontBelieveHeadline</span><span class="p">():</span>
+<span class="c"> 88. </span>    <span class="n">state</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">STATES</span><span class="p">)</span>
+<span class="c"> 89. </span>    <span class="n">noun</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">NOUNS</span><span class="p">)</span>
+<span class="c"> 90. </span>    <span class="n">pronoun</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">POSSESIVE_PRONOUNS</span><span class="p">)</span>
+<span class="c"> 91. </span>    <span class="n">place</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">PLACES</span><span class="p">)</span>
+<span class="c"> 92. </span>    <span class="k">return</span> <span class="s1">&#39;You Won</span><span class="se">\&#39;</span><span class="s1">t Believe What This </span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1"> Found in </span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">noun</span><span class="p">,</span> <span class="n">pronoun</span><span class="p">,</span> <span class="n">place</span><span class="p">)</span>
+<span class="c"> 93. </span>
+<span class="c"> 94. </span>
+<span class="c"> 95. </span><span class="k">def</span> <span class="nf">generateDontWantYouToKnowHeadline</span><span class="p">():</span>
+<span class="c"> 96. </span>    <span class="n">pluralNoun1</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">NOUNS</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;s&#39;</span>
+<span class="c"> 97. </span>    <span class="n">pluralNoun2</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">NOUNS</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;s&#39;</span>
+<span class="c"> 98. </span>    <span class="k">return</span> <span class="s1">&#39;What </span><span class="si">{}</span><span class="s1"> Don</span><span class="se">\&#39;</span><span class="s1">t Want You To Know About </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pluralNoun1</span><span class="p">,</span> <span class="n">pluralNoun2</span><span class="p">)</span>
+<span class="c"> 99. </span>
+<span class="c">100. </span>
+<span class="c">101. </span><span class="k">def</span> <span class="nf">generateGiftIdeaHeadline</span><span class="p">():</span>
+<span class="c">102. </span>    <span class="n">number</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
+<span class="c">103. </span>    <span class="n">noun</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">NOUNS</span><span class="p">)</span>
+<span class="c">104. </span>    <span class="n">state</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">STATES</span><span class="p">)</span>
+<span class="c">105. </span>    <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> Gift Ideas to Give Your </span><span class="si">{}</span><span class="s1"> From </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">number</span><span class="p">,</span> <span class="n">noun</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+<span class="c">106. </span>
+<span class="c">107. </span>
+<span class="c">108. </span><span class="k">def</span> <span class="nf">generateReasonsWhyHeadline</span><span class="p">():</span>
+<span class="c">109. </span>    <span class="n">number1</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">19</span><span class="p">)</span>
+<span class="c">110. </span>    <span class="n">pluralNoun</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">NOUNS</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;s&#39;</span>
+<span class="c">111. </span>    <span class="c1"># number2 should be no larger than number1:</span>
+<span class="c">112. </span>    <span class="n">number2</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">number1</span><span class="p">)</span>
+<span class="c">113. </span>    <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> Reasons Why </span><span class="si">{}</span><span class="s1"> Are More Interesting Than You Think (Number </span><span class="si">{}</span><span class="s1"> Will Surprise You!)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">number1</span><span class="p">,</span> <span class="n">pluralNoun</span><span class="p">,</span> <span class="n">number2</span><span class="p">)</span>
+<span class="c">114. </span>
+<span class="c">115. </span>
+<span class="c">116. </span><span class="k">def</span> <span class="nf">generateJobAutomatedHeadline</span><span class="p">():</span>
+<span class="c">117. </span>    <span class="n">state</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">STATES</span><span class="p">)</span>
+<span class="c">118. </span>    <span class="n">noun</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">NOUNS</span><span class="p">)</span>
+<span class="c">119. </span>
+<span class="c">120. </span>    <span class="n">i</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="c">121. </span>    <span class="n">pronoun1</span> <span class="o">=</span> <span class="n">POSSESIVE_PRONOUNS</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="c">122. </span>    <span class="n">pronoun2</span> <span class="o">=</span> <span class="n">PERSONAL_PRONOUNS</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="c">123. </span>    <span class="k">if</span> <span class="n">pronoun1</span> <span class="o">==</span> <span class="s1">&#39;Their&#39;</span><span class="p">:</span>
+<span class="c">124. </span>        <span class="k">return</span> <span class="s1">&#39;This </span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1"> Didn</span><span class="se">\&#39;</span><span class="s1">t Think Robots Would Take </span><span class="si">{}</span><span class="s1"> Job. </span><span class="si">{}</span><span class="s1"> Were Wrong.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">noun</span><span class="p">,</span> <span class="n">pronoun1</span><span class="p">,</span> <span class="n">pronoun2</span><span class="p">)</span>
+<span class="c">125. </span>    <span class="k">else</span><span class="p">:</span>
+<span class="c">126. </span>        <span class="k">return</span> <span class="s1">&#39;This </span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1"> Didn</span><span class="se">\&#39;</span><span class="s1">t Think Robots Would Take </span><span class="si">{}</span><span class="s1"> Job. </span><span class="si">{}</span><span class="s1"> Was Wrong.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">noun</span><span class="p">,</span> <span class="n">pronoun1</span><span class="p">,</span> <span class="n">pronoun2</span><span class="p">)</span>
+<span class="c">127. </span>
+<span class="c">128. </span>
+<span class="c">129. </span><span class="c1"># If the program is run (instead of imported), run the game:</span>
+<span class="c">130. </span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="c">131. </span>    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
 <p class="calibre19">After entering the source code and running it a few times, try making experimental changes to it. On your own, you can also try to figure out how to do the following:</p>
 <ul class="calibre25">
 <li class="calibre8">Add additional types of clickbait headlines.</li>

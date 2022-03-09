@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Bouncing DVD Logo</title></head><body style="background-color: #fffeee;">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><link rel="stylesheet" type="text/css" href="pygments.css"><title>Bouncing DVD Logo</title></head><body style="background-color: #fffeee;">
 
 <script type="text/javascript">
 //<![CDATA[
@@ -64,154 +64,157 @@ _gaq.push(['_trackPageview']);
 <figcaption class="calibre29"><p class="calibre30"><a id="calibre_link-337" class="linkurl">Figure 5-2</a>: The origin point (0, 0) is in the upper left of the screen, while the x- and y-coordinates increase going right and down, respectively.</p></figcaption>
 </figure>
 <p class="calibre19">The <code class="calibre22">bext</code> module’s <code class="calibre22">goto()</code> function works the same way: calling <code class="calibre22">bext.goto(0, 0)</code> places the text cursor at the top left of the terminal window. We represent each bouncing DVD logo using a Python dictionary with the keys <code class="calibre22">'color'</code>, <code class="calibre22">'direction'</code>, <code class="calibre22">'x'</code>, and <code class="calibre22">'y'</code>. The values for the <code class="calibre22">'x'</code> and <code class="calibre22">'y'</code> are integers representing the logo’s position in the window. Since these values get passed to <code class="calibre22">bext.goto()</code>, increasing them will move the logo right and down, while decreasing them will move the logo left and up.</p>
-<pre class="calibre24"><code class="calibre22">  1. """Bouncing DVD Logo, by Al Sweigart al@inventwithpython.com
-  2. A bouncing DVD logo animation. You have to be "of a certain age" to
-  3. appreciate this. Press Ctrl-C to stop.
-  4.
-  5. NOTE: Do not resize the terminal window while this program is running.
-  6. View this code at https://nostarch.com/big-book-small-python-projects
-  7. Tags: short, artistic, bext"""
-  8.
-  9. import sys, random, time
- 10.
- 11. try:
- 12.     import bext
- 13. except ImportError:
- 14.     print('This program requires the bext module, which you')
- 15.     print('can install by following the instructions at')
- 16.     print('https://pypi.org/project/Bext/')
- 17.     sys.exit()
- 18.
- 19. # Set up the constants:
- 20. WIDTH, HEIGHT = bext.size()
- 21. # We can't print to the last column on Windows without it adding a
- 22. # newline automatically, so reduce the width by one:
- 23. WIDTH -= 1
- 24.
- 25. NUMBER_OF_LOGOS = 5  # (!) Try changing this to 1 or 100.
- 26. PAUSE_AMOUNT = 0.2  # (!) Try changing this to 1.0 or 0.0.
- 27. # (!) Try changing this list to fewer colors:
- 28. COLORS = ['red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white']
- 29.
- 30. UP_RIGHT   = 'ur'
- 31. UP_LEFT    = 'ul'
- 32. DOWN_RIGHT = 'dr'
- 33. DOWN_LEFT  = 'dl'
- 34. DIRECTIONS = (UP_RIGHT, UP_LEFT, DOWN_RIGHT, DOWN_LEFT)
- 35.
- 36. # Key names for logo dictionaries:
- 37. COLOR = 'color'
- 38. X = 'x'
- 39. Y = 'y'
- 40. DIR = 'direction'
- 41.
- 42.
- 43. def main():
- 44.     bext.clear()
- 45.
- 46.     # Generate some logos.
- 47.     logos = []
- 48.     for i in range(NUMBER_OF_LOGOS):
- 49.         logos.append({COLOR: random.choice(COLORS),
- 50.                       X: random.randint(1, WIDTH - 4),
- 51.                       Y: random.randint(1, HEIGHT - 4),
- 52.                       DIR: random.choice(DIRECTIONS)})
- 53.         if logos[-1][X] % 2 == 1:
- 54.             # Make sure X is even so it can hit the corner.
- 55.             logos[-1][X] -= 1
- 56.
- 57.     cornerBounces = 0  # Count how many times a logo hits a corner.
- 58.     while True:  # Main program loop.
- 59.         for logo in logos:  # Handle each logo in the logos list.
- 60.             # Erase the logo's current location:
- 61.             bext.goto(logo[X], logo[Y])
- 62.             print('   ', end='')  # (!) Try commenting this line out.
- 63.
- 64.             originalDirection = logo[DIR]
- 65.
- 66.             # See if the logo bounces off the corners:
- 67.             if logo[X] == 0 and logo[Y] == 0:
- 68.                 logo[DIR] = DOWN_RIGHT
- 69.                 cornerBounces += 1
- 70.             elif logo[X] == 0 and logo[Y] == HEIGHT - 1:
- 71.                 logo[DIR] = UP_RIGHT
- 72.                 cornerBounces += 1
- 73.             elif logo[X] == WIDTH - 3 and logo[Y] == 0:
- 74.                 logo[DIR] = DOWN_LEFT
- 75.                 cornerBounces += 1
- 76.             elif logo[X] == WIDTH - 3 and logo[Y] == HEIGHT - 1:
- 77.                 logo[DIR] = UP_LEFT
- 78.                 cornerBounces += 1
- 79.
- 80.             # See if the logo bounces off the left edge:
- 81.             elif logo[X] == 0 and logo[DIR] == UP_LEFT:
- 82.                 logo[DIR] = UP_RIGHT
- 83.             elif logo[X] == 0 and logo[DIR] == DOWN_LEFT:
- 84.                 logo[DIR] = DOWN_RIGHT
- 85.
- 86.             # See if the logo bounces off the right edge:
- 87.             # (WIDTH - 3 because 'DVD' has 3 letters.)
- 88.             elif logo[X] == WIDTH - 3 and logo[DIR] == UP_RIGHT:
- 89.                 logo[DIR] = UP_LEFT
- 90.             elif logo[X] == WIDTH - 3 and logo[DIR] == DOWN_RIGHT:
- 91.                 logo[DIR] = DOWN_LEFT
- 92.
- 93.             # See if the logo bounces off the top edge:
- 94.             elif logo[Y] == 0 and logo[DIR] == UP_LEFT:
- 95.                 logo[DIR] = DOWN_LEFT
- 96.             elif logo[Y] == 0 and logo[DIR] == UP_RIGHT:
- 97.                 logo[DIR] = DOWN_RIGHT
- 98.
- 99.             # See if the logo bounces off the bottom edge:
-100.             elif logo[Y] == HEIGHT - 1 and logo[DIR] == DOWN_LEFT:
-101.                 logo[DIR] = UP_LEFT
-102.             elif logo[Y] == HEIGHT - 1 and logo[DIR] == DOWN_RIGHT:
-103.                 logo[DIR] = UP_RIGHT
-104.
-105.             if logo[DIR] != originalDirection:
-106.                 # Change color when the logo bounces:
-107.                 logo[COLOR] = random.choice(COLORS)
-108.
-109.             # Move the logo. (X moves by 2 because the terminal
-110.             # characters are twice as tall as they are wide.)
-111.             if logo[DIR] == UP_RIGHT:
-112.                 logo[X] += 2
-113.                 logo[Y] -= 1
-114.             elif logo[DIR] == UP_LEFT:
-115.                 logo[X] -= 2
-116.                 logo[Y] -= 1
-117.             elif logo[DIR] == DOWN_RIGHT:
-118.                 logo[X] += 2
-119.                 logo[Y] += 1
-120.             elif logo[DIR] == DOWN_LEFT:
-121.                 logo[X] -= 2
-122.                 logo[Y] += 1
-123.
-124.         # Display number of corner bounces:
-125.         bext.goto(5, 0)
-126.         bext.fg('white')
-127.         print('Corner bounces:', cornerBounces, end='')
-128.
-129.         for logo in logos:
-130.             # Draw the logos at their new location:
-131.             bext.goto(logo[X], logo[Y])
-132.             bext.fg(logo[COLOR])
-133.             print('DVD', end='')
-134.
-135.         bext.goto(0, 0)
-136.
-137.         sys.stdout.flush()  # (Required for bext-using programs.)
-138.         time.sleep(PAUSE_AMOUNT)
-139.
-140.
-141. # If this program was run (instead of imported), run the game:
-142. if __name__ == '__main__':
-143.     try:
-144.         main()
-145.     except KeyboardInterrupt:
-146.         print()
-147.         print('Bouncing DVD Logo, by Al Sweigart')
-148.         sys.exit()  # When Ctrl-C is pressed, end the program.</code></pre>
+<div class="highlight"><pre><span></span>
+<span class="c">  1. </span><span class="sd">&quot;&quot;&quot;Bouncing DVD Logo, by Al Sweigart al@inventwithpython.com</span>
+<span class="c">  2. </span><span class="sd">A bouncing DVD logo animation. You have to be &quot;of a certain age&quot; to</span>
+<span class="c">  3. </span><span class="sd">appreciate this. Press Ctrl-C to stop.</span>
+<span class="c">  4. </span>
+<span class="c">  5. </span><span class="sd">NOTE: Do not resize the terminal window while this program is running.</span>
+<span class="c">  6. </span><span class="sd">This code is available at https://nostarch.com/big-book-small-python-programming</span>
+<span class="c">  7. </span><span class="sd">Tags: short, artistic, bext&quot;&quot;&quot;</span>
+<span class="c">  8. </span>
+<span class="c">  9. </span><span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">random</span><span class="o">,</span> <span class="nn">time</span>
+<span class="c"> 10. </span>
+<span class="c"> 11. </span><span class="k">try</span><span class="p">:</span>
+<span class="c"> 12. </span>    <span class="kn">import</span> <span class="nn">bext</span>
+<span class="c"> 13. </span><span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+<span class="c"> 14. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;This program requires the bext module, which you&#39;</span><span class="p">)</span>
+<span class="c"> 15. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;can install by following the instructions at&#39;</span><span class="p">)</span>
+<span class="c"> 16. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;https://pypi.org/project/Bext/&#39;</span><span class="p">)</span>
+<span class="c"> 17. </span>    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+<span class="c"> 18. </span>
+<span class="c"> 19. </span><span class="c1"># Set up the constants:</span>
+<span class="c"> 20. </span><span class="n">WIDTH</span><span class="p">,</span> <span class="n">HEIGHT</span> <span class="o">=</span> <span class="n">bext</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+<span class="c"> 21. </span><span class="c1"># We can&#39;t print to the last column on Windows without it adding a</span>
+<span class="c"> 22. </span><span class="c1"># newline automatically, so reduce the width by one:</span>
+<span class="c"> 23. </span><span class="n">WIDTH</span> <span class="o">-=</span> <span class="mi">1</span>
+<span class="c"> 24. </span>
+<span class="c"> 25. </span><span class="n">NUMBER_OF_LOGOS</span> <span class="o">=</span> <span class="mi">5</span>  <span class="c1"># (!) Try changing this to 1 or 100.</span>
+<span class="c"> 26. </span><span class="n">PAUSE_AMOUNT</span> <span class="o">=</span> <span class="mf">0.2</span>  <span class="c1"># (!) Try changing this to 1.0 or 0.0.</span>
+<span class="c"> 27. </span><span class="c1"># (!) Try changing this list to fewer colors:</span>
+<span class="c"> 28. </span><span class="n">COLORS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="s1">&#39;yellow&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;magenta&#39;</span><span class="p">,</span> <span class="s1">&#39;cyan&#39;</span><span class="p">,</span> <span class="s1">&#39;white&#39;</span><span class="p">]</span>
+<span class="c"> 29. </span>
+<span class="c"> 30. </span><span class="n">UP_RIGHT</span>   <span class="o">=</span> <span class="s1">&#39;ur&#39;</span>
+<span class="c"> 31. </span><span class="n">UP_LEFT</span>    <span class="o">=</span> <span class="s1">&#39;ul&#39;</span>
+<span class="c"> 32. </span><span class="n">DOWN_RIGHT</span> <span class="o">=</span> <span class="s1">&#39;dr&#39;</span>
+<span class="c"> 33. </span><span class="n">DOWN_LEFT</span>  <span class="o">=</span> <span class="s1">&#39;dl&#39;</span>
+<span class="c"> 34. </span><span class="n">DIRECTIONS</span> <span class="o">=</span> <span class="p">(</span><span class="n">UP_RIGHT</span><span class="p">,</span> <span class="n">UP_LEFT</span><span class="p">,</span> <span class="n">DOWN_RIGHT</span><span class="p">,</span> <span class="n">DOWN_LEFT</span><span class="p">)</span>
+<span class="c"> 35. </span>
+<span class="c"> 36. </span><span class="c1"># Key names for logo dictionaries:</span>
+<span class="c"> 37. </span><span class="n">COLOR</span> <span class="o">=</span> <span class="s1">&#39;color&#39;</span>
+<span class="c"> 38. </span><span class="n">X</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span>
+<span class="c"> 39. </span><span class="n">Y</span> <span class="o">=</span> <span class="s1">&#39;y&#39;</span>
+<span class="c"> 40. </span><span class="n">DIR</span> <span class="o">=</span> <span class="s1">&#39;direction&#39;</span>
+<span class="c"> 41. </span>
+<span class="c"> 42. </span>
+<span class="c"> 43. </span><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<span class="c"> 44. </span>    <span class="n">bext</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+<span class="c"> 45. </span>
+<span class="c"> 46. </span>    <span class="c1"># Generate some logos.</span>
+<span class="c"> 47. </span>    <span class="n">logos</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="c"> 48. </span>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">NUMBER_OF_LOGOS</span><span class="p">):</span>
+<span class="c"> 49. </span>        <span class="n">logos</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="n">COLOR</span><span class="p">:</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">COLORS</span><span class="p">),</span>
+<span class="c"> 50. </span>                      <span class="n">X</span><span class="p">:</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">WIDTH</span> <span class="o">-</span> <span class="mi">4</span><span class="p">),</span>
+<span class="c"> 51. </span>                      <span class="n">Y</span><span class="p">:</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">HEIGHT</span> <span class="o">-</span> <span class="mi">4</span><span class="p">),</span>
+<span class="c"> 52. </span>                      <span class="n">DIR</span><span class="p">:</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">DIRECTIONS</span><span class="p">)})</span>
+<span class="c"> 53. </span>        <span class="k">if</span> <span class="n">logos</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">X</span><span class="p">]</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+<span class="c"> 54. </span>            <span class="c1"># Make sure X is even so it can hit the corner.</span>
+<span class="c"> 55. </span>            <span class="n">logos</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">X</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">1</span>
+<span class="c"> 56. </span>
+<span class="c"> 57. </span>    <span class="n">cornerBounces</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Count how many times a logo hits a corner.</span>
+<span class="c"> 58. </span>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>  <span class="c1"># Main program loop.</span>
+<span class="c"> 59. </span>        <span class="k">for</span> <span class="n">logo</span> <span class="ow">in</span> <span class="n">logos</span><span class="p">:</span>  <span class="c1"># Handle each logo in the logos list.</span>
+<span class="c"> 60. </span>            <span class="c1"># Erase the logo&#39;s current location:</span>
+<span class="c"> 61. </span>            <span class="n">bext</span><span class="o">.</span><span class="n">goto</span><span class="p">(</span><span class="n">logo</span><span class="p">[</span><span class="n">X</span><span class="p">],</span> <span class="n">logo</span><span class="p">[</span><span class="n">Y</span><span class="p">])</span>
+<span class="c"> 62. </span>            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;   &#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>  <span class="c1"># (!) Try commenting this line out.</span>
+<span class="c"> 63. </span>
+<span class="c"> 64. </span>            <span class="n">originalDirection</span> <span class="o">=</span> <span class="n">logo</span><span class="p">[</span><span class="n">DIR</span><span class="p">]</span>
+<span class="c"> 65. </span>
+<span class="c"> 66. </span>            <span class="c1"># See if the logo bounces off the corners:</span>
+<span class="c"> 67. </span>            <span class="k">if</span> <span class="n">logo</span><span class="p">[</span><span class="n">X</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">logo</span><span class="p">[</span><span class="n">Y</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+<span class="c"> 68. </span>                <span class="n">logo</span><span class="p">[</span><span class="n">DIR</span><span class="p">]</span> <span class="o">=</span> <span class="n">DOWN_RIGHT</span>
+<span class="c"> 69. </span>                <span class="n">cornerBounces</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="c"> 70. </span>            <span class="k">elif</span> <span class="n">logo</span><span class="p">[</span><span class="n">X</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">logo</span><span class="p">[</span><span class="n">Y</span><span class="p">]</span> <span class="o">==</span> <span class="n">HEIGHT</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+<span class="c"> 71. </span>                <span class="n">logo</span><span class="p">[</span><span class="n">DIR</span><span class="p">]</span> <span class="o">=</span> <span class="n">UP_RIGHT</span>
+<span class="c"> 72. </span>                <span class="n">cornerBounces</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="c"> 73. </span>            <span class="k">elif</span> <span class="n">logo</span><span class="p">[</span><span class="n">X</span><span class="p">]</span> <span class="o">==</span> <span class="n">WIDTH</span> <span class="o">-</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">logo</span><span class="p">[</span><span class="n">Y</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+<span class="c"> 74. </span>                <span class="n">logo</span><span class="p">[</span><span class="n">DIR</span><span class="p">]</span> <span class="o">=</span> <span class="n">DOWN_LEFT</span>
+<span class="c"> 75. </span>                <span class="n">cornerBounces</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="c"> 76. </span>            <span class="k">elif</span> <span class="n">logo</span><span class="p">[</span><span class="n">X</span><span class="p">]</span> <span class="o">==</span> <span class="n">WIDTH</span> <span class="o">-</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">logo</span><span class="p">[</span><span class="n">Y</span><span class="p">]</span> <span class="o">==</span> <span class="n">HEIGHT</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+<span class="c"> 77. </span>                <span class="n">logo</span><span class="p">[</span><span class="n">DIR</span><span class="p">]</span> <span class="o">=</span> <span class="n">UP_LEFT</span>
+<span class="c"> 78. </span>                <span class="n">cornerBounces</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="c"> 79. </span>
+<span class="c"> 80. </span>            <span class="c1"># See if the logo bounces off the left edge:</span>
+<span class="c"> 81. </span>            <span class="k">elif</span> <span class="n">logo</span><span class="p">[</span><span class="n">X</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">logo</span><span class="p">[</span><span class="n">DIR</span><span class="p">]</span> <span class="o">==</span> <span class="n">UP_LEFT</span><span class="p">:</span>
+<span class="c"> 82. </span>                <span class="n">logo</span><span class="p">[</span><span class="n">DIR</span><span class="p">]</span> <span class="o">=</span> <span class="n">UP_RIGHT</span>
+<span class="c"> 83. </span>            <span class="k">elif</span> <span class="n">logo</span><span class="p">[</span><span class="n">X</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">logo</span><span class="p">[</span><span class="n">DIR</span><span class="p">]</span> <span class="o">==</span> <span class="n">DOWN_LEFT</span><span class="p">:</span>
+<span class="c"> 84. </span>                <span class="n">logo</span><span class="p">[</span><span class="n">DIR</span><span class="p">]</span> <span class="o">=</span> <span class="n">DOWN_RIGHT</span>
+<span class="c"> 85. </span>
+<span class="c"> 86. </span>            <span class="c1"># See if the logo bounces off the right edge:</span>
+<span class="c"> 87. </span>            <span class="c1"># (WIDTH - 3 because &#39;DVD&#39; has 3 letters.)</span>
+<span class="c"> 88. </span>            <span class="k">elif</span> <span class="n">logo</span><span class="p">[</span><span class="n">X</span><span class="p">]</span> <span class="o">==</span> <span class="n">WIDTH</span> <span class="o">-</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">logo</span><span class="p">[</span><span class="n">DIR</span><span class="p">]</span> <span class="o">==</span> <span class="n">UP_RIGHT</span><span class="p">:</span>
+<span class="c"> 89. </span>                <span class="n">logo</span><span class="p">[</span><span class="n">DIR</span><span class="p">]</span> <span class="o">=</span> <span class="n">UP_LEFT</span>
+<span class="c"> 90. </span>            <span class="k">elif</span> <span class="n">logo</span><span class="p">[</span><span class="n">X</span><span class="p">]</span> <span class="o">==</span> <span class="n">WIDTH</span> <span class="o">-</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">logo</span><span class="p">[</span><span class="n">DIR</span><span class="p">]</span> <span class="o">==</span> <span class="n">DOWN_RIGHT</span><span class="p">:</span>
+<span class="c"> 91. </span>                <span class="n">logo</span><span class="p">[</span><span class="n">DIR</span><span class="p">]</span> <span class="o">=</span> <span class="n">DOWN_LEFT</span>
+<span class="c"> 92. </span>
+<span class="c"> 93. </span>            <span class="c1"># See if the logo bounces off the top edge:</span>
+<span class="c"> 94. </span>            <span class="k">elif</span> <span class="n">logo</span><span class="p">[</span><span class="n">Y</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">logo</span><span class="p">[</span><span class="n">DIR</span><span class="p">]</span> <span class="o">==</span> <span class="n">UP_LEFT</span><span class="p">:</span>
+<span class="c"> 95. </span>                <span class="n">logo</span><span class="p">[</span><span class="n">DIR</span><span class="p">]</span> <span class="o">=</span> <span class="n">DOWN_LEFT</span>
+<span class="c"> 96. </span>            <span class="k">elif</span> <span class="n">logo</span><span class="p">[</span><span class="n">Y</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">logo</span><span class="p">[</span><span class="n">DIR</span><span class="p">]</span> <span class="o">==</span> <span class="n">UP_RIGHT</span><span class="p">:</span>
+<span class="c"> 97. </span>                <span class="n">logo</span><span class="p">[</span><span class="n">DIR</span><span class="p">]</span> <span class="o">=</span> <span class="n">DOWN_RIGHT</span>
+<span class="c"> 98. </span>
+<span class="c"> 99. </span>            <span class="c1"># See if the logo bounces off the bottom edge:</span>
+<span class="c">100. </span>            <span class="k">elif</span> <span class="n">logo</span><span class="p">[</span><span class="n">Y</span><span class="p">]</span> <span class="o">==</span> <span class="n">HEIGHT</span> <span class="o">-</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">logo</span><span class="p">[</span><span class="n">DIR</span><span class="p">]</span> <span class="o">==</span> <span class="n">DOWN_LEFT</span><span class="p">:</span>
+<span class="c">101. </span>                <span class="n">logo</span><span class="p">[</span><span class="n">DIR</span><span class="p">]</span> <span class="o">=</span> <span class="n">UP_LEFT</span>
+<span class="c">102. </span>            <span class="k">elif</span> <span class="n">logo</span><span class="p">[</span><span class="n">Y</span><span class="p">]</span> <span class="o">==</span> <span class="n">HEIGHT</span> <span class="o">-</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">logo</span><span class="p">[</span><span class="n">DIR</span><span class="p">]</span> <span class="o">==</span> <span class="n">DOWN_RIGHT</span><span class="p">:</span>
+<span class="c">103. </span>                <span class="n">logo</span><span class="p">[</span><span class="n">DIR</span><span class="p">]</span> <span class="o">=</span> <span class="n">UP_RIGHT</span>
+<span class="c">104. </span>
+<span class="c">105. </span>            <span class="k">if</span> <span class="n">logo</span><span class="p">[</span><span class="n">DIR</span><span class="p">]</span> <span class="o">!=</span> <span class="n">originalDirection</span><span class="p">:</span>
+<span class="c">106. </span>                <span class="c1"># Change color when the logo bounces:</span>
+<span class="c">107. </span>                <span class="n">logo</span><span class="p">[</span><span class="n">COLOR</span><span class="p">]</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">COLORS</span><span class="p">)</span>
+<span class="c">108. </span>
+<span class="c">109. </span>            <span class="c1"># Move the logo. (X moves by 2 because the terminal</span>
+<span class="c">110. </span>            <span class="c1"># characters are twice as tall as they are wide.)</span>
+<span class="c">111. </span>            <span class="k">if</span> <span class="n">logo</span><span class="p">[</span><span class="n">DIR</span><span class="p">]</span> <span class="o">==</span> <span class="n">UP_RIGHT</span><span class="p">:</span>
+<span class="c">112. </span>                <span class="n">logo</span><span class="p">[</span><span class="n">X</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">2</span>
+<span class="c">113. </span>                <span class="n">logo</span><span class="p">[</span><span class="n">Y</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">1</span>
+<span class="c">114. </span>            <span class="k">elif</span> <span class="n">logo</span><span class="p">[</span><span class="n">DIR</span><span class="p">]</span> <span class="o">==</span> <span class="n">UP_LEFT</span><span class="p">:</span>
+<span class="c">115. </span>                <span class="n">logo</span><span class="p">[</span><span class="n">X</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">2</span>
+<span class="c">116. </span>                <span class="n">logo</span><span class="p">[</span><span class="n">Y</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">1</span>
+<span class="c">117. </span>            <span class="k">elif</span> <span class="n">logo</span><span class="p">[</span><span class="n">DIR</span><span class="p">]</span> <span class="o">==</span> <span class="n">DOWN_RIGHT</span><span class="p">:</span>
+<span class="c">118. </span>                <span class="n">logo</span><span class="p">[</span><span class="n">X</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">2</span>
+<span class="c">119. </span>                <span class="n">logo</span><span class="p">[</span><span class="n">Y</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="c">120. </span>            <span class="k">elif</span> <span class="n">logo</span><span class="p">[</span><span class="n">DIR</span><span class="p">]</span> <span class="o">==</span> <span class="n">DOWN_LEFT</span><span class="p">:</span>
+<span class="c">121. </span>                <span class="n">logo</span><span class="p">[</span><span class="n">X</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">2</span>
+<span class="c">122. </span>                <span class="n">logo</span><span class="p">[</span><span class="n">Y</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="c">123. </span>
+<span class="c">124. </span>        <span class="c1"># Display number of corner bounces:</span>
+<span class="c">125. </span>        <span class="n">bext</span><span class="o">.</span><span class="n">goto</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="c">126. </span>        <span class="n">bext</span><span class="o">.</span><span class="n">fg</span><span class="p">(</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
+<span class="c">127. </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Corner bounces:&#39;</span><span class="p">,</span> <span class="n">cornerBounces</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c">128. </span>
+<span class="c">129. </span>        <span class="k">for</span> <span class="n">logo</span> <span class="ow">in</span> <span class="n">logos</span><span class="p">:</span>
+<span class="c">130. </span>            <span class="c1"># Draw the logos at their new location:</span>
+<span class="c">131. </span>            <span class="n">bext</span><span class="o">.</span><span class="n">goto</span><span class="p">(</span><span class="n">logo</span><span class="p">[</span><span class="n">X</span><span class="p">],</span> <span class="n">logo</span><span class="p">[</span><span class="n">Y</span><span class="p">])</span>
+<span class="c">132. </span>            <span class="n">bext</span><span class="o">.</span><span class="n">fg</span><span class="p">(</span><span class="n">logo</span><span class="p">[</span><span class="n">COLOR</span><span class="p">])</span>
+<span class="c">133. </span>            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;DVD&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c">134. </span>
+<span class="c">135. </span>        <span class="n">bext</span><span class="o">.</span><span class="n">goto</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="c">136. </span>
+<span class="c">137. </span>        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>  <span class="c1"># (Required for bext-using programs.)</span>
+<span class="c">138. </span>        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">PAUSE_AMOUNT</span><span class="p">)</span>
+<span class="c">139. </span>
+<span class="c">140. </span>
+<span class="c">141. </span><span class="c1"># If this program was run (instead of imported), run the game:</span>
+<span class="c">142. </span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="c">143. </span>    <span class="k">try</span><span class="p">:</span>
+<span class="c">144. </span>        <span class="n">main</span><span class="p">()</span>
+<span class="c">145. </span>    <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
+<span class="c">146. </span>        <span class="nb">print</span><span class="p">()</span>
+<span class="c">147. </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Bouncing DVD Logo, by Al Sweigart&#39;</span><span class="p">)</span>
+<span class="c">148. </span>        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>  <span class="c1"># When Ctrl-C is pressed, end the program.</span>
+</pre></div>
+
 <p class="calibre19">After entering the source code and running it a few times, try making experimental changes to it. The comments marked with <code class="calibre22">(!)</code> have suggestions for small changes you can make. On your own, you can also try to figure out how to do the following:</p>
 <ul class="calibre25">
 <li class="calibre8">Change <code class="calibre22">NUMBER_OF_LOGOS</code> to increase the number of bouncing logos on the screen.</li>

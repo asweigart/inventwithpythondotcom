@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Birthday Paradox</title></head><body style="background-color: #fffeee;">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><link rel="stylesheet" type="text/css" href="pygments.css"><title>Birthday Paradox</title></head><body style="background-color: #fffeee;">
 
 <script type="text/javascript">
 //<![CDATA[
@@ -76,114 +76,117 @@ having a matching birthday in their group.
 That's probably more than you would think!</code></pre>
 <h2 id="calibre_link-42" class="calibre5">How It Works</h2>
 <p class="bodyfirst">Running 100,000 simulations can take a while, which is why lines 95 and 96 report that another 10,000 simulations have finished. This feedback can assure the user that the program hasn’t frozen. Notice that some of the integers, like <code class="calibre22">10_000</code> on line 95 and <code class="calibre22">100_000</code> on lines 93 and 103, have underscores. These underscores have no special meaning, but Python allows them so that programmers can make integer values easier to read. In other words, it’s easier to read “one hundred thousand” from <code class="calibre22">100_000</code> than from <code class="calibre22">100000</code>.</p>
-<pre class="calibre24"><code class="calibre22">  1. """Birthday Paradox Simulation, by Al Sweigart al@inventwithpython.com
-  2. Explore the surprising probabilities of the "Birthday Paradox".
-  3. More info at https://en.wikipedia.org/wiki/Birthday_problem
-  4. View this code at https://nostarch.com/big-book-small-python-projects
-  5. Tags: short, math, simulation"""
-  6.
-  7. import datetime, random
-  8.
-  9.
- 10. def getBirthdays(numberOfBirthdays):
- 11.     """Returns a list of number random date objects for birthdays."""
- 12.     birthdays = []
- 13.     for i in range(numberOfBirthdays):
- 14.         # The year is unimportant for our simulation, as long as all
- 15.         # birthdays have the same year.
- 16.         startOfYear = datetime.date(2001, 1, 1)
- 17.
- 18.         # Get a random day into the year:
- 19.         randomNumberOfDays = datetime.timedelta(random.randint(0, 364))
- 20.         birthday = startOfYear + randomNumberOfDays
- 21.         birthdays.append(birthday)
- 22.     return birthdays
- 23.
- 24.
- 25. def getMatch(birthdays):
- 26.     """Returns the date object of a birthday that occurs more than once
- 27.     in the birthdays list."""
- 28.     if len(birthdays) == len(set(birthdays)):
- 29.         return None  # All birthdays are unique, so return None.
- 30.
- 31.     # Compare each birthday to every other birthday:
- 32.     for a, birthdayA in enumerate(birthdays):
- 33.         for b, birthdayB in enumerate(birthdays[a + 1 :]):
- 34.             if birthdayA == birthdayB:
- 35.                 return birthdayA  # Return the matching birthday.
- 36.
- 37.
- 38. # Display the intro:
- 39. print('''Birthday Paradox, by Al Sweigart al@inventwithpython.com
- 40.
- 41. The Birthday Paradox shows us that in a group of N people, the odds
- 42. that two of them have matching birthdays is surprisingly large.
- 43. This program does a Monte Carlo simulation (that is, repeated random
- 44. simulations) to explore this concept.
- 45.
- 46. (It's not actually a paradox, it's just a surprising result.)
- 47. ''')
- 48.
- 49. # Set up a tuple of month names in order:
- 50. MONTHS = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
- 51.           'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec')
- 52.
- 53. while True:  # Keep asking until the user enters a valid amount.
- 54.     print('How many birthdays shall I generate? (Max 100)')
- 55.     response = input('&gt; ')
- 56.     if response.isdecimal() and (0 &lt; int(response) &lt;= 100):
- 57.         numBDays = int(response)
- 58.         break  # User has entered a valid amount.
- 59. print()
- 60.
- 61. # Generate and display the birthdays:
- 62. print('Here are', numBDays, 'birthdays:')
- 63. birthdays = getBirthdays(numBDays)
- 64. for i, birthday in enumerate(birthdays):
- 65.     if i != 0:
- 66.         # Display a comma for each birthday after the first birthday.
- 67.         print(', ', end='')
- 68.     monthName = MONTHS[birthday.month - 1]
- 69.     dateText = '{} {}'.format(monthName, birthday.day)
- 70.     print(dateText, end='')
- 71. print()
- 72. print()
- 73.
- 74. # Determine if there are two birthdays that match.
- 75. match = getMatch(birthdays)
- 76.
- 77. # Display the results:
- 78. print('In this simulation, ', end='')
- 79. if match != None:
- 80.     monthName = MONTHS[match.month - 1]
- 81.     dateText = '{} {}'.format(monthName, match.day)
- 82.     print('multiple people have a birthday on', dateText)
- 83. else:
- 84.     print('there are no matching birthdays.')
- 85. print()
- 86.
- 87. # Run through 100,000 simulations:
- 88. print('Generating', numBDays, 'random birthdays 100,000 times...')
- 89. input('Press Enter to begin...')
- 90.
- 91. print('Let\'s run another 100,000 simulations.')
- 92. simMatch = 0  # How many simulations had matching birthdays in them.
- 93. for i in range(100_000):
- 94.     # Report on the progress every 10,000 simulations:
- 95.     if i % 10_000 == 0:
- 96.         print(i, 'simulations run...')
- 97.     birthdays = getBirthdays(numBDays)
- 98.     if getMatch(birthdays) != None:
- 99.         simMatch = simMatch + 1
-100. print('100,000 simulations run.')
-101.
-102. # Display simulation results:
-103. probability = round(simMatch / 100_000 * 100, 2)
-104. print('Out of 100,000 simulations of', numBDays, 'people, there was a')
-105. print('matching birthday in that group', simMatch, 'times. This means')
-106. print('that', numBDays, 'people have a', probability, '% chance of')
-107. print('having a matching birthday in their group.')
-108. print('That\'s probably more than you would think!')</code></pre>
+<div class="highlight"><pre><span></span>
+<span class="c">  1. </span><span class="sd">&quot;&quot;&quot;Birthday Paradox Simulation, by Al Sweigart al@inventwithpython.com</span>
+<span class="c">  2. </span><span class="sd">Explore the surprising probabilities of the &quot;Birthday Paradox&quot;.</span>
+<span class="c">  3. </span><span class="sd">More info at https://en.wikipedia.org/wiki/Birthday_problem</span>
+<span class="c">  4. </span><span class="sd">This code is available at https://nostarch.com/big-book-small-python-programming</span>
+<span class="c">  5. </span><span class="sd">Tags: short, math, simulation&quot;&quot;&quot;</span>
+<span class="c">  6. </span>
+<span class="c">  7. </span><span class="kn">import</span> <span class="nn">datetime</span><span class="o">,</span> <span class="nn">random</span>
+<span class="c">  8. </span>
+<span class="c">  9. </span>
+<span class="c"> 10. </span><span class="k">def</span> <span class="nf">getBirthdays</span><span class="p">(</span><span class="n">numberOfBirthdays</span><span class="p">):</span>
+<span class="c"> 11. </span>    <span class="sd">&quot;&quot;&quot;Returns a list of number random date objects for birthdays.&quot;&quot;&quot;</span>
+<span class="c"> 12. </span>    <span class="n">birthdays</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="c"> 13. </span>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numberOfBirthdays</span><span class="p">):</span>
+<span class="c"> 14. </span>        <span class="c1"># The year is unimportant for our simulation, as long as all</span>
+<span class="c"> 15. </span>        <span class="c1"># birthdays have the same year.</span>
+<span class="c"> 16. </span>        <span class="n">startOfYear</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="mi">2001</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="c"> 17. </span>
+<span class="c"> 18. </span>        <span class="c1"># Get a random day into the year:</span>
+<span class="c"> 19. </span>        <span class="n">randomNumberOfDays</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">364</span><span class="p">))</span>
+<span class="c"> 20. </span>        <span class="n">birthday</span> <span class="o">=</span> <span class="n">startOfYear</span> <span class="o">+</span> <span class="n">randomNumberOfDays</span>
+<span class="c"> 21. </span>        <span class="n">birthdays</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">birthday</span><span class="p">)</span>
+<span class="c"> 22. </span>    <span class="k">return</span> <span class="n">birthdays</span>
+<span class="c"> 23. </span>
+<span class="c"> 24. </span>
+<span class="c"> 25. </span><span class="k">def</span> <span class="nf">getMatch</span><span class="p">(</span><span class="n">birthdays</span><span class="p">):</span>
+<span class="c"> 26. </span>    <span class="sd">&quot;&quot;&quot;Returns the date object of a birthday that occurs more than once</span>
+<span class="c"> 27. </span><span class="sd">    in the birthdays list.&quot;&quot;&quot;</span>
+<span class="c"> 28. </span>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">birthdays</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">birthdays</span><span class="p">)):</span>
+<span class="c"> 29. </span>        <span class="k">return</span> <span class="kc">None</span>  <span class="c1"># All birthdays are unique, so return None.</span>
+<span class="c"> 30. </span>
+<span class="c"> 31. </span>    <span class="c1"># Compare each birthday to every other birthday:</span>
+<span class="c"> 32. </span>    <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">birthdayA</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">birthdays</span><span class="p">):</span>
+<span class="c"> 33. </span>        <span class="k">for</span> <span class="n">b</span><span class="p">,</span> <span class="n">birthdayB</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">birthdays</span><span class="p">[</span><span class="n">a</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:]):</span>
+<span class="c"> 34. </span>            <span class="k">if</span> <span class="n">birthdayA</span> <span class="o">==</span> <span class="n">birthdayB</span><span class="p">:</span>
+<span class="c"> 35. </span>                <span class="k">return</span> <span class="n">birthdayA</span>  <span class="c1"># Return the matching birthday.</span>
+<span class="c"> 36. </span>
+<span class="c"> 37. </span>
+<span class="c"> 38. </span><span class="c1"># Display the intro:</span>
+<span class="c"> 39. </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;Birthday Paradox, by Al Sweigart al@inventwithpython.com</span>
+<span class="c"> 40. </span>
+<span class="c"> 41. </span><span class="s1">The birthday paradox shows us that in a group of N people, the odds</span>
+<span class="c"> 42. </span><span class="s1">that two of them have matching birthdays is surprisingly large.</span>
+<span class="c"> 43. </span><span class="s1">This program does a Monte Carlo simulation (that is, repeated random</span>
+<span class="c"> 44. </span><span class="s1">simulations) to explore this concept.</span>
+<span class="c"> 45. </span>
+<span class="c"> 46. </span><span class="s1">(It&#39;s not actually a paradox, it&#39;s just a surprising result.)</span>
+<span class="c"> 47. </span><span class="s1">&#39;&#39;&#39;</span><span class="p">)</span>
+<span class="c"> 48. </span>
+<span class="c"> 49. </span><span class="c1"># Set up a tuple of month names in order:</span>
+<span class="c"> 50. </span><span class="n">MONTHS</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Jan&#39;</span><span class="p">,</span> <span class="s1">&#39;Feb&#39;</span><span class="p">,</span> <span class="s1">&#39;Mar&#39;</span><span class="p">,</span> <span class="s1">&#39;Apr&#39;</span><span class="p">,</span> <span class="s1">&#39;May&#39;</span><span class="p">,</span> <span class="s1">&#39;Jun&#39;</span><span class="p">,</span>
+<span class="c"> 51. </span>          <span class="s1">&#39;Jul&#39;</span><span class="p">,</span> <span class="s1">&#39;Aug&#39;</span><span class="p">,</span> <span class="s1">&#39;Sep&#39;</span><span class="p">,</span> <span class="s1">&#39;Oct&#39;</span><span class="p">,</span> <span class="s1">&#39;Nov&#39;</span><span class="p">,</span> <span class="s1">&#39;Dec&#39;</span><span class="p">)</span>
+<span class="c"> 52. </span>
+<span class="c"> 53. </span><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>  <span class="c1"># Keep asking until the user enters a valid amount.</span>
+<span class="c"> 54. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;How many birthdays shall I generate? (Max 100)&#39;</span><span class="p">)</span>
+<span class="c"> 55. </span>    <span class="n">response</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;&gt; &#39;</span><span class="p">)</span>
+<span class="c"> 56. </span>    <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">isdecimal</span><span class="p">()</span> <span class="ow">and</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;</span> <span class="nb">int</span><span class="p">(</span><span class="n">response</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">):</span>
+<span class="c"> 57. </span>        <span class="n">numBDays</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+<span class="c"> 58. </span>        <span class="k">break</span>  <span class="c1"># User has entered a valid amount.</span>
+<span class="c"> 59. </span><span class="nb">print</span><span class="p">()</span>
+<span class="c"> 60. </span>
+<span class="c"> 61. </span><span class="c1"># Generate and display the birthdays:</span>
+<span class="c"> 62. </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Here are&#39;</span><span class="p">,</span> <span class="n">numBDays</span><span class="p">,</span> <span class="s1">&#39;birthdays:&#39;</span><span class="p">)</span>
+<span class="c"> 63. </span><span class="n">birthdays</span> <span class="o">=</span> <span class="n">getBirthdays</span><span class="p">(</span><span class="n">numBDays</span><span class="p">)</span>
+<span class="c"> 64. </span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">birthday</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">birthdays</span><span class="p">):</span>
+<span class="c"> 65. </span>    <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+<span class="c"> 66. </span>        <span class="c1"># Display a comma for each birthday after the first birthday.</span>
+<span class="c"> 67. </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;, &#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c"> 68. </span>    <span class="n">monthName</span> <span class="o">=</span> <span class="n">MONTHS</span><span class="p">[</span><span class="n">birthday</span><span class="o">.</span><span class="n">month</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+<span class="c"> 69. </span>    <span class="n">dateText</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">monthName</span><span class="p">,</span> <span class="n">birthday</span><span class="o">.</span><span class="n">day</span><span class="p">)</span>
+<span class="c"> 70. </span>    <span class="nb">print</span><span class="p">(</span><span class="n">dateText</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c"> 71. </span><span class="nb">print</span><span class="p">()</span>
+<span class="c"> 72. </span><span class="nb">print</span><span class="p">()</span>
+<span class="c"> 73. </span>
+<span class="c"> 74. </span><span class="c1"># Determine if there are two birthdays that match.</span>
+<span class="c"> 75. </span><span class="n">match</span> <span class="o">=</span> <span class="n">getMatch</span><span class="p">(</span><span class="n">birthdays</span><span class="p">)</span>
+<span class="c"> 76. </span>
+<span class="c"> 77. </span><span class="c1"># Display the results:</span>
+<span class="c"> 78. </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;In this simulation, &#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c"> 79. </span><span class="k">if</span> <span class="n">match</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+<span class="c"> 80. </span>    <span class="n">monthName</span> <span class="o">=</span> <span class="n">MONTHS</span><span class="p">[</span><span class="n">match</span><span class="o">.</span><span class="n">month</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+<span class="c"> 81. </span>    <span class="n">dateText</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">monthName</span><span class="p">,</span> <span class="n">match</span><span class="o">.</span><span class="n">day</span><span class="p">)</span>
+<span class="c"> 82. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;multiple people have a birthday on&#39;</span><span class="p">,</span> <span class="n">dateText</span><span class="p">)</span>
+<span class="c"> 83. </span><span class="k">else</span><span class="p">:</span>
+<span class="c"> 84. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;there are no matching birthdays.&#39;</span><span class="p">)</span>
+<span class="c"> 85. </span><span class="nb">print</span><span class="p">()</span>
+<span class="c"> 86. </span>
+<span class="c"> 87. </span><span class="c1"># Run through 100,000 simulations:</span>
+<span class="c"> 88. </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Generating&#39;</span><span class="p">,</span> <span class="n">numBDays</span><span class="p">,</span> <span class="s1">&#39;random birthdays 100,000 times...&#39;</span><span class="p">)</span>
+<span class="c"> 89. </span><span class="nb">input</span><span class="p">(</span><span class="s1">&#39;Press Enter to begin...&#39;</span><span class="p">)</span>
+<span class="c"> 90. </span>
+<span class="c"> 91. </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Let</span><span class="se">\&#39;</span><span class="s1">s run another 100,000 simulations.&#39;</span><span class="p">)</span>
+<span class="c"> 92. </span><span class="n">simMatch</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># How many simulations had matching birthdays in them.</span>
+<span class="c"> 93. </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100000</span><span class="p">):</span>
+<span class="c"> 94. </span>    <span class="c1"># Report on the progress every 10,000 simulations:</span>
+<span class="c"> 95. </span>    <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">10000</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+<span class="c"> 96. </span>        <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="s1">&#39;simulations run...&#39;</span><span class="p">)</span>
+<span class="c"> 97. </span>    <span class="n">birthdays</span> <span class="o">=</span> <span class="n">getBirthdays</span><span class="p">(</span><span class="n">numBDays</span><span class="p">)</span>
+<span class="c"> 98. </span>    <span class="k">if</span> <span class="n">getMatch</span><span class="p">(</span><span class="n">birthdays</span><span class="p">)</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+<span class="c"> 99. </span>        <span class="n">simMatch</span> <span class="o">=</span> <span class="n">simMatch</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="c">100. </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;100,000 simulations run.&#39;</span><span class="p">)</span>
+<span class="c">101. </span>
+<span class="c">102. </span><span class="c1"># Display simulation results:</span>
+<span class="c">103. </span><span class="n">probability</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">simMatch</span> <span class="o">/</span> <span class="mi">100000</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="c">104. </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Out of 100,000 simulations of&#39;</span><span class="p">,</span> <span class="n">numBDays</span><span class="p">,</span> <span class="s1">&#39;people, there was a&#39;</span><span class="p">)</span>
+<span class="c">105. </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;matching birthday in that group&#39;</span><span class="p">,</span> <span class="n">simMatch</span><span class="p">,</span> <span class="s1">&#39;times. This means&#39;</span><span class="p">)</span>
+<span class="c">106. </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;that&#39;</span><span class="p">,</span> <span class="n">numBDays</span><span class="p">,</span> <span class="s1">&#39;people have a&#39;</span><span class="p">,</span> <span class="n">probability</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">% c</span><span class="s1">hance of&#39;</span><span class="p">)</span>
+<span class="c">107. </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;having a matching birthday in their group.&#39;</span><span class="p">)</span>
+<span class="c">108. </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;That</span><span class="se">\&#39;</span><span class="s1">s probably more than you would think!&#39;</span><span class="p">)</span>
+</pre></div>
+
 <h2 id="calibre_link-43" class="calibre5">Exploring the Program</h2>
 <p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
 <ol class="decimal">

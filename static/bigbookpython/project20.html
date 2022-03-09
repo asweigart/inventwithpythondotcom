@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Digital Stream</title></head><body style="background-color: #fffeee;">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><link rel="stylesheet" type="text/css" href="pygments.css"><title>Digital Stream</title></head><body style="background-color: #fffeee;">
 
 <script type="text/javascript">
 //<![CDATA[
@@ -69,57 +69,60 @@ Press Ctrl-C to quit.
 <var class="calibre27">--snip--</var></code></pre>
 <h2 id="calibre_link-107" class="calibre5">How It Works</h2>
 <p class="bodyfirst">Like Project 15, “Deep Cave,” this program uses the scrolling caused by <code class="calibre22">print()</code> calls to create an animation. Each column is represented by an integer in the columns list: <code class="calibre22">columns[0]</code> is an integer for the leftmost column, <code class="calibre22">columns[1]</code> is an integer for the column to the right of that one, and so on. The program initially sets these integers to <code class="calibre22">0</code>, meaning it prints <code class="calibre22">' '</code> (an empty space string) instead of a stream in that column. Randomly, it changes each integer to a value between <code class="calibre22">MIN_STREAM_LENGTH</code> and <code class="calibre22">MAX_STREAM_LENGTH</code>. That integer decreases by <code class="calibre22">1</code> each time a line is printed. As long as a column’s integer is greater than <code class="calibre22">0</code>, the program prints a random <code class="calibre22">1</code> or <code class="calibre22">0</code> in that column. This produces the “digital stream” effect you see on the screen.</p>
-<pre class="calibre24"><code class="calibre22"> 1. """Digital Stream, by Al Sweigart al@inventwithpython.com
- 2. A screensaver in the style of The Matrix movie's visuals.
- 3. View this code at https://nostarch.com/big-book-small-python-projects
- 4. Tags: tiny, artistic, beginner, scrolling"""
- 5.
- 6. import random, shutil, sys, time
- 7.
- 8. # Set up the constants:
- 9. MIN_STREAM_LENGTH = 6  # (!) Try changing this to 1 or 50.
-10. MAX_STREAM_LENGTH = 14  # (!) Try changing this to 100.
-11. PAUSE = 0.1  # (!) Try changing this to 0.0 or 2.0.
-12. STREAM_CHARS = ['0', '1']  # (!) Try changing this to other characters.
-13.
-14. # Density can range from 0.0 to 1.0:
-15. DENSITY = 0.02  # (!) Try changing this to 0.10 or 0.30.
-16.
-17. # Get the size of the terminal window:
-18. WIDTH = shutil.get_terminal_size()[0]
-19. # We can't print to the last column on Windows without it adding a
-20. # newline automatically, so reduce the width by one:
-21. WIDTH -= 1
-22.
-23. print('Digital Stream, by Al Sweigart al@inventwithpython.com')
-24. print('Press Ctrl-C to quit.')
-25. time.sleep(2)
-26.
-27. try:
-28.     # For each column, when the counter is 0, no stream is shown.
-29.     # Otherwise, it acts as a counter for how many times a 1 or 0
-30.     # should be displayed in that column.
-31.     columns = [0] * WIDTH
-32.     while True:
-33.         # Set up the counter for each column:
-34.         for i in range(WIDTH):
-35.             if columns[i] == 0:
-36.                 if random.random() &lt;= DENSITY:
-37.                     # Restart a stream on this column.
-38.                     columns[i] = random.randint(MIN_STREAM_LENGTH,
-39.                                                 MAX_STREAM_LENGTH)
-40.
-41.             # Display an empty space or a 1/0 character.
-42.             if columns[i] &gt; 0:
-43.                 print(random.choice(STREAM_CHARS), end='')
-44.                 columns[i] -= 1
-45.             else:
-46.                 print(' ', end='')
-47.         print()  # Print a newline at the end of the row of columns.
-48.         sys.stdout.flush()  # Make sure text appears on the screen.
-49.         time.sleep(PAUSE)
-50. except KeyboardInterrupt:
-51.     sys.exit()  # When Ctrl-C is pressed, end the program.</code></pre>
+<div class="highlight"><pre><span></span>
+<span class="c"> 1. </span><span class="sd">&quot;&quot;&quot;Digital Stream, by Al Sweigart al@inventwithpython.com</span>
+<span class="c"> 2. </span><span class="sd">A screensaver in the style of The Matrix movie&#39;s visuals.</span>
+<span class="c"> 3. </span><span class="sd">This code is available at https://nostarch.com/big-book-small-python-programming</span>
+<span class="c"> 4. </span><span class="sd">Tags: tiny, artistic, beginner, scrolling&quot;&quot;&quot;</span>
+<span class="c"> 5. </span>
+<span class="c"> 6. </span><span class="kn">import</span> <span class="nn">random</span><span class="o">,</span> <span class="nn">shutil</span><span class="o">,</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">time</span>
+<span class="c"> 7. </span>
+<span class="c"> 8. </span><span class="c1"># Set up the constants:</span>
+<span class="c"> 9. </span><span class="n">MIN_STREAM_LENGTH</span> <span class="o">=</span> <span class="mi">6</span>  <span class="c1"># (!) Try changing this to 1 or 50.</span>
+<span class="c">10. </span><span class="n">MAX_STREAM_LENGTH</span> <span class="o">=</span> <span class="mi">14</span>  <span class="c1"># (!) Try changing this to 100.</span>
+<span class="c">11. </span><span class="n">PAUSE</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="c1"># (!) Try changing this to 0.0 or 2.0.</span>
+<span class="c">12. </span><span class="n">STREAM_CHARS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">]</span>  <span class="c1"># (!) Try changing this to other characters.</span>
+<span class="c">13. </span>
+<span class="c">14. </span><span class="c1"># Density can range from 0.0 to 1.0:</span>
+<span class="c">15. </span><span class="n">DENSITY</span> <span class="o">=</span> <span class="mf">0.02</span>  <span class="c1"># (!) Try changing this to 0.10 or 0.30.</span>
+<span class="c">16. </span>
+<span class="c">17. </span><span class="c1"># Get the size of the terminal window:</span>
+<span class="c">18. </span><span class="n">WIDTH</span> <span class="o">=</span> <span class="n">shutil</span><span class="o">.</span><span class="n">get_terminal_size</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="c">19. </span><span class="c1"># We can&#39;t print to the last column on Windows without it adding a</span>
+<span class="c">20. </span><span class="c1"># newline automatically, so reduce the width by one:</span>
+<span class="c">21. </span><span class="n">WIDTH</span> <span class="o">-=</span> <span class="mi">1</span>
+<span class="c">22. </span>
+<span class="c">23. </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Digital Stream, by Al Sweigart al@inventwithpython.com&#39;</span><span class="p">)</span>
+<span class="c">24. </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Press Ctrl-C to quit.&#39;</span><span class="p">)</span>
+<span class="c">25. </span><span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="c">26. </span>
+<span class="c">27. </span><span class="k">try</span><span class="p">:</span>
+<span class="c">28. </span>    <span class="c1"># For each column, when the counter is 0, no stream is shown.</span>
+<span class="c">29. </span>    <span class="c1"># Otherwise, it acts as a counter for how many times a 1 or 0</span>
+<span class="c">30. </span>    <span class="c1"># should be displayed in that column.</span>
+<span class="c">31. </span>    <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">WIDTH</span>
+<span class="c">32. </span>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<span class="c">33. </span>        <span class="c1"># Set up the counter for each column:</span>
+<span class="c">34. </span>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">WIDTH</span><span class="p">):</span>
+<span class="c">35. </span>            <span class="k">if</span> <span class="n">columns</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+<span class="c">36. </span>                <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">DENSITY</span><span class="p">:</span>
+<span class="c">37. </span>                    <span class="c1"># Restart a stream on this column.</span>
+<span class="c">38. </span>                    <span class="n">columns</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">MIN_STREAM_LENGTH</span><span class="p">,</span>
+<span class="c">39. </span>                                                <span class="n">MAX_STREAM_LENGTH</span><span class="p">)</span>
+<span class="c">40. </span>
+<span class="c">41. </span>            <span class="c1"># Display an empty space or a 1/0 character.</span>
+<span class="c">42. </span>            <span class="k">if</span> <span class="n">columns</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+<span class="c">43. </span>                <span class="nb">print</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">STREAM_CHARS</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c">44. </span>                <span class="n">columns</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">1</span>
+<span class="c">45. </span>            <span class="k">else</span><span class="p">:</span>
+<span class="c">46. </span>                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c">47. </span>        <span class="nb">print</span><span class="p">()</span>  <span class="c1"># Print a newline at the end of the row of columns.</span>
+<span class="c">48. </span>        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>  <span class="c1"># Make sure text appears on the screen.</span>
+<span class="c">49. </span>        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">PAUSE</span><span class="p">)</span>
+<span class="c">50. </span><span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
+<span class="c">51. </span>    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>  <span class="c1"># When Ctrl-C is pressed, end the program.</span>
+</pre></div>
+
 <p class="calibre19">After entering the source code and running it a few times, try making experimental changes to it. The comments marked with <code class="calibre22">(!)</code> have suggestions for small changes you can make. On your own, you can also try to figure out how to do the following:</p>
 <ul class="calibre25">
 <li class="calibre8">Include characters besides just 1s and 0s.</li>

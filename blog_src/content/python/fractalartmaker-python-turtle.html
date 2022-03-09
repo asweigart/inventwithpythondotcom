@@ -1,0 +1,281 @@
+<html>
+    <head>
+        <title>Make Fractals in Python Turtle with the FractalArtMaker Module</title>
+        <meta name="tags" content="" />
+        <meta name="date" content="2022-03-09 12:00" />
+        <meta name="summary" content="<p><a href=&quot;https://pypi.org/project/FractalArtMaker/&quot;>FractalArtMaker</a> is a module for creating fractal art in Python's <code>turtle</code> module. You can install the module by running <code>pip3 install FractalArtMaker</code></p>" />
+    </head>
+    <body>
+
+
+<p><a href="https://pypi.org/project/FractalArtMaker/">FractalArtMaker</a> is a module for creating fractal art in Python's <code>turtle</code> module. You can install the module by running <code>pip3 install FractalArtMaker</code></p>
+
+<p>This module is explored in the book "The Recursive Book of Recursion" by Al Sweigart from No Starch Press. This blog post will show you how to make fractals like the following:</p>
+
+<p><img src="/blogstatic/fractalartmakerexamples.webp" /></p>
+
+<p>You can purchase this book directly from the publisher at <a href="https://nostarch.com/recursive-book-recursion">https://nostarch.com/recursive-book-recursion</a> or read it online at <a href="https://inventwithpython.com/recursion/">https://inventwithpython.com/recursion/</a></p>
+
+<h2>Quickstart</h2>
+
+<p>To view some example fractals, run the following from the interactive shell:</p>
+
+<div class="highlight"><pre><span class="n">&gt;&gt;&gt;</span><span class="kn">import</span> <span class="nn">fractalartmaker</span>
+<span class="n">&gt;&gt;&gt;</span><span class="n">fractalartmaker</span><span class="o">.</span><span class="n">fast</span><span class="p">()</span>  <span class="c1"># draw the fractals quickly</span>
+<span class="n">&gt;&gt;&gt;</span><span class="n">fractalartmaker</span><span class="o">.</span><span class="n">example</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># pass 1 to 9</span>
+</pre></div>
+
+<h2>Making Fractals</h2>
+
+<p>The Fractal Art Maker's algorithm has two major components: a shape-drawing function and the recursive <code>drawFractal()</code> function.</p>
+
+<p>The shape-drawing function draws a basic shape. The Fractal Art Maker program comes with the two shape-drawing functions, <code>fractalartmaker.drawFilledSquare()</code> and <code>fractalartmaker.drawTriangleOutline()</code>, but you can also create your own. We pass a shape-drawing function to the <code>fractalartmaker.drawFractal()</code> function as an argument.</p>
+
+<p>The <code>fractalartmaker.drawFractal()</code> function also has a parameter indicating changes to the size, position, and angle of the shapes between recursive calls to <code>fractalartmaker.drawFractal()</code>.</p>
+
+<p>The <code>fractalartmaker.drawFractal()</code> function uses a shape-drawing function passed to it to draw the individual parts of the fractal. This is usually a simple shape, such as a square or triangle. The beautiful complexity of the fractals emerges from <code>fractalartmaker.drawFractal()</code> recursively calling this function for each individual component of the whole fractal.</p>
+
+<p>Here's the two shape-drawing functions that come in the <code>fractalartmaker</code> module:</p>
+
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">drawFilledSquare</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">depth</span><span class="p">):</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+
+    <span class="c1"># Move to the top-right corner before drawing:</span>
+    <span class="n">turtle</span><span class="o">.</span><span class="n">penup</span><span class="p">()</span>
+    <span class="n">turtle</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">size</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">turtle</span><span class="o">.</span><span class="n">left</span><span class="p">(</span><span class="mi">90</span><span class="p">)</span>
+    <span class="n">turtle</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">size</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">turtle</span><span class="o">.</span><span class="n">left</span><span class="p">(</span><span class="mi">180</span><span class="p">)</span>
+    <span class="n">turtle</span><span class="o">.</span><span class="n">pendown</span><span class="p">()</span>
+
+    <span class="c1"># Alternate between white and gray (with black border):</span>
+    <span class="k">if</span> <span class="n">depth</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">turtle</span><span class="o">.</span><span class="n">pencolor</span><span class="p">(</span><span class="s1">'black'</span><span class="p">)</span>
+        <span class="n">turtle</span><span class="o">.</span><span class="n">fillcolor</span><span class="p">(</span><span class="s1">'white'</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">turtle</span><span class="o">.</span><span class="n">pencolor</span><span class="p">(</span><span class="s1">'black'</span><span class="p">)</span>
+        <span class="n">turtle</span><span class="o">.</span><span class="n">fillcolor</span><span class="p">(</span><span class="s1">'gray'</span><span class="p">)</span>
+
+    <span class="c1"># Draw a square:</span>
+    <span class="n">turtle</span><span class="o">.</span><span class="n">begin_fill</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>  <span class="c1"># Draw four lines.</span>
+        <span class="n">turtle</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+        <span class="n">turtle</span><span class="o">.</span><span class="n">right</span><span class="p">(</span><span class="mi">90</span><span class="p">)</span>
+    <span class="n">turtle</span><span class="o">.</span><span class="n">end_fill</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">drawTriangleOutline</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">depth</span><span class="p">):</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+
+    <span class="c1"># Move the turtle to the top of the equilateral triangle:</span>
+    <span class="n">height</span> <span class="o">=</span> <span class="n">size</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+    <span class="n">turtle</span><span class="o">.</span><span class="n">penup</span><span class="p">()</span>
+    <span class="n">turtle</span><span class="o">.</span><span class="n">left</span><span class="p">(</span><span class="mi">90</span><span class="p">)</span>  <span class="c1"># Turn to face upwards.</span>
+    <span class="n">turtle</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">height</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span><span class="p">))</span>  <span class="c1"># Move to the top corner.</span>
+    <span class="n">turtle</span><span class="o">.</span><span class="n">right</span><span class="p">(</span><span class="mi">150</span><span class="p">)</span>  <span class="c1"># Turn to face the bottom-right corner.</span>
+    <span class="n">turtle</span><span class="o">.</span><span class="n">pendown</span><span class="p">()</span>
+
+    <span class="c1"># Draw the three sides of the triangle:</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+        <span class="n">turtle</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+        <span class="n">turtle</span><span class="o">.</span><span class="n">right</span><span class="p">(</span><span class="mi">120</span><span class="p">)</span>
+</pre></div>
+
+<p>The shape-drawing functions for the Fractal Art Maker have two parameters: <code>size</code> and <code>depth</code>. The size parameter is the length of the sides of the square or triangle it draws. The shape-drawing functions should always use arguments to <code>turtle.forward()</code> that are based on <code>size</code> so that the lengths will be proportionate to size at each level of recursion. Avoid code like <code>turtle.forward(100)</code> or <code>turtle.forward(200)</code>; instead, use code that is based on the <code>size</code> parameter, like <code>turtle.forward(size)</code> or <code>turtle.forward(size * 2)</code>. In Python's <code>turtle</code> module, <code>turtle.forward(1)</code> moves the turtle by one unit, which is not necessarily the same as one pixel.</p>
+
+<p>The shape-drawing functions' second parameter is the recursive depth of <code>fractalartmaker.drawFractal()</code>. Your shape-drawing function can ignore this argument, but using it can cause interesting variations to the basic shape. For example, the <code>fractalartmaker.drawFilledSquare()</code> shape-drawing function uses depth to alternate between drawing white squares and gray squares. Keep this in mind if you'd like to create your own shape-drawing functions for the Fractal Art Maker program, as they must accept a <code>size</code> and <code>depth</code> argument.</p>
+
+<p>The <code>fractalartmaker.drawFractal()</code> function has three required parameters and one optional one: <code>shapeDrawFunction</code>, <code>size</code>, <code>specs</code>, and optionally <code>maxDepth</code>. The <code>shapeDrawFunction</code> parameter expects a function, like <code>fractalartmaker.drawFilledSquare</code> or <code>fractalartmaker.drawTriangleOutline</code>. The <code>size</code> parameter expects the starting size passed to the drawing function. Often, a value between <code>100</code> and <code>500</code> is a good starting size, though this depends on the code in your shape-drawing function, and finding the right value may require experimentation.</p>
+
+<p>The <code>specs</code> parameter expects a list of dictionaries that specify how the recursive shapes should change their size, position, and angle as <code>fractalartmaker.drawFractal()</code> recursively calls itself. These specifications are described later in this section. To prevent <code>fractalartmaker.drawFractal()</code> from recursing until it causes a stack overflow, the <code>maxDepth</code> parameter holds the number of times <code>fractalartmaker.drawFractal()</code> should recursively call itself. By default, <code>maxDepth</code> has a value of <code>8</code>, but you can provide a different value if you want more recursive shapes or fewer.</p>
+
+<p>The recursive calls to <code>fractalartmaker.drawFractal()</code> are based on the specification in the <code>specs</code> list's dictionaries. For each dictionary, <code>fractalartmaker.drawFractal()</code> makes one recursive call to <code>fractalartmaker.drawFractal()</code>. If specs is a list with one dictionary, every call to <code>fractalartmaker.drawFractal()</code> results in only one recursive call to <code>fractalartmaker.drawFractal()</code>. If specs is a list with three dictionaries, every call to <code>fractalartmaker.drawFractal()</code> results in three recursive calls to <code>fractalartmaker.drawFractal()</code>.</p>
+
+<p>The dictionaries in the specs parameter provide specifications for each recursive call. Each of these dictionaries has the keys <code>sizeChange</code>, <code>xChange</code>, <code>yChange</code>, and <code>angleChange</code>. These dictate how the size of the fractal, the position of the turtle, and the heading of the turtle change for a recursive <code>fractalartmaker.drawFractal()</code> call.</p>
+
+* <code>sizeChange</code> (default is <code>1.0</code>) - The next recursive shape's size value is the current size multiplied by this value.
+* <code>xChange</code> (default is <code>0.0</code>) - The next recursive shape's x-coordinate is the current x-coordinate plus the current size multiplied by this value.
+* <code>yChange</code> (default is <code>0.0</code>) - The next recursive shape's y-coordinate is the current y-coordinate plus the current size multiplied by this value.
+* <code>angleChange</code> (default is <code>0.0</code>) - The next recursive shape's starting angle is the current starting angle plus this value.
+
+<p>Let's take a look at the specification dictionary for the Four Corners fractal, which is drawn when you call <code>fractalartmaker.example(1)</code>. The call to <code>fractalartmaker.drawFractal()</code> for the Four Corners fractal passes the following list of dictionaries for the <code>specs</code> parameter:</p>
+
+<div class="highlight"><pre><span></span><span class="n">fractalartmaker</span><span class="o">.</span><span class="n">drawFractal</span><span class="p">(</span><span class="n">fractalartmaker</span><span class="o">.</span><span class="n">drawFilledSquare</span><span class="p">,</span> <span class="mi">350</span><span class="p">,</span>
+    <span class="p">[{</span><span class="s1">'sizeChange'</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">'xChange'</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="s1">'yChange'</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">},</span>
+     <span class="p">{</span><span class="s1">'sizeChange'</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">'xChange'</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">'yChange'</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">},</span>
+     <span class="p">{</span><span class="s1">'sizeChange'</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">'xChange'</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="s1">'yChange'</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">},</span>
+     <span class="p">{</span><span class="s1">'sizeChange'</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">'xChange'</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">'yChange'</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">}],</span> <span class="mi">5</span><span class="p">)</span>
+</pre></div>
+
+<p>The <code>specs</code> list has four dictionaries, so each call to <code>drawFractal()</code> that draws a square will, in turn, recursively call <code>drawFractal()</code> four more times to draw four more squares.</p>
+
+<p>To determine the size of the next square to be drawn, the value for the <code>sizeChange</code> key is multiplied by the current size parameter. The first dictionary in the specs list has a <code>sizeChange</code> value of <code>0.5</code>, which makes the next recursive call have a size argument of <code>350 * 0.5</code>, or <code>175</code> units. This makes the next square half the size of the previous square. A <code>sizeChange</code> value of <code>2.0</code> would, for example, double the size of the next square. If the dictionary has no <code>sizeChange</code> key, the value defaults to <code>1.0</code> for no change to the size.</p>
+
+<p>If you look at the three other dictionaries in the <code>specs</code> list, you'll notice they all have a <code>sizeChange</code> value of <code>0.5</code>. The difference between them is that their <code>xChange</code> and <code>yChange</code> values place them in the other three corners of the current square. As a result, the next four squares are drawn centered on the four corners of the current square.</p>
+
+<p>The dictionaries in the <code>specs</code> list for this example don't have an <code>angleChange</code> value, so this value defaults to <code>0.0</code> degrees. A positive <code>angleChange</code> value indicates a counterclockwise rotation, while a negative value indicates a clockwise rotation.</p>
+
+<p>Take a look at the code in the module's <code>example()</code> function for more examples.</p>
+
+<p>The <code>fractalartmaker</code> module also has a <code>fractalartmaker.fast()</code> function you can call to make the fractals draw quickly, and a <code>fractalartmaker.clear()</code> to clear the turtle drawing window.</p>
+
+<p>Let's examine the code for each of the 9 example fractals that come with the module.</p>
+
+<h2>Example 1 - Four Corners</h2>
+
+<p><img src="/blogstatic/fractalartmaker-fourcorners.webp" /></p>
+
+<p>The first fractal is Four Corners, which begins as a large square. As the function calls itself, the fractal's specifications cause four smaller squares to be drawn in the four corners of the square:</p>
+
+<div class="highlight"><pre><span></span><span class="c1"># Four Corners:</span>
+<span class="n">drawFractal</span><span class="p">(</span><span class="n">drawFilledSquare</span><span class="p">,</span> <span class="mi">350</span><span class="p">,</span>
+  <span class="p">[{</span><span class="s1">'sizeChange'</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">'xChange'</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="s1">'yChange'</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">},</span>
+   <span class="p">{</span><span class="s1">'sizeChange'</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">'xChange'</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">'yChange'</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">},</span>
+   <span class="p">{</span><span class="s1">'sizeChange'</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">'xChange'</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="s1">'yChange'</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">},</span>
+   <span class="p">{</span><span class="s1">'sizeChange'</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">'xChange'</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">'yChange'</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">}],</span> <span class="mi">5</span><span class="p">)</span>
+</pre></div>
+
+<p>The call to <code>drawFractal()</code> here limits the maximum depth to <code>5</code>, as any more tends to make the fractal so dense that the fine detail becomes hard to see.</p>
+
+<h2>Example 2 - Spiral Squares</h2>
+
+<p><img src="/blogstatic/fractalartmaker-spiralsquares.webp" /></p>
+
+
+<p>The Spiral Squares fractal also starts as a large square, but it creates just one new square on each recursive call:</p>
+
+<div class="highlight"><pre><span></span><span class="c1"># Spiral Squares:</span>
+<span class="n">drawFractal</span><span class="p">(</span><span class="n">drawFilledSquare</span><span class="p">,</span> <span class="mi">600</span><span class="p">,</span> <span class="p">[{</span><span class="s1">&#39;sizeChange&#39;</span><span class="p">:</span> <span class="mf">0.95</span><span class="p">,</span> <span class="s1">&#39;angleChange&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">}],</span> <span class="mi">50</span><span class="p">)</span>
+</pre></div>
+
+
+<p>This square is slightly smaller and rotated by 7 degrees. The centers of all the squares are unchanged, so there's no need to add <code>xChange</code> and <code><code</>yChange</code> keys <code>to</code> the specification. The default maximum depth of <code>8</code> is <code>too</code> small to get an interesting fractal, so we increase it to <code>50</code> to <code>produce</code> a hypnotic spiral pattern.</p>
+
+<h2>Example 3 - Double Spiral Squares</h2>
+
+<p><img src="/blogstatic/fractalartmaker-doublespiralsquares.webp" /></p>
+
+
+<p>The Double Spiral Squares fractal is similar to Spiral Squares, except each square creates two smaller squares. This creates an interesting fan effect, as the second square is drawn later and tends to cover up previously drawn squares:</p>
+
+<div class="highlight"><pre><span></span><span class="c1"># Double Spiral Squares:</span>
+<span class="n">drawFractal</span><span class="p">(</span><span class="n">drawFilledSquare</span><span class="p">,</span> <span class="mi">600</span><span class="p">,</span>
+    <span class="p">[{</span><span class="s1">&#39;sizeChange&#39;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span> <span class="s1">&#39;yChange&#39;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> <span class="s1">&#39;angleChange&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">10</span><span class="p">},</span>
+     <span class="p">{</span><span class="s1">&#39;sizeChange&#39;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span> <span class="s1">&#39;yChange&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="s1">&#39;angleChange&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">}])</span>
+</pre></div>
+
+
+<p>The squares are created slightly higher or lower than their previous square and rotated either <code>10</code> or <code>-10</code> degrees.</p>
+
+<h2>Example 4 - Triangle Spiral</h2>
+
+<p><img src="/blogstatic/fractalartmaker-trianglespiral.webp" /></p>
+
+
+<p>The Triangle Spiral fractal, another variation of the Spiral Square, uses the <code>drawTriangleOutline()</code> shape-drawing function instead of <code>drawFilledSquare()</code>:</p>
+
+<div class="highlight"><pre><span></span><span class="c1"># Triangle Spiral:</span>
+<span class="n">drawFractal</span><span class="p">(</span><span class="n">drawTriangleOutline</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="p">[{</span><span class="s1">&#39;sizeChange&#39;</span><span class="p">:</span> <span class="mf">1.05</span><span class="p">,</span> <span class="s1">&#39;angleChange&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">}],</span> <span class="mi">80</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Unlike the Spiral Square, the Triangle Spiral begins at the small size of <code>20</code> units and slightly increases in size for each level of recursion. The <code>sizeChange</code> key is greater than <code>1.0</code>, so the shapes are always increasing in size.</p>
+
+<p>This means the base case occurs when the recursion reaches a depth of <code>80</code>, because the base case of size becoming less than <code>1</code> is never reached.</p>
+
+<h2>Example 5 - Conway's Game of Life Glider</h2>
+
+<p><img src="/blogstatic/fractalartmaker-glider.webp" /></p>
+
+
+<p>Conway's Game of Life is a famous example of cellular automata. The game's simple rules cause interesting and wildly chaotic patterns to emerge on a two-dimensional grid. One such pattern is a Glider consisting of five cells in a 3 × 3 space:</p>
+
+<div class="highlight"><pre><span></span><span class="c1"># Conway&#39;s Game of Life Glider:</span>
+<span class="n">third</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">3</span>
+<span class="n">drawFractal</span><span class="p">(</span><span class="n">drawFilledSquare</span><span class="p">,</span> <span class="mi">600</span><span class="p">,</span>
+    <span class="p">[{</span><span class="s1">&#39;sizeChange&#39;</span><span class="p">:</span> <span class="n">third</span><span class="p">,</span> <span class="s1">&#39;yChange&#39;</span><span class="p">:</span> <span class="n">third</span><span class="p">},</span>
+     <span class="p">{</span><span class="s1">&#39;sizeChange&#39;</span><span class="p">:</span> <span class="n">third</span><span class="p">,</span> <span class="s1">&#39;xChange&#39;</span><span class="p">:</span> <span class="n">third</span><span class="p">},</span>
+     <span class="p">{</span><span class="s1">&#39;sizeChange&#39;</span><span class="p">:</span> <span class="n">third</span><span class="p">,</span> <span class="s1">&#39;xChange&#39;</span><span class="p">:</span> <span class="n">third</span><span class="p">,</span> <span class="s1">&#39;yChange&#39;</span><span class="p">:</span> <span class="o">-</span><span class="n">third</span><span class="p">},</span>
+     <span class="p">{</span><span class="s1">&#39;sizeChange&#39;</span><span class="p">:</span> <span class="n">third</span><span class="p">,</span> <span class="s1">&#39;yChange&#39;</span><span class="p">:</span> <span class="o">-</span><span class="n">third</span><span class="p">},</span>
+     <span class="p">{</span><span class="s1">&#39;sizeChange&#39;</span><span class="p">:</span> <span class="n">third</span><span class="p">,</span> <span class="s1">&#39;xChange&#39;</span><span class="p">:</span> <span class="o">-</span><span class="n">third</span><span class="p">,</span> <span class="s1">&#39;yChange&#39;</span><span class="p">:</span> <span class="o">-</span><span class="n">third</span><span class="p">}])</span>
+</pre></div>
+
+
+<p>The Glider fractal here has additional Gliders drawn inside each of its five cells. The third variable helps precisely set the position of the recursive shapes in the 3 × 3 space.</p>
+
+<p>You can find a Python implementation of Conway's Game of Life online at <a href="https://inventwithpython.com/bigbookpython/project13.html">https://inventwithpython.com/bigbookpython/project13.html</a>. Tragically, John Conway, the mathematician and professor who developed Conway's Game of Life, passed away of complications from COVID-19 in April 2020.</p>
+
+<h2>Example 6 - Sierpiński Triangle</h2>
+
+<p><img src="/blogstatic/fractalartmaker-sierpinskitriangle.webp" /></p>
+
+
+<p>We created the Sierpiński Triangle fractal in Chapter 9, but our Fractal Art Maker can re-create it as well by using the <code>drawTriangleOutline()</code> shape function. After all, a Sierpiński triangle is an equilateral triangle with three smaller equilateral triangles drawn in its interior:</p>
+
+<div class="highlight"><pre><span></span><span class="c1"># Sierpinski Triangle:</span>
+<span class="n">toMid</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">/</span> <span class="mi">6</span>
+<span class="n">drawFractal</span><span class="p">(</span><span class="n">drawTriangleOutline</span><span class="p">,</span> <span class="mi">600</span><span class="p">,</span>
+    <span class="p">[{</span><span class="s1">&#39;sizeChange&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;yChange&#39;</span><span class="p">:</span> <span class="n">toMid</span><span class="p">,</span> <span class="s1">&#39;angleChange&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+     <span class="p">{</span><span class="s1">&#39;sizeChange&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;yChange&#39;</span><span class="p">:</span> <span class="n">toMid</span><span class="p">,</span> <span class="s1">&#39;angleChange&#39;</span><span class="p">:</span> <span class="mi">120</span><span class="p">},</span>
+     <span class="p">{</span><span class="s1">&#39;sizeChange&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;yChange&#39;</span><span class="p">:</span> <span class="n">toMid</span><span class="p">,</span> <span class="s1">&#39;angleChange&#39;</span><span class="p">:</span> <span class="mi">240</span><span class="p">}])</span>
+</pre></div>
+
+
+<p>The center of these smaller triangles is <code>size * math.sqrt(3) / 6</code> units from the center of the previous triangle. The three calls adjust the heading of the turtle to 0, 120, and 240 degrees before moving up on the turtle's relative y-axis.</p>
+
+<h2>Example 7 - Wave</h2>
+
+<p><img src="/blogstatic/fractalartmaker-wave.webp" /></p>
+
+
+<p>We discussed the Wave fractal at the start of this chapter. This relatively simple fractal creates three smaller and distinct recursive triangles:</p>
+
+<div class="highlight"><pre><span></span><span class="c1"># Wave:</span>
+<span class="n">drawFractal</span><span class="p">(</span><span class="n">drawTriangleOutline</span><span class="p">,</span> <span class="mi">280</span><span class="p">,</span>
+    <span class="p">[{</span><span class="s1">&#39;sizeChange&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;xChange&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;yChange&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">},</span>
+     <span class="p">{</span><span class="s1">&#39;sizeChange&#39;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span> <span class="s1">&#39;xChange&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;yChange&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">},</span>
+     <span class="p">{</span><span class="s1">&#39;sizeChange&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;yChange&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.7</span><span class="p">,</span> <span class="s1">&#39;angleChange&#39;</span><span class="p">:</span> <span class="mi">15</span><span class="p">}])</span>
+</pre></div>
+
+
+<h2>Example 8 - Horn</h2>
+
+<p><img src="/blogstatic/fractalartmaker-horn.webp" /></p>
+
+
+<p>The Horn fractal resembles a ram's horn:</p>
+
+<div class="highlight"><pre><span></span><span class="c1"># Horn:</span>
+<span class="n">drawFractal</span><span class="p">(</span><span class="n">drawFilledSquare</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="p">[{</span><span class="s1">&#39;sizeChange&#39;</span><span class="p">:</span> <span class="mf">0.96</span><span class="p">,</span> <span class="s1">&#39;yChange&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;angleChange&#39;</span><span class="p">:</span> <span class="mi">11</span><span class="p">}],</span> <span class="mi">100</span><span class="p">)</span>
+</pre></div>
+
+
+<p>This simple fractal is made up of squares, each of which is slightly smaller, moved up, and rotated 11 degrees from the previous square. We increase the maximum recursion depth to 100 to extend the horn into a tight spiral.</p>
+
+<h2>Example 9 - Snowflake</h2>
+
+<p><img src="/blogstatic/fractalartmaker-snowflake.webp" /></p>
+
+
+<p>The final fractal, Snowflake, is composed of squares laid out in a pentagon pattern. This is similar to the Four Corners fractal, but it uses five evenly spaced recursive squares instead of four:</p>
+
+<div class="highlight"><pre><span></span><span class="c1"># Snowflake:</span>
+<span class="n">drawFractal</span><span class="p">(</span><span class="n">drawFilledSquare</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span>
+    <span class="p">[{</span><span class="s1">&#39;xChange&#39;</span><span class="p">:</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">180</span><span class="p">),</span>
+      <span class="s1">&#39;yChange&#39;</span><span class="p">:</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">180</span><span class="p">),</span> <span class="s1">&#39;sizeChange&#39;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">},</span>
+    <span class="p">{</span><span class="s1">&#39;xChange&#39;</span><span class="p">:</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">72</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">180</span><span class="p">),</span>
+      <span class="s1">&#39;yChange&#39;</span><span class="p">:</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">72</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">180</span><span class="p">),</span> <span class="s1">&#39;sizeChange&#39;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">},</span>
+    <span class="p">{</span><span class="s1">&#39;xChange&#39;</span><span class="p">:</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">144</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">180</span><span class="p">),</span>
+      <span class="s1">&#39;yChange&#39;</span><span class="p">:</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">144</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">180</span><span class="p">),</span> <span class="s1">&#39;sizeChange&#39;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">},</span>
+    <span class="p">{</span><span class="s1">&#39;xChange&#39;</span><span class="p">:</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">216</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">180</span><span class="p">),</span>
+      <span class="s1">&#39;yChange&#39;</span><span class="p">:</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">216</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">180</span><span class="p">),</span> <span class="s1">&#39;sizeChange&#39;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">},</span>
+    <span class="p">{</span><span class="s1">&#39;xChange&#39;</span><span class="p">:</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">288</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">180</span><span class="p">),</span>
+      <span class="s1">&#39;yChange&#39;</span><span class="p">:</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">288</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">180</span><span class="p">),</span> <span class="s1">&#39;sizeChange&#39;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">}])</span>
+</pre></div>
+
+
+<p>This fractal uses the cosine and sine functions from trigonometry, implemented in Python's <code>math.cos()</code> and <code>math.sin()</code> functions, to determine how to shift the squares along the x-axis and y-axis. A full circle has 360 degrees, so to evenly space out the five recursive squares in this circle, we place them at intervals of 0, 72, 144, 216, and 288 degrees. The <code>math.cos()</code> and <code>math.sin()</code> functions expect the angle argument to be in radians instead of degrees, so we must multiply these numbers by <code>math.pi / 180.</code></p>
+
+<p>The end result is that each square is surrounded by five other squares, which are surrounded by five other squares, and so on, to form a crystal-like fractal that resembles a snowflake.</p>
+</body>
+</html>

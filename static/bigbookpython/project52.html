@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Numeral Systems</title></head><body style="background-color: #fffeee;">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><link rel="stylesheet" type="text/css" href="pygments.css"><title>Numeral Systems</title></head><body style="background-color: #fffeee;">
 
 <script type="text/javascript">
 //<![CDATA[
@@ -90,46 +90,49 @@ DEC: 19    HEX: 13    BIN: 10011</code></pre>
 &gt;&gt;&gt; <b class="calibre6">int('0x2a', 16)</b>
 42</code></pre>
 <p class="calibre19">Keep in mind that the binary and hexadecimal “numbers” returned by <code class="calibre22">bin()</code> and <code class="calibre22">hex()</code> are actually string values: <code class="calibre22">bin(42)</code> returns the string <code class="calibre22">'0b101010'</code> and <code class="calibre22">hex(42)</code> returns the string <code class="calibre22">'0x2a'</code>. In programming, it is convention to add a <code class="calibre22">0b</code> prefix to binary numbers and <code class="calibre22">0x</code> prefix to hexadecimal numbers. That way, no one will confuse the binary number 10000 (the number 16 in decimal) with the decimal number “ten thousand.” The numeral systems program removes these prefixes before displaying the number.</p>
-<pre class="calibre24"><code class="calibre22"> 1. """Numeral System Counters, by Al Sweigart al@inventwithpython.com
- 2. Shows equivalent numbers in decimal, hexadecimal, and binary.
- 3. View this code at https://nostarch.com/big-book-small-python-projects
- 4. Tags: tiny, math"""
- 5.
- 6.
- 7. print('''Numeral System Counters, by Al Sweigart al@inventwithpython.com
- 8.
- 9. This program shows you equivalent numbers in decimal (base 10),
-10. hexadecimal (base 16), and binary (base 2) numeral systems.
-11.
-12. (Ctrl-C to quit.)
-13. ''')
-14.
-15. while True:
-16.     response = input('Enter the starting number (e.g. 0) &gt; ')
-17.     if response == '':
-18.         response = '0'  # Start at 0 by default.
-19.         break
-20.     if response.isdecimal():
-21.         break
-22.     print('Please enter a number greater than or equal to 0.')
-23. start = int(response)
-24.
-25. while True:
-26.     response = input('Enter how many numbers to display (e.g. 1000) &gt; ')
-27.     if response == '':
-28.         response = '1000'  # Display 1000 numbers by default.
-29.         break
-30.     if response.isdecimal():
-31.         break
-32.     print('Please enter a number.')
-33. amount = int(response)
-34.
-35. for number in range(start, start + amount):  # Main program loop.
-36.     # Convert to hexadecimal/binary and remove the prefix:
-37.     hexNumber = hex(number)[2:].upper()
-38.     binNumber = bin(number)[2:]
-39.
-40.     print('DEC:', number, '   HEX:', hexNumber, '   BIN:', binNumber)</code></pre>
+<div class="highlight"><pre><span></span>
+<span class="c"> 1. </span><span class="sd">&quot;&quot;&quot;Numeral System Counters, by Al Sweigart al@inventwithpython.com</span>
+<span class="c"> 2. </span><span class="sd">Shows equivalent numbers in decimal, hexadecimal, and binary.</span>
+<span class="c"> 3. </span><span class="sd">This code is available at https://nostarch.com/big-book-small-python-programming</span>
+<span class="c"> 4. </span><span class="sd">Tags: tiny, math&quot;&quot;&quot;</span>
+<span class="c"> 5. </span>
+<span class="c"> 6. </span>
+<span class="c"> 7. </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;Numeral System Counters, by Al Sweigart al@inventwithpython.com</span>
+<span class="c"> 8. </span>
+<span class="c"> 9. </span><span class="s1">This program shows you equivalent numbers in decimal (base 10),</span>
+<span class="c">10. </span><span class="s1">hexadecimal (base 16), and binary (base 2) numeral systems.</span>
+<span class="c">11. </span>
+<span class="c">12. </span><span class="s1">(Ctrl-C to quit.)</span>
+<span class="c">13. </span><span class="s1">&#39;&#39;&#39;</span><span class="p">)</span>
+<span class="c">14. </span>
+<span class="c">15. </span><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<span class="c">16. </span>    <span class="n">response</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;Enter the starting number (e.g. 0) &gt; &#39;</span><span class="p">)</span>
+<span class="c">17. </span>    <span class="k">if</span> <span class="n">response</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+<span class="c">18. </span>        <span class="n">response</span> <span class="o">=</span> <span class="s1">&#39;0&#39;</span>  <span class="c1"># Start at 0 by default.</span>
+<span class="c">19. </span>        <span class="k">break</span>
+<span class="c">20. </span>    <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">isdecimal</span><span class="p">():</span>
+<span class="c">21. </span>        <span class="k">break</span>
+<span class="c">22. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Please enter a number greater than or equal to 0.&#39;</span><span class="p">)</span>
+<span class="c">23. </span><span class="n">start</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+<span class="c">24. </span>
+<span class="c">25. </span><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<span class="c">26. </span>    <span class="n">response</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;Enter how many numbers to display (e.g. 1000) &gt; &#39;</span><span class="p">)</span>
+<span class="c">27. </span>    <span class="k">if</span> <span class="n">response</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+<span class="c">28. </span>        <span class="n">response</span> <span class="o">=</span> <span class="s1">&#39;1000&#39;</span>  <span class="c1"># Display 1000 numbers by default.</span>
+<span class="c">29. </span>        <span class="k">break</span>
+<span class="c">30. </span>    <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">isdecimal</span><span class="p">():</span>
+<span class="c">31. </span>        <span class="k">break</span>
+<span class="c">32. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Please enter a number.&#39;</span><span class="p">)</span>
+<span class="c">33. </span><span class="n">amount</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+<span class="c">34. </span>
+<span class="c">35. </span><span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">start</span> <span class="o">+</span> <span class="n">amount</span><span class="p">):</span>  <span class="c1"># Main program loop.</span>
+<span class="c">36. </span>    <span class="c1"># Convert to hexadecimal/binary and remove the prefix:</span>
+<span class="c">37. </span>    <span class="n">hexNumber</span> <span class="o">=</span> <span class="nb">hex</span><span class="p">(</span><span class="n">number</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+<span class="c">38. </span>    <span class="n">binNumber</span> <span class="o">=</span> <span class="nb">bin</span><span class="p">(</span><span class="n">number</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]</span>
+<span class="c">39. </span>
+<span class="c">40. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;DEC:&#39;</span><span class="p">,</span> <span class="n">number</span><span class="p">,</span> <span class="s1">&#39;   HEX:&#39;</span><span class="p">,</span> <span class="n">hexNumber</span><span class="p">,</span> <span class="s1">&#39;   BIN:&#39;</span><span class="p">,</span> <span class="n">binNumber</span><span class="p">)</span>
+</pre></div>
+
 <p class="calibre19">After entering the source code and running it a few times, try making experimental changes to it. On your own, you can also try to figure out how to do the following:</p>
 <ul class="calibre25">
 <li class="calibre8">Enter a new row for <em class="calibre9">octal</em>, the base-8 number system, using Python’s <code class="calibre22">oct()</code> function.</li>

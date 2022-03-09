@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Factor Finder</title></head><body style="background-color: #fffeee;">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><link rel="stylesheet" type="text/css" href="pygments.css"><title>Factor Finder</title></head><body style="background-color: #fffeee;">
 
 <script type="text/javascript">
 //<![CDATA[
@@ -71,52 +71,55 @@ Enter a number to factor (or "QUIT" to quit):
 <p class="bodyfirst">We can tell if a number is a factor of another number by checking if the second number evenly divides the first number. For example, 7 is a factor of 21 because 21 ÷ 7 is 3. This also gives us another of 21’s factors: 3. However, 8 is not a factor of 21 because 21 ÷ 8 = 2.625. The fractional remainder component tells us this equation did not divide evenly.</p>
 <p class="calibre19">The <code class="calibre22">%</code> mod operator will perform division and tell us if there’s a remainder: <code class="calibre22">21 % 7</code> evaluates to <code class="calibre22">0</code>, meaning there is no remainder and 7 is a factor of 21, whereas <code class="calibre22">21 % 8</code> evaluates to <code class="calibre22">1</code>, a nonzero value, meaning that it isn’t a factor. The factor finder program uses this technique on line 35 to determine which numbers are factors.</p>
 <p class="calibre19">The <code class="calibre22">math.sqrt()</code> function returns the square root of the number passed to it. For example, <code class="calibre22">math.sqrt(25)</code> returns <code class="calibre22">5.0</code> because 5 times itself is 25, making it the square root of 25.</p>
-<pre class="calibre24"><code class="calibre22"> 1. """Factor Finder, by Al Sweigart al@inventwithpython.com
- 2. Finds all the factors of a number.
- 3. View this code at https://nostarch.com/big-book-small-python-projects
- 4. Tags: tiny, beginner, math"""
- 5.
- 6. import math, sys
- 7.
- 8. print('''Factor Finder, by Al Sweigart al@inventwithpython.com
- 9.
-10. A number's factors are two numbers that, when multiplied with each
-11. other, produce the number. For example, 2 x 13 = 26, so 2 and 13 are
-12. factors of 26. 1 x 26 = 26, so 1 and 26 are also factors of 26. We
-13. say that 26 has four factors: 1, 2, 13, and 26.
-14.
-15. If a number only has two factors (1 and itself), we call that a prime
-16. number. Otherwise, we call it a composite number.
-17.
-18. Can you discover some prime numbers?
-19. ''')
-20.
-21. while True:  # Main program loop.
-22.     print('Enter a positive whole number to factor (or QUIT):')
-23.     response = input('&gt; ')
-24.     if response.upper() == 'QUIT':
-25.         sys.exit()
-26.
-27.     if not (response.isdecimal() and int(response) &gt; 0):
-28.         continue
-29.     number = int(response)
-30.
-31.     factors = []
-32.
-33.     # Find the factors of number:
-34.     for i in range(1, int(math.sqrt(number)) + 1):
-35.         if number % i == 0:  # If there's no remainder, it is a factor.
-36.             factors.append(i)
-37.             factors.append(number // i)
-38.
-39.     # Convert to a set to get rid of duplicate factors:
-40.     factors = list(set(factors))
-41.     factors.sort()
-42.
-43.     # Display the results:
-44.     for i, factor in enumerate(factors):
-45.         factors[i] = str(factor)
-46.     print(', '.join(factors))</code></pre>
+<div class="highlight"><pre><span></span>
+<span class="c"> 1. </span><span class="sd">&quot;&quot;&quot;Factor Finder, by Al Sweigart al@inventwithpython.com</span>
+<span class="c"> 2. </span><span class="sd">Finds all the factors of a number.</span>
+<span class="c"> 3. </span><span class="sd">This code is available at https://nostarch.com/big-book-small-python-programming</span>
+<span class="c"> 4. </span><span class="sd">Tags: tiny, beginner, math&quot;&quot;&quot;</span>
+<span class="c"> 5. </span>
+<span class="c"> 6. </span><span class="kn">import</span> <span class="nn">math</span><span class="o">,</span> <span class="nn">sys</span>
+<span class="c"> 7. </span>
+<span class="c"> 8. </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;Factor Finder, by Al Sweigart al@inventwithpython.com</span>
+<span class="c"> 9. </span>
+<span class="c">10. </span><span class="s1">A number&#39;s factors are two numbers that, when multiplied with each</span>
+<span class="c">11. </span><span class="s1">other, produce the number. For example, 2 x 13 = 26, so 2 and 13 are</span>
+<span class="c">12. </span><span class="s1">factors of 26. 1 x 26 = 26, so 1 and 26 are also factors of 26. We</span>
+<span class="c">13. </span><span class="s1">say that 26 has four factors: 1, 2, 13, and 26.</span>
+<span class="c">14. </span>
+<span class="c">15. </span><span class="s1">If a number only has two factors (1 and itself), we call that a prime</span>
+<span class="c">16. </span><span class="s1">number. Otherwise, we call it a composite number.</span>
+<span class="c">17. </span>
+<span class="c">18. </span><span class="s1">Can you discover some prime numbers?</span>
+<span class="c">19. </span><span class="s1">&#39;&#39;&#39;</span><span class="p">)</span>
+<span class="c">20. </span>
+<span class="c">21. </span><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>  <span class="c1"># Main program loop.</span>
+<span class="c">22. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Enter a positive whole number to factor (or QUIT):&#39;</span><span class="p">)</span>
+<span class="c">23. </span>    <span class="n">response</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;&gt; &#39;</span><span class="p">)</span>
+<span class="c">24. </span>    <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;QUIT&#39;</span><span class="p">:</span>
+<span class="c">25. </span>        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+<span class="c">26. </span>
+<span class="c">27. </span>    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">isdecimal</span><span class="p">()</span> <span class="ow">and</span> <span class="nb">int</span><span class="p">(</span><span class="n">response</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+<span class="c">28. </span>        <span class="k">continue</span>
+<span class="c">29. </span>    <span class="n">number</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+<span class="c">30. </span>
+<span class="c">31. </span>    <span class="n">factors</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="c">32. </span>
+<span class="c">33. </span>    <span class="c1"># Find the factors of number:</span>
+<span class="c">34. </span>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">number</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+<span class="c">35. </span>        <span class="k">if</span> <span class="n">number</span> <span class="o">%</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># If there&#39;s no remainder, it is a factor.</span>
+<span class="c">36. </span>            <span class="n">factors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<span class="c">37. </span>            <span class="n">factors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">number</span> <span class="o">//</span> <span class="n">i</span><span class="p">)</span>
+<span class="c">38. </span>
+<span class="c">39. </span>    <span class="c1"># Convert to a set to get rid of duplicate factors:</span>
+<span class="c">40. </span>    <span class="n">factors</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">factors</span><span class="p">))</span>
+<span class="c">41. </span>    <span class="n">factors</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+<span class="c">42. </span>
+<span class="c">43. </span>    <span class="c1"># Display the results:</span>
+<span class="c">44. </span>    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">factor</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">factors</span><span class="p">):</span>
+<span class="c">45. </span>        <span class="n">factors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">factor</span><span class="p">)</span>
+<span class="c">46. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">factors</span><span class="p">))</span>
+</pre></div>
+
 <h2 id="calibre_link-124" class="calibre5">Exploring the Program</h2>
 <p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
 <ol class="decimal">

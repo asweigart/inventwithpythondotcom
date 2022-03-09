@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Pig Latin</title></head><body style="background-color: #fffeee;">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><link rel="stylesheet" type="text/css" href="pygments.css"><title>Pig Latin</title></head><body style="background-color: #fffeee;">
 
 <script type="text/javascript">
 //<![CDATA[
@@ -61,85 +61,88 @@ Isthay isyay ayay eryvay erioussay essagemay.
 (Copied pig latin to clipboard.)</code></pre>
 <h2 id="calibre_link-232" class="calibre5">How It Works</h2>
 <p class="bodyfirst">The <code class="calibre22">englishToPigLatin()</code> function takes a string of English text and returns a string of its Pig Latin equivalent. The <code class="calibre22">main()</code> function only gets called if a user runs the program directly. You could also write your own Python programs, import <em class="calibre9">piglatin.py</em> with an <code class="calibre22">import piglatin</code> statement, then call <code class="calibre22">piglatin.englishToPigLatin()</code> to make use of the <code class="calibre22">englishToPigLatin()</code> function. This reuse technique can save you the time and effort required to reinvent this code yourself.</p>
-<pre class="calibre24"><code class="calibre22"> 1. """Pig Latin, by Al Sweigart al@inventwithpython.com
- 2. Translates English messages into Igpay Atinlay.
- 3. View this code at https://nostarch.com/big-book-small-python-projects
- 4. Tags: short, word"""
- 5.
- 6. try:
- 7.     import pyperclip  # pyperclip copies text to the clipboard.
- 8. except ImportError:
- 9.     pass  # If pyperclip is not installed, do nothing. It's no big deal.
-10.
-11. VOWELS = ('a', 'e', 'i', 'o', 'u', 'y')
-12.
-13.
-14. def main():
-15.     print('''Igpay Atinlay (Pig Latin)
-16. By Al Sweigart al@inventwithpython.com
-17.
-18. Enter your message:''')
-19.     pigLatin = englishToPigLatin(input('&gt; '))
-20.
-21.     # Join all the words back together into a single string:
-22.     print(pigLatin)
-23.
-24.     try:
-25.         pyperclip.copy(pigLatin)
-26.         print('(Copied pig latin to clipboard.)')
-27.     except NameError:
-28.         pass  # Do nothing if pyperclip wasn't installed.
-29.
-30.
-31. def englishToPigLatin(message):
-32.     pigLatin = ''  # A string of the pig latin translation.
-33.     for word in message.split():
-34.         # Separate the non-letters at the start of this word:
-35.         prefixNonLetters = ''
-36.         while len(word) &gt; 0 and not word[0].isalpha():
-37.             prefixNonLetters += word[0]
-38.             word = word[1:]
-39.         if len(word) == 0:
-40.             pigLatin = pigLatin + prefixNonLetters + ' '
-41.             continue
-42.
-43.         # Separate the non-letters at the end of this word:
-44.         suffixNonLetters = ''
-45.         while not word[-1].isalpha():
-46.             suffixNonLetters = word[-1] + suffixNonLetters
-47.             word = word[:-1]
-48.
-49.         # Remember if the word was in uppercase or titlecase.
-50.         wasUpper = word.isupper()
-51.         wasTitle = word.istitle()
-52.
-53.         word = word.lower()  # Make the word lowercase for translation.
-54.
-55.         # Separate the consonants at the start of this word:
-56.         prefixConsonants = ''
-57.         while len(word) &gt; 0 and not word[0] in VOWELS:
-58.             prefixConsonants += word[0]
-59.             word = word[1:]
-60.
-61.         # Add the pig latin ending to the word:
-62.         if prefixConsonants != '':
-63.             word += prefixConsonants + 'ay'
-64.         else:
-65.             word += 'yay'
-66.
-67.         # Set the word back to uppercase or titlecase:
-68.         if wasUpper:
-69.             word = word.upper()
-70.         if wasTitle:
-71.             word = word.title()
-72.
-73.         # Add the non-letters back to the start or end of the word.
-74.         pigLatin += prefixNonLetters + word + suffixNonLetters + ' '
-75.     return pigLatin
-76.
-77.
-78. if __name__ == '__main__':
-79.     main()</code></pre>
+<div class="highlight"><pre><span></span>
+<span class="c"> 1. </span><span class="sd">&quot;&quot;&quot;Pig Latin, by Al Sweigart al@inventwithpython.com</span>
+<span class="c"> 2. </span><span class="sd">Translates English messages into Igpay Atinlay.</span>
+<span class="c"> 3. </span><span class="sd">This code is available at https://nostarch.com/big-book-small-python-programming</span>
+<span class="c"> 4. </span><span class="sd">Tags: short, word&quot;&quot;&quot;</span>
+<span class="c"> 5. </span>
+<span class="c"> 6. </span><span class="k">try</span><span class="p">:</span>
+<span class="c"> 7. </span>    <span class="kn">import</span> <span class="nn">pyperclip</span>  <span class="c1"># pyperclip copies text to the clipboard.</span>
+<span class="c"> 8. </span><span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+<span class="c"> 9. </span>    <span class="k">pass</span>  <span class="c1"># If pyperclip is not installed, do nothing. It&#39;s no big deal.</span>
+<span class="c">10. </span>
+<span class="c">11. </span><span class="n">VOWELS</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="s1">&#39;i&#39;</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">)</span>
+<span class="c">12. </span>
+<span class="c">13. </span>
+<span class="c">14. </span><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<span class="c">15. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;Igpay Atinlay (Pig Latin)</span>
+<span class="c">16. </span><span class="s1">By Al Sweigart al@inventwithpython.com</span>
+<span class="c">17. </span>
+<span class="c">18. </span><span class="s1">Enter your message:&#39;&#39;&#39;</span><span class="p">)</span>
+<span class="c">19. </span>    <span class="n">pigLatin</span> <span class="o">=</span> <span class="n">englishToPigLatin</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s1">&#39;&gt; &#39;</span><span class="p">))</span>
+<span class="c">20. </span>
+<span class="c">21. </span>    <span class="c1"># Join all the words back together into a single string:</span>
+<span class="c">22. </span>    <span class="nb">print</span><span class="p">(</span><span class="n">pigLatin</span><span class="p">)</span>
+<span class="c">23. </span>
+<span class="c">24. </span>    <span class="k">try</span><span class="p">:</span>
+<span class="c">25. </span>        <span class="n">pyperclip</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">pigLatin</span><span class="p">)</span>
+<span class="c">26. </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;(Copied pig latin to clipboard.)&#39;</span><span class="p">)</span>
+<span class="c">27. </span>    <span class="k">except</span> <span class="ne">NameError</span><span class="p">:</span>
+<span class="c">28. </span>        <span class="k">pass</span>  <span class="c1"># Do nothing if pyperclip wasn&#39;t installed.</span>
+<span class="c">29. </span>
+<span class="c">30. </span>
+<span class="c">31. </span><span class="k">def</span> <span class="nf">englishToPigLatin</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
+<span class="c">32. </span>    <span class="n">pigLatin</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>  <span class="c1"># A string of the pig latin translation.</span>
+<span class="c">33. </span>    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">message</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
+<span class="c">34. </span>        <span class="c1"># Separate the non-letters at the start of this word:</span>
+<span class="c">35. </span>        <span class="n">prefixNonLetters</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+<span class="c">36. </span>        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">word</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">isalpha</span><span class="p">():</span>
+<span class="c">37. </span>            <span class="n">prefixNonLetters</span> <span class="o">+=</span> <span class="n">word</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="c">38. </span>            <span class="n">word</span> <span class="o">=</span> <span class="n">word</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+<span class="c">39. </span>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+<span class="c">40. </span>            <span class="n">pigLatin</span> <span class="o">=</span> <span class="n">pigLatin</span> <span class="o">+</span> <span class="n">prefixNonLetters</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span>
+<span class="c">41. </span>            <span class="k">continue</span>
+<span class="c">42. </span>
+<span class="c">43. </span>        <span class="c1"># Separate the non-letters at the end of this word:</span>
+<span class="c">44. </span>        <span class="n">suffixNonLetters</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+<span class="c">45. </span>        <span class="k">while</span> <span class="ow">not</span> <span class="n">word</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">isalpha</span><span class="p">():</span>
+<span class="c">46. </span>            <span class="n">suffixNonLetters</span> <span class="o">=</span> <span class="n">word</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">suffixNonLetters</span>
+<span class="c">47. </span>            <span class="n">word</span> <span class="o">=</span> <span class="n">word</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="c">48. </span>
+<span class="c">49. </span>        <span class="c1"># Remember if the word was in uppercase or titlecase.</span>
+<span class="c">50. </span>        <span class="n">wasUpper</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="n">isupper</span><span class="p">()</span>
+<span class="c">51. </span>        <span class="n">wasTitle</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="n">istitle</span><span class="p">()</span>
+<span class="c">52. </span>
+<span class="c">53. </span>        <span class="n">word</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>  <span class="c1"># Make the word lowercase for translation.</span>
+<span class="c">54. </span>
+<span class="c">55. </span>        <span class="c1"># Separate the consonants at the start of this word:</span>
+<span class="c">56. </span>        <span class="n">prefixConsonants</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+<span class="c">57. </span>        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">word</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">VOWELS</span><span class="p">:</span>
+<span class="c">58. </span>            <span class="n">prefixConsonants</span> <span class="o">+=</span> <span class="n">word</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="c">59. </span>            <span class="n">word</span> <span class="o">=</span> <span class="n">word</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+<span class="c">60. </span>
+<span class="c">61. </span>        <span class="c1"># Add the pig latin ending to the word:</span>
+<span class="c">62. </span>        <span class="k">if</span> <span class="n">prefixConsonants</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+<span class="c">63. </span>            <span class="n">word</span> <span class="o">+=</span> <span class="n">prefixConsonants</span> <span class="o">+</span> <span class="s1">&#39;ay&#39;</span>
+<span class="c">64. </span>        <span class="k">else</span><span class="p">:</span>
+<span class="c">65. </span>            <span class="n">word</span> <span class="o">+=</span> <span class="s1">&#39;yay&#39;</span>
+<span class="c">66. </span>
+<span class="c">67. </span>        <span class="c1"># Set the word back to uppercase or titlecase:</span>
+<span class="c">68. </span>        <span class="k">if</span> <span class="n">wasUpper</span><span class="p">:</span>
+<span class="c">69. </span>            <span class="n">word</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+<span class="c">70. </span>        <span class="k">if</span> <span class="n">wasTitle</span><span class="p">:</span>
+<span class="c">71. </span>            <span class="n">word</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="n">title</span><span class="p">()</span>
+<span class="c">72. </span>
+<span class="c">73. </span>        <span class="c1"># Add the non-letters back to the start or end of the word.</span>
+<span class="c">74. </span>        <span class="n">pigLatin</span> <span class="o">+=</span> <span class="n">prefixNonLetters</span> <span class="o">+</span> <span class="n">word</span> <span class="o">+</span> <span class="n">suffixNonLetters</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span>
+<span class="c">75. </span>    <span class="k">return</span> <span class="n">pigLatin</span>
+<span class="c">76. </span>
+<span class="c">77. </span>
+<span class="c">78. </span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="c">79. </span>    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
 <h2 id="calibre_link-233" class="calibre5">Exploring the Program</h2>
 <p class="bodyfirst">Try to find the answers to the following questions. Experiment with some modifications to the code and rerun the program to see what effect the changes have.</p>
 <ol class="decimal">

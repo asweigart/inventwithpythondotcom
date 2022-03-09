@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Carrot in a Box</title></head><body style="background-color: #fffeee;">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><link rel="stylesheet" type="text/css" href="pygments.css"><title>Carrot in a Box</title></head><body style="background-color: #fffeee;">
 
 <script type="text/javascript">
 //<![CDATA[
@@ -89,160 +89,163 @@ Press Enter to continue...
 <h2 id="calibre_link-70" class="calibre5">How It Works</h2>
 <p class="bodyfirst">This program relies on the second player closing their eyes so they don’t see the contents of the first player’s box. In order to keep the second player from seeing the box contents after this step, we need to find a way to clear the screen. Line 83 does this with <code class="calibre22">print('\n' * 100)</code>. This prints 100 newline characters, causing the previously printed content to scroll up and out of view. This keeps the second player from accidentally seeing what was only intended for the first player. While the second player could always scroll up to see this text, it’d be obvious to the first player, who’s sitting right next to them, that they had done so.</p>
 <p class="calibre19">On lines 114, 130, and 142, the spacing of the vertical lines may look incorrect, but the program replaces the curly braces with the string <code class="calibre22">'RED '</code> (with a space at the end) or <code class="calibre22">'GOLD'</code>. The four characters in these strings will cause the rest of the box’s vertical lines to line up with the rest of the ASCII-art image.</p>
-<pre class="calibre24"><code class="calibre22">  1. """Carrot in a Box, by Al Sweigart al@inventwithpython.com
-  2. A silly bluffing game between two human players. Based on the game
-  3. from the show 8 Out of 10 Cats.
-  4. View this code at https://nostarch.com/big-book-small-python-projects
-  5. Tags: large, beginner, game, two-player"""
-  6.
-  7. import random
-  8.
-  9. print('''Carrot in a Box, by Al Sweigart al@inventwithpython.com
- 10.
- 11. This is a bluffing game for two human players. Each player has a box.
- 12. One box has a carrot in it. To win, you must have the box with the
- 13. carrot in it.
- 14.
- 15. This is a very simple and silly game.
- 16.
- 17. The first player looks into their box (the second player must close
- 18. their eyes during this). The first player then says "There is a carrot
- 19. in my box" or "There is not a carrot in my box". The second player then
- 20. gets to decide if they want to swap boxes or not.
- 21. ''')
- 22. input('Press Enter to begin...')
- 23.
- 24. p1Name = input('Human player 1, enter your name: ')
- 25. p2Name = input('Human player 2, enter your name: ')
- 26. playerNames = p1Name[:11].center(11) + '    ' + p2Name[:11].center(11)
- 27.
- 28. print('''HERE ARE TWO BOXES:
- 29.   __________     __________
- 30.  /         /|   /         /|
- 31. +---------+ |  +---------+ |
- 32. |   RED   | |  |   GOLD  | |
- 33. |   BOX   | /  |   BOX   | /
- 34. +---------+/   +---------+/''')
- 35.
- 36. print()
- 37. print(playerNames)
- 38. print()
- 39. print(p1Name + ', you have a RED box in front of you.')
- 40. print(p2Name + ', you have a GOLD box in front of you.')
- 41. print()
- 42. print(p1Name + ', you will get to look into your box.')
- 43. print(p2Name.upper() + ', close your eyes and don\'t look!!!')
- 44. input('When ' + p2Name + ' has closed their eyes, press Enter...')
- 45. print()
- 46.
- 47. print(p1Name + ' here is the inside of your box:')
- 48.
- 49. if random.randint(1, 2) == 1:
- 50.     carrotInFirstBox = True
- 51. else:
- 52.     carrotInFirstBox = False
- 53.
- 54. if carrotInFirstBox:
- 55.     print('''
- 56.    ___VV____
- 57.   |   VV    |
- 58.   |   VV    |
- 59.   |___||____|    __________
- 60.  /    ||   /|   /         /|
- 61. +---------+ |  +---------+ |
- 62. |   RED   | |  |   GOLD  | |
- 63. |   BOX   | /  |   BOX   | /
- 64. +---------+/   +---------+/
- 65.  (carrot!)''')
- 66.     print(playerNames)
- 67. else:
- 68.     print('''
- 69.    _________
- 70.   |         |
- 71.   |         |
- 72.   |_________|    __________
- 73.  /         /|   /         /|
- 74. +---------+ |  +---------+ |
- 75. |   RED   | |  |   GOLD  | |
- 76. |   BOX   | /  |   BOX   | /
- 77. +---------+/   +---------+/
- 78. (no carrot!)''')
- 79.     print(playerNames)
- 80.
- 81. input('Press Enter to continue...')
- 82.
- 83. print('\n' * 100)  # Clear the screen by printing several newlines.
- 84. print(p1Name + ', tell ' + p2Name + ' to open their eyes.')
- 85. input('Press Enter to continue...')
- 86.
- 87. print()
- 88. print(p1Name + ', say one of the following sentences to ' + p2Name + '.')
- 89. print('  1) There is a carrot in my box.')
- 90. print('  2) There is not a carrot in my box.')
- 91. print()
- 92. input('Then press Enter to continue...')
- 93.
- 94. print()
- 95. print(p2Name + ', do you want to swap boxes with ' + p1Name + '? YES/NO')
- 96. while True:
- 97.     response = input('&gt; ').upper()
- 98.     if not (response.startswith('Y') or response.startswith('N')):
- 99.         print(p2Name + ', please enter "YES" or "NO".')
-100.     else:
-101.         break
-102.
-103. firstBox = 'RED '  # Note the space after the "D".
-104. secondBox = 'GOLD'
-105.
-106. if response.startswith('Y'):
-107.     carrotInFirstBox = not carrotInFirstBox
-108.     firstBox, secondBox = secondBox, firstBox
-109.
-110. print('''HERE ARE THE TWO BOXES:
-111.   __________     __________
-112.  /         /|   /         /|
-113. +---------+ |  +---------+ |
-114. |   {}  | |  |   {}  | |
-115. |   BOX   | /  |   BOX   | /
-116. +---------+/   +---------+/'''.format(firstBox, secondBox))
-117. print(playerNames)
-118.
-119. input('Press Enter to reveal the winner...')
-120. print()
-121.
-122. if carrotInFirstBox:
-123.     print('''
-124.    ___VV____      _________
-125.   |   VV    |    |         |
-126.   |   VV    |    |         |
-127.   |___||____|    |_________|
-128.  /    ||   /|   /         /|
-129. +---------+ |  +---------+ |
-130. |   {}  | |  |   {}  | |
-131. |   BOX   | /  |   BOX   | /
-132. +---------+/   +---------+/'''.format(firstBox, secondBox))
-133.
-134. else:
-135.     print('''
-136.    _________      ___VV____
-137.   |         |    |   VV    |
-138.   |         |    |   VV    |
-139.   |_________|    |___||____|
-140.  /         /|   /    ||   /|
-141. +---------+ |  +---------+ |
-142. |   {}  | |  |   {}  | |
-143. |   BOX   | /  |   BOX   | /
-144. +---------+/   +---------+/'''.format(firstBox, secondBox))
-145.
-146. print(playerNames)
-147.
-148. # This modification made possible through the 'carrotInFirstBox' variable
-149. if carrotInFirstBox:
-150.     print(p1Name + ' is the winner!')
-151. else:
-152.     print(p2Name + ' is the winner!')
-153.
-154. print('Thanks for playing!')</code></pre>
+<div class="highlight"><pre><span></span>
+<span class="c">  1. </span><span class="sd">&quot;&quot;&quot;Carrot in a Box, by Al Sweigart al@inventwithpython.com</span>
+<span class="c">  2. </span><span class="sd">A silly bluffing game between two human players. Based on the game</span>
+<span class="c">  3. </span><span class="sd">from the show, 8 Out of 10 Cats.</span>
+<span class="c">  4. </span><span class="sd">This code is available at https://nostarch.com/big-book-small-python-programming</span>
+<span class="c">  5. </span><span class="sd">Tags: large, beginner, game, two-player&quot;&quot;&quot;</span>
+<span class="c">  6. </span>
+<span class="c">  7. </span><span class="kn">import</span> <span class="nn">random</span>
+<span class="c">  8. </span>
+<span class="c">  9. </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;Carrot in a Box, by Al Sweigart al@inventwithpython.com</span>
+<span class="c"> 10. </span>
+<span class="c"> 11. </span><span class="s1">This is a bluffing game for two human players. Each player has a box.</span>
+<span class="c"> 12. </span><span class="s1">One box has a carrot in it. To win, you must have the box with the</span>
+<span class="c"> 13. </span><span class="s1">carrot in it.</span>
+<span class="c"> 14. </span>
+<span class="c"> 15. </span><span class="s1">This is a very simple and silly game.</span>
+<span class="c"> 16. </span>
+<span class="c"> 17. </span><span class="s1">The first player looks into their box (the second player must close</span>
+<span class="c"> 18. </span><span class="s1">their eyes during this.) The first player then says &quot;There is a carrot</span>
+<span class="c"> 19. </span><span class="s1">in my box&quot; or &quot;There is not a carrot in my box&quot;. The second player then</span>
+<span class="c"> 20. </span><span class="s1">gets to decide if they want to swap boxes or not.</span>
+<span class="c"> 21. </span><span class="s1">&#39;&#39;&#39;</span><span class="p">)</span>
+<span class="c"> 22. </span><span class="nb">input</span><span class="p">(</span><span class="s1">&#39;Press Enter to begin...&#39;</span><span class="p">)</span>
+<span class="c"> 23. </span>
+<span class="c"> 24. </span><span class="n">p1Name</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;Human player 1, enter your name: &#39;</span><span class="p">)</span>
+<span class="c"> 25. </span><span class="n">p2Name</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;Human player 2, enter your name: &#39;</span><span class="p">)</span>
+<span class="c"> 26. </span><span class="n">playerNames</span> <span class="o">=</span> <span class="n">p1Name</span><span class="p">[:</span><span class="mi">11</span><span class="p">]</span><span class="o">.</span><span class="n">center</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;    &#39;</span> <span class="o">+</span> <span class="n">p2Name</span><span class="p">[:</span><span class="mi">11</span><span class="p">]</span><span class="o">.</span><span class="n">center</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span>
+<span class="c"> 27. </span>
+<span class="c"> 28. </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;HERE ARE TWO BOXES:</span>
+<span class="c"> 29. </span><span class="s1">  __________     __________</span>
+<span class="c"> 30. </span><span class="s1"> /         /|   /         /|</span>
+<span class="c"> 31. </span><span class="s1">+---------+ |  +---------+ |</span>
+<span class="c"> 32. </span><span class="s1">|   RED   | |  |   GOLD  | |</span>
+<span class="c"> 33. </span><span class="s1">|   BOX   | /  |   BOX   | /</span>
+<span class="c"> 34. </span><span class="s1">+---------+/   +---------+/&#39;&#39;&#39;</span><span class="p">)</span>
+<span class="c"> 35. </span>
+<span class="c"> 36. </span><span class="nb">print</span><span class="p">()</span>
+<span class="c"> 37. </span><span class="nb">print</span><span class="p">(</span><span class="n">playerNames</span><span class="p">)</span>
+<span class="c"> 38. </span><span class="nb">print</span><span class="p">()</span>
+<span class="c"> 39. </span><span class="nb">print</span><span class="p">(</span><span class="n">p1Name</span> <span class="o">+</span> <span class="s1">&#39;, you have a RED box in front of you.&#39;</span><span class="p">)</span>
+<span class="c"> 40. </span><span class="nb">print</span><span class="p">(</span><span class="n">p2Name</span> <span class="o">+</span> <span class="s1">&#39;, you have a GOLD box in front of you.&#39;</span><span class="p">)</span>
+<span class="c"> 41. </span><span class="nb">print</span><span class="p">()</span>
+<span class="c"> 42. </span><span class="nb">print</span><span class="p">(</span><span class="n">p1Name</span> <span class="o">+</span> <span class="s1">&#39;, you will get to look into your box.&#39;</span><span class="p">)</span>
+<span class="c"> 43. </span><span class="nb">print</span><span class="p">(</span><span class="n">p2Name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;, close your eyes and don</span><span class="se">\&#39;</span><span class="s1">t look!!!&#39;</span><span class="p">)</span>
+<span class="c"> 44. </span><span class="nb">input</span><span class="p">(</span><span class="s1">&#39;When &#39;</span> <span class="o">+</span> <span class="n">p2Name</span> <span class="o">+</span> <span class="s1">&#39; has closed their eyes, press Enter...&#39;</span><span class="p">)</span>
+<span class="c"> 45. </span><span class="nb">print</span><span class="p">()</span>
+<span class="c"> 46. </span>
+<span class="c"> 47. </span><span class="nb">print</span><span class="p">(</span><span class="n">p1Name</span> <span class="o">+</span> <span class="s1">&#39; here is the inside of your box:&#39;</span><span class="p">)</span>
+<span class="c"> 48. </span>
+<span class="c"> 49. </span><span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+<span class="c"> 50. </span>    <span class="n">carrotInFirstBox</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="c"> 51. </span><span class="k">else</span><span class="p">:</span>
+<span class="c"> 52. </span>    <span class="n">carrotInFirstBox</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="c"> 53. </span>
+<span class="c"> 54. </span><span class="k">if</span> <span class="n">carrotInFirstBox</span><span class="p">:</span>
+<span class="c"> 55. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="c"> 56. </span><span class="s1">   ___VV____</span>
+<span class="c"> 57. </span><span class="s1">  |   VV    |</span>
+<span class="c"> 58. </span><span class="s1">  |   VV    |</span>
+<span class="c"> 59. </span><span class="s1">  |___||____|    __________</span>
+<span class="c"> 60. </span><span class="s1"> /    ||   /|   /         /|</span>
+<span class="c"> 61. </span><span class="s1">+---------+ |  +---------+ |</span>
+<span class="c"> 62. </span><span class="s1">|   RED   | |  |   GOLD  | |</span>
+<span class="c"> 63. </span><span class="s1">|   BOX   | /  |   BOX   | /</span>
+<span class="c"> 64. </span><span class="s1">+---------+/   +---------+/</span>
+<span class="c"> 65. </span><span class="s1"> (carrot!)&#39;&#39;&#39;</span><span class="p">)</span>
+<span class="c"> 66. </span>    <span class="nb">print</span><span class="p">(</span><span class="n">playerNames</span><span class="p">)</span>
+<span class="c"> 67. </span><span class="k">else</span><span class="p">:</span>
+<span class="c"> 68. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="c"> 69. </span><span class="s1">   _________</span>
+<span class="c"> 70. </span><span class="s1">  |         |</span>
+<span class="c"> 71. </span><span class="s1">  |         |</span>
+<span class="c"> 72. </span><span class="s1">  |_________|    __________</span>
+<span class="c"> 73. </span><span class="s1"> /         /|   /         /|</span>
+<span class="c"> 74. </span><span class="s1">+---------+ |  +---------+ |</span>
+<span class="c"> 75. </span><span class="s1">|   RED   | |  |   GOLD  | |</span>
+<span class="c"> 76. </span><span class="s1">|   BOX   | /  |   BOX   | /</span>
+<span class="c"> 77. </span><span class="s1">+---------+/   +---------+/</span>
+<span class="c"> 78. </span><span class="s1">(no carrot!)&#39;&#39;&#39;</span><span class="p">)</span>
+<span class="c"> 79. </span>    <span class="nb">print</span><span class="p">(</span><span class="n">playerNames</span><span class="p">)</span>
+<span class="c"> 80. </span>
+<span class="c"> 81. </span><span class="nb">input</span><span class="p">(</span><span class="s1">&#39;Press Enter to continue...&#39;</span><span class="p">)</span>
+<span class="c"> 82. </span>
+<span class="c"> 83. </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span>  <span class="c1"># Clear the screen by printing several newlines.</span>
+<span class="c"> 84. </span><span class="nb">print</span><span class="p">(</span><span class="n">p1Name</span> <span class="o">+</span> <span class="s1">&#39;, tell &#39;</span> <span class="o">+</span> <span class="n">p2Name</span> <span class="o">+</span> <span class="s1">&#39; to open their eyes.&#39;</span><span class="p">)</span>
+<span class="c"> 85. </span><span class="nb">input</span><span class="p">(</span><span class="s1">&#39;Press Enter to continue...&#39;</span><span class="p">)</span>
+<span class="c"> 86. </span>
+<span class="c"> 87. </span><span class="nb">print</span><span class="p">()</span>
+<span class="c"> 88. </span><span class="nb">print</span><span class="p">(</span><span class="n">p1Name</span> <span class="o">+</span> <span class="s1">&#39;, say one of the following sentences to &#39;</span> <span class="o">+</span> <span class="n">p2Name</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span>
+<span class="c"> 89. </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  1) There is a carrot in my box.&#39;</span><span class="p">)</span>
+<span class="c"> 90. </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  2) There is not a carrot in my box.&#39;</span><span class="p">)</span>
+<span class="c"> 91. </span><span class="nb">print</span><span class="p">()</span>
+<span class="c"> 92. </span><span class="nb">input</span><span class="p">(</span><span class="s1">&#39;Then press Enter to continue...&#39;</span><span class="p">)</span>
+<span class="c"> 93. </span>
+<span class="c"> 94. </span><span class="nb">print</span><span class="p">()</span>
+<span class="c"> 95. </span><span class="nb">print</span><span class="p">(</span><span class="n">p2Name</span> <span class="o">+</span> <span class="s1">&#39;, do you want to swap boxes with &#39;</span> <span class="o">+</span> <span class="n">p1Name</span> <span class="o">+</span> <span class="s1">&#39;? YES/NO&#39;</span><span class="p">)</span>
+<span class="c"> 96. </span><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<span class="c"> 97. </span>    <span class="n">response</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;&gt; &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+<span class="c"> 98. </span>    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;Y&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">response</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;N&#39;</span><span class="p">)):</span>
+<span class="c"> 99. </span>        <span class="nb">print</span><span class="p">(</span><span class="n">p2Name</span> <span class="o">+</span> <span class="s1">&#39;, please enter &quot;YES&quot; or &quot;NO&quot;.&#39;</span><span class="p">)</span>
+<span class="c">100. </span>    <span class="k">else</span><span class="p">:</span>
+<span class="c">101. </span>        <span class="k">break</span>
+<span class="c">102. </span>
+<span class="c">103. </span><span class="n">firstBox</span> <span class="o">=</span> <span class="s1">&#39;RED &#39;</span>  <span class="c1"># Note the space after the &quot;D&quot;.</span>
+<span class="c">104. </span><span class="n">secondBox</span> <span class="o">=</span> <span class="s1">&#39;GOLD&#39;</span>
+<span class="c">105. </span>
+<span class="c">106. </span><span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;Y&#39;</span><span class="p">):</span>
+<span class="c">107. </span>    <span class="n">carrotInFirstBox</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">carrotInFirstBox</span>
+<span class="c">108. </span>    <span class="n">firstBox</span><span class="p">,</span> <span class="n">secondBox</span> <span class="o">=</span> <span class="n">secondBox</span><span class="p">,</span> <span class="n">firstBox</span>
+<span class="c">109. </span>
+<span class="c">110. </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;HERE ARE THE TWO BOXES:</span>
+<span class="c">111. </span><span class="s1">  __________     __________</span>
+<span class="c">112. </span><span class="s1"> /         /|   /         /|</span>
+<span class="c">113. </span><span class="s1">+---------+ |  +---------+ |</span>
+<span class="c">114. </span><span class="s1">|   </span><span class="si">{}</span><span class="s1">  | |  |   </span><span class="si">{}</span><span class="s1">  | |</span>
+<span class="c">115. </span><span class="s1">|   BOX   | /  |   BOX   | /</span>
+<span class="c">116. </span><span class="s1">+---------+/   +---------+/&#39;&#39;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">firstBox</span><span class="p">,</span> <span class="n">secondBox</span><span class="p">))</span>
+<span class="c">117. </span><span class="nb">print</span><span class="p">(</span><span class="n">playerNames</span><span class="p">)</span>
+<span class="c">118. </span>
+<span class="c">119. </span><span class="nb">input</span><span class="p">(</span><span class="s1">&#39;Press Enter to reveal the winner...&#39;</span><span class="p">)</span>
+<span class="c">120. </span><span class="nb">print</span><span class="p">()</span>
+<span class="c">121. </span>
+<span class="c">122. </span><span class="k">if</span> <span class="n">carrotInFirstBox</span><span class="p">:</span>
+<span class="c">123. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="c">124. </span><span class="s1">   ___VV____      _________</span>
+<span class="c">125. </span><span class="s1">  |   VV    |    |         |</span>
+<span class="c">126. </span><span class="s1">  |   VV    |    |         |</span>
+<span class="c">127. </span><span class="s1">  |___||____|    |_________|</span>
+<span class="c">128. </span><span class="s1"> /    ||   /|   /         /|</span>
+<span class="c">129. </span><span class="s1">+---------+ |  +---------+ |</span>
+<span class="c">130. </span><span class="s1">|   </span><span class="si">{}</span><span class="s1">  | |  |   </span><span class="si">{}</span><span class="s1">  | |</span>
+<span class="c">131. </span><span class="s1">|   BOX   | /  |   BOX   | /</span>
+<span class="c">132. </span><span class="s1">+---------+/   +---------+/&#39;&#39;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">firstBox</span><span class="p">,</span> <span class="n">secondBox</span><span class="p">))</span>
+<span class="c">133. </span>
+<span class="c">134. </span><span class="k">else</span><span class="p">:</span>
+<span class="c">135. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="c">136. </span><span class="s1">   _________      ___VV____</span>
+<span class="c">137. </span><span class="s1">  |         |    |   VV    |</span>
+<span class="c">138. </span><span class="s1">  |         |    |   VV    |</span>
+<span class="c">139. </span><span class="s1">  |_________|    |___||____|</span>
+<span class="c">140. </span><span class="s1"> /         /|   /    ||   /|</span>
+<span class="c">141. </span><span class="s1">+---------+ |  +---------+ |</span>
+<span class="c">142. </span><span class="s1">|   </span><span class="si">{}</span><span class="s1">  | |  |   </span><span class="si">{}</span><span class="s1">  | |</span>
+<span class="c">143. </span><span class="s1">|   BOX   | /  |   BOX   | /</span>
+<span class="c">144. </span><span class="s1">+---------+/   +---------+/&#39;&#39;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">firstBox</span><span class="p">,</span> <span class="n">secondBox</span><span class="p">))</span>
+<span class="c">145. </span>
+<span class="c">146. </span><span class="nb">print</span><span class="p">(</span><span class="n">playerNames</span><span class="p">)</span>
+<span class="c">147. </span>
+<span class="c">148. </span><span class="c1"># This modification made possible through the &#39;carrotInFirstBox variable</span>
+<span class="c">149. </span><span class="k">if</span> <span class="n">carrotInFirstBox</span><span class="p">:</span>
+<span class="c">150. </span>    <span class="nb">print</span><span class="p">(</span><span class="n">p1Name</span> <span class="o">+</span> <span class="s1">&#39; is the winner!&#39;</span><span class="p">)</span>
+<span class="c">151. </span><span class="k">else</span><span class="p">:</span>
+<span class="c">152. </span>    <span class="nb">print</span><span class="p">(</span><span class="n">p2Name</span> <span class="o">+</span> <span class="s1">&#39; is the winner!&#39;</span><span class="p">)</span>
+<span class="c">153. </span>
+<span class="c">154. </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Thanks for playing!&#39;</span><span class="p">)</span>
+</pre></div>
+
 <p class="calibre19">After entering the source code and running it a few times, try making experimental changes to it. On your own, you can also try to figure out how to do the following:</p>
 <ul class="calibre25">
 <li class="calibre8">Change the ASCII art for the boxes and carrots to something more ornate.</li>

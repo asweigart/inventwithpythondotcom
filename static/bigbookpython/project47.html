@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Mondrian Art Generator</title></head><body style="background-color: #fffeee;">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><link rel="stylesheet" type="text/css" href="pygments.css"><title>Mondrian Art Generator</title></head><body style="background-color: #fffeee;">
 
 <script type="text/javascript">
 //<![CDATA[
@@ -74,190 +74,193 @@ _gaq.push(['_trackPageview']);
 <figcaption class="calibre29"><p class="calibre30"><a id="calibre_link-345" class="linkurl">Figure 47-4</a>: The third step of the Mondrian art algorithm randomly selects rectangles to fill with color.</p></figcaption>
 </figure>
 <p class="calibre19">You can find another version of this Mondrian art generator at <a href="https://github.com/asweigart/mondrian_art_generator/" class="linkurl">https://github.com/asweigart/mondrian_art_generator/</a> along with several sample images.</p>
-<pre class="calibre24"><code class="calibre22">  1. """Mondrian Art Generator, by Al Sweigart al@inventwithpython.com
-  2. Randomly generates art in the style of Piet Mondrian.
-  3. More info at: https://en.wikipedia.org/wiki/Piet_Mondrian
-  4. View this code at https://nostarch.com/big-book-small-python-projects
-  5. Tags: large, artistic, bext"""
-  6.
-  7. import sys, random
-  8.
-  9. try:
- 10.     import bext
- 11. except ImportError:
- 12.     print('This program requires the bext module, which you')
- 13.     print('can install by following the instructions at')
- 14.     print('https://pypi.org/project/Bext/')
- 15.     sys.exit()
- 16.
- 17. # Set up the constants:
- 18. MIN_X_INCREASE = 6
- 19. MAX_X_INCREASE = 16
- 20. MIN_Y_INCREASE = 3
- 21. MAX_Y_INCREASE = 6
- 22. WHITE = 'white'
- 23. BLACK = 'black'
- 24. RED = 'red'
- 25. YELLOW = 'yellow'
- 26. BLUE = 'blue'
- 27.
- 28. # Setup the screen:
- 29. width, height = bext.size()
- 30. # We can't print to the last column on Windows without it adding a
- 31. # newline automatically, so reduce the width by one:
- 32. width -= 1
- 33.
- 34. height -= 3
- 35.
- 36. while True:  # Main application loop.
- 37.     # Pre-populate the canvas with blank spaces:
- 38.     canvas = {}
- 39.     for x in range(width):
- 40.         for y in range(height):
- 41.             canvas[(x, y)] = WHITE
- 42.
- 43.     # Generate vertical lines:
- 44.     numberOfSegmentsToDelete = 0
- 45.     x = random.randint(MIN_X_INCREASE, MAX_X_INCREASE)
- 46.     while x &lt; width - MIN_X_INCREASE:
- 47.         numberOfSegmentsToDelete += 1
- 48.         for y in range(height):
- 49.             canvas[(x, y)] = BLACK
- 50.         x += random.randint(MIN_X_INCREASE, MAX_X_INCREASE)
- 51.
- 52.     # Generate horizontal lines:
- 53.     y = random.randint(MIN_Y_INCREASE, MAX_Y_INCREASE)
- 54.     while y &lt; height - MIN_Y_INCREASE:
- 55.         numberOfSegmentsToDelete += 1
- 56.         for x in range(width):
- 57.             canvas[(x, y)] = BLACK
- 58.         y += random.randint(MIN_Y_INCREASE, MAX_Y_INCREASE)
- 59.
- 60.     numberOfRectanglesToPaint = numberOfSegmentsToDelete - 3
- 61.     numberOfSegmentsToDelete = int(numberOfSegmentsToDelete * 1.5)
- 62.
- 63.     # Randomly select points and try to remove them.
- 64.     for i in range(numberOfSegmentsToDelete):
- 65.         while True:  # Keep selecting segments to try to delete.
- 66.             # Get a random start point on an existing segment:
- 67.             startx = random.randint(1, width - 2)
- 68.             starty = random.randint(1, height - 2)
- 69.             if canvas[(startx, starty)] == WHITE:
- 70.                 continue
- 71.
- 72.             # Find out if we're on a vertical or horizontal segment:
- 73.             if (canvas[(startx - 1, starty)] == WHITE and
- 74.                 canvas[(startx + 1, starty)] == WHITE):
- 75.                 orientation = 'vertical'
- 76.             elif (canvas[(startx, starty - 1)] == WHITE and
- 77.                 canvas[(startx, starty + 1)] == WHITE):
- 78.                 orientation = 'horizontal'
- 79.             else:
- 80.                 # The start point is on an intersection,
- 81.                 # so get a new random start point:
- 82.                 continue
- 83.
- 84.             pointsToDelete = [(startx, starty)]
- 85.
- 86.             canDeleteSegment = True
- 87.             if orientation == 'vertical':
- 88.                 # Go up one path from the start point, and
- 89.                 # see if we can remove this segment:
- 90.                 for changey in (-1, 1):
- 91.                     y = starty
- 92.                     while 0 &lt; y &lt; height - 1:
- 93.                         y += changey
- 94.                         if (canvas[(startx - 1, y)] == BLACK and
- 95.                             canvas[(startx + 1, y)] == BLACK):
- 96.                             # We've found a four-way intersection.
- 97.                             break
- 98.                         elif ((canvas[(startx - 1, y)] == WHITE and
- 99.                                canvas[(startx + 1, y)] == BLACK) or
-100.                               (canvas[(startx - 1, y)] == BLACK and
-101.                                canvas[(startx + 1, y)] == WHITE)):
-102.                             # We've found a T-intersection; we can't
-103.                             # delete this segment:
-104.                             canDeleteSegment = False
-105.                             break
-106.                         else:
-107.                             pointsToDelete.append((startx, y))
-108.
-109.             elif orientation == 'horizontal':
-110.                 # Go up one path from the start point, and
-111.                 # see if we can remove this segment:
-112.                 for changex in (-1, 1):
-113.                     x = startx
-114.                     while 0 &lt; x &lt; width - 1:
-115.                         x += changex
-116.                         if (canvas[(x, starty - 1)] == BLACK and
-117.                             canvas[(x, starty + 1)] == BLACK):
-118.                             # We've found a four-way intersection.
-119.                             break
-120.                         elif ((canvas[(x, starty - 1)] == WHITE and
-121.                                canvas[(x, starty + 1)] == BLACK) or
-122.                               (canvas[(x, starty - 1)] == BLACK and
-123.                                canvas[(x, starty + 1)] == WHITE)):
-124.                             # We've found a T-intersection; we can't
-125.                             # delete this segment:
-126.                             canDeleteSegment = False
-127.                             break
-128.                         else:
-129.                             pointsToDelete.append((x, starty))
-130.             if not canDeleteSegment:
-131.                 continue  # Get a new random start point.
-132.             break  # Move on to delete the segment.
-133.
-134.         # If we can delete this segment, set all the points to white:
-135.         for x, y in pointsToDelete:
-136.             canvas[(x, y)] = WHITE
-137.
-138.     # Add the border lines:
-139.     for x in range(width):
-140.         canvas[(x, 0)] = BLACK  # Top border.
-141.         canvas[(x, height - 1)] = BLACK  # Bottom border.
-142.     for y in range(height):
-143.         canvas[(0, y)] = BLACK  # Left border.
-144.         canvas[(width - 1, y)] = BLACK  # Right border.
-145.
-146.     # Paint the rectangles:
-147.     for i in range(numberOfRectanglesToPaint):
-148.         while True:
-149.             startx = random.randint(1, width - 2)
-150.             starty = random.randint(1, height - 2)
-151.
-152.             if canvas[(startx, starty)] != WHITE:
-153.                 continue  # Get a new random start point.
-154.             else:
-155.                 break
-156.
-157.         # Flood fill algorithm:
-158.         colorToPaint = random.choice([RED, YELLOW, BLUE, BLACK])
-159.         pointsToPaint = set([(startx, starty)])
-160.         while len(pointsToPaint) &gt; 0:
-161.             x, y = pointsToPaint.pop()
-162.             canvas[(x, y)] = colorToPaint
-163.             if canvas[(x - 1, y)] == WHITE:
-164.                 pointsToPaint.add((x - 1, y))
-165.             if canvas[(x + 1, y)] == WHITE:
-166.                 pointsToPaint.add((x + 1, y))
-167.             if canvas[(x, y - 1)] == WHITE:
-168.                 pointsToPaint.add((x, y - 1))
-169.             if canvas[(x, y + 1)] == WHITE:
-170.                 pointsToPaint.add((x, y + 1))
-171.
-172.     # Draw the canvas data structure:
-173.     for y in range(height):
-174.         for x in range(width):
-175.             bext.bg(canvas[(x, y)])
-176.             print(' ', end='')
-177.
-178.         print()
-179.
-180.     # Prompt user to create a new one:
-181.     try:
-182.         input('Press Enter for another work of art, or Ctrl-C to quit.')
-183.     except KeyboardInterrupt:
-184.         sys.exit()</code></pre>
+<div class="highlight"><pre><span></span>
+<span class="c">  1. </span><span class="sd">&quot;&quot;&quot;Mondrian Art Generator, by Al Sweigart al@inventwithpython.com</span>
+<span class="c">  2. </span><span class="sd">Randomly generates art in the style of Piet Mondrian.</span>
+<span class="c">  3. </span><span class="sd">More info at: https://en.wikipedia.org/wiki/Piet_Mondrian</span>
+<span class="c">  4. </span><span class="sd">This code is available at https://nostarch.com/big-book-small-python-programming</span>
+<span class="c">  5. </span><span class="sd">Tags: large, artistic, bext&quot;&quot;&quot;</span>
+<span class="c">  6. </span>
+<span class="c">  7. </span><span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">random</span>
+<span class="c">  8. </span>
+<span class="c">  9. </span><span class="k">try</span><span class="p">:</span>
+<span class="c"> 10. </span>    <span class="kn">import</span> <span class="nn">bext</span>
+<span class="c"> 11. </span><span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+<span class="c"> 12. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;This program requires the bext module, which you&#39;</span><span class="p">)</span>
+<span class="c"> 13. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;can install by following the instructions at&#39;</span><span class="p">)</span>
+<span class="c"> 14. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;https://pypi.org/project/Bext/&#39;</span><span class="p">)</span>
+<span class="c"> 15. </span>    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+<span class="c"> 16. </span>
+<span class="c"> 17. </span><span class="c1"># Set up the constants:</span>
+<span class="c"> 18. </span><span class="n">MIN_X_INCREASE</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="c"> 19. </span><span class="n">MAX_X_INCREASE</span> <span class="o">=</span> <span class="mi">16</span>
+<span class="c"> 20. </span><span class="n">MIN_Y_INCREASE</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="c"> 21. </span><span class="n">MAX_Y_INCREASE</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="c"> 22. </span><span class="n">WHITE</span> <span class="o">=</span> <span class="s1">&#39;white&#39;</span>
+<span class="c"> 23. </span><span class="n">BLACK</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span>
+<span class="c"> 24. </span><span class="n">RED</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span>
+<span class="c"> 25. </span><span class="n">YELLOW</span> <span class="o">=</span> <span class="s1">&#39;yellow&#39;</span>
+<span class="c"> 26. </span><span class="n">BLUE</span> <span class="o">=</span> <span class="s1">&#39;blue&#39;</span>
+<span class="c"> 27. </span>
+<span class="c"> 28. </span><span class="c1"># Setup the screen:</span>
+<span class="c"> 29. </span><span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="n">bext</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+<span class="c"> 30. </span><span class="c1"># We can&#39;t print to the last column on Windows without it adding a</span>
+<span class="c"> 31. </span><span class="c1"># newline automatically, so reduce the width by one:</span>
+<span class="c"> 32. </span><span class="n">width</span> <span class="o">-=</span> <span class="mi">1</span>
+<span class="c"> 33. </span>
+<span class="c"> 34. </span><span class="n">height</span> <span class="o">-=</span> <span class="mi">3</span>
+<span class="c"> 35. </span>
+<span class="c"> 36. </span><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>  <span class="c1"># Main application loop.</span>
+<span class="c"> 37. </span>    <span class="c1"># Pre-populate the canvas with blank spaces:</span>
+<span class="c"> 38. </span>    <span class="n">canvas</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="c"> 39. </span>    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">width</span><span class="p">):</span>
+<span class="c"> 40. </span>        <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
+<span class="c"> 41. </span>            <span class="n">canvas</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">=</span> <span class="n">WHITE</span>
+<span class="c"> 42. </span>
+<span class="c"> 43. </span>    <span class="c1"># Generate vertical lines:</span>
+<span class="c"> 44. </span>    <span class="n">numberOfSegmentsToDelete</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="c"> 45. </span>    <span class="n">x</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">MIN_X_INCREASE</span><span class="p">,</span> <span class="n">MAX_X_INCREASE</span><span class="p">)</span>
+<span class="c"> 46. </span>    <span class="k">while</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">width</span> <span class="o">-</span> <span class="n">MIN_X_INCREASE</span><span class="p">:</span>
+<span class="c"> 47. </span>        <span class="n">numberOfSegmentsToDelete</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="c"> 48. </span>        <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
+<span class="c"> 49. </span>            <span class="n">canvas</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">=</span> <span class="n">BLACK</span>
+<span class="c"> 50. </span>        <span class="n">x</span> <span class="o">+=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">MIN_X_INCREASE</span><span class="p">,</span> <span class="n">MAX_X_INCREASE</span><span class="p">)</span>
+<span class="c"> 51. </span>
+<span class="c"> 52. </span>    <span class="c1"># Generate horizontal lines:</span>
+<span class="c"> 53. </span>    <span class="n">y</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">MIN_Y_INCREASE</span><span class="p">,</span> <span class="n">MAX_Y_INCREASE</span><span class="p">)</span>
+<span class="c"> 54. </span>    <span class="k">while</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">height</span> <span class="o">-</span> <span class="n">MIN_Y_INCREASE</span><span class="p">:</span>
+<span class="c"> 55. </span>        <span class="n">numberOfSegmentsToDelete</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="c"> 56. </span>        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">width</span><span class="p">):</span>
+<span class="c"> 57. </span>            <span class="n">canvas</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">=</span> <span class="n">BLACK</span>
+<span class="c"> 58. </span>        <span class="n">y</span> <span class="o">+=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">MIN_Y_INCREASE</span><span class="p">,</span> <span class="n">MAX_Y_INCREASE</span><span class="p">)</span>
+<span class="c"> 59. </span>
+<span class="c"> 60. </span>    <span class="n">numberOfRectanglesToPaint</span> <span class="o">=</span> <span class="n">numberOfSegmentsToDelete</span> <span class="o">-</span> <span class="mi">3</span>
+<span class="c"> 61. </span>    <span class="n">numberOfSegmentsToDelete</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">numberOfSegmentsToDelete</span> <span class="o">*</span> <span class="mf">1.5</span><span class="p">)</span>
+<span class="c"> 62. </span>
+<span class="c"> 63. </span>    <span class="c1"># Randomly select points and try to remove them.</span>
+<span class="c"> 64. </span>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numberOfSegmentsToDelete</span><span class="p">):</span>
+<span class="c"> 65. </span>        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>  <span class="c1"># Keep selecting segments to try to delete.</span>
+<span class="c"> 66. </span>            <span class="c1"># Get a random start point on an existing segment:</span>
+<span class="c"> 67. </span>            <span class="n">startx</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">width</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span>
+<span class="c"> 68. </span>            <span class="n">starty</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">height</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span>
+<span class="c"> 69. </span>            <span class="k">if</span> <span class="n">canvas</span><span class="p">[(</span><span class="n">startx</span><span class="p">,</span> <span class="n">starty</span><span class="p">)]</span> <span class="o">==</span> <span class="n">WHITE</span><span class="p">:</span>
+<span class="c"> 70. </span>                <span class="k">continue</span>
+<span class="c"> 71. </span>
+<span class="c"> 72. </span>            <span class="c1"># Find out if we&#39;re on a vertical or horizontal segment:</span>
+<span class="c"> 73. </span>            <span class="k">if</span> <span class="p">(</span><span class="n">canvas</span><span class="p">[(</span><span class="n">startx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">starty</span><span class="p">)]</span> <span class="o">==</span> <span class="n">WHITE</span> <span class="ow">and</span>
+<span class="c"> 74. </span>                <span class="n">canvas</span><span class="p">[(</span><span class="n">startx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">starty</span><span class="p">)]</span> <span class="o">==</span> <span class="n">WHITE</span><span class="p">):</span>
+<span class="c"> 75. </span>                <span class="n">orientation</span> <span class="o">=</span> <span class="s1">&#39;vertical&#39;</span>
+<span class="c"> 76. </span>            <span class="k">elif</span> <span class="p">(</span><span class="n">canvas</span><span class="p">[(</span><span class="n">startx</span><span class="p">,</span> <span class="n">starty</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">==</span> <span class="n">WHITE</span> <span class="ow">and</span>
+<span class="c"> 77. </span>                <span class="n">canvas</span><span class="p">[(</span><span class="n">startx</span><span class="p">,</span> <span class="n">starty</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">==</span> <span class="n">WHITE</span><span class="p">):</span>
+<span class="c"> 78. </span>                <span class="n">orientation</span> <span class="o">=</span> <span class="s1">&#39;horizontal&#39;</span>
+<span class="c"> 79. </span>            <span class="k">else</span><span class="p">:</span>
+<span class="c"> 80. </span>                <span class="c1"># The start point is on an intersection,</span>
+<span class="c"> 81. </span>                <span class="c1"># so get a new random start point:</span>
+<span class="c"> 82. </span>                <span class="k">continue</span>
+<span class="c"> 83. </span>
+<span class="c"> 84. </span>            <span class="n">pointsToDelete</span> <span class="o">=</span> <span class="p">[(</span><span class="n">startx</span><span class="p">,</span> <span class="n">starty</span><span class="p">)]</span>
+<span class="c"> 85. </span>
+<span class="c"> 86. </span>            <span class="n">canDeleteSegment</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="c"> 87. </span>            <span class="k">if</span> <span class="n">orientation</span> <span class="o">==</span> <span class="s1">&#39;vertical&#39;</span><span class="p">:</span>
+<span class="c"> 88. </span>                <span class="c1"># Go up one path from the start point, and</span>
+<span class="c"> 89. </span>                <span class="c1"># see if we can remove this segment:</span>
+<span class="c"> 90. </span>                <span class="k">for</span> <span class="n">changey</span> <span class="ow">in</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+<span class="c"> 91. </span>                    <span class="n">y</span> <span class="o">=</span> <span class="n">starty</span>
+<span class="c"> 92. </span>                    <span class="k">while</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">height</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+<span class="c"> 93. </span>                        <span class="n">y</span> <span class="o">+=</span> <span class="n">changey</span>
+<span class="c"> 94. </span>                        <span class="k">if</span> <span class="p">(</span><span class="n">canvas</span><span class="p">[(</span><span class="n">startx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">==</span> <span class="n">BLACK</span> <span class="ow">and</span>
+<span class="c"> 95. </span>                            <span class="n">canvas</span><span class="p">[(</span><span class="n">startx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">==</span> <span class="n">BLACK</span><span class="p">):</span>
+<span class="c"> 96. </span>                            <span class="c1"># We&#39;ve found a four-way intersection.</span>
+<span class="c"> 97. </span>                            <span class="k">break</span>
+<span class="c"> 98. </span>                        <span class="k">elif</span> <span class="p">((</span><span class="n">canvas</span><span class="p">[(</span><span class="n">startx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">==</span> <span class="n">WHITE</span> <span class="ow">and</span>
+<span class="c"> 99. </span>                               <span class="n">canvas</span><span class="p">[(</span><span class="n">startx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">==</span> <span class="n">BLACK</span><span class="p">)</span> <span class="ow">or</span>
+<span class="c">100. </span>                              <span class="p">(</span><span class="n">canvas</span><span class="p">[(</span><span class="n">startx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">==</span> <span class="n">BLACK</span> <span class="ow">and</span>
+<span class="c">101. </span>                               <span class="n">canvas</span><span class="p">[(</span><span class="n">startx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">==</span> <span class="n">WHITE</span><span class="p">)):</span>
+<span class="c">102. </span>                            <span class="c1"># We&#39;ve found a T-intersection; we can&#39;t</span>
+<span class="c">103. </span>                            <span class="c1"># delete this segment:</span>
+<span class="c">104. </span>                            <span class="n">canDeleteSegment</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="c">105. </span>                            <span class="k">break</span>
+<span class="c">106. </span>                        <span class="k">else</span><span class="p">:</span>
+<span class="c">107. </span>                            <span class="n">pointsToDelete</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">startx</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+<span class="c">108. </span>
+<span class="c">109. </span>            <span class="k">elif</span> <span class="n">orientation</span> <span class="o">==</span> <span class="s1">&#39;horizontal&#39;</span><span class="p">:</span>
+<span class="c">110. </span>                <span class="c1"># Go up one path from the start point, and</span>
+<span class="c">111. </span>                <span class="c1"># see if we can remove this segment:</span>
+<span class="c">112. </span>                <span class="k">for</span> <span class="n">changex</span> <span class="ow">in</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+<span class="c">113. </span>                    <span class="n">x</span> <span class="o">=</span> <span class="n">startx</span>
+<span class="c">114. </span>                    <span class="k">while</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+<span class="c">115. </span>                        <span class="n">x</span> <span class="o">+=</span> <span class="n">changex</span>
+<span class="c">116. </span>                        <span class="k">if</span> <span class="p">(</span><span class="n">canvas</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">starty</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">==</span> <span class="n">BLACK</span> <span class="ow">and</span>
+<span class="c">117. </span>                            <span class="n">canvas</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">starty</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">==</span> <span class="n">BLACK</span><span class="p">):</span>
+<span class="c">118. </span>                            <span class="c1"># We&#39;ve found a four-way intersection.</span>
+<span class="c">119. </span>                            <span class="k">break</span>
+<span class="c">120. </span>                        <span class="k">elif</span> <span class="p">((</span><span class="n">canvas</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">starty</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">==</span> <span class="n">WHITE</span> <span class="ow">and</span>
+<span class="c">121. </span>                               <span class="n">canvas</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">starty</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">==</span> <span class="n">BLACK</span><span class="p">)</span> <span class="ow">or</span>
+<span class="c">122. </span>                              <span class="p">(</span><span class="n">canvas</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">starty</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">==</span> <span class="n">BLACK</span> <span class="ow">and</span>
+<span class="c">123. </span>                               <span class="n">canvas</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">starty</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">==</span> <span class="n">WHITE</span><span class="p">)):</span>
+<span class="c">124. </span>                            <span class="c1"># We&#39;ve found a T-intersection; we can&#39;t</span>
+<span class="c">125. </span>                            <span class="c1"># delete this segment:</span>
+<span class="c">126. </span>                            <span class="n">canDeleteSegment</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="c">127. </span>                            <span class="k">break</span>
+<span class="c">128. </span>                        <span class="k">else</span><span class="p">:</span>
+<span class="c">129. </span>                            <span class="n">pointsToDelete</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">starty</span><span class="p">))</span>
+<span class="c">130. </span>            <span class="k">if</span> <span class="ow">not</span> <span class="n">canDeleteSegment</span><span class="p">:</span>
+<span class="c">131. </span>                <span class="k">continue</span>  <span class="c1"># Get a new random start point.</span>
+<span class="c">132. </span>            <span class="k">break</span>  <span class="c1"># Move on to delete the segment.</span>
+<span class="c">133. </span>
+<span class="c">134. </span>        <span class="c1"># If we can delete this segment, set all the points to white:</span>
+<span class="c">135. </span>        <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">pointsToDelete</span><span class="p">:</span>
+<span class="c">136. </span>            <span class="n">canvas</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">=</span> <span class="n">WHITE</span>
+<span class="c">137. </span>
+<span class="c">138. </span>    <span class="c1"># Add the border lines:</span>
+<span class="c">139. </span>    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">width</span><span class="p">):</span>
+<span class="c">140. </span>        <span class="n">canvas</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]</span> <span class="o">=</span> <span class="n">BLACK</span>  <span class="c1"># Top border.</span>
+<span class="c">141. </span>        <span class="n">canvas</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">height</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">BLACK</span>  <span class="c1"># Bottom border.</span>
+<span class="c">142. </span>    <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
+<span class="c">143. </span>        <span class="n">canvas</span><span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">=</span> <span class="n">BLACK</span>  <span class="c1"># Left border.</span>
+<span class="c">144. </span>        <span class="n">canvas</span><span class="p">[(</span><span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">=</span> <span class="n">BLACK</span>  <span class="c1"># Right border.</span>
+<span class="c">145. </span>
+<span class="c">146. </span>    <span class="c1"># Paint the rectangles:</span>
+<span class="c">147. </span>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numberOfRectanglesToPaint</span><span class="p">):</span>
+<span class="c">148. </span>        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<span class="c">149. </span>            <span class="n">startx</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">width</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span>
+<span class="c">150. </span>            <span class="n">starty</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">height</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span>
+<span class="c">151. </span>
+<span class="c">152. </span>            <span class="k">if</span> <span class="n">canvas</span><span class="p">[(</span><span class="n">startx</span><span class="p">,</span> <span class="n">starty</span><span class="p">)]</span> <span class="o">!=</span> <span class="n">WHITE</span><span class="p">:</span>
+<span class="c">153. </span>                <span class="k">continue</span>  <span class="c1"># Get a new random start point.</span>
+<span class="c">154. </span>            <span class="k">else</span><span class="p">:</span>
+<span class="c">155. </span>                <span class="k">break</span>
+<span class="c">156. </span>
+<span class="c">157. </span>        <span class="c1"># Flood fill algorithm:</span>
+<span class="c">158. </span>        <span class="n">colorToPaint</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="n">RED</span><span class="p">,</span> <span class="n">YELLOW</span><span class="p">,</span> <span class="n">BLUE</span><span class="p">,</span> <span class="n">BLACK</span><span class="p">])</span>
+<span class="c">159. </span>        <span class="n">pointsToPaint</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([(</span><span class="n">startx</span><span class="p">,</span> <span class="n">starty</span><span class="p">)])</span>
+<span class="c">160. </span>        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">pointsToPaint</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+<span class="c">161. </span>            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">pointsToPaint</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+<span class="c">162. </span>            <span class="n">canvas</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">=</span> <span class="n">colorToPaint</span>
+<span class="c">163. </span>            <span class="k">if</span> <span class="n">canvas</span><span class="p">[(</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">==</span> <span class="n">WHITE</span><span class="p">:</span>
+<span class="c">164. </span>                <span class="n">pointsToPaint</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+<span class="c">165. </span>            <span class="k">if</span> <span class="n">canvas</span><span class="p">[(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">==</span> <span class="n">WHITE</span><span class="p">:</span>
+<span class="c">166. </span>                <span class="n">pointsToPaint</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+<span class="c">167. </span>            <span class="k">if</span> <span class="n">canvas</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">==</span> <span class="n">WHITE</span><span class="p">:</span>
+<span class="c">168. </span>                <span class="n">pointsToPaint</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+<span class="c">169. </span>            <span class="k">if</span> <span class="n">canvas</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">==</span> <span class="n">WHITE</span><span class="p">:</span>
+<span class="c">170. </span>                <span class="n">pointsToPaint</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+<span class="c">171. </span>
+<span class="c">172. </span>    <span class="c1"># Draw the canvas data structure:</span>
+<span class="c">173. </span>    <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
+<span class="c">174. </span>        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">width</span><span class="p">):</span>
+<span class="c">175. </span>            <span class="n">bext</span><span class="o">.</span><span class="n">bg</span><span class="p">(</span><span class="n">canvas</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)])</span>
+<span class="c">176. </span>            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c">177. </span>
+<span class="c">178. </span>        <span class="nb">print</span><span class="p">()</span>
+<span class="c">179. </span>
+<span class="c">180. </span>    <span class="c1"># Prompt user to create a new one:</span>
+<span class="c">181. </span>    <span class="k">try</span><span class="p">:</span>
+<span class="c">182. </span>        <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;Press Enter for another work of art, or Ctrl-C to quit.&#39;</span><span class="p">)</span>
+<span class="c">183. </span>    <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
+<span class="c">184. </span>        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+</pre></div>
+
 <p class="calibre19">After entering the source code and running it a few times, try making experimental changes to it. On your own, you can also try to figure out how to do the following:</p>
 <ul class="calibre25">
 <li class="calibre8">Create programs with different color palettes.</li>

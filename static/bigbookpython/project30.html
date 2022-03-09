@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Four in a Row</title></head><body style="background-color: #fffeee;">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><link rel="stylesheet" type="text/css" href="pygments.css"><title>Four in a Row</title></head><body style="background-color: #fffeee;">
 
 <script type="text/javascript">
 //<![CDATA[
@@ -93,182 +93,185 @@ Player O, enter a column or QUIT:
 Player O has won!</code></pre>
 <h2 id="calibre_link-147" class="calibre5">How It Works</h2>
 <p class="bodyfirst">The board game projects in this book follow a similar program structure. There’s often a dictionary or list for representing the state of the board, a <code class="calibre22">getNewBoard()</code> function that returns a data structure for a board, a <code class="calibre22">displayBoard()</code> function for rendering a board data structure on the screen, and so on. You can check out the other projects in this book with the <em class="calibre9">board game</em> tag and compare them with each other, especially when you want to create your own original board game programs.</p>
-<pre class="calibre24"><code class="calibre22">  1. """Four in a Row, by Al Sweigart al@inventwithpython.com
-  2. A tile-dropping game to get four in a row, similar to Connect Four.
-  3. View this code at https://nostarch.com/big-book-small-python-projects
-  4. Tags: large, game, board game, two-player"""
-  5.
-  6. import sys
-  7.
-  8. # Constants used for displaying the board:
-  9. EMPTY_SPACE = '.'  # A period is easier to count than a space.
- 10. PLAYER_X = 'X'
- 11. PLAYER_O = 'O'
- 12.
- 13. # Note: Update displayBoard() &amp; COLUMN_LABELS if BOARD_WIDTH is changed.
- 14. BOARD_WIDTH = 7
- 15. BOARD_HEIGHT = 6
- 16. COLUMN_LABELS = ('1', '2', '3', '4', '5', '6', '7')
- 17. assert len(COLUMN_LABELS) == BOARD_WIDTH
- 18.
- 19.
- 20. def main():
- 21.     print("""Four in a Row, by Al Sweigart al@inventwithpython.com
- 22.
- 23. Two players take turns dropping tiles into one of seven columns, trying
- 24. to make four in a row horizontally, vertically, or diagonally.
- 25. """)
- 26.
- 27.     # Set up a new game:
- 28.     gameBoard = getNewBoard()
- 29.     playerTurn = PLAYER_X
- 30.
- 31.     while True:  # Run a player's turn.
- 32.         # Display the board and get player's move:
- 33.         displayBoard(gameBoard)
- 34.         playerMove = askForPlayerMove(playerTurn, gameBoard)
- 35.         gameBoard[playerMove] = playerTurn
- 36.
- 37.         # Check for a win or tie:
- 38.         if isWinner(playerTurn, gameBoard):
- 39.             displayBoard(gameBoard)  # Display the board one last time.
- 40.             print('Player ' + playerTurn + ' has won!')
- 41.             sys.exit()
- 42.         elif isFull(gameBoard):
- 43.             displayBoard(gameBoard)  # Display the board one last time.
- 44.             print('There is a tie!')
- 45.             sys.exit()
- 46.
- 47.         # Switch turns to other player:
- 48.         if playerTurn == PLAYER_X:
- 49.             playerTurn = PLAYER_O
- 50.         elif playerTurn == PLAYER_O:
- 51.             playerTurn = PLAYER_X
- 52.
- 53.
- 54. def getNewBoard():
- 55.     """Returns a dictionary that represents a Four in a Row board.
- 56.
- 57.     The keys are (columnIndex, rowIndex) tuples of two integers, and the
- 58.     values are one of the 'X', 'O' or '.' (empty space) strings."""
- 59.     board = {}
- 60.     for columnIndex in range(BOARD_WIDTH):
- 61.         for rowIndex in range(BOARD_HEIGHT):
- 62.             board[(columnIndex, rowIndex)] = EMPTY_SPACE
- 63.     return board
- 64.
- 65.
- 66. def displayBoard(board):
- 67.     """Display the board and its tiles on the screen."""
- 68.
- 69.     '''Prepare a list to pass to the format() string method for the
- 70.     board template. The list holds all of the board's tiles (and empty
- 71.     spaces) going left to right, top to bottom:'''
- 72.     tileChars = []
- 73.     for rowIndex in range(BOARD_HEIGHT):
- 74.         for columnIndex in range(BOARD_WIDTH):
- 75.             tileChars.append(board[(columnIndex, rowIndex)])
- 76.
- 77.     # Display the board:
- 78.     print("""
- 79.      1234567
- 80.     +-------+
- 81.     |{}{}{}{}{}{}{}|
- 82.     |{}{}{}{}{}{}{}|
- 83.     |{}{}{}{}{}{}{}|
- 84.     |{}{}{}{}{}{}{}|
- 85.     |{}{}{}{}{}{}{}|
- 86.     |{}{}{}{}{}{}{}|
- 87.     +-------+""".format(*tileChars))
- 88.
- 89.
- 90. def askForPlayerMove(playerTile, board):
- 91.     """Let a player select a column on the board to drop a tile into.
- 92.
- 93.     Returns a tuple of the (column, row) that the tile falls into."""
- 94.     while True:  # Keep asking player until they enter a valid move.
- 95.         print('Player {}, enter a column or QUIT:'.format(playerTile))
- 96.         response = input('&gt; ').upper().strip()
- 97.
- 98.         if response == 'QUIT':
- 99.             print('Thanks for playing!')
-100.             sys.exit()
-101.
-102.         if response not in COLUMN_LABELS:
-103.             print('Enter a number from 1 to {}.'.format(BOARD_WIDTH))
-104.             continue  # Ask player again for their move.
-105.
-106.         columnIndex = int(response) - 1  # -1 for 0-based the index.
-107.
-108.         # If the column is full, ask for a move again:
-109.         if board[(columnIndex, 0)] != EMPTY_SPACE:
-110.             print('That column is full, select another one.')
-111.             continue  # Ask player again for their move.
-112.
-113.         # Starting from the bottom, find the first empty space.
-114.         for rowIndex in range(BOARD_HEIGHT - 1, -1, -1):
-115.             if board[(columnIndex, rowIndex)] == EMPTY_SPACE:
-116.                 return (columnIndex, rowIndex)
-117.
-118.
-119. def isFull(board):
-120.     """Returns True if the `board` has no empty spaces, otherwise
-121.     returns False."""
-122.     for rowIndex in range(BOARD_HEIGHT):
-123.         for columnIndex in range(BOARD_WIDTH):
-124.             if board[(columnIndex, rowIndex)] == EMPTY_SPACE:
-125.                 return False  # Found an empty space, so return False.
-126.     return True  # All spaces are full.
-127.
-128.
-129. def isWinner(playerTile, board):
-130.     """Returns True if `playerTile` has four tiles in a row on `board`,
-131.     otherwise returns False."""
-132.
-133.     # Go through the entire board, checking for four-in-a-row:
-134.     for columnIndex in range(BOARD_WIDTH - 3):
-135.         for rowIndex in range(BOARD_HEIGHT):
-136.             # Check for horizontal four-in-a-row going right:
-137.             tile1 = board[(columnIndex, rowIndex)]
-138.             tile2 = board[(columnIndex + 1, rowIndex)]
-139.             tile3 = board[(columnIndex + 2, rowIndex)]
-140.             tile4 = board[(columnIndex + 3, rowIndex)]
-141.             if tile1 == tile2 == tile3 == tile4 == playerTile:
-142.                 return True
-143.
-144.     for columnIndex in range(BOARD_WIDTH):
-145.         for rowIndex in range(BOARD_HEIGHT - 3):
-146.             # Check for vertical four-in-a-row going down:
-147.             tile1 = board[(columnIndex, rowIndex)]
-148.             tile2 = board[(columnIndex, rowIndex + 1)]
-149.             tile3 = board[(columnIndex, rowIndex + 2)]
-150.             tile4 = board[(columnIndex, rowIndex + 3)]
-151.             if tile1 == tile2 == tile3 == tile4 == playerTile:
-152.                 return True
-153.
-154.     for columnIndex in range(BOARD_WIDTH - 3):
-155.         for rowIndex in range(BOARD_HEIGHT - 3):
-156.             # Check for four-in-a-row going right-down diagonal:
-157.             tile1 = board[(columnIndex, rowIndex)]
-158.             tile2 = board[(columnIndex + 1, rowIndex + 1)]
-159.             tile3 = board[(columnIndex + 2, rowIndex + 2)]
-160.             tile4 = board[(columnIndex + 3, rowIndex + 3)]
-161.             if tile1 == tile2 == tile3 == tile4 == playerTile:
-162.                 return True
-163.
-164.             # Check for four-in-a-row going left-down diagonal:
-165.             tile1 = board[(columnIndex + 3, rowIndex)]
-166.             tile2 = board[(columnIndex + 2, rowIndex + 1)]
-167.             tile3 = board[(columnIndex + 1, rowIndex + 2)]
-168.             tile4 = board[(columnIndex, rowIndex + 3)]
-169.             if tile1 == tile2 == tile3 == tile4 == playerTile:
-170.                 return True
-171.     return False
-172.
-173.
-174. # If the program is run (instead of imported), run the game:
-175. if __name__ == '__main__':
-176.     main()</code></pre>
+<div class="highlight"><pre><span></span>
+<span class="c">  1. </span><span class="sd">&quot;&quot;&quot;Four in a Row, by Al Sweigart al@inventwithpython.com</span>
+<span class="c">  2. </span><span class="sd">A tile-dropping game to get four in a row, similar to Connect Four.</span>
+<span class="c">  3. </span><span class="sd">This code is available at https://nostarch.com/big-book-small-python-programming</span>
+<span class="c">  4. </span><span class="sd">Tags: large, game, board game, two-player&quot;&quot;&quot;</span>
+<span class="c">  5. </span>
+<span class="c">  6. </span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="c">  7. </span>
+<span class="c">  8. </span><span class="c1"># Constants used for displaying the board:</span>
+<span class="c">  9. </span><span class="n">EMPTY_SPACE</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span>  <span class="c1"># A period is easier to count than a space.</span>
+<span class="c"> 10. </span><span class="n">PLAYER_X</span> <span class="o">=</span> <span class="s1">&#39;X&#39;</span>
+<span class="c"> 11. </span><span class="n">PLAYER_O</span> <span class="o">=</span> <span class="s1">&#39;O&#39;</span>
+<span class="c"> 12. </span>
+<span class="c"> 13. </span><span class="c1"># Note: Update displayBoard() &amp; COLUMN_LABELS if BOARD_WIDTH is changed.</span>
+<span class="c"> 14. </span><span class="n">BOARD_WIDTH</span> <span class="o">=</span> <span class="mi">7</span>
+<span class="c"> 15. </span><span class="n">BOARD_HEIGHT</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="c"> 16. </span><span class="n">COLUMN_LABELS</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;4&#39;</span><span class="p">,</span> <span class="s1">&#39;5&#39;</span><span class="p">,</span> <span class="s1">&#39;6&#39;</span><span class="p">,</span> <span class="s1">&#39;7&#39;</span><span class="p">)</span>
+<span class="c"> 17. </span><span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">COLUMN_LABELS</span><span class="p">)</span> <span class="o">==</span> <span class="n">BOARD_WIDTH</span>
+<span class="c"> 18. </span>
+<span class="c"> 19. </span>
+<span class="c"> 20. </span><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<span class="c"> 21. </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;Four in a Row, by Al Sweigart al@inventwithpython.com</span>
+<span class="c"> 22. </span>
+<span class="c"> 23. </span><span class="s2">Two players take turns dropping tiles into one of seven columns, trying</span>
+<span class="c"> 24. </span><span class="s2">to make four in a row horizontally, vertically, or diagonally.</span>
+<span class="c"> 25. </span><span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+<span class="c"> 26. </span>
+<span class="c"> 27. </span>    <span class="c1"># Set up a new game:</span>
+<span class="c"> 28. </span>    <span class="n">gameBoard</span> <span class="o">=</span> <span class="n">getNewBoard</span><span class="p">()</span>
+<span class="c"> 29. </span>    <span class="n">playerTurn</span> <span class="o">=</span> <span class="n">PLAYER_X</span>
+<span class="c"> 30. </span>
+<span class="c"> 31. </span>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>  <span class="c1"># Run a player&#39;s turn.</span>
+<span class="c"> 32. </span>        <span class="c1"># Display the board and get player&#39;s move:</span>
+<span class="c"> 33. </span>        <span class="n">displayBoard</span><span class="p">(</span><span class="n">gameBoard</span><span class="p">)</span>
+<span class="c"> 34. </span>        <span class="n">playerMove</span> <span class="o">=</span> <span class="n">askForPlayerMove</span><span class="p">(</span><span class="n">playerTurn</span><span class="p">,</span> <span class="n">gameBoard</span><span class="p">)</span>
+<span class="c"> 35. </span>        <span class="n">gameBoard</span><span class="p">[</span><span class="n">playerMove</span><span class="p">]</span> <span class="o">=</span> <span class="n">playerTurn</span>
+<span class="c"> 36. </span>
+<span class="c"> 37. </span>        <span class="c1"># Check for a win or tie:</span>
+<span class="c"> 38. </span>        <span class="k">if</span> <span class="n">isWinner</span><span class="p">(</span><span class="n">playerTurn</span><span class="p">,</span> <span class="n">gameBoard</span><span class="p">):</span>
+<span class="c"> 39. </span>            <span class="n">displayBoard</span><span class="p">(</span><span class="n">gameBoard</span><span class="p">)</span>  <span class="c1"># Display the board one last time.</span>
+<span class="c"> 40. </span>            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Player &#39;</span> <span class="o">+</span> <span class="n">playerTurn</span> <span class="o">+</span> <span class="s1">&#39; has won!&#39;</span><span class="p">)</span>
+<span class="c"> 41. </span>            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+<span class="c"> 42. </span>        <span class="k">elif</span> <span class="n">isFull</span><span class="p">(</span><span class="n">gameBoard</span><span class="p">):</span>
+<span class="c"> 43. </span>            <span class="n">displayBoard</span><span class="p">(</span><span class="n">gameBoard</span><span class="p">)</span>  <span class="c1"># Display the board one last time.</span>
+<span class="c"> 44. </span>            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;There is a tie!&#39;</span><span class="p">)</span>
+<span class="c"> 45. </span>            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+<span class="c"> 46. </span>
+<span class="c"> 47. </span>        <span class="c1"># Switch turns to other player:</span>
+<span class="c"> 48. </span>        <span class="k">if</span> <span class="n">playerTurn</span> <span class="o">==</span> <span class="n">PLAYER_X</span><span class="p">:</span>
+<span class="c"> 49. </span>            <span class="n">playerTurn</span> <span class="o">=</span> <span class="n">PLAYER_O</span>
+<span class="c"> 50. </span>        <span class="k">elif</span> <span class="n">playerTurn</span> <span class="o">==</span> <span class="n">PLAYER_O</span><span class="p">:</span>
+<span class="c"> 51. </span>            <span class="n">playerTurn</span> <span class="o">=</span> <span class="n">PLAYER_X</span>
+<span class="c"> 52. </span>
+<span class="c"> 53. </span>
+<span class="c"> 54. </span><span class="k">def</span> <span class="nf">getNewBoard</span><span class="p">():</span>
+<span class="c"> 55. </span>    <span class="sd">&quot;&quot;&quot;Returns a dictionary that represents a Four in a Row board.</span>
+<span class="c"> 56. </span>
+<span class="c"> 57. </span><span class="sd">    The keys are (columnIndex, rowIndex) tuples of two integers, and the</span>
+<span class="c"> 58. </span><span class="sd">    values are one of the &#39;X&#39;, &#39;O&#39; or &#39;.&#39; (empty space) strings.&quot;&quot;&quot;</span>
+<span class="c"> 59. </span>    <span class="n">board</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="c"> 60. </span>    <span class="k">for</span> <span class="n">columnIndex</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">BOARD_WIDTH</span><span class="p">):</span>
+<span class="c"> 61. </span>        <span class="k">for</span> <span class="n">rowIndex</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">BOARD_HEIGHT</span><span class="p">):</span>
+<span class="c"> 62. </span>            <span class="n">board</span><span class="p">[(</span><span class="n">columnIndex</span><span class="p">,</span> <span class="n">rowIndex</span><span class="p">)]</span> <span class="o">=</span> <span class="n">EMPTY_SPACE</span>
+<span class="c"> 63. </span>    <span class="k">return</span> <span class="n">board</span>
+<span class="c"> 64. </span>
+<span class="c"> 65. </span>
+<span class="c"> 66. </span><span class="k">def</span> <span class="nf">displayBoard</span><span class="p">(</span><span class="n">board</span><span class="p">):</span>
+<span class="c"> 67. </span>    <span class="sd">&quot;&quot;&quot;Display the board and its tiles on the screen.&quot;&quot;&quot;</span>
+<span class="c"> 68. </span>
+<span class="c"> 69. </span>    <span class="sd">&#39;&#39;&#39;Prepare a list to pass to the format() string method for the</span>
+<span class="c"> 70. </span><span class="sd">    board template. The list holds all of the board&#39;s tiles (and empty</span>
+<span class="c"> 71. </span><span class="sd">    spaces) going left to right, top to bottom:&#39;&#39;&#39;</span>
+<span class="c"> 72. </span>    <span class="n">tileChars</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="c"> 73. </span>    <span class="k">for</span> <span class="n">rowIndex</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">BOARD_HEIGHT</span><span class="p">):</span>
+<span class="c"> 74. </span>        <span class="k">for</span> <span class="n">columnIndex</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">BOARD_WIDTH</span><span class="p">):</span>
+<span class="c"> 75. </span>            <span class="n">tileChars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">board</span><span class="p">[(</span><span class="n">columnIndex</span><span class="p">,</span> <span class="n">rowIndex</span><span class="p">)])</span>
+<span class="c"> 76. </span>
+<span class="c"> 77. </span>    <span class="c1"># Display the board:</span>
+<span class="c"> 78. </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="c"> 79. </span><span class="s2">     1234567</span>
+<span class="c"> 80. </span><span class="s2">    +-------+</span>
+<span class="c"> 81. </span><span class="s2">    |</span><span class="si">{}{}{}{}{}{}{}</span><span class="s2">|</span>
+<span class="c"> 82. </span><span class="s2">    |</span><span class="si">{}{}{}{}{}{}{}</span><span class="s2">|</span>
+<span class="c"> 83. </span><span class="s2">    |</span><span class="si">{}{}{}{}{}{}{}</span><span class="s2">|</span>
+<span class="c"> 84. </span><span class="s2">    |</span><span class="si">{}{}{}{}{}{}{}</span><span class="s2">|</span>
+<span class="c"> 85. </span><span class="s2">    |</span><span class="si">{}{}{}{}{}{}{}</span><span class="s2">|</span>
+<span class="c"> 86. </span><span class="s2">    |</span><span class="si">{}{}{}{}{}{}{}</span><span class="s2">|</span>
+<span class="c"> 87. </span><span class="s2">    +-------+&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="n">tileChars</span><span class="p">))</span>
+<span class="c"> 88. </span>
+<span class="c"> 89. </span>
+<span class="c"> 90. </span><span class="k">def</span> <span class="nf">askForPlayerMove</span><span class="p">(</span><span class="n">playerTile</span><span class="p">,</span> <span class="n">board</span><span class="p">):</span>
+<span class="c"> 91. </span>    <span class="sd">&quot;&quot;&quot;Let a player select a column on the board to drop a tile into.</span>
+<span class="c"> 92. </span>
+<span class="c"> 93. </span><span class="sd">    Returns a tuple of the (column, row) that the tile falls into.&quot;&quot;&quot;</span>
+<span class="c"> 94. </span>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>  <span class="c1"># Keep asking player until they enter a valid move.</span>
+<span class="c"> 95. </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Player </span><span class="si">{}</span><span class="s1">, enter a column or QUIT:&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">playerTile</span><span class="p">))</span>
+<span class="c"> 96. </span>        <span class="n">response</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;&gt; &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+<span class="c"> 97. </span>
+<span class="c"> 98. </span>        <span class="k">if</span> <span class="n">response</span> <span class="o">==</span> <span class="s1">&#39;QUIT&#39;</span><span class="p">:</span>
+<span class="c"> 99. </span>            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Thanks for playing!&#39;</span><span class="p">)</span>
+<span class="c">100. </span>            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+<span class="c">101. </span>
+<span class="c">102. </span>        <span class="k">if</span> <span class="n">response</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">COLUMN_LABELS</span><span class="p">:</span>
+<span class="c">103. </span>            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Enter a number from 1 to </span><span class="si">{}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">BOARD_WIDTH</span><span class="p">))</span>
+<span class="c">104. </span>            <span class="k">continue</span>  <span class="c1"># Ask player again for their move.</span>
+<span class="c">105. </span>
+<span class="c">106. </span>        <span class="n">columnIndex</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">response</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># -1 for 0-based the index.</span>
+<span class="c">107. </span>
+<span class="c">108. </span>        <span class="c1"># If the column is full, ask for a move again:</span>
+<span class="c">109. </span>        <span class="k">if</span> <span class="n">board</span><span class="p">[(</span><span class="n">columnIndex</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]</span> <span class="o">!=</span> <span class="n">EMPTY_SPACE</span><span class="p">:</span>
+<span class="c">110. </span>            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;That column is full, select another one.&#39;</span><span class="p">)</span>
+<span class="c">111. </span>            <span class="k">continue</span>  <span class="c1"># Ask player again for their move.</span>
+<span class="c">112. </span>
+<span class="c">113. </span>        <span class="c1"># Starting from the bottom, find the first empty space.</span>
+<span class="c">114. </span>        <span class="k">for</span> <span class="n">rowIndex</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">BOARD_HEIGHT</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+<span class="c">115. </span>            <span class="k">if</span> <span class="n">board</span><span class="p">[(</span><span class="n">columnIndex</span><span class="p">,</span> <span class="n">rowIndex</span><span class="p">)]</span> <span class="o">==</span> <span class="n">EMPTY_SPACE</span><span class="p">:</span>
+<span class="c">116. </span>                <span class="k">return</span> <span class="p">(</span><span class="n">columnIndex</span><span class="p">,</span> <span class="n">rowIndex</span><span class="p">)</span>
+<span class="c">117. </span>
+<span class="c">118. </span>
+<span class="c">119. </span><span class="k">def</span> <span class="nf">isFull</span><span class="p">(</span><span class="n">board</span><span class="p">):</span>
+<span class="c">120. </span>    <span class="sd">&quot;&quot;&quot;Returns True if the `board` has no empty spaces, otherwise</span>
+<span class="c">121. </span><span class="sd">    returns False.&quot;&quot;&quot;</span>
+<span class="c">122. </span>    <span class="k">for</span> <span class="n">rowIndex</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">BOARD_HEIGHT</span><span class="p">):</span>
+<span class="c">123. </span>        <span class="k">for</span> <span class="n">columnIndex</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">BOARD_WIDTH</span><span class="p">):</span>
+<span class="c">124. </span>            <span class="k">if</span> <span class="n">board</span><span class="p">[(</span><span class="n">columnIndex</span><span class="p">,</span> <span class="n">rowIndex</span><span class="p">)]</span> <span class="o">==</span> <span class="n">EMPTY_SPACE</span><span class="p">:</span>
+<span class="c">125. </span>                <span class="k">return</span> <span class="kc">False</span>  <span class="c1"># Found an empty space, so return False.</span>
+<span class="c">126. </span>    <span class="k">return</span> <span class="kc">True</span>  <span class="c1"># All spaces are full.</span>
+<span class="c">127. </span>
+<span class="c">128. </span>
+<span class="c">129. </span><span class="k">def</span> <span class="nf">isWinner</span><span class="p">(</span><span class="n">playerTile</span><span class="p">,</span> <span class="n">board</span><span class="p">):</span>
+<span class="c">130. </span>    <span class="sd">&quot;&quot;&quot;Returns True if `playerTile` has four tiles in a row on `board`,</span>
+<span class="c">131. </span><span class="sd">    otherwise returns False.&quot;&quot;&quot;</span>
+<span class="c">132. </span>
+<span class="c">133. </span>    <span class="c1"># Go through the entire board, checking for four-in-a-row:</span>
+<span class="c">134. </span>    <span class="k">for</span> <span class="n">columnIndex</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">BOARD_WIDTH</span> <span class="o">-</span> <span class="mi">3</span><span class="p">):</span>
+<span class="c">135. </span>        <span class="k">for</span> <span class="n">rowIndex</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">BOARD_HEIGHT</span><span class="p">):</span>
+<span class="c">136. </span>            <span class="c1"># Check for horizontal four-in-a-row going right:</span>
+<span class="c">137. </span>            <span class="n">tile1</span> <span class="o">=</span> <span class="n">board</span><span class="p">[(</span><span class="n">columnIndex</span><span class="p">,</span> <span class="n">rowIndex</span><span class="p">)]</span>
+<span class="c">138. </span>            <span class="n">tile2</span> <span class="o">=</span> <span class="n">board</span><span class="p">[(</span><span class="n">columnIndex</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">rowIndex</span><span class="p">)]</span>
+<span class="c">139. </span>            <span class="n">tile3</span> <span class="o">=</span> <span class="n">board</span><span class="p">[(</span><span class="n">columnIndex</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">rowIndex</span><span class="p">)]</span>
+<span class="c">140. </span>            <span class="n">tile4</span> <span class="o">=</span> <span class="n">board</span><span class="p">[(</span><span class="n">columnIndex</span> <span class="o">+</span> <span class="mi">3</span><span class="p">,</span> <span class="n">rowIndex</span><span class="p">)]</span>
+<span class="c">141. </span>            <span class="k">if</span> <span class="n">tile1</span> <span class="o">==</span> <span class="n">tile2</span> <span class="o">==</span> <span class="n">tile3</span> <span class="o">==</span> <span class="n">tile4</span> <span class="o">==</span> <span class="n">playerTile</span><span class="p">:</span>
+<span class="c">142. </span>                <span class="k">return</span> <span class="kc">True</span>
+<span class="c">143. </span>
+<span class="c">144. </span>    <span class="k">for</span> <span class="n">columnIndex</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">BOARD_WIDTH</span><span class="p">):</span>
+<span class="c">145. </span>        <span class="k">for</span> <span class="n">rowIndex</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">BOARD_HEIGHT</span> <span class="o">-</span> <span class="mi">3</span><span class="p">):</span>
+<span class="c">146. </span>            <span class="c1"># Check for vertical four-in-a-row going down:</span>
+<span class="c">147. </span>            <span class="n">tile1</span> <span class="o">=</span> <span class="n">board</span><span class="p">[(</span><span class="n">columnIndex</span><span class="p">,</span> <span class="n">rowIndex</span><span class="p">)]</span>
+<span class="c">148. </span>            <span class="n">tile2</span> <span class="o">=</span> <span class="n">board</span><span class="p">[(</span><span class="n">columnIndex</span><span class="p">,</span> <span class="n">rowIndex</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+<span class="c">149. </span>            <span class="n">tile3</span> <span class="o">=</span> <span class="n">board</span><span class="p">[(</span><span class="n">columnIndex</span><span class="p">,</span> <span class="n">rowIndex</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)]</span>
+<span class="c">150. </span>            <span class="n">tile4</span> <span class="o">=</span> <span class="n">board</span><span class="p">[(</span><span class="n">columnIndex</span><span class="p">,</span> <span class="n">rowIndex</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)]</span>
+<span class="c">151. </span>            <span class="k">if</span> <span class="n">tile1</span> <span class="o">==</span> <span class="n">tile2</span> <span class="o">==</span> <span class="n">tile3</span> <span class="o">==</span> <span class="n">tile4</span> <span class="o">==</span> <span class="n">playerTile</span><span class="p">:</span>
+<span class="c">152. </span>                <span class="k">return</span> <span class="kc">True</span>
+<span class="c">153. </span>
+<span class="c">154. </span>    <span class="k">for</span> <span class="n">columnIndex</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">BOARD_WIDTH</span> <span class="o">-</span> <span class="mi">3</span><span class="p">):</span>
+<span class="c">155. </span>        <span class="k">for</span> <span class="n">rowIndex</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">BOARD_HEIGHT</span> <span class="o">-</span> <span class="mi">3</span><span class="p">):</span>
+<span class="c">156. </span>            <span class="c1"># Check for four-in-a-row going right-down diagonal:</span>
+<span class="c">157. </span>            <span class="n">tile1</span> <span class="o">=</span> <span class="n">board</span><span class="p">[(</span><span class="n">columnIndex</span><span class="p">,</span> <span class="n">rowIndex</span><span class="p">)]</span>
+<span class="c">158. </span>            <span class="n">tile2</span> <span class="o">=</span> <span class="n">board</span><span class="p">[(</span><span class="n">columnIndex</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">rowIndex</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+<span class="c">159. </span>            <span class="n">tile3</span> <span class="o">=</span> <span class="n">board</span><span class="p">[(</span><span class="n">columnIndex</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">rowIndex</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)]</span>
+<span class="c">160. </span>            <span class="n">tile4</span> <span class="o">=</span> <span class="n">board</span><span class="p">[(</span><span class="n">columnIndex</span> <span class="o">+</span> <span class="mi">3</span><span class="p">,</span> <span class="n">rowIndex</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)]</span>
+<span class="c">161. </span>            <span class="k">if</span> <span class="n">tile1</span> <span class="o">==</span> <span class="n">tile2</span> <span class="o">==</span> <span class="n">tile3</span> <span class="o">==</span> <span class="n">tile4</span> <span class="o">==</span> <span class="n">playerTile</span><span class="p">:</span>
+<span class="c">162. </span>                <span class="k">return</span> <span class="kc">True</span>
+<span class="c">163. </span>
+<span class="c">164. </span>            <span class="c1"># Check for four-in-a-row going left-down diagonal:</span>
+<span class="c">165. </span>            <span class="n">tile1</span> <span class="o">=</span> <span class="n">board</span><span class="p">[(</span><span class="n">columnIndex</span> <span class="o">+</span> <span class="mi">3</span><span class="p">,</span> <span class="n">rowIndex</span><span class="p">)]</span>
+<span class="c">166. </span>            <span class="n">tile2</span> <span class="o">=</span> <span class="n">board</span><span class="p">[(</span><span class="n">columnIndex</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">rowIndex</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+<span class="c">167. </span>            <span class="n">tile3</span> <span class="o">=</span> <span class="n">board</span><span class="p">[(</span><span class="n">columnIndex</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">rowIndex</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)]</span>
+<span class="c">168. </span>            <span class="n">tile4</span> <span class="o">=</span> <span class="n">board</span><span class="p">[(</span><span class="n">columnIndex</span><span class="p">,</span> <span class="n">rowIndex</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)]</span>
+<span class="c">169. </span>            <span class="k">if</span> <span class="n">tile1</span> <span class="o">==</span> <span class="n">tile2</span> <span class="o">==</span> <span class="n">tile3</span> <span class="o">==</span> <span class="n">tile4</span> <span class="o">==</span> <span class="n">playerTile</span><span class="p">:</span>
+<span class="c">170. </span>                <span class="k">return</span> <span class="kc">True</span>
+<span class="c">171. </span>    <span class="k">return</span> <span class="kc">False</span>
+<span class="c">172. </span>
+<span class="c">173. </span>
+<span class="c">174. </span><span class="c1"># If the program is run (instead of imported), run the game:</span>
+<span class="c">175. </span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="c">176. </span>    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
 <p class="calibre19">After entering the source code and running it a few times, try making experimental changes to it. The comments marked with <code class="calibre22">(!)</code> have suggestions for small changes you can make. On your own, you can also try to figure out how to do the following:</p>
 <ul class="calibre25">
 <li class="calibre8">Create a three-in-a-row or five-in-a-row variant.</li>

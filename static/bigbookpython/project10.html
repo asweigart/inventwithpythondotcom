@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Cho-Han</title></head><body style="background-color: #fffeee;">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><link rel="stylesheet" type="text/css" href="pygments.css"><title>Cho-Han</title></head><body style="background-color: #fffeee;">
 
 <script type="text/javascript">
 //<![CDATA[
@@ -74,89 +74,92 @@ The house collects a 40 mon fee.
 <var class="calibre27">--snip--</var></code></pre>
 <h2 id="calibre_link-74" class="calibre5">How It Works</h2>
 <p class="bodyfirst">The <code class="calibre22">random.randint(1, 6)</code> call returns a random integer between <code class="calibre22">1</code> and <code class="calibre22">6</code>, making it ideal for representing a six-sided die roll. However, we also need to display the Japanese words for the numbers one to six. Instead of having an <code class="calibre22">if</code> statement followed by five <code class="calibre22">elif</code> statements, we have a dictionary, stored in <code class="calibre22">JAPANESE_NUMBERS</code>, that maps the integers <code class="calibre22">1</code> to <code class="calibre22">6</code> to strings of the Japanese words. This is how line 57’s <code class="calibre22">JAPANESE_NUMBERS[dice1]</code> and <code class="calibre22">JAPANESE_NUMBERS[dice2]</code> can display the Japanese words for the dice results in just one line of code.</p>
-<pre class="calibre24"><code class="calibre22"> 1. """Cho-Han, by Al Sweigart al@inventwithpython.com
- 2. The traditional Japanese dice game of even-odd.
- 3. View this code at https://nostarch.com/big-book-small-python-projects
- 4. Tags: short, beginner, game"""
- 5.
- 6. import random, sys
- 7.
- 8. JAPANESE_NUMBERS = {1: 'ICHI', 2: 'NI', 3: 'SAN',
- 9.                     4: 'SHI', 5: 'GO', 6: 'ROKU'}
-10.
-11. print('''Cho-Han, by Al Sweigart al@inventwithpython.com
-12.
-13. In this traditional Japanese dice game, two dice are rolled in a bamboo
-14. cup by the dealer sitting on the floor. The player must guess if the
-15. dice total to an even (cho) or odd (han) number.
-16. ''')
-17.
-18. purse = 5000
-19. while True:  # Main game loop.
-20.     # Place your bet:
-21.     print('You have', purse, 'mon. How much do you bet? (or QUIT)')
-22.     while True:
-23.         pot = input('&gt; ')
-24.         if pot.upper() == 'QUIT':
-25.             print('Thanks for playing!')
-26.             sys.exit()
-27.         elif not pot.isdecimal():
-28.             print('Please enter a number.')
-29.         elif int(pot) &gt; purse:
-30.             print('You do not have enough to make that bet.')
-31.         else:
-32.             # This is a valid bet.
-33.             pot = int(pot)  # Convert pot to an integer.
-34.             break  # Exit the loop once a valid bet is placed.
-35.
-36.     # Roll the dice.
-37.     dice1 = random.randint(1, 6)
-38.     dice2 = random.randint(1, 6)
-39.
-40.     print('The dealer swirls the cup and you hear the rattle of dice.')
-41.     print('The dealer slams the cup on the floor, still covering the')
-42.     print('dice and asks for your bet.')
-43.     print()
-44.     print('    CHO (even) or HAN (odd)?')
-45.
-46.     # Let the player bet cho or han:
-47.     while True:
-48.         bet = input('&gt; ').upper()
-49.         if bet != 'CHO' and bet != 'HAN':
-50.             print('Please enter either "CHO" or "HAN".')
-51.             continue
-52.         else:
-53.             break
-54.
-55.     # Reveal the dice results:
-56.     print('The dealer lifts the cup to reveal:')
-57.     print('  ', JAPANESE_NUMBERS[dice1], '-', JAPANESE_NUMBERS[dice2])
-58.     print('    ', dice1, '-', dice2)
-59.
-60.     # Determine if the player won:
-61.     rollIsEven = (dice1 + dice2) % 2 == 0
-62.     if rollIsEven:
-63.         correctBet = 'CHO'
-64.     else:
-65.         correctBet = 'HAN'
-66.
-67.     playerWon = bet == correctBet
-68.
-69.     # Display the bet results:
-70.     if playerWon:
-71.         print('You won! You take', pot, 'mon.')
-72.         purse = purse + pot  # Add the pot from player's purse.
-73.         print('The house collects a', pot // 10, 'mon fee.')
-74.         purse = purse - (pot // 10)  # The house fee is 10%.
-75.     else:
-76.         purse = purse - pot  # Subtract the pot from player's purse.
-77.         print('You lost!')
-78.
-79.     # Check if the player has run out of money:
-80.     if purse == 0:
-81.         print('You have run out of money!')
-82.         print('Thanks for playing!')
-83.         sys.exit()</code></pre>
+<div class="highlight"><pre><span></span>
+<span class="c"> 1. </span><span class="sd">&quot;&quot;&quot;Cho-Han, by Al Sweigart al@inventwithpython.com</span>
+<span class="c"> 2. </span><span class="sd">The traditional Japanese dice game of even-odd.</span>
+<span class="c"> 3. </span><span class="sd">View this code athttps://nostarch.com/big-book-small-python-projects</span>
+<span class="c"> 4. </span><span class="sd">Tags: short, beginner, game&quot;&quot;&quot;</span>
+<span class="c"> 5. </span>
+<span class="c"> 6. </span><span class="kn">import</span> <span class="nn">random</span><span class="o">,</span> <span class="nn">sys</span>
+<span class="c"> 7. </span>
+<span class="c"> 8. </span><span class="n">JAPANESE_NUMBERS</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="s1">&#39;ICHI&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="s1">&#39;NI&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="s1">&#39;SAN&#39;</span><span class="p">,</span>
+<span class="c"> 9. </span>                    <span class="mi">4</span><span class="p">:</span> <span class="s1">&#39;SHI&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">:</span> <span class="s1">&#39;GO&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">:</span> <span class="s1">&#39;ROKU&#39;</span><span class="p">}</span>
+<span class="c">10. </span>
+<span class="c">11. </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;Cho-Han, by Al Sweigart al@inventwithpython.com</span>
+<span class="c">12. </span>
+<span class="c">13. </span><span class="s1">In this traditional Japanese dice game, two dice are rolled in a bamboo</span>
+<span class="c">14. </span><span class="s1">cup by the dealer sitting on the floor. The player must guess if the</span>
+<span class="c">15. </span><span class="s1">dice total to an even (cho) or odd (han) number.</span>
+<span class="c">16. </span><span class="s1">&#39;&#39;&#39;</span><span class="p">)</span>
+<span class="c">17. </span>
+<span class="c">18. </span><span class="n">purse</span> <span class="o">=</span> <span class="mi">5000</span>
+<span class="c">19. </span><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>  <span class="c1"># Main game loop.</span>
+<span class="c">20. </span>    <span class="c1"># Place your bet:</span>
+<span class="c">21. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;You have&#39;</span><span class="p">,</span> <span class="n">purse</span><span class="p">,</span> <span class="s1">&#39;mon. How much do you bet? (or QUIT)&#39;</span><span class="p">)</span>
+<span class="c">22. </span>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<span class="c">23. </span>        <span class="n">pot</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;&gt; &#39;</span><span class="p">)</span>
+<span class="c">24. </span>        <span class="k">if</span> <span class="n">pot</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;QUIT&#39;</span><span class="p">:</span>
+<span class="c">25. </span>            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Thanks for playing!&#39;</span><span class="p">)</span>
+<span class="c">26. </span>            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+<span class="c">27. </span>        <span class="k">elif</span> <span class="ow">not</span> <span class="n">pot</span><span class="o">.</span><span class="n">isdecimal</span><span class="p">():</span>
+<span class="c">28. </span>            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Please enter a number.&#39;</span><span class="p">)</span>
+<span class="c">29. </span>        <span class="k">elif</span> <span class="nb">int</span><span class="p">(</span><span class="n">pot</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">purse</span><span class="p">:</span>
+<span class="c">30. </span>            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;You do not have enough to make that bet.&#39;</span><span class="p">)</span>
+<span class="c">31. </span>        <span class="k">else</span><span class="p">:</span>
+<span class="c">32. </span>            <span class="c1"># This is a valid bet.</span>
+<span class="c">33. </span>            <span class="n">pot</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">pot</span><span class="p">)</span>  <span class="c1"># Convert pot to an integer.</span>
+<span class="c">34. </span>            <span class="k">break</span>  <span class="c1"># Exit the loop once a valid bet is placed.</span>
+<span class="c">35. </span>
+<span class="c">36. </span>    <span class="c1"># Roll the dice.</span>
+<span class="c">37. </span>    <span class="n">dice1</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+<span class="c">38. </span>    <span class="n">dice2</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+<span class="c">39. </span>
+<span class="c">40. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The dealer swirls the cup and you hear the rattle of dice.&#39;</span><span class="p">)</span>
+<span class="c">41. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The dealer slams the cup on the floor, still covering the&#39;</span><span class="p">)</span>
+<span class="c">42. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;dice and asks for your bet.&#39;</span><span class="p">)</span>
+<span class="c">43. </span>    <span class="nb">print</span><span class="p">()</span>
+<span class="c">44. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;    CHO (even) or HAN (odd)?&#39;</span><span class="p">)</span>
+<span class="c">45. </span>
+<span class="c">46. </span>    <span class="c1"># Let the player bet cho or han:</span>
+<span class="c">47. </span>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<span class="c">48. </span>        <span class="n">bet</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;&gt; &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+<span class="c">49. </span>        <span class="k">if</span> <span class="n">bet</span> <span class="o">!=</span> <span class="s1">&#39;CHO&#39;</span> <span class="ow">and</span> <span class="n">bet</span> <span class="o">!=</span> <span class="s1">&#39;HAN&#39;</span><span class="p">:</span>
+<span class="c">50. </span>            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Please enter either &quot;CHO&quot; or &quot;HAN&quot;.&#39;</span><span class="p">)</span>
+<span class="c">51. </span>            <span class="k">continue</span>
+<span class="c">52. </span>        <span class="k">else</span><span class="p">:</span>
+<span class="c">53. </span>            <span class="k">break</span>
+<span class="c">54. </span>
+<span class="c">55. </span>    <span class="c1"># Reveal the dice results:</span>
+<span class="c">56. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The dealer lifts the cup to reveal:&#39;</span><span class="p">)</span>
+<span class="c">57. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  &#39;</span><span class="p">,</span> <span class="n">JAPANESE_NUMBERS</span><span class="p">[</span><span class="n">dice1</span><span class="p">],</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">JAPANESE_NUMBERS</span><span class="p">[</span><span class="n">dice2</span><span class="p">])</span>
+<span class="c">58. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;    &#39;</span><span class="p">,</span> <span class="n">dice1</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">dice2</span><span class="p">)</span>
+<span class="c">59. </span>
+<span class="c">60. </span>    <span class="c1"># Determine if the player won:</span>
+<span class="c">61. </span>    <span class="n">rollIsEven</span> <span class="o">=</span> <span class="p">(</span><span class="n">dice1</span> <span class="o">+</span> <span class="n">dice2</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span>
+<span class="c">62. </span>    <span class="k">if</span> <span class="n">rollIsEven</span><span class="p">:</span>
+<span class="c">63. </span>        <span class="n">correctBet</span> <span class="o">=</span> <span class="s1">&#39;CHO&#39;</span>
+<span class="c">64. </span>    <span class="k">else</span><span class="p">:</span>
+<span class="c">65. </span>        <span class="n">correctBet</span> <span class="o">=</span> <span class="s1">&#39;HAN&#39;</span>
+<span class="c">66. </span>
+<span class="c">67. </span>    <span class="n">playerWon</span> <span class="o">=</span> <span class="n">bet</span> <span class="o">==</span> <span class="n">correctBet</span>
+<span class="c">68. </span>
+<span class="c">69. </span>    <span class="c1"># Display the bet results:</span>
+<span class="c">70. </span>    <span class="k">if</span> <span class="n">playerWon</span><span class="p">:</span>
+<span class="c">71. </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;You won! You take&#39;</span><span class="p">,</span> <span class="n">pot</span><span class="p">,</span> <span class="s1">&#39;mon.&#39;</span><span class="p">)</span>
+<span class="c">72. </span>        <span class="n">purse</span> <span class="o">=</span> <span class="n">purse</span> <span class="o">+</span> <span class="n">pot</span>  <span class="c1"># Add the pot from player&#39;s purse.</span>
+<span class="c">73. </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The house collects a&#39;</span><span class="p">,</span> <span class="n">pot</span> <span class="o">//</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;mon fee.&#39;</span><span class="p">)</span>
+<span class="c">74. </span>        <span class="n">purse</span> <span class="o">=</span> <span class="n">purse</span> <span class="o">-</span> <span class="p">(</span><span class="n">pot</span> <span class="o">//</span> <span class="mi">10</span><span class="p">)</span>  <span class="c1"># The house fee is 10%.</span>
+<span class="c">75. </span>    <span class="k">else</span><span class="p">:</span>
+<span class="c">76. </span>        <span class="n">purse</span> <span class="o">=</span> <span class="n">purse</span> <span class="o">-</span> <span class="n">pot</span>  <span class="c1"># Subtract the pot from player&#39;s purse.</span>
+<span class="c">77. </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;You lost!&#39;</span><span class="p">)</span>
+<span class="c">78. </span>
+<span class="c">79. </span>    <span class="c1"># Check if the player has run out of money:</span>
+<span class="c">80. </span>    <span class="k">if</span> <span class="n">purse</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+<span class="c">81. </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;You have run out of money!&#39;</span><span class="p">)</span>
+<span class="c">82. </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Thanks for playing!&#39;</span><span class="p">)</span>
+<span class="c">83. </span>        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+</pre></div>
+
 <p class="calibre19">After entering the source code and running it a few times, try making experimental changes to it. On your own, you can also try to figure out how to do the following:</p>
 <ul class="calibre25">
 <li class="calibre8">Implement one of the variations of this game, described in the Wikipedia article, where multiple players bet against each other. Add computer-controlled gamblers with their own purses to play against.</li>

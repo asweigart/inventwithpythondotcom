@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Hex Grid</title></head><body style="background-color: #fffeee;">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><link rel="stylesheet" type="text/css" href="pygments.css"><title>Hex Grid</title></head><body style="background-color: #fffeee;">
 
 <script type="text/javascript">
 //<![CDATA[
@@ -60,26 +60,29 @@ _gaq.push(['_trackPageview']);
 <h2 id="calibre_link-164" class="calibre5">How It Works</h2>
 <p class="bodyfirst">The power behind programming is that it can make a computer carry out repetitive instructions quickly and without mistakes. This is how a dozen lines of code can create hundreds, thousands, or millions of hexagons on the screen.</p>
 <p class="calibre19">In the Command Prompt or Terminal window, you can redirect a program’s output from the screen to a text file. On Windows, run <code class="calibre22">py hexgrid.py &gt; hextiles.txt</code> to create a text file that contains the hexagons. On Linux and macOS, run <code class="calibre22">python3 hexgrid.py &gt; hextiles.txt</code>. Without the size of the screen as a limit, you can increase the <code class="calibre22">X_REPEAT</code> and <code class="calibre22">Y_REPEAT</code> constants and save the contents to a file. From there, it’s easy to print the file on paper, send it in an email, or post it to social media. This applies to any computer-generated artwork you create.</p>
-<pre class="calibre24"><code class="calibre22"> 1. """Hex Grid, by Al Sweigart al@inventwithpython.com
- 2. Displays a simple tessellation of a hexagon grid.
- 3. View this code at https://nostarch.com/big-book-small-python-projects
- 4. Tags: tiny, beginner, artistic"""
- 5.
- 6. # Set up the constants:
- 7. # (!) Try changing these values to other numbers:
- 8. X_REPEAT = 19  # How many times to tessellate horizontally.
- 9. Y_REPEAT = 12  # How many times to tessellate vertically.
-10.
-11. for y in range(Y_REPEAT):
-12.     # Display the top half of the hexagon:
-13.     for x in range(X_REPEAT):
-14.         print(r'/ \_', end='')
-15.     print()
-16.
-17.     # Display the bottom half of the hexagon:
-18.     for x in range(X_REPEAT):
-19.         print(r'\_/ ', end='')
-20.     print()</code></pre>
+<div class="highlight"><pre><span></span>
+<span class="c"> 1. </span><span class="sd">&quot;&quot;&quot;Hex Grid, by Al Sweigart al@inventwithpython.com</span>
+<span class="c"> 2. </span><span class="sd">Displays a simple tessellation of a hexagon grid.</span>
+<span class="c"> 3. </span><span class="sd">This code is available at https://nostarch.com/big-book-small-python-programming</span>
+<span class="c"> 4. </span><span class="sd">Tags: tiny, beginner, artistic&quot;&quot;&quot;</span>
+<span class="c"> 5. </span>
+<span class="c"> 6. </span><span class="c1"># Set up the constants:</span>
+<span class="c"> 7. </span><span class="c1"># (!) Try changing these values to other numbers:</span>
+<span class="c"> 8. </span><span class="n">X_REPEAT</span> <span class="o">=</span> <span class="mi">19</span>  <span class="c1"># How many times to tessellate horizontally.</span>
+<span class="c"> 9. </span><span class="n">Y_REPEAT</span> <span class="o">=</span> <span class="mi">12</span>  <span class="c1"># How many times to tessellate vertically.</span>
+<span class="c">10. </span>
+<span class="c">11. </span><span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Y_REPEAT</span><span class="p">):</span>
+<span class="c">12. </span>    <span class="c1"># Display the top half of the hexagon:</span>
+<span class="c">13. </span>    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">X_REPEAT</span><span class="p">):</span>
+<span class="c">14. </span>        <span class="nb">print</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;/ \_&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c">15. </span>    <span class="nb">print</span><span class="p">()</span>
+<span class="c">16. </span>
+<span class="c">17. </span>    <span class="c1"># Display the bottom half of the hexagon:</span>
+<span class="c">18. </span>    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">X_REPEAT</span><span class="p">):</span>
+<span class="c">19. </span>        <span class="nb">print</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\_/ &#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c">20. </span>    <span class="nb">print</span><span class="p">()</span>
+</pre></div>
+
 <p class="calibre19">After entering the source code and running it a few times, try making experimental changes to it. The comments marked with <code class="calibre22">(!)</code> have suggestions for small changes you can make. On your own, you can also try to figure out how to do the following:</p>
 <ul class="calibre25">
 <li class="calibre8">Create tiled hexagons of a larger size.</li>

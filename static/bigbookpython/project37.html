@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Hungry Robots</title></head><body style="background-color: #fffeee;">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><link rel="stylesheet" type="text/css" href="pygments.css"><title>Hungry Robots</title></head><body style="background-color: #fffeee;">
 
 <script type="text/javascript">
 //<![CDATA[
@@ -82,248 +82,251 @@ Enter move or QUIT: (Z) (X) ( )
 <var class="calibre27">--snip--</var></code></pre>
 <h2 id="calibre_link-170" class="calibre5">How It Works</h2>
 <p class="bodyfirst">The x- and y- Cartesian coordinates that represent positions in this game allow us to use math to determine the direction in which the robots should move. In programming, x-coordinates increase going right, and y-coordinates increase going down. This means that if the robot’s x-coordinate is larger than the player’s coordinate, it should move left (that is, the code should subtract from its current x-coordinate) to move closer to the player. If the robot’s x-coordinate is smaller, it should move right (that is, the code should add to its current x-coordinate) instead. The same applies to moving up and down based on their relative y-coordinates.</p>
-<pre class="calibre24"><code class="calibre22">  1. """Hungry Robots, by Al Sweigart al@inventwithpython.com
-  2. Escape the hungry robots by making them crash into each other.
-  3. View this code at https://nostarch.com/big-book-small-python-projects
-  4. Tags: large, game"""
-  5.
-  6. import random, sys
-  7.
-  8. # Set up the constants:
-  9. WIDTH = 40           # (!) Try changing this to 70 or 10.
- 10. HEIGHT = 20          # (!) Try changing this to 10.
- 11. NUM_ROBOTS = 10      # (!) Try changing this to 1 or 30.
- 12. NUM_TELEPORTS = 2    # (!) Try changing this to 0 or 9999.
- 13. NUM_DEAD_ROBOTS = 2  # (!) Try changing this to 0 or 20.
- 14. NUM_WALLS = 100      # (!) Try changing this to 0 or 1000.
- 15.
- 16. EMPTY_SPACE = ' '    # (!) Try changing this to '.'.
- 17. PLAYER = '@'         # (!) Try changing this to 'R'.
- 18. ROBOT = 'R'          # (!) Try changing this to '@'.
- 19. DEAD_ROBOT = 'X'     # (!) Try changing this to 'R'.
- 20.
- 21. # (!) Try changing this to '#' or 'O' or ' ':
- 22. WALL = chr(9617)  # Character 9617 is '░'
- 23.
- 24.
- 25. def main():
- 26.     print('''Hungry Robots, by Al Sweigart al@inventwithpython.com
- 27.
- 28. You are trapped in a maze with hungry robots! You don't know why robots
- 29. need to eat, but you don't want to find out. The robots are badly
- 30. programmed and will move directly toward you, even if blocked by walls.
- 31. You must trick the robots into crashing into each other (or dead robots)
- 32. without being caught. You have a personal teleporter device, but it only
- 33. has enough battery for {} trips. Keep in mind, you and robots can slip
- 34. through the corners of two diagonal walls!
- 35. '''.format(NUM_TELEPORTS))
- 36.
- 37.     input('Press Enter to begin...')
- 38.
- 39.     # Set up a new game:
- 40.     board = getNewBoard()
- 41.     robots = addRobots(board)
- 42.     playerPosition = getRandomEmptySpace(board, robots)
- 43.     while True:  # Main game loop.
- 44.         displayBoard(board, robots, playerPosition)
- 45.
- 46.         if len(robots) == 0:  # Check if the player has won.
- 47.             print('All the robots have crashed into each other and you')
- 48.             print('lived to tell the tale! Good job!')
- 49.             sys.exit()
- 50.
- 51.         # Move the player and robots:
- 52.         playerPosition = askForPlayerMove(board, robots, playerPosition)
- 53.         robots = moveRobots(board, robots, playerPosition)
- 54.
- 55.         for x, y in robots:  # Check if the player has lost.
- 56.             if (x, y) == playerPosition:
- 57.                 displayBoard(board, robots, playerPosition)
- 58.                 print('You have been caught by a robot!')
- 59.                 sys.exit()
- 60.
- 61.
- 62. def getNewBoard():
- 63.     """Returns a dictionary that represents the board. The keys are
- 64.     (x, y) tuples of integer indexes for board positions, the values are
- 65.     WALL, EMPTY_SPACE, or DEAD_ROBOT. The dictionary also has the key
- 66.     'teleports' for the number of teleports the player has left.
- 67.     The living robots are stored separately from the board dictionary."""
- 68.     board = {'teleports': NUM_TELEPORTS}
- 69.
- 70.     # Create an empty board:
- 71.     for x in range(WIDTH):
- 72.         for y in range(HEIGHT):
- 73.             board[(x, y)] = EMPTY_SPACE
- 74.
- 75.     # Add walls on the edges of the board:
- 76.     for x in range(WIDTH):
- 77.         board[(x, 0)] = WALL  # Make top wall.
- 78.         board[(x, HEIGHT - 1)] = WALL  # Make bottom wall.
- 79.     for y in range(HEIGHT):
- 80.         board[(0, y)] = WALL  # Make left wall.
- 81.         board[(WIDTH - 1, y)] = WALL  # Make right wall.
- 82.
- 83.     # Add the random walls:
- 84.     for i in range(NUM_WALLS):
- 85.         x, y = getRandomEmptySpace(board, [])
- 86.         board[(x, y)] = WALL
- 87.
- 88.     # Add the starting dead robots:
- 89.     for i in range(NUM_DEAD_ROBOTS):
- 90.         x, y = getRandomEmptySpace(board, [])
- 91.         board[(x, y)] = DEAD_ROBOT
- 92.     return board
- 93.
- 94.
- 95. def getRandomEmptySpace(board, robots):
- 96.     """Return a (x, y) integer tuple of an empty space on the board."""
- 97.     while True:
- 98.         randomX = random.randint(1, WIDTH - 2)
- 99.         randomY = random.randint(1, HEIGHT - 2)
-100.         if isEmpty(randomX, randomY, board, robots):
-101.             break
-102.     return (randomX, randomY)
-103.
-104.
-105. def isEmpty(x, y, board, robots):
-106.     """Return True if the (x, y) is empty on the board and there's also
-107.     no robot there."""
-108.     return board[(x, y)] == EMPTY_SPACE and (x, y) not in robots
-109.
-110.
-111. def addRobots(board):
-112.     """Add NUM_ROBOTS number of robots to empty spaces on the board and
-113.     return a list of these (x, y) spaces where robots are now located."""
-114.     robots = []
-115.     for i in range(NUM_ROBOTS):
-116.         x, y = getRandomEmptySpace(board, robots)
-117.         robots.append((x, y))
-118.     return robots
-119.
-120.
-121. def displayBoard(board, robots, playerPosition):
-122.     """Display the board, robots, and player on the screen."""
-123.     # Loop over every space on the board:
-124.     for y in range(HEIGHT):
-125.         for x in range(WIDTH):
-126.             # Draw the appropriate character:
-127.             if board[(x, y)] == WALL:
-128.                 print(WALL, end='')
-129.             elif board[(x, y)] == DEAD_ROBOT:
-130.                 print(DEAD_ROBOT, end='')
-131.             elif (x, y) == playerPosition:
-132.                 print(PLAYER, end='')
-133.             elif (x, y) in robots:
-134.                 print(ROBOT, end='')
-135.             else:
-136.                 print(EMPTY_SPACE, end='')
-137.         print()  # Print a newline.
-138.
-139.
-140. def askForPlayerMove(board, robots, playerPosition):
-141.     """Returns the (x, y) integer tuple of the place the player moves
-142.     next, given their current location and the walls of the board."""
-143.     playerX, playerY = playerPosition
-144.
-145.     # Find which directions aren't blocked by a wall:
-146.     q = 'Q' if isEmpty(playerX - 1, playerY - 1, board, robots) else ' '
-147.     w = 'W' if isEmpty(playerX + 0, playerY - 1, board, robots) else ' '
-148.     e = 'E' if isEmpty(playerX + 1, playerY - 1, board, robots) else ' '
-149.     d = 'D' if isEmpty(playerX + 1, playerY + 0, board, robots) else ' '
-150.     c = 'C' if isEmpty(playerX + 1, playerY + 1, board, robots) else ' '
-151.     x = 'X' if isEmpty(playerX + 0, playerY + 1, board, robots) else ' '
-152.     z = 'Z' if isEmpty(playerX - 1, playerY + 1, board, robots) else ' '
-153.     a = 'A' if isEmpty(playerX - 1, playerY + 0, board, robots) else ' '
-154.     allMoves = (q + w + e + d + c + x + a + z + 'S')
-155.
-156.     while True:
-157.         # Get player's move:
-158.         print('(T)eleports remaining: {}'.format(board["teleports"]))
-159.         print('                    ({}) ({}) ({})'.format(q, w, e))
-160.         print('                    ({}) (S) ({})'.format(a, d))
-161.         print('Enter move or QUIT: ({}) ({}) ({})'.format(z, x, c))
-162.
-163.         move = input('&gt; ').upper()
-164.         if move == 'QUIT':
-165.             print('Thanks for playing!')
-166.             sys.exit()
-167.         elif move == 'T' and board['teleports'] &gt; 0:
-168.             # Teleport the player to a random empty space:
-169.             board['teleports'] -= 1
-170.             return getRandomEmptySpace(board, robots)
-171.         elif move != '' and move in allMoves:
-172.             # Return the new player position based on their move:
-173.             return {'Q': (playerX - 1, playerY - 1),
-174.                     'W': (playerX + 0, playerY - 1),
-175.                     'E': (playerX + 1, playerY - 1),
-176.                     'D': (playerX + 1, playerY + 0),
-177.                     'C': (playerX + 1, playerY + 1),
-178.                     'X': (playerX + 0, playerY + 1),
-179.                     'Z': (playerX - 1, playerY + 1),
-180.                     'A': (playerX - 1, playerY + 0),
-181.                     'S': (playerX, playerY)}[move]
-182.
-183.
-184. def moveRobots(board, robotPositions, playerPosition):
-185.     """Return a list of (x, y) tuples of new robot positions after they
-186.     have tried to move toward the player."""
-187.     playerx, playery = playerPosition
-188.     nextRobotPositions = []
-189.
-190.     while len(robotPositions) &gt; 0:
-191.         robotx, roboty = robotPositions[0]
-192.
-193.         # Determine the direction the robot moves.
-194.         if robotx &lt; playerx:
-195.             movex = 1  # Move right.
-196.         elif robotx &gt; playerx:
-197.             movex = -1  # Move left.
-198.         elif robotx == playerx:
-199.             movex = 0  # Don't move horizontally.
-200.
-201.         if roboty &lt; playery:
-202.             movey = 1  # Move up.
-203.         elif roboty &gt; playery:
-204.             movey = -1  # Move down.
-205.         elif roboty == playery:
-206.             movey = 0  # Don't move vertically.
-207.
-208.         # Check if the robot would run into a wall, and adjust course:
-209.         if board[(robotx + movex, roboty + movey)] == WALL:
-210.             # Robot would run into a wall, so come up with a new move:
-211.             if board[(robotx + movex, roboty)] == EMPTY_SPACE:
-212.                 movey = 0  # Robot can't move horizontally.
-213.             elif board[(robotx, roboty + movey)] == EMPTY_SPACE:
-214.                 movex = 0  # Robot can't move vertically.
-215.             else:
-216.                 # Robot can't move.
-217.                 movex = 0
-218.                 movey = 0
-219.         newRobotx = robotx + movex
-220.         newRoboty = roboty + movey
-221.
-222.         if (board[(robotx, roboty)] == DEAD_ROBOT
-223.             or board[(newRobotx, newRoboty)] == DEAD_ROBOT):
-224.             # Robot is at a crash site, remove it.
-225.             del robotPositions[0]
-226.             continue
-227.
-228.         # Check if it moves into a robot, then destroy both robots:
-229.         if (newRobotx, newRoboty) in nextRobotPositions:
-230.             board[(newRobotx, newRoboty)] = DEAD_ROBOT
-231.             nextRobotPositions.remove((newRobotx, newRoboty))
-232.         else:
-233.             nextRobotPositions.append((newRobotx, newRoboty))
-234.
-235.         # Remove robots from robotPositions as they move.
-236.         del robotPositions[0]
-237.     return nextRobotPositions
-238.
-239.
-240. # If this program was run (instead of imported), run the game:
-241. if __name__ == '__main__':
-242.     main()</code></pre>
+<div class="highlight"><pre><span></span>
+<span class="c">  1. </span><span class="sd">&quot;&quot;&quot;Hungry Robots, by Al Sweigart al@inventwithpython.com</span>
+<span class="c">  2. </span><span class="sd">Escape the hungry robots by making them crash into each other.</span>
+<span class="c">  3. </span><span class="sd">This code is available at https://nostarch.com/big-book-small-python-programming</span>
+<span class="c">  4. </span><span class="sd">Tags: large, game&quot;&quot;&quot;</span>
+<span class="c">  5. </span>
+<span class="c">  6. </span><span class="kn">import</span> <span class="nn">random</span><span class="o">,</span> <span class="nn">sys</span>
+<span class="c">  7. </span>
+<span class="c">  8. </span><span class="c1"># Set up the constants:</span>
+<span class="c">  9. </span><span class="n">WIDTH</span> <span class="o">=</span> <span class="mi">40</span>           <span class="c1"># (!) Try changing this to 70 or 10.</span>
+<span class="c"> 10. </span><span class="n">HEIGHT</span> <span class="o">=</span> <span class="mi">20</span>          <span class="c1"># (!) Try changing this to 10.</span>
+<span class="c"> 11. </span><span class="n">NUM_ROBOTS</span> <span class="o">=</span> <span class="mi">10</span>      <span class="c1"># (!) Try changing this to 1 or 30.</span>
+<span class="c"> 12. </span><span class="n">NUM_TELEPORTS</span> <span class="o">=</span> <span class="mi">2</span>    <span class="c1"># (!) Try changing this to 0 or 9999.</span>
+<span class="c"> 13. </span><span class="n">NUM_DEAD_ROBOTS</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c1"># (!) Try changing this to 0 or 20.</span>
+<span class="c"> 14. </span><span class="n">NUM_WALLS</span> <span class="o">=</span> <span class="mi">100</span>      <span class="c1"># (!) Try changing this to 0 or 300.</span>
+<span class="c"> 15. </span>
+<span class="c"> 16. </span><span class="n">EMPTY_SPACE</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span>    <span class="c1"># (!) Try changing this to &#39;.&#39;.</span>
+<span class="c"> 17. </span><span class="n">PLAYER</span> <span class="o">=</span> <span class="s1">&#39;@&#39;</span>         <span class="c1"># (!) Try changing this to &#39;R&#39;.</span>
+<span class="c"> 18. </span><span class="n">ROBOT</span> <span class="o">=</span> <span class="s1">&#39;R&#39;</span>          <span class="c1"># (!) Try changing this to &#39;@&#39;.</span>
+<span class="c"> 19. </span><span class="n">DEAD_ROBOT</span> <span class="o">=</span> <span class="s1">&#39;X&#39;</span>     <span class="c1"># (!) Try changing this to &#39;R&#39;.</span>
+<span class="c"> 20. </span>
+<span class="c"> 21. </span><span class="c1"># (!) Try changing this to &#39;#&#39; or &#39;O&#39; or &#39; &#39;:</span>
+<span class="c"> 22. </span><span class="n">WALL</span> <span class="o">=</span> <span class="nb">chr</span><span class="p">(</span><span class="mi">9617</span><span class="p">)</span>  <span class="c1"># Character 9617 is &#39;░&#39;</span>
+<span class="c"> 23. </span>
+<span class="c"> 24. </span>
+<span class="c"> 25. </span><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<span class="c"> 26. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;Hungry Robots, by Al Sweigart al@inventwithpython.com</span>
+<span class="c"> 27. </span>
+<span class="c"> 28. </span><span class="s1">You are trapped in a maze with hungry robots! You don&#39;t know why robots</span>
+<span class="c"> 29. </span><span class="s1">need to eat, but you don&#39;t want to find out. The robots are badly</span>
+<span class="c"> 30. </span><span class="s1">programmed and will move directly toward you, even if blocked by walls.</span>
+<span class="c"> 31. </span><span class="s1">You must trick the robots into crashing into each other (or dead robots)</span>
+<span class="c"> 32. </span><span class="s1">without being caught. You have a personal teleporter device, but it only</span>
+<span class="c"> 33. </span><span class="s1">has enough battery for </span><span class="si">{}</span><span class="s1"> trips. Keep in mind, you and robots can slip</span>
+<span class="c"> 34. </span><span class="s1">through the corners of two diagonal walls!</span>
+<span class="c"> 35. </span><span class="s1">&#39;&#39;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">NUM_TELEPORTS</span><span class="p">))</span>
+<span class="c"> 36. </span>
+<span class="c"> 37. </span>    <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;Press Enter to begin...&#39;</span><span class="p">)</span>
+<span class="c"> 38. </span>
+<span class="c"> 39. </span>    <span class="c1"># Set up a new game:</span>
+<span class="c"> 40. </span>    <span class="n">board</span> <span class="o">=</span> <span class="n">getNewBoard</span><span class="p">()</span>
+<span class="c"> 41. </span>    <span class="n">robots</span> <span class="o">=</span> <span class="n">addRobots</span><span class="p">(</span><span class="n">board</span><span class="p">)</span>
+<span class="c"> 42. </span>    <span class="n">playerPosition</span> <span class="o">=</span> <span class="n">getRandomEmptySpace</span><span class="p">(</span><span class="n">board</span><span class="p">,</span> <span class="n">robots</span><span class="p">)</span>
+<span class="c"> 43. </span>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>  <span class="c1"># Main game loop.</span>
+<span class="c"> 44. </span>        <span class="n">displayBoard</span><span class="p">(</span><span class="n">board</span><span class="p">,</span> <span class="n">robots</span><span class="p">,</span> <span class="n">playerPosition</span><span class="p">)</span>
+<span class="c"> 45. </span>
+<span class="c"> 46. </span>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">robots</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># Check if the player has won.</span>
+<span class="c"> 47. </span>            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;All the robots have crashed into each other and you&#39;</span><span class="p">)</span>
+<span class="c"> 48. </span>            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;lived to tell the tale! Good job!&#39;</span><span class="p">)</span>
+<span class="c"> 49. </span>            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+<span class="c"> 50. </span>
+<span class="c"> 51. </span>        <span class="c1"># Move the player and robots:</span>
+<span class="c"> 52. </span>        <span class="n">playerPosition</span> <span class="o">=</span> <span class="n">askForPlayerMove</span><span class="p">(</span><span class="n">board</span><span class="p">,</span> <span class="n">robots</span><span class="p">,</span> <span class="n">playerPosition</span><span class="p">)</span>
+<span class="c"> 53. </span>        <span class="n">robots</span> <span class="o">=</span> <span class="n">moveRobots</span><span class="p">(</span><span class="n">board</span><span class="p">,</span> <span class="n">robots</span><span class="p">,</span> <span class="n">playerPosition</span><span class="p">)</span>
+<span class="c"> 54. </span>
+<span class="c"> 55. </span>        <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">robots</span><span class="p">:</span>  <span class="c1"># Check if the player has lost.</span>
+<span class="c"> 56. </span>            <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="o">==</span> <span class="n">playerPosition</span><span class="p">:</span>
+<span class="c"> 57. </span>                <span class="n">displayBoard</span><span class="p">(</span><span class="n">board</span><span class="p">,</span> <span class="n">robots</span><span class="p">,</span> <span class="n">playerPosition</span><span class="p">)</span>
+<span class="c"> 58. </span>                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;You have been caught by a robot!&#39;</span><span class="p">)</span>
+<span class="c"> 59. </span>                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+<span class="c"> 60. </span>
+<span class="c"> 61. </span>
+<span class="c"> 62. </span><span class="k">def</span> <span class="nf">getNewBoard</span><span class="p">():</span>
+<span class="c"> 63. </span>    <span class="sd">&quot;&quot;&quot;Returns a dictionary that represents the board. The keys are</span>
+<span class="c"> 64. </span><span class="sd">    (x, y) tuples of integer indexes for board positions, the values are</span>
+<span class="c"> 65. </span><span class="sd">    WALL, EMPTY_SPACE, or DEAD_ROBOT. The dictionary also has the key</span>
+<span class="c"> 66. </span><span class="sd">    &#39;teleports&#39; for the number of teleports the player has left.</span>
+<span class="c"> 67. </span><span class="sd">    The living robots are stored separately from the board dictionary.&quot;&quot;&quot;</span>
+<span class="c"> 68. </span>    <span class="n">board</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;teleports&#39;</span><span class="p">:</span> <span class="n">NUM_TELEPORTS</span><span class="p">}</span>
+<span class="c"> 69. </span>
+<span class="c"> 70. </span>    <span class="c1"># Create an empty board:</span>
+<span class="c"> 71. </span>    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">WIDTH</span><span class="p">):</span>
+<span class="c"> 72. </span>        <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">HEIGHT</span><span class="p">):</span>
+<span class="c"> 73. </span>            <span class="n">board</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">=</span> <span class="n">EMPTY_SPACE</span>
+<span class="c"> 74. </span>
+<span class="c"> 75. </span>    <span class="c1"># Add walls on the edges of the board:</span>
+<span class="c"> 76. </span>    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">WIDTH</span><span class="p">):</span>
+<span class="c"> 77. </span>        <span class="n">board</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]</span> <span class="o">=</span> <span class="n">WALL</span>  <span class="c1"># Make top wall.</span>
+<span class="c"> 78. </span>        <span class="n">board</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">HEIGHT</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">WALL</span>  <span class="c1"># Make bottom wall.</span>
+<span class="c"> 79. </span>    <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">HEIGHT</span><span class="p">):</span>
+<span class="c"> 80. </span>        <span class="n">board</span><span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">=</span> <span class="n">WALL</span>  <span class="c1"># Make left wall.</span>
+<span class="c"> 81. </span>        <span class="n">board</span><span class="p">[(</span><span class="n">WIDTH</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">=</span> <span class="n">WALL</span>  <span class="c1"># Make right wall.</span>
+<span class="c"> 82. </span>
+<span class="c"> 83. </span>    <span class="c1"># Add the random walls:</span>
+<span class="c"> 84. </span>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">NUM_WALLS</span><span class="p">):</span>
+<span class="c"> 85. </span>        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">getRandomEmptySpace</span><span class="p">(</span><span class="n">board</span><span class="p">,</span> <span class="p">[])</span>
+<span class="c"> 86. </span>        <span class="n">board</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">=</span> <span class="n">WALL</span>
+<span class="c"> 87. </span>
+<span class="c"> 88. </span>    <span class="c1"># Add the starting dead robots:</span>
+<span class="c"> 89. </span>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">NUM_DEAD_ROBOTS</span><span class="p">):</span>
+<span class="c"> 90. </span>        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">getRandomEmptySpace</span><span class="p">(</span><span class="n">board</span><span class="p">,</span> <span class="p">[])</span>
+<span class="c"> 91. </span>        <span class="n">board</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">=</span> <span class="n">DEAD_ROBOT</span>
+<span class="c"> 92. </span>    <span class="k">return</span> <span class="n">board</span>
+<span class="c"> 93. </span>
+<span class="c"> 94. </span>
+<span class="c"> 95. </span><span class="k">def</span> <span class="nf">getRandomEmptySpace</span><span class="p">(</span><span class="n">board</span><span class="p">,</span> <span class="n">robots</span><span class="p">):</span>
+<span class="c"> 96. </span>    <span class="sd">&quot;&quot;&quot;Return a (x, y) integer tuple of an empty space on the board.&quot;&quot;&quot;</span>
+<span class="c"> 97. </span>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<span class="c"> 98. </span>        <span class="n">randomX</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">WIDTH</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span>
+<span class="c"> 99. </span>        <span class="n">randomY</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">HEIGHT</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span>
+<span class="c">100. </span>        <span class="k">if</span> <span class="n">isEmpty</span><span class="p">(</span><span class="n">randomX</span><span class="p">,</span> <span class="n">randomY</span><span class="p">,</span> <span class="n">board</span><span class="p">,</span> <span class="n">robots</span><span class="p">):</span>
+<span class="c">101. </span>            <span class="k">break</span>
+<span class="c">102. </span>    <span class="k">return</span> <span class="p">(</span><span class="n">randomX</span><span class="p">,</span> <span class="n">randomY</span><span class="p">)</span>
+<span class="c">103. </span>
+<span class="c">104. </span>
+<span class="c">105. </span><span class="k">def</span> <span class="nf">isEmpty</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">board</span><span class="p">,</span> <span class="n">robots</span><span class="p">):</span>
+<span class="c">106. </span>    <span class="sd">&quot;&quot;&quot;Return True if the (x, y) is empty on the board and there&#39;s also</span>
+<span class="c">107. </span><span class="sd">    no robot there.&quot;&quot;&quot;</span>
+<span class="c">108. </span>    <span class="k">return</span> <span class="n">board</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">==</span> <span class="n">EMPTY_SPACE</span> <span class="ow">and</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">robots</span>
+<span class="c">109. </span>
+<span class="c">110. </span>
+<span class="c">111. </span><span class="k">def</span> <span class="nf">addRobots</span><span class="p">(</span><span class="n">board</span><span class="p">):</span>
+<span class="c">112. </span>    <span class="sd">&quot;&quot;&quot;Add NUM_ROBOTS number of robots to empty spaces on the board and</span>
+<span class="c">113. </span><span class="sd">    return a list of these (x, y) spaces where robots are now located.&quot;&quot;&quot;</span>
+<span class="c">114. </span>    <span class="n">robots</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="c">115. </span>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">NUM_ROBOTS</span><span class="p">):</span>
+<span class="c">116. </span>        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">getRandomEmptySpace</span><span class="p">(</span><span class="n">board</span><span class="p">,</span> <span class="n">robots</span><span class="p">)</span>
+<span class="c">117. </span>        <span class="n">robots</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+<span class="c">118. </span>    <span class="k">return</span> <span class="n">robots</span>
+<span class="c">119. </span>
+<span class="c">120. </span>
+<span class="c">121. </span><span class="k">def</span> <span class="nf">displayBoard</span><span class="p">(</span><span class="n">board</span><span class="p">,</span> <span class="n">robots</span><span class="p">,</span> <span class="n">playerPosition</span><span class="p">):</span>
+<span class="c">122. </span>    <span class="sd">&quot;&quot;&quot;Display the board, robots, and player on the screen.&quot;&quot;&quot;</span>
+<span class="c">123. </span>    <span class="c1"># Loop over every space on the board:</span>
+<span class="c">124. </span>    <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">HEIGHT</span><span class="p">):</span>
+<span class="c">125. </span>        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">WIDTH</span><span class="p">):</span>
+<span class="c">126. </span>            <span class="c1"># Draw the appropriate character:</span>
+<span class="c">127. </span>            <span class="k">if</span> <span class="n">board</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">==</span> <span class="n">WALL</span><span class="p">:</span>
+<span class="c">128. </span>                <span class="nb">print</span><span class="p">(</span><span class="n">WALL</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c">129. </span>            <span class="k">elif</span> <span class="n">board</span><span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span> <span class="o">==</span> <span class="n">DEAD_ROBOT</span><span class="p">:</span>
+<span class="c">130. </span>                <span class="nb">print</span><span class="p">(</span><span class="n">DEAD_ROBOT</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c">131. </span>            <span class="k">elif</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="o">==</span> <span class="n">playerPosition</span><span class="p">:</span>
+<span class="c">132. </span>                <span class="nb">print</span><span class="p">(</span><span class="n">PLAYER</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c">133. </span>            <span class="k">elif</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="n">robots</span><span class="p">:</span>
+<span class="c">134. </span>                <span class="nb">print</span><span class="p">(</span><span class="n">ROBOT</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c">135. </span>            <span class="k">else</span><span class="p">:</span>
+<span class="c">136. </span>                <span class="nb">print</span><span class="p">(</span><span class="n">EMPTY_SPACE</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c">137. </span>        <span class="nb">print</span><span class="p">()</span>  <span class="c1"># Print a newline.</span>
+<span class="c">138. </span>
+<span class="c">139. </span>
+<span class="c">140. </span><span class="k">def</span> <span class="nf">askForPlayerMove</span><span class="p">(</span><span class="n">board</span><span class="p">,</span> <span class="n">robots</span><span class="p">,</span> <span class="n">playerPosition</span><span class="p">):</span>
+<span class="c">141. </span>    <span class="sd">&quot;&quot;&quot;Returns the (x, y) integer tuple of the place the player moves</span>
+<span class="c">142. </span><span class="sd">    next, given their current location and the walls of the board.&quot;&quot;&quot;</span>
+<span class="c">143. </span>    <span class="n">playerX</span><span class="p">,</span> <span class="n">playerY</span> <span class="o">=</span> <span class="n">playerPosition</span>
+<span class="c">144. </span>
+<span class="c">145. </span>    <span class="c1"># Find which directions aren&#39;t blocked by a wall:</span>
+<span class="c">146. </span>    <span class="n">q</span> <span class="o">=</span> <span class="s1">&#39;Q&#39;</span> <span class="k">if</span> <span class="n">isEmpty</span><span class="p">(</span><span class="n">playerX</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">playerY</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">board</span><span class="p">,</span> <span class="n">robots</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39; &#39;</span>
+<span class="c">147. </span>    <span class="n">w</span> <span class="o">=</span> <span class="s1">&#39;W&#39;</span> <span class="k">if</span> <span class="n">isEmpty</span><span class="p">(</span><span class="n">playerX</span> <span class="o">+</span> <span class="mi">0</span><span class="p">,</span> <span class="n">playerY</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">board</span><span class="p">,</span> <span class="n">robots</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39; &#39;</span>
+<span class="c">148. </span>    <span class="n">e</span> <span class="o">=</span> <span class="s1">&#39;E&#39;</span> <span class="k">if</span> <span class="n">isEmpty</span><span class="p">(</span><span class="n">playerX</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">playerY</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">board</span><span class="p">,</span> <span class="n">robots</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39; &#39;</span>
+<span class="c">149. </span>    <span class="n">d</span> <span class="o">=</span> <span class="s1">&#39;D&#39;</span> <span class="k">if</span> <span class="n">isEmpty</span><span class="p">(</span><span class="n">playerX</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">playerY</span> <span class="o">+</span> <span class="mi">0</span><span class="p">,</span> <span class="n">board</span><span class="p">,</span> <span class="n">robots</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39; &#39;</span>
+<span class="c">150. </span>    <span class="n">c</span> <span class="o">=</span> <span class="s1">&#39;C&#39;</span> <span class="k">if</span> <span class="n">isEmpty</span><span class="p">(</span><span class="n">playerX</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">playerY</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">board</span><span class="p">,</span> <span class="n">robots</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39; &#39;</span>
+<span class="c">151. </span>    <span class="n">x</span> <span class="o">=</span> <span class="s1">&#39;X&#39;</span> <span class="k">if</span> <span class="n">isEmpty</span><span class="p">(</span><span class="n">playerX</span> <span class="o">+</span> <span class="mi">0</span><span class="p">,</span> <span class="n">playerY</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">board</span><span class="p">,</span> <span class="n">robots</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39; &#39;</span>
+<span class="c">152. </span>    <span class="n">z</span> <span class="o">=</span> <span class="s1">&#39;Z&#39;</span> <span class="k">if</span> <span class="n">isEmpty</span><span class="p">(</span><span class="n">playerX</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">playerY</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">board</span><span class="p">,</span> <span class="n">robots</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39; &#39;</span>
+<span class="c">153. </span>    <span class="n">a</span> <span class="o">=</span> <span class="s1">&#39;A&#39;</span> <span class="k">if</span> <span class="n">isEmpty</span><span class="p">(</span><span class="n">playerX</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">playerY</span> <span class="o">+</span> <span class="mi">0</span><span class="p">,</span> <span class="n">board</span><span class="p">,</span> <span class="n">robots</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39; &#39;</span>
+<span class="c">154. </span>    <span class="n">allMoves</span> <span class="o">=</span> <span class="p">(</span><span class="n">q</span> <span class="o">+</span> <span class="n">w</span> <span class="o">+</span> <span class="n">e</span> <span class="o">+</span> <span class="n">d</span> <span class="o">+</span> <span class="n">c</span> <span class="o">+</span> <span class="n">x</span> <span class="o">+</span> <span class="n">a</span> <span class="o">+</span> <span class="n">z</span> <span class="o">+</span> <span class="s1">&#39;S&#39;</span><span class="p">)</span>
+<span class="c">155. </span>
+<span class="c">156. </span>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<span class="c">157. </span>        <span class="c1"># Get player&#39;s move:</span>
+<span class="c">158. </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;(T)eleports remaining: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">board</span><span class="p">[</span><span class="s2">&quot;teleports&quot;</span><span class="p">]))</span>
+<span class="c">159. </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;                    (</span><span class="si">{}</span><span class="s1">) (</span><span class="si">{}</span><span class="s1">) (</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">e</span><span class="p">))</span>
+<span class="c">160. </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;                    (</span><span class="si">{}</span><span class="s1">) (S) (</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">d</span><span class="p">))</span>
+<span class="c">161. </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Enter move or QUIT: (</span><span class="si">{}</span><span class="s1">) (</span><span class="si">{}</span><span class="s1">) (</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">c</span><span class="p">))</span>
+<span class="c">162. </span>
+<span class="c">163. </span>        <span class="n">move</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;&gt; &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+<span class="c">164. </span>        <span class="k">if</span> <span class="n">move</span> <span class="o">==</span> <span class="s1">&#39;QUIT&#39;</span><span class="p">:</span>
+<span class="c">165. </span>            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Thanks for playing!&#39;</span><span class="p">)</span>
+<span class="c">166. </span>            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+<span class="c">167. </span>        <span class="k">elif</span> <span class="n">move</span> <span class="o">==</span> <span class="s1">&#39;T&#39;</span> <span class="ow">and</span> <span class="n">board</span><span class="p">[</span><span class="s1">&#39;teleports&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+<span class="c">168. </span>            <span class="c1"># Teleport the player to a random empty space:</span>
+<span class="c">169. </span>            <span class="n">board</span><span class="p">[</span><span class="s1">&#39;teleports&#39;</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">1</span>
+<span class="c">170. </span>            <span class="k">return</span> <span class="n">getRandomEmptySpace</span><span class="p">(</span><span class="n">board</span><span class="p">,</span> <span class="n">robots</span><span class="p">)</span>
+<span class="c">171. </span>        <span class="k">elif</span> <span class="n">move</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span> <span class="ow">and</span> <span class="n">move</span> <span class="ow">in</span> <span class="n">allMoves</span><span class="p">:</span>
+<span class="c">172. </span>            <span class="c1"># Return the new player position based on their move:</span>
+<span class="c">173. </span>            <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;Q&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">playerX</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">playerY</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span>
+<span class="c">174. </span>                    <span class="s1">&#39;W&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">playerX</span> <span class="o">+</span> <span class="mi">0</span><span class="p">,</span> <span class="n">playerY</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span>
+<span class="c">175. </span>                    <span class="s1">&#39;E&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">playerX</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">playerY</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span>
+<span class="c">176. </span>                    <span class="s1">&#39;D&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">playerX</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">playerY</span> <span class="o">+</span> <span class="mi">0</span><span class="p">),</span>
+<span class="c">177. </span>                    <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">playerX</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">playerY</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+<span class="c">178. </span>                    <span class="s1">&#39;X&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">playerX</span> <span class="o">+</span> <span class="mi">0</span><span class="p">,</span> <span class="n">playerY</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+<span class="c">179. </span>                    <span class="s1">&#39;Z&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">playerX</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">playerY</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+<span class="c">180. </span>                    <span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">playerX</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">playerY</span> <span class="o">+</span> <span class="mi">0</span><span class="p">),</span>
+<span class="c">181. </span>                    <span class="s1">&#39;S&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">playerX</span><span class="p">,</span> <span class="n">playerY</span><span class="p">)}[</span><span class="n">move</span><span class="p">]</span>
+<span class="c">182. </span>
+<span class="c">183. </span>
+<span class="c">184. </span><span class="k">def</span> <span class="nf">moveRobots</span><span class="p">(</span><span class="n">board</span><span class="p">,</span> <span class="n">robotPositions</span><span class="p">,</span> <span class="n">playerPosition</span><span class="p">):</span>
+<span class="c">185. </span>    <span class="sd">&quot;&quot;&quot;Return a list of (x, y) tuples of new robot positions after they</span>
+<span class="c">186. </span><span class="sd">    have tried to move toward the player.&quot;&quot;&quot;</span>
+<span class="c">187. </span>    <span class="n">playerx</span><span class="p">,</span> <span class="n">playery</span> <span class="o">=</span> <span class="n">playerPosition</span>
+<span class="c">188. </span>    <span class="n">nextRobotPositions</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="c">189. </span>
+<span class="c">190. </span>    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">robotPositions</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+<span class="c">191. </span>        <span class="n">robotx</span><span class="p">,</span> <span class="n">roboty</span> <span class="o">=</span> <span class="n">robotPositions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="c">192. </span>
+<span class="c">193. </span>        <span class="c1"># Determine the direction the robot moves.</span>
+<span class="c">194. </span>        <span class="k">if</span> <span class="n">robotx</span> <span class="o">&lt;</span> <span class="n">playerx</span><span class="p">:</span>
+<span class="c">195. </span>            <span class="n">movex</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># Move right.</span>
+<span class="c">196. </span>        <span class="k">elif</span> <span class="n">robotx</span> <span class="o">&gt;</span> <span class="n">playerx</span><span class="p">:</span>
+<span class="c">197. </span>            <span class="n">movex</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>  <span class="c1"># Move left.</span>
+<span class="c">198. </span>        <span class="k">elif</span> <span class="n">robotx</span> <span class="o">==</span> <span class="n">playerx</span><span class="p">:</span>
+<span class="c">199. </span>            <span class="n">movex</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Don&#39;t move horizontally.</span>
+<span class="c">200. </span>
+<span class="c">201. </span>        <span class="k">if</span> <span class="n">roboty</span> <span class="o">&lt;</span> <span class="n">playery</span><span class="p">:</span>
+<span class="c">202. </span>            <span class="n">movey</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># Move up.</span>
+<span class="c">203. </span>        <span class="k">elif</span> <span class="n">roboty</span> <span class="o">&gt;</span> <span class="n">playery</span><span class="p">:</span>
+<span class="c">204. </span>            <span class="n">movey</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>  <span class="c1"># Move down.</span>
+<span class="c">205. </span>        <span class="k">elif</span> <span class="n">roboty</span> <span class="o">==</span> <span class="n">playery</span><span class="p">:</span>
+<span class="c">206. </span>            <span class="n">movey</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Don&#39;t move vertically.</span>
+<span class="c">207. </span>
+<span class="c">208. </span>        <span class="c1"># Check if the robot would run into a wall, and adjust course:</span>
+<span class="c">209. </span>        <span class="k">if</span> <span class="n">board</span><span class="p">[(</span><span class="n">robotx</span> <span class="o">+</span> <span class="n">movex</span><span class="p">,</span> <span class="n">roboty</span> <span class="o">+</span> <span class="n">movey</span><span class="p">)]</span> <span class="o">==</span> <span class="n">WALL</span><span class="p">:</span>
+<span class="c">210. </span>            <span class="c1"># Robot would run into a wall, so come up with a new move:</span>
+<span class="c">211. </span>            <span class="k">if</span> <span class="n">board</span><span class="p">[(</span><span class="n">robotx</span> <span class="o">+</span> <span class="n">movex</span><span class="p">,</span> <span class="n">roboty</span><span class="p">)]</span> <span class="o">==</span> <span class="n">EMPTY_SPACE</span><span class="p">:</span>
+<span class="c">212. </span>                <span class="n">movey</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Robot can&#39;t move horizontally.</span>
+<span class="c">213. </span>            <span class="k">elif</span> <span class="n">board</span><span class="p">[(</span><span class="n">robotx</span><span class="p">,</span> <span class="n">roboty</span> <span class="o">+</span> <span class="n">movey</span><span class="p">)]</span> <span class="o">==</span> <span class="n">EMPTY_SPACE</span><span class="p">:</span>
+<span class="c">214. </span>                <span class="n">movex</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Robot can&#39;t move vertically.</span>
+<span class="c">215. </span>            <span class="k">else</span><span class="p">:</span>
+<span class="c">216. </span>                <span class="c1"># Robot can&#39;t move.</span>
+<span class="c">217. </span>                <span class="n">movex</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="c">218. </span>                <span class="n">movey</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="c">219. </span>        <span class="n">newRobotx</span> <span class="o">=</span> <span class="n">robotx</span> <span class="o">+</span> <span class="n">movex</span>
+<span class="c">220. </span>        <span class="n">newRoboty</span> <span class="o">=</span> <span class="n">roboty</span> <span class="o">+</span> <span class="n">movey</span>
+<span class="c">221. </span>
+<span class="c">222. </span>        <span class="k">if</span> <span class="p">(</span><span class="n">board</span><span class="p">[(</span><span class="n">robotx</span><span class="p">,</span> <span class="n">roboty</span><span class="p">)]</span> <span class="o">==</span> <span class="n">DEAD_ROBOT</span>
+<span class="c">223. </span>            <span class="ow">or</span> <span class="n">board</span><span class="p">[(</span><span class="n">newRobotx</span><span class="p">,</span> <span class="n">newRoboty</span><span class="p">)]</span> <span class="o">==</span> <span class="n">DEAD_ROBOT</span><span class="p">):</span>
+<span class="c">224. </span>            <span class="c1"># Robot is at a crash site, remove it.</span>
+<span class="c">225. </span>            <span class="k">del</span> <span class="n">robotPositions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="c">226. </span>            <span class="k">continue</span>
+<span class="c">227. </span>
+<span class="c">228. </span>        <span class="c1"># Check if it moves into a robot, then destroy both robots:</span>
+<span class="c">229. </span>        <span class="k">if</span> <span class="p">(</span><span class="n">newRobotx</span><span class="p">,</span> <span class="n">newRoboty</span><span class="p">)</span> <span class="ow">in</span> <span class="n">nextRobotPositions</span><span class="p">:</span>
+<span class="c">230. </span>            <span class="n">board</span><span class="p">[(</span><span class="n">newRobotx</span><span class="p">,</span> <span class="n">newRoboty</span><span class="p">)]</span> <span class="o">=</span> <span class="n">DEAD_ROBOT</span>
+<span class="c">231. </span>            <span class="n">nextRobotPositions</span><span class="o">.</span><span class="n">remove</span><span class="p">((</span><span class="n">newRobotx</span><span class="p">,</span> <span class="n">newRoboty</span><span class="p">))</span>
+<span class="c">232. </span>        <span class="k">else</span><span class="p">:</span>
+<span class="c">233. </span>            <span class="n">nextRobotPositions</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">newRobotx</span><span class="p">,</span> <span class="n">newRoboty</span><span class="p">))</span>
+<span class="c">234. </span>
+<span class="c">235. </span>        <span class="c1"># Remove robots from robotPositions as they move.</span>
+<span class="c">236. </span>        <span class="k">del</span> <span class="n">robotPositions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="c">237. </span>    <span class="k">return</span> <span class="n">nextRobotPositions</span>
+<span class="c">238. </span>
+<span class="c">239. </span>
+<span class="c">240. </span><span class="c1"># If this program was run (instead of imported), run the game:</span>
+<span class="c">241. </span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="c">242. </span>    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
 <p class="calibre19">After entering the source code and running it a few times, try making experimental changes to it. The comments marked with <code class="calibre22">(!)</code> have suggestions for small changes you can make. On your own, you can also try to figure out how to do the following:</p>
 <ul class="calibre25">
 <li class="calibre8">Create two different kinds of robots: those that can only move diagonally and those that can only move in cardinal directions.</li>

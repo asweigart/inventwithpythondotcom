@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><title>Calendar Maker</title></head><body style="background-color: #fffeee;">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="style.css" rel="stylesheet" type="text/css" /><link rel="stylesheet" type="text/css" href="pygments.css"><title>Calendar Maker</title></head><body style="background-color: #fffeee;">
 
 <script type="text/javascript">
 //<![CDATA[
@@ -94,107 +94,109 @@ Enter the month for the calendar, 1-12:
 Saved to calendar_2029_12.txt</code></pre>
 <h2 id="calibre_link-66" class="calibre5">How It Works</h2>
 <p class="bodyfirst">Note that the <code class="calibre22">getCalendarFor()</code> function returns a giant multiline string of the calendar for the given month and year. In this function, the <code class="calibre22">calText</code> variable stores this string, which adds the lines, spaces, and dates to it. To track the date, the <code class="calibre22">currentDate</code> variable holds a <code class="calibre22">datetime.date()</code> object, which gets set to the next or previous date by adding or subtracting <code class="calibre22">datetime.timedelta()</code> objects. You can learn about Python’s date and time modules by reading Chapter 17 of <em class="calibre9">Automate the Boring Stuff with Python</em> at <a href="https://automatetheboringstuff.com/2e/chapter17/" class="linkurl">https://automatetheboringstuff.com/2e/chapter17/</a>.</p>
-<pre class="calibre24"><code class="calibre22">  1. """Calendar Maker, by Al Sweigart al@inventwithpython.com
-  2. Create monthly calendars, saved to a text file and fit for printing.
-  3. View this code at https://nostarch.com/big-book-small-python-projects
-  4. Tags: short"""
-  5.
-  6. import datetime
-  7.
-  8. # Set up the constants:
-  9. DAYS = ('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday',
- 10.         'Friday', 'Saturday')
- 11. MONTHS = ('January', 'February', 'March', 'April', 'May', 'June', 'July',
- 12.           'August', 'September', 'October', 'November', 'December')
- 13.
- 14. print('Calendar Maker, by Al Sweigart al@inventwithpython.com')
- 15.
- 16. while True:  # Loop to get a year from the user.
- 17.     print('Enter the year for the calendar:')
- 18.     response = input('&gt; ')
- 19.
- 20.     if response.isdecimal() and int(response) &gt; 0:
- 21.         year = int(response)
- 22.         break
- 23.
- 24.     print('Please enter a numeric year, like 2023.')
- 25.     continue
- 26.
- 27. while True:  # Loop to get a month from the user.
- 28.     print('Enter the month for the calendar, 1-12:')
- 29.     response = input('&gt; ')
- 30.
- 31.     if not response.isdecimal():
- 32.         print('Please enter a numeric month, like 3 for March.')
- 33.         continue
- 34.
- 35.     month = int(response)
- 36.     if 1 &lt;= month &lt;= 12:
- 37.         break
- 38.
- 39.     print('Please enter a number from 1 to 12.')
- 40.
- 41.
- 42. def getCalendarFor(year, month):
- 43.     calText = ''  # calText will contain the string of our calendar.
- 44.
- 45.     # Put the month and year at the top of the calendar:
- 46.     calText += (' ' * 34) + MONTHS[month - 1] + ' ' + str(year) + '\n'
- 47.
- 48.     # Add the days of the week labels to the calendar:
- 49.     # (!) Try changing this to abbreviations: SUN, MON, TUE, etc.
- 50.     calText += '...Sunday.....Monday....Tuesday...Wednesday...Thursday....
-         Friday....Saturday..\n'
- 51.
- 52.     # The horizontal line string that separate weeks:
- 53.     weekSeparator = ('+----------' * 7) + '+\n'
- 54.
- 55.     # The blank rows have ten spaces in between the | day separators:
- 56.     blankRow = ('|          ' * 7) + '|\n'
- 57.
- 58.     # Get the first date in the month. (The datetime module handles all
- 59.     # the complicated calendar stuff for us here.)
- 60.     currentDate = datetime.date(year, month, 1)
- 61.
- 62.     # Roll back currentDate until it is Sunday. (weekday() returns 6
- 63.     # for Sunday, not 0.)
- 64.     while currentDate.weekday() != 6:
- 65.         currentDate -= datetime.timedelta(days=1)
- 66.
- 67.     while True:  # Loop over each week in the month.
- 68.         calText += weekSeparator
- 69.
- 70.         # dayNumberRow is the row with the day number labels:
- 71.         dayNumberRow = ''
- 72.         for i in range(7):
- 73.             dayNumberLabel = str(currentDate.day).rjust(2)
- 74.             dayNumberRow += '|' + dayNumberLabel + (' ' * 8)
- 75.             currentDate += datetime.timedelta(days=1) # Go to next day.
- 76.         dayNumberRow += '|\n'  # Add the vertical line after Saturday.
- 77.
- 78.         # Add the day number row and 3 blank rows to the calendar text.
- 79.         calText += dayNumberRow
- 80.         for i in range(3):  # (!) Try changing the 4 to a 5 or 10.
- 81.             calText += blankRow
- 82.
- 83.         # Check if we're done with the month:
- 84.         if currentDate.month != month:
- 85.             break
- 86.
- 87.     # Add the horizontal line at the very bottom of the calendar.
- 88.     calText += weekSeparator
- 89.     return calText
- 90.
- 91.
- 92. calText = getCalendarFor(year, month)
- 93. print(calText)  # Display the calendar.
- 94.
- 95. # Save the calendar to a text file:
- 96. calendarFilename = 'calendar_{}_{}.txt'.format(year, month)
- 97. with open(calendarFilename, 'w') as fileObj:
- 98.     fileObj.write(calText)
- 99.
-100. print('Saved to ' + calendarFilename)</code></pre>
+<div class="highlight"><pre><span></span>
+<span class="c">  1. </span><span class="sd">&quot;&quot;&quot;Calendar Maker, by Al Sweigart al@inventwithpython.com</span>
+<span class="c">  2. </span><span class="sd">Create monthly calendars, saved to a text file and fit for printing.</span>
+<span class="c">  3. </span><span class="sd">This code is available at https://nostarch.com/big-book-small-python-programming</span>
+<span class="c">  4. </span><span class="sd">Tags: short&quot;&quot;&quot;</span>
+<span class="c">  5. </span>
+<span class="c">  6. </span><span class="kn">import</span> <span class="nn">datetime</span>
+<span class="c">  7. </span>
+<span class="c">  8. </span><span class="c1"># Set up the constants:</span>
+<span class="c">  9. </span><span class="n">DAYS</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Sunday&#39;</span><span class="p">,</span> <span class="s1">&#39;Monday&#39;</span><span class="p">,</span> <span class="s1">&#39;Tuesday&#39;</span><span class="p">,</span> <span class="s1">&#39;Wednesday&#39;</span><span class="p">,</span> <span class="s1">&#39;Thursday&#39;</span><span class="p">,</span>
+<span class="c"> 10. </span>        <span class="s1">&#39;Friday&#39;</span><span class="p">,</span> <span class="s1">&#39;Saturday&#39;</span><span class="p">)</span>
+<span class="c"> 11. </span><span class="n">MONTHS</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;January&#39;</span><span class="p">,</span> <span class="s1">&#39;February&#39;</span><span class="p">,</span> <span class="s1">&#39;March&#39;</span><span class="p">,</span> <span class="s1">&#39;April&#39;</span><span class="p">,</span> <span class="s1">&#39;May&#39;</span><span class="p">,</span> <span class="s1">&#39;June&#39;</span><span class="p">,</span> <span class="s1">&#39;July&#39;</span><span class="p">,</span>
+<span class="c"> 12. </span>          <span class="s1">&#39;August&#39;</span><span class="p">,</span> <span class="s1">&#39;September&#39;</span><span class="p">,</span> <span class="s1">&#39;October&#39;</span><span class="p">,</span> <span class="s1">&#39;November&#39;</span><span class="p">,</span> <span class="s1">&#39;December&#39;</span><span class="p">)</span>
+<span class="c"> 13. </span>
+<span class="c"> 14. </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Calendar Maker, by Al Sweigart al@inventwithpython.com&#39;</span><span class="p">)</span>
+<span class="c"> 15. </span>
+<span class="c"> 16. </span><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>  <span class="c1"># Loop to get a year from the user.</span>
+<span class="c"> 17. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Enter the year for the calendar:&#39;</span><span class="p">)</span>
+<span class="c"> 18. </span>    <span class="n">response</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;&gt; &#39;</span><span class="p">)</span>
+<span class="c"> 19. </span>
+<span class="c"> 20. </span>    <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">isdecimal</span><span class="p">()</span> <span class="ow">and</span> <span class="nb">int</span><span class="p">(</span><span class="n">response</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+<span class="c"> 21. </span>        <span class="n">year</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+<span class="c"> 22. </span>        <span class="k">break</span>
+<span class="c"> 23. </span>
+<span class="c"> 24. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Please enter a numeric year, like 2023.&#39;</span><span class="p">)</span>
+<span class="c"> 25. </span>    <span class="k">continue</span>
+<span class="c"> 26. </span>
+<span class="c"> 27. </span><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>  <span class="c1"># Loop to get a month from the user.</span>
+<span class="c"> 28. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Enter the month for the calendar, 1-12:&#39;</span><span class="p">)</span>
+<span class="c"> 29. </span>    <span class="n">response</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;&gt; &#39;</span><span class="p">)</span>
+<span class="c"> 30. </span>
+<span class="c"> 31. </span>    <span class="k">if</span> <span class="ow">not</span> <span class="n">response</span><span class="o">.</span><span class="n">isdecimal</span><span class="p">():</span>
+<span class="c"> 32. </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Please enter a numeric month, like 3 for March.&#39;</span><span class="p">)</span>
+<span class="c"> 33. </span>        <span class="k">continue</span>
+<span class="c"> 34. </span>
+<span class="c"> 35. </span>    <span class="n">month</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+<span class="c"> 36. </span>    <span class="k">if</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">month</span> <span class="o">&lt;=</span> <span class="mi">12</span><span class="p">:</span>
+<span class="c"> 37. </span>        <span class="k">break</span>
+<span class="c"> 38. </span>
+<span class="c"> 39. </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Please enter a number from 1 to 12.&#39;</span><span class="p">)</span>
+<span class="c"> 40. </span>
+<span class="c"> 41. </span>
+<span class="c"> 42. </span><span class="k">def</span> <span class="nf">getCalendarFor</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">):</span>
+<span class="c"> 43. </span>    <span class="n">calText</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>  <span class="c1"># calText will contain the string of our calendar.</span>
+<span class="c"> 44. </span>
+<span class="c"> 45. </span>    <span class="c1"># Put the month and year at the top of the calendar:</span>
+<span class="c"> 46. </span>    <span class="n">calText</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39; &#39;</span> <span class="o">*</span> <span class="mi">34</span><span class="p">)</span> <span class="o">+</span> <span class="n">MONTHS</span><span class="p">[</span><span class="n">month</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">year</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+<span class="c"> 47. </span>
+<span class="c"> 48. </span>    <span class="c1"># Add the days of the week labels to the calendar:</span>
+<span class="c"> 49. </span>    <span class="c1"># (!) Try changing this to abbreviations: SUN, MON, TUE, etc.</span>
+<span class="c"> 50. </span>    <span class="n">calText</span> <span class="o">+=</span> <span class="s1">&#39;...Sunday.....Monday....Tuesday...Wednesday...Thursday....Friday....Saturday..</span><span class="se">\n</span><span class="s1">&#39;</span>
+<span class="c"> 51. </span>
+<span class="c"> 52. </span>    <span class="c1"># The horizontal line string that separate weeks:</span>
+<span class="c"> 53. </span>    <span class="n">weekSeparator</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;+----------&#39;</span> <span class="o">*</span> <span class="mi">7</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;+</span><span class="se">\n</span><span class="s1">&#39;</span>
+<span class="c"> 54. </span>
+<span class="c"> 55. </span>    <span class="c1"># The blank rows have ten spaces in between the | day separators:</span>
+<span class="c"> 56. </span>    <span class="n">blankRow</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;|          &#39;</span> <span class="o">*</span> <span class="mi">7</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;|</span><span class="se">\n</span><span class="s1">&#39;</span>
+<span class="c"> 57. </span>
+<span class="c"> 58. </span>    <span class="c1"># Get the first date in the month. (The datetime module handles all</span>
+<span class="c"> 59. </span>    <span class="c1"># the complicated calendar stuff for us here.)</span>
+<span class="c"> 60. </span>    <span class="n">currentDate</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="c"> 61. </span>
+<span class="c"> 62. </span>    <span class="c1"># Roll back currentDate until it is Sunday. (weekday() returns 6</span>
+<span class="c"> 63. </span>    <span class="c1"># for Sunday, not 0.)</span>
+<span class="c"> 64. </span>    <span class="k">while</span> <span class="n">currentDate</span><span class="o">.</span><span class="n">weekday</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">6</span><span class="p">:</span>
+<span class="c"> 65. </span>        <span class="n">currentDate</span> <span class="o">-=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="c"> 66. </span>
+<span class="c"> 67. </span>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>  <span class="c1"># Loop over each week in the month.</span>
+<span class="c"> 68. </span>        <span class="n">calText</span> <span class="o">+=</span> <span class="n">weekSeparator</span>
+<span class="c"> 69. </span>
+<span class="c"> 70. </span>        <span class="c1"># dayNumberRow is the row with the day number labels:</span>
+<span class="c"> 71. </span>        <span class="n">dayNumberRow</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+<span class="c"> 72. </span>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">7</span><span class="p">):</span>
+<span class="c"> 73. </span>            <span class="n">dayNumberLabel</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">currentDate</span><span class="o">.</span><span class="n">day</span><span class="p">)</span><span class="o">.</span><span class="n">rjust</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="c"> 74. </span>            <span class="n">dayNumberRow</span> <span class="o">+=</span> <span class="s1">&#39;|&#39;</span> <span class="o">+</span> <span class="n">dayNumberLabel</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39; &#39;</span> <span class="o">*</span> <span class="mi">8</span><span class="p">)</span>
+<span class="c"> 75. </span>            <span class="n">currentDate</span> <span class="o">+=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># Go to next day.</span>
+<span class="c"> 76. </span>        <span class="n">dayNumberRow</span> <span class="o">+=</span> <span class="s1">&#39;|</span><span class="se">\n</span><span class="s1">&#39;</span>  <span class="c1"># Add the vertical line after Saturday.</span>
+<span class="c"> 77. </span>
+<span class="c"> 78. </span>        <span class="c1"># Add the day number row and 3 blank rows to the calendar text.</span>
+<span class="c"> 79. </span>        <span class="n">calText</span> <span class="o">+=</span> <span class="n">dayNumberRow</span>
+<span class="c"> 80. </span>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>  <span class="c1"># (!) Try changing the 4 to a 5 or 10.</span>
+<span class="c"> 81. </span>            <span class="n">calText</span> <span class="o">+=</span> <span class="n">blankRow</span>
+<span class="c"> 82. </span>
+<span class="c"> 83. </span>        <span class="c1"># Check if we&#39;re done with the month:</span>
+<span class="c"> 84. </span>        <span class="k">if</span> <span class="n">currentDate</span><span class="o">.</span><span class="n">month</span> <span class="o">!=</span> <span class="n">month</span><span class="p">:</span>
+<span class="c"> 85. </span>            <span class="k">break</span>
+<span class="c"> 86. </span>
+<span class="c"> 87. </span>    <span class="c1"># Add the horizontal line at the very bottom of the calendar.</span>
+<span class="c"> 88. </span>    <span class="n">calText</span> <span class="o">+=</span> <span class="n">weekSeparator</span>
+<span class="c"> 89. </span>    <span class="k">return</span> <span class="n">calText</span>
+<span class="c"> 90. </span>
+<span class="c"> 91. </span>
+<span class="c"> 92. </span><span class="n">calText</span> <span class="o">=</span> <span class="n">getCalendarFor</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">)</span>
+<span class="c"> 93. </span><span class="nb">print</span><span class="p">(</span><span class="n">calText</span><span class="p">)</span>  <span class="c1"># Display the calendar.</span>
+<span class="c"> 94. </span>
+<span class="c"> 95. </span><span class="c1"># Save the calendar to a text file:</span>
+<span class="c"> 96. </span><span class="n">calendarFilename</span> <span class="o">=</span> <span class="s1">&#39;calendar_</span><span class="si">{}</span><span class="s1">_</span><span class="si">{}</span><span class="s1">.txt&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">)</span>
+<span class="c"> 97. </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">calendarFilename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fileObj</span><span class="p">:</span>
+<span class="c"> 98. </span>    <span class="n">fileObj</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">calText</span><span class="p">)</span>
+<span class="c"> 99. </span>
+<span class="c">100. </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Saved to &#39;</span> <span class="o">+</span> <span class="n">calendarFilename</span><span class="p">)</span>
+</pre></div>
+
 <p class="calibre19">After you’ve entered the code and run it a few times, try re-creating this program from scratch without looking at the source code in this book. It doesn’t have to be exactly the same as this program; you can invent your own version! On your own, you can also try to figure out how to do the following:</p>
 <ul class="calibre25">
 <li class="calibre8">Add text inside some of the boxes for holidays.</li>
