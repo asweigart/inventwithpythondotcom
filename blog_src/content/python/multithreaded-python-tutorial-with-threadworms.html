@@ -1,11 +1,10 @@
-<html>
-    <head>
-        <title>Multithreaded Python Tutorial with the "Threadworms" Demo</title>
-        <meta name="tags" content="" />
-        <meta name="date" content="2013-04-22 12:00" />
-        <meta name="summary" content="" />
-    </head>
-    <body>
+<head>
+<title>Multithreaded Python Tutorial with the "Threadworms" Demo</title>
+<meta name="tags" content="" />
+<meta name="date" content="2013-04-22 12:00" />
+<meta name="summary" content="" />
+</head>
+<body>
 
 
 			<p>The code for this tutorial can be downloaded here: <a href="/threadworms.py">threadworms.py</a> or from <a href="https://github.com/asweigart/threadworms">GitHub</a>. This code works with <a href="">Python 3 or Python 2</a>, and you need <a href="">Pygame</a> installed as well in order to run it.</p>
@@ -271,7 +270,7 @@ RGB tuples are kind of hard to read, so I usually set up some constants for them
 
  58.         self.name = name
 
- 59. 
+ 59.
 
  60.         # Set the maxsize to the parameter, or to a random maxsize.
 
@@ -279,7 +278,7 @@ RGB tuples are kind of hard to read, so I usually set up some constants for them
 
  62.             self.maxsize = random.randint(4, 10)
 
- 63. 
+ 63.
 
  64.             # Have a small chance of a super long worm.
 
@@ -291,7 +290,7 @@ RGB tuples are kind of hard to read, so I usually set up some constants for them
 
  68.             self.maxsize = maxsize
 
- 69. 
+ 69.
 
  70.         # Set the color to the parameter, or to a random color.
 
@@ -303,7 +302,7 @@ RGB tuples are kind of hard to read, so I usually set up some constants for them
 
  74.             self.color = color
 
- 75. 
+ 75.
 
  76.         # Set the speed to the parameter, or to a random number.
 
@@ -317,7 +316,7 @@ RGB tuples are kind of hard to read, so I usually set up some constants for them
 <p>The above code sets up a worm with random values for the size, color, and speed unless specific values were specified for the parameters.</p>
 <pre> 82.         GRID_LOCK.acquire() # block until this thread can acquire the lock
 
- 83. 
+ 83.
 
  84.         while True:
 
@@ -329,11 +328,11 @@ RGB tuples are kind of hard to read, so I usually set up some constants for them
 
  88.                 break # we've found an unoccupied cell in the grid
 
- 89. 
+ 89.
 
  90.         GRID[startx][starty] = self.color # modify the shared data structure
 
- 91. 
+ 91.
 
  92.         GRID_LOCK.release()</pre>
 <p>We need to determine a random starting location for the worm. To make this easier, all worms begin with a length of one body segment and grow until they reach their full maximum size. But we need to make sure that the random location on the grid we come up with isn't already occupied. This involves reading and modifying the <code>GRID</code> global variable, so we need to acquire and release the <code>GRID_LOCK</code> lock before doing this.</p>
@@ -362,7 +361,7 @@ RGB tuples are kind of hard to read, so I usually set up some constants for them
 <p>On each move, there's a 20% chance that the worm randomly changes direction. (Although the new direction could be the same as the current direction. But I wanted to write this code out quickly.)</p>
 <pre>109.             GRID_LOCK.acquire() # don't return (that is, block) until this thread can acquire the lock
 
-110. 
+110.
 
 111.             nextx, nexty = self.getNextPosition()
 
@@ -372,7 +371,7 @@ RGB tuples are kind of hard to read, so I usually set up some constants for them
 
 114.                 self.direction = self.getNewDirection()
 
-115. 
+115.
 
 116.                 if self.direction is None:
 
@@ -382,7 +381,7 @@ RGB tuples are kind of hard to read, so I usually set up some constants for them
 
 119.                     self.direction = self.getNewDirection()
 
-120. 
+120.
 
 121.                 if self.direction is not None:
 
@@ -390,7 +389,7 @@ RGB tuples are kind of hard to read, so I usually set up some constants for them
 
 123.                     nextx, nexty = self.getNextPosition()
 
-124. 
+124.
 
 125.             if self.direction is not None:
 
@@ -400,7 +399,7 @@ RGB tuples are kind of hard to read, so I usually set up some constants for them
 
 128.                 self.body.insert(0, {'x': nextx, 'y': nexty}) # update this worm's own state
 
-129. 
+129.
 
 130.                 # Check if we've grown too long, and cut off tail if we have.
 
@@ -416,7 +415,7 @@ RGB tuples are kind of hard to read, so I usually set up some constants for them
 
 136.                 self.direction = random.choice((UP, DOWN, LEFT, RIGHT)) # can't move, so just do nothing for now but set a new random direction
 
-137. 
+137.
 
 138.             GRID_LOCK.release()</pre>
 <p>The above code handles moving the worm one space. Since this involves reading and modifying <code>GRID</code>, we need to acquire the <code>GRID_LOCK</code> lock first. Essentially, the worm will try to move one space in the direction that it's direction member variable says. If this cell is beyond the border of the grid or is already occupied, then the worm will change its direction. If the worm is blocked on all sides, then the worm reverses itself so that the butt becomes the head and the head becomes the butt. If the worm still can't move in any direction, then it will just stay put for now.</p>
@@ -437,7 +436,7 @@ while time.time() - 5 > startOfWait:
 
 145.         # on the current position of its "head" and direction member.
 
-146. 
+146.
 
 147.         if self.direction == UP:
 
@@ -467,7 +466,7 @@ while time.time() - 5 > startOfWait:
 
 160.             assert False, 'Bad value for self.direction: %s' % self.direction
 
-161. 
+161.
 
 162.         return nextx, nexty</pre>
 <p>The <code>getNextPosition()</code> figures out where the worm will go next given the position of its head and the direction it is going.</p>
@@ -477,7 +476,7 @@ while time.time() - 5 > startOfWait:
 
 167.         y = self.body[HEAD]['y']
 
-168. 
+168.
 
 169.         # Compile a list of possible directions the worm can move.
 
@@ -499,13 +498,13 @@ while time.time() - 5 > startOfWait:
 
 178.             newDirection.append(RIGHT)
 
-179. 
+179.
 
 180.         if newDirection == []:
 
 181.             return None # None is returned when there are no possible ways for the worm to move.
 
-182. 
+182.
 
 183.         return random.choice(newDirection)</pre>
 <p>The <code>getNewDirection()</code> method returns a direction (one of the <code>UP</code>, <code>DOWN</code>, <code>LEFT</code>, or <code>RIGHT</code> strings) that is for an unoccupied cell within the grid. If there are no available cells the head could move towards, the method returns None.</p>
@@ -513,7 +512,7 @@ while time.time() - 5 > startOfWait:
 
 186.     global FPSCLOCK, DISPLAYSURF
 
-187. 
+187.
 
 188.     # Draw some walls on the grid
 
@@ -581,7 +580,7 @@ while time.time() - 5 > startOfWait:
 
 223.         drawGrid()
 
-224. 
+224.
 
 225.         pygame.display.update()
 
@@ -593,7 +592,7 @@ while time.time() - 5 > startOfWait:
 
 231.     global WORMS_RUNNING
 
-232. 
+232.
 
 233.     for event in pygame.event.get(): # event handling loop
 
@@ -625,7 +624,7 @@ while time.time() - 5 > startOfWait:
 
 250.     GRID_LOCK.acquire()
 
-251. 
+251.
 
 252.     for x in range(0, CELLS_WIDE):
 
@@ -635,11 +634,11 @@ while time.time() - 5 > startOfWait:
 
 255.                 continue # No body segment at this cell to draw, so skip it
 
-256. 
+256.
 
 257.             color = GRID[x][y] # modify the GRID data structure
 
-258. 
+258.
 
 259.             # Draw the body segment on the screen
 
@@ -649,7 +648,7 @@ while time.time() - 5 > startOfWait:
 
 262.             pygame.draw.rect(DISPLAYSURF, color,       (x * CELL_SIZE + 4, y * CELL_SIZE + 4, CELL_SIZE - 8, CELL_SIZE - 8))
 
-263. 
+263.
 
 264.     GRID_LOCK.release() # We're done messing with GRID, so release the lock.</pre>
 <p>Because this code reads the <code>GRID</code> variable, we will first acquire the <code>GRID_LOCK</code> lock. If a cell is occupied (that is, it is set to an RGB tuple value inside the <code>GRID</code> variable) the code draws in the cell.</p>
@@ -669,7 +668,7 @@ while time.time() - 5 > startOfWait:
 
 274.     # """
 
-275. 
+275.
 
 276.     squares = squares.split('\n')
 
@@ -712,7 +711,7 @@ while time.time() - 5 > startOfWait:
 <p>Actually, the way we have our code set up, even if we got rid of the locks it would still run almost perfectly. Nothing would crash, although there would sometimes be the case where two worms are approaching the same cell and end up both occupying it. They would then seemingly move through each other. Using locks ensures that only one worm can occupy a cell at any time.</p>
 <p>Good luck!</p>
 <p><img src="/blog/images/threadworms_screenshot.png?27f655" /></p>
-					
 
-    </body>
+
+</body>
 </html>
