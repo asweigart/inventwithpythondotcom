@@ -69,3 +69,9 @@ SKIP_COLOPHON = True
 #STATIC_PATHS = ['blogstatic']  # Don't use this, it causes the local pelican server to use locahost:8000 instead of localhost:8000/blog and makes it useless for testing.
 STATIC_PATHS = []  # Get rid of " Watched path does not exist" warning for the images folder, which I don't use.
 DELETE_OUTPUT_DIRECTORY = True
+
+
+OPEN_GRAPH = True
+OPEN_GRAPH_IMAGE = ''
+
+TWITTER_USERNAME = "AlSweigart"

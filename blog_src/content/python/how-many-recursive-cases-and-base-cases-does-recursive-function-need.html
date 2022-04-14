@@ -1,0 +1,69 @@
+<head>
+  <title>How Many Recursive Cases and Base Cases Does a Recursive Function Need?</title>
+  <meta name="tags" content="" />
+  <meta name="date" content="2022-03-20 12:00" />
+  <meta name="summary" content="<p><img src=&quot;/blogstatic/how-many-recursive-base-cases.webp&quot; /></p><p>Let's look at a simple example of a recursive function to see what it needs at minimum.</p>" />
+</head>
+<body>
+
+<p><img src=&quot;/blogstatic/how-many-recursive-base-cases.webp&quot; /></p>
+
+<p>All recursive functions need at least one recursive case and at least one base case. A recursive case is the set of circumstances where a recursive function calls itself. A base case is the set of circumstances where a recursive function returns without calling itself. Here's a simple recursive factorial function with one base case and one recursive case:</p>
+
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">factorial</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="c1"># BASE CASE</span>
+        <span class="k">return</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># RECURSIVE CASE</span>
+        <span class="k">return</span> <span class="n">n</span> <span class="o">*</span> <span class="n">factorial</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+<p>When you call <code>factorial(5)</code>, it returns
+
+<p>If a recursive function has zero recursive cases, it never calls itself and is not a recursive function. The following buggy factorial function has a base case but no recursive case:</p>
+
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">factorialNoRecursiveCase</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+  <span class="k">if</span> <span class="kc">True</span><span class="p">:</span>
+      <span class="c1"># BASE CASE</span>
+      <span class="k">return</span> <span class="mi">1</span>
+</pre></div>
+
+
+<p>When <code>factorialNoRecursiveCase(5)</code> is called, it returns <code>1</code>. The trouble is, it returns <code>1</code> for every argument.</p>
+
+<p>If a recursive function has zero base ases, it never returns and only recurses. This will eventually cause a stack overflow (unless some other . The following buggy factorial function has a recursive case but no base case:</p>
+
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">factorialNoBaseCase</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+  <span class="k">if</span> <span class="kc">True</span><span class="p">:</span>
+      <span class="c1"># RECURSIVE CASE</span>
+      <span class="k">return</span> <span class="n">n</span> <span class="o">*</span> <span class="n">factorialNoBaseCase</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+
+<p>When <code>factorialNoBaseCase(5)</code> is called, it causes a <code>RecursionError: maximum recursion depth exceeded</code> error.</p>
+
+<p>There is one more requirement for a correctly working recursive function: the recursive function calls must eventually get closer to a base case. Otherwise, the base case is never reached and it will be as though no base case exists, causing a stack overflow. The following buggy factorial function has a recursive case and a base case but never reaches the base case:</p>
+
+<div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">factorialNoReachBaseCase</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="c1"># BASE CASE</span>
+        <span class="k">return</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># RECURSIVE CASE</span>
+        <span class="k">return</span> <span class="n">n</span> <span class="o">*</span> <span class="n">factorialNoReachBaseCase</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># Adds one instead of subtracts one!</span>
+</pre></div>
+
+<p>When <code>factorialNoReachBaseCase(5)</code> is called, it never reaches the base case and causes a <code>RecursionError: maximum recursion depth exceeded</code> error.</p>
+
+<p>When writing your own recursive functions, you should ask yourself three questions:</p>
+
+<ol>
+  <li>What is the base case?</li>
+  <li>What arguments are passed to the recursive function call?</li>
+  <li>Does the argument get closer to the base case?</li>
+</ol>
+
+<p>If you'd like to learn more about recursion, check out my book, <a href="https://nostarch.com/recursive-book-recursion">The Recursive Book of Recursion"</a> from No Starch Press.</p>
+
+</body>
