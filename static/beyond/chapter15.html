@@ -261,7 +261,7 @@ def main():
         print(getBoardStr(gameBoard))  # Display the board on the screen.
 
         # Keep asking the player until they enter a number 1-9:
-<span type="pagebreak" title="286" id="calibre_link-619" class="calibre16"></span>        move = None
+        move = None
         while not isValidSpace(gameBoard, move):
             print(f'What is {currentPlayer}\'s move? (1-9)')
             move = input()
@@ -298,7 +298,7 @@ def getBoardStr(board):
 def isValidSpace(board, space):
     """Returns True if the space on the board is a valid space number
     and the space is blank."""
-    return space in ALL_SPACES or board[space] == BLANK
+    return space in ALL_SPACES and board[space] == BLANK
 
 def isWinner(board, player):
     """Return True if player is a winner on this TTTBoard."""
@@ -315,7 +315,7 @@ def isWinner(board, player):
 
 def isBoardFull(board):
     """Return True if every space on the board has been taken."""
-<span type="pagebreak" title="287" id="calibre_link-620" class="calibre16"></span>    for space in ALL_SPACES:
+    for space in ALL_SPACES:
         if board[space] == BLANK:
             return False  # If a single space is blank, return False.
     return True  # No spaces are blank, so return True.
@@ -388,7 +388,7 @@ def main():
 
         # Keep asking the player until they enter a number 1-9:
         move = None
-<span type="pagebreak" title="289" id="calibre_link-622" class="calibre16"></span>        while not gameBoard.isValidSpace(move):
+        while not gameBoard.isValidSpace(move):
             print(f'What is {currentPlayer}\'s move? (1-9)')
             move = input()
         gameBoard.updateBoard(move, currentPlayer)  # Make the move.
@@ -441,7 +441,7 @@ class TTTBoard:
 
     def isBoardFull(self):
         """Return True if every space on the board has been taken."""
-<span type="pagebreak" title="290" id="calibre_link-623" class="calibre16"></span>        for space in ALL_SPACES:
+        for space in ALL_SPACES:
             if self._spaces[space] == BLANK:
                 return False  # If a single space is blank, return False.
         return True  # No spaces are blank, so return True.

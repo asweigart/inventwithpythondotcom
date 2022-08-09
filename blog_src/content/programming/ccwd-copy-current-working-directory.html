@@ -25,6 +25,16 @@ C:\Users\Al\Desktop></pre>
 
 <p><a href="/blogstatic/ccwd.exe">ccwd.exe executable program</a></p>
 
-<p>I recommend placing the ccwd.exe file in the C:\Windows folder or someplace on the system PATH.</p>
+<p>I recommend placing the ccwd.exe file in the C:\Windows folder or someplace on the system PATH (i.e. one of the folders listed in your <a href="https://en.wikipedia.org/wiki/PATH_(variable)">PATH environment variable</a>).</p>
+
+<p>UPDATE 2022/05/04: If you don't want to download the sketchy looking, unsigned .exe file from this page, you can download a batch file to use instead:</p>
+
+<p><a href="/blogstatic/ccwd.bat">ccwd.bat batch file</a></p>
+
+<p>The code in this batch file is easy enough to understand. It uses the Get-Location cmdlet for Powershell (preinstalled on Windows 7 SP1 and later) to get the current working directory and stores it in a temporary variable. Then it uses Set-Clipboard to put the contents of this variable on the clipboard.</p>
+
+<p>TODO</p>
+
+<p><code>pwd | tr -d '\n' | pbcopy</code>
 
 </body>
