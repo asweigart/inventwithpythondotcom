@@ -1,0 +1,85 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="../style_pythongently.css" rel="stylesheet" type="text/css" />
+<title>Exercise 9 - Chess Square Color</title></head><body style="background-color: #fffeee;"><p><a href="../exercise8/">Prev - #8 Read Write File</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise10/">Next - #10 Find and Replace</a></p>
+
+
+
+
+<h1><a name="_Toc115418678"></a><a name="_Toc115359989">Exercise #9: Chess
+Square Color</a></h1>
+<p class="ChapterTitleCodeExample">getChessSquareColor(8, 8)  <span style="font-size:13.0pt">→ </span> 'white'<br/>
+getChessSquareColor(2, 1)  <span style="font-size:13.0pt">→ </span> 'black'</p>
+<p class="ChapterTitleCodeExample"><img border="0" height="144" id="Picture 20" src="../images/image010.jpg" width="144"/></p>
+<p class="Body">A chess board has a checker-pattern of white and black tiles. In
+this program, you’ll determine a pattern to the color of the squares based on
+their column and row. This program challenges you to take a real-world object
+such as a chess board, determine the patterns behind its design, and translate
+that into Python code.</p>
+<p class="HeadA">Exercise Description</p>
+<p class="Body">Write a <code>getChessSquareColor()</code> function
+that has parameters <code>column</code> and <code>row</code>.
+The function either returns <code>'black'</code> or <span class="Literal">'white'</span> depending on the color at the specified <span class="Literal">column</span> and <code>row</code>. Chess boards
+are 8 x 8 spaces in size, and the columns and rows in this program begin at <span class="Literal">0</span> and end at <code>7</code> like in Figure
+9-1. If the arguments for <code>column</code> or <span class="Literal">row</span> are outside the <code>0</code> to <span class="Literal">7</span> range, the function returns a blank string.</p>
+<p class="Body">Note that chess boards always have a white square in the top left
+corner.</p>
+<p class="Body"><img border="0" height="338" id="Picture 7" src="../images/image011.png" width="332"/></p>
+<p class="MsoCaption"><span lang="EN-CA">Figure 9-1: A chess board with labeled
+columns and rows.</span></p>
+<p class="Body">These Python <code>assert</code> statements stop
+the program if their condition is <code>False</code>. Copy them
+to the bottom of your solution program. Your solution is correct if the following
+<code>assert</code> statements’ conditions are all <span class="Literal">True</span>:</p>
+<p class="CodeCxSpFirst">assert getChessSquareColor(1, 1) == 'white'</p>
+<p class="CodeCxSpMiddle">assert getChessSquareColor(2, 1) == 'black'</p>
+<p class="CodeCxSpMiddle">assert getChessSquareColor(1, 2) == 'black'</p>
+<p class="CodeCxSpMiddle">assert getChessSquareColor(8, 8) == 'white'</p>
+<p class="CodeCxSpMiddle">assert getChessSquareColor(0, 8) == ''</p>
+<p class="CodeCxSpLast">assert getChessSquareColor(2, 9) == ''</p>
+<p class="Body">Try to write a solution based on the information in this
+description. If you still have trouble solving this exercise, read the <span class="Bold">Solution Design</span> and <span class="Bold">Special Cases and
+Gotchas</span> sections for additional hints.</p>
+<p class="Body">Prerequisite concepts: Boolean operators, modulo operator</p>
+<p class="HeadA">Solution Design</p>
+<p class="Body">There is a pattern to the colors of a chess board. If the column
+and row are both even or both odd, then the space is white. If one is odd and
+the other is even, the space is black. Exercise #3, “Odd &amp; Even” shows how
+the <code>%</code> modulo operator determines if a number (such
+as the one in the <code>column</code> and <code>row</code>
+parameter) is even or odd. Use this to write a condition that determines if the
+oddness or evenness of the column and row match.</p>
+<p class="HeadA">Special Cases and Gotchas</p>
+<p class="Body">The function should first check whether the column or row
+argument is outside the <code>0</code> to <code>7</code>
+range of valid values. If so, the function should immediately return a blank
+string.</p>
+<p class="Body">Now try to write a solution based on the information in the
+previous sections. If you still have trouble solving this exercise, read the <span class="Bold">Solution Template</span> section for additional hints.</p>
+<p class="HeadA">Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/chesscolor-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst">def getChessSquareColor(column, row):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># If the column and row is
+out of bounds, return a blank string:</span></p>
+<p class="CodeCxSpMiddle">    if column ____ or ____ &gt; 8 or ____ &lt; 1 or row
+____:</p>
+<p class="CodeCxSpMiddle">        return ''</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># If the even/oddness of
+the column and row match, return 'white':</span></p>
+<p class="CodeCxSpMiddle">    if ____ % 2 == row % ____:</p>
+<p class="CodeCxSpMiddle">        return 'white'</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># If they don't match, then
+return 'black':</span></p>
+<p class="CodeCxSpMiddle">    else:</p>
+<p class="CodeCxSpLast">        return 'black'</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/chesscolor.py</span>. You can
+view each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/chesscolor-debug/</span>.</p>
+
+
+
+<p><a href="../exercise8/">Prev - #8 Read Write File</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise10/">Next - #10 Find and Replace</a></p></body></html>

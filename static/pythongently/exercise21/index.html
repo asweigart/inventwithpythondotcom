@@ -1,0 +1,151 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="../style_pythongently.css" rel="stylesheet" type="text/css" />
+<title>Exercise 21 - Validate Date</title></head><body style="background-color: #fffeee;"><p><a href="../exercise20/">Prev - #20 Leap Year</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise22/">Next - #22 Rock, Paper, Scissors</a></p>
+
+
+
+
+<h1><a name="_Toc115418690"></a><a name="_Toc115360001">Exercise #21: Validate
+Date</a></h1>
+<p class="ChapterTitleCodeExample">isValidDate(2005, 3, 29)  <span style="font-size:13.0pt">→ </span> True<br/>
+isValidDate(2005, 13, 32)  <span style="font-size:13.0pt">→ </span> False</p>
+<p class="ChapterTitleCodeExample"><span style='font-size:8.0pt;font-family:"MS Shell Dlg 2","sans-serif"'><img border="0" height="144" id="Picture 32" src="../images/image025.jpg" width="156"/></span></p>
+<p class="Body">You can represent a date with three integers for the year, month,
+and day, but this doesn’t mean that any integers represent a valid date. After
+all, there is no 13<sup>th</sup> month of the year or 32<sup>nd</sup> day of
+any month. This exercise has you check if a year/month/day combination is
+valid, given that different months have different numbers of days. You’ll use
+the solution you wrote for Exercise #20, “Leap Year” as part of the solution
+for this exercise, so finish Exercise #20 before attempting this one.</p>
+<p class="HeadA">Exercise Description</p>
+<p class="Body">Write an <code>isValidDate()</code> function with
+parameters <code>year</code>, <code>month</code>,
+and <code>day</code>. The function should return <span class="Literal">True</span> if the integers provided for these parameters
+represent a valid date. Otherwise, the function returns <code>False</code>.
+Months are represented by the integers <code>1</code> (for
+January) to <code>12</code> (for December) and days are
+represented by integers <code>1</code> up to <code>28</code>,
+<code>29</code>, <code>30</code>, or <span class="Literal">31</span> depending on the month and year. Your solution should
+import your <i>leapyear.py</i>
+program from Exercise #20 for its <code>isLeapYear()</code>
+function, as February 29<sup>th</sup> is a valid date on leap years.</p>
+<p class="Body">September, April, June, and November have 30 days. The rest have
+31, except February which has 28 days. On leap years, February has 29 days.</p>
+<p class="Body">These Python <code>assert</code> statements stop the
+program if their condition is <code>False</code>. Copy them to
+the bottom of your solution program. Your solution is correct if the following <span class="Literal">assert</span> statements’ conditions are all <code>True</code>:</p>
+<p class="CodeCxSpFirst">assert isValidDate(1999, 12, 31) == True</p>
+<p class="CodeCxSpMiddle">assert isValidDate(2000, 2, 29) == True</p>
+<p class="CodeCxSpMiddle">assert isValidDate(2001, 2, 29) == False</p>
+<p class="CodeCxSpMiddle">assert isValidDate(2029, 13, 1) == False</p>
+<p class="CodeCxSpMiddle">assert isValidDate(1000000, 1, 1) == True</p>
+<p class="CodeCxSpMiddle">assert isValidDate(2015, 4, 31) == False</p>
+<p class="CodeCxSpMiddle">assert isValidDate(1970, 5, 99) == False</p>
+<p class="CodeCxSpMiddle">assert isValidDate(1981, 0, 3) == False</p>
+<p class="CodeCxSpMiddle">assert isValidDate(1666, 4, 0) == False</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">import datetime</p>
+<p class="CodeCxSpMiddle">d = datetime.date(1970, 1, 1)</p>
+<p class="CodeCxSpMiddle">oneDay = datetime.timedelta(days=1)</p>
+<p class="CodeCxSpMiddle">for i in range(1000000):</p>
+<p class="CodeCxSpMiddle">    assert isValidDate(d.year, d.month, d.day) == True</p>
+<p class="CodeCxSpLast">    d += oneDay</p>
+<p class="Body">Try to write a solution based on the information in this
+description. If you still have trouble solving this exercise, read the <span class="Bold">Solution Design and Special Cases and Gotchas</span> sections for
+additional hints.</p>
+<p class="Body">Prerequisite concepts: <code>import</code>
+statements, Boolean operators, chaining operators, <code>elif</code>
+statements</p>
+<p class="HeadA">Solution Design</p>
+<p class="Body">Any integer is a valid value for the <code>year</code>
+parameter, but we do need to pass <code>year</code> to our <span class="Literal">leapyear.isLeapYear()</span> function if <code>month</code>
+is set to <code>2</code> (February). Be sure your program has an <span class="Literal">import leapyear</span> instruction and that the <span class="Italic"><span style='font-family:"serif"'>leapyear.py</span></span>
+file is in the same folder as your solution’s file.</p>
+<p class="Body">Any <code>month</code> values outside of <span class="Literal">1</span> to <code>12</code> would be an invalid
+date. In Python, you can chain together operators as a shortcut: the expression
+<code>1 &lt;= month &lt;= 12</code> is the same as the expression
+<code>(1 &lt;= month) and (month &lt;= 12)</code>. You can use
+this to determine if your <code>month</code> and <span class="Literal">day</span> parameters are within a valid range.</p>
+<p class="Body">The number of days in a month depends on the month:</p>
+<p class="Body" style="margin-left:.75in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>If <code>month</code> is <code>9</code>,
+<code>4</code>, <code>6</code>, or <span class="Literal">11</span> (September, April, June, and November, respectively)
+the maximum value for <code>day</code> is <code>30</code>.</p>
+<p class="Body" style="margin-left:.75in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>If <code>month</code> is <code>2</code>
+(February), the maximum value for <code>day</code> is <span class="Literal">28</span> (or <code>29</code> if <span class="Literal">leapyear.isLeapYear(year)</span> returns <code>True</code>).</p>
+<p class="Body" style="margin-left:.75in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>Otherwise, the maximum value for day is <code>31</code>.</p>
+<p class="Body">Like the solution for Exercise #20, “Leap Year,” this solution is
+a series of <code>if</code>, <code>elif</code>, or <span class="Literal">else</span> statements.</p>
+<p class="HeadA">Special Cases and Gotchas</p>
+<p class="Body">To simplify your code as much as possible, think about the cases
+that can cause the function to return as soon as possible. For example, if <span class="Literal">month</span> is outside of the <code>1</code> to <span class="Literal">12</span> range, the function returns <code>False</code>.
+There’s no other set of circumstances you need to check; the function can
+immediately return <code>False</code>. If it doesn’t return, you
+can assume that month contains a valid value for the rest of the function.</p>
+<p class="Body">The other immediate check is if <code>leapyear.isLeapYear(year)</code>
+returns <code>True</code> and <code>month</code> is
+<code>2</code> and day is <code>29</code>, the
+function can immediately return <code>True</code>. If the
+function hasn’t returned <code>True</code> for the leap day, you
+can assume that leap years are irrelevant for the rest of the code in the
+function.</p>
+<p class="Body">Now try to write a solution based on the information in the
+previous sections. If you still have trouble solving this exercise, read the <span class="Bold">Solution Template</span> section for additional hints.</p>
+<p class="HeadA">Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/validatedate-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst"><span class="CodeComment"># Import the leapyear module for
+its isLeapYear() function:</span></p>
+<p class="CodeCxSpMiddle">____ leapyear</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">def isValidDate(year, month, day):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># If month is outside the
+bounds of 1 to 12, return False:</span></p>
+<p class="CodeCxSpMiddle">    if not (1 ____ month ____ 12):</p>
+<p class="CodeCxSpMiddle">        return ____</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># After this point, you can
+assume the month is valid.</span></p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># If the year is a leap
+year and the date is Feb 29th, it is valid:</span></p>
+<p class="CodeCxSpMiddle">    if leapyear.isLeapYear(____) and ____ == 2 and ____
+== 29:</p>
+<p class="CodeCxSpMiddle">        return ____</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># After this point, you can
+assume the year is not a leap year.</span></p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Check for invalid dates
+in 31-day months:</span></p>
+<p class="CodeCxSpMiddle">    if month in (1, 3, 5, 7, 8, 10, 12) and not (1
+&lt;= ____ &lt;= 31):</p>
+<p class="CodeCxSpMiddle">        return ____</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Check for invalid dates
+in 30-day months:</span></p>
+<p class="CodeCxSpMiddle">    elif ____ in (4, 6, 9, 11) and not (1 &lt;= day
+&lt;= 30):</p>
+<p class="CodeCxSpMiddle">        return ____</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Check for invalid dates
+in February:</span></p>
+<p class="CodeCxSpMiddle">    elif month == ____ and not (1 &lt;= ____ &lt;= 28):</p>
+<p class="CodeCxSpMiddle">        return ____</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Date passes all checks
+and is valid, so return True:</span></p>
+<p class="CodeCxSpLast">    return ____</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/validatedate.py</span>. You can
+view each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/validatedate-debug/</span>.</p>
+<p class="HeadA">Further Reading</p>
+<p class="Body">Python’s <code>datetime</code> module has several
+features for dealing with dates and calendar data. You can learn more about it
+in Chapter 17 of <span class="Italic"><span style='font-family:"serif"'>Automate
+the Boring Stuff with Python</span></span> at <span class="MsoHyperlink">https://automatetheboringstuff.com/2e/chapter17/</span>.</p>
+
+
+
+<p><a href="../exercise20/">Prev - #20 Leap Year</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise22/">Next - #22 Rock, Paper, Scissors</a></p></body></html>

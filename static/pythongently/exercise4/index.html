@@ -1,0 +1,115 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="../style_pythongently.css" rel="stylesheet" type="text/css" />
+<title>Exercise 4 - Area & Volume</title></head><body style="background-color: #fffeee;"><p><a href="../exercise3/">Prev - #3 Odd & Even</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise5/">Next - #5 Fizz Buzz</a></p>
+
+
+
+
+<h1><a name="_Toc115418673"></a><a name="_Toc115359984">Exercise #4: Area &amp;
+Volume</a></h1>
+<p class="ChapterTitleCodeExample">         area(10, 4)  <span style="font-size:
+13.0pt">→ </span> 40<br/>
+    perimeter(10, 4)  <span style="font-size:13.0pt">→ </span> 28<br/>
+     volume(10, 4, 5)  <span style="font-size:13.0pt">→ </span> 200<br/>
+surfaceArea(10, 4, 5)  <span style="font-size:13.0pt">→ </span> 220</p>
+<p class="ChapterTitleCodeExample"><span style='font-size:8.0pt;font-family:"MS Shell Dlg 2","sans-serif"'><img height="144" id="Picture 10" src="../images/image004.jpg" width="192"/></span></p>
+<p class="Body">Area, perimeter, volume, and surface area are straightforward
+calculations. This exercise is similar to Exercise #2, “Temperature Conversion”
+and Exercise #3, “Odd &amp; Even.” Each function in this exercise is a simple
+calculation and <code>return</code> statement. However, area and
+volume are slightly more complicated because they involve multiple parameters.
+This exercise continues to challenge you to translate mathematical formulas
+into Python code.</p>
+<p class="HeadA">Exercise Description</p>
+<p class="Body">You will write four functions for this exercise. The functions <span class="Literal">area()</span> and <code>perimeter()</code> have <span class="Literal">length</span> and <code>width</code> parameters and
+the functions <code>volume()</code> and <code>surfaceArea()</code>
+have <code>length</code>, <code>width</code>, and <span class="Literal">height</span> parameters. These functions return the area,
+perimeter, volume, and surface area, respectively.</p>
+<p class="Body">The formulas for calculating area, perimeter, volume, and surface
+area are based on the length (L), width (W), and height (H) of the shape:</p>
+<p class="Body" style="margin-left:.75in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>area = L × W</p>
+<p class="Body" style="margin-left:.75in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>perimeter = L + W + L + W</p>
+<p class="Body" style="margin-left:.75in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>volume = L × W × H</p>
+<p class="Body" style="margin-left:.75in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>surface area = (L × W × 2) + (L × H × 2) + (W × H × 2)</p>
+<p class="Body">Area is a two-dimensional measurement from multiplying length and
+width. Perimeter is the sum of all of the four one-dimensional lines around the
+rectangle. Volume is a three-dimensional measurement from multiplying length,
+width, and height. Surface area is the sum of all six of the two-dimensional
+areas around the cube. Each of these areas comes from multiplying two of the
+three length, width, or height dimensions.</p>
+<p class="Body">You can see what these formulas measure in Figure 4-1.</p>
+<p class="Body"><img height="503" id="Picture 5" src="../images/image005.png" width="503"/></p>
+<p class="MsoCaption"><span lang="EN-CA">Figure 4-1: The components of area,
+volume, perimeter, and surface area.</span></p>
+<p class="Body">These Python <code>assert</code> statements stop
+the program if their condition is <code>False</code>. Copy them
+to the bottom of your solution program. Your solution is correct if the following
+<code>assert</code> statements’ conditions are all <span class="Literal">True</span>:</p>
+<p class="CodeCxSpFirst">assert area(10, 10) == 100</p>
+<p class="CodeCxSpMiddle">assert area(0, 9999) == 0</p>
+<p class="CodeCxSpMiddle">assert area(5, 8) == 40</p>
+<p class="CodeCxSpMiddle">assert perimeter(10, 10) == 40</p>
+<p class="CodeCxSpMiddle">assert perimeter(0, 9999) == 19998</p>
+<p class="CodeCxSpMiddle">assert perimeter(5, 8) == 26</p>
+<p class="CodeCxSpMiddle">assert volume(10, 10, 10) == 1000</p>
+<p class="CodeCxSpMiddle">assert volume(9999, 0, 9999) == 0</p>
+<p class="CodeCxSpMiddle">assert volume(5, 8, 10) == 400</p>
+<p class="CodeCxSpMiddle">assert surfaceArea(10, 10, 10) == 600</p>
+<p class="CodeCxSpMiddle">assert surfaceArea(9999, 0, 9999) == 199960002</p>
+<p class="CodeCxSpLast">assert surfaceArea(5, 8, 10) == 340</p>
+<p class="Body">Try to write a solution based on the information in this
+description. If you still have trouble solving this exercise, read the <span class="Bold">Solution Design</span> and <span class="Bold">Special Cases and
+Gotchas</span> sections for additional hints.</p>
+<p class="Body">Prerequisite concepts: math operators, operator precedence</p>
+<p class="HeadA">Solution Design</p>
+<p class="Body">Use the same strategy you used in Exercise #2, “Temperature
+Conversion” and translate the math formulas into Python code. Replace the L, W,
+and H with the <code>length</code>, <code>width</code>,
+and <code>height</code> parameters. Replace the + addition and ×
+multiplication signs with the <code>+</code> and <span class="Literal">*</span> Python operators. These functions can be one line long:
+a <code>return</code> statement that calculates the result and
+returns it.</p>
+<p class="HeadA">Special Cases and Gotchas</p>
+<p class="Body">Length, width, and height can only be positive numbers. You could
+write additional code that checks if any of these are negative numbers, and
+raise an exception in that case. However, this isn’t a requirement for this
+exercise.</p>
+<p class="Body">Now try to write a solution based on the information in the
+previous sections. If you still have trouble solving this exercise, read the <span class="Bold">Solution Template</span> section for additional hints.</p>
+<p class="HeadA">Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/areavolume-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst">def area(length, width):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Return the product of the
+length and width:</span></p>
+<p class="CodeCxSpMiddle">    return ____ * ____</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">def perimeter(length, width):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Return the sum of the
+length twice and the width twice:</span></p>
+<p class="CodeCxSpMiddle">    return ____ * 2 + width * ____</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">def volume(length, width, height):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Return the product of the
+length, width, and height:</span></p>
+<p class="CodeCxSpMiddle">    return ____ * ____ * ____</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">def surfaceArea(length, width, height):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Return the sum of the area
+of each of the six sides:</span></p>
+<p class="CodeCxSpLast">    return ((length * ____) + (length * ____) + (width * ____))
+* 2</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/areavolume.py</span>. You can
+view each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/areavolume-debug/</span>.</p>
+
+
+
+<p><a href="../exercise3/">Prev - #3 Odd & Even</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise5/">Next - #5 Fizz Buzz</a></p></body></html>

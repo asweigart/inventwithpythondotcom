@@ -1,0 +1,102 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="../style_pythongently.css" rel="stylesheet" type="text/css" />
+<title>Exercise 24 - Every 15 Minutes</title></head><body style="background-color: #fffeee;"><p><a href="../exercise23/">Prev - #23 99 Bottles of Beer</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise25/">Next - #25 Multiplication Table</a></p>
+
+
+
+
+<h1><a name="_Toc115418693"></a><a name="_Toc115360004">Exercise #24: Every 15
+Minutes</a></h1>
+<p class="ChapterTitleCodeExample"><img border="0" height="144" id="Picture 35" src="../images/image028.jpg" width="502"/></p>
+<p class="Body">Clocks have an unusual counting system compared to the normal
+decimal number system we’re familiar with. Instead of beginning at 0 and going
+to 1, 2, and so on forever, clocks start at 12 and go on to 1, 2, and so on up
+to 11. Then it loops back to 12 again. (Clocks are quite odd if you think about
+it: 12 am comes before 11 am and 12 pm comes before 11 pm.) This is a bit more
+complicated than simply writing a program that counts upward. This exercise
+requires using nested <code>for</code> loops to loop over the
+minutes, the hours, and the am and pm halve of the day.</p>
+<p class="HeadA">Exercise Description</p>
+<p class="Body">Write a program that displays the time for every 15 minute
+interval from 12:00 am to 11:45 pm. Your solution should produce the following
+output:</p>
+<p class="CodeCxSpFirst">12:00 am</p>
+<p class="CodeCxSpMiddle">12:15 am</p>
+<p class="CodeCxSpMiddle">12:30 am</p>
+<p class="CodeCxSpMiddle">12:45 am</p>
+<p class="CodeCxSpMiddle">1:00 am</p>
+<p class="CodeCxSpMiddle">1:15 am</p>
+<p class="CodeCxSpMiddle">--cut--</p>
+<p class="CodeCxSpMiddle">11:30 pm</p>
+<p class="CodeCxSpLast">11:45 pm</p>
+<p class="Body">There are 96 lines in the full output.</p>
+<p class="Body">Try to write a solution based on the information in this
+description. If you still have trouble solving this exercise, read the <span class="Bold">Solution Design and Special Cases and Gotchas</span> sections for
+additional hints.</p>
+<p class="Body">Prerequisite concepts: <code>for</code> loops,
+lists, nested loops, string concatenation</p>
+<p class="HeadA">Solution Design</p>
+<p class="Body">This solution requires the use of three nested <span class="Literal">for</span> loops. The outermost <code>for</code> loop
+iterates over <code>'am'</code> and <code>'pm'</code>.
+The second <code>for</code> loop iterates over twelve hours,
+starting with <code>'12'</code>, then <code>'1'</code>,
+then <code>'2'</code>, and so on until <code>'11'</code>.
+The third <code>for</code> loop iterates over the minutes in
+15-minute increments: <code>'00'</code>, <code>'15'</code>,
+<code>'30'</code>, and <code>'45'</code>. Note that
+the hours and minutes values are strings, not integers, because we need to
+concatenate them into our final string, like: <span class="Literal">'12' + ':' +
+'00' + ' ' + 'am'</span> evaluates to <code>'12:00 am'</code></p>
+<p class="Body">You’re used to <code>for</code> loops iterating
+over a range of integers from the <code>range()</code> function.
+But Python’s <code>for</code> loops can iterate over lists of any
+values. For example, enter the following into the interactive shell:</p>
+<p class="CodeCxSpFirst">&gt;&gt;&gt; for i in ['Alice', 'Bob', 'Carol']:</p>
+<p class="CodeCxSpMiddle">...     print('Hello ' + i)</p>
+<p class="CodeCxSpMiddle">...</p>
+<p class="CodeCxSpMiddle">Hello Alice</p>
+<p class="CodeCxSpMiddle">Hello Bob</p>
+<p class="CodeCxSpLast">Hello Carol</p>
+<p class="Body">What a <code>for</code> loop does is iterate over a
+sequence of values. The following interactive shell example is the equivalent <span class="Literal">for i in range(4)</span>:</p>
+<p class="CodeCxSpFirst">&gt;&gt;&gt; for i in [0, 1, 2, 3]:</p>
+<p class="CodeCxSpMiddle">...     print(i)</p>
+<p class="CodeCxSpMiddle">...</p>
+<p class="CodeCxSpMiddle">0</p>
+<p class="CodeCxSpMiddle">1</p>
+<p class="CodeCxSpMiddle">2</p>
+<p class="CodeCxSpLast">3</p>
+<p class="Body">In this case, we explicitly typed out the integers to iterate in
+a list rather than use the more convenient <code>range(4)</code>.
+But they produce identical results. And explicitly typing out the integers in a
+list becomes prohibitively long for large ranges such as <code>range(1000)</code>.</p>
+<p class="HeadA">Special Cases and Gotchas</p>
+<p class="Body">The order of the nested <code>for</code> loops is
+important. You want the innermost <code>for</code> loop to
+iterate over minutes, the next innermost to iterate over hours, and the
+outermost <code>for</code> loop to iterate over <span class="Literal">'am'</span> and <code>'pm'</code>. </p>
+<p class="Body">Now try to write a solution based on the information in the
+previous sections. If you still have trouble solving this exercise, read the <span class="Bold">Solution Template</span> section for additional hints.</p>
+<p class="HeadA">Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/every15minutes-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst"><span class="CodeComment"># Loop over am and pm:</span></p>
+<p class="CodeCxSpMiddle">for meridiem in [____, 'pm']:</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Loop over every hour:</span></p>
+<p class="CodeCxSpMiddle">    for hour in [____, '1', '2', '3', '4', '5', '6',
+'7', '8', '9', '10', '11']:</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># Loop over every 15
+minutes:</span></p>
+<p class="CodeCxSpMiddle">        for minutes in ['00', ____, ____, '45']:</p>
+<p class="CodeCxSpMiddle">            <span class="CodeComment"># Print the time:</span></p>
+<p class="CodeCxSpLast">            print(____ + ':' + ____ + ' ' + ____)</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/every15minutes.py</span>. You
+can view each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/every15minutes-debug/</span>.</p>
+
+
+
+<p><a href="../exercise23/">Prev - #23 99 Bottles of Beer</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise25/">Next - #25 Multiplication Table</a></p></body></html>

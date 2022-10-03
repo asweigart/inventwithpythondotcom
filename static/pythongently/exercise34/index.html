@@ -1,0 +1,111 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="../style_pythongently.css" rel="stylesheet" type="text/css" />
+<title>Exercise 34 - Uppercase Letters</title></head><body style="background-color: #fffeee;"><p><a href="../exercise33/">Prev - #33 Comma-Formatted Numbers</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise35/">Next - #35 Title Case</a></p>
+
+
+
+
+<h1><a name="_Toc115418703"></a><a name="_Toc115360014">Exercise #34: Uppercase
+Letters</a></h1>
+<p class="ChapterTitleCodeExample">getUppercase('Hello')  <span style="font-size:
+13.0pt">→ </span> 'HELLO'</p>
+<p class="ChapterTitleCodeExample"><span style='font-size:8.0pt;font-family:"MS Shell Dlg 2","sans-serif"'><img border="0" height="144" id="Picture 45" src="../images/image039.jpg" width="281"/></span></p>
+<p class="Body">Python is known as a “batteries included” language because its
+standard library comes with many useful functions and modules. One of these is
+the <code>upper()</code> string method, which returns an
+uppercase version of the string: <code>'Hello'.upper()</code>
+evaluates to <code>'HELLO'</code>. However, in this exercise,
+you’ll create your own implementation of this method.</p>
+<p class="HeadA">Exercise Description</p>
+<p class="Body">Write a <code>getUppercase()</code> function with a
+<code>text</code> string parameter. The function returns a string
+with all lowercase letters in <code>text</code> converted to
+uppercase. Any non-letter characters in <code>text</code> remain
+as they are. For example, <code>'Hello'</code> causes <span class="Literal">getUppercase()</span> to return <code>'HELLO'</code>
+but <code>'goodbye 123!'</code> returns <span class="Literal">'GOODBYE
+123!'</span>.</p>
+<p class="Body">These Python <code>assert</code> statements stop
+the program if their condition is <code>False</code>. Copy them
+to the bottom of your solution program. Your solution is correct if the following
+<code>assert</code> statements’ conditions are all <span class="Literal">True</span>:</p>
+<p class="CodeCxSpFirst">assert getUppercase('Hello') == 'HELLO'</p>
+<p class="CodeCxSpMiddle">assert getUppercase('hello') == 'HELLO'</p>
+<p class="CodeCxSpMiddle">assert getUppercase('HELLO') == 'HELLO'</p>
+<p class="CodeCxSpMiddle">assert getUppercase('Hello, world!') == 'HELLO, WORLD!'</p>
+<p class="CodeCxSpMiddle">assert getUppercase('goodbye 123!') == 'GOODBYE 123!'</p>
+<p class="CodeCxSpMiddle">assert getUppercase('12345') == '12345'</p>
+<p class="CodeCxSpLast">assert getUppercase('') == ''</p>
+<p class="Body">Try to write a solution based on the information in this
+description. If you still have trouble solving this exercise, read the <span class="Bold">Solution Design and Special Cases and Gotchas</span> sections for
+additional hints.</p>
+<p class="Body">Prerequisite concepts: <code>for</code> loops, <span class="Literal">in</span> operator, string concatenation, indexes</p>
+<p class="HeadA">Solution Design</p>
+<p class="Body">The <code>getUppercase()</code> function should
+start with a new, empty string that will only contain non-lowercase characters.
+Then, we can use a loop to go over each character in the <code>text</code>
+parameter, copying characters to this new string. If the character is a
+lowercase letter, we can copy the uppercase version of that letter. Otherwise,
+a non-lowercase letter character can be copied to the new string as-is. After
+the loop finishes, <code>getUppercase()</code> returns the
+newly-built uppercase string.</p>
+<p class="Body">Getting the uppercase version of a letter will involve a dictionary
+that maps lowercase letters to uppercase letters. If a character from the <span class="Literal">text</span> parameter exists as a key in the dictionary, we know
+it is a letter and the dictionary contains its corresponding uppercase version.
+This uppercase letter is concatenated to the end of the returned string. Otherwise,
+the original character from <code>text</code> is concatenated to
+the returned string.</p>
+<p class="HeadA">Special Cases and Gotchas</p>
+<p class="Body">The <code>getUppercase()</code> function should
+work equally well whether the <code>text</code> parameter is in
+lowercase or already in uppercase. Also, any non-letter characters aren't
+affected by the <code>getUppercase()</code> function.</p>
+<p class="Body">Note that using the dictionary that maps lowercase letters to
+uppercase letters means our program only works for the basic 26 letters of the
+English alphabet. Therefore, it can’t convert letters with accent marks to
+uppercase, such as <code>'ñ'</code> to <code>'Ñ'</code>,
+the way Python’s <code>upper()</code> string method can. You
+would have to add every accented letter to the dictionary if you want it to be
+converted to uppercase.</p>
+<p class="Body">Now try to write a solution based on the information in the
+previous sections. If you still have trouble solving this exercise, read the <span class="Bold">Solution Template</span> section for additional hints.</p>
+<p class="HeadA">Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/uppercase-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst"><span class="CodeComment"># Map the lowercase letters to
+uppercase letters.</span></p>
+<p class="CodeCxSpMiddle">LOWER_TO_UPPER = {'a': 'A', 'b': 'B', 'c': 'C', 'd':
+'D', 'e': 'E', 'f': 'F', 'g': 'G', 'h': 'H', 'i': 'I', 'j': 'J', 'k': 'K', 'l':
+'L', 'm': 'M', 'n': 'N', 'o': 'O', 'p': 'P', 'q': 'Q', 'r': 'R', 's': 'S', 't':
+'T', 'u': 'U', 'v': 'V', 'w': 'W', 'x': 'X', 'y': 'Y', 'z': 'Z'}</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">def getUppercase(text):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Create a new variable
+that starts as a blank string and will</span></p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># hold the uppercase form
+of text:</span></p>
+<p class="CodeCxSpMiddle">    uppercaseText = ''</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Loop over all the
+characters in text, adding non-lowercase</span></p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># characters to our new
+string:</span></p>
+<p class="CodeCxSpMiddle">    for character in ____:</p>
+<p class="CodeCxSpMiddle">        if character in ____:</p>
+<p class="CodeCxSpMiddle">            <span class="CodeComment"># Append the uppercase
+form to the new string:</span></p>
+<p class="CodeCxSpMiddle">            uppercaseText += ____[____]</p>
+<p class="CodeCxSpMiddle">        else:</p>
+<p class="CodeCxSpMiddle">            uppercaseText += ____</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Return the uppercase
+string:</span></p>
+<p class="CodeCxSpLast">    return ____</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/uppercase.py</span>. You can
+view each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/uppercase-debug/</span>.</p>
+
+
+
+<p><a href="../exercise33/">Prev - #33 Comma-Formatted Numbers</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise35/">Next - #35 Title Case</a></p></body></html>

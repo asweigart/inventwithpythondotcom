@@ -1,0 +1,98 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="../style_pythongently.css" rel="stylesheet" type="text/css" />
+<title>Exercise 27 - Rectangle Drawing</title></head><body style="background-color: #fffeee;"><p><a href="../exercise26/">Prev - #26 Handshakes</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise28/">Next - #28 Border Drawing</a></p>
+
+
+
+
+<h1><a name="_Toc115418696"></a><a name="_Toc115360007">Exercise #27: Rectangle
+Drawing</a></h1>
+<p class="ChapterTitleCodeExample">drawRectangle(16, 4)  <span style="font-size:
+13.0pt">→ </span> ################<br/>
+                          ################<br/>
+                          ################<br/>
+                          ################</p>
+<p class="ChapterTitleCodeExample"><span style='font-size:8.0pt;font-family:"MS Shell Dlg 2","sans-serif"'><img border="0" height="170" id="Picture 57" src="../images/image032.png" width="198"/></span></p>
+<p class="Body">In this exercise, you’ll create some <span class="Italic"><span style='font-family:"serif"'>ASCII art</span></span>, primitive
+graphics created from text characters. There will be a few such exercises in
+this book. In this first one, your code draws a solid rectangle out of <span class="Literal">#</span> hashtag characters.</p>
+<p class="HeadA">Exercise Description</p>
+<p class="Body">Write a <code>drawRectangle()</code> function with
+two integer parameters: <code>width</code> and <span class="Literal">height</span>. The function doesn’t return any values but rather
+prints a rectangle with the given number of hashtags in the horizontal and
+vertical directions.</p>
+<p class="Body">There are no Python <code>assert</code> statements to
+check the correctness of your program. Instead, you can visually inspect the
+output yourself. For example, calling <code>drawRectangle(10, 4)</code>
+should produce the following output:</p>
+<p class="CodeCxSpFirst">##########</p>
+<p class="CodeCxSpMiddle">##########</p>
+<p class="CodeCxSpMiddle">##########</p>
+<p class="CodeCxSpLast">##########</p>
+<p class="Body">If either the <code>width</code> or <span class="Literal">height</span> parameter is <code>0</code> or a
+negative number, the function should print nothing.</p>
+<p class="Body">Try to write a solution based on the information in this
+description. If you still have trouble solving this exercise, read the <span class="Bold">Solution Design and Special Cases and Gotchas</span> sections for
+additional hints.</p>
+<p class="Body">Prerequisite concepts: <code>for</code> loops, <span class="Literal">range()</span>, <code>print()</code>, <span class="Literal">end</span> keyword argument for <code>print()</code></p>
+<p class="HeadA">Solution Design</p>
+<p class="Body">The solution requires a pair of nested <code>for</code>
+loops. The inner <code>for</code> loop prints a row of hashtag
+characters the width of the <code>width</code> parameter, while
+the outer <code>for</code> loop prints a number of rows the same
+as the <code>height</code> parameter. Inside the inner loop, prevent
+<code>print()</code> from automatically printing a newline by
+passing the <code>end=''</code> keyword argument, like <span class="Literal">print('#', end='')</span>.</p>
+<p class="Body">Alternatively, you can use string replication to create a row of hashtag
+characters. In Python, you can use the <code>*</code> operator
+with a string and an integer to evaluate to a longer string. For example, enter
+the following into the interactive shell:</p>
+<p class="CodeCxSpFirst">&gt;&gt;&gt; 'Hello' * 3</p>
+<p class="CodeCxSpMiddle">'HelloHelloHello'</p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; '#' * 16</p>
+<p class="CodeCxSpMiddle">'################'</p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; width = 10</p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; width * '#'</p>
+<p class="CodeCxSpLast">'##########'</p>
+<p class="Body">Using string replication, you can avoid needing a second <span class="Literal">for</span> loop in your solution.</p>
+<p class="HeadA">Special Cases and Gotchas</p>
+<p class="Body">The solution to this exercise is fairly straightforward. But you
+should note that in terminal windows, the text characters are twice as tall as
+they are wide. If you want to display a square shape, the width you pass to the
+<code>drawRectangle()</code> function should be twice the height.</p>
+<p class="Body">Now try to write a solution based on the information in the
+previous sections. If you still have trouble solving this exercise, read the <span class="Bold">Solution Template</span> section for additional hints.</p>
+<p class="HeadA">Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/rectangledrawing-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst">def drawRectangle(width, height):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Special case: If width or
+height is less than 1, draw nothing:</span></p>
+<p class="CodeCxSpMiddle">    if width ____ 1 or height ____ 1:</p>
+<p class="CodeCxSpMiddle">        return</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Loop over each row:</span></p>
+<p class="CodeCxSpMiddle">    for row in range(____):</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># Loop over each column
+in this row:</span></p>
+<p class="CodeCxSpMiddle">        for column in range(width):</p>
+<p class="CodeCxSpMiddle">            # Print a hashtag:</p>
+<p class="CodeCxSpMiddle">            print('#', ____='')</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># At the end of the
+row, print a newline:</span></p>
+<p class="CodeCxSpLast">        print()</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/rectangledrawing.py</span>. You
+can view each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/rectangledrawing-debug/</span>.</p>
+<p class="HeadA">Further Reading</p>
+<p class="Body">For examples of ASCII art, check out <span class="MsoHyperlink">https://en.wikipedia.org/wiki/ASCII_art</span>
+and <span class="MsoHyperlink">https://www.asciiart.eu/</span>. I’ve also
+compiled a large number of ASCII art examples in the <span class="Italic"><span style='font-family:"serif"'>.txt</span></span> text files in this
+Git repo: <span class="MsoHyperlink">https://github.com/asweigart/asciiartjsondb</span></p>
+
+
+
+<p><a href="../exercise26/">Prev - #26 Handshakes</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise28/">Next - #28 Border Drawing</a></p></body></html>

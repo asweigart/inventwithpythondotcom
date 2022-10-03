@@ -1,0 +1,131 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="../style_pythongently.css" rel="stylesheet" type="text/css" />
+<title>Exercise 13 - Sum & Product</title></head><body style="background-color: #fffeee;"><p><a href="../exercise12/">Prev - #12 Smallest & Biggest</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise14/">Next - #14 Average</a></p>
+
+
+
+
+<h1><a name="_Toc115418682"></a><a name="_Toc115359993">Exercise #13: Sum &amp;
+Product</a></h1>
+<p class="ChapterTitleCodeExample">  calculateSum([2, 4, 6, 8, 10])  <span style="font-size:13.0pt">→ </span> 30<br/>
+calculateProduct([2, 4, 6, 8, 10])  <span style="font-size:13.0pt">→ </span> 3840</p>
+<p class="ChapterTitleCodeExample"><span style='font-size:8.0pt;font-family:"MS Shell Dlg 2","sans-serif"'><img border="0" height="144" id="Picture 24" src="../images/image017.jpg" width="288"/></span></p>
+<p class="Body">Python’s built-in <code>sum()</code> function
+returns the sum of the list of numbers passed for its argument. In this
+exercise, you’ll reimplement this behavior for your <code>calculateSum()</code>
+function and also create a <code>calculateProduct()</code>
+function.</p>
+<p class="HeadA">Exercise Description</p>
+<p class="Body">Write two functions named <code>calculateSum()</code>
+and <code>calculateProduct()</code>. They both have a parameter
+named <code>numbers</code>, which will be a list of integer or
+floating-point values. The <code>calculateSum()</code> function
+adds these numbers and returns the sum while the <code>calculateProduct()</code>
+function multiplies these numbers and returns the product. If the list passed
+to <code>calculateSum()</code> is empty, the function returns <span class="Literal">0</span>. If the list passed to <code>calculateProduct()</code>
+is empty, the function returns <code>1</code>. Since this
+function replicates Python’s <code>sum()</code> function, your
+solution shouldn’t call.</p>
+<p class="Body">These Python <code>assert</code> statements stop
+the program if their condition is <code>False</code>. Copy them
+to the bottom of your solution program. Your solution is correct if the following
+<code>assert</code> statements’ conditions are all <span class="Literal">True</span>:</p>
+<p class="CodeCxSpFirst">assert calculateSum([]) == 0</p>
+<p class="CodeCxSpMiddle">assert calculateSum([2, 4, 6, 8, 10]) == 30</p>
+<p class="CodeCxSpMiddle">assert calculateProduct([]) == 1</p>
+<p class="CodeCxSpLast">assert calculateProduct([2, 4, 6, 8, 10]) == 3840</p>
+<p class="Body">Try to write a solution based on the information in this description.
+If you still have trouble solving this exercise, read the <span class="Bold">Solution
+Design</span> and <b>Special Cases and Gotchas</b> sections
+for additional hints.</p>
+<p class="Body">Prerequisite concepts: lists, indexes, <code>for</code>
+loops, augmented assignment operator</p>
+<p class="HeadA">Solution Design</p>
+<p class="Body">For calculating a sum in <code>calculateSum()</code>,
+create a variable named <code>result</code> to store the running
+sum result. This variable starts at <code>0</code>, and while the
+program loops over each number in the numbers parameter, each number is added
+to this running sum. The same is done in <code>calculateProduct()</code>,
+except the <code>result</code> variable starts at <span class="Literal">1</span> and is multiplied by each number.</p>
+<p class="HeadA">Special Cases and Gotchas</p>
+<p class="Body">You might be tempted to use a variable named <code>sum</code>
+to store the running sum. However, in Python this name is already used for the
+built-in <code>sum()</code> function. Reusing this name for a
+local variable means we’d lose the ability to call the original <span class="Literal">sum()</span> function for the rest of the function’s code because
+we have overwritten <code>sum</code> to the value we put in it
+rather than Python’s <code>sum()</code> function. You want to
+avoid reusing the names of Python’s built-in functions by overwriting them, as
+it could cause odd bugs in your code. Some commonly overwritten Python names
+are <code>all</code>, <code>any</code>, <span class="Literal">date</span>, <code>email</code>, <span class="Literal">file</span>, <code>format</code>, <span class="Literal">hash</span>, <code>id</code>, <code>input</code>,
+<code>list</code>, <code>min</code>, <span class="Literal">max</span>, <code>object</code>, <span class="Literal">open</span>, <code>random</code>, <span class="Literal">set</span>, <code>str</code>, <code>sum</code>,
+<code>test</code>, and <code>type</code>. Don’t use
+these names for your own variables.</p>
+<p class="Body">Also, the sum of an empty list of numbers should be <span class="Literal">0</span>. The product of an empty list of numbers should be <span class="Literal">1</span>. When calculating the product of several numbers, begin
+the running product result at <code>1</code> and not <span class="Literal">0</span>. If you start it at <code>0</code>, all
+multiplications result in <code>0</code> and your <span class="Literal">calculateProduct()</span> function will return <span class="Literal">0</span> every time. In mathematics, the numbers 0 and 1 are
+called the <span class="Italic"><span style='font-family:"serif"'>additive
+identity</span></span> and <span class="Italic"><span style='font-family:"serif"'>multiplicative
+identity</span></span>, respectively. Adding the additive identity (0) to a
+number results in that same number, while multiplying the multiplicative
+identity (1) with a number results in that same number. For example, 12 + 0 is
+just 12 and 12 × 1 is just 12 too.</p>
+<p class="Body">Now try to write a solution based on the information in the
+previous sections. If you still have trouble solving this exercise, read the <span class="Bold">Solution Template</span> section for additional hints.</p>
+<p class="HeadA">Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/sumproduct-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst">def calculateSum(numbers):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Start the sum result at
+0:</span></p>
+<p class="CodeCxSpMiddle">    result = ____</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Loop over all the numbers
+in the numbers parameter, and add them</span></p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># to the running sum
+result:</span></p>
+<p class="CodeCxSpMiddle">    for number in ____:</p>
+<p class="CodeCxSpMiddle">        result += ____</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Return the final sum
+result:</span></p>
+<p class="CodeCxSpMiddle">    return ____</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">def calculateProduct(numbers):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Start the product result
+at 1:</span></p>
+<p class="CodeCxSpMiddle">    result = ____</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Loop over all the numbers
+in the numbers parameter, and multiply </span></p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># them by the running
+product result:</span></p>
+<p class="CodeCxSpMiddle">    for number in ____:</p>
+<p class="CodeCxSpMiddle">        result ____ number</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Return the final product
+result:</span></p>
+<p class="CodeCxSpLast">    return ____</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/sumproduct.py</span>. You can
+view each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/sumproduct-debug/</span>.</p>
+<p class="HeadA">Further Reading</p>
+<p class="Body">Just like in Exercise #12 “Smallest &amp; Biggest” we can
+generate a list of one million numbers, and then calculate the sum and product
+of these numbers. Multiplying one million numbers creates an astronomically
+large number, so we’ll limit our test to a mere ten thousand numbers. Write the
+following program and save it in a file named <span class="Italic"><span style='font-family:"serif"'>testsumproduct.py</span></span>. Run it
+from the same folder as your <i>sumproduct.py</i>
+file so that it can import it as a module:</p>
+<p class="CodeCxSpFirst">import random, smallest</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">numbers = []</p>
+<p class="CodeCxSpMiddle">for i in range(10000):</p>
+<p class="CodeCxSpMiddle">    numbers.append(random.randint(1, 1000000000))</p>
+<p class="CodeCxSpMiddle">print('Numbers:', numbers)</p>
+<p class="CodeCxSpLast">print('Smallest number is',
+smallest.getSmallest(numbers))</p>
+<p class="Body">When run, this program displays the million numbers between 1 and
+1,000,000,000 it generated, along with the smallest number in that list.</p>
+
+
+
+<p><a href="../exercise12/">Prev - #12 Smallest & Biggest</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise14/">Next - #14 Average</a></p></body></html>

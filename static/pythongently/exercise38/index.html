@@ -1,0 +1,139 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="../style_pythongently.css" rel="stylesheet" type="text/css" />
+<title>Exercise 38 - Random Shuffle</title></head><body style="background-color: #fffeee;"><p><a href="../exercise37/">Prev - #37 Change Maker</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise39/">Next - #39 Collatz Sequence</a></p>
+
+
+
+
+<h1><a name="_Toc115418707"></a><a name="_Toc115360018">Exercise #38: Random
+Shuffle</a></h1>
+<p class="ChapterTitleCodeExample">shuffle([1, 2, 3, 4, 5])  <span style="font-size:13.0pt">→ </span> [3, 1, 4, 5, 2]</p>
+<p class="ChapterTitleCodeExample"><span style='font-size:8.0pt;font-family:"MS Shell Dlg 2","sans-serif"'><img border="0" height="144" id="Picture 49" src="../images/image045.jpg" width="171"/></span></p>
+<p class="Body">A random shuffle algorithm puts the values in a list into a
+random order, like shuffling a deck of cards. This algorithm produces a new <span class="Italic"><span style='font-family:"serif"'>permutation</span></span>,
+or ordering, of the values in the list. The algorithm works by looping over
+each value in the list and randomly determining a new index with which to swap
+it. As a result, the values in the list are in random order.</p>
+<p class="Body">For a list of n values, there are n! (“n factorial”) possible
+permutations. For example, a 10-value list has 10! or 10 × 9 × 8 × 7 × 6 × 5 ×
+4 × 3 × 2 × 1 or 3,628,800 possible ways to order them.</p>
+<p class="Body">This exercise modifies the list passed to it <span class="Italic"><span style='font-family:"serif"'>in-place</span></span>, rather than
+creating a new list and returning it. Because lists are mutable objects in
+Python, modifications made to a parameter are actually modifying the original
+object passed to the function call for that parameter. For example, enter the
+following into the interactive shell:</p>
+<p class="CodeCxSpFirst">&gt;&gt;&gt; someList = [1, 2, 3]  <span class="CodeComment"># Let's create a list object.</span></p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; def someFunc(someParam):</p>
+<p class="CodeCxSpMiddle">...     someParam[0] = 'dog'  <span class="CodeComment">#
+This is changing the list in-place.</span></p>
+<p class="CodeCxSpMiddle">...     someParam.append('xyz')  <span class="CodeComment"># This is changing the list in-place.</span></p>
+<p class="CodeCxSpMiddle">...</p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; someList  </p>
+<p class="CodeCxSpMiddle">[1, 2, 3]</p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; someFunc(someList)  <span class="CodeComment"># Pass the list as the argument.</span></p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; someList  <span class="CodeComment"># Note
+that the list object has been modified by the function.</span></p>
+<p class="CodeCxSpLast">['dog', 2, 3, 'xyz']</p>
+<p class="Body">Notice that the <code>someList</code> list is
+passed as the argument for the <code>someParam</code> parameter
+of the <code>someFunc()</code> function. This function modifies <span class="Literal">someParam</span> (which refers to the same list object that the <span class="Literal">someList</span> variable refers to), so these modifications are
+still there after the function returns. The <code>someFunc()</code>
+function isn’t returning a new list to replace <code>someList</code>;
+it’s modifying <code>someList</code> in-place.</p>
+<p class="Body">In Python, only mutable objects (such as lists, dictionaries, and
+sets) can be modified in-place. Immutable objects (such a strings, integers,
+tuples, and frozen sets) can’t be modified in-place.</p>
+<p class="HeadA">Exercise Description</p>
+<p class="Body">Write a <code>shuffle()</code> function with a <span class="Literal">values</span> parameter set to a list of values. The function
+doesn’t return anything, but rather it sets each value in the list to a random
+index. The resulting shuffled list must contain the same values as before but
+in random order.</p>
+<p class="Body">This exercise asks you to implement a function identical to
+Python’s <code>random.shuffle()</code> function. As such, avoid
+using this function in your solution as it’d defeat the purpose of the
+exercise.</p>
+<p class="Body">These Python <code>assert</code> statements stop
+the program if their condition is <code>False</code>. Copy them
+to the bottom of your solution program. Your solution is correct if the following
+<code>assert</code> statements’ conditions are all <span class="Literal">True</span>:</p>
+<p class="CodeCxSpFirst">random.seed(42)</p>
+<p class="CodeCxSpMiddle"><span class="CodeComment"># Perform this test ten times:</span></p>
+<p class="CodeCxSpMiddle">for i in range(10):</p>
+<p class="CodeCxSpMiddle">    testData1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]</p>
+<p class="CodeCxSpMiddle">    shuffle(testData1)</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Make sure the number of values
+hasn't changed:</span></p>
+<p class="CodeCxSpMiddle">    assert len(testData1) == 10</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Make sure the order has
+changed:</span></p>
+<p class="CodeCxSpMiddle">    assert testData1 != [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Make sure that when
+re-sorted, all the original values are there:</span></p>
+<p class="CodeCxSpMiddle">    assert sorted(testData1) == [1, 2, 3, 4, 5, 6, 7,
+8, 9, 10]</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle"><span class="CodeComment"># Make sure an empty list
+shuffled remains empty:</span></p>
+<p class="CodeCxSpMiddle">testData2 = []</p>
+<p class="CodeCxSpMiddle">shuffle(testData2)</p>
+<p class="CodeCxSpLast">assert testData2 == []</p>
+<p class="Body">Try to write a solution based on the information in this
+description. If you still have trouble solving this exercise, read the <span class="Bold">Solution Design and Special Cases and Gotchas</span> sections for
+additional hints.</p>
+<p class="Body">Prerequisite concepts: <code>import</code>
+statements, <code>random</code> module, <code>randint()</code>,
+<code>for</code> loops, <code>range()</code>, <span class="Literal">len()</span>, swapping values</p>
+<p class="HeadA">Solution Design</p>
+<p class="Body">The solution is surprisingly straightforward. A <span class="Literal">for</span> loop can loop over every index in the list. On each
+iteration, the code in the loop selects a random index. Then it swaps the
+values at the current iteration’s index and the random index.</p>
+<p class="Body">If the random index is the same as the current iteration’s index,
+this is fine: a random shuffling can include values at their original location.
+This isn’t somehow “less random” than any other permutation. If the random
+index is a repeat of an index that has previously been swapped, this is fine as
+well. Shuffling a value to a random location twice isn’t any more or less
+shuffled than moving a value to a random location once.</p>
+<p class="HeadA">Special Cases and Gotchas</p>
+<p class="Body">Take care that your <code>shuffle()</code> function
+doesn’t add or remove any values to the list; it should only rearrange the
+values already in the list. Because the <code>shuffle()</code>
+function modifies the values list argument in-place, it doesn’t need to return
+anything. There shouldn’t be a <code>return</code> statement
+anywhere in the function. In Python, all functions technically return a value;
+it’s just that functions with no <code>return</code> statement
+return the value <code>None</code>.</p>
+<p class="Body">When selecting a random index, select only an index within the
+range of the list’s indexes. This means you should select an index from <span class="Literal">0</span> up to, but not including, the length of the list. When
+calling <code>random.randint()</code> to generate this random
+index, you’ll want to use <code>0</code> and <span class="Literal">len(values)
+- 1</span> to represent this range, and not <code>0</code> and <span class="Literal">len(values)</span>.</p>
+<p class="Body">Now try to write a solution based on the information in the
+previous sections. If you still have trouble solving this exercise, read the <span class="Bold">Solution Template</span> section for additional hints.</p>
+<p class="HeadA">Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/randomshuffle-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst"><span class="CodeComment"># Import the random module for
+its randint() function.</span></p>
+<p class="CodeCxSpMiddle">import random</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">def shuffle(values):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Loop over the range of
+indexes from 0 up to the length of the list:</span></p>
+<p class="CodeCxSpMiddle">    for i in range(____(values)):</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># Randomly pick an
+index to swap with:</span></p>
+<p class="CodeCxSpMiddle">        swapIndex = random.randint(0, len(____) - ____)</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># Swap the values
+between the two indexes:</span></p>
+<p class="CodeCxSpLast">        values[i], values[swapIndex] = values[____],
+values[____]</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/randomshuffle.py</span>. You can
+view each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/randomshuffle-debug/</span>.</p>
+
+
+
+<p><a href="../exercise37/">Prev - #37 Change Maker</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise39/">Next - #39 Collatz Sequence</a></p></body></html>

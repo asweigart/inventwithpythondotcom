@@ -1,0 +1,141 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="../style_pythongently.css" rel="stylesheet" type="text/css" />
+<title>Exercise 35 - Title Case</title></head><body style="background-color: #fffeee;"><p><a href="../exercise34/">Prev - #34 Uppercase Letters</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise36/">Next - #36 Reverse String</a></p>
+
+
+
+
+<h1><a name="_Toc115418704"></a><a name="_Toc115360015">Exercise #35: Title
+Case</a></h1>
+<p class="ChapterTitleCodeExample">getTitleCase('cat dog moose')  <span style="font-size:13.0pt">→ </span> 'Cat Dog Moose'</p>
+<p class="ChapterTitleCodeExample"><span style='font-size:8.0pt;font-family:"MS Shell Dlg 2","sans-serif"'><img border="0" height="144" id="Picture 46" src="../images/image040.jpg" width="281"/></span></p>
+<p class="Body">In this exercise, you’ll have to convert a string to title case
+where every word in the string begins with an uppercase letter. The remaining
+letters in the word are in lowercase. Title case is a slight increase in
+complexity compared to Exercise #34, “Uppercase Letters”, so I advise that you
+solve that exercise before attempting this one.</p>
+<p class="HeadA">Exercise Description</p>
+<p class="Body">Write a <code>getTitleCase()</code> function with a
+<code>text</code> parameter. The function should return the title
+case form of the string: every word begins with an uppercase and the remaining
+letters are lowercase. Non-letter characters separate words in the string. This
+means that <code>'Hello World'</code> is considered to be two
+words while <code>'HelloWorld'</code> is considered to be one
+word. Not only spaces, but all non-letter characters can separate words, so <span class="Literal">'Hello5World'</span> and <code>'Hello@World'</code>
+also have two words.</p>
+<p class="Body">Python’s <code>upper()</code> and <span class="Literal">lower()</span> string methods return uppercase and lowercase
+forms of the string, and you can use these in your implementation. You may also
+use the <code>isalpha()</code> string method, which returns <span class="Literal">True</span> if the string contains only uppercase or lowercase
+letter characters. However, you may not use Python’s <code>title()</code>
+string method, as that would defeat the purpose of the exercise. Similarly,
+while you need to split up a string into individual words, don’t use Python’s <span class="Literal">split()</span> string method.</p>
+<p class="Body">These Python <code>assert</code> statements stop
+the program if their condition is <code>False</code>. Copy them
+to the bottom of your solution program. Your solution is correct if the following
+<code>assert</code> statements’ conditions are all <span class="Literal">True</span>:</p>
+<p class="CodeCxSpFirst">assert getTitleCase('Hello, world!') == 'Hello, World!'</p>
+<p class="CodeCxSpMiddle">assert getTitleCase('HELLO') == 'Hello'</p>
+<p class="CodeCxSpMiddle">assert getTitleCase('hello') == 'Hello'</p>
+<p class="CodeCxSpMiddle">assert getTitleCase('hElLo') == 'Hello'</p>
+<p class="CodeCxSpMiddle">assert getTitleCase('') == ''</p>
+<p class="CodeCxSpMiddle">assert getTitleCase('abc123xyz') == 'Abc123Xyz'</p>
+<p class="CodeCxSpMiddle">assert getTitleCase('cat dog RAT') == 'Cat Dog Rat'</p>
+<p class="CodeCxSpMiddle">assert getTitleCase('cat,dog,RAT') == 'Cat,Dog,Rat'</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">import random</p>
+<p class="CodeCxSpMiddle">random.seed(42)</p>
+<p class="CodeCxSpMiddle">chars = list('abcdefghijklmnopqrstuvwxyz1234567890 ,.')</p>
+<p class="CodeCxSpMiddle">for i in range(1000):</p>
+<p class="CodeCxSpMiddle">    random.shuffle(chars)</p>
+<p class="CodeCxSpLast">    assert getTitleCase(''.join(chars)) ==
+''.join(chars).title()</p>
+<p class="Body">The code in the <code>for</code> loop generates
+random strings and checks that your <code>getTitleCase()</code>
+function returns the same string that Python’s built-in <code>title()</code>
+string method does. This allows us to quickly generate 1,000 test cases for
+your solution.</p>
+<p class="Body">Try to write a solution based on the information in this
+description. If you still have trouble solving this exercise, read the <span class="Bold">Solution Design and Special Cases and Gotchas</span> sections for additional
+hints.</p>
+<p class="Body">Prerequisite concepts: strings, <code>for</code>
+loops, <code>range()</code>, <code>len()</code>, <span class="Literal">upper()</span>, <code>isalpha()</code>, <span class="Literal">lower()</span></p>
+<p class="HeadA">Solution Design</p>
+<p class="Body">The main challenge in this exercise isn’t converting letters to
+uppercase and lowercase but splitting the string up into individual words. We
+don’t need to use Python’s <code>split()</code> string method or
+the advanced regular expressions library. Look at the three example strings
+with the first letter of each word highlighted in Figure 35-1.</p>
+<p class="Body"><img border="0" height="273" id="Picture 3" src="../images/image041.png" width="474"/></p>
+<p class="MsoCaption"><span lang="EN-CA">Figure 35-1: Three strings with the first
+letter of every word highlighted.</span></p>
+<p class="Body">By looking at these examples, we can figure out that what makes a
+character in the string the first letter of a word is that the character is
+either the first character of the string (at index <code>0</code>)
+or follows a non-letter character. Our title case string will have these
+letters in uppercase and every other letter lowercase. Non-letter characters
+remain as they are.</p>
+<p class="Body">Our function can start with a variable named <code>titledText</code>
+that holds the title case string form of the <code>text</code>
+parameter as we build it. Then a <code>for</code> loop can loop
+over all the indexes of the string. If the index is <code>0</code>
+(meaning it is at the start of the string) or the character at the previous
+index is not a letter, add the uppercase form of the character to <span class="Literal">titledText</span>. Otherwise, add the lowercase form of the
+character to <code>titledText</code>.</p>
+<p class="Body">Note that Python’s <code>upper()</code> and <span class="Literal">lower()</span> string methods have no effect on strings of
+non-letter characters. The expression <code>'42!'.upper()</code>
+and <code>'42!'.lower()</code> both evaluate to <span class="Literal">'42!'</span>.</p>
+<p class="Body">By the time the <code>for</code> loop has finished,
+<code>titledText</code> contains the complete title case form of
+text for the function to return.</p>
+<p class="HeadA">Special Cases and Gotchas</p>
+<p class="Body">Title case not only means the first letter is in uppercase, but
+all other letters must be lowercase. It’s not enough to only make the first
+letter uppercase. You must also force the remaining letters to be lowercase.
+Converting the string <code>'mcCloud'</code> to title case
+doesn’t result in <code>'McCloud'</code> but rather <span class="Literal">'Mccloud'</span>.</p>
+<p class="Body">There is also a boundary condition you should be aware of when
+looking at the “previous index” in the <code>for</code> loop. You
+can easily calculate the previous index from the index <code>i</code>
+with the expression <code>i - 1</code>, but there’s a catch: when
+<code>i</code> is <code>0</code>, this results in <span class="Literal">-1</span> which refers to the last index of the string. Your code
+must explicitly make sure you aren’t checking the previous index for the first
+index of the string, because there is no previous index in that case.</p>
+<p class="Body">Now try to write a solution based on the information in the
+previous sections. If you still have trouble solving this exercise, read the <span class="Bold">Solution Template</span> section for additional hints.</p>
+<p class="HeadA">Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/titlecase-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst">def getTitleCase(text):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Create a titledText
+variable to store the titlecase text:</span></p>
+<p class="CodeCxSpMiddle">    titledText = ____</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Loop over every index in
+text:</span></p>
+<p class="CodeCxSpMiddle">    for i in range(len(____)):</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># The character at the
+start of text should be uppercase:</span></p>
+<p class="CodeCxSpMiddle">        if i == ____:</p>
+<p class="CodeCxSpMiddle">            titledText += text[i].____()</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># If the character is a
+letter and the previous character is</span></p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># not a letter, make it
+uppercase:</span></p>
+<p class="CodeCxSpMiddle">        elif text[____].isalpha() and not text[i - ____].isalpha():</p>
+<p class="CodeCxSpMiddle">            titledText += text[____].upper()</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># Otherwise, make it
+lowercase:</span></p>
+<p class="CodeCxSpMiddle">        else:</p>
+<p class="CodeCxSpMiddle">            titledText += text[i].____()</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Return the titled cased
+string:</span></p>
+<p class="CodeCxSpLast">    return titledText</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/titlecase.py</span>. You can
+view each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/titlecase-debug/</span>.</p>
+
+
+
+<p><a href="../exercise34/">Prev - #34 Uppercase Letters</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise36/">Next - #36 Reverse String</a></p></body></html>

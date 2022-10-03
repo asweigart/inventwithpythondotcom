@@ -1,0 +1,112 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="../style_pythongently.css" rel="stylesheet" type="text/css" />
+<title>Exercise 28 - Border Drawing</title></head><body style="background-color: #fffeee;"><p><a href="../exercise27/">Prev - #27 Rectangle Drawing</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise29/">Next - #29 Pyramid Drawing</a></p>
+
+
+
+
+<h1><a name="_Toc115418697"></a><a name="_Toc115360008">Exercise #28: Border
+Drawing</a></h1>
+<p class="ChapterTitleCodeExample">drawBorder(16, 4)  <span style="font-size:
+13.0pt">→ </span> +--------------+<br/>
+                       |              |<br/>
+                       |              |<br/>
+                       +--------------+</p>
+<p class="ChapterTitleCodeExample"><span style='font-size:8.0pt;font-family:"MS Shell Dlg 2","sans-serif"'><img border="0" height="144" id="Picture 39" src="../images/image033.jpg" width="168"/></span></p>
+<p class="Body">Similar to the solid, filled-in ASCII art rectangles our code
+generated in Exercise #27, “Rectangle Drawing,” this exercise draws only the
+border of a rectangle. The <code>+</code> plus character is used
+for the corners, the <code>-</code> dash character for horizontal
+lines, and the <code>|</code> pipe character for vertical lines.
+(This is the similar style as the lines in Exercise #25’s multiplication table.</p>
+<p class="HeadA">Exercise Description</p>
+<p class="Body">Write a <code>drawBorder()</code> function with
+parameters <code>width</code> and <code>height</code>.
+The function draws the border of a rectangle with the given integer sizes. There
+are no Python <code>assert</code> statements to check the
+correctness of your program. Instead, you can visually inspect the output
+yourself. For example, calling <code>drawBorder(16, 4)</code>
+would output the following:</p>
+<p class="CodeCxSpFirst">+--------------+</p>
+<p class="CodeCxSpMiddle">|              |</p>
+<p class="CodeCxSpMiddle">|              |</p>
+<p class="CodeCxSpLast">+--------------+</p>
+<p class="Body">The interior of the rectangle requires printing spaces. The sizes
+given include the space required for the corners. If the <code>width</code>
+or <code>height</code> parameter is less than <span class="Literal">2</span>, the function should print nothing.</p>
+<p class="Body">Try to write a solution based on the information in this
+description. If you still have trouble solving this exercise, read the <span class="Bold">Solution Design and Special Cases and Gotchas</span> sections for
+additional hints.</p>
+<p class="Body">Prerequisite concepts: Boolean operators, strings, string
+concatenation, string replication, <code>for</code> loops, <span class="Literal">range()</span></p>
+<span style='font-size:11.0pt;font-family:"sans-serif"'><br clear="all" style="page-break-before:always"/>
+</span>
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style='font-size:12.0pt;font-family:"sans-serif";
+color:black'> </span></b></p>
+<p class="HeadA">Solution Design</p>
+<p class="Body">There are three separate parts required for the <span class="Literal">drawBorder()</span> function: drawing the top border line,
+drawing the middle, and drawing the bottom border line. The code for drawing
+the top and bottom border line will be identical. So really, there’s only two
+parts you need to code in this function.</p>
+<p class="Body">Drawing the top horizontal line involves creating a string with a
+<code>+</code> plus character on the left, followed by a number
+of <code>-</code> minus characters, and then another <span class="Literal">+</span> plus character on the right. The number of <span class="Literal">-</span> minus characters needed is <code>width - 2</code>,
+because the two <code>+</code> plus characters for the corners
+count as two units of width.</p>
+<p class="Body">Similarly, drawing the middle rows requires a | pipe character,
+followed by a number of space characters, and then another | pipe character.
+The number of spaces is also <code>width - 2</code>. You’ll also
+need to put this code in a <code>for</code> loop, and draw a
+number of these rows equal to <code>height - 2</code>.</p>
+<p class="Body">Finally, drawing the bottom horizontal line is identical to
+drawing the top. You can copy and paste the code.</p>
+<p class="Body">String replication can easily create the <code>-</code>
+minus and space character strings. In Python, you can use the <span class="Literal">*</span> operator with a string and an integer to evaluate to a
+longer string. For example, enter the following into the interactive shell:</p>
+<p class="CodeCxSpFirst">&gt;&gt;&gt; 'Hello' * 3</p>
+<p class="CodeCxSpMiddle">'HelloHelloHello'</p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; '-' * 16</p>
+<p class="CodeCxSpMiddle">'----------------'</p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; width = 10</p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; (width - 2) * '-'</p>
+<p class="CodeCxSpLast">'--------'</p>
+<p class="HeadA">Special Cases and Gotchas</p>
+<p class="Body">Note that the minimum width and height for a border is <span class="Literal">2</span>. Calling <code>drawBorder(2, 2)</code>
+should print the following on the screen:</p>
+<p class="CodeCxSpFirst">++</p>
+<p class="CodeCxSpLast">++</p>
+<p class="Body">If either the <code>width</code> or <span class="Literal">height</span> argument is less than <code>2</code>,
+the function prints nothing.</p>
+<p class="Body">Now try to write a solution based on the information in the
+previous sections. If you still have trouble solving this exercise, read the <span class="Bold">Solution Template</span> section for additional hints.</p>
+<p class="HeadA">Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/borderdrawing-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst">def drawBorder(width, height):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Special case: If the
+width or height is less than two, draw nothing:</span></p>
+<p class="CodeCxSpMiddle">    if width &lt; ____ or height &lt; ____:</p>
+<p class="CodeCxSpMiddle">        return</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Print the top row:</span></p>
+<p class="CodeCxSpMiddle">    print('+' + ('-' * (width - ____)) + ____)</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Loop for each row (except
+the top and bottom):</span></p>
+<p class="CodeCxSpMiddle">    for i in range(height - 2):</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># Print the sides:</span></p>
+<p class="CodeCxSpMiddle">        print(____ + (____ * (width - 2)) + ____)</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Print the bottom row:</span></p>
+<p class="CodeCxSpLast">    print(___________________________________)</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/borderdrawing.py</span>. You can
+view each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/borderdrawing-debug/</span>.</p>
+
+
+
+<p><a href="../exercise27/">Prev - #27 Rectangle Drawing</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise29/">Next - #29 Pyramid Drawing</a></p></body></html>

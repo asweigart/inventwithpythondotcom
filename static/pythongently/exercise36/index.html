@@ -1,0 +1,124 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="../style_pythongently.css" rel="stylesheet" type="text/css" />
+<title>Exercise 36 - Reverse String</title></head><body style="background-color: #fffeee;"><p><a href="../exercise35/">Prev - #35 Title Case</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise37/">Next - #37 Change Maker</a></p>
+
+
+
+
+<h1><a name="_Toc115418705"></a><a name="_Toc115360016">Exercise #36: Reverse
+String</a></h1>
+<p class="ChapterTitleCodeExample">reverseString('Hello')  <span style="font-size:13.0pt">→ </span> 'olleH'</p>
+<p class="ChapterTitleCodeExample"><span style='font-size:8.0pt;font-family:"MS Shell Dlg 2","sans-serif"'><img border="0" height="144" id="Picture 47" src="../images/image042.jpg" width="474"/></span></p>
+<p class="Body">Strings are immutable in the Python language, meaning you can’t
+modify their characters the way you can modify the items in a list. For
+example, if you tried to change <code>'Rat'</code> to <span class="Literal">'Ram'</span> with the assignment statement <span class="Literal">'Rat'[2]
+= 'm'</span>, you would receive a <span class="Literal">TypeError: 'str' object
+does not support item assignment</span> error message. On the other hand, if
+you store a string 'Rat' in a variable named animal, the assignment statement
+animal = 'Ram' isn’t modifying the 'Rat' string but rather making animal refer
+to an entirely new string, 'Ram'.</p>
+<p class="Body">We can modify an existing string is to create a list of
+single-character strings, modify the list, and then create a new string from
+the list. Enter the following into the interactive shell:</p>
+<p class="CodeCxSpFirst">&gt;&gt;&gt; animal = 'Rat'</p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; animal = list(animal)</p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; animal</p>
+<p class="CodeCxSpMiddle">['R', 'a', 't']</p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; animal[2] = 'm'</p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; animal</p>
+<p class="CodeCxSpMiddle">['R', 'a', 'm']</p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; animal = ''.join(animal)</p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; animal</p>
+<p class="CodeCxSpLast">'Ram'</p>
+<p class="Body">We’ll use this technique to reverse the characters in a string.</p>
+<p class="HeadA">Exercise Description</p>
+<p class="Body">Write a <code>reverseString()</code> function with
+a <code>text</code> parameter. The function should return a
+string with all of <code>text</code>’s characters in reverse
+order. For example, <code>reverseString('Hello')</code> returns <span class="Literal">'olleH'</span>. The function should not alter the casing of any
+letters. And, if <code>text</code> is a blank string, the
+function returns a blank string.</p>
+<p class="Body">These Python <code>assert</code> statements stop
+the program if their condition is <code>False</code>. Copy them
+to the bottom of your solution program. Your solution is correct if the following
+<code>assert</code> statements’ conditions are all <span class="Literal">True</span>:</p>
+<p class="CodeCxSpFirst">assert reverseString('Hello') == 'olleH'</p>
+<p class="CodeCxSpMiddle">assert reverseString('') == ''</p>
+<p class="CodeCxSpMiddle">assert reverseString('aaazzz') == 'zzzaaa'</p>
+<p class="CodeCxSpLast">assert reverseString('xxxx') == 'xxxx'</p>
+<p class="Body">Try to write a solution based on the information in this
+description. If you still have trouble solving this exercise, read the <span class="Bold">Solution Design and Special Cases and Gotchas</span> sections for
+additional hints.</p>
+<p class="Body">Prerequisite concepts: lists, <code>list()</code>, <span class="Literal">for</span> loops, <code>range()</code>, <span class="Literal">len()</span>, integer division, indexes, swapping values, <span class="Literal">join()</span></p>
+<p class="HeadA">Solution Design</p>
+<p class="Body">Instead of building up a string from the characters in <span class="Literal">text</span> in reverse order, let’s make our function first
+convert the string in <code>text</code> into a list of
+single-character strings. Python’s <code>list()</code> function
+does when we pass it a string. For example, <code>list('Hello')</code>
+returns the list value <code>['H', 'e', 'l', 'l', 'o']</code>. We
+can assign this list as the new value of <code>text</code>.</p>
+<p class="Body">Once we have the characters of <code>text</code> in
+a list, create a <code>for</code> loop that loops over the first
+half of the list’s indexes. This can be calculated from the expression <span class="Literal">len(text) // 2</span>. We want to replace the character at each
+index with the character at the “mirror” index in the second half of the list. The
+mirror of the first index is the last index, the mirror of the second index is
+the second to last index, the mirror of the third index is the third to last
+index, and so on.</p>
+<p class="Body">To calculate the mirror of an index <code>i</code>
+in <code>text</code>, you would want <span class="Literal">len(text)
+- 1 - i</span>. For example, the mirror of index <code>0</code>
+is <code>len(text) - 1 - 0</code>, the mirror of index <span class="Literal">1</span> is <code>len(text) - 1 - 1</code>, the
+mirror of index <code>2</code> is <span class="Literal">len(text) -
+1 - 2</span>, and so on.</p>
+<p class="Body">Python’s assignment statement allows you to swap two values simultaneously.
+For example, the assignment statement <span class="Literal">myList[0], myList[5]
+= myList[5], myList[0]</span> swaps the values at indexes <code>0</code>
+and <code>5</code> in a hypothetical <code>myList</code>
+variable.</p>
+<p class="Body">Figure 36-1 shows the characters of a hypothetical 12-item list
+made from <code>'Hello, world'</code> being swapped until the
+string is reversed.</p>
+<p class="Body"><img border="0" height="502" id="Picture 4" src="../images/image043.png" width="406"/></p>
+<p class="MsoCaption"><span lang="EN-CA">Figure 36-1: The process of reversing a
+list of single-character strings by swapping their mirror indexes.</span></p>
+<p class="Body">Finally, the <code>join()</code> string method
+creates a string from the text list with the instruction <code>''.join(text)</code>.
+This is the string the <code>reverseString()</code> function
+should return.</p>
+<p class="HeadA">Special Cases and Gotchas</p>
+<p class="Body">You may think that you need two different algorithms depending on
+if the string to reverse has an odd or even number of characters. However, it
+turns out this doesn’t matter. If the <code>text</code> string has
+an odd number of characters, like the 5 characters in the list <span class="Literal">['H', 'e', 'l', 'l', 'o']</span>, then swapping the middle
+character at index <code>2</code> with itself doesn’t change the
+list.</p>
+<p class="Body">Now try to write a solution based on the information in the
+previous sections. If you still have trouble solving this exercise, read the <span class="Bold">Solution Template</span> section for additional hints.</p>
+<p class="HeadA">Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/reversestring-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst">def reverseString(text):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Convert the text string
+into a list of character strings:</span></p>
+<p class="CodeCxSpMiddle">    text = ____(text)</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Loop over the first half
+of indexes in the list:</span></p>
+<p class="CodeCxSpMiddle">    for i in range(len(____) // ____):</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># Swap the values of i
+and it's mirror index in the second</span></p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># half of the list:</span></p>
+<p class="CodeCxSpMiddle">        mirrorIndex = len(text) - ____ - ____</p>
+<p class="CodeCxSpMiddle">        text[i], text[mirrorIndex] = text[____], text[____]</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Join the list of strings
+into a single string and return it:</span></p>
+<p class="CodeCxSpLast">    return ''.join(text)</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/reversestring.py</span>. You can
+view each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/reversestring-debug/</span>.</p>
+
+
+
+<p><a href="../exercise35/">Prev - #35 Title Case</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise37/">Next - #37 Change Maker</a></p></body></html>

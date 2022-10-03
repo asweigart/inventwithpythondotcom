@@ -1,0 +1,93 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="../style_pythongently.css" rel="stylesheet" type="text/css" />
+<title>Exercise 8 - Read Write File</title></head><body style="background-color: #fffeee;"><p><a href="../exercise7/">Prev - #7 ASCII Table</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise9/">Next - #9 Chess Square Color</a></p>
+
+
+
+
+<h1><a name="_Toc115418677"></a><a name="_Toc115359988">Exercise #8: Read Write
+File</a></h1>
+<p class="ChapterTitleCodeExample"><img border="0" height="144" id="Picture 19" src="../images/image009.jpg" width="120"/></p>
+<p class="Body">File I/O, or file input/output, allows your programs to read and
+write data to files on the hard drive. This exercise covers just the basics of
+writing text to a file with Python code and then reading the text from the file
+you just created. File I/O is an important technique because it allows your
+programs to save data so that work isn’t lost when the program closes.</p>
+<p class="HeadA">Exercise Description</p>
+<p class="Body">You will write three functions for this exercise. First, write a <span class="Literal">writeToFile()</span> function with two parameters for the
+filename of the file and the text to write into the file. Second, write an <span class="Literal">appendToFile()</span> function, which is identical to <span class="Literal">writeToFile()</span> except that the file opens in append mode
+instead of write mode. Finally, write a <code>readFromFile()</code>
+function with one parameter for the filename to open. This function returns the
+full text contents of the file as a string.</p>
+<p class="Body">These Python instructions should generate the file and the <span class="Literal">assert</span> statement checks that the content is correct:</p>
+<p class="CodeCxSpFirst">writeToFile('greet.txt', 'Hello!\n')</p>
+<p class="CodeCxSpMiddle">appendToFile('greet.txt', 'Goodbye!\n')</p>
+<p class="CodeCxSpLast">assert readFromFile('greet.txt') == 'Hello!\nGoodbye!\n'</p>
+<p class="Body">This code writes the text <code>'Hello!\n'</code>
+and <code>'Goodbye!\n'</code> to a file named <span class="Italic"><span style='font-family:"serif"'>greet.txt</span></span>, then reads in
+this file’s content to verify it is correct. You can delete the <span class="Italic"><span style='font-family:"serif"'>greet.txt</span></span>
+file after running these instructions program.</p>
+<p class="Body">Try to write a solution based on the information in this
+description. If you still have trouble solving this exercise, read the <span class="Bold">Solution Design</span> and <span class="Bold">Special Cases and
+Gotchas</span> sections for additional hints.</p>
+<p class="Body">Prerequisite concepts: text file reading and writing</p>
+<p class="HeadA">Solution Design</p>
+<p class="Body">Python’s built-in <code>open()</code> function returns
+a file object that you can use to read or write text from and to the file. You
+should call <code>open()</code> with the <code>with</code>
+statement, like <code>with open(filename, mode) as fileObj:</code>.</p>
+<p class="Body">The valid arguments for the <code>mode</code> parameter
+are <code>'r'</code> to read from text files, <span class="Literal">'w'</span> to write to text files, and <code>'a'</code>
+to append (that is, write at the end of) to text files. If no mode argument is
+given, then the function defaults to read mode. Opening the file in write or
+append mode lets you call <code>fileObj.write('text goes here')</code>,
+which allows you to pass a string of text to write to the file. Otherwise, in
+read mode calling <code>fileObj.read()</code> returns the file’s contents
+as a string.</p>
+<p class="HeadA">Special Cases and Gotchas</p>
+<p class="Body">If you open a file in write mode and the file doesn’t exist, then
+a blank file is created. If the file does exist, it is overwritten with a blank
+file. Append mode, as opposed to write mode, adds text to the end of the file
+without destroying the original content.</p>
+<p class="Body">Now try to write a solution based on the information in the
+previous sections. If you still have trouble solving this exercise, read the <span class="Bold">Solution Template</span> section for additional hints.</p>
+<p class="HeadA">Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/readwritefile-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst">def writeToFile(filename, text):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Open the file in write
+mode:</span></p>
+<p class="CodeCxSpMiddle">    with open(filename, ____) as fileObj:</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># Write the text to the
+file:</span></p>
+<p class="CodeCxSpMiddle">        ____.write(text)</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">def appendToFile(filename, text):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Open the file in append
+mode:</span></p>
+<p class="CodeCxSpMiddle">    ____ open(filename, ____) as fileObj:</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># Write the text to the
+end of the file:</span></p>
+<p class="CodeCxSpMiddle">        ____.write(____)</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">def readFromFile(filename):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Open the file in read
+mode:</span></p>
+<p class="CodeCxSpMiddle">    ____ ____(filename) as fileObj:</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># Read all of the text
+in the file and return it as a string:</span></p>
+<p class="CodeCxSpLast">        return ____.read()</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/readwritefile.py</span>. You can
+view each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/readwritefile-debug/</span>.</p>
+<p class="HeadA">Further Reading</p>
+<p class="Body">You can learn about reading and writing files in Chapters 9 and
+10 of my book, <span class="Italic"><span style='font-family:"serif"'>Automate
+the Boring Stuff with Python</span></span> online at <span class="MsoHyperlink">https://automatetheboringstuff.com/2e/</span>.</p>
+
+
+
+<p><a href="../exercise7/">Prev - #7 ASCII Table</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise9/">Next - #9 Chess Square Color</a></p></body></html>

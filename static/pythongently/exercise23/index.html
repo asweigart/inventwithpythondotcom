@@ -1,0 +1,189 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="../style_pythongently.css" rel="stylesheet" type="text/css" />
+<title>Exercise 23 - 99 Bottles of Beer</title></head><body style="background-color: #fffeee;"><p><a href="../exercise22/">Prev - #22 Rock, Paper, Scissors</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise24/">Next - #24 Every 15 Minutes</a></p>
+
+
+
+
+<h1><a name="_Toc115418692"></a><a name="_Toc115360003">Exercise #23: 99
+Bottles of Beer</a></h1>
+<p class="ChapterTitleCodeExample">99 bottles of beer on the wall,<br/>
+99 bottles of beer,<br/>
+Take one down,<br/>
+Pass it around,<br/>
+98 bottles of beer on the wall,</p>
+<p class="ChapterTitleCodeExample"><span style='font-size:8.0pt;font-family:"MS Shell Dlg 2","sans-serif"'><img border="0" height="144" id="Picture 34" src="../images/image027.jpg" width="120"/></span></p>
+<p class="Body">“99 Bottles of Beer on the Wall” is a cumulative song often sung
+to pass the time (and annoy anyone close to the singer). Long, tedious activities
+are the perfect task for computers. In this exercise, you’ll write a program to
+display the complete lyrics of this song.</p>
+<p class="HeadA">Exercise Description</p>
+<p class="Body">Write a program that displays the lyrics to “99 Bottles of Beer.”
+Each stanza of the song goes like this:</p>
+<p class="Body"><span class="Italic"><span style='font-family:"serif"'>X
+bottles of beer on the wall,</span></span></p>
+<p class="Body"><span class="Italic"><span style='font-family:"serif"'>X
+bottles of beer,</span></span></p>
+<p class="Body"><span class="Italic"><span style='font-family:"serif"'>Take
+one down,</span></span></p>
+<p class="Body"><span class="Italic"><span style='font-family:"serif"'>Pass
+it around,</span></span></p>
+<p class="Body"><span class="Italic"><span style='font-family:"serif"'>X
+</span></span>–<span class="Italic"><span style='font-family:"serif"'>
+1 bottles of beer on the wall,</span></span></p>
+<p class="Body">The X in the song starts at 99 and decreases by one for each
+stanza. When X is one (and X – 1 is zero), the last line is “<span class="Italic"><span style='font-family:"serif"'>No more bottles of
+beer on the wall!</span></span>” After each stanza, display a blank line to
+separate it from the next stanza.</p>
+<p class="Body">You’ll know you have the program correct if it matches the lyrics
+at <span class="MsoHyperlink">https://inventwithpython.com/bottlesofbeerlyrics.txt</span>.
+It looks like the following:</p>
+<p class="Body"><span class="Italic"><span style='font-family:"serif"'>99
+bottles of beer on the wall,</span></span></p>
+<p class="Body"><span class="Italic"><span style='font-family:"serif"'>99
+bottles of beer,</span></span></p>
+<p class="Body"><span class="Italic"><span style='font-family:"serif"'>Take
+one down,</span></span></p>
+<p class="Body"><span class="Italic"><span style='font-family:"serif"'>Pass
+it around,</span></span></p>
+<p class="Body"><span class="Italic"><span style='font-family:"serif"'>98
+bottles of beer on the wall,</span></span></p>
+<p class="Body"><i> </i></p>
+<p class="Body"><span class="Italic"><span style='font-family:"serif"'>98
+bottles of beer on the wall,</span></span></p>
+<p class="Body"><span class="Italic"><span style='font-family:"serif"'>98
+bottles of beer,</span></span></p>
+<p class="Body"><span class="Italic"><span style='font-family:"serif"'>Take
+one down,</span></span></p>
+<p class="Body"><span class="Italic"><span style='font-family:"serif"'>Pass
+it around,</span></span></p>
+<p class="Body"><span class="Italic"><span style='font-family:"serif"'>97
+bottles of beer on the wall,</span></span></p>
+<p class="Body"><span class="Italic"><span style='font-family:"serif"'>…cut
+for brevity…</span></span></p>
+<p class="Body"><span class="Italic"><span style='font-family:"serif"'>1
+bottle of beer on the wall,</span></span></p>
+<p class="Body"><span class="Italic"><span style='font-family:"serif"'>1
+bottle of beer,</span></span></p>
+<p class="Body"><span class="Italic"><span style='font-family:"serif"'>Take
+one down,</span></span></p>
+<p class="Body"><span class="Italic"><span style='font-family:"serif"'>Pass
+it around,</span></span></p>
+<p class="Body"><span class="Italic"><span style='font-family:"serif"'>No
+more bottles of beer on the wall!</span></span></p>
+<p class="Body">Try to write a solution based on the information in this
+description. If you still have trouble solving this exercise, read the <span class="Bold">Solution Design and Special Cases and Gotchas</span> sections for
+additional hints.</p>
+<p class="Body">Prerequisite concepts: <code>for</code> loops, <span class="Literal">range()</span> with three arguments, <code>print()</code></p>
+<p class="HeadA">Solution Design</p>
+<p class="Body">Use a <code>for</code> loop to loop from <span class="Literal">99</span> down to, but not including, <code>1</code>.
+The 3-argument form of <code>range()</code> can do this with:</p>
+<p class="Body"><code>for numberOfBottles in</code> <span class="Literal">range(99, 1, -1)</span></p>
+<p class="Body">The <code>numberOfBottles</code> variable starts at
+the first argument, <code>99</code>. The second argument, <span class="Literal">1</span>, is the value that <code>numberOfBottles</code>
+goes down to (but does not include). This means the last iteration sets <span class="Literal">numberOfBottles</span> to <code>2</code>. The third
+argument, <code>-1</code>, is the <span class="Italic"><span style='font-family:"serif"'>step argument</span></span> and changes <span class="Literal">numberOfBottles</span> by <code>-1</code> instead
+of the default <code>1</code>. This causes the <span class="Literal">for</span> loop to decrease the loop variable rather than
+increase it.</p>
+<p class="Body">For example, if we run:</p>
+<p class="Body"><code>for i in range(4, 0, -1):</code></p>
+<p class="Body"><code>    print(i)</code></p>
+<p class="Body">...it would produce the following output:</p>
+<p class="CodeCxSpFirst">4</p>
+<p class="CodeCxSpMiddle">3</p>
+<p class="CodeCxSpMiddle">2</p>
+<p class="CodeCxSpLast">1</p>
+<p class="Body">If we run:</p>
+<p class="Body"><code>for i in range(0, 8, 2):</code></p>
+<p class="Body"><code>    print(i)</code></p>
+<p class="Body">...it would produce the following output:</p>
+<p class="CodeCxSpFirst">0</p>
+<p class="CodeCxSpMiddle">2</p>
+<p class="CodeCxSpMiddle">4</p>
+<p class="CodeCxSpLast">6</p>
+<p class="Body">The 3-argument form of <code>range()</code> allows
+you to set more detail than the 1-argument form, but the 1-argument form is
+more common because the start and step arguments are often the default <span class="Literal">0</span> and <code>1</code>, respectively. For
+example, the code <code>for i in range(10)</code> is the
+equivalent of <code>for i in range(0, 10, 1)</code>.</p>
+<p class="HeadA">Special Cases and Gotchas</p>
+<p class="Body">Python’s <code>print()</code> function accepts
+multiple arguments to display. These arguments can be strings, integers,
+Booleans, or values of any other data type. The <code>print()</code>
+function automatically converts the argument to a string. However, keep in mind
+that you can only concatenate a string value to another string value. So while
+these two lines of code are valid:</p>
+<p class="Body" style="margin-left:.75in;text-indent:-.25in"><span class="Literal"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span></span><span class="Literal">print(numberOfBottles, 'bottles of
+beer,')</span></p>
+<p class="Body" style="margin-left:.75in;text-indent:-.25in"><span class="Literal"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span></span><span class="Literal">print(str(numberOfBottles) + ' bottles
+of beer,')</span></p>
+<p class="Body">This line of code produces a <span class="Literal">TypeError:
+unsupported operand type(s) for +: 'int' and 'str'</span> error message because
+<code>numberOfBottles</code> holds an integer and the <span class="Literal">+</span> operator cannot concatenate integers to strings.</p>
+<p class="Body" style="margin-left:.75in;text-indent:-.25in"><span class="Literal"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span></span><span class="Literal">print(numberOfBottles + ' bottles of
+beer,')</span></p>
+<p class="Body">The latter line of code is trying to pass a single argument to <span class="Literal">print()</span>: the expression <span class="Literal">numberOfBottles
++ ' bottles of beer,'</span> evaluates to this single value. This differs from the
+first two examples where two arguments, separated by a comma, are passed to <span class="Literal">print()</span>. The difference is a subtle but important. While <span class="Literal">print()</span> automatically converts arguments to strings,
+string concatenation doesn’t and requires you to call <code>str()</code>
+to perform this conversion.</p>
+<p class="Body">Even the word “convert” is a bit of a misnomer here: function
+calls return brand new values rather than change an existing value. Calling <span class="Literal">len('hello')</span> <span class="Italic"><span style='font-family:
+"serif"'>returns</span></span> the integer value <span class="Literal">5</span>. It’s not that the string <code>'hello'</code>
+has been <i>changed</i>
+to the integer <code>5</code>. Similarly, calling <span class="Literal">str(42)</span> or <code>int('99')</code> doesn’t
+change the argument but returns new values.</p>
+<p class="Body">This is why code such as <code>str(numberOfBottles)</code>
+doesn’t convert the integer in the <code>numberOfBottles</code>
+variable to a string. Instead, if you want to change the variable, you need to
+assign the return value to the variable like: </p>
+<p class="Body"><code>numberOfBottles = str(numberOfBottles)</code></p>
+<p class="Body">Don’t think of this as modifying the value in <span class="Literal">numberOfBottles</span>, but rather replacing it with the value
+returned from the <code>str()</code> function call.</p>
+<p class="Body">Now try to write a solution based on the information in the
+previous sections. If you still have trouble solving this exercise, read the <span class="Bold">Solution Template</span> section for additional hints.</p>
+<p class="HeadA">Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/bottlesofbeer-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst"><span class="CodeComment"># Loop from 99 to 2, displaying
+the lyrics to each stanza.</span></p>
+<p class="CodeCxSpMiddle">for numberOfBottles in range(99, 1, ____):</p>
+<p class="CodeCxSpMiddle">    print(____, 'bottles of beer on the wall,')</p>
+<p class="CodeCxSpMiddle">    print(____, 'bottles of beer,')</p>
+<p class="CodeCxSpMiddle">    ____('Take one down,')</p>
+<p class="CodeCxSpMiddle">    ____('Pass it around,')</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># If there is only one,
+print "bottle" instead of "bottles".</span></p>
+<p class="CodeCxSpMiddle">    if (numberOfBottles - 1) == ____:</p>
+<p class="CodeCxSpMiddle">        ____('1 bottle of beer on the wall,')</p>
+<p class="CodeCxSpMiddle">    ____:</p>
+<p class="CodeCxSpMiddle">        print(____ - 1, ' bottles of beer on the
+wall,')</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle"><span class="CodeComment"># The last stanza has singular
+"bottle" and a different final line:</span></p>
+<p class="CodeCxSpMiddle">____('1 bottle of beer on the wall,')</p>
+<p class="CodeCxSpMiddle">____('1 bottle of beer,')</p>
+<p class="CodeCxSpMiddle">____('Take one down,')</p>
+<p class="CodeCxSpMiddle">____('Pass it around,')</p>
+<p class="CodeCxSpLast">____('No more bottles of beer on the wall!')</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/bottlesofbeer.py</span>. You can
+view each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/bottlesofbeer-debug/</span>.</p>
+<p class="HeadA">Further Reading</p>
+<p class="Body">Project #50 in my book, <span class="Italic"><span style='font-family:"serif"'>The Big Book of Small Python Projects</span></span>,
+also implements this “99 bottles of beer” exercise. You can read it for free
+online at <span class="MsoHyperlink">https://inventwithpython.com/bigbookpython/</span>.
+Project #51 is a version where the lyrics deteriorate over time with erased
+letters, swapped letters, and other drunken typos.</p>
+
+
+
+<p><a href="../exercise22/">Prev - #22 Rock, Paper, Scissors</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise24/">Next - #24 Every 15 Minutes</a></p></body></html>

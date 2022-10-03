@@ -1,0 +1,59 @@
+  <head>
+    <title>How to Run Pip From The Python Interactive Shell</title>
+    <meta name="tags" content="" />
+    <meta name="date" content="2022-08-25 12:00" />
+    <meta name="summary" content="<p>Installing Python modules with the pip tool is surprisingly hard to describe to beginners learning to code. There are several potential issues: multiple Python installations, virtual environments, PATH environment variable settings. You have to introduce command-line terminals and file system navigation, and the differences between Windows and Mac/Linux. However, there is a line of code you can run from the interactive shell to handle all this for you.</p>" />
+  </head>
+  <body>
+
+<p>Installing Python modules with the pip tool is surprisingly hard to describe to beginners learning to code. There are several potential issues: multiple Python installations, virtual environments, PATH environment variable settings. You have to introduce command-line terminals and file system navigation, and the differences between Windows and Mac/Linux. However, there is a line of code you can run from the interactive shell to handle all this for you.</p>
+
+<p>To install a Python module, run the following code from the interactive shell (that is, the thing with the &gt;&gt;&gt; prompt):</p>
+
+<p><code>import sys, subprocess; subprocess.run([sys.executable, '-m', 'pip', 'install', '--user', 'MODULE_NAME'])</code></p>
+
+<p>If you're running the interactive shell from a virtual environment and you get an error like <code>ERROR: Can not perform a '--user' install. User site-packages are not visible in this virtualenv.</code>, then remove the <code>--user</code> option:</p>
+
+<p><code>import sys, subprocess; subprocess.run([sys.executable, '-m', 'pip', 'install', 'MODULE_NAME'])</code></p>
+
+<p>It's generally not advisable to run code that some website tells you to without understanding what it does, so let's break down each section.</p>
+
+<p><code>import sys, subprocess;</code></p>
+
+<p>This imports the <code>sys</code> and <code>subprocess</code> built-in modules so that we can access the <code>sys.executable</code> variable and <code>subprocess.run()</code> function. These modules are in Python's <i>standard library</i>, so they are always already installed with Python.</p>
+
+<p>The semicolon makes Python consider it the "end of the line" so that we can fit two Python instructions on the same line.</p>
+
+<p><code>subprocess.run(</code></p>
+
+<p>This function call simulates running a command from the Terminal or Command Prompt window, except it's now done from Python code.</p>
+
+<p><code>sys.executable, </code></p>
+
+<p>The <code>sys.executable</code> variable contains the file path of the Python interpreter that is currently running the interactive shell. This is especially useful if you have multiple Python installations or virtual environments and want to run the current Python interpreter you are using.</p>
+
+<p><code>'-m', 'pip', 'install', 'MODULE_NAME'])</code></p>
+
+<p>When you run the Python interpreter with the <code>-m</code> option, you are running a module (in our case, the standard <code>pip</code> module) as a script. Running <code>python -m pip</code> is the same thing as running the <code>pip</code> tool itself. The <code>'install', 'MODULE_NAME'</code> options tells pip to download and install a module from the <a href="https://pypi.org/">online Python Packaging Index</a>. Your computer needs to be connected to the internet when you run these instructions.</p>
+
+<p>After running these instructions, you should see the output from pip in the window. For example, when I installed the <a href="https://pypi.org/project/PyRect/">pyrect</a> module the interactive shell looked like this:</p>
+
+<pre>&gt;&gt;&gt; import sys, subprocess; subprocess.run([sys.executable, '-m', 'pip', 'install', 'pyrect'])
+Collecting pyrect
+  Using cached PyRect-0.2.0.tar.gz (17 kB)
+  Preparing metadata (setup.py) ... done
+Building wheels for collected packages: pyrect
+  Building wheel for pyrect (setup.py) ... done
+  Created wheel for pyrect: filename=PyRect-0.2.0-py2.py3-none-any.whl size=11196 sha256=5b7fb5f14167a70c955fff3bb14eecfa557f07747f27a03b5c63834173a58f49
+  Stored in directory: c:\users\al\appdata\local\pip\cache\wheels\25\80\fa\27bb4a1c2e21f64ec71390489d52e57b7cc8afbe79bd595c5e
+Successfully built pyrect
+Installing collected packages: pyrect
+Successfully installed pyrect-0.2.0
+CompletedProcess(args=['C:\\Users\\Al\\.virtualenvs\\deleteme-NM1HlCaN\\Scripts\\python.exe', '-m', 'pip', 'install', 'pyrect'], returncode=0)
+</pre>
+
+<p>To verify that the module installed correctly, run <code>import MODULE_NAME</code>. If no error message appears, the module has been successfully installed.</p>
+
+<p>If you're teaching a Python class or running a Python workshop, using this Python code is a great way to avoid confusion when you need them to install a third-party module from <a href="https://pypi.org/">PyPI</a>. If you want to go into more detail about the command-line, environment variables, and similar topics, you can read <a href="https://inventwithpython.com/beyond/chapter2.html">Chapter 2 of my free book, Beyond the Basic Stuff with Python</a>.</p>
+
+</body>

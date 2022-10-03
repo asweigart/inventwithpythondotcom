@@ -1,0 +1,124 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="../style_pythongently.css" rel="stylesheet" type="text/css" />
+<title>Exercise 12 - Smallest & Biggest</title></head><body style="background-color: #fffeee;"><p><a href="../exercise11/">Prev - #11 Hours, Minutes, Seconds</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise13/">Next - #13 Sum & Product</a></p>
+
+
+
+
+<h1><a name="_Toc115418681"></a><a name="_Toc115359992">Exercise #12: Smallest
+&amp; Biggest</a></h1>
+<p class="ChapterTitleCodeExample">getSmallest([28, 25, 42, 2, 28])  <span style="font-size:13.0pt">→ </span> 2</p>
+<p class="ChapterTitleCodeExample"><span style='font-size:8.0pt;font-family:"MS Shell Dlg 2","sans-serif"'><img border="0" height="144" id="Picture 23" src="../images/image015.jpg" width="128"/></span></p>
+<p class="Body">Python’s built-in <code>min()</code> and <span class="Literal">max()</span> functions return the smallest and biggest numbers in
+a list of numbers passed, respectively. In this exercise, you’ll reimplement
+the behavior of these functions.</p>
+<p class="Body">This is the sort of problem that is trivial for a human to solve
+by hand if the list of numbers is short. However, if the list contains
+thousands, millions, or billions of numbers </p>
+<p class="HeadA">Exercise Description</p>
+<p class="Body">Write a <code>getSmallest()</code> function that
+has a <code>numbers</code> parameter. The <code>numbers</code>
+parameter will be a list of integer and floating-point number values. The
+function returns the smallest value in the list. If the list is empty, the
+function should return <code>None</code>. Since this function
+replicates Python’s <code>min()</code> function, your solution
+shouldn’t use it.</p>
+<p class="Body">These Python <code>assert</code> statements stop
+the program if their condition is <code>False</code>. Copy them
+to the bottom of your solution program. Your solution is correct if the following
+<code>assert</code> statements’ conditions are all <span class="Literal">True</span>:</p>
+<p class="CodeCxSpFirst">assert getSmallest([1, 2, 3]) == 1</p>
+<p class="CodeCxSpMiddle">assert getSmallest([3, 2, 1]) == 1</p>
+<p class="CodeCxSpMiddle">assert getSmallest([28, 25, 42, 2, 28]) == 2</p>
+<p class="CodeCxSpMiddle">assert getSmallest([1]) == 1</p>
+<p class="CodeCxSpLast">assert getSmallest([]) == None</p>
+<p class="Body">Try to write a solution based on the information in this
+description. If you still have trouble solving this exercise, read the <span class="Bold">Solution Design</span> and <span class="Bold">Special Cases and
+Gotchas</span> sections for additional hints.</p>
+<p class="Body">When you are done with this exercise, write a <span class="Literal">getBiggest()</span> function which returns the biggest number
+instead of the smallest number.</p>
+<p class="Body">Prerequisite concepts: <code>len()</code>, <span class="Literal">for</span> loops, lists, <code>None</code> value</p>
+<p class="HeadA">Solution Design</p>
+<p class="Body">Think about how you would solve this problem without a computer,
+given a list of numbers written on paper. You would use the first number as the
+smallest number, and then read every number after it. If the next number is
+smallest than the smallest number you’ve seen so far, it becomes the new
+smallest number. Let’s look at a small example. Figure 12-1 shows how looping
+over the list <code>[28, 25, 42, 2, 28]</code> would affect the
+contents of a variable named <code>smallest</code> that tracks
+the smallest number seen so far.</p>
+<p class="Body"><img border="0" height="571" id="Picture 2" src="../images/image016.png" width="517"/></p>
+<p class="MsoCaption"><span lang="EN-CA">Figure 12-1: The value in </span><span class="Literal">smallest</span><span lang="EN-CA"> contains the smallest integer
+found so far as the </span><code>for</code><span lang="EN-CA"> loop
+iterates over the list </span><code>[28, 25, 42, 2, 28]</code><span lang="EN-CA">.</span></p>
+<p class="Body">Creates a variable named <code>smallest</code> to
+track the smallest value found so far and set it to the first value in the list
+to start. Then have a <code>for</code> loop that loops over every
+number in the list from left to right, and if the number is less than the
+current value in <code>smallest</code>, it becomes the new value
+in <code>smallest</code>. After the loop finishes, the function
+returns the smallest value.</p>
+<p class="HeadA">Special Cases and Gotchas</p>
+<p class="Body">The function should first check if the list is empty. In that
+case, return <code>None</code>. And by starting the <span class="Literal">smallest</span> variable to the first number in a non-empty <span class="Literal">numbers</span> list, you can guarantee that <code>smallest</code>
+is always initialized to a value from the list.</p>
+<p class="Body">Now try to write a solution based on the information in the
+previous sections. If you still have trouble solving this exercise, read the <span class="Bold">Solution Template</span> section for additional hints.</p>
+<p class="HeadA">Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/smallest-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst">def getSmallest(numbers):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># If the numbers list is
+empty, return None:</span></p>
+<p class="CodeCxSpMiddle">    if len(____) == ____:</p>
+<p class="CodeCxSpMiddle">        return None</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Create a variable that
+tracks the smallest value so far, and start</span></p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># it off a the first value
+in the list:</span></p>
+<p class="CodeCxSpMiddle">    smallest = numbers[____]</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Loop over each number in
+the numbers list:</span></p>
+<p class="CodeCxSpMiddle">    for number in ____:</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># If the number is
+smaller than the current smallest value, make</span></p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># it the new smallest
+value:</span></p>
+<p class="CodeCxSpMiddle">        if ____ &lt; smallest:</p>
+<p class="CodeCxSpMiddle">            ____ = number</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Return the smallest value
+found:</span></p>
+<p class="CodeCxSpLast">    ____ smallest</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/smallest.py</span>. You can view
+each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/smallest-debug/</span>.</p>
+<p class="HeadA">Further Reading</p>
+<p class="Body">The benefit of writing a computer program to do a simple task
+like finding the smallest number in a list is that a computer can process a
+list of millions of numbers in seconds. We can simulate this by having the
+computer generate one million random numbers in a list, and then pass that list
+to our <code>getSmallest()</code> function. On my computer, this
+program takes a few seconds, and most of that time is spent displaying the
+million numbers on the screen.</p>
+<p class="Body">Write the following program and save it in a file named <span class="Italic"><span style='font-family:"serif"'>testsmallest.py</span></span>.
+Run it from the same folder as your <span class="Italic"><span style='font-family:
+"serif"'>smallest.py</span></span> file so that it can import it as
+a module:</p>
+<p class="CodeCxSpFirst">import random, smallest</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">numbers = []</p>
+<p class="CodeCxSpMiddle">for i in range(1000000):</p>
+<p class="CodeCxSpMiddle">    numbers.append(random.randint(1, 1000000000))</p>
+<p class="CodeCxSpMiddle">print('Numbers:', numbers)</p>
+<p class="CodeCxSpLast">print('Smallest number is',
+smallest.getSmallest(numbers))</p>
+<p class="Body">When run, this program displays the million numbers between 1 and
+1,000,000,000 it generated, along with the smallest number in that list.</p>
+
+
+
+<p><a href="../exercise11/">Prev - #11 Hours, Minutes, Seconds</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise13/">Next - #13 Sum & Product</a></p></body></html>

@@ -1,0 +1,212 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="../style_pythongently.css" rel="stylesheet" type="text/css" />
+<title>Exercise 29 - Pyramid Drawing</title></head><body style="background-color: #fffeee;"><p><a href="../exercise28/">Prev - #28 Border Drawing</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise30/">Next - #30 3D Box Drawing</a></p>
+
+
+
+
+<h1><a name="_Toc115418698"></a><a name="_Toc115360009">Exercise #29: Pyramid
+Drawing</a></h1>
+<p class="ChapterTitleCodeExample">drawPyramid(5)  <span style="font-size:13.0pt">→
+</span>     #<br/>
+                       ###<br/>
+                       #####<br/>
+                       ####### <br/>
+                       #########</p>
+<p class="ChapterTitleCodeExample"><span style='font-size:8.0pt;font-family:"MS Shell Dlg 2","sans-serif"'><img border="0" height="144" id="Picture 40" src="../images/image034.jpg" width="144"/></span></p>
+<p class="Body">This exercise continues the generative ASCII art programs of
+Exercise #27, “Rectangle Drawing,” and Exercise #28, “Border Drawing.” In this
+exercise, your code prints a pyramid of hashtag characters in any given size.</p>
+<p class="HeadA">Exercise Description</p>
+<p class="Body">Write a <code>drawPyramid()</code> function with a <span class="Literal">height</span> parameter. The top of the pyramid has one centered hashtag
+character, and the subsequent rows have two more hashtags than the previous
+row. The number of rows matches the <code>height</code> integer.
+There are no Python <code>assert</code> statements to check the
+correctness of your program. Instead, you can visually inspect the output
+yourself. For example, calling <code>drawPyramid(8)</code> would
+output the following:</p>
+<p class="CodeCxSpFirst">       #</p>
+<p class="CodeCxSpMiddle">      ###</p>
+<p class="CodeCxSpMiddle">     #####</p>
+<p class="CodeCxSpMiddle">    #######</p>
+<p class="CodeCxSpMiddle">   #########</p>
+<p class="CodeCxSpMiddle">  ###########</p>
+<p class="CodeCxSpMiddle"> #############</p>
+<p class="CodeCxSpLast">###############</p>
+<p class="Body">Try to write a solution based on the information in this
+description. If you still have trouble solving this exercise, read the <span class="Bold">Solution Design and Special Cases and Gotchas</span> sections for
+additional hints.</p>
+<p class="Body">Prerequisite concepts: strings, string concatenation, string
+replication, <code>for</code> loops, <code>range()</code></p>
+<span style='font-size:11.0pt;font-family:"sans-serif"'><br clear="all" style="page-break-before:always"/>
+</span>
+<p class="MsoNormal" style="margin-bottom:0in;margin-bottom:.0001pt;line-height:
+normal"><b><span style='font-size:12.0pt;font-family:"sans-serif";
+color:black'> </span></b></p>
+<p class="HeadA">Solution Design</p>
+<p class="Body">It’s important to notice the general pattern as the height of the
+pyramid increases. Here’s a pyramid of height 1:</p>
+<p class="Code">#</p>
+<p class="Body">Here’s a pyramid of height 2:</p>
+<p class="CodeCxSpFirst"> #</p>
+<p class="CodeCxSpLast">###</p>
+<p class="Body">Here’s a pyramid of height 3:</p>
+<p class="CodeCxSpFirst">  #</p>
+<p class="CodeCxSpMiddle"> ###</p>
+<p class="CodeCxSpLast">#####</p>
+<p class="Body">In order to center the pyramid correctly, you need to print the
+correct amount of space characters on the left side of the row. Here’s the
+pyramid with <code>height</code> set to <code>5</code>
+and the spaces marked with periods to make them visible:</p>
+<p class="CodeCxSpFirst">....#</p>
+<p class="CodeCxSpMiddle">...###</p>
+<p class="CodeCxSpMiddle">..#####</p>
+<p class="CodeCxSpMiddle">.#######</p>
+<p class="CodeCxSpLast">#########</p>
+<p class="Body">The number of hashtag characters begins at <code>1</code>
+for the top row and then increases by <code>2</code>. The code in
+the <code>for</code> loop requires a number of hashtags equal to <span class="Literal">rowNumber * 2 + 1</span>. The following table shows the number of
+spaces and hashtags for a pyramid of height 5:</p>
+<table border="1" cellpadding="0" cellspacing="0" class="MsoTableGrid" style="border-collapse:collapse;border:none">
+<tr>
+<td style="width:1.15in;border:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="166">
+<p align="center" class="Body" style="text-align:center;text-indent:0in"><span class="Bold">Row Number</span></p>
+</td>
+<td style="width:102.6pt;border:solid windowtext 1.0pt;
+  border-left:none;padding:0in 5.4pt 0in 5.4pt" valign="top" width="205">
+<p align="center" class="Body" style="text-align:center;text-indent:0in"><span class="Bold">Number of Spaces</span></p>
+</td>
+<td style="width:121.5pt;border:solid windowtext 1.0pt;
+  border-left:none;padding:0in 5.4pt 0in 5.4pt" valign="top" width="243">
+<p align="center" class="Body" style="text-align:center;text-indent:0in"><span class="Bold">Number of Hashtags</span></p>
+</td>
+</tr>
+<tr>
+<td style="width:1.15in;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt" valign="top" width="166">
+<p align="center" class="Body" style="text-align:center;text-indent:0in">0</p>
+</td>
+<td style="width:102.6pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="205">
+<p align="center" class="Body" style="text-align:center;text-indent:0in">4</p>
+</td>
+<td style="width:121.5pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="243">
+<p align="center" class="Body" style="text-align:center;text-indent:0in">1</p>
+</td>
+</tr>
+<tr>
+<td style="width:1.15in;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt" valign="top" width="166">
+<p align="center" class="Body" style="text-align:center;text-indent:0in">1</p>
+</td>
+<td style="width:102.6pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="205">
+<p align="center" class="Body" style="text-align:center;text-indent:0in">3</p>
+</td>
+<td style="width:121.5pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="243">
+<p align="center" class="Body" style="text-align:center;text-indent:0in">3</p>
+</td>
+</tr>
+<tr>
+<td style="width:1.15in;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt" valign="top" width="166">
+<p align="center" class="Body" style="text-align:center;text-indent:0in">2</p>
+</td>
+<td style="width:102.6pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="205">
+<p align="center" class="Body" style="text-align:center;text-indent:0in">2</p>
+</td>
+<td style="width:121.5pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="243">
+<p align="center" class="Body" style="text-align:center;text-indent:0in">5</p>
+</td>
+</tr>
+<tr>
+<td style="width:1.15in;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt" valign="top" width="166">
+<p align="center" class="Body" style="text-align:center;text-indent:0in">3</p>
+</td>
+<td style="width:102.6pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="205">
+<p align="center" class="Body" style="text-align:center;text-indent:0in">1</p>
+</td>
+<td style="width:121.5pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="243">
+<p align="center" class="Body" style="text-align:center;text-indent:0in">7</p>
+</td>
+</tr>
+<tr>
+<td style="width:1.15in;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt" valign="top" width="166">
+<p align="center" class="Body" style="text-align:center;text-indent:0in">4</p>
+</td>
+<td style="width:102.6pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="205">
+<p align="center" class="Body" style="text-align:center;text-indent:0in">0</p>
+</td>
+<td style="width:121.5pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="243">
+<p align="center" class="Body" style="text-align:center;text-indent:0in">9</p>
+</td>
+</tr>
+</table>
+<p class="Body">Notice that for all pyramids, the number of spaces for the top
+row is <code>height - 1</code>, and each subsequent row has one
+less space than the previous row. An easier way to create each row is with a <span class="Literal">for</span> loop that ranges from <code>0</code> up
+to, but not including, <code>height</code> for the row number,
+where row 0 is at the top. Then the number of spaces at a row number is <span class="Literal">height – (rowNumber + 1)</span>.</p>
+<p class="Body">String replication can easily create the <code>#</code>
+hashtag and space character strings. In Python, you can use the <span class="Literal">*</span> operator with a string and an integer to evaluate to a
+longer string. For example, enter the following into the interactive shell:</p>
+<p class="CodeCxSpFirst">&gt;&gt;&gt; 'Hello' * 3</p>
+<p class="CodeCxSpMiddle">'HelloHelloHello'</p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; '#' * 7</p>
+<p class="CodeCxSpMiddle">'#######'</p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; rowNumber = 5</p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; (rowNumber * 2 + 1) * '#'</p>
+<p class="CodeCxSpLast">'###########'</p>
+<p class="HeadA">Special Cases and Gotchas</p>
+<p class="Body">If our solution uses a <code>for</code> loop to
+loop over the range from <code>0</code> up to, but not including,
+<code>height</code>, we don’t need a separate check for a <span class="Literal">height</span> of <code>0</code> or a negative <span class="Literal">height</span>. This is because these values cause the <span class="Literal">for</span> loop to not run its code, resulting in no output.</p>
+<p class="Body">Now try to write a solution based on the information in the
+previous sections. If you still have trouble solving this exercise, read the <span class="Bold">Solution Template</span> section for additional hints.</p>
+<p class="HeadA">Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/pyramiddrawing-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst">def drawPyramid(height):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Loop over each row from 0
+up to height:</span></p>
+<p class="CodeCxSpMiddle">    for rowNumber in range(____):</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># Create a string of
+spaces for the left side of the pyramid:</span></p>
+<p class="CodeCxSpMiddle">        leftSideSpaces = ' ' * (____ - (rowNumber + ____))</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># Create the string of
+hashtags for this row of the pyramid:</span></p>
+<p class="CodeCxSpMiddle">        pyramidRow = '#' * (____ * 2 + ____)</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># Print the left side
+spaces and the row of the pyramid:</span></p>
+<p class="CodeCxSpLast">        ____(leftSideSpaces + pyramidRow)</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/pyramiddrawing.py</span>. You
+can view each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/pyramiddrawing-debug/</span>.</p>
+
+
+
+<p><a href="../exercise28/">Prev - #28 Border Drawing</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise30/">Next - #30 3D Box Drawing</a></p></body></html>

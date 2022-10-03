@@ -1,0 +1,364 @@
+  <head>
+    <title>Introducing Humre: Human-Readable Regular Expressions</title>
+    <meta name="tags" content="" />
+    <meta name="date" content="2022-08-23 12:00" />
+    <meta name="summary" content="<p>Regular expressions (aka regexes) are a mini-language to specify a pattern of text to look for. However, regex syntax is composed of various punctuation marks that can be hard to remember. Humre is a Python module that gives a more human-readable syntax that works better with code editing tools. You can install Humre just like any other Python module with <code>pip install humre</code> and <a href=&quot;https://github.com/asweigart/humre&quot;>the full documentation is available in the git repo's README file.</a></p>" />
+  </head>
+  <body>
+
+<p>Regular expressions (aka regexes) are a mini-language to specify a pattern of text to look for. However, regex syntax is composed of various punctuation marks that can be hard to remember. <a href="https://github.com/asweigart/humre">Humre</a> is a Python module that gives a more human-readable syntax that works better with code editing tools. You can install Humre just like any other Python module with <code>pip install humre</code> and <a href="https://github.com/asweigart/humre">the full documentation is available in the git repo's README file.</a></p>
+
+<p>For example, if you want to find an American phone number, you can use the regex string <code>r'\d{3}-\d{3}-\d{4}'</code> (the <code>r</code> makes it a <a href="https://www.pythonmorsels.com/raw-strings/">raw string</a> that automatically escapes the backslashes) to search for a 3 numeric digit characters for the area code (the <code>\d{3}</code>), then a dash (the <code>-</code>), followed by three digits, a dash, and four digits. But <code>r'\d{3}-\d{3}-\d{4}'</code> is not an intuitive way to convey this. Humre fixes this by providing functions and constants with readable names. The equivalent Humre code for an American phone number is:</p>
+
+<p><code>exactly(3, DIGIT) + '-' + exactly(3, DIGIT) + '-' exactly(4, DIGIT)</code></p>
+
+<p>Humre's constants are strings and Humre's functions return strings, so the above expression evaluates to the same string: <code>r'\d{3}-\d{3}-\d{4}'</code></p>
+
+<p>Consider this regex code using Python's <code>re</code> module for an American phone number with optional parentheses around the area code:</p>
+
+<pre>
+&gt;&gt;&gt; import re
+&gt;&gt;&gt; regexStr = r'(\d{3})|(\(\d{3}\))-\d{3}-\d{4}'
+&gt;&gt;&gt; patternObj = re.compile(regexStr)
+&gt;&gt;&gt; patternObj.search('My number is (415)-555-5555.')
+&lt;re.Match object; span=(13, 27), match='(415)-555-5555'&gt;
+</pre>
+
+<p>The regex string is hard to read, especially with those escaped parentheses mixed in with the</p>
+
+<pre>
+&gt;&gt;&gt; from humre import *
+&gt;&gt;&gt; regexStr = either(group(exactly(3, DIGIT)), group(OPEN_PAREN, exactly(3, DIGIT), CLOSE_PAREN)) + '-' + exactly(3, DIGIT) + '-' + exactly(4, DIGIT)
+&gt;&gt;&gt; regexStr
+'(\\d{3})|(\\(\\d{3}\\))-\\d{3}-\\d{4}'
+&gt;&gt;&gt; patternObj = compile(regexStr)
+&gt;&gt;&gt; patternObj.search('My number is (415)-555-5555.')
+&lt;re.Match object; span=(13, 27), match='(415)-555-5555'&gt;
+</pre>
+
+<p>The Humre code produces the same regex string except using more readable code. Humre is not a reimplementation of a regular expression engine; it's a wrapper that adds readable names to standard regex syntax.</p>
+
+<p>Python's <code>re</code> module has "verbose mode" which allows you to use multiline strings with comments. This can make your regex strings easier to read, but they are still strings and won't benefit from advanced features your IDE provides, such as:</p>
+
+<ul>
+  <li>Your editor's parentheses matching works.</li>
+  <li>Your editor's syntax highlight works.</li>
+  <li>Your editor's linter and type hints tool picks up typos.</li>
+  <li>Your editor's autocomplete works.</li>
+  <li>Auto-formatter tools like Black can automatically format your regex code.</li>
+  <li>Humre handles raw strings/string escaping for you.</li>
+  <li>You can put actual Python comments alongside your Humre code.</li>
+  <li>Better error messages for invalid regexes.</li>
+</ul>
+
+<p>The <a href="https://github.com/asweigart/humre">README on Humre's git repository has full documentation</a>, but here's a general introduction. I still recommend all programmers learn standard regex syntax, as you'll need that knowledge to read other people's (non-Humre) code and diagnose any bugs you accidentally write with the Humre module.</p>
+
+<h2>Creating Basic Regex Strings with Humre</h2>
+
+<p>Humre functions return strings, so that instead of remembering the regex syntax for matching between 3 and 5 letter X's with <code>'X{3,5}'</code>, you can write the code <code>between(3, 5, 'X')</code>. To avoid having to prefix <code>humre.</code> in front of every function call, I recommend importing the Humre module with <code>from humre import *</code>.</p>
+
+<p>Because Humre functions take string arguments and return strings, you can compose them together. For example, if you want to put the 3-to-5-letter-Xs inside of a regex group, you can write <code>group(between(3, 5, 'X'))</code>.</p>
+
+<p>Humre functions also accept a variable number of string arguments and concatenates them together for your convenience. The code <code>group('Z', between(3, 5, 'X'))</code> adds a letter Z to the start of the group, and this is equivalent to the code <code>group('Z' + between(3, 5, 'X'))</code>.</p>
+
+<p>The exception to this is the <code>either()</code> function, which is used for the regex alternation pipe character <code>'|'</code>. If you wanted to match "cat" <i>or</i> "dog" with the regex <code>'cat|dog'</code>, you would need to call Humre's <code>either('cat', 'dog')</code> function. The two string arguments are not concatenated together for <code>either()</code>.</p>
+
+<p>Humre also provides constants for common regex strings, such as <code>DIGIT</code> for <code>r'\d'</code> and <code>OPEN_PAREN</code> for <code>r'\('</code>. These manage escaping for you.</p>
+
+<p>A full list of Humre functions and constants is available in the <a href="https://github.com/asweigart/humre">README documentation</a>.</p>
+
+<p>Experimenting with what strings Humre returns is easy to do in the interactive shell if you want to explore what Humre is doing:</p>
+
+<pre>
+&gt;&gt;&gt; from humre import *
+&gt;&gt;&gt; exactly(3, 'X')
+'X{3}'
+&gt;&gt;&gt; >>> zero_or_more('X')
+'X*'
+&gt;&gt;&gt;
+&gt;&gt;&gt; group(DIGIT)
+'(\\d)'
+&gt;&gt;&gt; group(either(exactly(3, DIGIT), 'cat'))
+'(\\d{3}|cat)'
+&gt;&gt;&gt; either(exactly(3, DIGIT), group('cat'))
+'\\d{3}|(cat)'
+</pre>
+
+<h2>Humre's Convenience Functions</h2>
+
+<p>You don't need to keep typing out quotes and <code>+</code> operators to join strings. Humre's <code>join()</code> function offers an easier way to join strings together. The following <code>humre.join()</code> function and <code>''.join()</code> method calls are equivalent:</p>
+
+<pre>
+&gt;&gt;&gt; ''.join(['Hello', 'World'])
+'HelloWorld'
+&gt;&gt;&gt; from humre import *
+&gt;&gt;&gt; join('Hello', 'World')
+'HelloWorld'
+</pre>
+
+<p>Humre also provides a <code>compile()</code> function which wraps the standard <code>re.compile()</code> function. This is so that you don't need to mix your Humre and <code>re</code> code. The following code produces equivalent pattern objects:</p>
+
+<pre>
+&gt;&gt;&gt; import re
+&gt;&gt;&gt; re.compile(r'\d{3}')
+re.compile('\\d{3}')
+&gt;&gt;&gt; from humre import *
+&gt;&gt;&gt; compile(exactly(3, DIGIT))
+re.compile('\\d{3}')
+</pre>
+
+<p>Because Humre functions concatenate multiple string arguments together, if you want to pass regex flags (such as <code>re.IGNORECASE</code>) you need to use <code>humre.compile()</code>'s <code>flags</code> keyword argument instead. The following code produces equivalent pattern objects:</p>
+
+<pre>
+&gt;&gt;&gt; import re
+&gt;&gt;&gt; re.compile('Hello', re.IGNORECASE)
+re.compile('Hello', re.IGNORECASE)
+&gt;&gt;&gt; from humre import *
+&gt;&gt;&gt; compile('Hello', flags=re.IGNORECASE)
+re.compile('Hello', re.IGNORECASE)
+</pre>
+
+<p>Note that this means running <code>from humre import *</code> overwrites Python's built-in <code>compile()</code> function. However, most applications don't call this function. If yours does, you can import Humre with <code>import humre</code> or import individual Humre functions and constants instead.</p>
+
+<h2>Human-Readable Error Messages</h2>
+
+<p>Typos in your Humre code give much better error messages than the standard <code>re</code> module does. For example, if you make a typo and ask for between 5 and 3 occurrences of the letter X (instead of between 3 and 5), the <code>re</code> module produces this unwieldy error:</p>
+
+<pre>
+&gt;&gt;&gt; import re
+&gt;&gt;&gt; re.compile('X{5,3}')
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+  File "C:\Users\Al\AppData\Local\Programs\Python\Python311\Lib\re\__init__.py", line 227, in compile
+    return _compile(pattern, flags)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Al\AppData\Local\Programs\Python\Python311\Lib\re\__init__.py", line 294, in _compile
+    p = _compiler.compile(pattern, flags)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Al\AppData\Local\Programs\Python\Python311\Lib\re\_compiler.py", line 743, in compile
+    p = _parser.parse(p, flags)
+        ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Al\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py", line 980, in parse
+    p = _parse_sub(source, state, flags & SRE_FLAG_VERBOSE, 0)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Al\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py", line 455, in _parse_sub
+    itemsappend(_parse(source, state, verbose, nested + 1,
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Al\AppData\Local\Programs\Python\Python311\Lib\re\_parser.py", line 672, in _parse
+    raise source.error("min repeat greater than max repeat",
+re.error: min repeat greater than max repeat at position 2
+</pre>
+
+<p>That's quite a lot of text to read through. The same mistake in Humre provides a more direct, detailed error message:</p>
+
+<pre>
+&gt;&gt;&gt; from humre import *
+&gt;&gt;&gt; between(5, 3, 'X')
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+  File "c:\github\humre\src\humre\__init__.py", line 439, in between
+    raise ValueError('minimum argument ' + str(minimum) + ' must be less than maximum argument ' + str(maximum))
+ValueError: minimum argument 5 must be less than maximum argument 3
+</pre>
+
+<h2>Unicode Letter Support</h2>
+
+<p>It's common to write <code>[A-Za-z]</code> for a character class to match all letters, but this suffers from the problem of not matching letters with accent marks or non-English letters. Humre's <code>LETTER</code> character class looks like <code>'[A-Za-zªµºÀ-ÖØ-öø-ˁˆ-ˑˠ-ˤˬˮͰ-ʹͶ-ͷͺ-ͽͿΆΈ-ΊΌΎ-Ρ...</code> and matches all letters. The definition of "letter" in this case is based on Python's <code>isalpha()</code> string method.</p>
+
+<h2>Massive Regexes Are Easier with Humre</h2>
+
+<p>The benefits of Humre compound as your regular expressions get larger. Let's compare a massive regex used in Python packaging code to its equivalent Humre code.</p>
+
+<p>Here's the <a href="https://github.com/pypa/packaging/blob/213cb954e5fde8f6f14bc72c3a8e48d1884e37f8/packaging/specifiers.py#L106-L204">massive regular expression in verbose mode</a>:</p>
+
+<textarea style="width: 100%;">
+  _version_regex_str = r"""
+(?P&lt;version&gt;
+    (?:
+        # The identity operators allow for an escape hatch that will
+        # do an exact string match of the version you wish to install.
+        # This will not be parsed by PEP 440 and we cannot determine
+        # any semantic meaning from it. This operator is discouraged
+        # but included entirely as an escape hatch.
+        (?&lt;====)  # Only match for the identity operator
+        \s*
+        [^\s]*    # We just match everything, except for whitespace
+                  # since we are only testing for strict identity.
+    )
+    |
+    (?:
+        # The (non)equality operators allow for wild card and local
+        # versions to be specified so we have to define these two
+        # operators separately to enable that.
+        (?&lt;===|!=)            # Only match for equals and not equals
+        \s*
+        v?
+        (?:[0-9]+!)?          # epoch
+        [0-9]+(?:\.[0-9]+)*   # release
+        (?:                   # pre release
+            [-_\.]?
+            (a|b|c|rc|alpha|beta|pre|preview)
+            [-_\.]?
+            [0-9]*
+        )?
+        (?:                   # post release
+            (?:-[0-9]+)|(?:[-_\.]?(post|rev|r)[-_\.]?[0-9]*)
+        )?
+        # You cannot use a wild card and a dev or local version
+        # together so group them with a | and make them optional.
+        (?:
+            \.\*  # Wild card syntax of .*
+            |
+            (?:[-_\.]?dev[-_\.]?[0-9]*)?         # dev release
+            (?:\+[a-z0-9]+(?:[-_\.][a-z0-9]+)*)? # local
+        )?
+    )
+    |
+    (?:
+        # The compatible operator requires at least two digits in the
+        # release segment.
+        (?&lt;=~=)               # Only match for the compatible operator
+        \s*
+        v?
+        (?:[0-9]+!)?          # epoch
+        [0-9]+(?:\.[0-9]+)+   # release  (We have a + instead of a *)
+        (?:                   # pre release
+            [-_\.]?
+            (a|b|c|rc|alpha|beta|pre|preview)
+            [-_\.]?
+            [0-9]*
+        )?
+        (?:                                   # post release
+            (?:-[0-9]+)|(?:[-_\.]?(post|rev|r)[-_\.]?[0-9]*)
+        )?
+        (?:[-_\.]?dev[-_\.]?[0-9]*)?          # dev release
+    )
+    |
+    (?:
+        # All other operators only allow a sub set of what the
+        # (non)equality operators do. Specifically they do not allow
+        # local versions to be specified nor do they allow the prefix
+        # matching wild cards.
+        (?&lt;!==|!=|~=)         # We have special cases for these
+                              # operators so we want to make sure they
+                              # don't match here.
+        \s*
+        v?
+        (?:[0-9]+!)?          # epoch
+        [0-9]+(?:\.[0-9]+)*   # release
+        (?:                   # pre release
+            [-_\.]?
+            (a|b|c|rc|alpha|beta|pre|preview)
+            [-_\.]?
+            [0-9]*
+        )?
+        (?:                                   # post release
+            (?:-[0-9]+)|(?:[-_\.]?(post|rev|r)[-_\.]?[0-9]*)
+        )?
+        (?:[-_\.]?dev[-_\.]?[0-9]*)?          # dev release
+    )
+)
+"""
+</textarea>
+
+<p>And here's <a href="https://pastebin.com/raw/CyQ5GXWP">the equivalent code with Humre</a>:</p>
+
+<textarea style="width: 100%;">
+from humre import *
+
+SEPARATOR = chars('-_' + PERIOD)
+OPT_SEPARATOR = optional(SEPARATOR)
+
+
+def version_template(fn):
+    return ''.join([
+    zero_or_more(WHITESPACE),
+    optional('v'),
+    optional(noncap_group(one_or_more(chars('0-9')), '!')), # epoch
+
+    one_or_more(chars('0-9')), fn(noncap_group(PERIOD, one_or_more(chars('0-9')))), # release
+
+    optional(noncap_group( # pre release
+        OPT_SEPARATOR,
+        group(either('a', 'b', 'c', 'rc', 'alpha', 'beta', 'pre', 'preview')),
+        OPT_SEPARATOR,
+        zero_or_more(chars('0-9')),
+    )),
+    optional(noncap_group( # post release
+        either(
+            noncap_group('-', one_or_more(chars('0-9'))),
+            noncap_group(OPT_SEPARATOR, group_either('post', 'rev', 'r') + OPT_SEPARATOR + zero_or_more(chars('0-9')))
+        )
+    ))
+])
+
+EQ_NE_VERSION_TEMPLATE = version_template(zero_or_more)
+COMPATIBILITY_VERSION_TEMPLATE = version_template(one_or_more)
+
+DEV_RELEASE = optional(noncap_group(OPT_SEPARATOR, 'dev', OPT_SEPARATOR, zero_or_more(chars('0-9'))))  # dev release
+
+_version_regex_str = named_group('version',
+    either(
+        noncap_group(
+            # The identity operators allow for an escape hatch that will
+            # do an exact string match of the version you wish to install.
+            # This will not be parsed by PEP 440 and we cannot determine
+            # any semantic meaning from it. This operator is discouraged
+            # but included entirely as an escape hatch.
+            positive_lookbehind('==='), # Only match for the identity operator
+            zero_or_more(WHITESPACE),
+            zero_or_more(nonchars(WHITESPACE)) # We just match everything, except for whitespace
+                                               # since we are only testing for strict identity.
+        ),
+        noncap_group(
+            # The (non)equality operators allow for wild card and local
+            # versions to be specified so we have to define these two
+            # operators separately to enable that.
+            positive_lookbehind(either('==', '!=')), # Only match for equals and not equals
+
+            EQ_NE_VERSION_TEMPLATE,
+
+            # You cannot use a wild card and a dev or local version
+            # together so group them with a | and make them optional.
+            optional(noncap_group(
+                either(
+                    PERIOD + ASTERISK, # Wild card syntax of .*
+                    DEV_RELEASE +
+                    optional(noncap_group(PLUS, one_or_more(chars('a-z0-9')), zero_or_more(noncap_group(SEPARATOR, one_or_more(chars('a-z0-9')))))) # local
+                )
+            ))
+        ),
+        noncap_group(
+            # The compatible operator requires at least two digits in the
+            # release segment.
+            positive_lookbehind('~='), # Only match for the compatible operator
+
+            COMPATIBILITY_VERSION_TEMPLATE,
+
+            DEV_RELEASE,
+        ),
+        noncap_group(
+            # All other operators only allow a sub set of what the
+            # (non)equality operators do. Specifically they do not allow
+            # local versions to be specified nor do they allow the prefix
+            # matching wild cards.
+            negative_lookbehind(either('==', '!=', '~=')), # We have special cases for these
+                                                           # operators so we want to make sure they
+                                                           # don't match here.
+            EQ_NE_VERSION_TEMPLATE,
+
+            DEV_RELEASE,
+        )
+    )
+)
+
+print(_version_regex_str)
+</textarea>
+
+<p>While both are a lot to take in, the Humre code benefits from not being in a multiline string. This means your IDE can match parentheses, your linter can spot typos, and your automatic code formatting tools can clean up your Humre code for you.</p>
+
+<h2>Full Documentation</h2>
+
+<p>This is a broad introduction to Humre. The <a href="https://github.com/asweigart/humre">full documentation</a> is available in the git repo's README file.</p>
+
+</body>

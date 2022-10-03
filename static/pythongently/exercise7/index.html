@@ -1,0 +1,113 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="../style_pythongently.css" rel="stylesheet" type="text/css" />
+<title>Exercise 7 - ASCII Table</title></head><body style="background-color: #fffeee;"><p><a href="../exercise6/">Prev - #6 Ordinal Suffix</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise8/">Next - #8 Read Write File</a></p>
+
+
+
+
+<h1><a name="_Toc115418676"></a><a name="_Toc115359987">Exercise #7: ASCII
+Table</a></h1>
+<p class="ChapterTitleCodeExample"><br/>
+<span style='font-size:8.0pt;font-family:"MS Shell Dlg 2","sans-serif"'><img height="144" id="Picture 16" src="../images/image008.jpg" width="120"/></span></p>
+<p class="Body">ASCII stands for <span class="Italic"><span style='font-family:
+"serif"'>American Standard Code for Information Interchange</span></span>.
+Computers can only store numbers, so each letter, numeral, punctuation mark,
+and every other character is assigned a number called a <span class="Italic"><span style='font-family:"serif"'>code point</span></span>. ASCII was a
+popular standard mapping of text characters to numbers. For example, <span class="Literal">'Hello'</span> would be represented by 72, 101, 108, 108, 111. Specifically,
+computers only store the ones and zeros of binary numbers. These decimal
+numbers translate to 01001000, 01100101, 01101100, 01101100, 01101111 in binary.
+An ASCII table showed all the characters and their assigned ASCII number
+values.</p>
+<p class="Body">However, ASCII is an old and somewhat limited standard: it
+doesn’t have numbers assigned for Cyrillic or Chinese characters, for example.
+And it is an <i>American</i>
+standard: it has a code point for the dollar sign (code point 36) but not the
+British pound sign.</p>
+<p class="Body">ASCII is no longer enough now that the internet has made global
+communication commonplace. The newer <span class="Italic"><span style='font-family:
+"serif"'>Unicode</span></span> character set provides code points
+for every character and is what Python uses for its string values. Unicode’s
+code points are backward compatible with ASCII, so we can still easily use
+Python to display an ASCII table.</p>
+<p class="Body">In this exercise you’ll learn how to use the <code>ord()</code>
+and <code>chr()</code> functions to translate between integers
+and text characters.</p>
+<p class="HeadA">Exercise Description</p>
+<p class="Body">Write a <code>printASCIITable()</code> function that
+displays the ASCII number and its corresponding text character, from 32 to 126.
+(These are called the <span class="Italic"><span style='font-family:"serif"'>printable
+ASCII characters</span></span>.)</p>
+<p class="Body">Your solution is correct if calling <code>printASCIITable()</code>
+displays output that looks like the following:</p>
+<p class="CodeCxSpFirst">32  </p>
+<p class="CodeCxSpMiddle">33 !</p>
+<p class="CodeCxSpMiddle">34 "</p>
+<p class="CodeCxSpMiddle">35 #</p>
+<p class="CodeCxSpMiddle">--more--</p>
+<p class="CodeCxSpMiddle">124 |</p>
+<p class="CodeCxSpMiddle">125 }</p>
+<p class="CodeCxSpLast">126 ~</p>
+<p class="Body">Note that the character for ASCII value 32 is the space character,
+which is why it looks like nothing is next to 32 in the output.</p>
+<p class="Body">Try to write a solution based on the information in this
+description. If you still have trouble solving this exercise, read the <span class="Bold">Solution Design</span> and <span class="Bold">Special Cases and
+Gotchas</span> sections for additional hints.</p>
+<p class="Body">Prerequisite concepts: <code>for</code> loops, <span class="Literal">range()</span> with two arguments, <code>chr()</code></p>
+<p class="HeadA">Solution Design</p>
+<p class="Body">Python’s built-in <code>chr()</code> function
+accepts an integer argument of a code point and returns the string of that code
+point’s character. The <code>ord()</code> function does the
+opposite: accepting a string of a single character and returning its integer
+code point. The “ord” is short for “ordinal”.</p>
+<p class="Body">For example, enter the following into the interactive shell:</p>
+<p class="CodeCxSpFirst">&gt;&gt;&gt; ord('A')</p>
+<p class="CodeCxSpMiddle">65</p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; chr(65)</p>
+<p class="CodeCxSpMiddle">'A'</p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; ord('B')</p>
+<p class="CodeCxSpMiddle">66</p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; ord('!')</p>
+<p class="CodeCxSpMiddle">33</p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; 'Hello' + chr(33)</p>
+<p class="CodeCxSpLast">'Hello!'</p>
+<p class="Body">The <code>printASCIITable()</code> function needs a
+<code>for</code> loop that starts at the integer <span class="Literal">32</span> and goes up to <code>126</code>. Then, inside
+the loop, print the integer loop variable and what the <code>chr()</code>
+function returns for that integer loop variable.</p>
+<p class="HeadA">Special Cases and Gotchas</p>
+<p class="Body">The upper bound argument to the <code>range()</code>
+function doesn’t include the number itself. This means that <span class="Literal">for i in range(32, 126):</span> covers the range of integers from
+<code>32</code> up to, but not including, <code>126</code>.
+If you want to include <code>126</code> (which we do for this exercise),
+pass <code>127</code> as the second argument to <span class="Literal">range()</span>.</p>
+<p class="Body">Now try to write a solution based on the information in the
+previous sections. If you still have trouble solving this exercise, read the <span class="Bold">Solution Template</span> section for additional hints.</p>
+<p class="HeadA">Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/asciitable-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst">def printASCIITable():</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Loop over integers 32 up
+to and including 126:</span></p>
+<p class="CodeCxSpMiddle">    for i in range(____, ____):</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># Print the integer and
+its ASCII text character:</span></p>
+<p class="CodeCxSpMiddle">        print(i, ____(i))</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpLast">printASCIITable()</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/asciitable.py</span>. You can
+view each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/asciitable-debug/</span>.</p>
+<p class="HeadA">Further Reading</p>
+<p class="Body">If you’d like to learn more about Unicode, I recommend Ned
+Batchelder’s “Pragmatic Unicode” blog post at <span class="MsoHyperlink">https://nedbatchelder.com/text/unipain.html</span>.
+He also gave a PyCon talk based on this blog post that you can watch at <span class="MsoHyperlink">https://youtu.be/sgHbC6udIqc</span>. Unicode is often seen as
+a complicated topic, but Ned breaks it down into understandable parts and what
+Python programmers need to know.</p>
+<p class="Body">You can also see an ASCII table for yourself at <a href="https://en.wikipedia.org/wiki/ASCII"><i>https://en.wikipedia.org/wiki/ASCII</i></a>.</p>
+
+
+
+<p><a href="../exercise6/">Prev - #6 Ordinal Suffix</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise8/">Next - #8 Read Write File</a></p></body></html>

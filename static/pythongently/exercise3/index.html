@@ -1,0 +1,97 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="../style_pythongently.css" rel="stylesheet" type="text/css" />
+<title>Exercise 3 - Odd & Even</title></head><body style="background-color: #fffeee;"><p><a href="../exercise2/">Prev - #2 Temperature Conversion</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise4/">Next - #4 Area & Volume</a></p>
+
+
+
+
+<h1><a name="_Toc115418672"></a><a name="_Toc115359983">Exercise #3: Odd &amp; Even</a></h1>
+<p class="ChapterTitleCodeExample">isOdd(13)  <span style="font-size:13.0pt">→
+</span> True<br/>
+isEven(13)  <span style="font-size:13.0pt">→ </span> False</p>
+<p class="ChapterTitleCodeExample"><span style='font-size:8.0pt;font-family:"MS Shell Dlg 2","sans-serif"'><img height="144" id="Picture 9" src="../images/image003.jpg" width="237"/></span></p>
+<p class="Body">Determining if a number is even or odd is a common calculation
+that uses the modulo operator. Like Exercise #2, “Temperature Conversion,” the
+functions for this exercise’s solution functions can be as little as one line
+long.</p>
+<p class="Body">This exercise covers the % modulo operator, and the technique of
+using modulo-2 arithmetic to determine if a number is even or odd.</p>
+<p class="HeadA">Exercise Description</p>
+<p class="Body">Write two functions, <code>isOdd()</code> and <span class="Literal">isEven()</span>, with a single numeric parameter named <span class="Literal">number</span>. The <code>isOdd()</code> function
+returns <code>True</code> if <code>number</code> is
+odd and <code>False</code> if <code>number</code>
+is even. The <code>isEven()</code> function returns the <span class="Literal">True</span> if <code>number</code> is even and <span class="Literal">False</span> if <code>number</code> is odd. Both
+functions return <code>False</code> for numbers with fractional
+parts, such as <code>3.14</code> or <code>-4.5</code>.
+Zero is considered an even number.</p>
+<p class="Body">These Python <code>assert</code> statements stop
+the program if their condition is <code>False</code>. Copy them
+to the bottom of your solution program. Your solution is correct if the following
+<code>assert</code> statements’ conditions are all <span class="Literal">True</span>:</p>
+<p class="CodeCxSpFirst">assert isOdd(42) == False</p>
+<p class="CodeCxSpMiddle">assert isOdd(9999) == True</p>
+<p class="CodeCxSpMiddle">assert isOdd(-10) == False</p>
+<p class="CodeCxSpMiddle">assert isOdd(-11) == True</p>
+<p class="CodeCxSpMiddle">assert isOdd(3.1415) == False</p>
+<p class="CodeCxSpMiddle">assert isEven(42) == True</p>
+<p class="CodeCxSpMiddle">assert isEven(9999) == False</p>
+<p class="CodeCxSpMiddle">assert isEven(-10) == True</p>
+<p class="CodeCxSpMiddle">assert isEven(-11) == False</p>
+<p class="CodeCxSpLast">assert isEven(3.1415) == False</p>
+<p class="Body">Try to write a solution based on the information in this
+description. If you still have trouble solving this exercise, read the <span class="Bold">Solution Design</span> and <span class="Bold">Special Cases and
+Gotchas</span> sections for additional hints.</p>
+<p class="Body">Prerequisite concepts: modulo operator</p>
+<p class="HeadA">Solution Design</p>
+<p class="Body">You might not know how to write code that finds out if a number
+is odd or even. This kind of exercise is easy to solve if you already know how
+to solve it, but difficult if you have to reinvent the solution yourself. Feel
+free to look up answers to questions you have on the internet. Include the
+programming language’s name for more specific results, such as “<span class="Italic"><span style='font-family:"serif"'>python find out if a
+number is odd or even</span></span>”. The question-and-answer website <span class="MsoHyperlink">https://stackoverflow.com</span> is usually at the top of
+the search results and reliably has direct, high-quality answers. Looking up programming
+answers online isn’t “cheating.” Professional software developers look up
+answers dozens of times a day!</p>
+<p class="Body">The <code>%</code> modulo operator can mod a number
+by <code>2</code> to determine its evenness or oddness. The modulo
+operator acts as a sort of “division remainder” operator. If you divide a
+number by <code>2</code> and the remainder is <span class="Literal">1</span>, the number must be odd. If the remainder is <span class="Literal">0</span>, the number must be even. For example, <span class="Literal">42 % 2</span> is <code>0</code>, meaning that <span class="Literal">42</span> is even. But <code>7 % 2</code> is <span class="Literal">1</span>, meaning that <code>7</code> is odd.</p>
+<p class="Body">Floating-point numbers such as <code>3.1415</code>
+are neither odd nor even, so both <code>isOdd()</code> and <span class="Literal">isEven()</span> should return <code>False</code>
+for them.</p>
+<p class="Body">Keep in mind that the <code>isOdd()</code> and <span class="Literal">isEven()</span> function you write must return a Boolean <span class="Literal">True</span> or <code>False</code> value, not an
+integer <code>0</code> or <code>1</code>. You need
+to use a <code>==</code> or <code>!=</code> comparison
+operator to produce a Boolean value: <code>7 % 2 == 1</code>
+evaluates to <code>1 == 1</code>, which in turn evaluates to <span class="Literal">True</span>.</p>
+<p class="HeadA">Special Cases and Gotchas</p>
+<p class="Body">Non-integer numbers such as <code>4.5</code> or <span class="Literal">3.1415</span> are neither odd nor even, so both <span class="Literal">isOdd()</span> and <code>isEven()</code> should
+return <code>False</code> for them.</p>
+<p class="Body">Now try to write a solution based on the information in the
+previous sections. If you still have trouble solving this exercise, read the <span class="Bold">Solution Template</span> section for additional hints.</p>
+<p class="HeadA">Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/oddeven-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst">def isOdd(number):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Return whether number mod
+2 is 1:</span></p>
+<p class="CodeCxSpMiddle">    return ____ % 2 == ____</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">def isEven(number):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Return whether number mod
+2 is 0:</span></p>
+<p class="CodeCxSpLast">    return ____ % 2 == ____</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/oddeven.py</span>. You can view
+each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/oddeven-debug/</span>.</p>
+<p class="HeadA">Further Reading</p>
+<p class="Body">There are several uses of the <code>%</code> modulo
+operator. You can learn more about them in the tutorial “Python Modulo in
+Practice: How to Use the % Operator” at <span class="MsoHyperlink">https://realpython.com/python-modulo-operator/</span>.</p>
+
+
+
+<p><a href="../exercise2/">Prev - #2 Temperature Conversion</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise4/">Next - #4 Area & Volume</a></p></body></html>

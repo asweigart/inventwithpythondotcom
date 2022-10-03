@@ -1,0 +1,145 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="../style_pythongently.css" rel="stylesheet" type="text/css" />
+<title>Exercise 40 - Merging Two Sorted Lists</title></head><body style="background-color: #fffeee;"><p><a href="../exercise39/">Prev - #39 Collatz Sequence</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise41/">Next - #41 ROT 13 Encryption</a></p>
+
+
+
+
+<h1><a name="_Toc115418709"></a><a name="_Toc115360020">Exercise #40: Merging Two
+Sorted Lists</a></h1>
+<p class="ChapterTitleCodeExample">mergeTwoLists([1, 3, 6], [5, 7, 8, 9])  <span style="font-size:13.0pt">→ </span> [1, 3, 5, 6, 7, 8, 9]</p>
+<p class="ChapterTitleCodeExample"><span style='font-size:8.0pt;font-family:"MS Shell Dlg 2","sans-serif"'><img border="0" height="144" id="Picture 51" src="../images/image047.jpg" width="106"/></span></p>
+<p class="Body">One of the most efficient sorting algorithms is the merge sort
+algorithm. Merge sort has two phases: the dividing phase and the merge phase. We
+won’t dive into this advanced algorithm in this book. However, we can write
+code for the second half: merging two pre-sorted lists of integers into a
+single sorted list.</p>
+<p class="HeadA">Exercise Description</p>
+<p class="Body">Write a <code>mergeTwoLists()</code> function with
+two parameters <code>list1</code> and <code>list2</code>.
+The lists of numbers passed for these parameters are already in sorted order
+from smallest to largest number. The function returns a single sorted list of
+all numbers from these two lists.</p>
+<p class="Body">You could write this function in one line of code by using
+Python’s <code>sorted()</code> function:</p>
+<p class="Code">return sorted(list1 + list2)</p>
+<p class="Body">But this would defeat the purpose of the exercise, so don’t use
+the <code>sorted()</code> function or <code>sort()</code>
+method as part of your solution.</p>
+<p class="Body">These Python <code>assert</code> statements stop
+the program if their condition is <code>False</code>. Copy them
+to the bottom of your solution program. Your solution is correct if the following
+<code>assert</code> statements’ conditions are all <span class="Literal">True</span>:</p>
+<p class="CodeCxSpFirst">assert mergeTwoLists([1, 3, 6], [5, 7, 8, 9]) == [1, 3,
+5, 6, 7, 8, 9]</p>
+<p class="CodeCxSpMiddle">assert mergeTwoLists([1, 2, 3], [4, 5]) == [1, 2, 3, 4,
+5]</p>
+<p class="CodeCxSpMiddle">assert mergeTwoLists([4, 5], [1, 2, 3]) == [1, 2, 3, 4,
+5]</p>
+<p class="CodeCxSpMiddle">assert mergeTwoLists([2, 2, 2], [2, 2, 2]) == [2, 2, 2,
+2, 2, 2]</p>
+<p class="CodeCxSpMiddle">assert mergeTwoLists([1, 2, 3], []) == [1, 2, 3]</p>
+<p class="CodeCxSpLast">assert mergeTwoLists([], [1, 2, 3]) == [1, 2, 3]</p>
+<p class="Body">Try to write a solution based on the information in this
+description. If you still have trouble solving this exercise, read the <span class="Bold">Solution Design and Special Cases and Gotchas</span> sections for
+additional hints.</p>
+<p class="Body">Prerequisite concepts: lists, <code>while</code>
+loops, Boolean operators, <code>append()</code>, <span class="Literal">for</span> loops, <code>range()</code> with two
+arguments, <code>len()</code></p>
+<p class="HeadA">Solution Design</p>
+<p class="Body">The lists of integers, already in sorted order, are passed to the
+function as parameters <code>list1</code> and <span class="Literal">list2</span>. The algorithm begins with two variables, <span class="Literal">i1</span> and <code>i2</code>, which both begin at
+index <code>0</code> of their respective lists. We also create a
+blank list in a variable named <code>result</code> which stores
+the merged results of the two lists.</p>
+<p class="Body">Inside of a <code>while</code> loop, the code does
+the following:</p>
+<p class="Body" style="margin-left:.75in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>Look at the numbers that <code>i1</code> and <span class="Literal">i2</span> point to.</p>
+<p class="Body" style="margin-left:.75in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>Append the smaller of the two numbers to <code>result</code>.</p>
+<p class="Body" style="margin-left:.75in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>If <code>i1</code>’s number was appended, increment
+<code>i1</code> to point to the next number in <span class="Literal">list1</span>. Otherwise, increment <code>i2</code>
+to point to the next number in <code>list2</code>.</p>
+<p class="Body" style="margin-left:.75in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>Repeat until either <code>i1</code> or <span class="Literal">i2</span> has gone past the end of their list. </p>
+<p class="Body">For example, Figure 40-1 shows the first three iterations of the
+loop when merging lists <code>[1, 3, 6]</code> and <span class="Literal">[5, 7, 8, 9]</span>.</p>
+<p class="Body"><img border="0" height="646" id="Picture 12" src="../images/image048.png" width="499"/></p>
+<p class="MsoCaption"><span lang="EN-CA">Figure 40-1: The first three iterations of
+the loop that merges two lists.</span></p>
+<p class="Body">Think of this code as like an asymmetrical zipper: the <span class="Literal">i1</span> and <code>i2</code> variables keep moving
+right along their respective lists, appending their values to result. When
+either <code>i1</code> or <code>i2</code> reaches
+the end of their list, the rest of the other list is appended to <span class="Literal">result</span>. This <code>result</code> list
+contains all of the numbers in <code>list1</code> and <span class="Literal">list2</span> in sorted order, so the function returns it.</p>
+<p class="HeadA">Special Cases and Gotchas</p>
+<p class="Body">Keep in mind that while the <code>list1</code> and <span class="Literal">list2</span> parameters must be sorted lists, they aren’t
+required to be the same length.</p>
+<p class="Body">If either of these list arguments to <code>mergeTwoLists()</code>
+isn’t sorted, the function will return a merged list that is also not in sorted
+order. For this exercise, however, we’ll assume that <code>mergeTwoLists()</code>
+is always called with valid arguments.</p>
+<p class="Body">Now try to write a solution based on the information in the
+previous sections. If you still have trouble solving this exercise, read the <span class="Bold">Solution Template</span> section for additional hints.</p>
+<p class="HeadA">Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/mergetwolists-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst">def mergeTwoLists(list1, list2):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Create an empty list to
+hold the final sorted results:</span></p>
+<p class="CodeCxSpMiddle">    result = ____</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Start i1 and i2 at index 0,
+the start of list1 and list2:</span></p>
+<p class="CodeCxSpMiddle">    i1 = ____</p>
+<p class="CodeCxSpMiddle">    i2 = ____</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Keeping moving up i1 and
+i2 until one reaches the end of its list:</span></p>
+<p class="CodeCxSpMiddle">    while i1 &lt; len(____) and ____ &lt; len(list2):</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># Add the smaller of
+the two current items to the result:</span></p>
+<p class="CodeCxSpMiddle">        if list1[____] &lt; list2[____]:</p>
+<p class="CodeCxSpMiddle">            <span class="CodeComment"># Add list1's
+current item to the result:</span></p>
+<p class="CodeCxSpMiddle">            result.append(____[i1])</p>
+<p class="CodeCxSpMiddle">            <span class="CodeComment"># Increment i1:</span></p>
+<p class="CodeCxSpMiddle">            i1 += ____</p>
+<p class="CodeCxSpMiddle">        else:</p>
+<p class="CodeCxSpMiddle">            <span class="CodeComment"># Add list2's
+current item to the result:</span></p>
+<p class="CodeCxSpMiddle">            result.append(____[i2])</p>
+<p class="CodeCxSpMiddle">            <span class="CodeComment"># Increment i2:</span></p>
+<p class="CodeCxSpMiddle">            i2 += ____</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># If i1 is not at the end
+of list1, add the remaining items from list1:</span></p>
+<p class="CodeCxSpMiddle">    if i1 &lt; len(____):</p>
+<p class="CodeCxSpMiddle">        for j in range(i1, len(list1)):</p>
+<p class="CodeCxSpMiddle">            result.append(____[j])</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># If i2 is not at the end
+of list2, add the remaining items from list2:</span></p>
+<p class="CodeCxSpMiddle">    if i2 &lt; len(____):</p>
+<p class="CodeCxSpMiddle">        for j in range(i2, len(list2)):</p>
+<p class="CodeCxSpMiddle">            result.append(____[j])</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Return the merged, sorted
+list:</span></p>
+<p class="CodeCxSpLast">    return result</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/mergetwolists.py</span>. You can
+view each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/mergetwolists-debug/</span>.</p>
+<p class="HeadA">Further Reading</p>
+<p class="Body">Merge sort uses this “merge two sorted lists into a single sorted
+list” behavior as a step in its algorithm. You can learn more about merge sort
+and other recursive algorithms from my book, “The Recursive Book of Recursion.”
+The full book is freely available under a Creative Commons license at <span class="MsoHyperlink">https://inventwithpython.com/recursion/</span>.</p>
+
+
+
+<p><a href="../exercise39/">Prev - #39 Collatz Sequence</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise41/">Next - #41 ROT 13 Encryption</a></p></body></html>

@@ -1,0 +1,98 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="../style_pythongently.css" rel="stylesheet" type="text/css" />
+<title>Exercise 14 - Average</title></head><body style="background-color: #fffeee;"><p><a href="../exercise13/">Prev - #13 Sum & Product</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise15/">Next - #15 Median</a></p>
+
+
+
+
+<h1><a name="_Toc115418683"></a><a name="_Toc115359994">Exercise #14: Average</a></h1>
+<p class="ChapterTitleCodeExample">average([12, 20, 37])  <span style="font-size:
+13.0pt">→ </span> 23</p>
+<p class="ChapterTitleCodeExample"><span style='font-size:8.0pt;font-family:"MS Shell Dlg 2","sans-serif"'><img border="0" height="144" id="Picture 25" src="../images/image018.jpg" width="144"/></span></p>
+<p class="Body">Averages are an essential statistical tool, and computers make it
+easy to calculate the average of millions or billions of numbers. The <span class="Italic"><span style='font-family:"serif"'>average</span></span>
+is the sum of a set of the numbers divided by the amount of numbers. For
+example, the average of 12, 1, and 5 is 6, because 12 + 1 + 5 is 18 and 18 / 3
+is 6. This and the following two exercises challenge you to make Python solve
+these statistics calculations.</p>
+<p class="HeadA">Exercise Description</p>
+<p class="Body">Write an <code>average()</code> function that has a
+<code>numbers</code> parameter. This function returns the
+statistical average of the list of integer and floating-point numbers passed to
+the function. While Python’s built-in <code>sum()</code> function
+can help you solve this exercise, try writing the solution without using it.</p>
+<p class="Body">Passing an empty list to <code>average()</code>
+should cause it to return <code>None</code>.</p>
+<p class="Body">These Python <code>assert</code> statements stop
+the program if their condition is <code>False</code>. Copy them
+to the bottom of your solution program. Your solution is correct if the following
+<code>assert</code> statements’ conditions are all <span class="Literal">True</span>:</p>
+<p class="CodeCxSpFirst">assert average([1, 2, 3]) == 2</p>
+<p class="CodeCxSpMiddle">assert average([1, 2, 3, 1, 2, 3, 1, 2, 3]) == 2</p>
+<p class="CodeCxSpMiddle">assert average([12, 20, 37]) == 23</p>
+<p class="CodeCxSpMiddle">assert average([0, 0, 0, 0, 0]) == 0</p>
+<p class="CodeCxSpMiddle">import random</p>
+<p class="CodeCxSpMiddle">random.seed(42)</p>
+<p class="CodeCxSpMiddle">testData = [1, 2, 3, 1, 2, 3, 1, 2, 3]</p>
+<p class="CodeCxSpMiddle">for i in range(1000):</p>
+<p class="CodeCxSpMiddle">    random.shuffle(testData)</p>
+<p class="CodeCxSpLast">    assert average(testData) == 2</p>
+<p class="Body">Shuffling the order of the numbers should not affect the average.
+The <code>for</code> loop does 1,000 such random shuffles to
+thoroughly check that this fact remains true. For an explanation of the <span class="Literal">random.seed()</span> function, see the Further Reading section of
+Exercise #19, “Password Generator”.</p>
+<p class="Body">Try to write a solution based on the information in this
+description. If you still have trouble solving this exercise, read the <span class="Bold">Solution Design and Special Cases and Gotchas</span> sections for
+additional hints.</p>
+<p class="Body">Prerequisite concepts: <code>len()</code>, <span class="Literal">for</span> loops, augmented assignment operators</p>
+<p class="HeadA">Solution Design</p>
+<p class="Body">Create a variable that holds the sum total of the numbers in the <span class="Literal">numbers</span> list. Then write a <code>for</code> loop
+to go over all the numbers in the list, adding them to this total. This is
+identical to the <code>calculateSum()</code> function in Exercise
+#13 “Sum &amp; Product.” After the loop, return the total divided by the amount
+of numbers in the <code>numbers</code> list. You can use Python’s
+built-in <code>len()</code> function for this.</p>
+<p class="Body">While you shouldn’t use Python’s built-in <code>sum()</code>
+function, you can import your <i>sumproduct.py</i>
+program from Exercise #13, “Sum &amp; Product” for its <code>calculateSum()</code>
+function. After completing Exercise #13, make sure <span class="Italic"><span style='font-family:"serif"'>sumproduct.py</span></span> is in the
+same folder as <i>average.py</i>.
+Then use <code>import sumproduct</code> to import the module and <span class="Literal">sumproduct.calculateSum()</span> to call the function.</p>
+<p class="HeadA">Special Cases and Gotchas</p>
+<p class="Body">If the <code>numbers</code> parameter is an empty
+list, the function should return <code>None</code>. Therefore, you
+should put the code that checks this at the start of the function.</p>
+<p class="Body">Now try to write a solution based on the information in the
+previous sections. If you still have trouble solving this exercise, read the <span class="Bold">Solution Template</span> section for additional hints.</p>
+<p class="HeadA">Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/average-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst">def average(numbers):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Special case: If the
+numbers list is empty, return None:</span></p>
+<p class="CodeCxSpMiddle">    if len(____) == ____:</p>
+<p class="CodeCxSpMiddle">        return ____</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Start the total at 0:</span></p>
+<p class="CodeCxSpMiddle">    total = ____</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Loop over each number in
+numbers:</span></p>
+<p class="CodeCxSpMiddle">    for number in ____:</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># Add the number to the
+total:</span></p>
+<p class="CodeCxSpMiddle">        total ____ number</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Get the average by
+dividing the total by how many numbers there are:</span></p>
+<p class="CodeCxSpLast">    return ____ / ____(numbers)</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/average.py</span>. You can view
+each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/average-debug/</span>.</p>
+
+
+
+<p><a href="../exercise13/">Prev - #13 Sum & Product</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise15/">Next - #15 Median</a></p></body></html>

@@ -1,0 +1,163 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="../style_pythongently.css" rel="stylesheet" type="text/css" />
+<title>Exercise 41 - ROT 13 Encryption</title></head><body style="background-color: #fffeee;"><p><a href="../exercise40/">Prev - #40 Merging Two Sorted Lists</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise42/">Next - #42 Bubble Sort</a></p>
+
+
+
+
+<h1><a name="_Toc115418710"></a><a name="_Toc115360021">Exercise #41: ROT 13
+Encryption</a></h1>
+<p class="ChapterTitleCodeExample">rot13('Hello, world!')  <span style="font-size:13.0pt">→ </span> 'Uryyb, jbeyq!'<br/>
+rot13('Uryyb, jbeyq!')  <span style="font-size:13.0pt">→ </span> 'Hello,
+world!'</p>
+<p class="ChapterTitleCodeExample"><span style='font-size:8.0pt;font-family:"MS Shell Dlg 2","sans-serif"'><img border="0" height="144" id="Picture 52" src="../images/image049.jpg" width="424"/></span></p>
+<p class="Body">ROT 13 is a simple encryption <span class="Italic"><span style='font-family:"serif"'>cipher</span></span>. The name “ROT 13”
+is short for “rotate 13.” It encrypts by replacing letters with letters that
+appear 13 characters down the alphabet: A is replaced with N, B is replaced
+with O, C is replaced with P, and so on. If this rotation of 13 letters goes
+passed the end of the alphabet, it “wraps around” the Z and continues from the
+start of the alphabet. Thus, X is replaced with K, Y is replaced with L, Z is
+replaced with M, and so on. Non-letter characters are left unencrypted.</p>
+<p class="Body">The benefit of ROT 13 is that you can decrypt the encrypted text
+by running it through ROT 13 encryption again. This rotates the letter 26
+times, returning us to the original letter. So “Hello, world!” encrypts to
+“Uryyb, jbeyq!” which in turn encrypts to “Hello, world!” There is no
+decryption algorithm; you decrypt encrypted text by encrypting it again. The
+ROT 13 algorithm isn’t secure for real-world cryptography. But it can be used
+to obfuscate text to prevent spoiling joke punch lines or puzzle solutions.</p>
+<p class="Body">The following shows what each of the 26 letters encrypts to with
+ROT 13 once (from the top row to the middle row) and twice (from the middle row
+to the bottom row.)</p>
+<p class="CodeCxSpFirst">A  B  C  D  E  F  G  H  I  J  K  L  M  N  O  P  Q  R  S 
+T  U  V  W  X  Y  Z</p>
+<p class="CodeCxSpMiddle">▼  ▼  ▼  ▼  ▼  ▼ 
+▼  ▼  ▼  ▼  ▼  ▼  ▼  ▼ 
+▼  ▼  ▼  ▼  ▼  ▼  ▼  ▼ 
+▼  ▼  ▼  ▼</p>
+<p class="CodeCxSpMiddle">N  O  P  Q  R  S  T  U  V  W  X  Y  Z  A  B  C  D  E 
+F  G  H  I  J  K  L  M  </p>
+<p class="CodeCxSpMiddle">▼  ▼  ▼  ▼  ▼  ▼ 
+▼  ▼  ▼  ▼  ▼  ▼  ▼  ▼  ▼
+ ▼  ▼  ▼  ▼  ▼  ▼  ▼  ▼ 
+▼  ▼  ▼</p>
+<p class="CodeCxSpLast">A  B  C  D  E  F  G  H  I  J  K  L  M  N  O  P  Q  R  S 
+T  U  V  W  X  Y  Z</p>
+<p class="HeadA">Exercise Description</p>
+<p class="Body">Write a <code>rot13()</code> function with a <span class="Literal">text</span> parameter that returns the ROT 13 encrypted version
+of <code>text</code>. Uppercase letters encrypt to uppercase
+letters and lowercase letters encrypt to lowercase letters. For example, <span class="Literal">'HELLO, world!'</span> encrypts to <span class="Literal">'URYYB,
+jbeyq!'</span> and <code>'hello, WORLD!'</code> encrypts to <span class="Literal">'uryyb, JBEYQ!'</span>.</p>
+<p class="Body">You may use the following Python functions and string methods as
+part of your solution: <code>ord()</code>, <code>chr()</code>,
+<code>isalpha()</code>, <code>islower()</code>, and
+<code>isupper()</code>.</p>
+<p class="Body">These Python <code>assert</code> statements stop
+the program if their condition is <code>False</code>. Copy them
+to the bottom of your solution program. Your solution is correct if the following
+<code>assert</code> statements’ conditions are all <span class="Literal">True</span>:</p>
+<p class="CodeCxSpFirst">assert rot13('Hello, world!') == 'Uryyb, jbeyq!'</p>
+<p class="CodeCxSpMiddle">assert rot13('Uryyb, jbeyq!') == 'Hello, world!'</p>
+<p class="CodeCxSpMiddle">assert rot13(rot13('Hello, world!')) == 'Hello, world!'</p>
+<p class="CodeCxSpMiddle">assert rot13('abcdefghijklmnopqrstuvwxyz') ==
+'nopqrstuvwxyzabcdefghijklm'</p>
+<p class="CodeCxSpLast">assert rot13('ABCDEFGHIJKLMNOPQRSTUVWXYZ') ==
+'NOPQRSTUVWXYZABCDEFGHIJKLM'</p>
+<p class="Body">Try to write a solution based on the information in this
+description. If you still have trouble solving this exercise, read the <span class="Bold">Solution Design and Special Cases and Gotchas</span> sections for
+additional hints.</p>
+<p class="Body">Prerequisite concepts: strings, <code>ord()</code>,
+<code>chr()</code>, <code>for</code> loops, Boolean
+operators, <code>islower()</code>, <code>isupper()</code>,
+augmented assignment operators</p>
+<p class="HeadA">Solution Design</p>
+<p class="Body">Instead of hard-coding every letter and its encrypted form, we
+can rely on each letter’s Unicode code point integer. Code points were
+discussed in Exercise #7, “ASCII Table.” The <code>ord()</code>
+and <code>chr()</code> functions discussed in Exercise #7, “ASCII
+Table” can translate from a letter string to integer and integer to letter
+string, respectively.</p>
+<p class="Body">The function starts with an <code>encryptedText</code>
+variable set to an empty string that will store the encrypted result as we
+encrypt each character. A <code>for</code> loop can loop over the
+<code>text</code> parameter to encrypt each character. If this
+character isn’t a letter, it’s added to the end of <code>encryptedText</code>
+as-is without encryption.</p>
+<p class="Body">Otherwise, we can pass the letter to <code>ord()</code>
+to obtain its Unicode code point as an integer. Uppercase letters A to Z have
+integers ranging from 65 up to and including 90. Lowercase letters a to z have
+integers ranging from 97 up to and including 122. We need to reduce this by 26
+to “wrap around” to the start of the alphabet.</p>
+<p class="Body">For example, the letter <code>'S'</code> has an
+integer <code>83</code> (because <code>ord('S')</code>
+returns <code>83</code>) but adding <code>83 + 13</code>
+gives us <code>96</code>, which is greater than the integer for Z
+(<code>ord('Z')</code> returns <code>90</code>). In
+this case, we must subtract <code>26</code>: <span class="Literal">96
+- 26</span> gives us the encrypted integer <code>70</code>, and <span class="Literal">chr(70)</span> returns <code>'F'</code>. This is
+how we can determine that <code>'S'</code> encrypts to <span class="Literal">'F'</span> in the ROT 13 cipher.</p>
+<p class="Body">Note that while an uppercase <code>'Z'</code> has
+the Unicode code point <code>90</code>, the lowercase <span class="Literal">'z'</span> has the Unicode code point <code>122</code>.</p>
+<p class="HeadA">Special Cases and Gotchas</p>
+<p class="Body">While you want to add <code>13</code> to the
+Unicode code point integers of both uppercase and lowercase letters, when you
+check if this addition results in a number larger than Z’s Unicode code point,
+you must use the correct case of Z. Otherwise, your <code>rot13()</code>
+function may determine that the lowercase <code>'a'</code> (with
+integer <code>97</code>) is past uppercase <code>'Z'</code>
+(with integer <code>90</code>) because <code>97</code>
+is greater than <code>90</code>. You must compare lowercase
+rotated letters with <code>122</code> (the integer of lowercase <span class="Literal">'z'</span>) and uppercase rotated letters with <span class="Literal">90</span> (the integer of uppercase <code>'Z'</code>).</p>
+<p class="Body">All non-letter characters such as numbers, spaces, and
+punctuation marks are added to the encrypted text unmodified. Be sure that your
+<code>rot13()</code> function doesn’t accidentally drop them from
+the returned string.</p>
+<p class="Body">Now try to write a solution based on the information in the
+previous sections. If you still have trouble solving this exercise, read the <span class="Bold">Solution Template</span> section for additional hints.</p>
+<p class="HeadA">Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/rot13-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst">def rot13(text):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Create an encryptedText
+variable to store the encrypted string:</span></p>
+<p class="CodeCxSpMiddle">    encryptedText = ____</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Loop over each character
+in the text:</span></p>
+<p class="CodeCxSpMiddle">    for character in text:</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># If the character is
+not a letter, add it as-is to encryptedText:</span></p>
+<p class="CodeCxSpMiddle">        if not character.____():</p>
+<p class="CodeCxSpMiddle">            encryptedText += ____</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># Otherwise calculate
+the letter's "rotated 13" letter:</span></p>
+<p class="CodeCxSpMiddle">        else:</p>
+<p class="CodeCxSpMiddle">            rotatedLetterOrdinal = ____(character) + 13</p>
+<p class="CodeCxSpMiddle">            <span class="CodeComment"># If adding 13
+pushes the letter past Z, subtract 26:</span></p>
+<p class="CodeCxSpMiddle">            if ____.islower() and rotatedLetterOrdinal
+&gt; ____:</p>
+<p class="CodeCxSpMiddle">                rotatedLetterOrdinal -= ____</p>
+<p class="CodeCxSpMiddle">            if ____.isupper() and rotatedLetterOrdinal
+&gt; ____:</p>
+<p class="CodeCxSpMiddle">                rotatedLetterOrdinal -= ____</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">            <span class="CodeComment"># Add the encrypted
+letter to encryptedText:</span></p>
+<p class="CodeCxSpMiddle">            encryptedText += ____(rotatedLetterOrdinal)</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Return the encrypted
+text:</span></p>
+<p class="CodeCxSpLast">    return encryptedText</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/rot13.py</span>. You can view
+each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/rot13-debug/</span>.</p>
+<p class="HeadA">Further Reading</p>
+<p class="Body">If you are interested in writing Python programs for encryption
+algorithms and code breaking, my book “Cracking Codes with Python” is freely
+available under a Creative Commons license at <span class="MsoHyperlink">https://inventwithpython.com/cracking/</span>.</p>
+
+
+
+<p><a href="../exercise40/">Prev - #40 Merging Two Sorted Lists</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise42/">Next - #42 Bubble Sort</a></p></body></html>

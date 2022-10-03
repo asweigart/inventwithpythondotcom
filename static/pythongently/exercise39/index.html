@@ -1,0 +1,139 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="../style_pythongently.css" rel="stylesheet" type="text/css" />
+<title>Exercise 39 - Collatz Sequence</title></head><body style="background-color: #fffeee;"><p><a href="../exercise38/">Prev - #38 Random Shuffle</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise40/">Next - #40 Merging Two Sorted Lists</a></p>
+
+
+
+
+<h1><a name="_Toc115418708"></a><a name="_Toc115360019">Exercise #39: Collatz
+Sequence</a></h1>
+<p class="ChapterTitleCodeExample">collatz(10)  <span style="font-size:13.0pt">→
+</span> [10, 5, 16, 8, 4, 2, 1]</p>
+<p class="ChapterTitleCodeExample"><span style='font-size:8.0pt;font-family:"MS Shell Dlg 2","sans-serif"'><img border="0" height="144" id="Picture 50" src="../images/image046.jpg" width="530"/></span></p>
+<p class="Body">The Collatz Sequence also called the 3<span class="Italic"><span style='font-family:"serif"'>n</span></span> + 1 problem, is a simple
+but mysterious numeric sequence that has remained unsolved by mathematicians.
+It has four rules:</p>
+<p class="Body" style="margin-left:.75in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>Begin with a positive, nonzero integer called <span class="Italic"><span style='font-family:"serif"'>n</span></span>.</p>
+<p class="Body" style="margin-left:.75in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>If <i>n</i>
+is 1, the sequence terminates.</p>
+<p class="Body" style="margin-left:.75in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>If <i>n</i>
+is even, the next value of <i>n</i>
+is <i>n</i>
+/ 2.</p>
+<p class="Body" style="margin-left:.75in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>If <i>n</i>
+is odd, the next value of <i>n</i>
+is 3<i>n</i>
++ 1.</p>
+<p class="Body">For example, if the starting integer is 10, that number is even
+so the next number is 10 / 2, or 5. 5 is odd, so the next number is 3 × 5 + 1,
+or 16. 16 is even, so the next number is 8, which is even so the next number is
+4, then 2, then 1. At 1, the sequence stops. The entire Collatz Sequence
+starting at 10 is: 10, 5, 16, 8, 4, 2, 1</p>
+<p class="Body">Mathematicians have been unable to prove if every starting
+integer eventually terminates. This gives the Collatz Sequence the description
+of “the simplest impossible math problem.” However, in this exercise, all you
+need to do is calculate the sequence of numbers for a given starting integer.</p>
+<p class="HeadA">Exercise Description</p>
+<p class="Body">Write a function named <code>collatz()</code> with
+a <code>startingNumber</code> parameter. The function returns a
+list of integers of the Collatz sequence that <code>startingNumber</code>
+produces. The first integer in this list must be <code>startingNumber</code>
+and the last integer must be <code>1</code>.</p>
+<p class="Body">Your function should check if <code>startingNumber</code>
+is an integer less than 1, and in that case, return an empty list.</p>
+<p class="Body">These Python <code>assert</code> statements stop
+the program if their condition is <code>False</code>. Copy them
+to the bottom of your solution program. Your solution is correct if the following
+<code>assert</code> statements’ conditions are all <span class="Literal">True</span>:</p>
+<p class="CodeCxSpFirst">assert collatz(0) == []</p>
+<p class="CodeCxSpMiddle">assert collatz(10) == [10, 5, 16, 8, 4, 2, 1]</p>
+<p class="CodeCxSpMiddle">assert collatz(11) == [11, 34, 17, 52, 26, 13, 40, 20,
+10, 5, 16, 8, 4, 2, 1]</p>
+<p class="CodeCxSpMiddle">assert collatz(12) == [12, 6, 3, 10, 5, 16, 8, 4, 2, 1]</p>
+<p class="CodeCxSpMiddle">assert len(collatz(256)) == 9</p>
+<p class="CodeCxSpMiddle">assert len(collatz(257)) == 123</p>
+<p class="CodeCxSpMiddle">import random</p>
+<p class="CodeCxSpMiddle">random.seed(42)</p>
+<p class="CodeCxSpMiddle">for i in range(1000):</p>
+<p class="CodeCxSpMiddle">    startingNum = random.randint(1, 10000)</p>
+<p class="CodeCxSpMiddle">    seq = collatz(startingNum)</p>
+<p class="CodeCxSpMiddle">    assert seq[0] == startingNum <span class="CodeComment"># Make sure it includes the starting number.</span></p>
+<p class="CodeCxSpLast">    assert seq[-1] == 1  <span class="CodeComment"># Make
+sure the last integer is 1.</span></p>
+<p class="Body">Try to write a solution based on the information in this
+description. If you still have trouble solving this exercise, read the <span class="Bold">Solution Design and Special Cases and Gotchas</span> sections for additional
+hints.</p>
+<p class="Body">Prerequisite concepts: lists, <code>while</code>
+loops, modulo operator, integer division, <code>append()</code></p>
+<p class="HeadA">Solution Design</p>
+<p class="Body">The function only needs a variable to keep track of the current
+number, which we can call <code>num</code>, and a variable to
+hold the sequence of values, which we can call <code>sequence</code>.
+At the start of the function, set <code>num</code> to the integer
+in <code>startingNumber</code> parameter and <code>sequence</code>
+to <code>[num]</code>. We can use a <code>while</code>
+loop that continues to loop as long as the <code>num</code> is
+not <code>1</code>. On each iteration of the loop, the next value
+for <code>num</code> is calculated based on whether <span class="Literal">num</span> is currently odd or even. You can use the modulo 2
+technique from Exercise #3, “Odd &amp; Even” to determine this: if <span class="Literal">num % 2</span> evaluates to <code>0</code> then <span class="Literal">num</span> is even and if it evaluates to <code>1</code>
+then <code>num</code> is odd. After this, append <span class="Literal">num</span> to the end of the <code>sequence</code>
+list.</p>
+<p class="Body">If <code>num</code> is exactly <code>1</code>,
+then the <code>while</code> loop stops looping and the function
+can return <code>sequence</code>.</p>
+<p class="HeadA">Special Cases and Gotchas</p>
+<p class="Body">The only special case is if the <code>startingNumber</code>
+parameter is less than 1, in which case there is no sequence and the function
+should return an empty list <code>[]</code>.</p>
+<p class="Body">Now try to write a solution based on the information in the
+previous sections. If you still have trouble solving this exercise, read the <span class="Bold">Solution Template</span> section for additional hints.</p>
+<p class="HeadA">Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/collatzsequence-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst">def collatz(startingNumber):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># If the starting number is
+0 or negative, return an empty list:</span></p>
+<p class="CodeCxSpMiddle">    if ____ &lt; 1:</p>
+<p class="CodeCxSpMiddle">        return ____</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Create a list to hold the
+sequence, beginning with the starting number:</span></p>
+<p class="CodeCxSpMiddle">    sequence = [____]</p>
+<p class="CodeCxSpMiddle">    num = ____</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Keep looping until the
+current number is 1:</span></p>
+<p class="CodeCxSpMiddle">    while num ____ 1:</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># If odd, the next
+number is 3 times the current number plus 1:</span></p>
+<p class="CodeCxSpMiddle">        if num % 2 == ____:</p>
+<p class="CodeCxSpMiddle">            num = 3 * num + 1</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># If even, the next
+number is half the current number:</span></p>
+<p class="CodeCxSpMiddle">        else:</p>
+<p class="CodeCxSpMiddle">            num = num // ____</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># Record the number in
+the sequence list:</span></p>
+<p class="CodeCxSpMiddle">        sequence.append(____)</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Return the sequence of
+numbers:</span></p>
+<p class="CodeCxSpLast">    return ____</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/collatzsequence.py</span>. You
+can view each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/collatzsequence-debug/</span>.</p>
+<p class="HeadA">Further Reading</p>
+<p class="Body">You can find out more about the Collatz sequence on Wikipedia at <span class="MsoHyperlink">https://en.wikipedia.org/wiki/Collatz_conjecture</span>.
+There are videos on YouTube about the sequence on the Veritasium channel titled
+“The Simplest Math Problem No One Can Solve - Collatz Conjecture” at <span class="MsoHyperlink">https://youtu.be/094y1Z2wpJg</span> and and the Numberphile
+channel titled “UNCRACKABLE? The Collatz Conjecture” at <span class="MsoHyperlink">https://youtu.be/5mFpVDpKX70</span>.</p>
+
+
+
+<p><a href="../exercise38/">Prev - #38 Random Shuffle</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise40/">Next - #40 Merging Two Sorted Lists</a></p></body></html>

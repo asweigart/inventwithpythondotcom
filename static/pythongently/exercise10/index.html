@@ -1,0 +1,225 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="../style_pythongently.css" rel="stylesheet" type="text/css" />
+<title>Exercise 10 - Find and Replace</title></head><body style="background-color: #fffeee;"><p><a href="../exercise9/">Prev - #9 Chess Square Color</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise11/">Next - #11 Hours, Minutes, Seconds</a></p>
+
+
+
+
+<h1><a name="_Toc115418679"></a><a name="_Toc115359990">Exercise #10: Find and
+Replace</a></h1>
+<p class="ChapterTitleCodeExample">findAndReplace('The fox', 'fox', 'dog')  <span style="font-size:13.0pt">→ </span> 'The dog'</p>
+<p class="ChapterTitleCodeExample"><span style='font-size:8.0pt;font-family:"MS Shell Dlg 2","sans-serif"'><img border="0" height="144" id="Picture 21" src="../images/image012.jpg" width="203"/></span></p>
+<p class="Body">Find-and-replace is a standard feature in text editors, IDEs, and
+word processor software. Even the Python language comes with a <span class="Literal">replace()</span> string method since programs often use it. In
+this exercise, you’ll reimplement this common string operation.</p>
+<p class="HeadA">Exercise Description</p>
+<p class="Body">Write a <code>findAndReplace()</code> function that
+has three parameters: <code>text</code> is the string with text
+to be replaced, <code>oldText</code> is the text to be replaced,
+and <code>newText</code> is the replacement text. Keep in mind
+that this function must be case-sensitive: if you are replacing <span class="Literal">'dog'</span> with <code>'fox'</code>, then the <span class="Literal">'DOG'</span> in <code>'MY DOG JONESY'</code> won’t
+be replaced. </p>
+<p class="Body">These Python <code>assert</code> statements stop
+the program if their condition is <code>False</code>. Copy them
+to the bottom of your solution program. Your solution is correct if the following
+<code>assert</code> statements’ conditions are all <span class="Literal">True</span>:</p>
+<p class="CodeCxSpFirst">assert findAndReplace('The fox', 'fox', 'dog') == 'The
+dog'</p>
+<p class="CodeCxSpMiddle">assert findAndReplace('fox', 'fox', 'dog') == 'dog'</p>
+<p class="CodeCxSpMiddle">assert findAndReplace('Firefox', 'fox', 'dog') == 'Firedog'</p>
+<p class="CodeCxSpMiddle">assert findAndReplace('foxfox', 'fox', 'dog') ==
+'dogdog'</p>
+<p class="CodeCxSpLast">assert findAndReplace('The Fox and fox.', 'fox', 'dog')
+== 'The Fox and dog.'</p>
+<p class="Body">Try to write a solution based on the information in this
+description. If you still have trouble solving this exercise, read the <span class="Bold">Solution Design</span> and <span class="Bold">Special Cases and
+Gotchas</span> sections for additional hints.</p>
+<p class="Body">Prerequisite concepts: slices, indexes, <code>len()</code>,
+augmented assignment operator</p>
+<p class="HeadA">Solution Design</p>
+<p class="Body">While Python comes with several string methods, such as <span class="Literal">replace()</span>, <code>find()</code>, and <span class="Literal">index()</span>, that could do this exercise for us, we’ll do the
+finding and replacing on our own.</p>
+<p class="Body">At the beginning of the function, create a <code>replacedText</code>
+variable to hold the text with replacements. It starts as a blank string. We’ll
+write code that copies the text in the <code>text</code>
+parameter to <code>replacedText</code>, except for where it finds
+instances of <code>oldText</code>, in which case <span class="Literal">newText</span> is copied to <code>replacedText</code>.</p>
+<p class="Body">Create a <code>while</code> loop starts a variable
+named <code>i</code> at <code>0</code> and then keeps
+looping until <code>i</code> reaches the length of the <span class="Literal">text</span> string argument. This <code>i</code>
+variable points to an index in the <code>text</code> string. The
+code inside the loop increases <code>i</code> by the length of <span class="Literal">oldText</span> if it has found an instance of <span class="Literal">oldText</span> in <code>text</code>. Otherwise the
+code inside the loop increases <code>i</code> by <span class="Literal">1</span> so it can examine the next character in <span class="Literal">text</span>.</p>
+<p class="Body">The code inside the loop can examine the slice <span class="Literal">text[i:i + len(oldText)]</span> to see if it matches <span class="Literal">oldText</span>. In that case, we append <code>newText</code>
+to <code>replacedText</code> and increase <code>i</code>
+by <code>1</code>. If not, we append just the <span class="Literal">text[i]</span> character to <code>replacedText</code>
+and increase <code>i</code> by <code>len(oldText)</code>.
+By the time <code>i</code> reaches the end of <span class="Literal">text</span>, the <code>replacedText</code> variable
+contains the finished string.</p>
+<p class="Body">Figure 10-1 shows each step of this process if we were to call <span class="Literal">findAndReplace('A fox.', 'fox', 'dog')</span>.</p>
+<p class="Body"><img border="0" height="594" id="Picture 18" src="../images/image013.png" width="721"/></p>
+<p class="MsoCaption"><span lang="EN-CA">Figure 10-1: Replacing </span><span class="Literal">'fox'</span><span lang="EN-CA"> with </span><code>'dog'</code><span lang="EN-CA"> in </span><code>'A fox.'</code></p>
+<p class="Body">Python has <span class="Italic"><span style='font-family:"serif"'>augmented
+assignment operators</span></span> such as <code>+=</code> and <span class="Literal">*=</span>. These are shortcuts for assignment statements that
+modify the value in a variable. Python has augmented assignment operators for
+several operators:</p>
+<table border="1" cellpadding="0" cellspacing="0" class="MsoTableGrid" style="border-collapse:collapse;border:none">
+<tr>
+<td style="width:162.9pt;border:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="326">
+<p class="Body" style="text-indent:0in"><b>Augmented Assignment</b></p>
+</td>
+<td style="width:207.9pt;border:solid windowtext 1.0pt;
+  border-left:none;padding:0in 5.4pt 0in 5.4pt" valign="top" width="416">
+<p class="Body" style="text-indent:0in"><b>Equivalent To</b></p>
+</td>
+</tr>
+<tr>
+<td style="width:162.9pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt" valign="top" width="326">
+<p class="Body" style="text-indent:0in"><code>someVariable += 42</code></p>
+</td>
+<td style="width:207.9pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="416">
+<p class="Body" style="text-indent:0in"><span class="Literal">someVariable =
+  someVariable + 42</span></p>
+</td>
+</tr>
+<tr>
+<td style="width:162.9pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt" valign="top" width="326">
+<p class="Body" style="text-indent:0in"><code>someVariable -= 42</code></p>
+</td>
+<td style="width:207.9pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="416">
+<p class="Body" style="text-indent:0in"><span class="Literal">someVariable =
+  someVariable - 42</span></p>
+</td>
+</tr>
+<tr>
+<td style="width:162.9pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt" valign="top" width="326">
+<p class="Body" style="text-indent:0in"><code>someVariable *= 42</code></p>
+</td>
+<td style="width:207.9pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="416">
+<p class="Body" style="text-indent:0in"><span class="Literal">someVariable =
+  someVariable * 42</span></p>
+</td>
+</tr>
+<tr>
+<td style="width:162.9pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt" valign="top" width="326">
+<p class="Body" style="text-indent:0in"><code>someVariable /= 42</code></p>
+</td>
+<td style="width:207.9pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="416">
+<p class="Body" style="text-indent:0in"><span class="Literal">someVariable =
+  someVariable / 42</span></p>
+</td>
+</tr>
+<tr>
+<td style="width:162.9pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt" valign="top" width="326">
+<p class="Body" style="text-indent:0in"><code>someVariable %= 42</code></p>
+</td>
+<td style="width:207.9pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="416">
+<p class="Body" style="text-indent:0in"><span class="Literal">someVariable =
+  someVariable % 42</span></p>
+</td>
+</tr>
+<tr>
+<td style="width:162.9pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt" valign="top" width="326">
+<p class="Body" style="text-indent:0in"><code>someVariable //= 42</code></p>
+</td>
+<td style="width:207.9pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="416">
+<p class="Body" style="text-indent:0in"><span class="Literal">someVariable =
+  someVariable // 42</span></p>
+</td>
+</tr>
+<tr>
+<td style="width:162.9pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt" valign="top" width="326">
+<p class="Body" style="text-indent:0in"><code>someVariable **= 42</code></p>
+</td>
+<td style="width:207.9pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt" valign="top" width="416">
+<p class="Body" style="text-indent:0in"><span class="Literal">someVariable =
+  someVariable ** 42</span></p>
+</td>
+</tr>
+</table>
+<p class="Body"> </p>
+<p class="Body">For example, instead of typing <span class="Literal">someVariable =
+someVariable + 42</span>, you could have the equivalent <span class="Literal">someVariable
++= 42</span> as a more concise form. Python’s augmented assignment operators
+include <code>+=</code>, <code>-=</code>, <span class="Literal">*=</span>, <code>/=</code>, and <span class="Literal">%=</span>.</p>
+<p class="Body">The solution I give for this exercise includes the <span class="Literal">+=</span> augmented assignment operator.</p>
+<p class="HeadA">Special Cases and Gotchas</p>
+<p class="Body">Using an out-of-bounds index on a string results an error
+message: <code>'Hello'[9999]</code> causes and <span class="Literal">IndexError: string index out of range</span> error. However, this
+doesn’t apply to slices. Running <code>'Hello'[1:9999]</code>
+results in <code>'ello'</code> rather than an error message, even
+though <code>9999</code> is greater than the largest index of the
+string, <code>4</code>.</p>
+<p class="Body">Keep this in mind when comparing slices with strings. For
+example, the slice <code>text[5:8]</code> might evaluate to a string
+of 3 characters because 8 - 5 is 3. But if this slice’s indexes are towards the
+end of the text string, it could evaluate to a string of 2, 1, or 0 characters.
+So think of the slice <code>text[5:8]</code> as being <span class="Italic"><span style='font-family:"serif"'>at most</span></span>
+3 characters long.</p>
+<p class="Body">For example, enter the following into the interactive shell for
+an example:</p>
+<p class="CodeCxSpFirst">&gt;&gt;&gt; 'elephant'[5:8]</p>
+<p class="CodeCxSpMiddle">'ant'</p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; 'gazelle'[5:8]</p>
+<p class="CodeCxSpMiddle">'le'</p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; 'turtle'[5:8]</p>
+<p class="CodeCxSpMiddle">'e'</p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; 'moose'[5:8]</p>
+<p class="CodeCxSpLast">''</p>
+<p class="Body">Now try to write a solution based on the information in the
+previous sections. If you still have trouble solving this exercise, read the <span class="Bold">Solution Template</span> section for additional hints.</p>
+<p class="HeadA">Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/findandreplace-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst">def findAndReplace(text, oldText, newText):</p>
+<p class="CodeCxSpMiddle">    replacedText = ____</p>
+<p class="CodeCxSpMiddle">    i = ____</p>
+<p class="CodeCxSpMiddle">    while i &lt; len(____):</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># If index i in text is
+the start of the oldText pattern, add</span></p>
+<p class="CodeCxSpMiddle"><span class="CodeComment">        # the replacement text:</span></p>
+<p class="CodeCxSpMiddle">        if text[i:i + len(____)] == oldText:</p>
+<p class="CodeCxSpMiddle">            <span class="CodeComment"># Add the replacement
+text:</span></p>
+<p class="CodeCxSpMiddle">            replacedText += ____</p>
+<p class="CodeCxSpMiddle">            <span class="CodeComment"># Increment i by
+the length of oldText:</span></p>
+<p class="CodeCxSpMiddle">            i += len(____)</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># Otherwise, add the
+characters at text[i] and increment i by 1:</span></p>
+<p class="CodeCxSpMiddle">        else:</p>
+<p class="CodeCxSpMiddle">            replacedText += ____[i]</p>
+<p class="CodeCxSpMiddle">            i += ____</p>
+<p class="CodeCxSpLast">    return replacedText</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/</span><span class="Heading2Char"><span style="font-size:13.0pt"> </span></span><span class="MsoHyperlink">findandreplace.py</span>.
+You can view each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/</span><span class="Heading2Char"><span style="font-size:13.0pt"> </span></span><span class="MsoHyperlink">findandreplace-debug/</span>.</p>
+
+
+
+<p><a href="../exercise9/">Prev - #9 Chess Square Color</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise11/">Next - #11 Hours, Minutes, Seconds</a></p></body></html>

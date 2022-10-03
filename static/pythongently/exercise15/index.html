@@ -1,0 +1,141 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="../style_pythongently.css" rel="stylesheet" type="text/css" />
+<title>Exercise 15 - Median</title></head><body style="background-color: #fffeee;"><p><a href="../exercise14/">Prev - #14 Average</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise16/">Next - #16 Mode</a></p>
+
+
+
+
+<h1><a name="_Toc115418684"></a><a name="_Toc115359995">Exercise #15: Median</a></h1>
+<p class="ChapterTitleCodeExample">median([3, 7, 10, 4, 1, 6, 9, 2, 8])  <span style="font-size:13.0pt">→ </span> 6</p>
+<p class="ChapterTitleCodeExample"><span style='font-size:8.0pt;font-family:"MS Shell Dlg 2","sans-serif"'><img border="0" height="144" id="Picture 26" src="../images/image018.jpg" width="144"/></span></p>
+<p class="Body">If you put a list of numbers into sorted order, the <span class="Italic"><span style='font-family:"serif"'>median</span></span>
+number is the number at the halfway point. Outliers can cause the statistical
+average to be much higher or smaller than the majority of numbers, so that the
+median number may give you a better idea of the characteristics of the numbers
+in the list. This, the previous, and the next exercise challenge you to make
+Python solve these statistics calculations.</p>
+<p class="HeadA">Exercise Description</p>
+<p class="Body">Write a <code>median()</code> function that has a <span class="Literal">numbers</span> parameter. This function returns the statistical
+median of the <code>numbers</code> list. The median of an
+odd-length list is the number in the middlemost number when the list is in
+sorted order. If the list has an even length, the median is the average of the
+two middlemost numbers when the list is in sorted order. Feel free to use
+Python’s built-in <code>sort()</code> method to sort the <span class="Literal">numbers</span> list.</p>
+<p class="Body">Passing an empty list to <code>average()</code>
+should cause it to return <code>None</code>.</p>
+<p class="Body">These Python <code>assert</code> statements stop
+the program if their condition is <code>False</code>. Copy them
+to the bottom of your solution program. Your solution is correct if the following
+<code>assert</code> statements’ conditions are all <span class="Literal">True</span>:</p>
+<p class="CodeCxSpFirst">assert median([]) == None</p>
+<p class="CodeCxSpMiddle">assert median([1, 2, 3]) == 2</p>
+<p class="CodeCxSpMiddle">assert median([3, 7, 10, 4, 1, 9, 6, 5, 2, 8]) == 5.5</p>
+<p class="CodeCxSpMiddle">assert median([3, 7, 10, 4, 1, 9, 6, 2, 8]) == 6</p>
+<p class="CodeCxSpMiddle">import random</p>
+<p class="CodeCxSpMiddle">random.seed(42)</p>
+<p class="CodeCxSpMiddle">testData = [3, 7, 10, 4, 1, 9, 6, 2, 8]</p>
+<p class="CodeCxSpMiddle">for i in range(1000):</p>
+<p class="CodeCxSpMiddle">    random.shuffle(testData)</p>
+<p class="CodeCxSpLast">    assert median(testData) == 6</p>
+<p class="Body">Shuffling the order of the numbers should not affect the median.
+The <code>for</code> loop does 1,000 such random shuffles to
+thoroughly check that this fact remains true. For an explanation of the <span class="Literal">random.seed()</span> function, see the <span class="Bold">Further
+Reading</span> section of Exercise #19, “Password Generator”.</p>
+<p class="Body">Try to write a solution based on the information in this
+description. If you still have trouble solving this exercise, read the <span class="Bold">Solution Design and Special Cases and Gotchas</span> sections for
+additional hints.</p>
+<p class="Body">Prerequisite concepts: <code>len()</code>, <span class="Literal">for</span> loops, augmented assignment operators, integer
+division, modulo operator, indexes</p>
+<p class="HeadA">Solution Design</p>
+<p class="Body">First, check if the <code>numbers</code> list is
+empty and, if so, return <code>None</code>. Next, you must sort
+them by calling the <code>sort()</code> list method. Then
+calculate the middle index by integer dividing the list length by <span class="Literal">2</span>. Integer division does normal division and then rounds the
+result down to the next lowest integer. Python’s integer division operator is <span class="Literal">//</span>. So, for example, while the expression <span class="Literal">5 / 2</span> evaluates to <code>2.5</code>, the
+expression <code>5 // 2</code> evaluates to <code>2</code>.</p>
+<p class="Body">Next, figure out if the list length is odd or even. If odd, the
+median number is at the middle index. Let’s think about a few examples to make
+sure this is correct:</p>
+<p class="Body" style="margin-left:.5in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>If the list length is <code>3</code>, the indexes
+range from <code>0</code> to <code>2</code> and the
+middle index is <br/>
+<code>3 // 2</code> or <code>1</code>. And <span class="Literal">1</span> is the middle of <code>0</code> to <span class="Literal">2</span>.</p>
+<p class="Body" style="margin-left:.5in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>If the list length is <code>5</code>, the indexes range
+from <code>0</code> to <code>4</code> and the
+middle index is <br/>
+<code>5 // 2</code> or <code>2</code>. And <span class="Literal">2</span> is the middle of <code>0</code> to <span class="Literal">4</span>.</p>
+<p class="Body" style="margin-left:.5in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>If the list length is <code>9</code>, the indexes
+range from <code>0</code> to <code>8</code> and the
+middle index is <br/>
+<code>9 // 2</code> or <code>4</code>. And <span class="Literal">4</span> is the middle of <code>0</code> to <span class="Literal">8</span>.</p>
+<p class="Body">These seem correct. If the list length is even, we need to
+calculate the average of the two middle numbers. The indexes for these are the
+middle index and the middle index minus 1. Let’s think about a few examples to
+make sure this is correct:</p>
+<p class="Body" style="margin-left:.5in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>If the list length is <code>4</code>, the indexes
+range from <code>0</code> to <code>3</code> and the
+middle indexes are <br/>
+<code>4 // 2</code> and <code>4 // 2 - 1</code>, or
+<code>2</code> and <code>1</code>. And <span class="Literal">2</span> and <code>1</code> are the middle of <span class="Literal">0</span> to <code>3</code>.</p>
+<p class="Body" style="margin-left:.5in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>If the list length is <code>6</code>, the indexes
+range from <code>0</code> to <code>5</code> and the
+middle indexes are <br/>
+<code>6 // 2</code> and <code>6 // 2 - 1</code>, or
+<code>3</code> and <code>2</code>. And <span class="Literal">3</span> and <code>2</code> are the middle of <span class="Literal">0</span> to <code>5</code>.</p>
+<p class="Body" style="margin-left:.5in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>If the list length is <code>10</code>, the indexes
+range from <code>0</code> to <code>9</code> and the
+middle indexes are <code>10 // 2</code> and <span class="Literal">10
+// 2 - 1</span>, or <code>5</code> and <code>4</code>.
+And <code>5</code> and <code>4</code> are the
+middle of <code>0</code> to <code>9</code>.</p>
+<p class="Body">These seem correct too. Even-length lists have the additional
+step that the median is the average of two numbers, so add them together and
+divide by two.</p>
+<p class="HeadA">Special Cases and Gotchas</p>
+<p class="Body">If the <code>numbers</code> parameter is an empty
+list, the function should return <code>None</code>. Therefore, you
+should put the code that checks this at the start of the function.</p>
+<p class="Body">Now try to write a solution based on the information in the
+previous sections. If you still have trouble solving this exercise, read the <span class="Bold">Solution Template</span> section for additional hints.</p>
+<p class="HeadA">Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/median-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst">def median(numbers):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Special case: If the
+numbers list is empty, return None:</span></p>
+<p class="CodeCxSpMiddle">    if len(numbers) == ____:</p>
+<p class="CodeCxSpMiddle">        return ____</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Sort the numbers list:</span></p>
+<p class="CodeCxSpMiddle">    ____.sort()</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Get the index of the
+middle number:</span></p>
+<p class="CodeCxSpMiddle">    middleIndex = len(____) // ____</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># If the numbers list has
+an even length, return the average of the</span></p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># middle two numbers:</span></p>
+<p class="CodeCxSpMiddle">    if len(numbers) % ____ == 0:</p>
+<p class="CodeCxSpMiddle">        return (numbers[____] + numbers[middleIndex - ____])
+/ ____</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># If the numbers list has
+an odd length, return the middlemost number:</span></p>
+<p class="CodeCxSpMiddle">    else:</p>
+<p class="CodeCxSpLast">        return numbers[____]</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/median.py</span>. You can view
+each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/median-debug/</span>.</p>
+
+
+
+<p><a href="../exercise14/">Prev - #14 Average</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise16/">Next - #16 Mode</a></p></body></html>

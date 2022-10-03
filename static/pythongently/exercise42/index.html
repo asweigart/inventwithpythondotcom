@@ -1,0 +1,114 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="../style_pythongently.css" rel="stylesheet" type="text/css" />
+<title>Exercise 42 - Bubble Sort</title></head><body style="background-color: #fffeee;"><p><a href="../exercise41/">Prev - #41 ROT 13 Encryption</a> | <a href="../index.html">Table of Contents</a></p>
+
+
+
+
+<h1><a name="_Toc115418711"></a><a name="_Toc115360022">Exercise #42: Bubble
+Sort</a></h1>
+<p class="ChapterTitleCodeExample">bubbleSort([2, 0, 4, 1, 3])  <span style="font-size:13.0pt">→ </span> [0, 1, 2, 3, 4]</p>
+<p class="ChapterTitleCodeExample"><span style='font-size:8.0pt;font-family:"MS Shell Dlg 2","sans-serif"'><img border="0" height="144" id="Picture 53" src="../images/image050.jpg" width="103"/></span></p>
+<p class="Body">Bubble sort is often the first sorting algorithm taught to
+computer science students. While it is too inefficient for use in real-world
+software, the algorithm is easy to understand. In this last exercise of the
+book, we’ll implement this basic sorting algorithm.</p>
+<p class="HeadA">Exercise Description</p>
+<p class="Body">Write a <code>bubbleSort()</code> function with a
+list parameter named <code>numbers</code>. The function
+rearranges the values in this list in-place. The function also returns the
+now-sorted list. There are many sorting algorithms, but this exercise asks you
+to implement the bubble sort algorithm.</p>
+<p class="Body">The objective of this exercise is to write a sorting algorithm,
+so avoid using Python’s <code>sort()</code> method or <span class="Literal">sorted()</span> function as that would defeat the purpose of the
+exercise.</p>
+<p class="Body">These Python <code>assert</code> statements stop
+the program if their condition is <code>False</code>. Copy them
+to the bottom of your solution program. Your solution is correct if the following
+<code>assert</code> statements’ conditions are all <span class="Literal">True</span>:</p>
+<p class="CodeCxSpFirst">assert bubbleSort([2, 0, 4, 1, 3]) == [0, 1, 2, 3, 4]</p>
+<p class="CodeCxSpLast">assert bubbleSort([2, 2, 2, 2]) == [2, 2, 2, 2]</p>
+<p class="Body">Try to write a solution based on the information in this
+description. If you still have trouble solving this exercise, read the <span class="Bold">Solution Design and Special Cases and Gotchas</span> sections for
+additional hints.</p>
+<p class="Body">Prerequisite concepts: lists, <code>for</code>
+loops, <code>range()</code> with two arguments, nested loops,
+swapping values</p>
+<p class="HeadA">Solution Design</p>
+<p class="Body">The bubble sort algorithm compares every pair of indexes and
+swaps their values so that the larger value comes later in the list. As the
+algorithm runs, the larger numbers “bubble up” towards the end, hence the algorithm’s
+name. We’ll use variables named <code>i</code> and <span class="Literal">j</span> to track the two indexes whose values should be compared
+with each other. The pattern behind the movements of <code>i</code>
+and <code>j</code> are easier to see when visually laid out, as
+in Figure 42-1 which uses a 5-item <code>numbers</code> list as
+an example:</p>
+<p class="Body"><img border="0" height="388" id="Picture 13" src="../images/image051.png" width="481"/></p>
+<p class="MsoCaption"><span lang="EN-CA">Figure 42-1: The pattern of i and j’s
+movement: j starts after i and moves to the right, and when it reaches the end,
+i moves right once and j starts after i again.</span></p>
+<p class="Body">Notice the similarity between the movement of <span class="Literal">i</span> and <code>j</code> to the nested <span class="Literal">for</span> loops in Project #26 “Handshakes.” As the algorithm
+runs, <code>j</code> starts after <code>i</code>
+and moves to the right, and when it reaches the end, <code>i</code>
+moves right once and <code>j</code> starts after <span class="Literal">i</span> again.</p>
+<p class="Body">If you look at the overall range of <code>i</code>
+and <code>j</code>, you’ll see that <code>i</code>
+starts at index <code>0</code> and ends at the second to last
+index. Meanwhile, <code>j</code> starts at the index after <span class="Literal">i</span> and ends at the last index. This means our nested <span class="Literal">for</span> loops over the <code>numbers</code> list
+parameter would look like this:</p>
+<p class="CodeCxSpFirst">for i in range(len(numbers) - 1):</p>
+<p class="CodeCxSpLast">    for j in range(i, len(numbers)):</p>
+<p class="Body">Inside the inner loop, the numbers at indexes <span class="Literal">i</span> and <code>j</code> are compared, and if
+the number at index <code>i</code> is larger than the number at
+index <code>j</code>, they are swapped. Figure 42-2 shows the
+state of a list <code>[8, 2, 9, 6, 3]</code> as the bubble sort
+algorithm swaps the two numbers after being compared at each step.</p>
+<p class="Body"><img border="0" height="462" id="Picture 15" src="../images/image052.png" width="481"/></p>
+<p class="MsoCaption"><span lang="EN-CA">Figure 42-2: The steps of the bubble sort
+algorithm as it sorts [8, 2, 9, 6, 3].</span></p>
+<p class="Body">At the end of these two nested <code>for</code>
+loops, the numbers in the list will have been swapped into sorted order.</p>
+<p class="HeadA">Special Cases and Gotchas</p>
+<p class="Body">Sorting algorithms are an excellent introduction to the computer
+science topic of <span class="Italic"><span style='font-family:"serif"'>data
+structures and algorithms</span></span>.  And bubble sort is a good
+introduction to sorting algorithms. But the chief weakness of bubble sort is
+that it’s incredibly inefficient. While it can quickly sort lists of a few
+dozen or few hundred values, it becomes infeasible for sorting lists of
+thousands or millions of values. For this reason, real-world applications never
+use bubble sort.</p>
+<p class="Body">Now try to write a solution based on the information in the
+previous sections. If you still have trouble solving this exercise, read the <span class="Bold">Solution Template</span> section for additional hints.</p>
+<p class="HeadA">Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/bubblesort-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst">def bubbleSort(numbers):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># The outer loop loops i
+over all but the last number:</span></p>
+<p class="CodeCxSpMiddle">    for i in range(len(____) - ____):</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># The inner loop loops
+j starting at i to the last number:</span></p>
+<p class="CodeCxSpMiddle">        for j in range(____, len(____)):</p>
+<p class="CodeCxSpMiddle">            <span class="CodeComment"># If the number at
+i is greater than the number at j, swap them:</span></p>
+<p class="CodeCxSpMiddle">            if numbers[i] ____ numbers[j]:</p>
+<p class="CodeCxSpMiddle">                numbers[i], numbers[j] = numbers[____],
+numbers[____]</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Return the now-sorted
+list:</span></p>
+<p class="CodeCxSpLast">    return numbers</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/bubblesort.py</span>. You can
+view each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/bubblesort-debug/</span>.</p>
+<p class="HeadA">Further Reading</p>
+<p class="Body">If you want to see what a first-year computer science student
+would study in a data structures and algorithms course, Coursera has a free
+online course called “Algorithmic Toolbox” at <span class="MsoHyperlink">https://www.coursera.org/learn/algorithmic-toolbox</span>.
+</p>
+
+
+
+<p><a href="../exercise41/">Prev - #41 ROT 13 Encryption</a> | <a href="../index.html">Table of Contents</a></p></body></html>

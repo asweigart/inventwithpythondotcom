@@ -1,0 +1,221 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="../style_pythongently.css" rel="stylesheet" type="text/css" />
+<title>Exercise 19 - Password Generator</title></head><body style="background-color: #fffeee;"><p><a href="../exercise18/">Prev - #18 Buy 8 Get 1 Free</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise20/">Next - #20 Leap Year</a></p>
+
+
+
+
+<h1><a name="_Toc115418688"></a><a name="_Toc115359999">Exercise #19: Password
+Generator</a></h1>
+<p class="ChapterTitleCodeExample">generatePassword(12)  <span style="font-size:
+13.0pt">→ </span> 'v*f6uoklQJ!d'<br/>
+generatePassword(12)  <span style="font-size:13.0pt">→ </span> ' Yzkr(j2T$MsG'<br/>
+generatePassword(16)  <span style="font-size:13.0pt">→ </span> '
+UVp7ow8T%5LZl1la'</p>
+<p class="ChapterTitleCodeExample"><span style='font-size:8.0pt;font-family:"MS Shell Dlg 2","sans-serif"'><img border="0" height="144" id="Picture 30" src="../images/image022.png" width="432"/></span></p>
+<p class="Body">While a password made from a single English word like “rosebud”
+or “swordfish” is easy to remember, it isn’t secure. A <span class="Italic"><span style='font-family:"serif"'>dictionary attack</span></span> is when
+hackers program their computers to repeatedly try logging in with every word in
+the dictionary as the password. A dictionary attack won’t work if you use randomly
+generated passwords. They may not be easy to remember, but they make hacking
+your accounts more difficult.</p>
+<p class="HeadA">Exercise Description</p>
+<p class="Body">Write a <code>generatePassword()</code> function
+that has a <code>length</code> parameter. The <span class="Literal">length</span> parameter is an integer of how many characters the generated
+password should have. For security reasons, if <code>length</code>
+is less than <code>12</code>, the function forcibly sets it to 12
+characters anyway. The password string returned by the function must have at
+least one lowercase letter, one uppercase letter, one number, and one special
+character. The special characters for this exercise are <code>~!@#$%^&amp;*()_+</code>.
+</p>
+<p class="Body">Your solution should import Python’s <code>random</code>
+module to help randomly generate these passwords.</p>
+<p class="Body">These Python <code>assert</code> statements stop
+the program if their condition is <code>False</code>. Copy them
+to the bottom of your solution program. Your solution is correct if the following
+<code>assert</code> statements’ conditions are all <span class="Literal">True</span>:</p>
+<p class="CodeCxSpFirst">assert len(generatePassword(8)) == 12</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">pw = generatePassword(14)</p>
+<p class="CodeCxSpMiddle">assert len(pw) == 14</p>
+<p class="CodeCxSpMiddle">hasLowercase = False</p>
+<p class="CodeCxSpMiddle">hasUppercase = False</p>
+<p class="CodeCxSpMiddle">hasNumber = False</p>
+<p class="CodeCxSpMiddle">hasSpecial = False</p>
+<p class="CodeCxSpMiddle">for character in pw:</p>
+<p class="CodeCxSpMiddle">    if character in LOWER_LETTERS:</p>
+<p class="CodeCxSpMiddle">        hasLowercase = True</p>
+<p class="CodeCxSpMiddle">    if character in UPPER_LETTERS:</p>
+<p class="CodeCxSpMiddle">        hasUppercase = True</p>
+<p class="CodeCxSpMiddle">    if character in NUMBERS:</p>
+<p class="CodeCxSpMiddle">        hasNumber = True</p>
+<p class="CodeCxSpMiddle">    if character in SPECIAL:</p>
+<p class="CodeCxSpMiddle">        hasSpecial = True</p>
+<p class="CodeCxSpLast">assert hasLowercase and hasUppercase and hasNumber and
+hasSpecial</p>
+<p class="Body">Try to write a solution based on the information in this
+description. If you still have trouble solving this exercise, read the <span class="Bold">Solution Design and Special Cases and Gotchas</span> sections for
+additional hints.</p>
+<p class="Body">Prerequisite concepts: <code>import</code>
+statements, <code>random</code> module, strings, string concatenation,
+<code>len()</code>, <code>append()</code>, <span class="Literal">randint()</span>, <code>shuffle()</code>, <span class="Literal">join()</span></p>
+<p class="HeadA">Solution Design</p>
+<p class="Body">First, you’ll need to create constant strings for each category
+of characters required by the exercise:</p>
+<p class="Body" style="margin-left:.5in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>Lowercase letters: abcdefghijklmnopqrstuvwxyz (26 characters)</p>
+<p class="Body" style="margin-left:.5in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>Uppercase letters: ABCDEFGHIJKLMNOPQRSTUVWXYZ (26 characters)</p>
+<p class="Body" style="margin-left:.5in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>Numbers: 1234567890 (10 characters)</p>
+<p class="Body" style="margin-left:.5in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>Special characters: ~!@#$%^&amp;*()_+ (13 characters)</p>
+<p class="Body">Next, create a string that concatenates all four strings into one
+75-character string. These variables are <span class="Italic"><span style='font-family:"serif"'>constants</span></span> in that they aren’t
+meant to have their contents changed. By convention, constant variables are
+typed with ALL_UPPERCASE names and have underscores to separate words by
+convention. Constants are often created in the global scope outside of all
+functions, rather than as local variables inside a particular function. Constants
+are commonly used in all programming languages, even though the term “constant
+variable” is a bit of an oxymoron.</p>
+<p class="Body">The first line of the <code>generatePassword()</code>
+function should check if the <code>length</code> argument is less
+than <code>12</code>, and if so, set <code>length</code>
+to <code>12</code>. Next, create a <code>password</code>
+variable that starts as an empty list. Then randomly select a character from
+the lowercase letter constant using Python’s <code>random.randint()</code>
+function to pick a random integer index from the constant’s string. Do this for
+the other three constants as well.</p>
+<p class="Body">To guarantee that the final password has at least one character
+from each of the four categories, we’ll begin the password with a character
+from each category. Then we’ll keep adding characters from the combined string
+until the password reaches the required length.</p>
+<p class="Body">But this isn’t completely random since the first four characters
+are from predictable categories. To fix this issue, we’ll call Python’s <span class="Literal">random.shuffle()</span> function to mix up the order of the
+characters. Unfortunately, the <code>random.shuffle()</code>
+function only works on lists, not strings, so we build up the password from an
+empty list rather than an empty string.</p>
+<p class="Body">In a loop, keep adding a randomly selected character from the
+concatenated string with all characters until the <code>password</code>
+list is the same length as <code>length</code>. Then, pass the
+password list to <code>random.shuffle()</code> to mix up the
+order of the characters. Finally, combine this list of strings into a single
+string using <code>''.join(password)</code> and return it.</p>
+<p class="HeadA">Special Cases and Gotchas</p>
+<p class="Body">The <code>random.shuffle()</code> function only
+works with list values and not string values. This is why we add
+single-character strings to a list, shuffle it, and combine that list of
+strings into a single string with the <code>join()</code> string
+method. Otherwise, passing a string to <code>random.shuffle()</code>
+results in a <span class="Literal">TypeError: 'str' object does not support item
+assignment</span> error message.</p>
+<p class="Body">Now try to write a solution based on the information in the
+previous sections. If you still have trouble solving this exercise, read the <span class="Bold">Solution Template</span> section for additional hints.</p>
+<p class="HeadA">Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/passwordgenerator-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst"><span class="CodeComment"># Import the random module for
+its randint() function.</span></p>
+<p class="CodeCxSpMiddle">import ____</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle"><span class="CodeComment"># Create string constants that
+for each type of character:</span></p>
+<p class="CodeCxSpMiddle">LOWER_LETTERS = 'abcdefghijklmnopqrstuvwxyz'</p>
+<p class="CodeCxSpMiddle">UPPER_LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'</p>
+<p class="CodeCxSpMiddle">NUMBERS = '1234567890'</p>
+<p class="CodeCxSpMiddle">SPECIAL = '~!@#$%^&amp;*()_+'</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle"><span class="CodeComment"># Create a string that has all
+of these strings combined:</span></p>
+<p class="CodeCxSpMiddle">ALL_CHARS = LOWER_LETTERS + ____ + ____ + ____</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">def generatePassword(length):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># 12 is the minimum length
+for passwords:</span></p>
+<p class="CodeCxSpMiddle">    if length ____ 12:</p>
+<p class="CodeCxSpMiddle">        length = ____</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Create a password
+variable that starts as an empty list:</span></p>
+<p class="CodeCxSpMiddle">    password = []</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Add a random character
+from the lowercase, uppercase, digits, and</span></p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># punctuation character
+strings:</span></p>
+<p class="CodeCxSpMiddle">    password.append(LOWER_LETTERS[random.randint(0,
+25)])</p>
+<p class="CodeCxSpMiddle">    password.____(UPPER_LETTERS[random.randint(0, ____)])</p>
+<p class="CodeCxSpMiddle">    password.____(NUMBERS[random.randint(0, ____)])</p>
+<p class="CodeCxSpMiddle">    password.____(SPECIAL[random.randint(0, ____)])</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Keep adding random
+characters from the combined string until the</span></p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># password meets the
+length:</span></p>
+<p class="CodeCxSpMiddle">    while len(password) &lt; ____:</p>
+<p class="CodeCxSpMiddle">        password.append(ALL_CHARS[random.randint(____,
+74)])</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Randomly shuffle the
+password list:</span></p>
+<p class="CodeCxSpMiddle">    random.shuffle(____)</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Join all the strings in
+the password list into one string to return:</span></p>
+<p class="CodeCxSpLast">    return ''.join(____)</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/passwordgenerator.py</span>. You
+can view each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/passwordgenerator-debug/</span>.</p>
+<p class="HeadA">Further Reading</p>
+<p class="Body">Most <span class="Italic"><span style='font-family:"serif"'>random
+number generator</span></span> (RNG) algorithms are <span class="Italic"><span style='font-family:"serif"'>pseudorandom</span></span>: they appear
+random but are actually predictable. Pseudorandom algorithms have an initial
+value (often an integer) called a seed, and the same starting seed value
+produces the same random numbers. For example, you can reset Python’s seed by
+passing a seed integer to <code>random.seed()</code>. Notice how
+setting the same seed in the following interactive shell example produces the
+same sequence of “random” numbers:</p>
+<p class="CodeCxSpFirst">&gt;&gt;&gt; import random</p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; random.seed(42)  <span class="CodeComment">#
+Use any arbitrary integer for the seed.</span></p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; for i in range(20):</p>
+<p class="CodeCxSpMiddle">...   print(random.randint(0, 9), end=' ')</p>
+<p class="CodeCxSpMiddle">...</p>
+<p class="CodeCxSpMiddle">1 0 4 3 3 2 1 8 1 9 6 0 0 1 3 3 8 9 0 8</p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; random.seed(42)  <span class="CodeComment">#
+Reset using the same integer seed.</span></p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; for i in range(20):</p>
+<p class="CodeCxSpMiddle">...   print(random.randint(0, 9), end=' ')</p>
+<p class="CodeCxSpMiddle">...</p>
+<p class="CodeCxSpLast">1 0 4 3 3 2 1 8 1 9 6 0 0 1 3 3 8 9 0 8</p>
+<p class="Body">Python can also generate truly random, not pseudorandom, numbers
+based on several sources of systems entropy such as boot time, process IDs,
+position of the mouse cursor, millisecond timing in between the last several
+keystrokes, and others. You can look up the official Python documentation for
+the <code>random.SystemRandom()</code> function at <span class="MsoHyperlink">https://docs.python.org/3/library/random.html</span>.</p>
+<p class="Body">These theoretical hacks on pseudorandom numbers might concern you
+if you’re an international spy or a journalist targeted by the intelligence
+agencies of nation-states, but in general, using this program is fine. Randomly-
+and pseudorandomly-generated passwords are still better than using a
+predictable password like “Stanley123”. And many hacks happen because people
+have keystroke-reading malware on their computers or reuse the same password
+for multiple accounts. So if the password database of a website you use is
+hacked, those hackers can then try to identify the users’ accounts on other popular
+websites and try those same passwords.</p>
+<p class="Body">A <span class="Italic"><span style='font-family:"serif"'>password
+manager</span></span> app is the most effective single thing a computer user
+can have to increase their security. When you need to log into a website, you
+enter your master password into the password manager app to unlock its
+encrypted database. Then you can copy the password from the manager to the
+clipboard. For example, your password could be something like GKfazu8WposcVP!EL8,
+but logging in with it is just a matter of pressing Ctrl-V to paste it into the
+website’s login page.</p>
+<p class="Body">I recommend the free and open-source KeePass app from <span class="MsoHyperlink">https://keepass.info</span>, but many password manager apps are
+freely available.</p>
+
+
+
+<p><a href="../exercise18/">Prev - #18 Buy 8 Get 1 Free</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise20/">Next - #20 Leap Year</a></p></body></html>

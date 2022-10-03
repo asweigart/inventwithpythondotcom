@@ -1,0 +1,117 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="../style_pythongently.css" rel="stylesheet" type="text/css" />
+<title>Exercise 26 - Handshakes</title></head><body style="background-color: #fffeee;"><p><a href="../exercise25/">Prev - #25 Multiplication Table</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise27/">Next - #27 Rectangle Drawing</a></p>
+
+
+
+
+<h1><a name="_Toc115418695"></a><a name="_Toc115360006">Exercise #26: Handshakes</a></h1>
+<p class="ChapterTitleCodeExample"><img border="0" height="144" id="Picture 37" src="../images/image030.jpg" width="233"/></p>
+<p class="Body">There is only one handshake that can happen between two people.
+Between three people, there are three possible handshaking pairs. Between four
+people, there are six handshakes; five people, ten handshakes, and so on. This
+exercise explores the full range of possible handshaking combinations with
+nested <code>for</code> loops.</p>
+<p class="HeadA">Exercise Description</p>
+<p class="Body">Write a function named <code>printHandshakes()</code>
+with a list parameter named <code>people</code> which will be a list
+of strings of people’s names. The function prints out <span class="Literal">'X
+shakes hands with Y'</span>, where X and Y are every possible pair of
+handshakes between the people in the list. No duplicates are permitted: if
+“Alice shakes hands with Bob” appears in the output, then “Bob shakes hands
+with Alice” should not appear.</p>
+<p class="Body">For example, <span class="Literal">printHandshakes(['Alice', 'Bob',
+'Carol', 'David'])</span> should print:</p>
+<p class="CodeCxSpFirst">Alice shakes hands with Bob</p>
+<p class="CodeCxSpMiddle">Alice shakes hands with Carol</p>
+<p class="CodeCxSpMiddle">Alice shakes hands with David</p>
+<p class="CodeCxSpMiddle">Bob shakes hands with Carol</p>
+<p class="CodeCxSpMiddle">Bob shakes hands with David</p>
+<p class="CodeCxSpLast">Carol shakes hands with David</p>
+<p class="Body">The <code>printHandshakes()</code> function must also
+return an integer of the number of handshakes.</p>
+<p class="Body">These Python <code>assert</code> statements stop
+the program if their condition is <code>False</code>. Copy them
+to the bottom of your solution program. Your solution is correct if the output
+displays all possible handshakes and the following <code>assert</code>
+statements’ conditions are all <code>True</code>:</p>
+<p class="CodeCxSpFirst">assert printHandshakes(['Alice', 'Bob']) == 1</p>
+<p class="CodeCxSpMiddle">assert printHandshakes(['Alice', 'Bob', 'Carol']) == 3</p>
+<p class="CodeCxSpLast">assert printHandshakes(['Alice', 'Bob', 'Carol',
+'David']) == 6</p>
+<p class="Body">Try to write a solution based on the information in this
+description. If you still have trouble solving this exercise, read the <span class="Bold">Solution Design and Special Cases and Gotchas</span> sections for
+additional hints.</p>
+<p class="Body">Prerequisite concepts: <code>for</code> loops, <span class="Literal">range()</span> with two arguments, <code>len()</code>,
+augmented assignment operators</p>
+<p class="HeadA">Solution Design</p>
+<p class="Body">We need a pair of nested <code>for</code> loops to
+obtain the pairs of people in each handshake. The outer <code>for</code>
+loop iterates over each index in the person list for the first handshaker, and
+the inner <code>for</code> loop iterates over each index in the
+person list after the outer loop’s index.</p>
+<p class="Body">The pattern behind the movements of <code>i</code>
+and <code>j</code> are easier to see when visually laid out, as
+in Figure 26-1, which uses a 5-item <code>people</code> list as
+an example. The indexes <code>i</code> and <code>j</code>
+refer to the two people in the handshake:</p>
+<p class="Body"><img border="0" height="388" id="Picture 54" src="../images/image031.png" width="481"/></p>
+<p class="MsoCaption"><span lang="EN-CA">Figure 26-1: The pattern of i and j’s
+movement.</span></p>
+<p class="Body">As the algorithm runs, <code>j</code> starts after <span class="Literal">i</span> and moves to the right, and when it reaches the end, <span class="Literal">i</span> moves right once and <code>j</code> starts
+after <code>i</code> again. In the above example with 5 people
+(indexes <code>0</code> to <code>4</code>) <span class="Literal">i</span> starts at <code>0</code> and <span class="Literal">j</span> starts at <code>i + 1</code>, or <span class="Literal">1</span>. The <code>j</code> variable increments
+until it reaches <code>4</code>, at which point <span class="Literal">i</span> increments to <code>1</code> and <span class="Literal">j</span> resets back to <code>i + 1</code>, which
+is now <code>2</code>. </p>
+<p class="Body">If you look at the overall range of <code>i</code>
+and <code>j</code>, you’ll see that <code>i</code>
+starts at index <code>0</code> and ends at the second to last
+index. Meanwhile, <code>j</code> starts at the index after <span class="Literal">i</span> and ends at the last index. This means our nested <span class="Literal">for</span> loops over the <code>people</code> list
+parameter would look like this:</p>
+<p class="CodeCxSpFirst">for i in range(0, len(people) - 1):</p>
+<p class="CodeCxSpLast">    for j in range(i, len(people)):</p>
+<p class="Body">This solution is identical to the nested <code>for</code>
+loops in Exercise #42, “Bubble Sort.”</p>
+<p class="HeadA">Special Cases and Gotchas</p>
+<p class="Body">The most common mistake you want to avoid is having repeated
+handshakes. This can happen if your nested <code>for</code> loops
+cover the full range of indexes in the people list like so:</p>
+<p class="CodeCxSpFirst">for i in range(0, len(people)):</p>
+<p class="CodeCxSpLast">    for j in range(0, len(people)):</p>
+<p class="Body">In this case, <code>i</code> and <span class="Literal">j</span> would run with each pair twice: for example, the first
+time with <code>people[i]</code> as the first handshaker and <span class="Literal">people[j]</span> as the second handshaker, and then with <span class="Literal">people[i]</span> as the second handshaker and <span class="Literal">people[j]</span> as the first handshaker.</p>
+<p class="Body">Now try to write a solution based on the information in the
+previous sections. If you still have trouble solving this exercise, read the <span class="Bold">Solution Template</span> section for additional hints.</p>
+<p class="HeadA">Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/handshake-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst">def printHandshakes(people):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># The total number of
+handshakes starts at 0:</span></p>
+<p class="CodeCxSpMiddle">    numberOfHandshakes = ____</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Loop over every index in
+the people list except the last:</span></p>
+<p class="CodeCxSpMiddle">    for i in range(0, len(____) - 1):</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># Loop over every index
+in the people list after index i:</span></p>
+<p class="CodeCxSpMiddle">        for j in range(i + ____, len(____)):</p>
+<p class="CodeCxSpMiddle">            <span class="CodeComment"># Print a handshake
+between the people at index i and j:</span></p>
+<p class="CodeCxSpMiddle">            print(people[____], 'shakes hands with',
+people[____])</p>
+<p class="CodeCxSpMiddle">            <span class="CodeComment"># Increment the
+total number of handshakes:</span></p>
+<p class="CodeCxSpMiddle">            numberOfHandshakes += ____</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Return the total number
+of handshakes:</span></p>
+<p class="CodeCxSpLast">    return numberOfHandshakes</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/handshake.py</span>. You can
+view each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/handshake-debug/</span>.</p>
+
+
+
+<p><a href="../exercise25/">Prev - #25 Multiplication Table</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise27/">Next - #27 Rectangle Drawing</a></p></body></html>

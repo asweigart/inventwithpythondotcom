@@ -1,0 +1,215 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="../style_pythongently.css" rel="stylesheet" type="text/css" />
+<title>Exercise 30 - 3D Box Drawing</title></head><body style="background-color: #fffeee;"><p><a href="../exercise29/">Prev - #29 Pyramid Drawing</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise31/">Next - #31 Convert Integers To Strings</a></p>
+
+
+
+
+<h1><a name="_Toc115418699"></a><a name="_Toc115360010">Exercise #30: 3D Box
+Drawing</a></h1>
+<p class="ChapterTitleCodeExample">drawBox(2)  <span style="font-size:13.0pt">→
+</span>   +----+<br/>
+                 /    /|<br/>
+                /    / |<br/>
+               +----+  +<br/>
+              |    | /<br/>
+             |    |/<br/>
+            +----+</p>
+<p class="ChapterTitleCodeExample"><img border="0" height="144" id="Picture 41" src="../images/image035.jpg" width="206"/></p>
+<p class="Body">In this exercise, we’ll move from 2D ASCII art into 3D ASCII art
+by programmatically generating boxes at any given size. </p>
+<p class="HeadA">Exercise Description</p>
+<p class="Body">Write a <code>drawBox()</code> function with a <span class="Literal">size</span> parameter. The <code>size</code>
+parameter contains an integer for the width, length, and height of the box. The
+horizontal lines are drawn with <code>-</code> dash characters,
+the vertical lines with <code>|</code> pipe characters, and the
+diagonal lines with <code>/</code> forward slash characters. The
+corners of the box are drawn with <code>+</code> plus signs.</p>
+<p class="Body">There are no Python <code>assert</code> statements
+to check the correctness of your program. Instead, you can visually inspect the
+output yourself. For example, calling <code>drawBox(1)</code> through
+<code>drawBox(5)</code> would output the following boxes,
+respectively:</p>
+<p class="CodeCxSpFirst">                                                       
++----------+</p>
+<p class="CodeCxSpMiddle">                                                      
+/          /|</p>
+<p class="CodeCxSpMiddle">                                      +--------+     
+/          / |</p>
+<p class="CodeCxSpMiddle">                                     /        /|    
+/          /  |</p>
+<p class="CodeCxSpMiddle">                       +------+     /        / |   
+/          /   |</p>
+<p class="CodeCxSpMiddle">                      /      /|    /        /  |  
+/          /    |</p>
+<p class="CodeCxSpMiddle">           +----+    /      / |   /        /   | 
++----------+     +</p>
+<p class="CodeCxSpMiddle">          /    /|   /      /  |  +--------+    + 
+|          |    / </p>
+<p class="CodeCxSpMiddle">  +--+   /    / |  +------+   +  |        |   /  
+|          |   /  </p>
+<p class="CodeCxSpMiddle"> /  /|  +----+  +  |      |  /   |        |  /   
+|          |  /   </p>
+<p class="CodeCxSpMiddle">+--+ +  |    | /   |      | /    |        | /    
+|          | /    </p>
+<p class="CodeCxSpMiddle">|  |/   |    |/    |      |/     |        |/     
+|          |/     </p>
+<p class="CodeCxSpMiddle">+--+    +----+     +------+      +--------+      
++----------+</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpLast">Size 1  Size 2      Size 3         Size 4            Size
+5</p>
+<p class="Body">If the argument for <code>size</code> is less than <span class="Literal">1</span>, the function prints nothing.</p>
+<p class="Body">Try to write a solution based on the information in this
+description. If you still have trouble solving this exercise, read the <span class="Bold">Solution Design and Special Cases and Gotchas</span> sections for
+additional hints.</p>
+<p class="Body">Prerequisite concepts: strings, string concatenation, string
+replication, <code>for</code> loops, <code>range()</code></p>
+<p class="HeadA">Solution Design</p>
+<p class="Body">This exercise is a significant leap in complexity compared to the
+previous rectangle, border, and pyramid drawing exercises. Nine different lines
+must be drawn, as well as several whitespace areas on the left side and
+interior of the box. However, solving this exercise is still a matter of
+figuring out the sizing patterns. Drawing the boxes manually in a text editor
+first can help you determine the pattern behind the boxes’ lines. Here are the
+boxes from size 1 to 5 with the lines numbered and the whitespace marked with
+periods (since spaces’ invisibility makes them hard to count):</p>
+<p class="CodeCxSpFirst">                                                  ......+----1-----+</p>
+<p class="CodeCxSpMiddle">                                                 
+...../........../|</p>
+<p class="CodeCxSpMiddle">                                 .....+---1----+ 
+..../........../.|</p>
+<p class="CodeCxSpMiddle">                                 ..../......../| 
+...2..........3..4</p>
+<p class="CodeCxSpMiddle">                   ....+--1---+  ...2........3.4 
+../........../...|</p>
+<p class="CodeCxSpMiddle">                   .../....../|  ../......../..| 
+./........../....|</p>
+<p class="CodeCxSpMiddle">        ...+-1--+  ..2......3.4  ./......../...| 
++----5-----+.....+</p>
+<p class="CodeCxSpMiddle">        ../..../|  ./....../..|  +---5----+....+  |..........|..../
+</p>
+<p class="CodeCxSpMiddle">..+1-+  .2....3.4  +--5---+...+  |........|.../  
+|..........|.../  </p>
+<p class="CodeCxSpMiddle">.2..34  +-5--+..+  |......|../   6........7..8   
+6..........7..8   </p>
+<p class="CodeCxSpMiddle">+5-+.+  6....7.8   6......7.8    |........|./    
+|..........|./    </p>
+<p class="CodeCxSpMiddle">6..78   |....|/    |......|/     |........|/     
+|..........|/     </p>
+<p class="CodeCxSpMiddle">+9-+    +-9--+     +--9---+      +---9----+      
++----9-----+</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpLast">Size 1  Size 2      Size 3         Size 4            Size
+5     </p>
+<p class="Body">Because <code>print()</code> calls display text
+left-to-right and top-to-bottom, we’ll have to consider the lines and
+whitespace in that order. For the following descriptions, note that <span class="Literal">size</span> is the integer parameter passed to the <span class="Literal">drawBox()</span> function.</p>
+<p class="Body">The box’s diagonal lines follow the pattern of having <span class="Literal">size</span> slash characters. The box’s vertical lines follow the
+pattern of having <code>size</code> pipe characters. Meanwhile, the
+horizontal lines made of <code>size * 2</code> dash characters.
+Look at the largest box on the right of the above diagram: The horizontal lines
+1, 5, and 9 are made of 10 <code>-</code> dash characters (that
+is, <code>size * 2</code>). The diagonal lines 2, 3, and 8 are
+made of 5 / slash characters (that is, <code>size</code>). The
+vertical lines 4, 6, and 7 are also made of 5 | pipe characters (that is, <span class="Literal">size</span>).</p>
+<p class="Body">The horizontal lines 1, 5, and 9 are identical: They’re made of a
++ plus character, followed by <code>size * 2</code> dash characters
+and another <code>+</code> plus character. Line 1 has a number of
+spaces to the left of the line that equals <code>size + 1</code>.</p>
+<p class="Body">The interior spaces for the top and front surfaces of the box are
+<code>size</code> space characters, the same as the number of <span class="Literal">-</span> dash characters. The interior space of the right surface
+of the box is trickier. For example, here’s a box with size as 5 with the
+right-side surface spaces marked with periods:</p>
+<p class="CodeCxSpFirst">      +----------+</p>
+<p class="CodeCxSpMiddle">     /          /| 0 periods </p>
+<p class="CodeCxSpMiddle">    /          /.| 1 period</p>
+<p class="CodeCxSpMiddle">   /          /..| 2 periods</p>
+<p class="CodeCxSpMiddle">  /          /...| 3 periods</p>
+<p class="CodeCxSpMiddle"> /          /....| 4 periods</p>
+<p class="CodeCxSpMiddle">+----------+.....+ 5 periods</p>
+<p class="CodeCxSpMiddle">|          |..../  4 periods</p>
+<p class="CodeCxSpMiddle">|          |.../   3 periods</p>
+<p class="CodeCxSpMiddle">|          |../    2 periods</p>
+<p class="CodeCxSpMiddle">|          |./     1 period</p>
+<p class="CodeCxSpMiddle">|          |/      0 periods</p>
+<p class="CodeCxSpMiddle">+----------+</p>
+<p class="CodeCxSpLast"><br/>
+   Size 5</p>
+<p class="Body">As you print the top surface, the right-side surface has an
+increasing number of spaces ranging from <code>0</code> to <span class="Literal">size - 1</span> before printing the <code>|</code>
+pipe character of line 4. When you print line 5, the right-side surface has
+exactly <code>size</code> spaces before printing the <span class="Literal">+</span> plus sign for the corner. And as you print the front
+surface, the right-side surface has a decreasing number of spaces ranging from <span class="Literal">size - 1</span> to <code>0</code> before printing
+the <code>/</code> slash character of line 8.</p>
+<p class="Body">Finally, you’ll print the <code>+</code> plus and <span class="Literal">-</span> dash characters of line 9 at the bottom.</p>
+<p class="HeadA">Special Cases and Gotchas</p>
+<p class="Body">There’s nothing unexpected about printing these boxes. While
+there are many things to keep track of, always remember that the number of
+space and dash characters you print in each row is always relative to the <span class="Literal">size</span> parameter. There will be <code>size</code>
+pipe and slash characters in each vertical line, and <span class="Literal">size *
+2</span> dash characters in each horizontal line.</p>
+<p class="Body">Now try to write a solution based on the information in the
+previous sections. If you still have trouble solving this exercise, read the <span class="Bold">Solution Template</span> section for additional hints.</p>
+<p class="HeadA">Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/boxdrawing-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst">def drawBox(size):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Special case: Draw
+nothing if size is less than 1:</span></p>
+<p class="CodeCxSpMiddle">    if size &lt; ____:</p>
+<p class="CodeCxSpMiddle">        return</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Draw back line on top
+surface:</span></p>
+<p class="CodeCxSpMiddle">    print(' ' * (____ + 1) + '+' + '-' * (____ * 2) +
+'+')</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Draw top surface:</span></p>
+<p class="CodeCxSpMiddle">    for i in range(____):</p>
+<p class="CodeCxSpMiddle">        print(' ' * (____ - i) + '/' + ' ' * (____ * 2)
++ '/' + ' ' * i + '|')</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Draw top line on top
+surface:</span></p>
+<p class="CodeCxSpMiddle">    print(____ + ____ * (size * 2) + ____ + ' ' * size
++ '+')</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Draw front surface:</span></p>
+<p class="CodeCxSpMiddle">    for i in range(size - 1, ____, ____):</p>
+<p class="CodeCxSpMiddle">        print(____ + ' ' * (size * ____) + ____ + ' ' *
+i + ____)</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Draw bottom lie on front
+surface:</span></p>
+<p class="CodeCxSpMiddle">    print(____ + ____ * (size * 2) + ____)</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle"><span class="CodeComment"># In a loop, call drawBox()
+with arguments 1 to 5:</span></p>
+<p class="CodeCxSpMiddle">for i in range(1, 6):</p>
+<p class="CodeCxSpLast">    drawBox(i)</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/boxdrawing.py</span>. You can
+view each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/boxdrawing-debug/</span>.</p>
+<p class="HeadA">Further Reading</p>
+<p class="Body">If you enjoy the challenge of these generative ASCII art
+exercises, check out <i>https://</i>
+<i>github.com/asweigart/programmedpatterns/</i>.
+This website has several growing patterns that you can try to replicate as
+Python programs. For example, one such pattern looks like this:</p>
+<p class="CodeCxSpFirst">#     #      #       #</p>
+<p class="CodeCxSpMiddle">##    ##     ##      ##</p>
+<p class="CodeCxSpMiddle">      ###    ###     ###</p>
+<p class="CodeCxSpMiddle">             ####    ####</p>
+<p class="CodeCxSpLast">                     #####</p>
+<p class="Body">The first four steps of the pattern are provided. You could then write
+a function with a <code>step</code> parameter that prints the
+pattern at that given step. There are hundreds of patterns featured on the
+site.</p>
+
+
+
+<p><a href="../exercise29/">Prev - #29 Pyramid Drawing</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise31/">Next - #31 Convert Integers To Strings</a></p></body></html>

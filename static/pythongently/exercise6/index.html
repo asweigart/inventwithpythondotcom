@@ -1,0 +1,195 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="../style_pythongently.css" rel="stylesheet" type="text/css" />
+<title>Exercise 6 - Ordinal Suffix</title></head><body style="background-color: #fffeee;"><p><a href="../exercise5/">Prev - #5 Fizz Buzz</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise7/">Next - #7 ASCII Table</a></p>
+
+
+
+
+<h1><a name="_Toc115418675"></a><a name="_Toc115359986">Exercise #6: Ordinal
+Suffix</a></h1>
+<p class="ChapterTitleCodeExample">ordinalSuffix(42)  <span style="font-size:
+13.0pt">→ </span> '42nd'</p>
+<p class="ChapterTitleCodeExample"><span style='font-size:8.0pt;font-family:"MS Shell Dlg 2","sans-serif"'><img height="144" id="Picture 14" src="../images/image007.jpg" width="128"/></span></p>
+<p class="Body">While <span class="Italic"><span style='font-family:"serif"'>cardinal
+numbers</span></span> refer to the size of a group of objects like “four
+apples” or “1,000 tickets”, <span class="Italic"><span style='font-family:"serif"'>ordinal
+numbers</span></span> refer to the place of an object in an ordered sequence
+like “first place” or “30th birthday”. This exercise involves numbers but is
+more an exercise in processing text than doing math.</p>
+<p class="HeadA">Exercise Description</p>
+<p class="Body">In English, ordinal numerals have suffixes such as the “th” in
+“30th” or “nd” in “2nd”. Write an <code>ordinalSuffix()</code>
+function with an integer parameter named <code>number</code> and
+returns a string of the number with its ordinal suffix. For example, <span class="Literal">ordinalSuffix(42)</span> should return the string <span class="Literal">'42nd'</span>.</p>
+<p class="Body">You may use Python’s <code>str()</code> function to
+convert the integer argument to a string. Python’s <code>endswith()</code>
+string method could be useful for this exercise, but to maintain the challenge
+in this exercise, don’t use it as part of your solution.</p>
+<p class="Body">These Python <code>assert</code> statements stop
+the program if their condition is <code>False</code>. Copy them
+to the bottom of your solution program. Your solution is correct if the following
+<code>assert</code> statements’ conditions are all <span class="Literal">True</span>:</p>
+<p class="CodeCxSpFirst">assert ordinalSuffix(0) == '0th'</p>
+<p class="CodeCxSpMiddle">assert ordinalSuffix(1) == '1st'</p>
+<p class="CodeCxSpMiddle">assert ordinalSuffix(2) == '2nd'</p>
+<p class="CodeCxSpMiddle">assert ordinalSuffix(3) == '3rd'</p>
+<p class="CodeCxSpMiddle">assert ordinalSuffix(4) == '4th'</p>
+<p class="CodeCxSpMiddle">assert ordinalSuffix(10) == '10th'</p>
+<p class="CodeCxSpMiddle">assert ordinalSuffix(11) == '11th'</p>
+<p class="CodeCxSpMiddle">assert ordinalSuffix(12) == '12th'</p>
+<p class="CodeCxSpMiddle">assert ordinalSuffix(13) == '13th'</p>
+<p class="CodeCxSpMiddle">assert ordinalSuffix(14) == '14th'</p>
+<p class="CodeCxSpLast">assert ordinalSuffix(101) == '101st'</p>
+<p class="Body">Try to write a solution based on the information in this
+description. If you still have trouble solving this exercise, read the <span class="Bold">Solution Design</span> and <span class="Bold">Special Cases and
+Gotchas</span> sections for additional hints.</p>
+<p class="Body">Prerequisite concepts: strings, <code>in</code>
+operator, slices, string concatenation</p>
+<p class="HeadA">Solution Design</p>
+<p class="Body">The ordinal suffix depends on the last two digits in the number:</p>
+<p class="Body" style="margin-left:.75in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>If the last two digits end with 11, 12, or 13 then the suffix is
+“th.”</p>
+<p class="Body" style="margin-left:.75in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>If the number ends with 1, the suffix is “st.”</p>
+<p class="Body" style="margin-left:.75in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>If the number ends with 2, the suffix is “nd.”</p>
+<p class="Body" style="margin-left:.75in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>If the number ends with 3, the suffix is “rd.”</p>
+<p class="Body" style="margin-left:.75in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>Every other number has a suffix of “th.”</p>
+<p class="Body">Our code becomes much easier to write if we call the <span class="Literal">str()</span> function to convert the integer value in <span class="Literal">number</span> to a string first. Then you can use negative
+indexes in Python to find the last digit in this string. You can store the
+string form in a variable named <code>numberStr</code>. Just as <span class="Literal">numberStr[0]</span> and <code>numberStr[1]</code>
+evaluate to the first and second character in <code>numberStr</code>,
+<code>numberStr[-1]</code> and <code>numberStr[-2]</code>
+evaluate to the last and second to last character in <code>numberStr</code>.
+Therefore, you can use <code>numberStr[-1]</code> to check if the
+last digit is 1, 2, or 3.</p>
+<p class="Body">To find the last two digits, you can use Python slices to get a
+substring from a string by specifying the start and end index of the slice. For
+example, <code>numberStr[0:3]</code> evaluates to the characters
+in <code>numberStr</code> from index <code>0</code>
+up to, but not including, index <code>3</code>. Enter the
+following in the interactive shell:</p>
+<p class="CodeCxSpFirst">&gt;&gt;&gt; numberStr = '41096'</p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; numberStr[0:3]</p>
+<p class="CodeCxSpLast">'410'</p>
+<p class="Body">If <code>numberStr</code> were <code>'41096'</code>,
+<code>numberStr[0:3]</code> evaluates to <code>'410'</code>.
+If you leave out the first index, Python assumes you mean “the start of the
+string.” For example, <code>numberStr[:3]</code> means the same
+thing as <code>numberStr[0:3]</code>. If you leave out the second
+index, Python assumes you mean “the end of the string.” For example, <span class="Literal">numberStr[3:]</span> means the same thing as <code>numberStr[3:len(numberStr)]</code>
+or <code>'96'</code>. Enter the following into the interactive
+shell:</p>
+<p class="CodeCxSpFirst">&gt;&gt;&gt; numberStr = '41096'</p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; numberStr[:3]</p>
+<p class="CodeCxSpMiddle">'410'</p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; numberStr[3:]</p>
+<p class="CodeCxSpLast">'96'</p>
+<p class="Body">You can combine slices and negative indexes. For example, <span class="Literal">numberStr[-2:]</span> means the slice starts from the second to
+last character in <code>numberStr</code> and continues to the end
+of the string. This is how <code>numberStr[-2:]</code> becomes
+the shorthand for “the last two characters in <code>numberStr</code>.”
+You can use this to determine if the number ends with 11, 12, or 13. Enter the
+following into the interactive shell:</p>
+<p class="CodeCxSpFirst">&gt;&gt;&gt; numberStr = '41096'</p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; numberStr[-2:]</p>
+<p class="CodeCxSpMiddle">'96'</p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; numberStr = '987654321'</p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; numberStr[-2:]</p>
+<p class="CodeCxSpLast">'21'</p>
+<p class="Body">If you need to compare a variable to multiple values, you can use
+the in keyword and put the values in a tuple. For example, instead of the lengthy
+condition <span class="Literal">numberStr[-2:] == '11' or numberStr[-2:] == '12'
+or numberStr[-2:] == '13'</span>, you can have the equivalent and more concise <span class="Literal">numberStr[-2:] in ('11', '12', '13')</span>. Enter the following
+into the interactive shell:</p>
+<p class="CodeCxSpFirst">&gt;&gt;&gt; numberStr = '41096'</p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; numberStr[-2:] in ('11', '12', '13')</p>
+<p class="CodeCxSpMiddle">False</p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; numberStr = '512'</p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; numberStr[-2:] in ('11', '12', '13')</p>
+<p class="CodeCxSpLast">True</p>
+<p class="Body">You’ll use a similar expression in this exercise’s solution.</p>
+<p class="HeadA">Special Cases and Gotchas</p>
+<p class="Body">Ensure that the number ends with 11, 12, or 13 <span class="Italic"><span style='font-family:"serif"'>before</span></span>
+checking if it ends with 1, 2, or 3. Otherwise, you may end up programming your
+function to return <code>'213rd'</code> instead of <span class="Literal">'213th'</span>. Also, notice that <code>'0'</code>
+has an ordinal suffix of “th”: <code>'0th'</code>.</p>
+<p class="Body">Now try to write a solution based on the information in the
+previous sections. If you still have trouble solving this exercise, read the <span class="Bold">Solution Template</span> section for additional hints.</p>
+<p class="HeadA">Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/ordinalsuffix-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst">def ordinalSuffix(number):</p>
+<p class="CodeCxSpMiddle">    numberStr = str(number)</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># 11, 12, and 13 have the
+suffix th:</span></p>
+<p class="CodeCxSpMiddle">    if numberStr[____:] in ('11', ____, ____):</p>
+<p class="CodeCxSpMiddle">        return numberStr + 'th'</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Numbers that end with 1
+have the suffix st:</span></p>
+<p class="CodeCxSpMiddle">    if numberStr[____] == '1':</p>
+<p class="CodeCxSpMiddle">        return numberStr + 'st'</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Numbers that end with 2
+have the suffix nd:</span></p>
+<p class="CodeCxSpMiddle">    if numberStr[____] == ____:</p>
+<p class="CodeCxSpMiddle">        return numberStr + 'nd'</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Numbers that end with 3
+have the suffix rd:</span></p>
+<p class="CodeCxSpMiddle">    if numberStr[____] == ____:</p>
+<p class="CodeCxSpMiddle">        return numberStr + 'rd'</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># All other numbers end
+with th:</span></p>
+<p class="CodeCxSpLast">    return ____ + ____</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/ordinalsuffix.py</span>. You can
+view each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/ordinalsuffix-debug/</span>.</p>
+<p class="HeadA">Another Solution Design</p>
+<p class="Body">Instead of using the <code>str()</code> function to
+convert the number to a string and examining the digits at the end, you could
+leave it as an integer and determine the last digit with the <span class="Literal">%</span> modulo operator.</p>
+<p class="Body">Any number modulo 10 evaluates to the digit in the one’s place of
+the number. You can use modulo 100 to get the last two digits. For example,
+enter the following into the interactive shell:</p>
+<p class="CodeCxSpFirst"><code>&gt;&gt;&gt; 42 % 10</code></p>
+<p class="CodeCxSpMiddle"><code>2</code></p>
+<p class="CodeCxSpMiddle"><code>&gt;&gt;&gt; 12345 % 10</code></p>
+<p class="CodeCxSpMiddle"><code>5</code></p>
+<p class="CodeCxSpMiddle"><code>&gt;&gt;&gt; 12345 % 100</code></p>
+<p class="CodeCxSpLast"><code>45</code></p>
+<p class="Body">Using this information, write an alternative solution for this
+exercise using modulo. If you need additional hints, replace the underscores in
+the following solution template with code:</p>
+<p class="CodeCxSpFirst">def ordinalSuffix(number):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># 11, 12, and 13 have the
+suffix th:</span></p>
+<p class="CodeCxSpMiddle">    if ____ % 100 in (11, ____, ____):</p>
+<p class="CodeCxSpMiddle">        return str(number) + 'th'</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Numbers that end with 1
+have the suffix st:</span></p>
+<p class="CodeCxSpMiddle">    if ____ % 10 == ____:</p>
+<p class="CodeCxSpMiddle">        return str(number) + 'st'</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Numbers that end with 2
+have the suffix nd:</span></p>
+<p class="CodeCxSpMiddle">    if ____ % 10 == ____:</p>
+<p class="CodeCxSpMiddle">        return str(number) + 'nd'</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Numbers that end with 3
+have the suffix rd:</span></p>
+<p class="CodeCxSpMiddle">    if ____ % 10 == ____:</p>
+<p class="CodeCxSpMiddle">        return str(number) + 'rd'</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># All other numbers end
+with th:</span></p>
+<p class="CodeCxSpLast">    return ____(____) + ____</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/ordinalsuffix2.py</span>. You
+can view each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/ordinalsuffix2-debug/</span>.</p>
+
+
+
+<p><a href="../exercise5/">Prev - #5 Fizz Buzz</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise7/">Next - #7 ASCII Table</a></p></body></html>

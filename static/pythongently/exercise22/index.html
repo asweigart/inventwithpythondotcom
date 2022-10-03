@@ -1,0 +1,96 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="../style_pythongently.css" rel="stylesheet" type="text/css" />
+<title>Exercise 22 - Rock, Paper, Scissors</title></head><body style="background-color: #fffeee;"><p><a href="../exercise21/">Prev - #21 Validate Date</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise23/">Next - #23 99 Bottles of Beer</a></p>
+
+
+
+
+<h1><a name="_Toc115418691"></a><a name="_Toc115360002">Exercise #22: Rock,
+Paper, Scissors</a></h1>
+<p class="ChapterTitleCodeExample">rpsWinner('rock', 'paper')  <span style="font-size:13.0pt">→ </span> 'player2'</p>
+<p class="ChapterTitleCodeExample"><span style='font-size:8.0pt;font-family:"MS Shell Dlg 2","sans-serif"'><img border="0" height="144" id="Picture 33" src="../images/image026.jpg" width="399"/></span></p>
+<p class="Body">Rock, paper, scissors is a popular hand game for two players. The
+two players simultaneously choose one of the three possible moves and determine
+the winner of the game: rock beats scissors, paper beats rock, and scissors
+beats paper. This exercise involves determining a game’s outcome given the
+moves of the two players.</p>
+<p class="HeadA">Exercise Description</p>
+<p class="Body">Write a <code>rpsWinner()</code> function with
+parameters <code>player1</code> and <code>player2</code>.
+These parameters are passed one of the strings <code>'rock'</code>,
+<code>'paper'</code>, or <code>'scissors'</code>
+representing that player’s move. If this results in player 1 winning, the
+function returns <code>'player one'</code>. If this results in
+player 2 winning, the function returns <code>'player two'</code>.
+Otherwise, the function returns <code>'tie'</code>.</p>
+<p class="Body">These Python <code>assert</code> statements stop
+the program if their condition is <code>False</code>. Copy them
+to the bottom of your solution program. Your solution is correct if the following
+<code>assert</code> statements’ conditions are all <span class="Literal">True</span>:</p>
+<p class="CodeCxSpFirst">assert rpsWinner('rock', 'paper') == 'player two'</p>
+<p class="CodeCxSpMiddle">assert rpsWinner('rock', 'scissors') == 'player one'</p>
+<p class="CodeCxSpMiddle">assert rpsWinner('paper', 'scissors') == 'player two'</p>
+<p class="CodeCxSpMiddle">assert rpsWinner('paper', 'rock') == 'player one'</p>
+<p class="CodeCxSpMiddle">assert rpsWinner('scissors', 'rock') == 'player two'</p>
+<p class="CodeCxSpMiddle">assert rpsWinner('scissors', 'paper') == 'player one'</p>
+<p class="CodeCxSpMiddle">assert rpsWinner('rock', 'rock') == 'tie'</p>
+<p class="CodeCxSpMiddle">assert rpsWinner('paper', 'paper') == 'tie'</p>
+<p class="CodeCxSpLast">assert rpsWinner('scissors', 'scissors') == 'tie'</p>
+<p class="Body">Try to write a solution based on the information in this
+description. If you still have trouble solving this exercise, read the <span class="Bold">Solution Design and Special Cases and Gotchas</span> sections for
+additional hints.</p>
+<p class="Body">Prerequisite concepts: Boolean operators, <code>elif</code>
+statements</p>
+<p class="HeadA">Solution Design</p>
+<p class="Body">Similar to the solutions for Exercise #20, “Leap Year” and #21,
+“Validate Date”, the solution for this exercise is a set of <span class="Literal">if</span>-<code>elif</code>-<code>else</code>
+statements. The <code>player1</code> parameter contains a string
+of the first player’s move and the <code>player2</code> parameter
+contains a string of the second player’s move. These strings will be one of <span class="Literal">'rock'</span>, <code>'paper'</code>, and <span class="Literal">'scissors'</span>. You’ll want to use comparison operators to
+check the value of both players and join them with an <code>and</code>
+operator. For example, the expression <code>player1 == 'rock'</code>
+evaluates to <code>True</code> if the first player went with
+rock, and the expression <code>player2 == 'paper'</code>
+evaluates to <code>True</code> if the second player went with
+paper. This means that in the expression <span class="Literal">player1 == 'rock'
+and player2 == 'paper'</span> evaluates to <code>True</code> if
+both sides of the <code>and</code> operator evaluated to <span class="Literal">True</span>. In this case, the second player is the winner and
+the function should return <code>'player2'</code>.</p>
+<p class="HeadA">Special Cases and Gotchas</p>
+<p class="Body">You can check if the <code>player1</code> parameter
+equals the <code>player2</code> parameter at the start of the
+function and immediately return <code>'tie'</code> in that case.</p>
+<p class="Body">Now try to write a solution based on the information in the
+previous sections. If you still have trouble solving this exercise, read the <span class="Bold">Solution Template</span> section for additional hints.</p>
+<p class="HeadA">Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/rockpaperscissors-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst">def rpsWinner(move1, move2):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Check all six possible
+combinations with a winner and return it:</span></p>
+<p class="CodeCxSpMiddle">    if move1 == 'rock' and move2 == 'paper':</p>
+<p class="CodeCxSpMiddle">        return 'player two'</p>
+<p class="CodeCxSpMiddle">    elif ____ == 'rock' and move2 == 'scissors':</p>
+<p class="CodeCxSpMiddle">        return ____</p>
+<p class="CodeCxSpMiddle">    ____ move1 == 'paper' and ____ == 'scissors':</p>
+<p class="CodeCxSpMiddle">        return ____</p>
+<p class="CodeCxSpMiddle">    ____ ____ == 'paper' and move2 == 'rock':</p>
+<p class="CodeCxSpMiddle">        return ____</p>
+<p class="CodeCxSpMiddle">    ____ move1 == 'scissors' and ____ == 'rock':</p>
+<p class="CodeCxSpMiddle">        return ____</p>
+<p class="CodeCxSpMiddle">    ____ ____ == 'scissors' and  ____ == 'paper':</p>
+<p class="CodeCxSpMiddle">        return 'player one'</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># For all other
+combinations, it is a tie:</span></p>
+<p class="CodeCxSpMiddle">    ____:</p>
+<p class="CodeCxSpLast">        return ____</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/rockpaperscissors.py</span>. You
+can view each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/rockpaperscissors-debug/</span>.</p>
+
+
+
+<p><a href="../exercise21/">Prev - #21 Validate Date</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise23/">Next - #23 99 Bottles of Beer</a></p></body></html>

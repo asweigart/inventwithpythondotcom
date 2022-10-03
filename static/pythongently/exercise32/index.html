@@ -1,0 +1,136 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="../style_pythongently.css" rel="stylesheet" type="text/css" />
+<title>Exercise 32 - Convert Strings To Integers</title></head><body style="background-color: #fffeee;"><p><a href="../exercise31/">Prev - #31 Convert Integers To Strings</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise33/">Next - #33 Comma-Formatted Numbers</a></p>
+
+
+
+
+<h1><a name="_Toc115418701"></a><a name="_Toc115360012">Exercise #32: Convert
+Strings To Integers</a></h1>
+<p class="ChapterTitleCodeExample">convertStrToInt('42')  <span style="font-size:
+13.0pt">→ </span> 42</p>
+<p class="ChapterTitleCodeExample"><span style='font-size:8.0pt;font-family:"MS Shell Dlg 2","sans-serif"'><img border="0" height="144" id="Picture 43" src="../images/image037.jpg" width="432"/></span></p>
+<p class="Body">To complement Exercise #31, “Convert Integers to Strings”, in
+this exercise we’ll convert strings of numeric digits into their integer
+equivalents. The most common use case for this is taking the string returned
+from, say, the <code>input()</code> function or a text file’s <span class="Literal">read()</span> method and converting it to an integer to perform
+mathematical operations on it. You can use Python’s <code>int()</code>
+function to do this conversion, but in this exercise, you’ll recreate this
+function yourself.</p>
+<p class="HeadA">Exercise Description</p>
+<p class="Body">Write a <code>convertStrToInt()</code> function with
+a <code>stringNum</code> parameter. This function returns an
+integer form of the parameter just like the <code>int()</code>
+function. For example, <code>convertStrToInt('42')</code> should
+return the integer <code>42</code>. The function doesn’t have to
+work for floating-point numbers with a decimal point, but it should work for
+negative number values.</p>
+<p class="Body">Avoid using <code>int()</code>in your code, as that
+would do the conversion for you and defeat the purpose of this exercise.
+However, we do use <code>int()</code> with <code>assert</code>
+statements to check that your <code>convertStrToInt()</code>
+function works the same as <code>int()</code> for all integers
+from <code>-10000</code> to <code>9999</code>:</p>
+<p class="CodeCxSpFirst">for i in range(-10000, 10000):</p>
+<p class="CodeCxSpLast">    assert convertStrToInt(str(i)) == i</p>
+<p class="Body">Try to write a solution based on the information in this
+description. If you still have trouble solving this exercise, read the <span class="Bold">Solution Design and Special Cases and Gotchas</span> sections for
+additional hints.</p>
+<p class="HeadA">Solution Design</p>
+<p class="Body">The solution for this exercise is quite different than the
+int-to-string algorithm. Still, they are both similar in that they convert one
+digit and use a dictionary to map between string digits and integer digits:</p>
+<p class="Code">DIGITS_STR_TO_INT = {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5':
+5, '6': 6, '7': 7, '8': 8, '9': 9}</p>
+<p class="Body">The function creates an <code>integerNum</code>
+variable to hold the integer form of <code>stringNum</code> as we
+build it. This variable starts with the value <code>0</code>.
+Your code must also note if there is a minus sign at the start of the string,
+in which case </p>
+<p class="Body">Our algorithm loops over the individual digits in the <span class="Literal">stringNum</span> parameter, starting on the left and moving
+right. The code multiplies current integer in <code>integerNum</code>
+by 10 to “move” all of these digits to the left by one place, then adds the
+current digit.</p>
+<p class="Body">For example, if we needed to convert the string <span class="Literal">'41096'</span> to an integer, the code needs to carry out the
+following operations:</p>
+<p class="Body" style="margin-left:.75in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span><code>integerNum</code> = <code>0</code></p>
+<p class="Body" style="margin-left:.75in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span><code>integerNum</code> = <span class="Literal">(0 *
+10) + 4</span> = <code>4</code></p>
+<p class="Body" style="margin-left:.75in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span><code>integerNum</code> = <span class="Literal">(4 *
+10) + 1</span> = <code>41</code></p>
+<p class="Body" style="margin-left:.75in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span><code>integerNum</code> = <span class="Literal">(41 *
+10) + 0</span> = <code>410</code></p>
+<p class="Body" style="margin-left:.75in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span><code>integerNum</code> = <span class="Literal">(410
+* 10) + 9</span> = <code>4109</code></p>
+<p class="Body" style="margin-left:.75in;text-indent:-.25in"><span class="Literal"><span style="font-family:Symbol;color:black">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span></span><code>integerNum</code> = <span class="Literal">(4109 * 10) + 6</span> = <code>41096</code></p>
+<p class="Body">Before returning, we convert this integer to a negative number if
+the original string began with a minus sign.</p>
+<p class="HeadA">Special Cases and Gotchas</p>
+<p class="Body">The <code>convertStrToInt()</code> function must be
+able to handle strings representing negative integers. To do this, check if <span class="Literal">stringNum[0]</span> (the first character in the string) is the <span class="Literal">'-'</span> dash character. If so, we can mark an <span class="Literal">isNegative</span> variable to <code>True</code>
+(and <code>False</code> otherwise). Then we can remove this dash character
+by setting <code>stringNum = stringNum[1:]</code>, replacing the
+string in <code>stringNum</code> with a string of all the
+characters in <code>stringNum</code> after the first.</p>
+<p class="Body">At the end of the function, the function can return <span class="Literal">-integerNum</span> if <code>isNegative</code> was
+set to <code>True</code>.</p>
+<p class="Body">Now try to write a solution based on the information in the
+previous sections. If you still have trouble solving this exercise, read the <span class="Bold">Solution Template</span> section for additional hints.</p>
+<p class="HeadA">Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/convertstrtoint-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst">def convertStrToInt(stringNum):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># This dictionary maps
+string digits to single integer digits:</span></p>
+<p class="CodeCxSpMiddle">    DIGITS_STR_TO_INT = {'0': 0, '1': 1, '2': 2, '3':
+3, '4': 4,</p>
+<p class="CodeCxSpMiddle">        '5': 5, '6': 6, '7': 7, '8': 8, '9': 9}</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Make a note whether the
+number is negative or not, and make</span></p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># integerNum positive for
+the rest of the function's code:</span></p>
+<p class="CodeCxSpMiddle">    if stringNum[0] == '-':</p>
+<p class="CodeCxSpMiddle">        isNegative = True</p>
+<p class="CodeCxSpMiddle">        stringNum = stringNum[1:]  <span class="CodeComment"># Remove the negative sign.</span></p>
+<p class="CodeCxSpMiddle">    else:</p>
+<p class="CodeCxSpMiddle">        isNegative = False</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># integerNum holds the
+converted integer, and starts off at 0:</span></p>
+<p class="CodeCxSpMiddle">    integerNum = 0</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Loop over the digits in
+the string from left to right:</span></p>
+<p class="CodeCxSpMiddle">    for i in range(len(stringNum)):</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># Get the integer digit
+from the string digit:</span></p>
+<p class="CodeCxSpMiddle">        digit = DIGITS_STR_TO_INT[stringNum[i]]</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># Add this to the
+integer number:</span></p>
+<p class="CodeCxSpMiddle">        integerNum = (integerNum * 10) + digit</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># If the number was
+originally negative, make the integer</span></p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># negative before returning
+it:</span></p>
+<p class="CodeCxSpMiddle">    if isNegative:</p>
+<p class="CodeCxSpMiddle">        return -integerNum</p>
+<p class="CodeCxSpMiddle">    else:</p>
+<p class="CodeCxSpLast">        return integerNum</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/convertstrtoint.py</span>. You
+can view each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/convertstrtoint-debug/</span>.</p>
+
+
+
+<p><a href="../exercise31/">Prev - #31 Convert Integers To Strings</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise33/">Next - #33 Comma-Formatted Numbers</a></p></body></html>

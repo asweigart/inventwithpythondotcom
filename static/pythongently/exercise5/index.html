@@ -1,0 +1,158 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="../style_pythongently.css" rel="stylesheet" type="text/css" />
+<title>Exercise 5 - Fizz Buzz</title></head><body style="background-color: #fffeee;"><p><a href="../exercise4/">Prev - #4 Area & Volume</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise6/">Next - #6 Ordinal Suffix</a></p>
+
+
+
+
+<h1><a name="_Toc115418674"></a><a name="_Toc115359985">Exercise #5: Fizz Buzz</a></h1>
+<p class="ChapterTitleCodeExample">fizzBuzz(5)  <span style="font-size:13.0pt">→
+</span> 1 2 Fizz 4 Buzz</p>
+<p class="ChapterTitleCodeExample"><span style='font-size:8.0pt;font-family:"MS Shell Dlg 2","sans-serif"'><img height="144" id="Picture 11" src="../images/image006.jpg" width="105"/></span></p>
+<p class="Body">Fizz buzz is a word game you can implement as a simple program.
+It became famous as a screening question in coding interviews to quickly
+determine if candidates had any programming ability whatsoever, so being able
+to solve it quickly leads to a good first impression.</p>
+<p class="Body">This exercise continues our use of the modulo operator to
+determine if numbers are divisible by 3, 5, or both 3 and 5. “Divisible by <span class="Italic"><span style='font-family:"serif"'>n</span></span>”
+means that it can be divided by a number <span class="Italic"><span style='font-family:"serif"'>n</span></span> with no remainder. For
+example, 10 is divisible by 5, but 11 is not divisible by 5.</p>
+<p class="HeadA">Exercise Description</p>
+<p class="Body">Write a <code>fizzBuzz()</code> function with a
+single integer parameter named <code>upTo</code>. For the numbers
+<code>1</code> up to and including <code>upTo</code>,
+the function prints one of four things:</p>
+<p class="Body" style="margin-left:.5in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>Prints <code>'FizzBuzz'</code> if the number is divisible
+by 3 <i>and</i>
+5.</p>
+<p class="Body" style="margin-left:.5in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>Prints <code>'Fizz'</code> if the number is only divisible
+by 3.</p>
+<p class="Body" style="margin-left:.5in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>Prints <code>'Buzz'</code> if the number is only divisible
+by 5.</p>
+<p class="Body" style="margin-left:.5in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>Prints the number if the number is <span class="Italic"><span style='font-family:"serif"'>neither</span></span> divisible by 3 nor
+5.</p>
+<p class="Body">Instead of printing each string or number on a separate line,
+print them without newlines. For example, your solution is correct if calling <span class="Literal">fizzBuzz(35)</span> produces the following output:</p>
+<p class="Code">1 2 Fizz 4 Buzz Fizz 7 8 Fizz Buzz 11 Fizz 13 14 FizzBuzz 16 17
+Fizz 19 Buzz Fizz 22 23 Fizz Buzz 26 Fizz 28 29 FizzBuzz 31 32 Fizz 34 Buzz</p>
+<p class="Body">Try to write a solution based on the information in this
+description. If you still have trouble solving this exercise, read the <span class="Bold">Solution Design</span> and <b>Special Cases and Gotchas</b>
+sections for additional hints.</p>
+<p class="Body">Prerequisite concepts: modulo operator, <code>end</code>
+keyword argument for <code>print()</code>, for loops, <span class="Literal">range()</span> with two arguments</p>
+<p class="HeadA">Solution Design</p>
+<p class="Body">This function requires a loop covering the integers <span class="Literal">1</span> up to and including the <code>upTo</code>
+parameter. The <code>%</code> modulo operator (which we used in Exercise
+#3, “Odd &amp; Even”) can check if a number is divisible by 3 or 5. If a number
+mod 3 is 0, then the number is divisible by 3. If a number mod 5 is 0, then the
+number is divisible by 5. For example, enter the following into the interactive
+shell:</p>
+<p class="CodeCxSpFirst">&gt;&gt;&gt; 9 % 3</p>
+<p class="CodeCxSpMiddle">0</p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; 10 % 3</p>
+<p class="CodeCxSpMiddle">1</p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; 11 % 3</p>
+<p class="CodeCxSpLast">2</p>
+<p class="Body"> <code>9 % 3</code> evaluates to <span class="Literal">0</span>, so 9 is divisible by 3. Meanwhile, <span class="Literal">10
+% 3</span> evaluates to <code>1</code> and <span class="Literal">11
+% 3</span> evaluates <code>2</code>, so 10 and 11 aren’t divisible
+by 3. To see the pattern behind the modulo operator, enter the following code
+into the interactive shell:</p>
+<p class="CodeCxSpFirst">&gt;&gt;&gt; for i in range(20):</p>
+<p class="CodeCxSpMiddle">...   print(str(i).rjust(2), i % 3, i % 5)</p>
+<p class="CodeCxSpMiddle">...</p>
+<p class="CodeCxSpMiddle"> 0 0 0</p>
+<p class="CodeCxSpMiddle"> 1 1 1</p>
+<p class="CodeCxSpMiddle"> 2 2 2</p>
+<p class="CodeCxSpMiddle"> 3 0 3</p>
+<p class="CodeCxSpMiddle"> 4 1 4</p>
+<p class="CodeCxSpMiddle"> 5 2 0</p>
+<p class="CodeCxSpMiddle"> 6 0 1</p>
+<p class="CodeCxSpMiddle"> 7 1 2</p>
+<p class="CodeCxSpMiddle"> 8 2 3</p>
+<p class="CodeCxSpMiddle"> 9 0 4</p>
+<p class="CodeCxSpMiddle">10 1 0</p>
+<p class="CodeCxSpMiddle">11 2 1</p>
+<p class="CodeCxSpMiddle">12 0 2</p>
+<p class="CodeCxSpMiddle">13 1 3</p>
+<p class="CodeCxSpMiddle">14 2 4</p>
+<p class="CodeCxSpMiddle">15 0 0</p>
+<p class="CodeCxSpMiddle">16 1 1</p>
+<p class="CodeCxSpMiddle">17 2 2</p>
+<p class="CodeCxSpMiddle">18 0 3</p>
+<p class="CodeCxSpLast">19 1 4</p>
+<p class="Body">The columns of three numbers are a number from 0 to 19, the
+number modulo 3, and the number modulo 5. Notice that the modulo 3 column
+cycles from 0 to 2 and the modulo 5 column cycles from 0 to 4. The modulo
+result is 0 every 3rd and 5th number, respectively. And they are both 0 every
+15th number (more on this in the <b>Special Cases and Gotchas</b>
+section.)</p>
+<p class="Body">Back to our solution, the code inside the loop checks if the
+current number should cause the program to either display one of “Fizz”, “Buzz”,
+“FizzBuzz”, or the number. This can be handled with a series of <span class="Literal">if</span>-<code>elif</code>-<code>elif</code>-<span class="Literal">else</span> statements.</p>
+<p class="Body">To tell the <code>print()</code> function to
+automatically print a space instead of a newline character, pass the <span class="Literal">end=' '</span> keyword argument. For example, <span class="Literal">print('FizzBuzz', end=' ')</span></p>
+<p class="HeadA">Special Cases and Gotchas</p>
+<p class="Body">One common mistake when writing a Fizz Buzz program is checking
+if the number is divisible by 3 <span class="Italic"><span style='font-family:
+"serif"'>or</span></span> 5 before checking if it’s divisible by 3 <span class="Italic"><span style='font-family:"serif"'>and</span></span> 5.
+You’ll want to check if a number is divisible by 3 and 5 first, because these
+numbers are also divisible by <code>3</code> and <span class="Literal">5</span>. But you want to be sure to display <code>'FizzBuzz'</code>
+rather than <code>'Fizz'</code> or <code>'Buzz'</code>.</p>
+<p class="Body">Another way to determine if a number is divisible by 3 and 5 is
+to check if it is divisible by 15. This is because 15 is the least common multiple
+(LCM) of 3 and 5. You can either write the condition as <span class="Literal">number
+% 3 == 0 and number % 5 == 0</span> or write the condition as <span class="Literal">number % 15 == 0</span>.</p>
+<p class="Body">The <code>range()</code> function tells <span class="Literal">for</span> loops to go up to <span class="Italic"><span style='font-family:"serif"'>but not including</span></span> their
+argument. The code <code>for i in range(10):</code> sets <span class="Literal">i</span> to <code>0</code> through <span class="Literal">9</span>, not <code>0</code> through <span class="Literal">10</span>. You can specify two arguments to tell <span class="Literal">range()</span> to start at a number besides <code>0</code>.
+The code <code>for i in range(1, 10):</code> sets <span class="Literal">i</span> to <code>1</code> to <code>9</code>.
+In our exercise, you want to include the number in <code>upTo</code>,
+so add <code>1</code> to it: <span class="Literal">range(1, upTo +
+1)</span></p>
+<p class="Body">Python’s <code>list()</code> function can take a <span class="Literal">range</span> object returned from <code>range()</code>
+to produce a list of integers. For example, if you need a list of integers <span class="Literal">1</span> to <code>10</code>, you can call <span class="Literal">list(range(1, 11))</span>. If you need every even number between <span class="Literal">150</span> up to and including <code>200</code>,
+you can call <code>list(range(150, 202, 2))</code>:</p>
+<p class="CodeCxSpFirst">&gt;&gt;&gt; list(range(1, 11))</p>
+<p class="CodeCxSpMiddle">[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]</p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; list(range(150, 202, 2))</p>
+<p class="CodeCxSpLast">[150, 152, 154, 156, 158, 160, 162, 164, 166, 168, 170,
+172, 174, 176, 178, 180, 182, 184, 186, 188, 190, 192, 194, 196, 198, 200]</p>
+<p class="Body">Now try to write a solution based on the information in the
+previous sections. If you still have trouble solving this exercise, read the <span class="Bold">Solution Template</span> section for additional hints.</p>
+<p class="HeadA">Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/fizzbuzz-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst">def fizzBuzz(upTo):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Loop from 1 up to (and
+including) the upTo parameter:</span></p>
+<p class="CodeCxSpMiddle">    for number in range(1, ____):</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># If the loop number is
+divisible by 3 and 5, print 'FizzBuzz':</span></p>
+<p class="CodeCxSpMiddle">        if number % 3 == ____ and number % 5 == ____:</p>
+<p class="CodeCxSpMiddle">            ____(____, end=' ')</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># Otherwise the loop
+number is divisible by only 3, print 'Fizz':</span></p>
+<p class="CodeCxSpMiddle">        elif ____ % 3 == 0:</p>
+<p class="CodeCxSpMiddle">            ____(____, end=' ')</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># Otherwise the loop
+number is divisible by only 5, print 'Buzz':</span></p>
+<p class="CodeCxSpMiddle">        elif number % 5 ____ 0:</p>
+<p class="CodeCxSpMiddle">            ____(____, end=' ')</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># Otherwise, print the
+loop number:</span></p>
+<p class="CodeCxSpMiddle">        else:</p>
+<p class="CodeCxSpLast">            ____(____, end=' ')</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/fizzbuzz.py</span>. You can view
+each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/fizzbuzz-debug/</span>.</p>
+
+
+
+<p><a href="../exercise4/">Prev - #4 Area & Volume</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise6/">Next - #6 Ordinal Suffix</a></p></body></html>

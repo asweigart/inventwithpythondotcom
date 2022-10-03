@@ -1,0 +1,118 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="../style_pythongently.css" rel="stylesheet" type="text/css" />
+<title>Exercise 16 - Mode</title></head><body style="background-color: #fffeee;"><p><a href="../exercise15/">Prev - #15 Median</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise17/">Next - #17 Dice Roll</a></p>
+
+
+
+
+<h1><a name="_Toc115418685"></a><a name="_Toc115359996">Exercise #16: Mode</a></h1>
+<p class="ChapterTitleCodeExample">mode([1, 1, 2, 3, 4])  <span style="font-size:
+13.0pt">→ </span> 1</p>
+<p class="ChapterTitleCodeExample"><span style='font-size:8.0pt;font-family:"MS Shell Dlg 2","sans-serif"'><img border="0" height="144" id="Picture 27" src="../images/image019.jpg" width="144"/></span></p>
+<p class="Body"><i>Mode</i>
+is the third statistical calculation exercise in this book. The mode is the
+number that appears most frequently in a list of numbers. Together with the
+median and average, you can get a descriptive summary of a list of numbers.
+This exercise tests your ability to use a dictionary to keep a count of the
+numbers in a list to find the most frequent number.</p>
+<p class="HeadA">Exercise Description</p>
+<p class="Body">Write a <code>mode()</code> function that has a <span class="Literal">numbers</span> parameter. This function returns the mode, or most
+frequently appearing number, of the list of integer and floating-point numbers
+passed to the function.</p>
+<p class="Body">These Python <code>assert</code> statements stop
+the program if their condition is <code>False</code>. Copy them
+to the bottom of your solution program. Your solution is correct if the following
+<code>assert</code> statements’ conditions are all <span class="Literal">True</span>:</p>
+<p class="CodeCxSpFirst">assert mode([]) == None</p>
+<p class="CodeCxSpMiddle">assert mode([1, 2, 3, 4, 4]) == 4</p>
+<p class="CodeCxSpMiddle">assert mode([1, 1, 2, 3, 4]) == 1</p>
+<p class="CodeCxSpMiddle">import random</p>
+<p class="CodeCxSpMiddle">random.seed(42)</p>
+<p class="CodeCxSpMiddle">testData = [1, 2, 3, 4, 4]</p>
+<p class="CodeCxSpMiddle">for i in range(1000):</p>
+<p class="CodeCxSpMiddle">    random.shuffle(testData)</p>
+<p class="CodeCxSpLast">    assert average(testData) == 2</p>
+<p class="Body">Shuffling the order of the numbers should not affect the mode.
+The <code>for</code> loop does 1,000 such random shuffles to
+thoroughly check that this fact remains true. For an explanation of the <span class="Literal">random.seed()</span> function, see the <span class="Bold">Further
+Reading</span> section of Exercise #19, “Password Generator”.</p>
+<p class="Body">Try to write a solution based on the information in this
+description. If you still have trouble solving this exercise, read the <span class="Bold">Solution Design and Special Cases and Gotchas</span> sections for
+additional hints.</p>
+<p class="Body">Prerequisite concepts: <code>for</code> loops,
+augmented assignment operators, indexes, <code>not in</code>
+operator</p>
+<p class="HeadA">Solution Design</p>
+<p class="Body">The solution uses a dictionary to track how often each number
+appears in the list. The keys of the dictionary will be the number, and the
+values will be a count of how often the number appears in the list.</p>
+<p class="Body">Start with an empty dictionary and set up two variables to keep
+track of the most frequent number and how many times this number has appeared
+in the list. Use a <code>for</code> loop to loop over numbers in
+the <code>numbers</code> list. If the current number we are
+looping on doesn’t appear in the dictionary’s keys, then create a key-value
+pair for it with the value starting at <code>0</code>. Then
+increment the count for this number in the dictionary. Finally, if this count
+is larger than the most frequent number’s count, update the most frequent
+number variable and most frequent number’s count variable with the current
+number and its count.</p>
+<p class="Body">By the time the <code>for</code> loop has finished,
+the most frequent number variable contains the mode of the <code>numbers</code>
+list. Calculating the mode is similar Exercise #12, “Smallest &amp; Biggest”.
+Both solutions loop over the list of numbers, using another variable to (in Exercise
+#12) keep track of the smallest/biggest number found so far or (in this
+exercise) keep track of the most frequently occurring number found so far.</p>
+<p class="HeadA">Special Cases and Gotchas</p>
+<p class="Body">If the numbers parameter is an empty list, the function should
+return <code>None</code>. You should put the code that checks
+this at the start of the function.</p>
+<p class="Body">Now try to write a solution based on the information in the
+previous sections. If you still have trouble solving this exercise, read the <span class="Bold">Solution Template</span> section for additional hints.</p>
+<p class="HeadA">Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/mode-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst">def mode(numbers):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Special case: If the
+numbers list is empty, return None:</span></p>
+<p class="CodeCxSpMiddle">    if len(numbers) == ____:</p>
+<p class="CodeCxSpMiddle">        return ____</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Dictionary with keys of
+numbers and values of how often they appear:</span></p>
+<p class="CodeCxSpMiddle">    numberCount = {}</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Track the most frequent
+number and how often it appears:</span></p>
+<p class="CodeCxSpMiddle">    mostFreqNumber = None</p>
+<p class="CodeCxSpMiddle">    mostFreqNumberCount = ____</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Loop through all the
+numbers, counting how often they appear:</span></p>
+<p class="CodeCxSpMiddle">    for number in ____:</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># If the number hasn't
+appeared before, set it's count to 0.</span></p>
+<p class="CodeCxSpMiddle">        if ____ not in numberCount:</p>
+<p class="CodeCxSpMiddle">            numberCount[____] = ____</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># Increment the
+number's count:</span></p>
+<p class="CodeCxSpMiddle">        numberCount[____] += ____</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># If this is more
+frequent than the most frequent number, it</span></p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># becomes the new most
+frequent number:</span></p>
+<p class="CodeCxSpMiddle">        if numberCount[number] &gt; ____:</p>
+<p class="CodeCxSpMiddle">            mostFreqNumber = ____</p>
+<p class="CodeCxSpMiddle">            mostFreqNumberCount = ____[____]</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># The function returns the
+most frequent number:</span></p>
+<p class="CodeCxSpLast">    return mostFreqNumber</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/mode.py</span>. You can view each
+step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/mode-debug/</span>.</p>
+
+
+
+<p><a href="../exercise15/">Prev - #15 Median</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise17/">Next - #17 Dice Roll</a></p></body></html>

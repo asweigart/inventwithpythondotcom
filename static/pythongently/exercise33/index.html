@@ -1,0 +1,162 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="../style_pythongently.css" rel="stylesheet" type="text/css" />
+<title>Exercise 33 - Comma-Formatted Numbers</title></head><body style="background-color: #fffeee;"><p><a href="../exercise32/">Prev - #32 Convert Strings To Integers</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise34/">Next - #34 Uppercase Letters</a></p>
+
+
+
+
+<h1><a name="_Toc115418702"></a><a name="_Toc115360013">Exercise #33: Comma-Formatted
+Numbers</a></h1>
+<p class="ChapterTitleCodeExample">commaFormat(12345)  <span style="font-size:
+13.0pt">→ </span> '12,345'</p>
+<p class="ChapterTitleCodeExample"><span style='font-size:8.0pt;font-family:"MS Shell Dlg 2","sans-serif"'><img border="0" height="140" id="Picture 44" src="../images/image038.jpg" width="720"/></span></p>
+<p class="Body">In the US and UK, the digits of numbers are grouped with commas
+every three digits. For example, the number 79033516 is written as 79,033,516
+for readability. In this exercise, you’ll write a function that takes a number
+and returns a string of the number with comma formatting.</p>
+<p class="HeadA">Exercise Description</p>
+<p class="Body">Write a <code>commaFormat()</code> function with a <span class="Literal">number</span> parameter. The argument for this parameter can be
+an integer or floating-point number. Your function returns a string of this
+number with proper US/UK comma formatting. There is a comma after every third
+digit in the whole number part. There are no commas at all in the fractional
+part: The proper comma formatting of 1234.5678 is 1,234.5678 and not
+1,234.567,8.            </p>
+<p class="Body">These Python <code>assert</code> statements stop
+the program if their condition is <code>False</code>. Copy them
+to the bottom of your solution program. Your solution is correct if the following
+<code>assert</code> statements’ conditions are all <span class="Literal">True</span>:</p>
+<p class="CodeCxSpFirst">assert commaFormat(1) == '1'</p>
+<p class="CodeCxSpMiddle">assert commaFormat(10) == '10'</p>
+<p class="CodeCxSpMiddle">assert commaFormat(100) == '100'</p>
+<p class="CodeCxSpMiddle">assert commaFormat(1000) == '1,000'</p>
+<p class="CodeCxSpMiddle">assert commaFormat(10000) == '10,000'</p>
+<p class="CodeCxSpMiddle">assert commaFormat(100000) == '100,000'</p>
+<p class="CodeCxSpMiddle">assert commaFormat(1000000) == '1,000,000'</p>
+<p class="CodeCxSpMiddle">assert commaFormat(1234567890) == '1,234,567,890'</p>
+<p class="CodeCxSpLast">assert commaFormat(1000.123456) == '1,000.123456'</p>
+<p class="Body">Try to write a solution based on the information in this
+description. If you still have trouble solving this exercise, read the <span class="Bold">Solution Design and Special Cases and Gotchas</span> sections for
+additional hints.</p>
+<p class="Body">Prerequisite concepts: strings, <code>str()</code>,
+<code>in</code> operator, <code>index()</code>,
+slices, string concatenation</p>
+<p class="HeadA">Solution Design</p>
+<p class="Body">Despite involving numbers, this exercise is actually about text
+manipulation. The characters of the string just happen to be numeric digits.</p>
+<p class="Body">First, we convert the <code>number</code> argument
+to a string with the <code>str()</code> function. This will work whether
+the number is an integer or a floating-point number. Once we have the <span class="Literal">number</span> as a string, we can check for the existence of a
+period which indicates it was a floating-point number with a fractional part. The
+expression <code>'.' in number</code> evaluates to <span class="Literal">True</span> if the string in number has a period character. Next,
+we can use <code>number.index('.')</code> to find the index of
+this period character. (The <code>index()</code> method raises a <span class="Literal">ValueError</span> exception if <code>'.'</code>
+doesn’t appear in the string, but the previous <code>'.'</code>
+in number expression being <code>True</code> guarantees that it
+does.)</p>
+<p class="Body">We need to remove this fractional part from <code>number</code>
+while saving it in another variable to add back in later. This way we are only
+adding commas to the whole number part of the <code>number</code>
+argument, whether or not it was an integer or floating-point number.</p>
+<p class="Body">Next, let’s start variables named <code>triplet</code>
+and <code>commaNumber</code> as blank strings. As we loop over
+the digits of <code>number</code>, the <code>triplet</code>
+variable will store digits until it has three of them, at which point we add
+them to <code>commaNumber</code> (which contains the
+comma-formatted version of number) with a comma. The first time we add <span class="Literal">triplet</span> to <code>commaNumber</code>, there
+will be an extra comma at the end of a number. For example, the triplet <span class="Literal">'248'</span> gets added to <code>commaNumber</code>
+as <code>'248,'</code>. We can remove the extra comma just before
+returning the number.</p>
+<p class="Body">We need to loop starting at the one’s place in the number and
+moving left, so our <code>for</code> loop should work in reverse:
+<code>for i in range(len(number) - 1, -1, -1)</code>. For
+example, if <code>number</code> is <code>4096</code>,
+then the first iteration of the loop can access <code>number[3]</code>,
+the second iteration can access <code>number[2]</code>, and so
+on. This way the first triplet ends up being <code>'096'</code>
+instead of <code>'409'</code>.</p>
+<p class="Body">If the loop finishes and there are leftover digits in <span class="Literal">triplet</span>, add them to <code>commaNumber</code>
+with a comma. Finally, return <code>commaNumber</code> except
+with the comma at the end truncated: <code>commaNumber[:-1]</code>
+evaluates to everything in <code>commaNumber</code> except the
+last character.</p>
+<p class="Body">Finally, we need to add the fractional part back in the number if
+there was one originally.</p>
+<p class="HeadA">Special Cases and Gotchas</p>
+<p class="Body">Several bugs that can occur in our code. We should consider them
+ahead of writing our code so we can ensure they don’t sneak past us. These bugs
+could include:</p>
+<p class="Body" style="margin-left:.5in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>A comma at the end of number, e.g., <code>386</code>
+producing <code>'386,'</code></p>
+<p class="Body" style="margin-left:.5in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>A comma at the front of a number, e.g., <code>499000</code>
+producing <code>',499,000'</code></p>
+<p class="Body" style="margin-left:.5in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>Commas appearing in the fraction part, e.g., <code>12.3333</code>
+producing <code>'12.3,333'</code></p>
+<p class="Body" style="margin-left:.5in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>Grouping triplets in reverse order, e.g., <code>4096</code>
+producing <code>'409,6'</code></p>
+<p class="Body">However you tackle this exercise, ensure that your code doesn’t make
+any of these mistakes.</p>
+<p class="Body">Now try to write a solution based on the information in the
+previous sections. If you still have trouble solving this exercise, read the <span class="Bold">Solution Template</span> section for additional hints.</p>
+<p class="HeadA">Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/commaformat-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst">def commaFormat(number):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Convert the number to a
+string:</span></p>
+<p class="CodeCxSpMiddle">    number = str(____)</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Remember the fractional
+part and remove it from the number, if any:</span></p>
+<p class="CodeCxSpMiddle">    if '.' in ____:</p>
+<p class="CodeCxSpMiddle">        fractionalPart = number[number.index(____):]</p>
+<p class="CodeCxSpMiddle">        number = number[:number.index('.')]</p>
+<p class="CodeCxSpMiddle">    else:</p>
+<p class="CodeCxSpMiddle">        fractionalPart = ''</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Create a variable to hold
+triplets of digits and the </span></p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># comma-formatted string as
+it is built:</span></p>
+<p class="CodeCxSpMiddle">    triplet = ____</p>
+<p class="CodeCxSpMiddle">    commaNumber = ____</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Loop over the digits
+starting on the right side and going left:</span></p>
+<p class="CodeCxSpMiddle">    for i in range(len(number) - 1, ____, ____):</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># Add the digits to the
+triplet variable:</span></p>
+<p class="CodeCxSpMiddle">        triplet = ____[i] + ____</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># When the triplet
+variable has three digits, add it with a </span></p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># comma to the
+comma-formatted string:</span></p>
+<p class="CodeCxSpMiddle">        if ____(triplet) == ____:</p>
+<p class="CodeCxSpMiddle">            commaNumber = triplet + ',' + ____</p>
+<p class="CodeCxSpMiddle">            # Reset the triplet variable back to a
+blank string:</p>
+<p class="CodeCxSpMiddle">            triplet = ____</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># If the triplet has any
+digits left over, add it with a comma</span></p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># to the comma-formatted
+string:</span></p>
+<p class="CodeCxSpMiddle">    if triplet != '':</p>
+<p class="CodeCxSpMiddle">        commaNumber = ____ + ',' + ____</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Return the
+comma-formatted string:</span></p>
+<p class="CodeCxSpLast">    return ____[:____] + fractionalPart</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/commaformat.py</span>. You can
+view each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/commaformat-debug/</span>.</p>
+
+
+
+<p><a href="../exercise32/">Prev - #32 Convert Strings To Integers</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise34/">Next - #34 Uppercase Letters</a></p></body></html>

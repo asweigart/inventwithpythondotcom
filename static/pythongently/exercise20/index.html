@@ -1,0 +1,122 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="../style_pythongently.css" rel="stylesheet" type="text/css" />
+<title>Exercise 20 - Leap Year</title></head><body style="background-color: #fffeee;"><p><a href="../exercise19/">Prev - #19 Password Generator</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise21/">Next - #21 Validate Date</a></p>
+
+
+
+
+<h1><a name="_Toc115418689"></a><a name="_Toc115360000">Exercise #20: Leap Year</a></h1>
+<p class="ChapterTitleCodeExample">isLeapYear(2004)  <span style="font-size:13.0pt">→
+</span> True</p>
+<p class="ChapterTitleCodeExample"><span style='font-size:8.0pt;font-family:"MS Shell Dlg 2","sans-serif"'><img border="0" height="144" id="Picture 31" src="../images/image023.jpg" width="156"/></span></p>
+<p class="Body">It takes about 365.25 days for the earth to revolve around the
+sun. This slight offset would cause our 365-day calendar to become inaccurate
+over time. Therefore, leap years have an extra day, February 29<sup>th</sup>. A
+leap year occurs on all years divisible by four (e.g., 2016, 2020, 2024, and so
+on). However, the exception to this rule is that years divisible by one hundred
+(e.g., 2100, 2200, 2300, and so on) aren’t leap years. And the exception to
+this exception is that years divisible by four hundred (e.g., 2000, 2400, and
+so on) are leap years.</p>
+<p class="HeadA">Exercise Description</p>
+<p class="Body">Write a <code>isLeapYear()</code> function with an
+integer <code>year</code> parameter. If <code>year</code>
+is a leap year, the function returns <code>True</code>.
+Otherwise, the function returns <code>False</code>.</p>
+<p class="Body">These Python <code>assert</code> statements stop the
+program if their condition is <code>False</code>. Copy them to
+the bottom of your solution program. Your solution is correct if the following <span class="Literal">assert</span> statements’ conditions are all <code>True</code>:</p>
+<p class="CodeCxSpFirst">assert isLeapYear(1999) == False</p>
+<p class="CodeCxSpMiddle">assert isLeapYear(2000) == True</p>
+<p class="CodeCxSpMiddle">assert isLeapYear(2001) == False</p>
+<p class="CodeCxSpMiddle">assert isLeapYear(2004) == True</p>
+<p class="CodeCxSpMiddle">assert isLeapYear(2100) == False</p>
+<p class="CodeCxSpLast">assert isLeapYear(2400) == True</p>
+<p class="Body">Try to write a solution based on the information in this
+description. If you still have trouble solving this exercise, read the <span class="Bold">Solution Design and Special Cases and Gotchas</span> sections for
+additional hints.</p>
+<p class="Body">Prerequisite concepts: modulo operator, <code>elif</code>
+statements</p>
+<p class="HeadA">Solution Design</p>
+<p class="Body">Determining leap years involves checking if an integer is divisible
+by 4, 100, and 400. Solving Exercise #3, “Odd &amp; Even,” Exercise #5, “Fizz Buzz,”
+and Exercise #6, “Ordinal Suffix,” all involved the <code>%</code>
+modulo operator to determine the divisibility of integers. We’ll use <span class="Literal">year % 4</span>, <code>year % 100</code>, and <span class="Literal">year % 400</span> in our solution.</p>
+<p class="Body">It can also help to draw a flow chart of the general logic on a
+whiteboard or with paper and pen. It could look something like this:</p>
+<p class="Body"><img border="0" height="443" id="Picture 6" src="../images/image024.png" width="384"/></p>
+<p class="MsoCaption"><span lang="EN-CA">Figure 20-1: A flow chart showing the
+logical steps of determining if a year is a leap year.</span></p>
+<p class="Body">Leap year rules have a few exceptions, so this function needs a
+set of <code>if</code>-<code>elif</code>-<span class="Literal">else</span> statements. The order of these statements matters.
+You could use an <code>if</code> statement to check if the year
+is divisible by 4 and, if so, return <code>True</code>. But
+before returning, you need another <code>if</code> statement to
+check if the year is divisible by 100 and return <code>False</code>. 
+But before that, you need yet another <code>if</code> statement that
+returns <code>True</code> if the year is divisible by 400. Writing
+code this way ends up looking like this:</p>
+<p class="CodeCxSpFirst">def isLeapYear(year):</p>
+<p class="CodeCxSpMiddle">    if year % 4 == 0:</p>
+<p class="CodeCxSpMiddle">        if year % 100 == 0:</p>
+<p class="CodeCxSpMiddle">            if year % 400 == 0:</p>
+<p class="CodeCxSpMiddle">                <span class="CodeComment"># Year is
+divisible by 400:</span></p>
+<p class="CodeCxSpMiddle">                return True</p>
+<p class="CodeCxSpMiddle">            else:</p>
+<p class="CodeCxSpMiddle">                <span class="CodeComment"># Year is
+divisible by 100 but not by 400:</span></p>
+<p class="CodeCxSpMiddle">                return False</p>
+<p class="CodeCxSpMiddle">        else:</p>
+<p class="CodeCxSpMiddle">            <span class="CodeComment"># Year is divisible
+by 4 but not by 100:</span></p>
+<p class="CodeCxSpMiddle">            return True</p>
+<p class="CodeCxSpMiddle">    else:</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># Year is not divisible
+by 4:</span></p>
+<p class="CodeCxSpLast">        return False</p>
+<p class="Body">This code works correctly but is hard to follow. There are
+several levels of indentation, and the nested <code>if</code>-<span class="Literal">else</span> statements make it tricky to see which <span class="Literal">else</span> statement is paired with which <code>if</code>
+statement.</p>
+<p class="Body">Instead, try switching around the order of the logic. For
+example, if the year is divisible by 400, return <code>True</code>.
+Or else, if the year is divisible by 100, return <code>False</code>.
+Or else, if the year is divisible by 4, return <code>True</code>.
+Or else, for all other years return <code>False</code>. Writing
+code this way reduces the amount of nested <code>if</code>-<span class="Literal">else</span> statements and produces more readable code.</p>
+<p class="HeadA">Special Cases and Gotchas</p>
+<p class="Body">Outside of the complex list of rules, there are no particular
+gotchas for this exercise. The tricky part is to ensure that you have the
+conditions for the <code>if</code> and <code>elif</code>
+statements in the correct order.</p>
+<p class="Body">Now try to write a solution based on the information in the
+previous sections. If you still have trouble solving this exercise, read the <span class="Bold">Solution Template</span> section for additional hints.</p>
+<p class="HeadA">Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/leapyear-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst">def isLeapYear(year):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Years divisible by 400
+are leap years:</span></p>
+<p class="CodeCxSpMiddle">    if ____ % 400 == ____:</p>
+<p class="CodeCxSpMiddle">        return ____</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Otherwise, years
+divisible by 100 are not leap years:</span></p>
+<p class="CodeCxSpMiddle">    elif ____ % 100 == ____:</p>
+<p class="CodeCxSpMiddle">        return ____</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Otherwise, years
+divisible by 4 are leap years:</span></p>
+<p class="CodeCxSpMiddle">    elif ____ % 4 == ____:</p>
+<p class="CodeCxSpMiddle">        return ____</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Otherwise, every other
+year is not a leap year:</span></p>
+<p class="CodeCxSpMiddle">    else:</p>
+<p class="CodeCxSpLast">        return ____</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/leapyear.py</span>. You can view
+each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/leapyear-debug/</span>.</p>
+
+
+
+<p><a href="../exercise19/">Prev - #19 Password Generator</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise21/">Next - #21 Validate Date</a></p></body></html>

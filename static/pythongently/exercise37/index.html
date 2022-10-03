@@ -1,0 +1,137 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="../style_pythongently.css" rel="stylesheet" type="text/css" />
+<title>Exercise 37 - Change Maker</title></head><body style="background-color: #fffeee;"><p><a href="../exercise36/">Prev - #36 Reverse String</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise38/">Next - #38 Random Shuffle</a></p>
+
+
+
+
+<h1><a name="_Toc115418706"></a><a name="_Toc115360017">Exercise #37: Change
+Maker</a></h1>
+<p class="ChapterTitleCodeExample">makeChange(30)  <span style="font-size:13.0pt">→
+</span> {'quarters': 1, 'nickels': 1}</p>
+<p class="ChapterTitleCodeExample"><span style='font-size:8.0pt;font-family:"MS Shell Dlg 2","sans-serif"'><img border="0" height="144" id="Picture 48" src="../images/image044.jpg" width="385"/></span></p>
+<p class="Body">American currency has coins in the denominations of 1 (pennies),
+5 (nickels), 10 (dimes), and 25 cents (quarters). Imagine that we were
+programming a cash register to dispense correct change. In this exercise, we
+would need to calculate the number of each coin for a given amount of change.</p>
+<p class="HeadA">Exercise Description</p>
+<p class="Body">Write a <code>makeChange()</code> function with an <span class="Literal">amount</span> parameter. The <code>amount</code>
+parameter contains an integer of the number of cents to make change for. For
+example, <code>30</code> would represent 30 cents and <span class="Literal">125</span> would represent $1.25. This function should return a
+dictionary with keys <code>'quarters'</code>, <span class="Literal">'dimes'</span>, <code>'nickels'</code>, and <span class="Literal">'pennies'</span>, where the value for a key is an integer of the
+number of this type of coin.</p>
+<p class="Body">The value for a coin’s key should never be <code>0</code>.
+Instead, the key should not be present in the dictionary. For example, <span class="Literal">makeChange(5)</span> should return <span class="Literal">{'nickels':
+1}</span> and not <span class="Literal">{'quarters’: 0, 'dimes': 0, 'nickels': 1,
+'pennies': 0}</span>.</p>
+<p class="Body">For example, <code>makeChange(30)</code> would
+returns the dictionary <code>{'quarters': 1, 'nickels': 5}</code>
+to represent the coins used for 30 cents change. The function should use the
+minimal number of coins. For example, <code>makeChange(10)</code>
+should return <code>{'dimes': 1}</code> and not <span class="Literal">{'nickels': 2}</span>, even though they both add up to 10 cents.</p>
+<p class="Body">These Python <code>assert</code> statements stop
+the program if their condition is <code>False</code>. Copy them
+to the bottom of your solution program. Your solution is correct if the following
+<code>assert</code> statements’ conditions are all <span class="Literal">True</span>:</p>
+<p class="CodeCxSpFirst">assert makeChange(30) == {'quarters': 1, 'nickels': 1}</p>
+<p class="CodeCxSpMiddle">assert makeChange(10) == {'dimes': 1}</p>
+<p class="CodeCxSpMiddle">assert makeChange(57) == {'quarters': 2, 'nickels': 1,
+'pennies': 2}</p>
+<p class="CodeCxSpMiddle">assert makeChange(100) == {'quarters': 4}</p>
+<p class="CodeCxSpLast">assert makeChange(125) == {'quarters': 5}</p>
+<p class="Body">Try to write a solution based on the information in this
+description. If you still have trouble solving this exercise, read the <span class="Bold">Solution Design and Special Cases and Gotchas</span> sections for
+additional hints.</p>
+<p class="Body">Prerequisite concepts: modulo operator, integer division</p>
+<p class="HeadA">Solution Design</p>
+<p class="Body">First, our <code>makeChange()</code> function
+should create an empty dictionary in a variable named <code>change</code>
+to store the results to return. Next, we need to determine the amount of each
+type of coin, starting with the largest denominations (25-cent quarters) to the
+smallest (1-cent pennies). This way, we don’t accidentally use more than the
+minimum amount of coins by determining we need, for example, two 5-cent nickels
+instead of one 10 cent dime.</p>
+<p class="Body">Let’s start with quarters. Before doing any calculation, if the
+amount of change to make is less than 25, then we can skip this calculation
+entirely since there are zero quarters. Otherwise, if the amount of change to
+make is divisible by 25, say the <code>amount</code> parameter is
+<code>125</code>, then we can determine the number of quarters by
+dividing <code>amount</code> by <code>25</code>: <span class="Literal">125 / 25</span> evaluates to <code>5.0</code>.</p>
+<p class="Body">However, if it isn’t divisible by 25, our result will have a
+fractional part: <code>135 / 25</code> evaluates to <span class="Literal">5.4</span>. We can only add whole numbers of quarters to our
+change, not 0.4 quarters. Using the <code>//</code> integer
+division operator, we can ensure that we only put whole numbers of coins into
+our change dictionary: both <code>125 // 25</code> and <span class="Literal">135 // 25</span> evaluate to <code>5</code>.</p>
+<p class="Body">To deduct the amount of change held by the quarters, we can set <span class="Literal">change</span> to the amount remaining after removing 25 cent increments.
+The word “remaining” hints that we should use the <code>%</code>
+modulo operator. For example, if we need to make 135 cents of change and use 5
+quarters for 125 of those cents, we would need to use other coins for the <span class="Literal">135 % 25</span> or <code>10</code> remaining cents.</p>
+<p class="Body">This handles calculating the number of quarters used to make
+change. We would then copy-paste this code and make modifications for dimes,
+nickels, and pennies (in that order). When we finish processing the number of
+pennies, the <code>amount</code> parameter will be <span class="Literal">0</span> and the <code>change</code> dictionary
+will contain the correct amounts of each coin.</p>
+<p class="HeadA">Special Cases and Gotchas</p>
+<p class="Body">Because this exercise specifies that the change should be made
+from the minimal number of coins, there is only one correct answer for any
+given amount of change. The most important thing to get right in this algorithm
+is to calculate the coins in order from largest to smallest, otherwise you’ll
+end up in a situation where, say, you use two nickels instead of one dime.</p>
+<p class="Body">Also, be sure to use the <code>//</code> integer
+division operator instead of the <code>/</code> division operator
+to calculate the number of coins. Python’s regular division operator evaluates
+to floating-point numbers, which may contain a fractional part. (Even if it
+doesn’t, Python still evaluates the result to a float: <span class="Literal">125
+/ 25</span> evaluates to the float <code>5.0</code> and not the
+integer <code>5</code>.) Integer division always evaluates to
+integers and doesn’t have this potential problem.</p>
+<p class="Body">Because pennies represent 1 cent, you can set the number of
+pennies in change to whatever the <code>amount</code> parameter
+is at the end of the function as long as it is greater than zero.</p>
+<p class="Body">Now try to write a solution based on the information in the
+previous sections. If you still have trouble solving this exercise, read the <span class="Bold">Solution Template</span> section for additional hints.</p>
+<p class="HeadA">Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/makechange-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst">def makeChange(amount):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Create a dictionary to
+keep track of how many of each coin:</span></p>
+<p class="CodeCxSpMiddle">    change = ____</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># If the amount is enough
+to add quarters, add them:</span></p>
+<p class="CodeCxSpMiddle">    if amount &gt;= ____:</p>
+<p class="CodeCxSpMiddle">        change['quarters'] = amount // ____</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># Reduce the amount by
+the value of the quarters added:</span></p>
+<p class="CodeCxSpMiddle">        amount = amount % ____</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># If the amount is enough
+to add dimes, add them:</span></p>
+<p class="CodeCxSpMiddle">    if amount &gt;= ____:</p>
+<p class="CodeCxSpMiddle">        change['dimes'] = ____ // ____</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># Reduce the amount by
+the value of the dimes added:</span></p>
+<p class="CodeCxSpMiddle">        amount = ____ % ____</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># If the amount is enough
+to add nickels, add them:</span></p>
+<p class="CodeCxSpMiddle">    if amount &gt;= ____:</p>
+<p class="CodeCxSpMiddle">        change['nickels'] = ____ // ____</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># Reduce the amount by
+the value of the nickels added:</span></p>
+<p class="CodeCxSpMiddle">        amount = ____ % ____</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># If the amount is enough
+to add pennies, add them:</span></p>
+<p class="CodeCxSpMiddle">    if amount &gt;= 1:</p>
+<p class="CodeCxSpMiddle">        change[____] = amount</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpLast">    return change</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/makechange.py</span>. You can
+view each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/makechange-debug/</span>.</p>
+
+
+
+<p><a href="../exercise36/">Prev - #36 Reverse String</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise38/">Next - #38 Random Shuffle</a></p></body></html>

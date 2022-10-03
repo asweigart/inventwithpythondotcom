@@ -1,0 +1,103 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="../style_pythongently.css" rel="stylesheet" type="text/css" />
+<title>Exercise 17 - Dice Roll</title></head><body style="background-color: #fffeee;"><p><a href="../exercise16/">Prev - #16 Mode</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise18/">Next - #18 Buy 8 Get 1 Free</a></p>
+
+
+
+
+<h1><a name="_Toc115418686"></a><a name="_Toc115359997">Exercise #17: Dice Roll</a></h1>
+<p class="ChapterTitleCodeExample">rollDice(1)  <span style="font-size:13.0pt">→
+</span> 6</p>
+<p class="ChapterTitleCodeExample"><span style='font-size:8.0pt;font-family:"MS Shell Dlg 2","sans-serif"'><img border="0" height="144" id="Picture 28" src="../images/image020.jpg" width="259"/></span></p>
+<p class="Body">This exercise uses Python’s random number generating functions to
+simulate rolling any number of six-sided dice and returning the total sum of
+the dice roll. This exercise covers random number generation with Python’s <span class="Literal">random</span> module.</p>
+<p class="HeadA">Exercise Description</p>
+<p class="Body">Write a <code>rollDice()</code> function with a <span class="Literal">numberOfDice</span> parameter that represents the number of
+six-sided dice. The function returns the sum of all of the dice rolls. For this
+exercise you must import Python’s <code>random</code> module to
+call its <code>random.randint()</code> function for this
+exercise.</p>
+<p class="Body">These Python <code>assert</code> statements stop
+the program if their condition is <code>False</code>. Copy them
+to the bottom of your solution program. Your solution is correct if the following
+<code>assert</code> statements’ conditions are all <span class="Literal">True</span>. We can’t predict <code>rollDice()</code>’s
+random return value, but we can do repeated checks that the return value is
+within the correct range of expected values:</p>
+<p class="CodeCxSpFirst">assert rollDice(0) == 0</p>
+<p class="CodeCxSpMiddle">assert rollDice(1000) != rollDice(1000)</p>
+<p class="CodeCxSpMiddle">for i in range(1000):</p>
+<p class="CodeCxSpMiddle">    assert 1 &lt;= rollDice(1) &lt;= 6</p>
+<p class="CodeCxSpMiddle">    assert 2 &lt;= rollDice(2) &lt;= 12</p>
+<p class="CodeCxSpMiddle">    assert 3 &lt;= rollDice(3) &lt;= 18</p>
+<p class="CodeCxSpLast">    assert 100 &lt;= rollDice(100) &lt;= 600</p>
+<p class="Body">There is an astronomically small chance that the <span class="Literal">assert rollDice(1000) != rollDice(1000)</span> will fail with a
+false positive. This assertion tests that <code>rollDice()</code>
+doesn’t simply return the same “random” number each time by simulating rolling
+1,000 dice twice and making sure the totals are different for both rolls. But,
+of course, there is a chance they’ll come up the same total and cause an <span class="Literal">AssertionError</span>. In that case, just rerun the assertion
+tests. After all, what are the odds of that happening twice?</p>
+<p class="Body">Try to write a solution based on the information in this
+description. If you still have trouble solving this exercise, read the <span class="Bold">Solution Design and Special Cases and Gotchas</span> sections for
+additional hints.</p>
+<p class="Body">Prerequisite concepts: <code>import</code>
+statements, <code>random</code> module, <code>randint()</code>,
+<code>for</code> loops, <code>range()</code>,
+augmented assignment operator</p>
+<p class="HeadA">Solution Design</p>
+<p class="Body">First, create a variable to track the running total of the dice
+rolls and start it with the value <code>0</code>. Then make a <span class="Literal">for</span> loop to loop the same number of times as the <span class="Literal">numberOfDice</span> parameter. Inside the loop, call the <span class="Literal">random.randint()</span> function to return a random number
+between <code>1</code> and <code>6</code> and add
+this number to the running total. After the loop completes, return the total.</p>
+<p class="Body">If you don’t know how the <code>random.randint()</code>
+function works, you can run <code>import random</code> and <span class="Literal">help(random.randint)</span> in the interactive shell to view its
+documentation. Or you can do an internet search for “python randint” to find information
+about the function online.</p>
+<p class="HeadA">Special Cases and Gotchas</p>
+<p class="Body">There are no special cases for this exercise, but remember that
+Python’s <code>random.randint()</code> function is inclusive of
+its arguments. Calling, for example, <code>range(6)</code> causes
+a <code>for</code> loop to loop from <code>0</code>
+up to, but not including, <code>6</code>. But calling <span class="Literal">random.randint(1, 6)</span> returns a random number between <span class="Literal">1</span> and <code>6</code>, including the <span class="Literal">1</span> and the <code>6</code>. If you roll three
+6-sided dice, the range is from 3 to 18, not 1 to 18.</p>
+<p class="Body">Rolling multiple dice doesn’t produce a uniform distribution:
+rolling two 6-sided dice is much more likely to come up with 7 because there
+are more combinations that add up to 7 (1 + 6, 2 + 5, 3 + 4, 4 + 3, 5 + 2, and
+6 + 1) compared with rolling 2 (1 and 1 only). This is why you would need to
+call <code>random.randint(1, 6)</code> twice and add the rolls
+together instead of call <code>random.randint(2, 12)</code> once.</p>
+<p class="Body">Your solution program needs <code>import random</code>
+at the top of the program in order to call the <code>random.randint()</code>
+function, or else you’ll get a <span class="Literal">NameError: name 'random' is
+not defined</span> error message.)</p>
+<p class="Body">Now try to write a solution based on the information in the
+previous sections. If you still have trouble solving this exercise, read the <span class="Bold">Solution Template</span> section for additional hints.</p>
+<p class="HeadA">Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/rolldice-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst"><span class="CodeComment"># Import the random module for
+its randint() function.</span></p>
+<p class="CodeCxSpMiddle">____ random</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">def rollDice(numberOfDice):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Start the sum total at 0:</span></p>
+<p class="CodeCxSpMiddle">    total = ____</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Run a loop for each die
+that needs to be rolled:</span></p>
+<p class="CodeCxSpMiddle">    for i in range(____):</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># Add the amount from
+one 6-sided dice roll to the total:</span></p>
+<p class="CodeCxSpMiddle">        total += random.randint(____, ____)</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Return the dice roll
+total:</span></p>
+<p class="CodeCxSpLast">    return total</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/rolldice.py</span>. You can view
+each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/rolldice-debug/</span>.</p>
+
+
+
+<p><a href="../exercise16/">Prev - #16 Mode</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise18/">Next - #18 Buy 8 Get 1 Free</a></p></body></html>

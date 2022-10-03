@@ -1,0 +1,210 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="../style_pythongently.css" rel="stylesheet" type="text/css" />
+<title>Exercise 11 - Hours, Minutes, Seconds</title></head><body style="background-color: #fffeee;"><p><a href="../exercise10/">Prev - #10 Find and Replace</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise12/">Next - #12 Smallest & Biggest</a></p>
+
+
+
+
+<h1><a name="_Toc115418680"></a><a name="_Toc115359991">Exercise #11: Hours,
+Minutes, Seconds</a></h1>
+<p class="ChapterTitleCodeExample">getHoursMinutesSeconds(90)  <span style="font-size:13.0pt">→ </span> '1m 30s'</p>
+<p class="ChapterTitleCodeExample"><span style='font-size:8.0pt;font-family:"MS Shell Dlg 2","sans-serif"'><img border="0" height="144" id="Picture 22" src="../images/image014.jpg" width="223"/></span></p>
+<p class="Body">Websites often use relative timestamps such as “3 days ago” or
+“about 3h ago” so the user doesn’t need to compare an absolute timestamp to the
+current time. In this exercise, you write a function that converts a number of
+seconds into a string with the number of hours, minutes, and seconds.</p>
+<p class="HeadA">Exercise Description</p>
+<p class="Body">Write a <code>getHoursMinutesSeconds()</code>
+function that has a <code>totalSeconds</code> parameter. The
+argument for this parameter will be the number of seconds to be translated into
+the number of hours, minutes, and seconds. If the amount for the hours,
+minutes, or seconds is zero, don’t show it: the function should return <span class="Literal">'10m'</span> rather than <code>'0h 10m 0s'</code>.
+The only exception is that <code>getHoursMinutesSeconds(0)</code>
+should return <code>'0s'</code>.</p>
+<p class="Body">These Python <code>assert</code> statements stop
+the program if their condition is <code>False</code>. Copy them
+to the bottom of your solution program. Your solution is correct if the following
+<code>assert</code> statements’ conditions are all <span class="Literal">True</span>:</p>
+<p class="CodeCxSpFirst">assert getHoursMinutesSeconds(30) == '30s'</p>
+<p class="CodeCxSpMiddle">assert getHoursMinutesSeconds(60) == '1m'</p>
+<p class="CodeCxSpMiddle">assert getHoursMinutesSeconds(90) == '1m 30s'</p>
+<p class="CodeCxSpMiddle">assert getHoursMinutesSeconds(3600) == '1h'</p>
+<p class="CodeCxSpMiddle">assert getHoursMinutesSeconds(3601) == '1h 1s'</p>
+<p class="CodeCxSpMiddle">assert getHoursMinutesSeconds(3661) == '1h 1m 1s'</p>
+<p class="CodeCxSpMiddle">assert getHoursMinutesSeconds(90042) == '25h 42s'</p>
+<p class="CodeCxSpMiddle">assert getHoursMinutesSeconds(0) == '0s'</p>
+<p class="CodeCxSpLast"> </p>
+<p class="Body"><span class="Bold"><span style="color:black;font-weight:normal">For
+an additional challenge, break up 24 hour periods into days with a “d” suffix.
+For example, </span></span><code>getHoursMinutesSeconds(90042)</code><span class="Bold"><span style="color:black;font-weight:normal"> would return </span></span><span class="Literal">'1d 1h 42s'</span><span class="Bold"><span style="color:black;
+font-weight:normal">.</span></span></p>
+<p class="Body">Try to write a solution based on the information in this
+description. If you still have trouble solving this exercise, read the <span class="Bold">Solution Design</span> and <span class="Bold">Special Cases and
+Gotchas</span> sections for additional hints.</p>
+<p class="Body">Prerequisite concepts: <code>join()</code>, <span class="Literal">append()</span>, lists, string concatenation, <span class="Literal">while</span> loops</p>
+<p class="HeadA">Solution Design</p>
+<p class="Body">One hour is 3600 seconds, one minute is 60 seconds, and one
+second is… 1 second. Our solution can have variables that track the number of
+hours, minutes, and seconds in the final result with variables <span class="Literal">hours</span>, <code>minutes</code>, and <span class="Literal">seconds</span>. The code subtracts <code>3600</code>
+from the <code>totalSeconds</code> while increasing <span class="Literal">hours</span> by <code>1</code>. Then the code
+subtracts <code>60</code> from <code>totalSeconds</code>
+while increasing <code>minutes</code> by 1. The <span class="Literal">seconds</span> variable can then be set to whatever remains in <span class="Literal">totalSeconds</span>.</p>
+<p class="Body">After calculating hours, minutes, and seconds, you should convert
+those integer amounts into strings with respective <code>'h'</code>,
+<code>'m'</code>, and <code>'s'</code> suffixes
+like <code>'1h'</code> or <code>'30s'</code>. Then
+you can append them to a list that initially starts as empty. Then the <span class="Literal">join()</span> list method can join these strings together with a
+single space separating them: from the list <code>['1h', '30s']</code>
+to the string <code>'1h 30s'</code>. For example, enter the
+following into the interactive shell:</p>
+<p class="CodeCxSpFirst">&gt;&gt;&gt; hms = ['1h', '30s']</p>
+<p class="CodeCxSpMiddle">&gt;&gt;&gt; ' '.join(hms)</p>
+<p class="CodeCxSpLast">'1h 30s'</p>
+<p class="Body">The function then returns this space-separated string.</p>
+<p class="Body">If you’re unfamiliar with the <code>join()</code>
+string method, you can enter <code>help(str.join)</code> into the
+interactive shell to view its documentation, or do an internet search for
+“python join”.</p>
+<p class="HeadA">Special Cases and Gotchas</p>
+<p class="Body">The first special case your function should check for is if the <span class="Literal">totalSeconds</span> parameter is set to 0. In this case, the
+function can immediately return <code>'0s'</code>.</p>
+<p class="Body">The final result string shouldn’t include hours, minutes, or
+seconds if the amount of those is zero. For example, your program should return
+<code>'1h 12s'</code> but not <code>'1h 0m 12s'</code>.</p>
+<p class="Body">Also, it’s important to subtract the larger amounts first.
+Otherwise, you would, for example, increase <code>hours</code> by
+<code>0</code> and minutes by <code>120</code>
+instead of increase <code>hours</code> by <code>2</code>
+and <code>minutes</code> by <code>0</code>.</p>
+<p class="Body">Now try to write a solution based on the information in the
+previous sections. If you still have trouble solving this exercise, read the <span class="Bold">Solution Template</span> section for additional hints.</p>
+<p class="HeadA">Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/hoursminutesseconds-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst">def getHoursMinutesSeconds(totalSeconds):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># If totalSeconds is 0,
+just return '0s':</span></p>
+<p class="CodeCxSpMiddle">    if totalSeconds == ____:</p>
+<p class="CodeCxSpMiddle">        return ____</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Set hours to 0, then add
+an hour for every 3600 seconds removed from</span></p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># totalSeconds until
+totalSeconds is less than 3600:</span></p>
+<p class="CodeCxSpMiddle">    hours = 0</p>
+<p class="CodeCxSpMiddle">    while totalSeconds ____ 3600:</p>
+<p class="CodeCxSpMiddle">        hours += ____</p>
+<p class="CodeCxSpMiddle">        totalSeconds -= ____</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Set minutes to 0, then
+add a minute for every 60 seconds removed from</span></p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># totalSeconds until
+totalSeconds is less than 60:</span></p>
+<p class="CodeCxSpMiddle">    minutes = 0</p>
+<p class="CodeCxSpMiddle">    while totalSeconds &gt;= ____:</p>
+<p class="CodeCxSpMiddle">        minutes += 1</p>
+<p class="CodeCxSpMiddle">        totalSeconds -= ____</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Set seconds to the
+remaining totalSeconds value:</span></p>
+<p class="CodeCxSpMiddle">    seconds = ____</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Create an hms list that
+contains the string hour/minute/second amounts:</span></p>
+<p class="CodeCxSpMiddle">    hms = []</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># If there are one or more
+hours, add the amount with an 'h' suffix:</span></p>
+<p class="CodeCxSpMiddle">    if hours &gt; ____:</p>
+<p class="CodeCxSpMiddle">        ____.append(str(____) + 'h')</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># If there are one or more
+minutes, add the amount with an 'm' suffix:</span></p>
+<p class="CodeCxSpMiddle">    if minutes &gt; 0:</p>
+<p class="CodeCxSpMiddle">        hms.append(____(minutes) + 'm')</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># If there are one or more
+seconds, add the amount with an 's' suffix:</span></p>
+<p class="CodeCxSpMiddle">    if seconds &gt; 0:</p>
+<p class="CodeCxSpMiddle">        hms.append(str(seconds) + ____)</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Join the
+hour/minute/second strings with a space in between them:</span></p>
+<p class="CodeCxSpLast">    return ' '.join(____)</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/hoursminutesseconds.py</span>.
+You can view each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/hoursminutesseconds-debug/</span>.</p>
+<p class="HeadA">Alternate Solution Design</p>
+<p class="Body">Alternatively, instead of subtractions in a loop you can use
+Python’s <code>//</code> <span class="Italic"><span style='font-family:"serif"'>integer division operator</span></span>
+to see how many 3600 amounts (for hours) or 60 amounts (for minutes) fit into <span class="Literal">totalSeconds</span>. To get the remaining amount in <span class="Literal">totalSeconds</span> after removing the seconds accounted for
+hours and minutes, you can use Python’s <code>%</code> modulo
+operator.</p>
+<p class="Body">For example, if <code>totalSeconds</code> were <span class="Literal">10000</span>, then <code>10000 // 3600</code>
+evaluates to <code>2</code>, telling you that there are two hours
+in 10,000 seconds. Then <code>10000 % 3600</code> evaluates to <span class="Literal">2800</span>, telling you there are 2,800 seconds left over after
+removing the two hours from 10,000 seconds. You would then run <span class="Literal">2800 // 60</span> to find the number of minutes in 2,800 seconds
+and <code>2800 % 60</code> to find the number of seconds
+remaining after removing those minutes.</p>
+<p class="HeadA">Alternate Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/hoursminutesseconds2-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst">def getHoursMinutesSeconds(totalSeconds):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># If totalSeconds is 0,
+just return '0s':</span></p>
+<p class="CodeCxSpMiddle">    if totalSeconds == ____:</p>
+<p class="CodeCxSpMiddle">        return ____</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Set hours to how many
+times 3600 seconds can divide</span></p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># totalSeconds. Then set
+totalSeconds to the remainder:</span></p>
+<p class="CodeCxSpMiddle">    if totalSeconds &gt;= 3600:</p>
+<p class="CodeCxSpMiddle">        hours = totalSeconds // 3600</p>
+<p class="CodeCxSpMiddle">        totalSeconds = totalSeconds % 3600</p>
+<p class="CodeCxSpMiddle">    else:</p>
+<p class="CodeCxSpMiddle">        hours = 0</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Set minutes to how many
+times 60 seconds can divide</span></p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># totalSeconds. Then set
+totalSeconds to the remainder:</span></p>
+<p class="CodeCxSpMiddle">    if totalSeconds &gt;= 60:</p>
+<p class="CodeCxSpMiddle">        minutes = totalSeconds // 60</p>
+<p class="CodeCxSpMiddle">        totalSeconds = totalSeconds % 60</p>
+<p class="CodeCxSpMiddle">    else:</p>
+<p class="CodeCxSpMiddle">        minutes = 0</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Set seconds to the
+remaining totalSeconds value:</span></p>
+<p class="CodeCxSpMiddle">    seconds = ____</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Create an hms list that
+contains the string hour/minute/second amounts:</span></p>
+<p class="CodeCxSpMiddle">    hms = []</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># If there are one or more
+hours, add the amount with an 'h' suffix:</span></p>
+<p class="CodeCxSpMiddle">    if hours &gt; ____:</p>
+<p class="CodeCxSpMiddle">        ____.append(str(____) + 'h')</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># If there are one or more
+minutes, add the amount with an 'm' suffix:</span></p>
+<p class="CodeCxSpMiddle">    if minutes &gt; 0:</p>
+<p class="CodeCxSpMiddle">        hms.append(____(minutes) + 'm')</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># If there are one or more
+seconds, add the amount with an 's' suffix:</span></p>
+<p class="CodeCxSpMiddle">    if seconds &gt; 0:</p>
+<p class="CodeCxSpMiddle">        hms.append(str(seconds) + ____)</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Join the
+hour/minute/second strings with a space in between them:</span></p>
+<p class="CodeCxSpLast">    return ' '.join(____)</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/hoursminutesseconds2.py</span>.
+You can view each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/hoursminutesseconds2-debug/</span>.</p>
+
+
+
+<p><a href="../exercise10/">Prev - #10 Find and Replace</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise12/">Next - #12 Smallest & Biggest</a></p></body></html>

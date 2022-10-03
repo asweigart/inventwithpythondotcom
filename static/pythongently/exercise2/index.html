@@ -1,0 +1,104 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="../style_pythongently.css" rel="stylesheet" type="text/css" />
+<title>Exercise 2 - Temperature Conversion</title></head><body style="background-color: #fffeee;"><p><a href="../exercise1/">Prev - #1 Hello, World!</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise3/">Next - #3 Odd & Even</a></p>
+
+
+
+
+<h1><a name="_Toc115418671"></a><a name="_Toc115359982">Exercise #2: Temperature
+Conversion</a></h1>
+<p class="ChapterTitleCodeExample">    convertToCelsius(32)  <span style="font-size:13.0pt">→ </span> 0.0<br/>
+convertToFahrenheit(100)  <span style="font-size:13.0pt">→ </span> 212</p>
+<p class="ChapterTitleCodeExample"><span style='font-size:8.0pt;font-family:"MS Shell Dlg 2","sans-serif"'><img height="144" id="Picture 8" src="../images/image002.jpg" width="72"/></span></p>
+<p class="Body">Converting between Celsius and Fahrenheit involves a basic
+calculation and provides a good exercise for writing functions that take in a
+numeric input and return a numeric output. This exercise tests your ability to
+use Python’s math operators and translate math equations into Python code.</p>
+<p class="HeadA">Exercise Description</p>
+<p class="Body">Write a <code>convertToFahrenheit()</code> function
+with a <code>degreesCelsius</code> parameter. This function
+returns the number of this temperature in degrees Fahrenheit. Then write a
+function named <code>convertToCelsius()</code> with a <span class="Literal">degreesFahrenheit</span> parameter and returns a number of this
+temperature in degrees Celsius.</p>
+<p class="Body">Use these two formulas for converting between Celsius and
+Fahrenheit:</p>
+<p class="Body" style="margin-left:.75in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>Fahrenheit = Celsius × (9 / 5) + 32</p>
+<p class="Body" style="margin-left:.75in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>Celsius = (Fahrenheit - 32) × (5 / 9)</p>
+<p class="Body">These Python <code>assert</code> statements stop
+the program if their condition is <code>False</code>. Copy them
+to the bottom of your solution program. Your solution is correct if the following
+<code>assert</code> statements’ conditions are all <span class="Literal">True</span>:</p>
+<p class="CodeCxSpFirst">assert convertToCelsius(0) == -17.77777777777778</p>
+<p class="CodeCxSpMiddle">assert convertToCelsius(180) == 82.22222222222223</p>
+<p class="CodeCxSpMiddle">assert convertToFahrenheit(0) == 32</p>
+<p class="CodeCxSpMiddle">assert convertToFahrenheit(100) == 212</p>
+<p class="CodeCxSpMiddle">assert convertToCelsius(convertToFahrenheit(15)) == 15</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle"><span class="CodeComment"># Rounding errors cause a
+slight discrepancy:</span></p>
+<p class="CodeCxSpLast">assert convertToCelsius(convertToFahrenheit(42)) ==
+42.00000000000001</p>
+<p class="Body">Try to write a solution based on the information in this
+description. If you still have trouble solving this exercise, read the <span class="Bold">Solution Design</span> and <span class="Bold">Special Cases and
+Gotchas</span> sections for additional hints.</p>
+<p class="Body">Prerequisite concepts: math operators</p>
+<p class="HeadA">Solution Design</p>
+<p class="Body">Think about how you can translate the mathematical equations in
+the Exercise Description into Python code. For converting from Celsius to
+Fahrenheit, the “Celsius” is the <code>degreesCelsius</code>
+parameter, the × multiplication sign can be replaced by Python’s <span class="Literal">*</span> operator, and the parentheses and other math symbols
+have direct Python equivalents. You can think of the “Fahrenheit =” and
+“Celsius =” parts in the formula to Python <code>return</code>
+statements.</p>
+<p class="Body">These functions can be one line long: a <code>return</code>
+statement that calculates the formula’s result and returns it.</p>
+<p class="HeadA">Special Cases and Gotchas</p>
+<p class="Body">When converting 42 degrees Celsius to Fahrenheit and back to
+Celsius in the Assertions section, you may have noticed that you don’t get
+exactly 42 but 42.00000000000001. This tiny fractional part is caused by
+rounding errors. Computers cannot perfectly represent all numbers with
+fractional parts. For example, if you enter <span class="Literal">print(0.1 + 0.1
++ 0.1)</span> into Python’s interactive shell, it doesn’t print <span class="Literal">0.3</span> but rather prints <code>0.30000000000000004</code>.</p>
+<p class="Body">The Python programming language doesn’t cause these rounding
+errors. Instead, they come from the technical standard for floating-point
+numbers used by all computers. Every programming language has these same
+rounding errors. However, unless you are writing software for a bank or nuclear
+reactor, these minor inaccuracies probably don’t matter. The <span class="Bold">Further
+Reading</span> section</p>
+<p class="Body">Now try to write a solution based on the information in the
+previous sections. If you still have trouble solving this exercise, read the <span class="Bold">Solution Template</span> section for additional hints.</p>
+<p class="HeadA">Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/converttemp-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst">def convertToFahrenheit(degreesCelsius):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Calculate and return the
+degrees Fahrenheit:</span></p>
+<p class="CodeCxSpMiddle">    return ____ * (9 / 5) + 32</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">def convertToCelsius(degreesFahrenheit):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Calculate and return the
+degrees Celsius:</span></p>
+<p class="CodeCxSpLast">    return (____ - 32) * (____ / ____)</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/converttemp.py</span>. You can
+view each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://</span><span class="Heading2Char"><span style="font-size:13.0pt"> </span></span><span class="MsoHyperlink">invpy.com/converttemp-debug/</span>.</p>
+<p class="HeadA">Further Reading</p>
+<p class="Body">You can use Python’s <code>decimal</code> module to
+represent fractional numbers more accurately than floating-point values can. You
+can learn about this module at the Python Module of the Week blog at <span class="MsoHyperlink">https://pymotw.com/3/decimal/</span>. </p>
+<p class="Body">One programming technique to avoid rounding errors is to stick
+with integers: instead of representing $1.25 as the float <code>1.25</code>
+you can use the integer <code>125</code> for 125 cents, or
+instead of representing 1.5 minutes as the float <code>1.5</code>
+you can use the integer <code>90</code> for 90 seconds or even <span class="Literal">90000</span> for 90,000 milliseconds. Integers and the <span class="Literal">decimal</span> module’s <code>Decimal</code>
+objects don’t suffer from rounding errors like floating-point numbers do.</p>
+
+
+
+<p><a href="../exercise1/">Prev - #1 Hello, World!</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise3/">Next - #3 Odd & Even</a></p></body></html>

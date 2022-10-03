@@ -1,0 +1,159 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="../style_pythongently.css" rel="stylesheet" type="text/css" />
+<title>Exercise 31 - Convert Integers To Strings</title></head><body style="background-color: #fffeee;"><p><a href="../exercise30/">Prev - #30 3D Box Drawing</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise32/">Next - #32 Convert Strings To Integers</a></p>
+
+
+
+
+<h1><a name="_Toc115418700"></a><a name="_Toc115360011">Exercise #31: Convert
+Integers To Strings</a></h1>
+<p class="ChapterTitleCodeExample">convertIntToStr(42)  <span style="font-size:
+13.0pt">→ </span> '42'</p>
+<p class="ChapterTitleCodeExample"><span style='font-size:8.0pt;font-family:"MS Shell Dlg 2","sans-serif"'><img border="0" height="144" id="Picture 42" src="../images/image036.jpg" width="432"/></span></p>
+<p class="Body">In Python, the values <code>42</code> and <span class="Literal">'42'</span> are two different values: you can perform mathematics
+on the integer <code>42</code>, but the string <span class="Literal">'42'</span> is the same as any other two-character text string. You
+can perform mathematical addition on integer values, but not on strings. And
+you can concatenate or replicate string values, but not integers. A common
+programming task is to obtain the string equivalent of a number. You can use
+the <code>str()</code> function to do this conversion but in this
+exercise you’ll recreate this function yourself.</p>
+<p class="HeadA">Exercise Description</p>
+<p class="Body">Write a <code>convertIntToStr()</code> function
+with an <code>integerNum</code> parameter. This function operates
+similarly to the <code>str()</code> function in that it returns a
+string form of the parameter. For example, <code>convertIntToStr(42)</code>
+should return the string <code>'42'</code>. The function doesn’t
+have to work for floating-point numbers with a decimal point, but it should
+work for negative integer values.</p>
+<p class="Body">Avoid using Python’s <code>str()</code> function in
+your code, as that would do the conversion for you and defeat the purpose of
+this exercise. However, we use <code>str()</code> with <span class="Literal">assert</span> statements to check that your <code>convertIntToStr()</code>
+function works the same as <code>str()</code> for all integers
+from <code>-10000</code> to <code>9999</code>:</p>
+<p class="CodeCxSpFirst">for i in range(-10000, 10000):</p>
+<p class="CodeCxSpLast">    assert convertIntToStr(i) == str(i)</p>
+<p class="Body">Try to write a solution based on the information in this
+description. If you still have trouble solving this exercise, read the <span class="Bold">Solution Design and Special Cases and Gotchas</span> sections for
+additional hints.</p>
+<p class="Body">Prerequisite concepts: dictionaries, <code>while</code>
+loops, string concatenation, integer division</p>
+<p class="HeadA">Solution Design</p>
+<p class="Body">To create the string equivalent of the integer value, we’ll convert
+the integers to strings one digit at a time. Let’s create a variable named <span class="Literal">stringNum</span> to hold the converted string. In a loop, the
+expression <code>integerNum % 10</code> evaluates to the digit in
+the one’s place of <code>integerNum</code>. Store this result in
+a variable named <code>onesPlaceDigit</code>.</p>
+<p class="Body">Then we add the string equivalent of <code>onesPlaceDigit</code>
+to <code>stringNum</code> with a series of <code>if</code>-<span class="Literal">elif</span> statements such as the following:</p>
+<p class="CodeCxSpFirst">if onesPlaceDigit == 0:</p>
+<p class="CodeCxSpMiddle">    stringNum = '0' + stringNum</p>
+<p class="CodeCxSpMiddle">elif onesPlaceDigit == 1:</p>
+<p class="CodeCxSpMiddle">    stringNum = '1' + stringNum</p>
+<p class="CodeCxSpMiddle">elif onesPlaceDigit == 2:</p>
+<p class="CodeCxSpMiddle">    stringNum = '2' + stringNum</p>
+<p class="CodeCxSpMiddle">elif onesPlaceDigit == 3:</p>
+<p class="CodeCxSpMiddle">    stringNum = '3' + stringNum</p>
+<p class="CodeCxSpMiddle">elif onesPlaceDigit == 4:</p>
+<p class="CodeCxSpMiddle">    stringNum = '4' + stringNum</p>
+<p class="CodeCxSpMiddle">elif onesPlaceDigit == 5:</p>
+<p class="CodeCxSpMiddle">    stringNum = '5' + stringNum</p>
+<p class="CodeCxSpMiddle">elif onesPlaceDigit == 6:</p>
+<p class="CodeCxSpMiddle">    stringNum = '6' + stringNum</p>
+<p class="CodeCxSpMiddle">elif onesPlaceDigit == 7:</p>
+<p class="CodeCxSpMiddle">    stringNum = '7' + stringNum</p>
+<p class="CodeCxSpMiddle">elif onesPlaceDigit == 8:</p>
+<p class="CodeCxSpMiddle">    stringNum = '8' + stringNum</p>
+<p class="CodeCxSpMiddle">elif onesPlaceDigit == 9:</p>
+<p class="CodeCxSpLast">    stringNum = '9' + stringNum</p>
+<p class="Body">However, this code is pretty long and tedious. A more concise and
+common approach is to create a dictionary that maps individual integer digits
+to their string equivalents, and then look up the value for the <span class="Literal">onesPlaceDigit</span> key:</p>
+<p class="CodeCxSpFirst">DIGITS_INT_TO_STR = {0: '0', 1: '1', 2: '2', 3: '3', 4:
+'4', 5: '5', 6: '6', 7: '7', 8: '8', 9: '9'}</p>
+<p class="CodeCxSpLast">stringNum = DIGITS_INT_TO_STR[onesPlaceDigit] + stringNum</p>
+<p class="Body">After this, we can integer divide it by <code>10</code>
+to “remove” the digit in the one’s place of <code>integerNum</code>.
+For example, <code>41096 // 10</code> evaluates to <span class="Literal">4109</span>, effectively removing the <code>6</code>
+from the number and making the <code>9</code> the new digit in
+the one’s place to convert. Our loop can continue looping and converting digits
+until <code>integerNum</code> is <code>0</code>. For
+example, doing this to the integer 41096 would carry out the following
+operations:</p>
+<p class="Body" style="margin-left:.75in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>41096 // 10 = 4109</p>
+<p class="Body" style="margin-left:.75in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>4109 // 10 = 410</p>
+<p class="Body" style="margin-left:.75in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>410 // 10 = 41</p>
+<p class="Body" style="margin-left:.75in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>41 // 10 = 4</p>
+<p class="Body" style="margin-left:.75in;text-indent:-.25in"><span style="font-family:Symbol">·<span style='font:7.0pt "Times New Roman"'>      
+</span></span>4 // 10 = 0</p>
+<p class="Body">At this point the algorithm is finished and <code>stringNum</code>
+contains the string form.</p>
+<p class="HeadA">Special Cases and Gotchas</p>
+<p class="Body">At the start of the function, check if the <code>integerNum</code>
+parameter is <code>0</code> and, if so, immediately return the
+string <code>'0'</code>. Our algorithm is such that otherwise it
+will return the blank string <code>''</code> for <span class="Literal">0</span>, which is incorrect.</p>
+<p class="Body">Now try to write a solution based on the information in the
+previous sections. If you still have trouble solving this exercise, read the <span class="Bold">Solution Template</span> section for additional hints.</p>
+<p class="HeadA">Solution Template</p>
+<p class="Body">Try to first write a solution from scratch. But if you have
+difficulty, you can use the following partial program as a starting place. Copy
+the following code from <span class="MsoHyperlink">https://invpy.com/convertinttostr-template.py</span>
+and paste it into your code editor. Replace the underscores with code to make a
+working program:</p>
+<p class="CodeCxSpFirst">def convertIntToStr(integerNum):</p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Special case: Check if
+integerNum is 0, and return '0' if so:</span></p>
+<p class="CodeCxSpMiddle">    if integerNum == ____:</p>
+<p class="CodeCxSpMiddle">        return ____</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># This dictionary maps
+single integer digits to string digits:</span></p>
+<p class="CodeCxSpMiddle">    DIGITS_INT_TO_STR = {0: '0', 1: '1', 2: '2', 3:
+'3', 4: '4',</p>
+<p class="CodeCxSpMiddle">        5: '5', 6: '6', 7: '7', 8: '8', 9: '9'}</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Make a note whether the
+number is negative or not, and make</span></p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># integerNum positive for
+the rest of the function's code:</span></p>
+<p class="CodeCxSpMiddle">    if integerNum &lt; ____:</p>
+<p class="CodeCxSpMiddle">        isNegative = ____</p>
+<p class="CodeCxSpMiddle">        integerNum = ____</p>
+<p class="CodeCxSpMiddle">    else:</p>
+<p class="CodeCxSpMiddle">        isNegative = ____</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># stringNum holds the
+converted string, and starts off blank:</span></p>
+<p class="CodeCxSpMiddle">    stringNum = ____</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># Keeping looping while
+integerNum is greater than zero:</span></p>
+<p class="CodeCxSpMiddle">    while integerNum ____ 0:</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># Mod the integerNum by
+10 to get the digit in the ones place:</span></p>
+<p class="CodeCxSpMiddle">        onesPlaceDigit = integerNum % ____</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># Put the corresponding
+string digit at the front of stringNum:</span></p>
+<p class="CodeCxSpMiddle">        stringNum = DIGITS_INT_TO_STR[onesPlaceDigit] +
+____</p>
+<p class="CodeCxSpMiddle">        <span class="CodeComment"># Divide integerNum by
+ten to remove one entire digit place:</span></p>
+<p class="CodeCxSpMiddle">        integerNum //= ____</p>
+<p class="CodeCxSpMiddle"> </p>
+<p class="CodeCxSpMiddle">    <span class="CodeComment"># If the number was
+originally negative, add a minus sign:</span></p>
+<p class="CodeCxSpMiddle">    if isNegative:</p>
+<p class="CodeCxSpMiddle">        return ____ + stringNum</p>
+<p class="CodeCxSpMiddle">    else:</p>
+<p class="CodeCxSpLast">        return ____</p>
+<p class="Body">The complete solution for this exercise is given in Appendix A
+and <span class="MsoHyperlink">https://invpy.com/convertinttostr.py</span>. You
+can view each step of this program as it runs under a debugger at <span class="MsoHyperlink">https://invpy.com/convertinttostr-debug/</span>.</p>
+
+
+
+<p><a href="../exercise30/">Prev - #30 3D Box Drawing</a> | <a href="../index.html">Table of Contents</a> | <a href="../exercise32/">Next - #32 Convert Strings To Integers</a></p></body></html>
