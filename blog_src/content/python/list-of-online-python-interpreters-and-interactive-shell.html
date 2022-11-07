@@ -1,0 +1,175 @@
+<html>
+    <head>
+        <title>17 Online Python IDEs and Interactive Shells/REPLs</title>
+        <meta name="tags" content="" />
+        <meta name="date" content="2022-10-30 12:00" />
+        <meta name="summary" content="<p>Installing Python is easy, but maybe you're on a smartphone/tablet, are on a library computer that doesn't let you install software, or can't install Python for some other reason. This article has a list of 10 free Python interpreters and interactive shells (also called REPLs) that you can access from a web browser.</p>" />
+    </head>
+    <body>
+
+
+<p>Installing Python is easy, but maybe you're on a smartphone/tablet, are on a library computer that doesn't let you install software, or can't install Python for some other reason. This article has a list of 17 free Python interpreters and interactive shells (also called REPLs) that you can access from a web browser.</p>
+
+<p>There are some downsides to using a browser-based Python interpreter. You won't be able to read or write files with the <code>open()</code> function or make network connections. You might not be allowed to have long-running programs or programs that use a lot of memory. And you won't be able to install third-party modules such as NumPy, Pandas, Requests, PyAutoGUI, or Pygame (though some will have these modules pre-installed.) Some other Python features might be disabled; you'll have to check with them individually. Some of these require you to sign up for a free account. You can use <a href="https://10minutemail.com/">10 Minute Email</a> to create disposable email accounts if you don't want to deal with spam.</p>
+
+<p>However, you'll still be able to practice writing Python code. The game, simulation, and digital art projects in my book <a href="https://inventwithpython.com/bigbookpython/">The Big Book of Small Python Projects</a> will still work in these online interpreters. You'll also be able to enter the text-based game projects from <a href="https://inventwithpython.com/invent4thed/">Invent Your Own Computer Games with Python</a> and the encryption and code-breaking projects from <a href="https://inventwithpython.com/cracking/">Cracking Codes with Python</a>.These books are free to read online through a Creative Commons license.</p>
+
+<p>Here's a curated list of browser-based Python interpreters. This isn't a hastily put together clickbait blog post; I've examined each of these and listed them in order of my personal preference.</p>
+
+
+
+<h2>Python Tutor</h2>
+<p><a href="https://pythontutor.com/">https://pythontutor.com/</a></p>
+
+<p>My favorite browser-based Python file editor is <a href="https://pythontutor.com/">Python Tutor</a>. Python Tutor offers a built-in debugger that lets you execute one line at a time and inspect how the program executes. Not only that, but it also records the state of the program at each step, so you can also step backwards. This is a feature most debuggers don't have.</p>
+
+<p>The Python Tutor site also has Java 8, JavaScript ES6, and C/C++ (with the gcc 9.3 compiler). It also has Python 2.7, TypeScript 1.4, and Ruby 2.2, though these are unsupported. The main downside is that there is a limit to the runtime for your programs (since the programs are run on their servers before returning the output to your browser), however you won't hit this for most learning exercises when you're just starting.</p>
+
+
+
+<h2>Python Anywhere</h2>
+<p><a href="https://www.pythonanywhere.com/">https://www.pythonanywhere.com/</a></p>
+
+<p>PythonAnywhere is one of the most popular browser-based interpreters. You must sign up first, but free accounts are available. You'll be able t to store your Python scripts, or just use their <a href="https://www.pythonanywhere.com/try-ipython/">IPython</a> interactive shell without having to log in. Their service allows you to read and write files to a virtual hard drive, and they have many popular Python third-party modules already installed. They have several different Python versions available, and PythonAnywhere is also used for <a href="https://www.python.org/shell/">the interactive shell on the Python.org website</a>.</p>
+
+
+
+<h2>Replit</h2>
+<p><a href="https://replit.com/">https://replit.com/</a></p>
+
+<p>Replit requires you to sign up for a free account to use it. The user interface is a bit complicated, as they have several features including a help system to navigate the site. The site also has online compilers for C, C++, Java, JavaScript, and several other languages.
+
+<p><a href="https://blog.replit.com/mobile-app">Replit also has a mobile app for programming on smartphones and tablets.</a></p>
+
+
+
+<h2>Brython</h2>
+<p><a href="https://brython.info/tests/console.html?lang=en">https://brython.info/tests/console.html?lang=en</a></p>
+
+<p>Brython is Python that you can run in your browser the way web browsers run JavaScript. The normal client-side things you can do in a web page with JavaScript can be done with Brython. This means you can run programs without limits on memory or runtime since they'll be running on your own computer. The downside is that your browser must first download the 6 megabyte Brython code whenever it loads the web page.</p>
+
+<p>You can avoid this by downloading Brython and running it off of your computer. This way you won't need an internet connection after downloading Brython. First, download Brython-3.11.0.zip from <a href="https://github.com/brython-dev/brython/releases">the Brython release page on their GitHub account</a> (or whatever the latest version you see on that page). Unpack the Brython-3.11.0 folder inside the zip. Create a new text file named console.html (or any name with a .html extension you choose) and put the following text into it:</p>
+
+<p><textarea style="width: 100%;">&lt;!doctype html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;script type="text/javascript" src="brython.js"&gt;&lt;/script&gt;
+    &lt;script type="text/javascript" src="brython_stdlib.js"&gt;&lt;/script&gt;
+    &lt;style&gt;
+    .codearea {
+        background-color:#000;
+        color:#fff;
+        font-family:'Oxygen Mono', Consolas, 'Liberation Mono', 'DejaVu Sans Mono', monospace;
+        font-size:14px;
+        overflow:auto
+    }
+    &lt;/style&gt;
+&lt;/head&gt;
+
+&lt;body onload=brython({"debug":1}) &gt;&lt;!-- remove the 1 to leave debug mode --&gt;
+    &lt;noscript&gt;Please enable Javascript to view this page correctly&lt;/noscript&gt;
+
+    &lt;textarea id="code" class="codearea" rows="20" cols="100"&gt;&lt;/textarea&gt;
+
+    &lt;script type="text/python3"&gt;
+        from interpreter import Interpreter
+
+        # Start an interactive interpreter in textarea with id "code"
+        Interpreter("code")
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</textarea></p>
+
+<p>When you open this .html file on your computer, you'll have a working Python interactive shell.</p>
+
+
+
+<h2>Google Colab</h2>
+<p><a href="https://colab.research.google.com/">https://colab.research.google.com/</a></p>
+<p>Your Google or GMail account can give you access to a Jupyter Notebooks-style REPL with generous memory and runtime limits.</p>
+
+
+
+<h2>Trinket</h2>
+<p><a href="https://trinket.io/">https://trinket.io/</a></p>
+<p>Trinket is an education-focused site. You need to sign up for a free account to use it, but their interactive shell also supports Turtle, Matplotlib, and other modules that many online REPLs don't.</p>
+
+
+
+<h2>Python Fiddle</h2>
+<p><a href="http://pythonfiddle.com/">http://pythonfiddle.com/</a></p>
+<p>Python Fiddle is a bare bones editor that lets you create and run Python scripts. Their user interface is a bit unwieldy, but it is rather straightforward.</p>
+
+
+
+<h2>Programiz</h2>
+<p><a href="https://www.programiz.com/python-programming/online-compiler/">https://www.programiz.com/python-programming/online-compiler/</a></p>
+<p>Programiz has a simple file editor. It can't write files and the programs have a limited runtime. The website also has compilers for C, C++, Java, C#, JavaScript, and a sandbox for SQL databases and HTML/CSS.</p>
+
+
+
+<h2>Ideone</h2>
+<p><a href="https://ideone.com/">https://ideone.com/</a></p>
+<p>Ideaone has a rich editor and supports several programming languages besides Python (even older languages like Pascal, Fortran, Prolog, and Cobol, and esoteric programming languages like Brainfuck and Intercal). There's only the editor that lets you write and run programs (with a 5 second runtime limit), but no interactive shell. I think Ideaone is better if you want to practice in less popular languages, rather than use it on a common basis for Python.</p>
+
+
+
+<h2>SymPy Live Shell</h2>
+<p><a href="https://live.sympy.org/">https://live.sympy.org/</a></p>
+<p>A Jupyter Notebooks-style REPL with a small user interface that is fine for casual examples. It uses <a href="https://jupyterlite.readthedocs.io/en/latest/">JupyterLite</a> to run JupyterLab entirely in your browser rather on their servers.</p>
+
+
+
+<h2>OnlineGDB</h2>
+<p><a href="https://www.onlinegdb.com/online_python_interpreter">https://www.onlinegdb.com/online_python_interpreter</a></p>
+<p>A decent editor that has a nice user interface without being too overwhelming. The runtime and memory limits seem quite generous too. I'd recommend this one.</p>
+
+
+
+<h2>W3Schools Python Shell</h2>
+<p><a href="https://www.w3schools.com/python/python_compiler.asp">https://www.w3schools.com/python/python_compiler.asp</a></p>
+<p>W3Schools has a straightforward Python editor with basic syntax highlighting. It has a runtime limit of about 10 seconds, though it doesn't report an error if your program goes over it. It's fine for simple examples.</p>
+
+
+
+<h2>Python Principles Online Python Interpreter</h2>
+<p><a href="https://pythonprinciples.com/online-python-interpreter/">https://pythonprinciples.com/online-python-interpreter/</a></p>
+<p>A simple file editor, but I had trouble getting it to run anything more than a toy example.</p>
+
+
+
+<h2>Online Python Beta</h2>
+<p><a href="https://www.online-python.com/">https://www.online-python.com/</a></p>
+
+<p>A simple and straightforward Python editor that runs the code on their back-end. Good for toy examples.</p>
+
+
+
+<h2>TutorialsPoint</h2>
+<p><a href="https://www.tutorialspoint.com/execute_python_online.php">https://www.tutorialspoint.com/execute_python_online.php</a></p>
+
+<p>A simple and straightforward editor with generous runtime limits.</p>
+
+
+
+<h2>RexTester</h2>
+<p><a href="https://rextester.com/l/python3_online_compiler">https://rextester.com/l/python3_online_compiler</a></p>
+
+<p>This looks like a hobbyist project with a minimal editor and 5 second runtime limit. There are compilers for other languages, but the website is hard to navigate.</p>
+
+
+
+<h2>Portable Python</h2>
+<p>https://portablepython.com/ (NOT RECOMMENDED</p>
+<p>This isn't a browser-based REPL, but rather a .exe file to run Python on Windows without having to install anything. However, the page hasn't been updated since 2013 (and Python 3.2), and the download pages don't use HTTPS. I recommend <b>against</b> using this software due to the possibility of malware.</p>
+
+
+<h2>Visual Studio Code Online</h2>
+<p><a href="https://vscode.dev/">https://vscode.dev/</a></p>
+<p>Visual Studio Code is an <a href="https://www.electronjs.org/">Electron</a> app, meaning that it can run as a regular desktop app or a browser-based app. The browser version is a bit limited, and navigating this online IDE has a steeper learning curve than the other online interpreters. Still, if you're willing to dive into it or already have experience with Visual Studio Code, you can use this browser-based version.</p>
+
+
+
+</body>
+</html>
