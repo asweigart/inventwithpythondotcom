@@ -1,34 +1,457 @@
 <html>
+<head><title>Decimal, Binary, Hexadecimal Odometers</title></head>
 
-<p>Decimal (Normal, base-10 with digits 0, 1, 2, 3, 4, 5, 6, 7, 8, 9):</p>
+<center><div style="width: 440px; ">
+<p>Decimal (Base-10: 0123456789)</p>
 
-<div id="odometerDecDiv" style="width:100%; height:45px; line-height: 45px;"></div>
+<div id="odometerDecDiv" style="width: 100%; height:45px; line-height: 45px;"></div>
 
-<p>Binary (base-2 with digits 0, 1):</p>
+<p>Binary (Base-2: 01)</p>
 
-<div id="odometerBinDiv" style="width:100%; height:45px; line-height: 45px;"></div>
+<div id="odometerBinDiv" style="width: 100%; height:45px; line-height: 45px;"></div>
 
-<p>Hexadecimal (base-16 with digits 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, A, B, C, D, E, F):</p>
+<p>Hexadecimal (Base-16: 0123456789ABCDEF)</p>
 
-<div id="odometerHexDiv" style="width:100%; height:45px; line-height: 45px;"></div>
+<div id="odometerHexDiv" style="width: 100%; height:45px; line-height: 45px;"></div>
 
-<input type="button" value="Start" onclick="runodometers();" />
-<input type="button" value="Stop" onclick="stopodometers();" />
-<input type="button" value="Increment" onclick="n = 0; myOdometerDec.set(myOdometerDec.get() + 1); myOdometerBin.set(myOdometerBin.get() + 1); myOdometerHex.set(myOdometerHex.get() + 1);" />
-<input type="button" value="Decrement" onclick="n = 0; myOdometerDec.set(myOdometerDec.get() - 1); myOdometerBin.set(myOdometerBin.get() - 1); myOdometerHex.set(myOdometerHex.get() - 1);" />
-<input type="button" value="Reset" onclick="n = 0; myOdometerDec.set(0); myOdometerBin.set(0); myOdometerHex.set(0);" />
+<input type="button" value="&#9658;" onclick="runodometers();" />
+<input type="button" value="&#x23F8;" onclick="stopodometers();" />
+<input type="button" value="&#x23f9;" onclick="stopodometers(); setTimeout('n = 0; myOdometerDec.set(0); myOdometerBin.set(0); myOdometerHex.set(0);', 250);" />
+<input type="button" value="+" onclick="incrementOdometers();" />
+<input type="button" value="-" onclick="decrementOdometers();" />
 
-<br />
+<br /><br />
 
 <input type="text" name="setnum" id="setnum" />
 <input type="button" value="Set" onclick="n = 0; myOdometerDec.set(parseInt(document.getElementById('setnum').value)); myOdometerBin.set(parseInt(document.getElementById('setnum').value)); myOdometerHex.set(parseInt(document.getElementById('setnum').value));" />
 
+</div></center>
 
-<script src="http://inventwithpython.com/source/odometer.js" type="text/javascript"></script>
-<script src="http://inventwithpython.com/source/odometerdisplay.js" type="text/javascript"></script>
+
 
 <script type="text/javascript">
 <!--
+// originally in odometer.js:
+
+//============================================================================//
+//  Gavin Brock's CSS/JavaScript Animated Odometer
+//  Version 1.0 - April 7th 2008
+//============================================================================//
+//  Copyright (C) 2008 Gavin Brock
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//============================================================================//
+
+// The hexadecimal and binary ugly hacks are to be solely blamed on Al Sweigart though.
+// This is throwaway code. Go to Gavin's website for the original source code.
+
+function OdometerHex (parentDiv,opts) {
+    if (!parentDiv) throw "ERROR: Odometer object must be past a document element.";
+
+    this.digits       = 6;
+    this.digitHeight  = 40;
+    this.digitPadding = 0;
+    this.digitWidth   = 30;
+    this.bustedness   = 2;
+    this.fontStyle    = "font-family: Courier New, Courier, monospace; font-weight: 900;";
+    this.value        = -1;
+
+    for (var key in opts) { this[key] = opts[key]; }
+
+    var style = {
+        digits:        "position:absolute; height:"+this.digitHeight+"px; width:"+(this.digitWidth-(2*this.digitPadding))+"px; "+
+                       "padding:"+this.digitPadding+"px; font-size:"+(this.digitHeight-(2*this.digitPadding))+"px; "+
+                       "background:black; color:white; text-align:center; "+this.fontStyle,
+        columns:       "position:relative; float:left; overflow:hidden;"+
+                       "height:"+this.digitHeight+"px; width:"+this.digitWidth+"px;",
+        highlight:     "position:absolute; background:white; opacity:0.25; filter:alpha(opacity=25); width:100%; left:0px;",
+        lowlight:      "position:absolute; background:black; opacity:0.25; filter:alpha(opacity=25); width:100%; left:0px;",
+        sidehighlight: "position:absolute; background:white; opacity:0.50; filter:alpha(opacity=50); height:100%; top:0px;",
+        sidelowlight:  "position:absolute; background:black; opacity:0.50; filter:alpha(opacity=50); height:100%; top:0px;"
+    };
+
+    var highlights = [
+        "top:20%;   height:32%;" + style.highlight,
+        "top:27.5%; height:16%;" + style.highlight,
+        "top:32.5%; height:6%;"  + style.highlight,
+        "right:0%;  width:6%;"   + style.sidelowlight,
+        "left:0%;   width:4%;"   + style.sidehighlight,
+        "top:0%;    height:14%;" + style.lowlight,
+        "bottom:0%; height:25%;" + style.lowlight,
+        "bottom:0%; height:8%;"  + style.lowlight
+    ];
+
+    this.setDigitValue = function (digit, val, frac) {
+        var di = digitInfo[digit];
+        var px = Math.floor(this.digitHeight * frac);
+        px = px + di.offset;
+        if (val != di.last_val) {
+
+            // swaps digitA and digitB
+            var tmp = di.digitA;
+            di.digitA = di.digitB;
+            di.digitB = tmp;
+
+            di.digitA.innerHTML = val;
+            di.digitB.innerHTML = ((parseInt(val, 16)) % 16).toString(16);
+            di.last_val = val;
+        }
+        if (px != di.last_px) {
+            di.digitA.style.top = (0-px)+"px";
+            di.digitB.style.top = (0-px+this.digitHeight)+"px";
+            di.last_px = px;
+        }
+    };
+
+
+    this.set = function (inVal) {
+        if (inVal < 0) throw "ERROR: Odometer value cannot be negative.";
+        this.value = inVal;
+
+        var numb = Math.floor(inVal);
+        var frac = inVal - numb;
+        numb = numb.toString(16); // convert to hex
+        //numb = String(numb);
+
+        for (var i=0; i < this.digits; i++) {
+            var num = numb.substring(numb.length-i-1, numb.length-i) || 0;
+            this.setDigitValue(this.digits-i-1, num, frac);
+            if (num != 'F') {
+                frac = 0;
+            }
+        }
+    };
+
+    this.get = function () {
+        return(this.value);
+    };
+
+
+    var odometerDiv = document.createElement("div")
+    odometerDiv.setAttribute("id","odometer");
+    odometerDiv.style.cssText="text-align: left";
+    parentDiv.appendChild(odometerDiv);
+
+    var digitInfo = new Array();
+    for (var i=0; i < this.digits; i++) {
+        var digitDivA = document.createElement("div");
+        digitDivA.setAttribute("id","odometer_digit_"+i+"a");
+        digitDivA.style.cssText=style.digits;
+
+        var digitDivB = document.createElement("div");
+        digitDivB.setAttribute("id","odometer_digit_"+i+"b");
+        digitDivB.style.cssText = style.digits;
+
+        var digitColDiv = document.createElement("div");
+        digitColDiv.style.cssText = style.columns;
+
+        digitColDiv.appendChild(digitDivB);
+        digitColDiv.appendChild(digitDivA);
+
+        for (var j in highlights) {
+            var hdiv = document.createElement("div");
+            hdiv.innerHTML="<p></p>"; // For Dumb IE
+            hdiv.style.cssText = highlights[j];
+            digitColDiv.appendChild(hdiv);
+        }
+        odometerDiv.appendChild(digitColDiv);
+    var offset = Math.floor(Math.random()*this.bustedness);
+    digitInfo.push({digitA:digitDivA, digitB:digitDivB, last_val:-1, last_px: -1, offset:offset});
+    };
+
+
+    if (this.value >= 0) this.set(this.value);
+}
+
+
+function OdometerBin (parentDiv,opts) {
+    if (!parentDiv) throw "ERROR: Odometer object must be past a document element.";
+
+    this.digits       = 6;
+    this.digitHeight  = 40;
+    this.digitPadding = 0;
+    this.digitWidth   = 30;
+    this.bustedness   = 2;
+    this.fontStyle    = "font-family: Courier New, Courier, monospace; font-weight: 900;";
+    this.value        = -1;
+
+    for (var key in opts) { this[key] = opts[key]; }
+
+    var style = {
+        digits:        "position:absolute; height:"+this.digitHeight+"px; width:"+(this.digitWidth-(2*this.digitPadding))+"px; "+
+                       "padding:"+this.digitPadding+"px; font-size:"+(this.digitHeight-(2*this.digitPadding))+"px; "+
+                       "background:black; color:white; text-align:center; "+this.fontStyle,
+        columns:       "position:relative; float:left; overflow:hidden;"+
+                       "height:"+this.digitHeight+"px; width:"+this.digitWidth+"px;",
+        highlight:     "position:absolute; background:white; opacity:0.25; filter:alpha(opacity=25); width:100%; left:0px;",
+        lowlight:      "position:absolute; background:black; opacity:0.25; filter:alpha(opacity=25); width:100%; left:0px;",
+        sidehighlight: "position:absolute; background:white; opacity:0.50; filter:alpha(opacity=50); height:100%; top:0px;",
+        sidelowlight:  "position:absolute; background:black; opacity:0.50; filter:alpha(opacity=50); height:100%; top:0px;"
+    };
+
+    var highlights = [
+        "top:20%;   height:32%;" + style.highlight,
+        "top:27.5%; height:16%;" + style.highlight,
+        "top:32.5%; height:6%;"  + style.highlight,
+        "right:0%;  width:6%;"   + style.sidelowlight,
+        "left:0%;   width:4%;"   + style.sidehighlight,
+        "top:0%;    height:14%;" + style.lowlight,
+        "bottom:0%; height:25%;" + style.lowlight,
+        "bottom:0%; height:8%;"  + style.lowlight
+    ];
+
+    this.setDigitValue = function (digit, val, frac) {
+        var di = digitInfo[digit];
+        var px = Math.floor(this.digitHeight * frac);
+        px = px + di.offset;
+        if (val != di.last_val) {
+
+            // swaps digitA and digitB
+            var tmp = di.digitA;
+            di.digitA = di.digitB;
+            di.digitB = tmp;
+
+            di.digitA.innerHTML = val;
+            di.digitB.innerHTML = ((parseInt(val, 2)) % 2).toString(2);
+            di.last_val = val;
+        }
+        if (px != di.last_px) {
+            di.digitA.style.top = (0-px)+"px";
+            di.digitB.style.top = (0-px+this.digitHeight)+"px";
+            di.last_px = px;
+        }
+    };
+
+
+    this.set = function (inVal) {
+        if (inVal < 0) throw "ERROR: Odometer value cannot be negative.";
+        this.value = inVal;
+
+        var numb = Math.floor(inVal);
+        var frac = inVal - numb;
+        numb = numb.toString(2); // convert to bin
+        //numb = String(numb);
+
+        for (var i=0; i < this.digits; i++) {
+            var num = numb.substring(numb.length-i-1, numb.length-i) || 0;
+            this.setDigitValue(this.digits-i-1, num, frac);
+            if (num != '1') {
+                frac = 0;
+            }
+        }
+    };
+
+    this.get = function () {
+        return(this.value);
+    };
+
+
+    var odometerDiv = document.createElement("div")
+    odometerDiv.setAttribute("id","odometer");
+    odometerDiv.style.cssText="text-align: left";
+    parentDiv.appendChild(odometerDiv);
+
+    var digitInfo = new Array();
+    for (var i=0; i < this.digits; i++) {
+        var digitDivA = document.createElement("div");
+        digitDivA.setAttribute("id","odometer_digit_"+i+"a");
+        digitDivA.style.cssText=style.digits;
+
+        var digitDivB = document.createElement("div");
+        digitDivB.setAttribute("id","odometer_digit_"+i+"b");
+        digitDivB.style.cssText = style.digits;
+
+        var digitColDiv = document.createElement("div");
+        digitColDiv.style.cssText = style.columns;
+
+        digitColDiv.appendChild(digitDivB);
+        digitColDiv.appendChild(digitDivA);
+
+        for (var j in highlights) {
+            var hdiv = document.createElement("div");
+            hdiv.innerHTML="<p></p>"; // For Dumb IE
+            hdiv.style.cssText = highlights[j];
+            digitColDiv.appendChild(hdiv);
+        }
+        odometerDiv.appendChild(digitColDiv);
+    var offset = Math.floor(Math.random()*this.bustedness);
+    digitInfo.push({digitA:digitDivA, digitB:digitDivB, last_val:-1, last_px: -1, offset:offset});
+    };
+
+
+    if (this.value >= 0) this.set(this.value);
+}
+
+
+
+function OdometerDec (parentDiv,opts) {
+    if (!parentDiv) throw "ERROR: Odometer object must be past a document element.";
+
+    this.digits       = 6;
+    this.digitHeight  = 40;
+    this.digitPadding = 0;
+    this.digitWidth   = 30;
+    this.bustedness   = 2;
+    this.fontStyle    = "font-family: Courier New, Courier, monospace; font-weight: 900;";
+    this.value        = -1;
+
+    for (var key in opts) { this[key] = opts[key]; }
+
+    var style = {
+        digits:        "position:absolute; height:"+this.digitHeight+"px; width:"+(this.digitWidth-(2*this.digitPadding))+"px; "+
+                       "padding:"+this.digitPadding+"px; font-size:"+(this.digitHeight-(2*this.digitPadding))+"px; "+
+                       "background:black; color:white; text-align:center; "+this.fontStyle,
+        columns:       "position:relative; float:left; overflow:hidden;"+
+                       "height:"+this.digitHeight+"px; width:"+this.digitWidth+"px;",
+        highlight:     "position:absolute; background:white; opacity:0.25; filter:alpha(opacity=25); width:100%; left:0px;",
+        lowlight:      "position:absolute; background:black; opacity:0.25; filter:alpha(opacity=25); width:100%; left:0px;",
+        sidehighlight: "position:absolute; background:white; opacity:0.50; filter:alpha(opacity=50); height:100%; top:0px;",
+        sidelowlight:  "position:absolute; background:black; opacity:0.50; filter:alpha(opacity=50); height:100%; top:0px;"
+    };
+
+    var highlights = [
+        "top:20%;   height:32%;" + style.highlight,
+        "top:27.5%; height:16%;" + style.highlight,
+        "top:32.5%; height:6%;"  + style.highlight,
+        "right:0%;  width:6%;"   + style.sidelowlight,
+        "left:0%;   width:4%;"   + style.sidehighlight,
+        "top:0%;    height:14%;" + style.lowlight,
+        "bottom:0%; height:25%;" + style.lowlight,
+        "bottom:0%; height:8%;"  + style.lowlight
+    ];
+
+    this.setDigitValue = function (digit, val, frac) {
+    var di = digitInfo[digit];
+        var px = Math.floor(this.digitHeight * frac);
+    px = px + di.offset;
+    if (val != di.last_val) {
+        var tmp = di.digitA;
+        di.digitA = di.digitB;
+        di.digitB = tmp;
+            di.digitA.innerHTML = val;
+            di.digitB.innerHTML = (Number(val)) % 10;
+        di.last_val = val;
+    }
+    if (px != di.last_px) {
+            di.digitA.style.top = (0-px)+"px";
+            di.digitB.style.top = (0-px+this.digitHeight)+"px";
+        di.last_px = px;
+    }
+    };
+
+
+    this.set = function (inVal) {
+        if (inVal < 0) throw "ERROR: Odometer value cannot be negative.";
+    this.value = inVal;
+        var numb = Math.floor(inVal);
+        var frac = inVal - numb;
+    numb = String(numb);
+        for (var i=0; i < this.digits; i++) {
+            var num = numb.substring(numb.length-i-1, numb.length-i) || 0;
+            this.setDigitValue(this.digits-i-1, num, frac);
+            if (num != 9) frac = 0;
+        }
+    };
+
+    this.get = function () {
+        return(this.value);
+    };
+
+
+    var odometerDiv = document.createElement("div")
+    odometerDiv.setAttribute("id","odometer");
+    odometerDiv.style.cssText="text-align: left";
+    parentDiv.appendChild(odometerDiv);
+
+    var digitInfo = new Array();
+    for (var i=0; i < this.digits; i++) {
+        var digitDivA = document.createElement("div");
+        digitDivA.setAttribute("id","odometer_digit_"+i+"a");
+        digitDivA.style.cssText=style.digits;
+
+        var digitDivB = document.createElement("div");
+        digitDivB.setAttribute("id","odometer_digit_"+i+"b");
+        digitDivB.style.cssText = style.digits;
+
+        var digitColDiv = document.createElement("div");
+        digitColDiv.style.cssText = style.columns;
+
+        digitColDiv.appendChild(digitDivB);
+        digitColDiv.appendChild(digitDivA);
+
+        for (var j in highlights) {
+            var hdiv = document.createElement("div");
+            hdiv.innerHTML="<p></p>"; // For Dumb IE
+            hdiv.style.cssText = highlights[j];
+            digitColDiv.appendChild(hdiv);
+        }
+        odometerDiv.appendChild(digitColDiv);
+    var offset = Math.floor(Math.random()*this.bustedness);
+    digitInfo.push({digitA:digitDivA, digitB:digitDivB, last_val:-1, last_px: -1, offset:offset});
+    };
+
+
+
+    if (this.value >= 0) this.set(this.value);
+}
+
+
+
+
+
+
+
+
+// originally in odometerdisplay.js:
+var n = 0;
+var myOdometerDec, myOdometerBin, myOdometerHex;
+var keeprunning = false;
+function runodometers () {
+    keeprunning = true;
+    update();
+}
+function startodometers() {
+    myOdometerDec = new OdometerDec(document.getElementById("odometerDecDiv"), {value: n, digits: 8});
+    myOdometerBin = new OdometerBin(document.getElementById("odometerBinDiv"), {value: n, digits: 8});
+    myOdometerHex = new OdometerHex(document.getElementById("odometerHexDiv"), {value: n, digits: 8});
+    runodometers();
+}
+function stopodometers() {
+    keeprunning = false;
+}
+function update () {
+    n=n+0.5
+    myOdometerDec.set(n);
+    myOdometerBin.set(n);
+    myOdometerHex.set(n);
+
+    if (myOdometerBin.get() > 255) {
+        n=0;
+        myOdometerDec.set(0);
+        myOdometerBin.set(0);
+        myOdometerHex.set(0);
+    }
+
+    if (keeprunning) {
+        setTimeout("update()", 250);
+    }
+}
+
+
+
+
+
 
 //============================================================================//
 //  Gavin Brock's CSS/JavaScript Animated Odometer
@@ -417,9 +840,9 @@ function runodometers () {
     update();
 }
 function startodometers() {
-    myOdometerDec = new OdometerDec(document.getElementById("odometerDecDiv"), {value: n, digits: 8});
-    myOdometerBin = new OdometerBin(document.getElementById("odometerBinDiv"), {value: n, digits: 8});
-    myOdometerHex = new OdometerHex(document.getElementById("odometerHexDiv"), {value: n, digits: 8});
+    myOdometerDec = new OdometerDec(document.getElementById("odometerDecDiv"), {value: n, digits: 14});
+    myOdometerBin = new OdometerBin(document.getElementById("odometerBinDiv"), {value: n, digits: 14});
+    myOdometerHex = new OdometerHex(document.getElementById("odometerHexDiv"), {value: n, digits: 14});
     runodometers();
 }
 function stopodometers() {
@@ -438,13 +861,35 @@ function update () {
         myOdometerHex.set(0);
     }
 
+    // Update the text in the setnum text field to the whole number version of decimal value:
+    document.getElementById('setnum').value = Math.floor(n);
+
+
     if (keeprunning) {
         setTimeout("update()", 250);
     }
 }
 
 
+function incrementOdometers() {
+    n = Math.floor(myOdometerDec.get() + 1); // make it so that 0.5 increments to 1, not 1.5
+    myOdometerDec.set(n); 
+    myOdometerBin.set(n); 
+    myOdometerHex.set(n);
 
+    // Update the text in the setnum text field to the whole number version of decimal value:
+    document.getElementById('setnum').value = Math.floor(n);
+}
+
+function decrementOdometers() {
+    n = Math.floor(myOdometerDec.get() - 1); // make it so that 1.5 decrements to 0, not 0.5
+    myOdometerDec.set(n); 
+    myOdometerBin.set(n); 
+    myOdometerHex.set(n);
+
+    // Update the text in the setnum text field to the whole number version of decimal value:
+    document.getElementById('setnum').value = Math.floor(n);
+}
 
 
 
