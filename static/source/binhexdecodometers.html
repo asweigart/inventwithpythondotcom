@@ -872,20 +872,31 @@ function update () {
 
 
 function incrementOdometers() {
-    n = Math.floor(myOdometerDec.get() + 1); // make it so that 0.5 increments to 1, not 1.5
+    n = myOdometerDec.get() + 0.5;
     myOdometerDec.set(n); 
     myOdometerBin.set(n); 
     myOdometerHex.set(n);
 
+    if (n % 1 === 0.5) {
+        // n has a 0.5 part, so animate it going up another 0.5:
+        setTimeout("n += 0.5; myOdometerDec.set(n); myOdometerBin.set(n); myOdometerHex.set(n);", 250);
+    }
+
+
     // Update the text in the setnum text field to the whole number version of decimal value:
-    document.getElementById('setnum').value = Math.floor(n);
+    document.getElementById('setnum').value = Math.ceil(n);
 }
 
 function decrementOdometers() {
-    n = Math.floor(myOdometerDec.get() - 1); // make it so that 1.5 decrements to 0, not 0.5
+    n = myOdometerDec.get() - 0.5;
     myOdometerDec.set(n); 
     myOdometerBin.set(n); 
     myOdometerHex.set(n);
+
+    if (n % 1 === 0.5) {
+        // n has a 0.5 part, so animate it going up another 0.5:
+        setTimeout("n -= 0.5; myOdometerDec.set(n); myOdometerBin.set(n); myOdometerHex.set(n);", 250);
+    }
 
     // Update the text in the setnum text field to the whole number version of decimal value:
     document.getElementById('setnum').value = Math.floor(n);
