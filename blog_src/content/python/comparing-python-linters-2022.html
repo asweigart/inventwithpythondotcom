@@ -1,0 +1,334 @@
+<html>
+    <head>
+        <title>Python Linter Comparison 2022: Pylint vs Pyflakes vs Flake8 vs autopep8 vs Bandit vs Prospector vs Pylama vs Pyroma vs Black vs Mypy vs Radon vs mccabe</title>
+        <meta name="tags" content="" />
+        <meta name="date" content="2022-11-19 12:00" />
+        <meta name="summary" content="<p>As you can tell from the lengthy title, there are many linting tools for Python. Some of them have near-identical names as each other. In November 2022, I upgraded my text editor to Sublime Text 4 and then took the opportunity to spend a few hours reviewing all of the Python linters I could find. After personally reviewing all of them, I've selected the following as must-haves: Pyflakes, Mypy, and Black. If you'd like additional tools, I also liked: Radon, Pyroma, and docformatter. I'm using <a href=&quot;https://docs.python.org/3.12/whatsnew/3.12.html&quot;>Python 3.12.0</a>. I don't care for my linter to point out when I stray from the certain dictates in the <a href=&quot;http://www.python.org/dev/peps/pep-0008/&quot;>PEP 8</a> document, and my linter choices reflect that. You might have different needs and values than I, so in this blog post I give my reasoning and views for each linter.</p>" />
+    </head>
+    <body>
+
+<p>As you can tell from the lengthy title, there are many linting tools for Python. Some of them have near-identical names as each other. In November 2022, I upgraded my text editor to Sublime Text 4 and then took the opportunity to spend a few hours reviewing all of the Python linters I could find. After personally reviewing all of them, I've selected the following as must-haves: Pyflakes, Mypy, and Black. If you'd like additional tools, I also liked: Radon, Pyroma, and docformatter. I'm using <a href="https://docs.python.org/3.12/whatsnew/3.12.html">Python 3.12.0</a>. I don't care for my linter to point out when I stray from the certain dictates in the <a href="http://www.python.org/dev/peps/pep-0008/">PEP 8</a> document, and my linter choices reflect that. You might have different needs and values than I, so in this blog post I give my reasoning and views for each linter.</p>
+
+<p>You can skip most of this discussion by using an IDE such as <a href="https://www.jetbrains.com/pycharm/">PyCharm Community Edition</a> and <a href="https://code.visualstudio.com/">Microsoft Visual Studio Code</a>, which already have integrated linters set up for you. But this blog post is good if you want to customize your development environment.</p>
+
+<p><i>Linter</i> is an overly broad term for a tool that examines your source code without running it (aka <i>static code analysis</i>) in order to point out possible issues. This early warning system speeds up your development, as you can fix them early in the development process rather than wait for QA or users to point them out. The term linter comes from how dryer lint traps can remove small bits of fluff from clothing. I've broken up these tools into the following categories:</p>
+
+<ul>
+    <li><i>Type checkers</i> verify that your program follows their own type annotations (aka type hints). (Mypy, Pyright, Pyre, Pytype) </li>
+    <li><i>Error linters</i> point out syntax errors or other code that will result in unhandled exceptions and crashes. (Pylint, Pyflakes, Flake8)</li>
+    <li><i>Style linters</i> point out issues that don't cause bugs but make the code less readable or are not in line with style guides such as Python's <a href="http://www.python.org/dev/peps/pep-0008/">PEP 8</a> document. (Pylint, Flake8)</li>
+    <li><i>Packaging linters</i> point out issues related to packaging your code for distribution on PyPI with properly formatted descriptions, versions, and meta data fields. (Pyroma)</li>
+    <li><i>Security linters</i> point out possible security vulnerabilities in your code. (Bandit)</li>
+    <li><i>Code formatters</i> change the style of your code (mostly revolving around proper whitespace) without affecting the behavior of the program. (Black)</li>
+    <li><i>Dead code linters</i> remove commented-out code from your program, since this practice should be skipped in favor of proper version control. (Vulture, eradicate) </li>
+    <li><i>Docstring linters/formatters</i> point out (and may correctly format) style issues in docstrings that aren't in line with Python's <a href="https://peps.python.org/pep-0257/">PEP 257</a> document. (pydocstringformatter, docformatter)</li>
+    <li><i>Complexity analyzers</i> point out code that is so complex that they can affect readability. (mccabe, Radon)</li>
+</ul>
+
+
+
+<p>Many of these Python packages include other Python packages, as explained in this table:</p>
+
+<table class="table">
+    <tr><td>This Package...</td><td>...Includes These Packages</td></tr>
+    <tr><td><a href="https://pypi.org/project/flake8/">flake8</a></td><td><a href="https://pypi.org/project/pyflakes/">Pyflakes</a>, <a href="https://pypi.org/project/pycodestyle/">pycodestyle</a>, <a href="https://pypi.org/project/mccabe/">mccabe</a></td></tr>
+    <tr><td><a href="https://pypi.org/project/autopep8/">autopep8</a></td><td><a href="https://pypi.org/project/pycodestyle/">pycodestyle</a></td></tr>
+    <tr><td><a href="https://pypi.org/project/pylama/">Pylama</a></td><td><a href="https://pypi.org/project/pycodestyle/">pycodestyle</a>, <a href="https://pypi.org/project/pydocstyle/">pydocstyle</a>, <a href="https://pypi.org/project/pyflakes/">Pyflakes</a>, <a href="https://pypi.org/project/mccabe/">mccabe</a>, <a href="https://pypi.org/project/pylint/">Pylint</a>, <a href="https://pypi.org/project/radon/">Radon</a>, <a href="https://pypi.org/project/eradicate/">eradicate</a>, <a href="https://pypi.org/project/mypy/">Mypy</a>, <a href="https://pypi.org/project/vulture/">Vulture</a></td></tr>
+    <tr><td><a href="https://pypi.org/project/prospector">Prospector</a></td><td><a href="https://pypi.org/project/pylint">Pylint</a>, <a href="https://pypi.org/project/flake8">flake8</a> (including <a href="https://pypi.org/project/pyflakes/">Pyflakes</a>, <a href="https://pypi.org/project/pycodestyle/">pycodestyle</a>, <a href="https://pypi.org/project/mccabe/">mccabe</a>), <a href="https://pypi.org/project/dodgy/">dodgy</a>, <a href="https://pypi.org/project/isort/">isort</a>, <a href="https://pypi.org/project/pydocstyle/">pydocstyle</a>, <a href="https://pypi.org/project/pep8-naming/">pep8-naming</a></td></tr>
+</table>
+
+
+
+
+<h2>Disqualified Packages</h2>
+
+<p>Out of the running immediately is <a href="https://pypi.org/project/PyChecker/">PyChecker</a> because it hasn't been updated since 2003, so I skipped evaluating it. The same goes for <a href="https://pypi.org/project/pylava/">Pylava</a>, a fork of Pylama that hasn't been updated since September 2020. I'd just use the original Pylama instead.</p>
+
+
+
+
+<h2>Mypy (Type Checker)</h2>
+
+<p>Mypy is not a linter but rather a static type checking tool. You should install and use it no matter what Python linter you use. Mypy examines the type hints (aka type annotations) you put on your functions and variables and ensures the rest of the program correctly follows them. It's a great way to find bugs early. I wrote <a href="https://inventwithpython.com/blog/2019/11/24/type-hints-for-busy-python-programmers/">a blog post on Python type hints</a> if you need to learn more. Mypy was the first static type checker for Python and has been suitable for my needs; I haven't evaluated the others: <a href="https://github.com/microsoft/pyright">Pyright</a> from Microsoft, <a href="https://pypi.org/project/pyre-check/">Pyre</a> from Facebook (installed with <code>pip install pyre-check</code> and not <code>pip install pyre</code>), and <A href="https://pypi.org/project/pytype/">Pytype</a> from Google.</A>
+
+
+
+
+<h2>Pyflakes (Error Linter)</h2>
+
+<p>From the <a href="https://pypi.org/project/pyflakes/">Pyflakes</a> project page:</p>
+
+<blockquote>Pyflakes makes a simple promise: it will never complain about style, and it will try very, very hard to never emit false positives. Pyflakes is also faster than <a href="https://pylint.pycqa.org/">Pylint</a>. This is largely because Pyflakes only examines the syntax tree of each file individually. As a consequence, Pyflakes is more limited in the types of things it can check. If you like Pyflakes but also want stylistic checks, you want <a href="https://pypi.org/project/flake8/">flake8</a>, which combines Pyflakes with style checks against <a href="https://www.python.org/dev/peps/pep-0008/">PEP 8</a> and adds per-project configuration ability.</blockquote>
+
+
+
+
+<h2>Pylint (Error and Style Linter)</h2>
+
+<p>From the Pylint project page:</p>
+
+<blockquote>Pylint is a static code analyzer for Python 2 or 3. Pylint analyses your code without actually running it. It checks for errors, enforces a coding standard, looks for code smells, and can make suggestions about how the code could be refactored.</blockquote>
+
+<p><a href="https://pylint.pycqa.org/">Pylint has extensive documentation.</a></p>
+
+<p>You can see the kinds of code smells that Pylint points out in this example output:</p>
+
+<pre>example.py:609:35: C0103: Argument name "n" doesn't conform to snake_case naming style (invalid-name)
+example.py:642:15: R1701: Consider merging these isinstance calls to isinstance(PAUSE, (float, int)) (consider-merging-isinstance)
+example.py:655:4: R1705: Unnecessary "elif" after "return", remove the leading "el" from "elif" (no-else-return)
+example.py:670:12: R1705: Unnecessary "else" after "return", remove the "else" and de-indent the code inside it (no-else-return)
+example.py:675:12: W0707: Consider explicitly re-raising using 'except Exception as exc' and 'raise ImageNotFoundException from exc' (raise-missing-from)
+example.py:686:20: C0209: Formatting a regular string which could be a f-string (consider-using-f-string)
+example.py:771:17: W0212: Access to a protected member _position of a client class (protected-access)
+example.py:1038:0: R0913: Too many arguments (7/5) (too-many-arguments)
+example.py:1168:47: E1306: Not enough arguments for format string (too-few-format-args)
+example.py:1418:0: R0914: Too many local variables (17/15) (too-many-locals)
+-----------------------------------
+Your code has been rated at 3.42/10</pre>
+
+<p>I prefer Pyflakes to Pylint, though running <code>pylint --errors-only</code> cuts out the style suggestions and gives me output similar to Pyflakes. Pylint tends to be slower than Pyflakes and flake8 as well as give more false positives. I'd use Pylint if you want to be especially thorough with your code.</p>
+
+
+
+
+<h2>pycodestyle (Style Linter)</h2>
+
+<p>From the <a href="https://pypi.org/projects/pycodestyle">pycodestyle</a> project page:</p>
+
+<blockquote>pycodestyle is a tool to check your Python code against some of the style conventions in <a href="http://www.python.org/dev/peps/pep-0008/">PEP 8</a>. This package used to be called pep8 but was renamed to pycodestyle to reduce confusion.</blockquote>
+
+<p>pycodestyle is included with <a href="https://pypi.org/project/flake8/">flake8</a>, <a href="https://pypi.org/project/autopep8/">autopep8</a>, <a href="https://pypi.org/project/pylama/">Pylama</a>, and <a href="https://pypi.org/project/prospector">Prospector</a>.</p>
+
+
+
+
+<h2>Black (Code Formatter)</h2>
+
+<p><a href="https://pypi.org/project/black/">Black</a> is not a linter but rather a code formatter that changes spacing and other cosmetic aspects of your source code without changing the behavior of your program. You should install it and use it no matter what Python linter you use. I prefer to run it with the command-line arguments <code>black -l 120 -S yourScript.py</code> so that it formats <i>yourScript.py</i> with a line length of 120 (the default is 88) and doesn't change the quotes for your strings (I like using single quote string but Black formats them into double quote strings.) I cover it in <a href="https://inventwithpython.com/beyond/chapter3.html">Chapter 3 of my free book, Beyond the Basic Stuff with Python</a></p>
+
+
+
+
+<h2>autopep8 (Style Linter and Formatter)</h2>
+
+<p><a href="https://pypi.org/projects/autopep8">autopep8</a> uses <a href="https://pypi.org/projects/pycodestyle">pycodestyle</a> to detect style issues and then automatically correct them. I've personally preferred the way <a href="https://pypi.org/project/black/">Black</a> formats code over pycodestyle. </p>
+
+
+
+
+
+<h2>pyupgrade (Style Linter)</h2>
+
+<p>I'm wary of <a href="https://pypi.org/project/pyupgrade/">pyupgrade</a>. On the one hand, it seems to update Python syntax to more modern syntax that later versions of Python use. On the other hand, the documentation is spotty and there's no way to see what changes it would make before it makes them. The project does seem to be maintained with regular releases, though I'd want to carefully evaluate it before recommending it to others.</p>
+
+
+
+
+
+<h2>mccabe (Complexity Analysis)</h2>
+
+<p>mccabe is not a traditional Python linter, but rather measures cyclomatic complexity. <a href="https://en.wikipedia.org/wiki/Cyclomatic_complexity">Cyclomatic complexity</a> (also called McCabe complexity after its creator in 1976) measures the number of linearly independent paths through some source code. Functions and methods with a score greater than 10 are generally considered "too complicated" and should be simplified. In this case, simplification means using shorter functions and removing duplicate code. Take the cyclomatic complexity score with a grain of salt; if anything, just use the score as an indicator of what parts of your source code might need a second look at. Don't use the score as a hard rule for what needs to be simplified; you'll end up with a program with overloaded with tiny functions that are far more unreadable than what it was before.</p>
+
+<p>mccabe is installed with <a href="https://pypi.org/project/flake8/">flake8</a>, <a href="https://pypi.org/project/pylama/">Pylama</a>, and <a href="https://pypi.org/project/prospector">Prospector</a>.</p>
+
+<p>After installing, run the program with <code>python -m --min 10 mccabe example.py</code>. Some example output of functions and methods with a minimum score of 10 would look like the following:</p>
+
+<pre>TryExcept 182 10
+646:0: '_normalizeXYArgs' 13
+826:0: '_normalizeButton' 10
+1418:0: '_mouseMoveDrag' 11
+1899:0: '_tokenizeCommandStr' 19
+2025:0: '_runCommandList' 21</pre>
+
+<p>Ooof, I should take a look at that <code>_runCommandList</code> function I wrote and see if I can simplify it.</p>
+
+
+
+
+<h2>Radon (Complexity Analysis)</h2>
+
+<p><a href="https://pypi.org/project/radon/">Radon</a> includes the <a href="https://pypi.org/project/mccabe/">mccabe</a> package to perform cyclomatic complexity measurement, but also has options for measuring LOC ("lines of code"), the <a href="https://en.wikipedia.org/wiki/Halstead_complexity_measures">Halstead metrics</a> (based on number of operators and operands to calculate the "difficulty" of understanding the code), and a Maintainability Index (using the same metrics formula used by the Microsoft Visual Studio IDE). How these metrics are calculated is given in <a href="https://radon.readthedocs.io/en/latest/intro.html">the documentation</a>.</p>
+
+<p>For example, I ran these Radon measurements on some of my code, and the output looks like this:</p>
+
+<pre>C:\Users\Al\Desktop\lintercmp>radon cc C:\github\pyautogui\pyautogui\__init__.py
+\github\pyautogui\pyautogui\__init__.py
+    F 2025:0 _runCommandList - D
+    F 1418:0 _mouseMoveDrag - C
+    F 1899:0 _tokenizeCommandStr - C
+    F 646:0 _normalizeXYArgs - C
+    F 826:0 _normalizeButton - B
+    F 1733:0 displayMousePosition - B
+--SNIP--
+    F 2157:0 getInfo - A
+    C 28:0 PyAutoGUIException - A
+    C 38:0 FailSafeException - A
+    C 48:0 ImageNotFoundException - A
+
+C:\Users\Al\Desktop\lintercmp>radon raw C:\github\pyautogui\pyautogui\__init__.py
+\github\pyautogui\pyautogui\__init__.py
+    LOC: 2163
+    LLOC: 821
+    SLOC: 1048
+    Comments: 154
+    Single comments: 117
+    Multi: 593
+    Blank: 405
+    - Comment Stats
+        (C % L): 7%
+        (C % S): 15%
+        (C + M % L): 35%
+
+C:\Users\Al\Desktop\lintercmp>radon hal C:\github\pyautogui\pyautogui\__init__.py
+\github\pyautogui\pyautogui\__init__.py:
+    h1: 19
+    h2: 329
+    N1: 268
+    N2: 524
+    vocabulary: 348
+    length: 792
+    calculated_length: 2831.7901243143224
+    volume: 6686.811248712193
+    difficulty: 15.130699088145896
+    effort: 101176.1288634933
+    time: 5620.89604797185
+    bugs: 2.2289370829040647
+
+C:\Users\Al\Desktop\lintercmp>radon mi C:\github\pyautogui\pyautogui\__init__.py
+\github\pyautogui\pyautogui\__init__.py - B</pre>
+
+<p>You'll need to peruse the documentation to figure out what exactly means, as it isn't very readable (funny enough). I wouldn't say Radon is as necessary as a type checker or error linter, but it can provide useful information on the general size of your code. Be sure not to confuse metrics with actual quality.</p>
+
+
+
+
+<h2>flake8 (Error & Style Linter, Complexity Analysis)</h2>
+
+<p><a href="https://pypi.org/project/flake8/">Flake8</a> is a bundle of <a href="https://pypi.org/project/pyflakes/">Pyflakes</a>, <a href="https://pypi.org/project/pycodestyle/">pycodestyle</a>, and <a href="https://pypi.org/project/mccabe/">mccabe</a> and merges the output of these programs together. It's like <a href="https://pypi.org/project/pylint/">Pylint</a> but with the <a href="https://pypi.org/project/mccabe/">mccabe</a> package included as well. Use this if you want to run these several tools at the same time.</p>
+
+
+
+
+<h2>Pylama ("Kitchen Sink")</h2>
+
+<p>Pylama is the kitchen sink, containing several linters and other tools: <a href="https://pypi.org/project/pycodestyle/">pycodestyle</a> (style linter), <a href="https://pypi.org/project/pydocstyle/">pydocstyle</a> (docstring linter), <a href="https://pypi.org/project/pyflakes/">Pyflakes</a> (error linter), <a href="https://pypi.org/project/mccabe/">mccabe</a> (complexity analysis), <a href="https://pypi.org/project/pylint/">Pylint</a> (error and style linter), <a href="https://pypi.org/project/radon/">Radon</a> (complexity analysis), <a href="https://pypi.org/project/eradicate/">eradicate</a> (dead code linter), <a href="https://pypi.org/project/mypy/">Mypy</a> (type checker), <a href="https://pypi.org/project/vulture/">Vulture</a> (dead code linter).</p>
+
+<p>I'm not sure how practical it is to have all of these tools run on your source code, and it definitely needs fine tuning to limit the false positives. But if you looked at this blog post and wanted to download all of these tools in one package, Pylama does this. Pylama and Prospector are similar "kitchen sink" packages, but as of November 2022 seem to require different versions of their bundled packages and can't both be installed at the same time.</p>
+
+
+
+
+<h2>Prospector ("Kitchen Sink")</h2>
+
+<p>Prospector is also a bundle of several tools, <a href="https://prospector.landscape.io/en/latest/supported_tools.html">outlined in their documentation</a>. Installing Prospector installs <a href="https://pypi.org/project/pylint/">Pylint</a> (error and style linter), <a href="https://pypi.org/project/pycodestyle/">pycodestyle</a> (style linter), <a href="https://pypi.org/project/pyflakes/">Pyflakes</a> (error linter), <a href="https://pypi.org/project/mccabe/">mccabe</a> (complexity analysis), <a href="https://pypi.org/project/dodgy/#history">dodgy</a> (security linter), and <a href="https://pypi.org/project/pydocstyle/">pydocstyle</a> (docstring linter). There are also other packages you can optionally install as well. Like Pylama, Prospector is useful to install if you want several different tools to run with one command. Pylama and Prospector are similar "kitchen sink" packages, but as of November 2022 seem to require different versions of their bundled packages and can't both be installed at the same time.</p>
+
+
+
+
+<h2>Bandit (Security Linter)</h2>
+
+<p>Bandit can detect some security issues in your Python code, <a href="https://bandit.readthedocs.io/en/latest/plugins/index.html#complete-test-plugin-listing">as listed on their website</a>. In my limited testing, I found that it's mostly false positives but I can see this as a good sanity test. You'll want to create your own .bandit configuration file that skips the B601 test that alerts you to the use of <code>assert</code> statements (by far the most common "security issue" that Bandit pointed out.) I haven't found any other such security linters for Python.</p>
+
+
+
+
+<h2>Dodgy (Security Linter)</h2>
+
+<p><a href="https://pypi.org/project/dodgy/">Dodgy</a> is "designed to detect things such as accidental SCM diff checkins, or passwords or secret keys hard coded into files." This might be nice to have, but the project hasn't been updated since December 2019 and I couldn't get it to trigger anything. I stored valid credit card numbers in variables, had a variable named "password", but nothing seemed to raise any warnings from Dodgy. <a href="https://github.com/landscapeio/dodgy">The README also claims</a> "This is a very early version with minimal functionality right now, but will be improved over time." I don't see Dodgy as a necessary tool.</p>
+
+<p>When my source code cleared with no issues, Dodgy still outputted the following:</p>
+
+<pre>{
+  "warnings": []
+}</pre>
+
+<p>Most tools output nothing when there are no issues to keep from polluting the output stream with unnecessary text.</p>
+
+
+
+
+<h2>Pyroma (Packaging Linter)</h2>
+
+<p>If you've seen projects on PyPI that say "The author of this package has not provided a project description" then you've seen a project that would benefit from <a href="https://pypi.org/project/pyroma/">Pyroma</a>. From the <a href="https://pypi.org/project/pyroma/">Pyroma project description</a>:</p>
+
+<blockquote>Pyroma rhymes with aroma, and is a product aimed at giving a rating of how well a Python project complies with the best practices of the Python packaging ecosystem, primarily PyPI, pip, Distribute etc, as well as a list of issues that could be improved.</blockquote>
+
+<p>The project description lists what Pyroma checks for. While they are all fairly basic, they're easy to miss when putting together a package for uploading to PyPI. I haven't found any other "packaging linters," so Pyroma is a must-have for me when I intend distribute your code.</p>
+
+
+
+
+<h2>Vulture (Dead Code Linter)</h2>
+
+<p>Vulture detects unused variables, functions, and methods. It generated a high number of false positives for me, so I find its usefulness limited.</p>
+
+
+
+
+<h2>eradicate (Dead Code Linter/Remove)</h2>
+
+<p>eradicate can find (and also remove) commented out code. I had trouble getting it to run on Windows: the <code>-m</code> doesn't work, forcing you to enter the full name of the eradicate Python script (which confusingly doesn't end in .py), and you can't run eradicate on a folder of files or pass a wildcard to have it run on multiple files. I also don't necessarily agree that commented-out code has no place if you use source control. Personally, I'd pass on eradicate.</p>
+
+
+<h2>autoflake (Dead Code Linter)</h2>
+
+<p><a href="https://pypi.org/pypi/autoflake">autoflake</a> is extremely limited and has a poor choice of name: It removes unused standard library imports and unnecessary <code>pass</code> statements. That's it. The name comes from the fact that it uses <a href="https://pypi.org/pypi/pyflakes">Pyflakes</a> to do this.</p>
+
+<p>I'd pass on this. Pyflakes, flake8, or the other linters can already point out unused imports, so a dedicated package to do this seems redundant to me.</p>
+
+
+
+
+
+<h2>docformatter (Docstring Formatter)</h2>
+
+<p><a href="https://pypi.org/pypi/docformatter">From the project description</a>:</p>
+
+<blockquote>docformatter automatically formats docstrings to follow a subset of the PEP 257 conventions. Below are the relevant items quoted from PEP 257.</blockquote>
+
+<ul>
+    <li>For consistency, always use triple double quotes around docstrings.</li>
+    <li>Triple quotes are used even though the string fits on one line.</li>
+    <li>Multi-line docstrings consist of a summary line just like a one-line docstring, followed by a blank line, followed by a more elaborate description.</li>
+    <li>Unless the entire docstring fits on a line, place the closing quotes on a line by themselves.</li>
+</ul>
+
+<p>docformatter also handles some of the PEP 8 conventions.</p>
+
+<ul>
+    <li>Don’t write string literals that rely on significant trailing whitespace. Such trailing whitespace is visually indistinguishable and some editors (or more recently, reindent.py) will trim them.</li>
+</ul>
+
+
+<h2>pydocstringformatter (Docstring Formatter)</h2>
+
+<p><a href="https://pypi.org/pypi/pydocstringformatter">From the project description</a>:</p>
+
+<blockquote>A tool to automatically format Python docstrings to follow recommendations from PEP 8 and PEP 257. This project is heavily inspired by <a href="https://pypi.org/pypi/docformatter">docformatter</a>.</blockquote>
+
+<p>It seems to be much less popular than docformatter, though both are currently maintained. Continued from the description:</p>
+
+<blockquote>As such, the biggest difference between the two is that pydocstringformatter fixes some of the open issues we found in docformatter. In general, the output of both formatters (and any other docstring formatter) should be relatively similar.</blockquote>
+
+
+
+
+<h2>pydocstyle (Docstring Linter)</h2>
+
+<p><a href="https://pypi.org/project/pydocstyle/">pydocstyle</a> seems to be another docstring linter. It hasn't been updated since May 2021.</p>
+
+
+
+<h2>isort (Style Linter for Import Statements)</h2>
+
+<p><a href="https://pypi.org/project/isort/">isort</a> is bundled with <a href="https://pypi.org/project/prospector">Prospector</a>. From the project description:</p>
+
+<blockquote>"isort is a Python utility / library to sort imports alphabetically, and automatically separated into sections and by type."</blockquote>
+
+<p>This is interesting, but I could also see it occassionally causing problems when the order of import statements does matter for some subtle reason. I'd use it as a linter, but not as something that automatically formats the order of <code>import</code> statements.</p>
+
+
+
+
+</body>
+</html>
