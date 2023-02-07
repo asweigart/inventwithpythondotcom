@@ -43,7 +43,7 @@ def englishToPigLatin(message):
         # Separate the non-letters at the end of this word:
         suffixNonLetters = ''
         while not word[-1].isalpha():
-            suffixNonLetters += word[-1]
+            suffixNonLetters = word[-1] + suffixNonLetters
             word = word[:-1]
 
         # Remember if the word was in uppercase or titlecase.
