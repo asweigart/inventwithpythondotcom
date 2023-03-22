@@ -1,0 +1,75 @@
+<head>
+  <title>How to Run Pip From The Python Interactive Shell with pipfromrepl</title>
+  <meta name="tags" content="" />
+  <meta name="date" content="2022-11-20 12:00" />
+  <meta name="summary" content="<p>If you are an instructor leading a Python programming workshop, getting third-party <a href=&quot;https://pypi.org/&quot;>PyPI</a> packages installed on students' machines with pip has several hurdles: navigating the command-line, operating system differences, distinguishing between <code>pip</code> and <code>pip3</code>, dealing with multiple versions of Python, misconfigured PATH environment variables, and virtual environments are all possible pitfalls.</p>
+
+<p>You can avoid all of this and save time by using <a href=&quot;https://pypi.org/project/pipfromrepl/&quot;>pipfromrepl</a>, which allows you to install PyPI packages from the interactive shell. These <i>same</i> steps work no matter what the computer's Python setup is.</p>" />
+</head>
+<body>
+
+<blockquote>UPDATE March 22, 2023: I now recommend using the one-liner <code>import pip; pip.main(['install', 'module_name_here'])</code> module to install modules from the interactive shell rather than the instructions in this blog post. This code is easier to remember and works on Python versions 2.7 and 3.5+. The only downside is that it doesn't work on Python 3.4, in which case, use the instructions below. Here in 2023, however, the number of students working from 3.4 is near nonexistent so this is unlikely to be an issue.</blockquote>
+
+<p>If you are an instructor leading a Python programming workshop, getting third-party <a href="https://pypi.org/">PyPI</a> packages installed on students' machines with pip has several hurdles: navigating the command-line, operating system differences, distinguishing between <code>pip</code> and <code>pip3</code>, dealing with multiple versions of Python, misconfigured PATH environment variables, and virtual environments are all possible pitfalls.</p>
+
+<p>You can avoid all of this and save time by using <a href="https://pypi.org/project/pipfromrepl/">pipfromrepl</a>, which allows you to install PyPI packages from the interactive shell. These <i>same</i> steps work no matter what the computer's Python setup is.</p>
+
+<p>To install <code>pipfromrepl</code>, copy and paste the following into the interactive shell:</p>
+
+<pre>import subprocess, sys; subprocess.run([sys.executable, '-m', 'pip', 'install', 'pipfromrepl'])</pre>
+
+<p>This code runs the interactive shell's own Python interpreter to run the pip module to install pipfromrepl. The pipfromrepl module itself uses this same code to install other third-party packages, albeit with a simple set of functions.</p>
+
+<p>Once <code>pipfromrepl</code> is installed, you can begin to use its functions: <code>pipfromrepl.install()</code>, <code>pipfromrepl.list()</code>, and <code>pipfromrepl.uninstall()</code>.</p>
+
+<p>For example:</p>
+
+<pre>&gt;&gt;&gt; import pipfromrepl
+
+&gt;&gt;&gt; pipfromrepl.list()
+Package     Version Editable project location
+----------- ------- -------------------------
+pip         22.3.1
+pipfromrepl 0.1.0   C:\github\pipfromrepl
+setuptools  65.5.1
+wheel       0.37.1
+
+&gt;&gt;&gt; pipfromrepl.install('pymsgbox')
+Collecting pymsgbox
+  Using cached PyMsgBox-1.0.9-py3-none-any.whl
+Installing collected packages: pymsgbox
+Successfully installed pymsgbox-1.0.9
+
+&gt;&gt;&gt; pipfromrepl.list()
+Package     Version Editable project location
+----------- ------- -------------------------
+pip         22.3.1
+pipfromrepl 0.1.0   C:\github\pipfromrepl
+PyMsgBox    1.0.9
+setuptools  65.5.1
+wheel       0.37.1
+
+&gt;&gt;&gt; pipfromrepl.uninstall('pymsgbox')
+Found existing installation: PyMsgBox 1.0.9
+Uninstalling PyMsgBox-1.0.9:
+  Would remove:
+    c:\users\al\.virtualenvs\pipfromrepl-fxbqt5ki\lib\site-packages\pymsgbox-1.0.9.dist-info\*
+    c:\users\al\.virtualenvs\pipfromrepl-fxbqt5ki\lib\site-packages\pymsgbox\*
+Proceed (Y/n)?   Successfully uninstalled PyMsgBox-1.0.9
+</pre>
+
+<p>There's also a <code>pip()</code> function that lets you specify the command-line arguments you'd pass to pip:</p>
+
+<pre>&gt;&gt;&gt; import pipfromrepl
+
+&gt;&gt;&gt; pipfromrepl.pip('list')
+
+&gt;&gt;&gt; pipfromrepl.pip('install pymsgbox')
+
+&gt;&gt;&gt; pipfromrepl.pip('uninstall pymsgbox')</pre>
+
+<p>You must have pip installed to install third party modules. Pip comes with Python on Windows and macOS, but on Linux you may need to run <code>sudo apt-get install python3-pip</code> from a terminal window to install pip. This command requires the admin password to run.</p>
+
+
+</body>
+</html>
