@@ -12,7 +12,7 @@
 
 <p>But what are TOML files and why is a TOML parser being added to Python? This blog explains what TOML files look like, how they're used, and the Python code that lets you parse them.</p>
 
-<p>TOML stands for Tom's Obvious, Minimal Language. It is a way to structure data in a text file, much like what <a href="https://en.wikipedia.org/wiki/JSON">JSON</a>, <a href="https://en.wikipedia.org/wiki/XML">XML</a>, and <a href="https://en.wikipedia.org/wiki/YAML">YAML</a> files do. The TOML standard is set up so that it's easy for humans to write TOML files in a text editor for use as configuration files. Here's an example TOML file:</p>
+<p>TOML stands for Tom's Obvious, Minimal Language. It is a way to structure data in a text file, much like what <a href="https://en.wikipedia.org/wiki/JSON">JSON</a>, <a href="https://en.wikipedia.org/wiki/XML">XML</a>, and <a href="https://en.wikipedia.org/wiki/YAML">YAML</a> files do. The TOML standard is set up so that it's easy for humans to write TOML files in a text editor for use as configuration files. The syntax is very similar to .ini files on Windows. Here's an example TOML file:</p>
 
 <pre># My Dungeons & Dragons character.
 name = "Mordnilap"
@@ -30,7 +30,7 @@ fireball = 3
 featherFall = 2
 </pre>
 
-<p>With the TOML parser that will be in Python 3.11, you'll be able to parse this text and turn into the following Python dictionary:</p>
+<p>TOML files are designed to easily and unambiguously be parsed into a dictionary data structure. With the TOML parser that will be in Python 3.11, you'll be able to parse this text and turn into the following Python dictionary:</p>
 
 <div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">'class'</span><span class="p">:</span> <span class="s1">'Magic user'</span><span class="p">,</span>
  <span class="s1">'currentHP'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
@@ -43,28 +43,24 @@ featherFall = 2
 
 <p>Python already has standard library modules for parsing XML and JSON text (with the <code>xml</code> and <code>json</code> modules, respectively.) There are third-party modules for parsing TOML files, but Python 3.11 will include one in the standard library so that all Python programs can access it without the additional step of installing a third-party TOML parsing module.</p>
 
-<p>TOML files aren't specific to Python. TOML is just a format for text files, and programs written in any programming language can read them. But many tools in the Python ecosystem use the TOML format, so it's not a big surprise that a TOML parser is being added to the Python standard library.</p>
-
 <p>As you can see in the example TOML file above, TOML is a great format for structuring data for configuration files. It doesn't have same column-and-row format that an Excel spreadsheet or CSV file would use though.</p>
 
-<p>As you can see in the example TOML file above, TOML is a great format for structuring data for configuration files. It doesn't have same column-and-row format that an Excel spreadsheet or CSV file would use though.</p>
+<p>In Python 3.11, the TOML module will be named <code>tomllib</code>, since a third-party module named <code>toml</code> already exists. The TOML module in 3.11 will be based on <a href="https://pypi.org/project/toml/">the existing <code>toml</code> third-party module</a>.</p>
 
-<p>In Python 3.11, the TOML module will be named <code>tomllib</code>, since a third-party module named <code>toml</code> already exists. The TOML module in 3.11 will be based on <a href="https://pypi.org/project/tomli/">the existing <code>tomli</code> third-party module</a>.</p>
+<h2>Writing Python Code with tomllib</h2>
 
-<h2>Writing Python Code with tomli</h2>
+<p>You don't have to wait for Python 3.11 to be released to use it today. You can install the third-party <code>toml</code> package with the pip tool by running <code>pip3 install --user toml</code> in a Terminal window on macOS and Linux, or by running <code>pip install --user toml</code> in a Command Prompt window on Windows. (Don't run this from the Python interactive shell; that doesn't work.)</p>
 
-<p>You don't have to wait for Python 3.11 to be released to use it today. You can install <code>tomli</code> with the pip tool by running <code>pip3 install --user tomli</code> in a Terminal window on macOS and Linux, or by running <code>pip install --user tomli</code> in a Command Prompt window on Windows. (Don't run this from the Python interactive shell; that doesn't work.)</p>
-
-<p>Much like how the <code>json</code> module has functions named <code>load()</code> and <code>loads()</code> (which is pronounced "load s" or "load string", not "loads"), the <code>tomli</code> third-party library (and future <code>tomllib</code> module in Python 3.11) has <code>load()</code> and <code>loads()</code> functions.</p>
+<p>Much like how the <code>json</code> module has functions named <code>load()</code> and <code>loads()</code> (which is pronounced "load s" or "load string", not "loads"), the <code>toml</code> third-party library (and future <code>tomllib</code> module in Python 3.11) has <code>load()</code> and <code>loads()</code> functions.</p>
 
 <p>For example, say we had the Dungeons & Dragons text above in a TOML file named <em>dnd_character.toml</em>. We could read into our Python program with the following code:</p>
 
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tomli</span>  <span class="c1"># import tomllib in Python 3.11</span>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tomllib</span>  <span class="c1"># import tomllib in Python 3.11</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
 
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'dnd_character.toml'</span><span class="p">)</span> <span class="k">as</span> <span class="n">fileObj</span><span class="p">:</span>
   <span class="n">content</span> <span class="o">=</span> <span class="n">fileObj</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-  <span class="n">dnd_char</span> <span class="o">=</span> <span class="n">tomli</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+  <span class="n">dnd_char</span> <span class="o">=</span> <span class="n">tomllib</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
 <span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">dnd_char</span><span class="p">)</span>
 </pre></div>
 
@@ -79,19 +75,19 @@ featherFall = 2
  <span class="s1">'spells'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'featherFall'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'fireball'</span><span class="p">:</span> <span class="mi">3</span><span class="p">}}</span>
 </pre></div>
 
-<p>The <code>toml.loads()</code> function takes a string that we pulled out of a text file named <em>dnd_character.toml</em>. This string could have come from anywhere (say, downloading it off the web with the <a href="https://docs.python-requests.org/en/latest/">Requests</a> module). But since reading it from a <em>.toml</em> file is so common, the <code>tomli.load()</code> function can accept the file object directly:</p>
+<p>The <code>toml.loads()</code> function takes a string that we pulled out of a text file named <em>dnd_character.toml</em>. This string could have come from anywhere (say, downloading it off the web with the <a href="https://docs.python-requests.org/en/latest/">Requests</a> module). But since reading it from a <em>.toml</em> file is so common, the <code>tomllib.load()</code> function can accept the file object directly:</p>
 
-<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tomli</span>  <span class="c1"># import tomllib in Python 3.11</span>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tomllib</span>  <span class="c1"># import tomllib in Python 3.11</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
 
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'dnd_character.toml'</span><span class="p">,</span> <span class="s1">'rb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">fileObj</span><span class="p">:</span>
-  <span class="n">dnd_char</span> <span class="o">=</span> <span class="n">tomli</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fileObj</span><span class="p">)</span>
+  <span class="n">dnd_char</span> <span class="o">=</span> <span class="n">tomllib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fileObj</span><span class="p">)</span>
 <span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">dnd_char</span><span class="p">)</span>
 </pre></div>
 
-<p>Note that the file object you pass to <code>tomli.load()</code> has to be open in "read binary" mode, and not just the default "read text" mode, so you need to pass <code>'rb'</code> as the second argument to the <code>open()</code> function.</p>
+<p>Note that the file object you pass to <code>tomllib.load()</code> has to be open in "read binary" mode, and not just the default "read text" mode, so you need to pass <code>'rb'</code> as the second argument to the <code>open()</code> function.</p>
 
-<p>Unlike the <code>json</code> module's <code>dumps()</code> function, there is no <code>tomli.dumps()</code> function that can <em>create</em> text for TOML files. This is because while JSON is meant to be human-readable and read and written by programs, TOML files are meant to be used for configuration files. These files are often read and written by humans, but only read by software. There is a third-party module called <code>toml-w</code> that has a <code>tomli-w.dumps()</code> function for writing TOML-structured text. The <code>dumps()</code> function won't be a part of the <code>tomllib</code> module in the Python 3.11 standard library though.</p>
+<p>Unlike the <code>json</code> module's <code>dumps()</code> function, there is no <code>tomllib.dumps()</code> function that can <em>create</em> text for TOML files. This is because while JSON is meant to be human-readable and read and written by programs, TOML files are meant to be used for configuration files. These files are often read and written by humans, but only read by software. There is a third-party module called <code>toml-w</code> that has a <code>tomli-w.dumps()</code> function for writing TOML-structured text. The <code>dumps()</code> function won't be a part of the <code>tomllib</code> module in the Python 3.11 standard library though.</p>
 
 <h2>Writing TOML Files in a Text Editor</h2>
 
@@ -106,7 +102,7 @@ class = "Magic user"
 maxHP = 14
 currentHP = 2</pre>
 
-<p>The <code>tomli.loads()</code> function takes the above TOML and returns the following Python dictionary:</p>
+<p>The <code>tomllib.loads()</code> function takes the above TOML and returns the following Python dictionary:</p>
 
 <div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">'name'</span><span class="p">:</span> <span class="s1">'Mordnilap'</span><span class="p">,</span> <span class="s1">'class'</span><span class="p">:</span> <span class="s1">'Magic user'</span><span class="p">,</span> <span class="s1">'maxHP'</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span> <span class="s1">'currentHP'</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>
 </pre></div>
@@ -120,7 +116,7 @@ currentHP = 2</pre>
 <pre>odt1 = 1979-05-27T07:32:00Z  # UTC time zone
 odt2 = 1979-05-27T00:32:00-07:00  # UTC minus 7 hours</pre>
 
-<p>The <code>tomli.loads()</code> function takes the above TOML and returns the following Python dictionary:</p>
+<p>The <code>tomllib.loads()</code> function takes the above TOML and returns the following Python dictionary:</p>
 
 <div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">'odt1'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">1979</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">27</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="n">tzinfo</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">),</span>
  <span class="s1">'odt2'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">1979</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">27</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="n">tzinfo</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">seconds</span><span class="o">=</span><span class="mi">61200</span><span class="p">)))}</span>
@@ -140,7 +136,7 @@ class = "Fighter"
 maxHP = 16
 currentHP = 16</pre>
 
-<p>The <code>tomli.loads()</code> function takes the above TOML and returns the following Python dictionary:</p>
+<p>The <code>tomllib.loads()</code> function takes the above TOML and returns the following Python dictionary:</p>
 
 <div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">'Bilbo'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'class'</span><span class="p">:</span> <span class="s1">'Fighter'</span><span class="p">,</span> <span class="s1">'currentHP'</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span> <span class="s1">'maxHP'</span><span class="p">:</span> <span class="mi">16</span><span class="p">},</span>
  <span class="s1">'Mordnilap'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'class'</span><span class="p">:</span> <span class="s1">'Magic user'</span><span class="p">,</span> <span class="s1">'currentHP'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'maxHP'</span><span class="p">:</span> <span class="mi">14</span><span class="p">}}</span>

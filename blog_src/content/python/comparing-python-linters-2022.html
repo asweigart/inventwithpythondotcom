@@ -7,6 +7,8 @@
     </head>
     <body>
 
+<blockquote>I'm giving a talk on static code analysis tools at PyCon 2023. <a href="https://docs.google.com/presentation/d/1kHK5M4GpB_qSQO3aGbVzUtWaSwqsEaMqikuIeM4VDjk/edit?usp=sharing">Here's the slidedeck.</a> I'll be updating this blog post as I learn more information.</blockquote>
+
 <p>As you can tell from the lengthy title, there are many linting tools for Python. Some of them have near-identical names as each other. In November 2022, I upgraded my text editor to Sublime Text 4 and then took the opportunity to spend a few hours reviewing all of the Python linters I could find. After personally reviewing all of them, I've selected the following as must-haves: Pyflakes, Mypy, and Black. If you'd like additional tools, I also liked: Radon, Pyroma, and docformatter. I'm using <a href="https://docs.python.org/3.12/whatsnew/3.12.html">Python 3.12.0</a>. I don't care for my linter to point out when I stray from the certain dictates in the <a href="http://www.python.org/dev/peps/pep-0008/">PEP 8</a> document, and my linter choices reflect that. You might have different needs and values than I, so in this blog post I give my reasoning and views for each linter.</p>
 
 <p>You can skip most of this discussion by using an IDE such as <a href="https://www.jetbrains.com/pycharm/">PyCharm Community Edition</a> and <a href="https://code.visualstudio.com/">Microsoft Visual Studio Code</a>, which already have integrated linters set up for you. But this blog post is good if you want to customize your development environment.</p>
@@ -18,7 +20,7 @@
     <li><i>Error linters</i> point out syntax errors or other code that will result in unhandled exceptions and crashes. (Pylint, Pyflakes, Flake8)</li>
     <li><i>Style linters</i> point out issues that don't cause bugs but make the code less readable or are not in line with style guides such as Python's <a href="http://www.python.org/dev/peps/pep-0008/">PEP 8</a> document. (Pylint, Flake8)</li>
     <li><i>Packaging linters</i> point out issues related to packaging your code for distribution on PyPI with properly formatted descriptions, versions, and meta data fields. (Pyroma)</li>
-    <li><i>Security linters</i> point out possible security vulnerabilities in your code. (Bandit)</li>
+    <li><i>Security linters</i> point out possible security vulnerabilities in your code. (Bandit, Dodgy)</li>
     <li><i>Code formatters</i> change the style of your code (mostly revolving around proper whitespace) without affecting the behavior of the program. (Black)</li>
     <li><i>Dead code linters</i> remove commented-out code from your program, since this practice should be skipped in favor of proper version control. (Vulture, eradicate) </li>
     <li><i>Docstring linters/formatters</i> point out (and may correctly format) style issues in docstrings that aren't in line with Python's <a href="https://peps.python.org/pep-0257/">PEP 257</a> document. (pydocstringformatter, docformatter)</li>
@@ -315,7 +317,7 @@ C:\Users\Al\Desktop\lintercmp>radon mi C:\github\pyautogui\pyautogui\__init__.py
 
 <h2>pydocstyle (Docstring Linter)</h2>
 
-<p><a href="https://pypi.org/project/pydocstyle/">pydocstyle</a> seems to be another docstring linter. It hasn't been updated since May 2021.</p>
+<p><a href="https://pypi.org/project/pydocstyle/">pydocstyle</a> seems to be another docstring linter.</p>
 
 
 
@@ -329,6 +331,12 @@ C:\Users\Al\Desktop\lintercmp>radon mi C:\github\pyautogui\pyautogui\__init__.py
 
 
 
+<!-- add pysa, which comes with pyre-check 
+
+flakeheaven/fakehell
+autopep8
+pep8ify
+-->
 
 </body>
 </html>
