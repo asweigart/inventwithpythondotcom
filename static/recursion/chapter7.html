@@ -1,0 +1,294 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="recursion-style.css" rel="stylesheet" type="text/css" /><title>Chapter 7 - Memoization and Dynamic Programming</title></head><body>
+
+
+
+<div style="background-color: #eeeddd; float: right; height: 310px; font-family: sans-serif;" id="otherbooks">
+  <a href="#" onclick="document.getElementById('otherbooks').outerHTML='';" style="vertical-align: top;">(close)</a><br />
+
+  <a target="_blank" href="https://nostarch.com/automatestuff2" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_automate.link');"><img src="/images/cover_automate2_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/big-book-small-python-projects" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_bigbookpython.link');"><img src="/images/cover_bigbookpython_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/beyond-basic-stuff-python" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_beyond.link');"><img src="/images/cover_beyond_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/inventwithpython" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_invent.link');"><img src="/images/cover_invent4th_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://www.amazon.com/Making-Games-Python-Pygame-Sweigart/dp/1469901730?ie=UTF8&amp;tag=playwithpyth-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1469901730" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_pygame.link');"><img src="/images/cover_makinggames_thumb.webp" style="height: 200px; border: solid black 1px; /"></a>
+  <a target="_blank" href="https://nostarch.com/crackingcodes" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_hacking.link');"><img src="/images/cover_crackingcodes_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/scratchplayground"><img src="/images/cover_scratchprogrammingplayground_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/codingwithminecraft"><img src="/images/cover_codingwithminecraft_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <br />
+  <a href="https://inventwithpython.com/automateudemy">Use this link to get a discount on the Automate the Boring Stuff online video course.</a><br />
+  <a href="https://www.patreon.com/AlSweigart">Support me on Patreon</a>
+</div>
+
+<div><a href="chapter6.html">Prev: Chapter 6 - Permutations and Combinations</a> | <a href="chapter8.html">Next: Chapter 8 - Tail Call Optimization</a></div>
+
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-208">
+<section class="toclist">
+<header class="calibre14">
+<h1 class="chapter">
+<span class="partnumber"><span type="pagebreak" title="151" id="calibre_link-528" class="calibre36"></span>7</span><br class="calibre18" />
+<span class="parttitle">Memoization and Dynamic Programming</span></h1>
+</header>
+<figure class="opener">
+<img src="images/000060.webp" alt="" class="calibre16" />
+</figure>
+<p class="chapterintro">In this chapter, we’ll explore memoization, a technique for making recursive algorithms run faster. We’ll discuss what memoization is, how it should be applied, and its usefulness in the areas of functional programming and dynamic programming. We’ll use the Fibonacci algorithm from <span class="calibre" itemid="xref_target_Chapter 2 ">Chapter 2 </span>to demonstrate memoizing code we write and the memoization features we can find in the Python standard library. We’ll also learn why memoization can’t be applied to every recursive function.</p>
+<h2 id="calibre_link-324" class="calibre6"><span type="pagebreak" title="152" id="calibre_link-83" class="calibre20"></span>Memoization</h2>
+<p class="bodyfirst"><em class="calibre10">Memoization</em> is the technique of remembering the return values from a function for the specific arguments supplied to it. For example, if someone asked me to find the square root of 720, which is the number that when multiplied by itself results in 720, I’d have to sit down with pencil and paper for a few minutes (or call <code class="calibre11">Math.sqrt(720)</code> in JavaScript or <code class="calibre11">math.sqrt(720)</code> in Python) to figure it out: 26.832815729997478. If they asked me again a few seconds later, I wouldn’t have to repeat my calculation because I’d already have the answer at hand. By caching previously calculated results, memoization makes a trade-off to save on execution time by increasing memory usage.</p>
+<p class="calibre22">Confusing <em class="calibre10">memoization</em> with <em class="calibre10">memorization</em> is a modern mistake made by many. (Feel free to make a memo to remind yourself of the difference.)</p>
+<h3 id="calibre_link-325" class="calibre33">Top-Down Dynamic Programming</h3>
+<p class="bodyfirst">Memoization is a common strategy in<em class="calibre10"> dynamic programming</em>, a computer programming technique that involves breaking a large problem into overlapping subproblems. This might sound a lot like the ordinary recursion we’ve already seen. The key difference is that dynamic programming uses recursion with repeated recursive cases; these are the <em class="calibre10">overlapping </em>subproblems.</p>
+<p class="calibre22">For example, let’s consider the recursive Fibonacci algorithm from <span class="calibre" itemid="xref_target_Chapter 2">Chapter 2</span>. Making a recursive <code class="calibre11">fibonacci(6)</code> function call will in turn call <code class="calibre11">fibonacci(5)</code> and <code class="calibre11">fibonacci(4)</code>. Next, <code class="calibre11">fibonacci(5)</code> will call <code class="calibre11">fibonacci(4)</code> and <code class="calibre11">fibonacci(3)</code>. The subproblems of the Fibonacci algorithm overlap, because the <code class="calibre11">fibonacci(4)</code> call, and many others, are repeated. This makes generating Fibonacci numbers a dynamic programming problem.</p>
+<p class="calibre22">An inefficiency exists here: performing those same calculations multiple times is unnecessary, because <code class="calibre11">fibonacci(4)</code> will always return the same thing, the integer <code class="calibre11">3</code>. Instead, our program could just remember that if the argument to our recursive function is <code class="calibre11">4</code>, the function should immediately return <code class="calibre11">3</code>.</p>
+<p class="calibre22"><a href="#calibre_link-209" id="calibre_link-660" class="linkurl">Figure 7-1</a> shows a tree diagram of all the recursive calls, including the redundant function calls that memoization can optimize. Meanwhile, quicksort and merge sort are recursive divide-and-conquer algorithms, but their subproblems do not overlap; they are unique. Dynamic programming techniques aren’t applied to these sorting algorithms.</p>
+<figure class="calibre25">
+<img src="images/000051.webp" class="calibre16" alt="Tree diagram beginning with the Fibonacci function called with an argument of 6. Two subsequent branches show the next calls to the Fibonacci function, with arguments of 5 and 4, respectively. The tree continues to branch until each branch ends with a value of 1. Several branches are grayed out, indicating that the Fibonacci function was called with the same argument as a previous branch." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-209" class="linkurl">Figure 7-1</a>: A tree diagram of the recursive function calls made starting with <span class="calibre"><code class="calibre39">fibonacci(6)</code></span>. The redundant function calls are in gray.</p></figcaption>
+</figure>
+<p class="calibre22"><span type="pagebreak" title="153" id="calibre_link-53" class="calibre17"></span>One approach in dynamic programming is to memoize the recursive function so that previous calculations are remembered for future function calls. Overlapping subproblems become trivial if we can reuse previous return values.</p>
+<p class="calibre22">Using recursion with memoization is called <em class="calibre10">top-down dynamic programming</em>. This process takes a large problem and divides it into smaller overlapping subproblems. A contrasting technique, <em class="calibre10">bottom-up dynamic programming</em>, starts with the smaller subproblems (often related to the base case) and “builds up” to the solution of the original, large problem. The iterative Fibonacci algorithm, which begins with the base cases of the first and second Fibonacci numbers, is an example of bottom-up dynamic programming. Bottom-up approaches don’t use recursive functions.</p>
+<p class="calibre22">Note that there is no such thing as top-down recursion or bottom-up recursion. These are commonly used but incorrect terms. All recursion is already top-down, so <em class="calibre10">top-down recursion</em> is redundant. And no bottom-up approach uses recursion, so there’s no such thing as <em class="calibre10">bottom-up recursion</em>. </p>
+<h3 id="calibre_link-326" class="calibre33">Memoization in Functional Programming</h3>
+<p class="bodyfirst">Not all functions can be memoized. To see why, we must discuss <em class="calibre10">functional programming</em>, a programming paradigm that emphasizes writing functions that don’t modify global variables or any <em class="calibre10">external state</em> (such as files on the hard drive, internet connections, or database contents). Some programming languages, such as Erlang, Lisp, and Haskell, are heavily designed around functional programming concepts. But you can apply functional programming features to almost any programming language, including Python and JavaScript. </p>
+<p class="calibre22">Functional programming includes the concepts of deterministic and nondeterministic functions, side effects, and pure functions. The <code class="calibre11">sqrt()</code> function mentioned in the introduction is a <em class="calibre10">deterministic</em> function because it always returns the same value when passed the same argument. However, Python’s <code class="calibre11">random.randint()</code> function, which returns a random integer, is <em class="calibre10">nondeterministic</em> because even when passed the same arguments, it can return different values. The <code class="calibre11">time.time()</code> function, which returns the current time, is also nondeterministic because time is constantly moving forward.</p>
+<p class="calibre22"><em class="calibre10">Side effects</em> are any changes a function makes to anything outside of its own code and local variables. To illustrate this, let’s create a <code class="calibre11">subtract()</code> function that implements Python’s subtraction operator (<code class="calibre11">-</code>):</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">&gt;&gt;&gt; <b class="calibre7">def subtract(number1, number2):</b>
+...     <b class="calibre7">return number1 - number2</b>
+...
+&gt;&gt;&gt; <b class="calibre7">subtract(123, 987)</b>
+-864</code></pre>
+<p class="calibre22">This <code class="calibre11">subtract()</code> function has no side effects; calling this function doesn’t affect anything in the program outside of its code. There’s no way to tell from the program’s or the computer’s state whether the <code class="calibre11">subtract()</code> function <span type="pagebreak" title="154" id="calibre_link-98" class="calibre17"></span>has been called once, twice, or a million times before. A function might modify local variables inside the function, but these changes are local to the function and remain isolated from the rest of the program.</p>
+<p class="calibre22">Now consider an <code class="calibre11">addToTotal()</code> function, which adds the numeric argument to a global variable named <code class="calibre11">TOTAL</code>:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">&gt;&gt;&gt; <b class="calibre7">TOTAL = 0</b>
+&gt;&gt;&gt; <b class="calibre7">def addToTotal(amount):</b>
+...     <b class="calibre7">global TOTAL</b>
+...     <b class="calibre7">TOTAL += amount</b>
+...     <b class="calibre7">return TOTAL</b>
+...
+&gt;&gt;&gt; <b class="calibre7">addToTotal(10)</b>
+10
+&gt;&gt;&gt; <b class="calibre7">addToTotal(10)</b>
+20
+&gt;&gt;&gt; <b class="calibre7">TOTAL</b>
+20</code></pre>
+<p class="calibre22">The <code class="calibre11">addToTotal()</code> function does have a side effect, because it modifies an element that exists outside of the function: the <code class="calibre11">TOTAL</code> global variable. </p>
+<p class="calibre22">Side effects can be more than mere changes to global variables. They include updating or deleting files, printing text onscreen, opening a database connection, authenticating to a server, or any other manipulation of data outside of the function. Any trace that a function call leaves behind after returning is a side effect.</p>
+<p class="calibre22">If a function is deterministic and has no side effects, it’s known as a <em class="calibre10">pure function</em>. Only pure functions should be memoized. You’ll see why in the next sections when we memoize the recursive Fibonacci function and the impure functions of the <code class="calibre11">doNotMemoize</code> program.</p>
+<h3 id="calibre_link-327" class="calibre33">Memoizing the Recursive Fibonacci Algorithm</h3>
+<p class="bodyfirst">Let’s memoize our recursive Fibonacci function from <span class="calibre" itemid="xref_target_Chapter 2">Chapter 2</span>. Remember that this function is extraordinarily inefficient: on my computer, the recursive <code class="calibre11">fibonacci(40)</code> call takes 57.8 seconds to compute. Meanwhile, an iterative version of <code class="calibre11">fibonacci(40)</code> is literally too fast for my code profiler to measure: 0.000 seconds. </p>
+<p class="calibre22">Memoization can greatly speed up the recursive version of the function. For example, <a href="#calibre_link-210" id="calibre_link-661" class="linkurl">Figure 7-2</a> shows the number of function calls the original and memoized <code class="calibre11">fibonacci()</code> functions make for the first 20 Fibonacci numbers. The original, non-memoized function is doing an extraordinary amount of unnecessary computation.</p>
+<p class="calibre22">The number of function calls sharply increases for the original <code class="calibre11">fibonacci()</code> function (top) but only slowly grows for the memoized <code class="calibre11">fibonacci()</code> function (bottom).</p>
+<span type="pagebreak" title="155" id="calibre_link-104" class="calibre17"></span><figure class="calibre25">
+<img src="images/000033.webp" alt="f07002a" class="calibre16" /></figure>
+
+<figure class="calibre25">
+<img src="images/000042.webp" class="calibre16" alt="Two graphs showing how the number of function calls increases as the number of Fibonacci numbers to calculate increases. The first graph increases rapidly to 14,000 function calls for the 20th Fibonacci number to calculate, while the second graph is linear, showing 20 function calls for the 20th Fibonacci number to calculate." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-210" class="linkurl">Figure 7-2</a>: The number of function calls sharply increases for the original <var class="calibre53">fibonacci()</var> function (top) but grows only slowly for the memoized <var class="calibre53">fibonacci()</var> function (bottom).</p></figcaption>
+</figure>
+<p class="calibre22">The Python version of the memoized Fibonacci algorithm is in <em class="calibre10">fibonacciByRecursionMemoized.py</em>. The additions to the original <em class="calibre10">fibonacciByRecursion.html</em> program from <span class="calibre" itemid="xref_target_Chapter 2">Chapter 2</span> have been marked in bold:</p>
+<pre class="calibre23"><code class="calibre11"><b class="calibre7">fibonacciCache = {} </b><span class="codeannotationcode" aria-label="annotation1">❶</span><b class="calibre7"> # Create the global cache.</b>
+
+def fibonacci(nthNumber, indent=0):
+    <b class="calibre7">global fibonacciCache</b>
+    indentation = '.' * indent
+    print(indentation + 'fibonacci(%s) called.' % (nthNumber))
+
+<span type="pagebreak" title="156" id="calibre_link-103" class="calibre17"></span>    <b class="calibre7">if nthNumber in fibonacciCache:</b>
+        <b class="calibre7"># If the value was already cached, return it.</b>
+<b class="calibre7">        print(indentation + 'Returning memoized result: %s' % (fibonacciCache[nthNumber]))</b>
+        <b class="calibre7">return fibonacciCache[nthNumber] </b><span class="codeannotationcode" aria-label="annotation2">❷</span>
+
+    if nthNumber == 1 or nthNumber == 2:
+        # BASE CASE
+        print(indentation + 'Base case fibonacci(%s) returning 1.' % (nthNumber))
+        <b class="calibre7">fibonacciCache[nthNumber] = 1 </b><span class="codeannotationcode" aria-label="annotation3">❸</span><b class="calibre7"> # Update the cache.</b>
+        return 1
+    else:
+        # RECURSIVE CASE
+        print(indentation + 'Calling fibonacci(%s) (nthNumber - 1).' % (nthNumber - 1))
+        result = fibonacci(nthNumber - 1, indent + 1)
+
+        print(indentation + 'Calling fibonacci(%s) (nthNumber - 2).' % (nthNumber - 2))
+        result = result + fibonacci(nthNumber - 2, indent + 1)
+
+        print('Call to fibonacci(%s) returning %s.' % (nthNumber, result))
+        <b class="calibre7">fibonacciCache[nthNumber] = result </b><span class="codeannotationcode" aria-label="annotation4">❹</span><b class="calibre7"> # Update the cache.</b>
+        return result
+
+print(fibonacci(10))
+<b class="calibre7">print(fibonacci(10))</b> <span class="codeannotationcode" aria-label="annotation5">❺</span></code></pre>
+<p class="calibre22">The JavaScript version of the memoized Fibonacci algorithm is in <em class="calibre10">fibonacciByRecursionMemoized.html</em>. The additions to the original <em class="calibre10">fibonacciByRecursion.html</em> program from <span class="calibre" itemid="xref_target_Chapter 2">Chapter 2</span> have been marked in bold:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+
+<span class="codeannotationhang" aria-label="annotation1">❶</span> <b class="calibre7">let fibonacciCache = {}; // Create the global cache.</b>
+
+function fibonacci(nthNumber, indent) {
+    if (indent === undefined) {
+        indent = 0;
+    }
+    let indentation = '.'.repeat(indent);
+    document.write(indentation + "fibonacci(" + nthNumber + ") called.
+&lt;br /&gt;");
+
+    <b class="calibre7">if (nthNumber in fibonacciCache) {</b>
+        <b class="calibre7">// If the value was already cached, return it.</b>
+<b class="calibre7">        document.write(indentation + </b>
+<b class="calibre7">        "Returning memoized result: " + fibonacciCache[nthNumber] + "&lt;br /&gt;");</b>
+      <span class="codeannotationcode" aria-label="annotation2">❷</span> <b class="calibre7">return fibonacciCache[nthNumber];</b>
+    <b class="calibre7">}</b>
+
+    if (nthNumber === 1 || nthNumber === 2) {
+        // BASE CASE
+        document.write(indentation +
+        "Base case fibonacci(" + nthNumber + ") returning 1.&lt;br /&gt;");
+      <span class="codeannotationcode" aria-label="annotation3">❸</span> <b class="calibre7">fibonacciCache[nthNumber] = 1; // Update the cache.</b>
+        return 1;
+<span type="pagebreak" title="157" id="calibre_link-529" class="calibre17"></span>    } else {
+        // RECURSIVE CASE
+        document.write(indentation +
+        "Calling fibonacci(" + (nthNumber - 1) + ") (nthNumber - 1).&lt;br /&gt;");
+        let result = fibonacci(nthNumber - 1, indent + 1);
+
+        document.write(indentation +
+        "Calling fibonacci(" + (nthNumber - 2) + ") (nthNumber - 2).&lt;br /&gt;");
+        result = result + fibonacci(nthNumber - 2, indent + 1);
+
+        document.write(indentation + "Returning " + result + ".&lt;br /&gt;");
+      <span class="codeannotationcode" aria-label="annotation4">❹</span> <b class="calibre7">fibonacciCache[nthNumber] = result; // Update the cache.</b>
+        return result;
+    }
+}
+
+document.write("&lt;pre&gt;");
+document.write(fibonacci(10) + "&lt;br /&gt;");
+<span class="codeannotationhang" aria-label="annotation5">❺</span> <b class="calibre7">document.write(fibonacci(10) + "&lt;br /&gt;");</b>
+document.write("&lt;/pre&gt;");
+&lt;/script&gt;</code></pre>
+<p class="calibre22">If you compare the output of this program to the original recursive Fibonacci program in <span class="calibre" itemid="xref_target_Chapter 2">Chapter 2</span>, you’ll find it’s much shorter. This reflects the massive reduction of computation needed to achieve the same results:</p>
+<pre class="calibre23"><code class="calibre11">fibonacci(10) called.
+Calling fibonacci(9) (nthNumber - 1).
+.fibonacci(9) called.
+.Calling fibonacci(8) (nthNumber - 1).
+..fibonacci(8) called.
+..Calling fibonacci(7) (nthNumber - 1).
+<var class="calibre48">--snip--</var>
+.......Calling fibonacci(2) (nthNumber - 1).
+........fibonacci(2) called.
+........Base case fibonacci(2) returning 1.
+.......Calling fibonacci(1) (nthNumber - 2).
+........fibonacci(1) called.
+........Base case fibonacci(1) returning 1.
+Call to fibonacci(3) returning 2.
+......Calling fibonacci(2) (nthNumber - 2).
+.......fibonacci(2) called.
+.......Returning memoized result: 1
+<var class="calibre48">--snip--</var>
+Calling fibonacci(8) (nthNumber - 2).
+.fibonacci(8) called.
+.Returning memoized result: 21
+Call to fibonacci(10) returning 55.
+55
+fibonacci(10) called.
+Returning memoized result: 55
+55</code></pre>
+<p class="calibre22"><span type="pagebreak" title="158" id="calibre_link-105" class="calibre17"></span>To memoize this function, we’ll create a dictionary (in Python) or object (in JavaScript) in a global variable named <code class="calibre11">fibonacciCache</code> <span class="codeannotation" aria-label="annotation1">❶</span>. Its keys are the arguments passed for the <code class="calibre11">nthNumber</code> parameter, and its values are the integers returned by the <code class="calibre11">fibonacci()</code> function given that argument. Every function call first checks if its <code class="calibre11">nthNumber</code> argument is already in the cache. If so, the cached return value is returned <span class="codeannotation" aria-label="annotation2">❷</span>. Otherwise, the function runs as normal (though it also adds the result to the cache just before the function returns <span class="codeannotation" aria-label="annotation3">❸</span> <span class="codeannotation" aria-label="annotation4">❹</span>).</p>
+<p class="calibre22">The memoized function is effectively expanding the number of base cases in the Fibonacci algorithm. The original base cases are only for the first and second Fibonacci numbers: they immediately return <code class="calibre11">1</code>. But every time a recursive case returns an integer, it becomes a base case for all future <code class="calibre11">fibonacci()</code> calls with that argument. The result is already in <code class="calibre11">fibonacciCache</code> and can be immediately returned. If you’ve already called <code class="calibre11">fibonacci(99)</code> once before, it becomes a base case just like <code class="calibre11">fibonacci(1)</code> and <code class="calibre11">fibonacci(2)</code>. In other words, memoization improves the performance of recursive functions with overlapping subproblems by increasing the number of base cases. Notice that the second time our program tries to find the 10th Fibonacci number <span class="codeannotation" aria-label="annotation5">❺</span>, it immediately returns the memoized result: <code class="calibre11">55</code>.</p>
+<p class="calibre22">Keep in mind that while memoization can reduce the number of redundant function calls a recursive algorithm makes, it doesn’t necessarily reduce the growth of frame objects on the call stack. Memoization won’t prevent stack overflow errors. Once again, you may be better off forgoing a recursive algorithm for a more straightforward iterative one.</p>
+<h2 id="calibre_link-328" class="calibre6">Python’s functools Module</h2>
+<p class="bodyfirst">Implementing a cache by adding a global variable and code to manage it for every function you’d like to memoize can be quite a chore. Python’s standard library has a <code class="calibre11">functools</code> module with a function decorator named <code class="calibre11">@lru_cache()</code> that automatically memoizes the function it decorates. In Python syntax, this means adding <code class="calibre11">@lru_cache()</code> to the line preceding the function’s <code class="calibre11">def</code> statement.</p>
+<p class="calibre22">The cache can have a memory size limit set. The <em class="calibre10">lru</em> in the decorator name stands for the <em class="calibre10">least recently used</em> cache replacement policy, meaning that the least recently used entry is replaced with new entries when the cache limit is reached. The LRU algorithm is simple and fast, though other cache replacement policies are available for different software requirements.</p>
+<p class="calibre22">The <em class="calibre10">fibonacciFunctools.py</em> program demonstrates the use of the <code class="calibre11">@lru_cache()</code> decorator. The additions to the original <em class="calibre10">fibonacciByRecursion.py</em> program from <span class="calibre" itemid="xref_target_Chapter 2 ">Chapter 2 </span>have been marked in bold:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11"><b class="calibre7">import functools</b>
+
+<b class="calibre7">@functools.lru_cache()</b>
+def fibonacci(nthNumber):
+    print('fibonacci(%s) called.' % (nthNumber))
+<span type="pagebreak" title="159" id="calibre_link-79" class="calibre17"></span>    if nthNumber == 1 or nthNumber == 2:
+        # BASE CASE
+        print('Call to fibonacci(%s) returning 1.' % (nthNumber))
+        return 1
+    else:
+        # RECURSIVE CASE
+        print('Calling fibonacci(%s) (nthNumber - 1).' % (nthNumber - 1))
+        result = fibonacci(nthNumber - 1)
+
+        print('Calling fibonacci(%s) (nthNumber - 2).' % (nthNumber - 2))
+        result = result + fibonacci(nthNumber - 2)
+
+        print('Call to fibonacci(%s) returning %s.' % (nthNumber, result))
+        return result
+
+print(fibonacci(99))</code></pre>
+<p class="calibre22">Compared to the additions required to implement our own cache in <em class="calibre10">fibonacciByRecursionMemoized.py</em>, using Python’s <code class="calibre11">@lru_cache()</code> decorator is much simpler. Normally, calculating <code class="calibre11">fibonacci(99)</code> with the recursive algorithm would take a few centuries. With memoization, our program displays the <code class="calibre11">218922995834555169026</code> result in a few milliseconds.</p>
+<p class="calibre22">Memoization is a useful technique for recursive functions with overlapping subproblems, but it can be applied to any pure function to speed up runtime at the expense of computer memory.</p>
+<h2 id="calibre_link-329" class="calibre6">What Happens When You Memoize Impure Functions?</h2>
+<p class="bodyfirst">You should not add the <code class="calibre11">@lru_cache</code> to functions that are not pure, meaning they are nondeterministic or have side effects. Memoization saves time by skipping the code in the function and returning the previously cached return value. This is fine for pure functions but can cause various bugs for impure functions. </p>
+<p class="calibre22">In nondeterministic functions, such as a function that returns the current time, memoization causes the function to return incorrect results. For functions with side effects, such as printing text to the screen, memoization causes the function to skip the intended side effect. The <em class="calibre10">doNotMemoize.py</em> program demonstrates what happens when the <code class="calibre11">@lru_cache</code> function decorator (described in the previous section) memoizes these impure functions:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">import functools, time, datetime
+
+@functools.lru_cache()
+def getCurrentTime():
+    # This nondeterministic function returns different values each time
+    # it's called.
+    return datetime.datetime.now()
+
+@functools.lru_cache()
+def printMessage():
+    # This function displays a message on the screen as a side effect.
+<span type="pagebreak" title="160" id="calibre_link-530" class="calibre17"></span>    print('Hello, world!')
+
+print('Getting the current time twice:')
+print(getCurrentTime())
+print('Waiting two seconds...')
+time.sleep(2)
+print(getCurrentTime())
+
+print()
+
+print('Displaying a message twice:')
+printMessage()
+printMessage()</code></pre>
+<p class="calibre22">When you run this program, the output looks like this:</p>
+<pre class="calibre23"><code class="calibre11">Getting the current time twice:
+2022-07-30 16:25:52.136999
+Waiting two seconds...
+2022-07-30 16:25:52.136999
+
+Displaying a message twice:
+Hello, world!</code></pre>
+<p class="calibre22">Notice that the second call to <code class="calibre11">getCurrentTime()</code> returns the same result as the first call despite being called two seconds later. And of the two calls to <code class="calibre11">printMessage()</code>, only the first call results in displaying the <code class="calibre11">Hello, world!</code> message on the screen.</p>
+<p class="calibre22">These bugs are subtle because they don’t cause an obvious crash, but rather cause the functions to behave incorrectly. No matter how you memoize your functions, be sure to thoroughly test them.</p>
+<h2 id="calibre_link-330" class="calibre6">Summary</h2>
+<p class="bodyfirst">Memoization (not memorization) is an optimization technique that can speed up recursive algorithms that have overlapping subproblems by remembering the previous results of identical calculations. Memoization is a common technique in the field of dynamic programming. By trading computer memory usage for improved runtime, memoization makes some otherwise intractable recursive functions possible. </p>
+<p class="calibre22">However, memoization won’t prevent stack overflow errors. Keep in mind that memoization is not a replacement for using a simple iterative solution. Code that uses recursion for the sake of recursion is not automatically more elegant than non-recursive code.</p>
+<p class="calibre22">Memoized functions must be pure&mdash;that is, they must be deterministic (returning the same values given the same arguments each time) and not have side effects (affecting anything about the computer or program outside of the function). Pure functions are often used in functional programming, which is a programming paradigm that makes heavy use of recursion.</p>
+<p class="calibre22"><span type="pagebreak" title="161" id="calibre_link-70" class="calibre17"></span>Memoization is implemented by creating a data structure called a <em class="calibre10">cache</em> for each function to memoize. You can write this code yourself, but Python has a built-in <code class="calibre11">@functools.lru_cache()</code> decorator that can automatically memoize the function it decorates.</p>
+<h2 id="calibre_link-331" class="calibre6">Further Reading</h2>
+<p class="bodyfirst">There’s more to dynamic programming algorithms than simply memoizing functions. These algorithms are often used in both coding interviews and programming competitions. Coursera offers a free “Dynamic Programming, Greedy Algorithms” course at <a href="https://www.coursera.org/learn/dynamic-programming-greedy-algorithms" class="linkurl">https://www.coursera.org/learn/dynamic-programming-greedy-algorithms</a>. The freeCodeCamp organization also has a series on dynamic programming at <a href="https://www.freecodecamp.org/news/learn-dynamic-programing-to-solve-coding-challenges" class="linkurl">https://www.freecodecamp.org/news/learn-dynamic-programing-to-solve-coding-challenges</a>.</p>
+<p class="calibre22">If you’d like to learn more about the LRU cache and other cache-related functions, the official Python documentation for the <code class="calibre11">functools</code> module is at <a href="https://docs.python.org/3/library/functools.html" class="linkurl">https://docs.python.org/3/library/functools.html</a>. More information about other kinds of cache replacement algorithms is mentioned on Wikipedia at <a href="https://en.wikipedia.org/wiki/Cache_replacement_policies" class="linkurl">https://en.wikipedia.org/wiki/Cache_replacement_policies</a>.</p>
+<h2 id="calibre_link-332" class="calibre6">Practice Questions</h2>
+<p class="bodyfirst">Test your comprehension by answering the following questions:</p>
+<ol class="decimal">
+<li value="1" class="calibre9">What is memoization?</li>
+<li value="2" class="calibre9">How do dynamic programming problems differ from regular recursion problems?</li>
+<li value="3" class="calibre9">What does functional programming emphasize?</li>
+<li value="4" class="calibre9">What two characteristics must a function have in order to be a pure function?</li>
+<li value="5" class="calibre9">Is a function that returns the current date and time a deterministic function?</li>
+<li value="6" class="calibre9">How does memoization improve the performance of recursive functions with overlapping subproblems?</li>
+<li value="7" class="calibre9">Would adding the <code class="calibre11">@lru_cache()</code> function decorator to a merge sort function improve its performance? Why or why not?</li>
+<li value="8" class="calibre9">Is changing the value in a function’s local variable an example of a side effect?</li>
+<li value="9" class="calibre9">Does memoization prevent stack overflows?</li>
+</ol>
+</section>
+</div>
+
+
+
+
+<div><a href="chapter6.html">Prev: Chapter 6 - Permutations and Combinations</a> | <a href="chapter8.html">Next: Chapter 8 - Tail Call Optimization</a></div></body></html>

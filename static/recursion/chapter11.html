@@ -1,0 +1,560 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="recursion-style.css" rel="stylesheet" type="text/css" /><title>Chapter 11 - Maze Generator</title></head><body>
+
+
+
+<div style="background-color: #eeeddd; float: right; height: 310px; font-family: sans-serif;" id="otherbooks">
+  <a href="#" onclick="document.getElementById('otherbooks').outerHTML='';" style="vertical-align: top;">(close)</a><br />
+
+  <a target="_blank" href="https://nostarch.com/automatestuff2" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_automate.link');"><img src="/images/cover_automate2_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/big-book-small-python-projects" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_bigbookpython.link');"><img src="/images/cover_bigbookpython_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/beyond-basic-stuff-python" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_beyond.link');"><img src="/images/cover_beyond_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/inventwithpython" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_invent.link');"><img src="/images/cover_invent4th_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://www.amazon.com/Making-Games-Python-Pygame-Sweigart/dp/1469901730?ie=UTF8&amp;tag=playwithpyth-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1469901730" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_pygame.link');"><img src="/images/cover_makinggames_thumb.webp" style="height: 200px; border: solid black 1px; /"></a>
+  <a target="_blank" href="https://nostarch.com/crackingcodes" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_hacking.link');"><img src="/images/cover_crackingcodes_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/scratchplayground"><img src="/images/cover_scratchprogrammingplayground_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/codingwithminecraft"><img src="/images/cover_codingwithminecraft_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <br />
+  <a href="https://inventwithpython.com/automateudemy">Use this link to get a discount on the Automate the Boring Stuff online video course.</a><br />
+  <a href="https://www.patreon.com/AlSweigart">Support me on Patreon</a>
+</div>
+
+<div><a href="chapter10.html">Prev: Chapter 10 - File Finder</a> | <a href="chapter12.html">Next: Chapter 12 - Sliding-Tile Solver</a></div>
+
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-369">
+<section class="toclist">
+<header class="calibre14">
+<h1 class="chapter">
+<span class="partnumber"><span type="pagebreak" title="215" id="calibre_link-154" class="calibre36"></span>11</span><br class="calibre18" />
+<span class="parttitle">Maze Generator </span></h1>
+</header>
+<figure class="opener">
+<img src="images/000060.webp" alt="" class="calibre16" />
+</figure>
+<p class="chapterintro"><span class="calibre" itemid="xref_target_Chapter 4 ">Chapter 4 </span>described a recursive algorithm that solves mazes, but another recursive algorithm generates mazes. In this chapter, we’ll generate mazes in the same format as the maze-solver program in <span class="calibre" itemid="xref_target_Chapter 4">Chapter 4</span>. So, whether you’re a fan of solving mazes or creating them, you’ll now have the power to apply programming to the task.</p>
+<p class="calibre24">The algorithm works by visiting a starting space in the maze and then recursively visiting a neighboring space. The maze’s hallways are “carved out” of the maze as the algorithm continues to visit neighbors. If the algorithm reaches a dead end that has no neighboring spaces, it backtracks to earlier spaces until it finds an unvisited neighbor and continues visiting from there. By the time the algorithm backtracks to the starting space, the entire maze has been generated.</p>
+<p class="calibre22">The recursive backtracking algorithm we’ll use here produces mazes that tend to have long hallways (the maze spaces that connect branching intersections) and are fairly simple to solve. However, this algorithm is <span type="pagebreak" title="216" id="calibre_link-146" class="calibre17"></span>easier to implement than many other maze-generation algorithms, such as Kruskal’s algorithm or Wilson’s algorithm, so it serves as a good introduction to the topic.</p>
+<h2 id="calibre_link-370" class="calibre6">The Complete Maze-Generator Program</h2>
+<p class="bodyfirst">Let’s begin by taking a look at the complete Python and JavaScript source code for the program, which uses the recursive backtracking algorithm for maze generation. The rest of this chapter explains each section of code individually. </p>
+<p class="calibre22">Copy this Python code to a file named <em class="calibre10">mazeGenerator.py</em>:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">import random
+
+WIDTH = 39 # Width of the maze (must be odd).
+HEIGHT = 19 # Height of the maze (must be odd).
+assert WIDTH % 2 == 1 and WIDTH &gt;= 3
+assert HEIGHT % 2 == 1 and HEIGHT &gt;= 3
+SEED = 1
+random.seed(SEED)
+
+# Use these characters for displaying the maze:
+EMPTY = ' '
+MARK = '@'
+WALL = chr(9608) # Character 9608 is '█'
+NORTH, SOUTH, EAST, WEST = 'n', 's', 'e', 'w'
+
+# Create the filled-in maze data structure to start:
+maze = {}
+for x in range(WIDTH):
+    for y in range(HEIGHT):
+        maze[(x, y)] = WALL # Every space is a wall at first.
+
+def printMaze(maze, markX=None, markY=None):
+    """Displays the maze data structure in the maze argument. The
+    markX and markY arguments are coordinates of the current
+    '@' location of the algorithm as it generates the maze."""
+
+    for y in range(HEIGHT):
+        for x in range(WIDTH):
+            if markX == x and markY == y:
+                # Display the '@' mark here:
+                print(MARK, end='')
+            else:
+                # Display the wall or empty space:
+                print(maze[(x, y)], end='')
+        print() # Print a newline after printing the row.
+
+
+def visit(x, y):
+    """"Carve out" empty spaces in the maze at x, y and then
+    recursively move to neighboring unvisited spaces. This
+    function backtracks when the mark has reached a dead end."""
+<span type="pagebreak" title="217" id="calibre_link-542" class="calibre17"></span>    maze[(x, y)] = EMPTY # "Carve out" the space at x, y.
+    printMaze(maze, x, y) # Display the maze as we generate it.
+    print('\n\n')
+
+    while True:
+        # Check which neighboring spaces adjacent to
+        # the mark have not been visited already:
+        unvisitedNeighbors = []
+        if y &gt; 1 and (x, y - 2) not in hasVisited:
+            unvisitedNeighbors.append(NORTH)
+
+        if y &lt; HEIGHT - 2 and (x, y + 2) not in hasVisited:
+            unvisitedNeighbors.append(SOUTH)
+
+        if x &gt; 1 and (x - 2, y) not in hasVisited:
+            unvisitedNeighbors.append(WEST)
+
+        if x &lt; WIDTH - 2 and (x + 2, y) not in hasVisited:
+            unvisitedNeighbors.append(EAST)
+
+        if len(unvisitedNeighbors) == 0:
+            # BASE CASE
+            # All neighboring spaces have been visited, so this is a
+            # dead end. Backtrack to an earlier space:
+            return
+        else:
+            # RECURSIVE CASE
+            # Randomly pick an unvisited neighbor to visit:
+            nextIntersection = random.choice(unvisitedNeighbors)
+
+            # Move the mark to an unvisited neighboring space:
+
+            if nextIntersection == NORTH:
+                nextX = x
+                nextY = y - 2
+                maze[(x, y - 1)] = EMPTY # Connecting hallway.
+            elif nextIntersection == SOUTH:
+                nextX = x
+                nextY = y + 2
+                maze[(x, y + 1)] = EMPTY # Connecting hallway.
+            elif nextIntersection == WEST:
+                nextX = x - 2
+                nextY = y
+                maze[(x - 1, y)] = EMPTY # Connecting hallway.
+            elif nextIntersection == EAST:
+                nextX = x + 2
+                nextY = y
+                maze[(x + 1, y)] = EMPTY # Connecting hallway.
+
+            hasVisited.append((nextX, nextY)) # Mark as visited.
+            visit(nextX, nextY) # Recursively visit this space.
+
+
+# Carve out the paths in the maze data structure:
+hasVisited = [(1, 1)] # Start by visiting the top-left corner.
+<span type="pagebreak" title="218" id="calibre_link-153" class="calibre17"></span>visit(1, 1)
+
+# Display the final resulting maze data structure:
+printMaze(maze)</code></pre>
+<p class="calibre22">Copy this JavaScript code to a file named <em class="calibre10">mazeGenerator.html</em>:</p>
+<p class="codelabel"><b class="calibre7">JavaScript </b></p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+
+const WIDTH = 39; // Width of the maze (must be odd).
+const HEIGHT = 19; // Height of the maze (must be odd).
+console.assert(WIDTH % 2 == 1 &amp;&amp; WIDTH &gt;= 2);
+console.assert(HEIGHT % 2 == 1 &amp;&amp; HEIGHT &gt;= 2);
+
+// Use these characters for displaying the maze:
+const EMPTY = "&nbsp;";
+const MARK = "@";
+const WALL = "█"; // Character 9608 is ′█′
+const [NORTH, SOUTH, EAST, WEST] = ["n", "s", "e", "w"];
+
+// Create the filled-in maze data structure to start:
+let maze = {};
+for (let x = 0; x &lt; WIDTH; x++) {
+    for (let y = 0; y &lt; HEIGHT; y++) {
+        maze[[x, y]] = WALL; // Every space is a wall at first.
+    }
+}
+
+
+function printMaze(maze, markX, markY) {
+    // Displays the maze data structure in the maze argument. The
+    // markX and markY arguments are coordinates of the current
+    // '@' location of the algorithm as it generates the maze.
+    document.write('&lt;code&gt;');
+    for (let y = 0; y &lt; HEIGHT; y++) {
+        for (let x = 0; x &lt; WIDTH; x++) {
+            if (markX === x &amp;&amp; markY === y) {
+                // Display the ′@′ mark here:
+                document.write(MARK);
+            } else {
+                // Display the wall or empty space:
+                document.write(maze[[x, y]]);
+            }
+        }
+        document.write('&lt;br /&gt;'); // Print a newline after printing the row.
+    }
+    document.write('&lt;/code&gt;');
+}
+
+
+function visit(x, y) {
+    // "Carve out" empty spaces in the maze at x, y and then
+    // recursively move to neighboring unvisited spaces. This
+    // function backtracks when the mark has reached a dead end.
+
+<span type="pagebreak" title="219" id="calibre_link-543" class="calibre17"></span>    maze[[x, y]] = EMPTY; // "Carve out" the space at x, y.
+    printMaze(maze, x, y); // Display the maze as we generate it.
+    document.write('&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;');
+
+    while (true) {
+        // Check which neighboring spaces adjacent to
+        // the mark have not been visited already:
+        let unvisitedNeighbors = [];
+        if (y &gt; 1 &amp;&amp; !JSON.stringify(hasVisited).includes(JSON.stringify([x, y - 2]))) {
+            unvisitedNeighbors.push(NORTH);
+        }
+        if (y &lt; HEIGHT - 2 &amp;&amp;
+        !JSON.stringify(hasVisited).includes(JSON.stringify([x, y + 2]))) {
+            unvisitedNeighbors.push(SOUTH);
+        }
+        if (x &gt; 1 &amp;&amp;
+        !JSON.stringify(hasVisited).includes(JSON.stringify([x - 2, y]))) {
+            unvisitedNeighbors.push(WEST);
+        }
+        if (x &lt; WIDTH - 2 &amp;&amp;
+        !JSON.stringify(hasVisited).includes(JSON.stringify([x + 2, y]))) {
+            unvisitedNeighbors.push(EAST);
+        }
+
+        if (unvisitedNeighbors.length === 0) {
+            // BASE CASE
+            // All neighboring spaces have been visited, so this is a
+            // dead end. Backtrack to an earlier space:
+            return;
+        } else {
+            // RECURSIVE CASE
+            // Randomly pick an unvisited neighbor to visit:
+            let nextIntersection = unvisitedNeighbors[
+            Math.floor(Math.random() * unvisitedNeighbors.length)];
+
+            // Move the mark to an unvisited neighboring space:
+            let nextX, nextY;
+            if (nextIntersection === NORTH) {
+                nextX = x;
+                nextY = y - 2;
+                maze[[x, y - 1]] = EMPTY; // Connecting hallway.
+            } else if (nextIntersection === SOUTH) {
+                nextX = x;
+                nextY = y + 2;
+                maze[[x, y + 1]] = EMPTY; // Connecting hallway.
+            } else if (nextIntersection === WEST) {
+                nextX = x - 2;
+                nextY = y;
+                maze[[x - 1, y]] = EMPTY; // Connecting hallway.
+            } else if (nextIntersection === EAST) {
+                nextX = x + 2;
+                nextY = y;
+                maze[[x + 1, y]] = EMPTY; // Connecting hallway.
+            }
+<span type="pagebreak" title="220" id="calibre_link-40" class="calibre17"></span>            hasVisited.push([nextX, nextY]); // Mark space as visited.
+            visit(nextX, nextY); // Recursively visit this space.
+        }
+    }
+}
+
+
+// Carve out the paths in the maze data structure:
+let hasVisited = [[1, 1]]; // Start by visiting the top-left corner.
+visit(1, 1);
+
+// Display the final resulting maze data structure:
+printMaze(maze);
+&lt;/script&gt;</code></pre>
+<p class="calibre22">When you run this program, it produces a large amount of text that will fill the terminal window or browser with each step of the maze’s construction. You’ll have to scroll back up to the top to view the entire output.</p>
+<p class="calibre22">The maze data structure begins as a completely filled-in 2D space. The recursive backtracker algorithm is given a starting point in this maze and then visits a previously unvisited neighboring space, “carving out” any hallway space in the process. Then it recursively calls itself on a neighboring space it hasn’t visited before. If all the neighboring spaces have already been visited, the algorithm is at a dead end and backtracks to an earlier visited space to visit its unvisited neighbors. The program ends when the algorithm backtracks to its starting location.</p>
+<p class="calibre22">You can see this algorithm in action by running the maze-generator program. As the maze is carved out, it displays the current x, y coordinates by using the <code class="calibre11">@</code> character. The process looks like <span class="calibre" itemid="xref_target_Figure 11-1"><a href="#calibre_link-457" id="calibre_link-689" class="linkurl">Figure 11-1</a></span>. Notice that the fifth image in the top-right corner has backtracked to an earlier space after reaching a dead end to explore a new neighboring direction from that space.</p>
+<figure class="calibre25">
+<img src="images/000055.webp" class="calibre16" alt="Diagram showing a maze being created one line at a time. The line backtracks every time it encounters a dead end. It eventually fills the entire screen." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-457" class="linkurl">Figure 11-1</a>: The maze as it gets “carved out” by the recursive backtracking algorithm</p></figcaption>
+</figure>
+<p class="calibre22">Let’s take a look at the code in more detail.</p>
+<h2 id="calibre_link-371" class="calibre6"><span type="pagebreak" title="221" id="calibre_link-188" class="calibre20"></span>Setting Up the Maze Generator’s Constants</h2>
+<p class="bodyfirst">The maze generator uses several constants, which we can change before running the program to alter the size and appearance of the maze. The Python code for these constants is as follows:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">import random
+
+WIDTH = 39 # Width of the maze (must be odd).
+HEIGHT = 19 # Height of the maze (must be odd).
+assert WIDTH % 2 == 1 and WIDTH &gt;= 3
+assert HEIGHT % 2 == 1 and HEIGHT &gt;= 3
+SEED = 1
+random.seed(SEED)</code></pre>
+<p class="calibre22">The JavaScript code is as follows:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+
+const WIDTH = 39; // Width of the maze (must be odd).
+const HEIGHT = 19; // Height of the maze (must be odd).
+console.assert(WIDTH % 2 == 1 &amp;&amp; WIDTH &gt;= 3);
+console.assert(HEIGHT % 2 == 1 &amp;&amp; HEIGHT &gt;= 3);</code></pre>
+<p class="calibre22">The constants <code class="calibre11">WIDTH</code> and <code class="calibre11">HEIGHT</code> dictate the size of the maze. They must be odd numbers, because our maze data structure requires walls between the visited spaces of the maze, leaving us with odd-numbered dimensions. To make sure the <code class="calibre11">WIDTH</code> and <code class="calibre11">HEIGHT</code> constants are set correctly, we use assertions to stop the program if the constants aren’t odd or are too small.</p>
+<p class="calibre22">The program relies on a random seed value to reproduce the same maze, given the same seed value. The Python version of this program lets us set this value by calling the <code class="calibre11">random.seed()</code> function. Unfortunately, JavaScript doesn’t have a way to set the seed value explicitly and will generate different mazes each time we run the program.</p>
+<aside type="sidebar" class="authors">
+<div class="top"><hr class="calibre29" /></div>
+<section class="note">
+<h2 class="calibre30"><span class="notehead">Note</span></h2>
+<p class="calibre31"> The “random” numbers the Python program generates are actually predictable, because they’re based on a starting seed value; the program generates the same “random” maze given the same seed. This can be useful when trying to debug the program by having it reproduce the same maze as when we first noticed the bug. </p>
+<div class="top"><hr class="calibre29" /></div>
+</section>
+</aside>
+<p class="calibre22">The Python code continues by setting a few more constants:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11"># Use these characters for displaying the maze:
+EMPTY = ' '
+MARK = '@'
+WALL = chr(9608) # Character 9608 is '█'
+NORTH, SOUTH, EAST, WEST = 'n', 's', 'e', 'w'</code></pre>
+<p class="calibre22"><span type="pagebreak" title="222" id="calibre_link-59" class="calibre17"></span>The JavaScript code for these constants is as follows:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">// Use these characters for displaying the maze:
+const EMPTY = "&nbsp;";
+const MARK = "@";
+const WALL = "█"; // Character 9608 is ′█′
+const [NORTH, SOUTH, EAST, WEST] = ["n", "s", "e", "w"];</code></pre>
+<p class="calibre22">The <code class="calibre11">EMPTY</code> and <code class="calibre11">WALL</code> constants affect how the maze is displayed on the screen. The <code class="calibre11">MARK</code> constant is used to point out the position of the algorithm in the maze as it runs. The <code class="calibre11">NORTH</code>, <code class="calibre11">SOUTH</code>, <code class="calibre11">EAST</code>, and <code class="calibre11">WEST</code> constants represent the directions that the mark can move through the maze and are used to make the code more readable.</p>
+<h2 id="calibre_link-372" class="calibre6">Creating the Maze Data Structure</h2>
+<p class="bodyfirst">The maze data structure is a Python dictionary or JavaScript object that has keys of Python tuples or JavaScript arrays of the x, y coordinates of every space in the maze. The value for these keys is a string in the <code class="calibre11">WALL</code> or <code class="calibre11">EMPTY</code> constant. This string notes whether this space is a blocking wall or a passable empty space in the maze.</p>
+<p class="calibre22">For example, the maze in <span class="calibre" itemid="xref_target_Figure 11-2"><a href="#calibre_link-458" id="calibre_link-690" class="linkurl">Figure 11-2</a></span> is represented by the following data structure:</p>
+<pre class="calibre23"><code class="calibre11">{(0, 0): '█', (0, 1): '█', (0, 2): '█', (0, 3): '█', (0, 4): '█',
+(0, 5): '█', (0, 6): '█', (1, 0): '█', (1, 1): ' ', (1, 2): ' ',
+(1, 3): ' ', (1, 4): ' ', (1, 5): ' ', (1, 6): '█', (2, 0): '█',
+(2, 1): '█', (2, 2): '█', (2, 3): '█', (2, 4): '█', (2, 5): ' ',
+(2, 6): '█', (3, 0): '█', (3, 1): ' ', (3, 2): '█', (3, 3): ' ',
+(3, 4): ' ', (3, 5): ' ', (3, 6): '█', (4, 0): '█', (4, 1): ' ',
+(4, 2): '█', (4, 3): ' ', (4, 4): '█', (4, 5): '█', (4, 6): '█',
+(5, 0): '█', (5, 1): ' ', (5, 2): ' ', (5, 3): ' ', (5, 4): ' ',
+(5, 5): ' ', (5, 6): '█', (6, 0): '█', (6, 1): '█', (6, 2): '█',
+(6, 3): '█', (6, 4): '█', (6, 5): '█', (6, 6): '█'}</code></pre>
+<figure class="calibre25">
+<img src="images/000046.webp" class="calibre16" alt="Diagram of a grid whose x- and y-axes are numbered 0 through 6, assigning each cell in the grid a numerical x and y value." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-458" class="linkurl">Figure 11-2</a>: An example maze that can be represented by a data structure</p></figcaption>
+</figure>
+<p class="calibre22"><span type="pagebreak" title="223" id="calibre_link-544" class="calibre17"></span>The program must start with every space set to <code class="calibre11">WALL</code>. The recursive <code class="calibre11">visit()</code> function then carves out the hallways and intersections of the maze by setting spaces to <code class="calibre11">EMPTY</code>:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11"># Create the filled-in maze data structure to start:
+maze = {}
+for x in range(WIDTH):
+    for y in range(HEIGHT):
+        maze[(x, y)] = WALL # Every space is a wall at first.</code></pre>
+<p class="calibre22">The corresponding JavaScript code is as follows:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">// Create the filled-in maze data structure to start:
+let maze = {};
+for (let x = 0; x &lt; WIDTH; x++) {
+    for (let y = 0; y &lt; HEIGHT; y++) {
+        maze[[x, y]] = WALL; // Every space is a wall at first.
+    }
+}</code></pre>
+<p class="calibre22">We create the blank dictionary (in Python) or object (in JavaScript) in the <code class="calibre11">maze</code> global variable. The <code class="calibre11">for</code> loops loop over every possible x, y coordinate, setting each to <code class="calibre11">WALL</code> to create a completely filled-in maze. The call to <code class="calibre11">visit()</code> will carve out the hallways of the maze from this data structure by setting the spaces in it to <code class="calibre11">EMPTY</code>.</p>
+<h2 id="calibre_link-373" class="calibre6">Printing the Maze Data Structure</h2>
+<p class="bodyfirst">To represent the maze as a data structure, the Python program uses a dictionary, and the JavaScript program uses an object. Within this structure, the keys are lists or arrays of two integers for the x- and y-coordinates, while the value is either the <code class="calibre11">WALL</code> or <code class="calibre11">EMPTY</code> single-character strings. Thus, we can access the wall or empty hallway space at the coordinates x, y in the maze as <code class="calibre11">maze[(x, y)]</code> in Python code and as <code class="calibre11">maze[[x, y]]</code> in JavaScript code.</p>
+<p class="calibre22">The Python code for <code class="calibre11">printMaze()</code> starts as follows:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">def printMaze(maze, markX=None, markY=None):
+    """Displays the maze data structure in the maze argument. The
+    markX and markY arguments are coordinates of the current
+    '@' location of the algorithm as it generates the maze."""
+
+    for y in range(HEIGHT):
+        for x in range(WIDTH):</code></pre>
+<p class="calibre22">The JavaScript code for <code class="calibre11">printMaze()</code> starts as follows:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">function printMaze(maze, markX, markY) {
+    // Displays the maze data structure in the maze argument. The
+    // markX and markY arguments are coordinates of the current
+    // '@' location of the algorithm as it generates the maze.
+    document.write('&lt;code&gt;');
+<span type="pagebreak" title="224" id="calibre_link-545" class="calibre17"></span>    for (let y = 0; y &lt; HEIGHT; y++) {
+        for (let x = 0; x &lt; WIDTH; x++) {</code></pre>
+<p class="calibre22">The <code class="calibre11">printMaze()</code> function prints the maze data structure it’s passed as the maze parameter on the screen. Optionally, if <code class="calibre11">markX</code> and <code class="calibre11">markY</code> integer arguments are passed, the <code class="calibre11">MARK</code> constant (which we set to <code class="calibre11">@</code>) appears at these x, y coordinates in the printed maze. To make sure the maze is printed in a monospace font, the JavaScript version writes the HTML tag <code class="calibre11">&lt;code&gt;</code> before printing the maze itself. Without this HTML tag, the maze will appear distorted in the browser.</p>
+<p class="calibre22">Within the function, nested <code class="calibre11">for</code> loops loop over every space in the maze data structure. These <code class="calibre11">for</code> loops iterate over each y-coordinate from <code class="calibre11">0</code> up to, but not including, <code class="calibre11">HEIGHT</code>, and each x-coordinate from <code class="calibre11">0</code> up to, but not including, <code class="calibre11">WIDTH</code>.</p>
+<p class="calibre22">Inside the inner <code class="calibre11">for</code> loop, if the current x, y coordinates match the position of the mark (the location where the algorithm is currently carving), the program displays the <code class="calibre11">@</code> in the <code class="calibre11">MARK</code> constant. The Python code does this as follows:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">            if markX == x and markY == y:
+                # Display the '@' mark here:
+                print(MARK, end='')
+            else:
+                # Display the wall or empty space:
+                print(maze[(x, y)], end='')
+
+
+        print() # Print a newline after printing the row.</code></pre>
+<p class="calibre22">The JavaScript code is as follows:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">            if (markX === x &amp;&amp; markY === y) {
+                // Display the ′@′ mark here:
+                document.write(MARK);
+            } else {
+                // Display the wall or empty space:
+                document.write(maze[[x, y]]);
+            }
+        }
+        document.write('&lt;br /&gt;'); // Print a newline after printing the row.
+    }
+    document.write('&lt;/code&gt;');
+}</code></pre>
+<p class="calibre22">Otherwise, the program displays either the <code class="calibre11">WALL</code> or <code class="calibre11">EMPTY</code> constant’s character at this x, y coordinate in the <code class="calibre11">maze</code> data structure by printing <code class="calibre11">maze[(x, y)]</code> in Python and <code class="calibre11">maze[[x, y]]</code> in JavaScript. After the inner <code class="calibre11">for</code> loop is done looping over the x-coordinates, we print a newline at the end of the row in preparation for the next row.</p>
+<h2 id="calibre_link-374" class="calibre6"><span type="pagebreak" title="225" id="calibre_link-135" class="calibre20"></span>Using the Recursive Backtracker Algorithm</h2>
+<p class="bodyfirst">The <code class="calibre11">visit()</code> function implements the recursive backtracker algorithm. The function has a list (in Python) or array (in JavaScript) that keeps track of the x, y coordinates that have already been visited by previous <code class="calibre11">visit()</code> function calls. It also in-place modifies the global <code class="calibre11">maze</code> variable that stores the maze data structure. The Python code for <code class="calibre11">visit()</code> begins as follows:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">def visit(x, y):
+    """"Carve out" empty spaces in the maze at x, y and then
+    recursively move to neighboring unvisited spaces. This
+    function backtracks when the mark has reached a dead end."""
+    maze[(x, y)] = EMPTY # "Carve out" the space at x, y.
+    printMaze(maze, x, y) # Display the maze as we generate it.
+    print('\n\n')</code></pre>
+<p class="calibre22">The JavaScript code for <code class="calibre11">visit()</code> begins as follows:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">function visit(x, y) {
+    // "Carve out" empty spaces in the maze at x, y and then
+    // recursively move to neighboring unvisited spaces. This
+    // function backtracks when the mark has reached a dead end.
+
+    maze[[x, y]] = EMPTY; // "Carve out" the space at x, y.
+    printMaze(maze, x, y); // Display the maze as we generate it.
+    document.write('&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;');</code></pre>
+<p class="calibre22">The <code class="calibre11">visit()</code> function accepts x, y coordinates as arguments for the place in the maze the algorithm is visiting. Then the function changes the data structure in <code class="calibre11">maze</code> at this location to an empty space. To let the user see the progression of the maze generation, it calls <code class="calibre11">printMaze()</code>, passing the <code class="calibre11">x</code> and <code class="calibre11">y</code> arguments as the current position of the mark.</p>
+<p class="calibre22">Next, the recursive backtracker calls <code class="calibre11">visit()</code> with the coordinates of a previously unvisited neighboring space. The Python code continues as follows:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">    while True:
+        # Check which neighboring spaces adjacent to
+        # the mark have not been visited already:
+        unvisitedNeighbors = []
+        if y &gt; 1 and (x, y - 2) not in hasVisited:
+            unvisitedNeighbors.append(NORTH)
+
+        if y &lt; HEIGHT - 2 and (x, y + 2) not in hasVisited:
+            unvisitedNeighbors.append(SOUTH)
+
+        if x &gt; 1 and (x - 2, y) not in hasVisited:
+            unvisitedNeighbors.append(WEST)
+
+        if x &lt; WIDTH - 2 and (x + 2, y) not in hasVisited:
+            unvisitedNeighbors.append(EAST)</code></pre>
+<p class="calibre22"><span type="pagebreak" title="226" id="calibre_link-546" class="calibre17"></span>The JavaScript code continues as follows:</p>
+<pre class="calibre23"><code class="calibre11">    while (true) {
+        // Check which neighboring spaces adjacent to
+        // the mark have not been visited already:
+        let unvisitedNeighbors = [];
+        if (y &gt; 1 &amp;&amp; !JSON.stringify(hasVisited).includes(JSON.stringify([x, y - 2]))) {
+            unvisitedNeighbors.push(NORTH);
+        }
+        if (y &lt; HEIGHT - 2 &amp;&amp; !JSON.stringify(hasVisited).includes(JSON.stringify([x, y + 2]))) {
+            unvisitedNeighbors.push(SOUTH);
+        }
+        if (x &gt; 1 &amp;&amp; !JSON.stringify(hasVisited).includes(JSON.stringify([x - 2, y]))) {
+            unvisitedNeighbors.push(WEST);
+        }
+        if (x &lt; WIDTH - 2 &amp;&amp; !JSON.stringify(hasVisited).includes(JSON.stringify([x + 2, y]))) {
+            unvisitedNeighbors.push(EAST);
+        }</code></pre>
+<p class="calibre22">The <code class="calibre11">while</code> loop continues to loop as long as unvisited neighbors remain for this location in the maze. We create a list or array of unvisited neighboring spaces in the <code class="calibre11">unvisitedNeighbors</code> variables. Four <code class="calibre11">if</code> statements check that the current x, y position is not on the border of the maze (so that we still have a neighboring space to check) and whether the neighboring space’s x, y coordinates don’t appear in the <code class="calibre11">hasVisited</code> list or array already.</p>
+<p class="calibre22">If all the neighbors have been visited, the function returns so that it can backtrack to an earlier space. The Python code continues on to check for the base case:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">        if len(unvisitedNeighbors) == 0:
+            # BASE CASE
+            # All neighboring spaces have been visited, so this is a
+            # dead end. Backtrack to an earlier space:
+            return</code></pre>
+<p class="calibre22">The JavaScript code does so as follows:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">        if (unvisitedNeighbors.length === 0) {
+            // BASE CASE
+            // All neighboring spaces have been visited, so this is a
+            // dead end. Backtrack to an earlier space:
+            return;</code></pre>
+<p class="calibre22">The base case for the recursive backtracking algorithm occurs when no unvisited neighbors remain to visit next. In this case, the function simply returns. The <code class="calibre11">visit()</code> function itself has no return value. Rather, the recursive function calls <code class="calibre11">visit()</code> to modify the maze data structure in the global <code class="calibre11">maze</code> variable as a side effect. When the original function call to <code class="calibre11">maze()</code> returns, the <code class="calibre11">maze</code> global variable contains the completely generated maze.</p>
+<p class="calibre22"><span type="pagebreak" title="227" id="calibre_link-547" class="calibre17"></span>The Python code continues on to the recursive case like this:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">        else:
+            # RECURSIVE CASE
+            # Randomly pick an unvisited neighbor to visit:
+            nextIntersection = random.choice(unvisitedNeighbors)
+
+            # Move the mark to an unvisited neighboring space:
+
+            if nextIntersection == NORTH:
+                nextX = x
+                nextY = y - 2
+                maze[(x, y - 1)] = EMPTY # Connecting hallway.
+            elif nextIntersection == SOUTH:
+                nextX = x
+                nextY = y + 2
+                maze[(x, y + 1)] = EMPTY # Connecting hallway.
+            elif nextIntersection == WEST:
+                nextX = x - 2
+                nextY = y
+                maze[(x - 1, y)] = EMPTY # Connecting hallway.
+            elif nextIntersection == EAST:
+                nextX = x + 2
+                nextY = y
+                maze[(x + 1, y)] = EMPTY # Connecting hallway.
+
+            hasVisited.append((nextX, nextY)) # Mark space as visited.
+            visit(nextX, nextY) # Recursively visit this space.</code></pre>
+<p class="calibre22">The JavaScript code continues as follows:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">        } else {
+            // RECURSIVE CASE
+            // Randomly pick an unvisited neighbor to visit:
+            let nextIntersection = unvisitedNeighbors[
+            Math.floor(Math.random() * unvisitedNeighbors.length)];
+
+            // Move the mark to an unvisited neighboring space:
+            let nextX, nextY;
+            if (nextIntersection === NORTH) {
+                nextX = x;
+                nextY = y - 2;
+                maze[[x, y - 1]] = EMPTY; // Connecting hallway.
+            } else if (nextIntersection === SOUTH) {
+                nextX = x;
+                nextY = y + 2;
+                maze[[x, y + 1]] = EMPTY; // Connecting hallway.
+            } else if (nextIntersection === WEST) {
+                nextX = x - 2;
+                nextY = y;
+                maze[[x - 1, y]] = EMPTY; // Connecting hallway.
+            } else if (nextIntersection === EAST) {
+                nextX = x + 2;
+                nextY = y;
+<span type="pagebreak" title="228" id="calibre_link-548" class="calibre17"></span>                maze[[x + 1, y]] = EMPTY;    // Connecting hallway.
+            }
+            hasVisited.push([nextX, nextY]); // Mark space as visited.
+            visit(nextX, nextY);             // Recursively visit this space.
+        }
+    }
+}</code></pre>
+<p class="calibre22">The <code class="calibre11">unvisitedNeighbors</code> list or array contains one or more of the <code class="calibre11">NORTH</code>, <code class="calibre11">SOUTH</code>, <code class="calibre11">WEST</code>, and <code class="calibre11">EAST</code> constants. We choose one of these directions for the next recursive call to <code class="calibre11">visit()</code>, and then set the <code class="calibre11">nextX</code> and <code class="calibre11">nextY</code> variables with the coordinates of the neighboring space in this direction.</p>
+<p class="calibre22">After this, we add the x, y coordinates of <code class="calibre11">nextX</code> and <code class="calibre11">nextY</code> to the <code class="calibre11">hasVisited</code> list or array before making the recursive call for this neighboring space. In this way, the <code class="calibre11">visit()</code> function continues to visit neighboring spaces, carving out the maze hallways by setting locations in <code class="calibre11">maze</code> to <code class="calibre11">EMPTY</code>. The connecting hallway between the current space and neighboring space is also set to <code class="calibre11">EMPTY</code>.</p>
+<p class="calibre22">When no neighbors exist, the base case simply returns to an earlier location. In the <code class="calibre11">visit()</code> function, the execution jumps back to the start of the <code class="calibre11">while</code> loop. The code in the <code class="calibre11">while</code> loop again checks which neighboring spaces haven’t been visited and makes a recursive <code class="calibre11">visit()</code> call on one of them, or returns if all neighboring spaces have already been visited.</p>
+<p class="calibre22">As the maze fills up with hallways and each space has been visited, the recursive calls will continue to return until the original <code class="calibre11">visit()</code> function call returns. At this point, the maze variable contains the completely generated maze.</p>
+<h2 id="calibre_link-375" class="calibre6">Starting the Chain of Recursive Calls</h2>
+<p class="bodyfirst">The recursive <code class="calibre11">visit()</code> uses two global variables, <code class="calibre11">maze</code> and <code class="calibre11">hasVisited</code>. The <code class="calibre11">hasVisited</code> variable is a list or array containing the x, y coordinates of every space the algorithm has visited and begins with <code class="calibre11">(1, 1)</code> since that is the maze starting point. The Python code for this is as follows:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11"># Carve out the paths in the maze data structure:
+hasVisited = [(1, 1)] # Start by visiting the top-left corner.
+visit(1, 1)
+
+# Display the final resulting maze data structure:
+printMaze(maze)</code></pre>
+<p class="calibre22">The JavaScript code for this is as follows:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">// Carve out the paths in the maze data structure:
+let hasVisited = [[1, 1]]; // Start by visiting the top-left corner.
+visit(1, 1);
+
+// Display the final resulting maze data structure:
+printMaze(maze);</code></pre>
+<p class="calibre22"><span type="pagebreak" title="229" id="calibre_link-549" class="calibre17"></span>After setting up <code class="calibre11">hasVisited</code> to include the x, y coordinates of 1, 1 (the top-left corner of the maze), we call <code class="calibre11">visit()</code> with these coordinates. This function call will result in all the recursive function calls that generate the hallways of the maze. By the time this function call returns, <code class="calibre11">hasVisited</code> will contain every x, y coordinate of the maze, and <code class="calibre11">maze</code> will contain the completely generated maze.</p>
+<h2 id="calibre_link-376" class="calibre6">Summary</h2>
+<p class="bodyfirst">As you just learned, we can use recursion to not only solve mazes (by traversing them as tree data structures) but also generate them using the recursive backtracker algorithm. The algorithm “carves out” hallways in the maze, backtracking to earlier points when it encounters a dead end. Once the algorithm is forced to backtrack to the starting point, the maze is completely generated.</p>
+<p class="calibre22">We can represent a well-connected maze with no loops as a DAG&mdash;that is, a tree data structure. The recursive backtracker algorithm makes use of the idea that recursive algorithms are well suited to problems involving tree-like data structures and backtracking. </p>
+<h2 id="calibre_link-377" class="calibre6">Further Reading</h2>
+<p class="bodyfirst">Wikipedia has an entry on maze generation in general, with a section on the recursive backtracker algorithm, at <a href="https://en.wikipedia.org/wiki/Maze_generation_algorithm#Recursive_backtracker" class="linkurl">https://en.wikipedia.org/wiki/Maze_generation_algorithm#Recursive_backtracker</a>. I’ve created a browser-based animation of the recursive backtracker algorithm that shows the “carving” of hallways in action at <a href="https://scratch.mit.edu/projects/17358777" class="linkurl">https://scratch.mit.edu/projects/17358777</a>.</p>
+<p class="calibre22">If maze generation interests you, you should read <em class="calibre10">Mazes for Programmers: Code Your Own Twisty Little Passages</em> by Jamis Buck (Pragmatic Bookshelf, 2015).</p>
+</section>
+</div>
+
+
+
+
+<div><a href="chapter10.html">Prev: Chapter 10 - File Finder</a> | <a href="chapter12.html">Next: Chapter 12 - Sliding-Tile Solver</a></div></body></html>

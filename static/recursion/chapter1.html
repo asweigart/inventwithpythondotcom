@@ -1,0 +1,447 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="recursion-style.css" rel="stylesheet" type="text/css" /><title>Chapter 1 - What Is Recursion?</title></head><body>
+
+
+
+<div style="background-color: #eeeddd; float: right; height: 310px; font-family: sans-serif;" id="otherbooks">
+  <a href="#" onclick="document.getElementById('otherbooks').outerHTML='';" style="vertical-align: top;">(close)</a><br />
+
+  <a target="_blank" href="https://nostarch.com/automatestuff2" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_automate.link');"><img src="/images/cover_automate2_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/big-book-small-python-projects" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_bigbookpython.link');"><img src="/images/cover_bigbookpython_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/beyond-basic-stuff-python" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_beyond.link');"><img src="/images/cover_beyond_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/inventwithpython" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_invent.link');"><img src="/images/cover_invent4th_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://www.amazon.com/Making-Games-Python-Pygame-Sweigart/dp/1469901730?ie=UTF8&amp;tag=playwithpyth-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1469901730" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_pygame.link');"><img src="/images/cover_makinggames_thumb.webp" style="height: 200px; border: solid black 1px; /"></a>
+  <a target="_blank" href="https://nostarch.com/crackingcodes" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_hacking.link');"><img src="/images/cover_crackingcodes_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/scratchplayground"><img src="/images/cover_scratchprogrammingplayground_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/codingwithminecraft"><img src="/images/cover_codingwithminecraft_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <br />
+  <a href="https://inventwithpython.com/automateudemy">Use this link to get a discount on the Automate the Boring Stuff online video course.</a><br />
+  <a href="https://www.patreon.com/AlSweigart">Support me on Patreon</a>
+</div>
+
+<div><a href="chapter0.html">Prev: Introduction</a> | <a href="chapter2.html">Next: Chapter 2 - Recursion vs. Iteration</a></div>
+
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-248">
+<section class="toclist">
+<header class="calibre14">
+<h1 class="chapter">
+<span class="partnumber"><span type="pagebreak" title="3" id="calibre_link-489" class="calibre36"></span>1</span><br class="calibre18" />
+<span class="parttitle">What Is Recursion?</span></h1>
+</header>
+<figure class="opener">
+<img src="images/000060.webp" alt="" class="calibre16" />
+</figure>
+<p class="chapterintro">Recursion has an intimidating reputation. It’s considered hard to understand, but at its core, it depends on only two things: function calls and stack data structures. </p>
+<p class="calibre24">Most new programmers trace through what a program does by following the execution. It’s an easy way to read code: you just put your finger on the line of code at the top of the program and move down. Sometimes your finger will loop back; other times, it will jump into a function and later return. This makes it easy to visualize what a program does and in what order.</p>
+<p class="calibre22">But to understand recursion, you need to become familiar with a less obvious data structure, called the <em class="calibre10">call stack</em>, that controls the program’s flow of execution. Most programming beginners don’t know about stacks, because programming tutorials often don’t even mention them when discussing function calls. Furthermore, the call stack that automatically manages function calls doesn’t appear anywhere in the source code. </p>
+<p class="calibre22"><span type="pagebreak" title="4" id="calibre_link-133" class="calibre17"></span>It’s hard to understand something when you can’t see it and don’t know it exists! In this chapter, we’ll pull back the curtain to dispel the overblown notion that recursion is hard, and you’ll be able to appreciate the elegance underneath.</p>
+<h2 id="calibre_link-249" class="calibre6">The Definition of Recursion</h2>
+<p class="bodyfirst">Before we begin, let’s get the clichéd recursion jokes out of the way, starting with this: “To understand recursion, you must first understand recursion.”</p>
+<p class="calibre22">During the months I’ve spent writing this book, I can assure you that this joke gets funnier the more you hear it. </p>
+<p class="calibre22">Another joke is that if you search Google for <em class="calibre10">recursion</em>, the results page asks if you mean <em class="calibre10">recursion</em>. Following the link, as shown in <a href="#calibre_link-432" id="calibre_link-614" class="linkurl">Figure 1-1</a>, takes you to . . . the search results for <em class="calibre10">recursion</em>.</p>
+<figure class="calibre25">
+<img src="images/000065.webp" class="calibre16" alt="Screenshot of a Google search for the term “recursion.” Below the search bar is a banner that reads, “Did you mean: recursion.”" />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-432" class="linkurl">Figure 1-1</a>: The Google search results for <em class="calibre37">recursion</em> link to the Google search results for <em class="calibre37">recursion</em>.</p></figcaption>
+</figure>
+<p class="calibre22"><a href="#calibre_link-433" id="calibre_link-615" class="linkurl">Figure 1-2</a> shows a recursion joke from the webcomic xkcd.</p>
+<figure class="calibre25">
+<img src="images/000075.webp" class="calibre16" alt="A one-panel comic of someone reading the text “I’m so meta, even this acronym.”" />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-433" class="linkurl">Figure 1-2</a>: I’m So Meta, Even This Acronym (I.S. M.E.T.A.) (<a href="http://xkcd.com/917" class="linkurl">xkcd.com/917</a> by Randall Munroe)</p></figcaption>
+</figure>
+<p class="calibre22">Most jokes about the 2010 science fiction action movie <em class="calibre10">Inception</em> are recursion jokes. The film features characters having dreams within dreams within dreams.</p>
+<p class="calibre22">And finally, what computer scientist could forget that monster from Greek mythology, the recursive centaur? As you can see in <a href="#calibre_link-434" id="calibre_link-616" class="linkurl">Figure 1-3</a>, it is half horse, half recursive centaur.</p>
+<span type="pagebreak" title="5" id="calibre_link-113" class="calibre17"></span><figure class="calibre25">
+<img src="images/000086.webp" class="calibre16" alt="Image of a statue with a horse’s body whose front legs and torso repeat, decreasing in size, in a spiral pattern." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-434" class="linkurl">Figure 1-3</a>: The recursive centaur. Image by Joseph Parker.</p></figcaption>
+</figure>
+<p class="calibre22">Based on these jokes, you might conclude that recursion is a sort of meta, self-referencing, dream-within-a-dream, infinite mirror-into-mirror sort of thing. Let’s establish a concrete definition: a <em class="calibre10">recursive</em> thing is something whose definition includes itself. That is, it has a self-referential definition. </p>
+<p class="calibre22">The Sierpiński triangle in <a href="#calibre_link-435" id="calibre_link-617" class="linkurl">Figure 1-4</a> is defined as an equilateral triangle with an upside-down triangle in the middle that forms three new equilateral triangles, each of which contains a Sierpiński triangle. The definition of Sierpiński triangles includes Sierpiński triangles.</p>
+<figure class="calibre25">
+<img src="images/000016.webp" class="calibre16" alt="Graphic depicting three triangles. The first triangle has a smaller upside-down triangle in the center that divides the original into smaller triangles. The next triangle shows those three smaller outer triangles, each divided into still smaller triangles. The third triangle shows those smaller triangles further divided into triangles." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-435" class="linkurl">Figure 1-4</a>: Sierpiński triangles are fractals (recursive shapes) that include Sierpiński triangles.</p></figcaption>
+</figure>
+<p class="calibre22">In a programming context, a <em class="calibre10">recursive function</em> is a function that calls itself. Before we explore recursive functions, let’s take a step back and understand how regular functions work. Programmers tend to take function calls for granted, but even experienced programmers will find it worthwhile to review functions in the next section.</p>
+<h2 id="calibre_link-250" class="calibre6">What Are Functions?</h2>
+<p class="bodyfirst"><em class="calibre10">Functions</em> can be described as mini-programs inside your program. They’re a feature of nearly every programming language. If you need to run identical <span type="pagebreak" title="6" id="calibre_link-36" class="calibre17"></span>instructions at three different places in a program, instead of copying and pasting the source code three times you can write the code in a function once and call the function three times. The beneficial result is a shorter and more readable program. The program is also easier to change: if you need to fix a bug or add features, you need to change your program in only one place instead of three.</p>
+<p class="calibre22">All programming languages implement four features in their functions:</p>
+<ol class="decimal">
+<li value="1" class="calibre9">Functions have code that is run when the function is called.</li>
+<li value="2" class="calibre9"><em class="calibre10">Arguments</em> (that is, values) are passed to the function when it’s called. This is the input to the function, and functions can have zero or more arguments.</li>
+<li value="3" class="calibre9">Functions return a <em class="calibre10">return value</em>. This is the output of the function, though some programming languages allow functions not to return anything or to return null values like <code class="calibre11">undefined</code> or <code class="calibre11">None</code>.</li>
+<li value="4" class="calibre9">The program remembers which line of code called the function and returns to it when the function finishes its execution.</li>
+</ol>
+<p class="calibre22">Different programming languages might have additional features, or different options for how to call functions, but they all have these four general elements. You can visually see the first three of these elements because you write them in the source code, but how does a program keep track of where the execution should return to when the function returns? </p>
+<p class="calibre22">To get a better sense of the problem, create a <em class="calibre10">functionCalls.py</em> program that has three functions: <code class="calibre11">a()</code>, which calls <code class="calibre11">b()</code>, which calls <code class="calibre11">c()</code>:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">def a():
+    print('a() was called.')
+    b()
+    print('a() is returning.')
+
+def b():
+    print('b() was called.')
+    c()
+    print('b() is returning.')
+
+def c():
+    print('c() was called.')
+    print('c() is returning.')
+
+a()</code></pre>
+<p class="calibre22">This code is equivalent to the following <em class="calibre10">functionCalls.html</em> program:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+function a() {
+    document.write("a() was called.&lt;br /&gt;");
+    b();
+    document.write("a() is returning.&lt;br /&gt;");
+}
+
+<span type="pagebreak" title="7" id="calibre_link-118" class="calibre17"></span>function b() {
+    document.write("b() was called.&lt;br /&gt;");
+    c();
+    document.write("b() is returning.&lt;br /&gt;");
+}
+
+function c() {
+    document.write("c() was called.&lt;br /&gt;");
+    document.write("c() is returning.&lt;br /&gt;");
+}
+
+a();
+&lt;/script&gt;</code></pre>
+<p class="calibre22">When you run this code, the output looks like this:</p>
+<pre class="calibre23"><code class="calibre11">a() was called.
+b() was called.
+c() was called.
+c() is returning.
+b() is returning.
+a() is returning.</code></pre>
+<p class="calibre22">The output shows the start of functions <code class="calibre11">a()</code>, <code class="calibre11">b()</code>, and <code class="calibre11">c()</code>. Then, when the functions return, the output appears in reverse order: <code class="calibre11">c()</code>, <code class="calibre11">b()</code>, and then <code class="calibre11">a()</code>. Notice the pattern to the text output: each time a function returns, it remembers which line of code originally called it. When the <code class="calibre11">c()</code> function call ends, the program returns to the <code class="calibre11">b()</code> function and displays <code class="calibre11">b() is returning</code>. Then the <code class="calibre11">b()</code> function call ends, and the program returns to the <code class="calibre11">a()</code> function and displays <code class="calibre11">a() is returning</code>. Finally, the program returns to the original <code class="calibre11">a()</code> function call at the end of the program. In other words, function calls don’t send the execution of the program on a one-way trip. </p>
+<p class="calibre22">But how does the program remember if it was <code class="calibre11">a()</code> or <code class="calibre11">b()</code> <span class="codeannotation" aria-label="annotation"><span class="codeannotation"></span></span>that called <code class="calibre11">c()</code>? This detail is handled by the program implicitly with a call stack. To understand how call stacks remember where the execution returns at the end of a function call, we need to first understand what a stack is.</p>
+<h2 id="calibre_link-251" class="calibre6">What Are Stacks?</h2>
+<p class="bodyfirst">Earlier I mentioned the clichéd wisecrack, “To understand recursion, you must first understand recursion.” But this is actually wrong: to really understand recursion, you must first understand stacks. </p>
+<p class="calibre22">A <em class="calibre10">stack</em> is one of the simplest data structures in computer science. It stores multiple values like a list does&mdash;but unlike lists, it limits you to adding to or removing values from the “top” of the stack only. For stacks implemented with lists or arrays, the “top” is the last item, at the right end of the list or array. Adding values is called <em class="calibre10">pushing</em> values onto the stack, while removing values is called <em class="calibre10">popping</em> values off the stack.</p>
+<p class="calibre22">Imagine that you’re engaged in a meandering conversation with someone. You’re talking about your friend Alice, which then reminds you of a <span type="pagebreak" title="8" id="calibre_link-35" class="calibre17"></span>story about your co-worker Bob, but for that story to make sense, you first have to explain something about your cousin Carol. You finish your story about Carol and go back to talking about Bob, and when you finish your story about Bob, you go back to talking about Alice. Then you are reminded about your brother David, so you tell a story about him. Eventually, you get around to finishing your original story about Alice. </p>
+<p class="calibre22">Your conversation follows a stack-like structure, as in <a href="#calibre_link-436" id="calibre_link-618" class="linkurl">Figure 1-5</a>. The conversation is stack-like because the current topic is always at the top of the stack.</p>
+<figure class="calibre25">
+<img src="images/000025.webp" class="calibre16" alt="A timeline that shows names stacked one on top of the other at various points in time. It begins with no names, then shows Alice, then Bob on top of Alice, then Carol on top of Bob on top of Alice, then Bob on top of Alice, then just Alice, then David on top of Alice, then Just Alice once more, then no names." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-436" class="linkurl">Figure 1-5</a>: Your meandering conversation stack</p></figcaption>
+</figure>
+<p class="calibre22">In our conversation stack, the new topics are added to the top of the stack and taken off as they are completed. The previous topics are “remembered” underneath the current topic in the stack.</p>
+<p class="calibre22">We can use Python lists as stacks if, to amend the list’s contents, we limit ourselves to the <code class="calibre11">append()</code> and <code class="calibre11">pop()</code> methods to perform pushing and popping. JavaScript arrays can also be used as stacks through their <code class="calibre11">push()</code> and <code class="calibre11">pop()</code> methods.</p>
+<aside type="sidebar" class="authors">
+<div class="top"><hr class="calibre29" /></div>
+<section class="note">
+<h2 class="calibre30"><span class="notehead">Note</span></h2>
+<p class="calibre31"> Python uses the terms <em class="calibre32">list</em> and <em class="calibre32">item</em>, while JavaScript uses the terms <em class="calibre32">array</em> and <em class="calibre32">element</em>, but they are respectively identical for our purposes. In this book, I use the terms <em class="calibre32">list </em>and <em class="calibre32">item</em> for both languages.</p>
+<div class="top"><hr class="calibre29" /></div>
+</section>
+</aside>
+<p class="calibre22">For example, consider this <em class="calibre10">cardStack.py</em> program, which pushes and pops string values of playing cards to the end of a list named <code class="calibre11">cardStack</code>:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">cardStack = <span class="codeannotationcode" aria-label="annotation1">❶</span> []
+<span class="codeannotationhang" aria-label="annotation2">❷</span> cardStack.append('5 of diamonds')
+print(','.join(cardStack))
+cardStack.append('3 of clubs')
+print(','.join(cardStack))
+cardStack.append('ace of hearts')
+print(','.join(cardStack))
+<span class="codeannotationhang" aria-label="annotation3">❸</span> cardStack.pop()
+print(','.join(cardStack))</code></pre>
+<p class="calibre22">The following <em class="calibre10">cardStack.html</em> program contains the equivalent code in JavaScript:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+let cardStack = <span class="codeannotationcode" aria-label="annotation1">❶</span> [];
+<span class="codeannotationhang" aria-label="annotation2">❷</span> cardStack.push("5 of diamonds");
+document.write(cardStack + "&lt;br /&gt;");
+cardStack.push("3 of clubs");
+document.write(cardStack + "&lt;br /&gt;");
+<span type="pagebreak" title="9" id="calibre_link-56" class="calibre17"></span>cardStack.push("ace of hearts");
+document.write(cardStack + "&lt;br /&gt;");
+<span class="codeannotationhang" aria-label="annotation3">❸</span> cardStack.pop()
+document.write(cardStack + "&lt;br /&gt;");
+&lt;/script&gt;</code></pre>
+<p class="calibre22">When you run this code, the output looks like this:</p>
+<pre class="calibre23"><code class="calibre11">5 of diamonds
+5 of diamonds,3 of clubs
+5 of diamonds,3 of clubs,ace of hearts
+5 of diamonds,3 of clubs</code></pre>
+<p class="calibre22">The stack starts off as empty <span class="codeannotation" aria-label="annotation1">❶</span>. Three strings representing cards are pushed onto the stack <span class="codeannotation" aria-label="annotation2">❷</span>. Then the stack is popped <span class="codeannotation" aria-label="annotation3">❸</span>, which removes the ace of hearts and leaves the three of clubs at the top of the stack again. The state of the <code class="calibre11">cardStack</code> stack is tracked in <a href="#calibre_link-437" id="calibre_link-619" class="linkurl">Figure 1-6</a>, going from left to right.</p>
+<figure class="calibre25">
+<img src="images/000007.webp" class="calibre16" alt="Timeline showing playing cards stacked on top of each other at various points in time. Begins with no cards, then the five of diamonds, then the three of clubs on top of the five of diamonds, then the ace of hearts on top of the three of clubs, and finally the ace of hearts removed to reveal the three of clubs." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-437" class="linkurl">Figure 1-6</a>: The stack starts empty. Cards are then pushed onto and popped off the stack.</p></figcaption>
+</figure>
+<p class="calibre22">You can see only the topmost card in the card stack, or, in our program’s stacks, the topmost value. In the simplest stack implementations, you can’t see how many cards (or values) are in the stack. You can see only whether the stack is empty or not. </p>
+<p class="calibre22">Stacks are a <em class="calibre10">LIFO</em> data structure, which stands for <em class="calibre10">last in, first out</em>, since the last value pushed onto the stack is the first value popped out of it. This behavior is similar to your web browser’s Back button. Your browser tab’s history functions like a stack that contains all the pages you’ve visited in the order that you visited them. The browser is always displaying the web page at the “top” of the history’s “stack.” Clicking a link pushes a new web page onto the history stack, while clicking the Back button pops the top web page off and reveals the one “underneath.”</p>
+<h2 id="calibre_link-252" class="calibre6">What Is the Call Stack?</h2>
+<p class="bodyfirst">Programs use stacks too. The program’s <em class="calibre10">call stack</em>, also simply called <em class="calibre10">the stack</em>, is a stack of frame objects. <em class="calibre10">Frame objects</em>, also simply called <em class="calibre10">frames</em>, contain information about a single function call, including which line of code called the function, so the execution can move back there when the function returns. </p>
+<p class="calibre22"><span type="pagebreak" title="10" id="calibre_link-149" class="calibre17"></span>Frame objects are created and pushed onto the stack when a function is called. When the function returns, that frame object is popped off the stack. If we call a function that calls a function that calls a function, the call stack will have three frame objects on the stack. When all these functions return, the call stack will have zero frame objects on the stack.</p>
+<p class="calibre22">Programmers don’t have to write code dealing with frame objects, since the programming language handles them automatically. Different programming languages have different ways of implementing frame objects, but in general they contain the following:</p>
+<ul class="calibre38">
+<li class="calibre9">The return address, or the spot in the program where the execution should move when the function returns</li>
+<li class="calibre9">The arguments passed to the function call</li>
+<li class="calibre9">A set of local variables created during the function call</li>
+</ul>
+<p class="calibre22">For example, take a look at the following <em class="calibre10">localVariables.py</em> program, which has three functions, just as our previous <em class="calibre10">functionCalls.py</em> and <em class="calibre10">functionCalls.html</em> programs did:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">def a():
+  <span class="codeannotationcode" aria-label="annotation1">❶</span> spam = 'Ant'
+  <span class="codeannotationcode" aria-label="annotation2">❷</span> print('spam is ' + spam)
+  <span class="codeannotationcode" aria-label="annotation3">❸</span> b()
+    print('spam is ' + spam)
+
+def b():
+  <span class="codeannotationcode" aria-label="annotation4">❹</span> spam = 'Bobcat'
+    print('spam is ' + spam)
+  <span class="codeannotationcode" aria-label="annotation5">❺</span> c()
+    print('spam is ' + spam)
+
+def c():
+  <span class="codeannotationcode" aria-label="annotation6">❻</span> spam = 'Coyote'
+    print('spam is ' + spam)
+
+<span class="codeannotationhang" aria-label="annotation7">❼</span> a()</code></pre>
+<p class="calibre22">This <em class="calibre10">localVariables.html</em> is the equivalent JavaScript program:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+function a() {
+  <span class="codeannotationcode" aria-label="annotation1">❶</span> let spam = "Ant";
+  <span class="codeannotationcode" aria-label="annotation2">❷</span> document.write("spam is " + spam + "&lt;br /&gt;");
+  <span class="codeannotationcode" aria-label="annotation3">❸</span> b();
+    document.write("spam is " + spam + "&lt;br /&gt;");
+}
+
+function b() {
+  <span class="codeannotationcode" aria-label="annotation4">❹</span> let spam = "Bobcat";
+    document.write("spam is " + spam + "&lt;br /&gt;");
+  <span class="codeannotationcode" aria-label="annotation5">❺</span> c();
+<span type="pagebreak" title="11" id="calibre_link-490" class="calibre17"></span>    document.write("spam is " + spam + "&lt;br /&gt;");
+}
+
+function c() {
+  <span class="codeannotationcode" aria-label="annotation6">❻</span> let spam = "Coyote";
+    document.write("spam is " + spam + "&lt;br /&gt;");
+}
+
+<span class="codeannotationhang" aria-label="annotation7">❼</span> a();
+&lt;/script&gt;</code></pre>
+<p class="calibre22">When you run this code, the output looks like this:</p>
+<pre class="calibre23"><code class="calibre11">spam is Ant
+spam is Bobcat
+spam is Coyote
+spam is Bobcat
+spam is Ant</code></pre>
+<p class="calibre22">When the program calls function <code class="calibre11">a()</code> <span class="codeannotation" aria-label="annotation7">❼</span>, a frame object is created and placed on the top of the call stack. This frame stores any arguments passed to <code class="calibre11">a()</code> (in this case, there are none), along with the local variable <code class="calibre11">spam</code> <span class="codeannotation" aria-label="annotation1">❶</span> and the place where the execution should go when the <code class="calibre11">a()</code> function returns.</p>
+<p class="calibre22">When <code class="calibre11">a()</code> is called, it displays the contents of its local <code class="calibre11">spam</code> variable, which is <code class="calibre11">Ant</code> <span class="codeannotation" aria-label="annotation2">❷</span>. When the code in <code class="calibre11">a()</code> calls function <code class="calibre11">b()</code> <span class="codeannotation" aria-label="annotation3">❸</span>, a new frame object is created and placed on the call stack above the frame object for <code class="calibre11">a()</code>. The <code class="calibre11">b()</code> function has its own local <code class="calibre11">spam</code> variable <span class="codeannotation" aria-label="annotation4">❹</span>, and calls <code class="calibre11">c()</code> <span class="codeannotation" aria-label="annotation5">❺</span>. A new frame object for the <code class="calibre11">c()</code> call is created and placed on the call stack, and it contains <code class="calibre11">c()</code>’s local <code class="calibre11">spam</code> variable <span class="codeannotation" aria-label="annotation6">❻</span>. As these functions return, the frame objects pop off the call stack. The program execution knows where to return to, because that return information is stored in the frame object. When the execution has returned from all function calls, the call stack is empty.</p>
+<p class="calibre22"><a href="#calibre_link-438" id="calibre_link-620" class="linkurl">Figure 1-7</a> shows the state of the call stack as each function is called and returns. Notice that all the local variables have the same name: <code class="calibre11">spam</code>. I did this to highlight the fact that local variables are always separate variables with distinct values, even if they have the same name as local variables in other functions.</p>
+<figure class="calibre25">
+<img src="images/000093.webp" class="calibre16" alt="Timeline depicting the state of a call stack at various points in time. It begins empty. Then, within the a() function, the spam variable equals “Ant.” Next, within the b() variable, spam equals “Bobcat,” and then within the c() function, spam equals “Coyote.” Within the b() function, spam once again equals “Bobcat,” and within the a() function, spam once again equals “Ant.”" />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-438" class="linkurl">Figure 1-7</a>: The state of the call stack as the <em class="calibre37">localVariables</em> program runs</p></figcaption>
+</figure>
+<p class="calibre22"><span type="pagebreak" title="12" id="calibre_link-54" class="calibre17"></span>As you can see, programming languages can have separate local variables with the same name (<code class="calibre11">spam</code>) because they are kept in separate frame objects. When a local variable is used in the source code, the variable with that name in the topmost frame object is used.</p>
+<p class="calibre22">Every running program has a call stack, and multithreaded programs have one call stack for each thread. But when you look at the source code for a program, you can’t see the call stack in the code. The call stack isn’t stored in a variable as other data structures are; it’s automatically handled in the background. </p>
+<p class="calibre22">The fact that the call stack doesn’t exist in source code is the main reason recursion is so confusing to beginners: recursion relies on something the programmer can’t even see! Revealing how stack data structures and the call stack work removes much of the mystery behind recursion. Functions and stacks are both simple concepts, and we can use them together to understand how recursion works.</p>
+<h2 id="calibre_link-253" class="calibre6">What Are Recursive Functions and Stack Overflows?</h2>
+<p class="bodyfirst">A <em class="calibre10">recursive function</em> is a function that calls itself. This <em class="calibre10">shortest.py</em> program is the shortest possible example of a recursive function:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">def shortest():
+    shortest()
+
+shortest()</code></pre>
+<p class="calibre22">The preceding program is equivalent to this <em class="calibre10">shortest.html</em> program:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+function shortest() {
+    shortest();
+}
+
+shortest();
+&lt;/script&gt;</code></pre>
+<p class="calibre22">The <code class="calibre11">shortest()</code> function does nothing but call the <code class="calibre11">shortest()</code> function. When this happens, it calls the <code class="calibre11">shortest()</code> function again, and that will call <code class="calibre11">shortest()</code>, and so on, seemingly forever. It is similar to the mythological idea that the crust of the Earth rests on the back of a giant space turtle, which rests on the back of another turtle. Beneath that turtle: another turtle. And so on, forever.</p>
+<p class="calibre22">But this “turtles all the way down” theory doesn’t do a good job of explaining cosmology, nor recursive functions. Since the call stack uses the computer’s finite memory, this program cannot continue forever, the way an infinite loop does. The only thing this program does is crash and display an error message.</p>
+<aside type="sidebar" class="authors">
+<div class="top"><hr class="calibre29" /></div>
+<section class="note">
+<h2 class="calibre30"><span class="notehead">Note</span></h2>
+<p class="calibre31"> To view the JavaScript error, you must open the <em class="calibre32">browser developer tools</em>. On most browsers, this is done by pressing F12 and then selecting the Console tab.</p>
+<div class="top"><hr class="calibre29" /></div>
+</section>
+</aside>
+<p class="calibre22"><span type="pagebreak" title="13" id="calibre_link-152" class="calibre17"></span>The Python output of <em class="calibre10">shortest.py</em> looks like this:</p>
+<pre class="calibre23"><code class="calibre11">Traceback (most recent call last):
+  File "shortest.py", line 4, in &lt;module&gt;
+    shortest()
+  File "shortest.py", line 2, in shortest
+    shortest()
+  File "shortest.py", line 2, in shortest
+    shortest()
+  File "shortest.py", line 2, in shortest
+    shortest()
+  [Previous line repeated 996 more times]
+RecursionError: maximum recursion depth exceeded</code></pre>
+<p class="calibre22">The JavaScript output of <em class="calibre10">shortest.html</em> looks like this in the Google Chrome web browser (other browsers will have similar error messages):</p>
+<pre class="calibre23"><code class="calibre11">Uncaught RangeError: Maximum call stack size exceeded
+    at shortest (shortest.html:2)
+    at shortest (shortest.html:3)
+    at shortest (shortest.html:3)
+    at shortest (shortest.html:3)
+    at shortest (shortest.html:3)
+    at shortest (shortest.html:3)
+    at shortest (shortest.html:3)
+    at shortest (shortest.html:3)
+    at shortest (shortest.html:3)
+    at shortest (shortest.html:3)</code></pre>
+<p class="calibre22">This kind of bug is called a <em class="calibre10">stack overflow</em>. (This is where the popular website <a href="https://stackoverflow.com" class="linkurl">https://stackoverflow.com</a> got its name.) The constant function calls with no returns grow the call stack until all the computer’s memory allocated for the call stack is used up. To prevent this, the Python and JavaScript interpreters crash the program after a certain limit of function calls that don’t return a value. </p>
+<p class="calibre22">This limit is called the <em class="calibre10">maximum recursion depth</em><em class="calibre10"> </em>or <em class="calibre10">maximum call stack size</em>. For Python, this is set to 1,000 function calls. For JavaScript, the maximum call stack size depends on the browser running the code but is generally at least 10,000 or so. Think of a stack overflow as happening when the call stack gets “too high” (that is, consumes too much computer memory), as in <a href="#calibre_link-439" id="calibre_link-621" class="linkurl">Figure 1-8</a>.</p>
+<figure class="calibre25">
+<img src="images/000048.webp" class="calibre16" alt="Graphic depicting a stack of cards with “c() spam = ‘Coyote’” written on the top card. A warning reads, “Stack too high.”" />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-439" class="linkurl">Figure 1-8</a>: A stack overflow happens when the call stack becomes too high, with too many frame objects taking up the computer’s memory.</p></figcaption>
+</figure>
+<p class="calibre22"><span type="pagebreak" title="14" id="calibre_link-45" class="calibre17"></span>Stack overflows don’t damage the computer. The computer just detects that the limit of function calls without returns has been reached and terminates the program. At worst, you’ll lose any unsaved work the program had. Stack overflows can be prevented by having something called a <em class="calibre10">base case</em>, which is explained next.</p>
+<h2 id="calibre_link-254" class="calibre6">Base Cases and Recursive Cases</h2>
+<p class="bodyfirst">The stack overflow example has a <code class="calibre11">shortest()</code> function that calls <code class="calibre11">shortest()</code> but never returns. To avoid a crash, there needs to be a case, or set of circumstances, where the function stops calling itself and instead just returns. This is called a <em class="calibre10">base case</em>. By contrast, a case where the function recursively calls itself is called a <em class="calibre10">recursive case</em>. </p>
+<p class="calibre22">All recursive functions require at least one base case and at least one recursive case. If there is no base case, the function never stops making recursive calls and eventually causes a stack overflow. If there is no recursive case, the function never calls itself and is an ordinary function, not a recursive one. When you start writing your own recursive functions, a good first step is to figure out what the base case and recursive case should be.</p>
+<p class="calibre22">Take a look at this <em class="calibre10">shortestWithBaseCase.py</em> program, which defines the shortest recursive function that won’t crash from a stack overflow:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">def shortestWithBaseCase(makeRecursiveCall):
+    print('shortestWithBaseCase(%s) called.' % makeRecursiveCall)
+    if not makeRecursiveCall:
+        # BASE CASE
+        print('Returning from base case.')
+      <span class="codeannotationcode" aria-label="annotation1">❶</span> return
+    else:
+        # RECURSIVE CASE
+      <span class="codeannotationcode" aria-label="annotation2">❷</span> shortestWithBaseCase(False)
+        print('Returning from recursive case.')
+        return
+
+print('Calling shortestWithBaseCase(False):')
+<span class="codeannotationhang" aria-label="annotation3">❸</span> shortestWithBaseCase(False)
+print()
+print('Calling shortestWithBaseCase(True):')
+<span class="codeannotationhang" aria-label="annotation4">❹</span> shortestWithBaseCase(True)</code></pre>
+<p class="calibre22">This code is equivalent to the following <em class="calibre10">shortestWithBaseCase.html</em> program:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+function shortestWithBaseCase(makeRecursiveCall) {
+    document.write("shortestWithBaseCase(" + makeRecursiveCall +
+     ") called.&lt;br /&gt;");
+    if  (makeRecursiveCall === false) {
+        // BASE CASE
+        document.write("Returning from base case.&lt;br /&gt;");
+      <span class="codeannotationcode" aria-label="annotation1">❶</span> return;
+<span type="pagebreak" title="15" id="calibre_link-491" class="calibre17"></span>    } else {
+        // RECURSIVE CASE
+      <span class="codeannotationcode" aria-label="annotation2">❷</span> shortestWithBaseCase(false);
+        document.write("Returning from recursive case.&lt;br /&gt;");
+        return;
+    }
+}
+
+document.write("Calling shortestWithBaseCase(false):&lt;br /&gt;");
+<span class="codeannotationhang" aria-label="annotation3">❸</span> shortestWithBaseCase(false);
+document.write("&lt;br /&gt;");
+document.write("Calling shortestWithBaseCase(true):&lt;br /&gt;");
+<span class="codeannotationhang" aria-label="annotation4">❹</span> shortestWithBaseCase(true);
+&lt;/script&gt;</code></pre>
+<p class="calibre22">When you run this code, the output looks like this:</p>
+<pre class="calibre23"><code class="calibre11">Calling shortestWithBaseCase(False):
+shortestWithBaseCase(False) called.
+Returning from base case.
+
+Calling shortestWithBaseCase(True):
+shortestWithBaseCase(True) called.
+shortestWithBaseCase(False) called.
+Returning from base case.
+Returning from recursive case.</code></pre>
+<p class="calibre22">This function doesn’t do anything useful except provide a short example of recursion (and it could be made shorter by removing the text output, but the text is useful for our explanation). When <code class="calibre11">shortestWithBaseCase(False)</code> is called <span class="codeannotation" aria-label="annotation3">❸</span>, the base case is executed and the function merely returns <span class="codeannotation" aria-label="annotation1">❶</span>. However, when <code class="calibre11">shortestWithBaseCase(True)</code> is called <span class="codeannotation" aria-label="annotation4">❹</span>, the recursive case is executed and <code class="calibre11">shortestWithBaseCase(False)</code> is called <span class="codeannotation" aria-label="annotation2">❷</span>.</p>
+<p class="calibre22">It’s important to note that when <code class="calibre11">shortestWithBaseCase(False)</code> is recursively called from <span class="codeannotation" aria-label="annotation2">❷</span> and then returns, the execution doesn’t immediately move back to the original function call at <span class="codeannotation" aria-label="annotation4">❹</span>. The rest of the code in the recursive case after the recursive call still runs, which is why <code class="calibre11">Returning from recursive case.</code> appears in the output. Returning from the base case doesn’t immediately return from all the recursive calls that happened before it. This will be important to keep in mind in the <code class="calibre11">countDownAndUp()</code> example in the next section.</p>
+<h2 id="calibre_link-255" class="calibre6">Code Before and After the Recursive Call</h2>
+<p class="bodyfirst">The code in a recursive case can be split into two parts: the code before the recursive call and the code after the recursive call. (If there are two recursive calls in the recursive case, such as with the Fibonacci sequence example in <span class="calibre" itemid="xref_target_Chapter 2">Chapter 2</span>, there will be a before, a between, and an after. But let’s keep it simple for now.)</p>
+<p class="calibre22">The important thing to know is that reaching the base case doesn’t necessarily mean reaching the end of the recursive algorithm. It only means the base case won’t continue to make recursive calls.</p>
+<p class="calibre22"><span type="pagebreak" title="16" id="calibre_link-69" class="calibre17"></span>For example, consider this <em class="calibre10">countDownAndUp.py</em> program whose recursive function counts from any number down to zero, and then back up to the number:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">def countDownAndUp(number):
+  <span class="codeannotationcode" aria-label="annotation1">❶</span> print(number)
+    if number == 0:
+        # BASE CASE
+      <span class="codeannotationcode" aria-label="annotation2">❷</span> print('Reached the base case.')
+        return
+    else:
+        # RECURSIVE CASE
+      <span class="codeannotationcode" aria-label="annotation3">❸</span> countDownAndUp(number - 1)
+      <span class="codeannotationcode" aria-label="annotation4">❹</span> print(number, 'returning')
+        return
+
+<span class="codeannotationhang" aria-label="annotation5">❺</span> countDownAndUp(3)</code></pre>
+<p class="calibre22">Here is the equivalent <em class="calibre10">countDownAndUp.html</em> program:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+function countDownAndUp(number) {
+  <span class="codeannotationcode" aria-label="annotation1">❶</span> document.write(number + "&lt;br /&gt;");
+    if (number === 0) {
+        // BASE CASE
+      <span class="codeannotationcode" aria-label="annotation2">❷</span> document.write("Reached the base case.&lt;br /&gt;");
+        return;
+    } else {
+        // RECURSIVE CASE
+      <span class="codeannotationcode" aria-label="annotation3">❸</span> countDownAndUp(number - 1);
+      <span class="codeannotationcode" aria-label="annotation4">❹</span> document.write(number + " returning&lt;br /&gt;");
+        return;
+    }
+}
+
+<span class="codeannotationhang" aria-label="annotation5">❺</span> countDownAndUp(3);
+&lt;/script&gt;</code></pre>
+<p class="calibre22">When you run this code, the output looks like this:</p>
+<pre class="calibre23"><code class="calibre11">3
+2
+1
+0
+Reached the base case.
+1 returning
+2 returning
+3 returning</code></pre>
+<p class="calibre22">Remember that every time a function is called, a new frame is created and pushed onto the call stack. This frame is where all the local variables and parameters (such as <code class="calibre11">number</code>) are stored. So, there is a separate <code class="calibre11"></code><span type="pagebreak" title="17" id="calibre_link-150" class="calibre17"></span>number variable for each frame on the call stack. This is another often confusing point about recursion: even though, from the source code, it looks like there is only one <code class="calibre11">number</code> variable, remember that because it is a local variable, there is actually a different <code class="calibre11">number</code> variable for each function call.</p>
+<p class="calibre22">When <code class="calibre11">countDownAndUp(3)</code> is called <span class="codeannotation" aria-label="annotation5">❺</span>, a frame is created, and that frame’s local <code class="calibre11">number</code> variable is set to <code class="calibre11">3</code>. The function prints the <code class="calibre11">number</code> variable to the screen <span class="codeannotation" aria-label="annotation1">❶</span>. As long as <code class="calibre11">number</code> isn’t <code class="calibre11">0</code>, <code class="calibre11">countDownAndUp()</code> is recursively called with <code class="calibre11">number - 1</code> <span class="codeannotation" aria-label="annotation3">❸</span>. When it calls <code class="calibre11">countDownAndUp(2)</code><span class="codeannotation" aria-label="annotation"><span class="codeannotation"></span></span>, a new frame is pushed onto the stack, and that frame’s local <code class="calibre11">number</code> variable is set to <code class="calibre11">2</code>. Again, the recursive case is reached and calls <code class="calibre11">countDownAndUp(1)</code><span class="codeannotation" aria-label="annotation"><span class="codeannotation"></span></span>, which again reaches the recursive case and calls <code class="calibre11">countDownAndUp(0)</code>.</p>
+<p class="calibre22">This pattern of making consecutive recursive function calls and then returning from the recursive function calls is what causes the countdown of numbers to appear. Once <code class="calibre11">countDownAndUp(0)</code> is called, the base case is reached <span class="codeannotation" aria-label="annotation2">❷</span>, and no more recursive calls are made. However, this isn’t the end of our program! When the base case is reached, the local <code class="calibre11">number</code> variable is <code class="calibre11">0</code>. But when that base case returns, and the frame is popped off the call stack, the frame under it has its own local <code class="calibre11">number</code> variable, with the same <code class="calibre11">1</code> value it’s always had. As the execution returns back to the previous frames in the call stack, the code <em class="calibre10">after</em> the recursive call is executed <span class="codeannotation" aria-label="annotation4">❹</span>. This is what causes the count up of numbers to appear. <a href="#calibre_link-440" id="calibre_link-622" class="linkurl">Figure 1-9</a> shows the state of the call stack as <code class="calibre11">countDownAndUp()</code> is recursively called and then returns.</p>
+<figure class="calibre25">
+<img src="images/000057.webp" class="calibre16" alt="Timeline depicting a call stack after each call to countDownAndUp(). It begins empty, then shows the number variable equal to 3, then equal to 2, then equal to 1, then equal to 0. The number variable then begins increasing, first to 1, then to 2, then to 3, until the call stack is empty." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-440" class="linkurl">Figure 1-9</a>: The call stack keeping track of the values in the <span class="calibre"><code class="calibre39">number</code></span> local variable for each function call</p></figcaption>
+</figure>
+<p class="calibre22"><span type="pagebreak" title="18" id="calibre_link-136" class="calibre17"></span>The fact that the code doesn’t stop immediately when the base case is reached will be important to keep in mind for the factorial calculation in the next chapter. Remember, any code after the recursive case will still have to run.</p>
+<p class="calibre22">At this point, you might be thinking that the recursive <code class="calibre11">countDownAndUp()</code> function is overengineered and difficult to follow. Why not, instead, use an iterative solution to print numbers? An <em class="calibre10">iterative</em> approach, which uses loops to repeat a task until it’s done, is usually thought of as the opposite of recursion. </p>
+<p class="calibre22">Whenever you find yourself asking, “Wouldn’t using a loop be easier?” the answer is almost certainly “Yes,” and you should avoid the recursive solution. Recursion can be tricky for both beginner and experienced programmers, and recursive code isn’t automatically “better” or “more elegant” than iterative code. Readable, easy-to-understand code is more important than any supposed elegance that recursion provides. However, on some occasions an algorithm cleanly maps to a recursive approach. Algorithms that involve tree-like data structures and require backtracking are especially suited for recursion. These ideas are further explored in <span class="calibre" itemid="xref_target_Chapters 2 and 4">Chapters 2 and 4</span>. </p>
+<h2 id="calibre_link-256" class="calibre6">Summary</h2>
+<p class="bodyfirst">Recursion often confuses new programmers, but it is built on the simple idea that a function can call itself. Every time a function call is made, a new frame object with information related to the call (such as local variables and a return address for the execution to move to when the function returns) is added to the call stack. The call stack, being a stack data structure, can be altered only by having data added to or removed from its “top.” This is called <em class="calibre10">pushing to</em> and <em class="calibre10">popping from</em> the stack, respectively.</p>
+<p class="calibre22">The call stack is handled by the program implicitly, so there is no call stack variable. Calling a function pushes a frame object to the call stack, and returning from a function pops a frame object from the call stack.</p>
+<p class="calibre22">Recursive functions have recursive cases, those in which a recursive call is made, and base cases, those where the function simply returns. If there is no base case or a bug prevents a base case from being run, the execution causes a stack overflow that crashes the program.</p>
+<p class="calibre22">Recursion is a useful technique, but recursion doesn’t automatically make code “better” or more “elegant.” This idea is explored more in the next chapter.</p>
+<h2 id="calibre_link-257" class="calibre6">Further Reading</h2>
+<p class="bodyfirst">You can find other introductions to recursion in my 2018 North Bay Python conference talk, “Recursion for Beginners: A Beginner’s Guide to Recursion,” at <a href="https://youtu.be/AfBqVVKg4GE" class="linkurl">https://youtu.be/AfBqVVKg4GE</a>. The YouTube channel Computerphile also introduces recursion in its video “What on Earth is Recursion?” at <a href="https://youtu.be/Mv9NEXX1VHc" class="linkurl">https://youtu.be/Mv9NEXX1VHc</a>. Finally, V. Anton Spraul talks about recursion in his book <em class="calibre10">Think Like a Programmer</em> (No Starch Press, 2012) and in his video <span type="pagebreak" title="19" id="calibre_link-492" class="calibre17"></span>“Recursion (Think Like a Programmer)” at <a href="https://youtu.be/oKndim5-G94" class="linkurl">https://youtu.be/oKndim5-G94</a>. Wikipedia’s article on recursion goes into great detail at <a href="https://en.wikipedia.org/wiki/Recursion" class="linkurl">https://en.wikipedia.org/wiki/Recursion</a>.</p>
+<p class="calibre22">You can install the <code class="calibre11">ShowCallStack</code> module for Python. This module adds a <code class="calibre11">showcallstack()</code> function that you can place anywhere in your code to see the state of the call stack at that particular point in your program. You can download the module and find instructions for it at <a href="https://pypi.org/project/ShowCallStack" class="linkurl">https://pypi.org/project/ShowCallStack</a>.</p>
+<h2 id="calibre_link-258" class="calibre6">Practice Questions</h2>
+<p class="bodyfirst">Test your comprehension by answering the following questions:</p>
+<ol class="decimal">
+<li value="1" class="calibre9">In general, what is a recursive thing?</li>
+<li value="2" class="calibre9">In programming, what is a recursive function?</li>
+<li value="3" class="calibre9">What four features do functions have?</li>
+<li value="4" class="calibre9">What is a stack?</li>
+<li value="5" class="calibre9">What are the terms for adding and removing values to and from the top of a stack?</li>
+<li value="6" class="calibre9">Say you push the letter <em class="calibre10">J</em> to a stack, then push the letter <em class="calibre10">Q</em>, then pop the stack, then push the letter <em class="calibre10">K</em>, then pop the stack again. What does the stack look like?</li>
+<li value="7" class="calibre9">What is pushed and popped onto the call stack?</li>
+<li value="8" class="calibre9">What causes a stack overflow to happen?</li>
+<li value="9" class="calibre9">What is a base case?</li>
+<li value="10" class="calibre9">What is a recursive case?</li>
+<li value="11" class="calibre9">How many base cases and recursive cases do recursive functions have?</li>
+<li value="12" class="calibre9">What happens if a recursive function has zero base cases?</li>
+<li value="13" class="calibre9">What happens if a recursive function has zero recursive cases?</li>
+</ol>
+</section>
+</div>
+
+
+<div><a href="chapter0.html">Prev: Introduction</a> | <a href="chapter2.html">Next: Chapter 2 - Recursion vs. Iteration</a></div></body></html>

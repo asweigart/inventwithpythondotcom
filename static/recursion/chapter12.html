@@ -1,0 +1,945 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="recursion-style.css" rel="stylesheet" type="text/css" /><title>Chapter 12 - Sliding-Tile Solver</title></head><body>
+
+
+
+<div style="background-color: #eeeddd; float: right; height: 310px; font-family: sans-serif;" id="otherbooks">
+  <a href="#" onclick="document.getElementById('otherbooks').outerHTML='';" style="vertical-align: top;">(close)</a><br />
+
+  <a target="_blank" href="https://nostarch.com/automatestuff2" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_automate.link');"><img src="/images/cover_automate2_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/big-book-small-python-projects" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_bigbookpython.link');"><img src="/images/cover_bigbookpython_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/beyond-basic-stuff-python" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_beyond.link');"><img src="/images/cover_beyond_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/inventwithpython" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_invent.link');"><img src="/images/cover_invent4th_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://www.amazon.com/Making-Games-Python-Pygame-Sweigart/dp/1469901730?ie=UTF8&amp;tag=playwithpyth-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1469901730" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_pygame.link');"><img src="/images/cover_makinggames_thumb.webp" style="height: 200px; border: solid black 1px; /"></a>
+  <a target="_blank" href="https://nostarch.com/crackingcodes" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_hacking.link');"><img src="/images/cover_crackingcodes_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/scratchplayground"><img src="/images/cover_scratchprogrammingplayground_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/codingwithminecraft"><img src="/images/cover_codingwithminecraft_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <br />
+  <a href="https://inventwithpython.com/automateudemy">Use this link to get a discount on the Automate the Boring Stuff online video course.</a><br />
+  <a href="https://www.patreon.com/AlSweigart">Support me on Patreon</a>
+</div>
+
+<div><a href="chapter11.html">Prev: Chapter 11 - Maze Generator</a> | <a href="chapter13.html">Next: Chapter 13 - Fractal Art Maker</a></div>
+
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-378">
+<section class="toclist">
+<header class="calibre14">
+<h1 class="chapter">
+<span class="partnumber"><span type="pagebreak" title="231" id="calibre_link-22" class="calibre36"></span>12</span><br class="calibre18" />
+<span class="parttitle">Sliding-Tile Solver</span></h1>
+</header>
+<figure class="opener">
+<img src="images/000060.webp" alt="" class="calibre16" />
+</figure>
+<p class="chapterintro">A <em class="calibre10">sliding-tile puzzle</em>, or <em class="calibre10">15-puzzle</em>, is a small puzzle game implemented as a set of 15 numbered sliding tiles on a 4 × 4 board. One tile is missing, allowing adjacent tiles to slide into the empty space on the board. The player’s goal is to move the tiles into numeric order, as in <a href="#calibre_link-459" id="calibre_link-691" class="linkurl">Figure 12-1</a>. Some versions of this game have fragments of a picture on the tiles that create a whole image when the puzzle is complete.</p>
+<span type="pagebreak" title="232" id="calibre_link-78" class="calibre17"></span><figure class="calibre25">
+<img src="images/000085.webp" class="calibre16" alt="Image of two 4 × 4 grids of numbered tiles with one missing tile each. The first grid’s numbers are out of order. The second grid’s numbers are ordered 1–15 from left to right." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-459" class="linkurl">Figure 12-1</a>: Solving a numeric sliding-tile puzzle from its scrambled state (left) to its solved, ordered state (right)</p></figcaption>
+</figure>
+<p class="calibre22">Incidentally, mathematicians have proven that even the hardest 15-puzzle can be solved in 80 moves. </p>
+<h2 id="calibre_link-379" class="calibre6">Solving 15-Puzzles Recursively</h2>
+<p class="bodyfirst">The algorithm that solves 15-puzzles is similar to the maze-solving algorithm. Each state of the board (that is, one arrangement of tiles) can be thought of as a maze intersection with four hallways to go down. In the case of 15-puzzles, sliding a tile in one of the four directions is like picking a hallway to follow to the next intersection.</p>
+<p class="calibre22">Just as you can turn a maze into a DAG, you can convert a 15-puzzle into a tree graph, as in <a href="#calibre_link-460" id="calibre_link-692" class="linkurl">Figure 12-2</a>. The board states are nodes with up to four edges (representing a direction to slide a tile) to other nodes (representing the resultant state). The root node is the starting state of the 15-puzzle. The solved-state node is the one in which the tiles are ordered correctly. The path from the root node to the solved state details the slides needed to solve the puzzle.</p>
+<figure class="calibre25">
+<img src="images/000009.webp" class="calibre16" alt="Tree graph in which each node is a 4 × 4 tile puzzle. The top node has two child nodes representing the two possible moves a player could make from that position, and each of those nodes has two child nodes representing all possible moves a player could make from those positions." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-460" class="linkurl">Figure 12-2</a>: The task of solving a 15-puzzle can be represented as a graph with tile states as nodes and slides as edges.</p></figcaption>
+</figure>
+<p class="calibre22"><span type="pagebreak" title="233" id="calibre_link-84" class="calibre17"></span>Clever algorithms are available for solving 15-puzzles, but we could also just recursively explore the entire tree graph until we find a path from the root node to the solution node. This puzzle’s tree can be searched with a depth-first search (DFS) algorithm. However, unlike a well-connected maze, the 15-puzzle’s tree graph is not a DAG. Rather, the graph’s nodes are <em class="calibre10">undirected</em>, because you can traverse both directions of an edge by undoing the previous slide you made. </p>
+<p class="calibre22"><a href="#calibre_link-461" id="calibre_link-693" class="linkurl">Figure 12-3</a> shows an example of the undirected edges between two nodes. Because it is possible to go back and forth between these two nodes forever, our 15-puzzle algorithm could encounter a stack overflow before it finds a solution.</p>
+<figure class="calibre25">
+<img src="images/000027.webp" class="calibre16" alt="Two tile puzzles. The tiles are positioned identically save for one, which has been slid downward in the second puzzle." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-461" class="linkurl">Figure 12-3</a>: The 15-puzzle has undirected edges (drawn without an arrowhead) between its nodes because slides can be undone by performing the opposite slide.</p></figcaption>
+</figure>
+<p class="calibre22">To optimize our algorithm, we’ll avoid slides that undo the previous slide. However, this optimization alone won’t save the algorithm from a stack overflow. While it makes the <em class="calibre10">edges</em> in the tree graph directed, it doesn’t turn the puzzle-solver algorithm into a DAG, because it has cycles, or loops, from lower nodes to higher ones. These loops happen if you slide the tiles in a circular pattern, as in <a href="#calibre_link-462" id="calibre_link-694" class="linkurl">Figure 12-4</a>.</p>
+<figure class="calibre25">
+<img src="images/000044.webp" class="calibre16" alt="Twelve tile puzzles connected by arrows that travel in a complete loop. In each subsequent puzzle, one tile is slid out of place until the state of the puzzle is the same as the starting puzzle’s state." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-462" class="linkurl">Figure 12-4</a>: An example of a loop in the 15-puzzle’s graph</p></figcaption>
+</figure>
+<p class="calibre22">Cycles in the graph mean that the later nodes at the bottom could loop back to a node at the top. Our solving algorithm could get “stuck” following this loop and never explore the branch that has the actual solution. In practice, this infinite loop would result in a stack overflow.</p>
+<p class="calibre22">We can still use recursion to solve a 15-puzzle. We just need to add our own base case for the maximum number of moves in order to avoid <span type="pagebreak" title="234" id="calibre_link-550" class="calibre17"></span>causing a stack overflow. Then, when the maximum number of slide moves is reached, the algorithm will begin backtracking to earlier nodes. If the 15-puzzle solver project can’t find a solution in every possible combination of 10 slides, it will try again using a maximum of 11 slides. If the puzzle can’t be solved in 11 moves, the project tries 12 moves, and so on. This prevents the algorithm from getting stuck exploring the moves of an infinite loop instead of exploring possible solutions of fewer moves.</p>
+<h2 id="calibre_link-380" class="calibre6">The Complete Sliding-Tile Solver Program</h2>
+<p class="bodyfirst">Let’s begin by taking a look at the complete source code for the sliding-tile puzzle solver program. The rest of this chapter explains each section of code individually. </p>
+<p class="calibre22">Copy the Python version of the code to a file named <em class="calibre10">slidingTileSolver.py</em>:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">import random, time
+
+DIFFICULTY = 40 # How many random slides a puzzle starts with.
+SIZE = 4 # The board is SIZE x SIZE spaces.
+random.seed(1) # Select which puzzle to solve.
+
+BLANK = 0
+UP = 'up'
+DOWN = 'down'
+LEFT = 'left'
+RIGHT = 'right'
+
+
+def displayBoard(board):
+    """Display the tiles stored in `board` on the screen."""
+    for y in range(SIZE): # Iterate over each row.
+        for x in range(SIZE): # Iterate over each column.
+            if board[y * SIZE + x] == BLANK:
+                print('__ ', end='') # Display blank tile.
+            else:
+                print(str(board[y * SIZE + x]).rjust(2) + ' ', end='')
+        print() # Print a newline at the end of the row.
+
+
+def getNewBoard():
+    """Return a list that represents a new tile puzzle."""
+    board = []
+    for i in range(1, SIZE * SIZE):
+        board.append(i)
+    board.append(BLANK)
+    return board
+
+
+def findBlankSpace(board):
+    """Return an [x, y] list of the blank space's location."""
+    for x in range(SIZE):
+<span type="pagebreak" title="235" id="calibre_link-551" class="calibre17"></span>        for y in range(SIZE):
+            if board[y * SIZE + x] == BLANK:
+                return [x, y]
+
+
+def makeMove(board, move):
+    """Modify `board` in place to carry out the slide in `move`."""
+    bx, by = findBlankSpace(board)
+    blankIndex = by * SIZE + bx
+
+    if move == UP:
+        tileIndex = (by + 1) * SIZE + bx
+    elif move == LEFT:
+        tileIndex = by * SIZE + (bx + 1)
+    elif move == DOWN:
+        tileIndex = (by - 1) * SIZE + bx
+    elif move == RIGHT:
+        tileIndex = by * SIZE + (bx - 1)
+
+    # Swap the tiles at blankIndex and tileIndex:
+    board[blankIndex], board[tileIndex] = board[tileIndex], board[blankIndex]
+
+
+def undoMove(board, move):
+    """Do the opposite move of `move` to undo it on `board`."""
+    if move == UP:
+        makeMove(board, DOWN)
+    elif move == DOWN:
+        makeMove(board, UP)
+    elif move == LEFT:
+        makeMove(board, RIGHT)
+    elif move == RIGHT:
+        makeMove(board, LEFT)
+
+
+def getValidMoves(board, prevMove=None):
+    """Returns a list of the valid moves to make on this board. If
+    prevMove is provided, do not include the move that would undo it."""
+
+    blankx, blanky = findBlankSpace(board)
+
+    validMoves = []
+    if blanky != SIZE - 1 and prevMove != DOWN:
+        # Blank space is not on the bottom row.
+        validMoves.append(UP)
+
+    if blankx != SIZE - 1 and prevMove != RIGHT:
+        # Blank space is not on the right column.
+        validMoves.append(LEFT)
+
+    if blanky != 0 and prevMove != UP:
+        # Blank space is not on the top row.
+        validMoves.append(DOWN)
+
+<span type="pagebreak" title="236" id="calibre_link-552" class="calibre17"></span>    if blankx != 0 and prevMove != LEFT:
+        # Blank space is not on the left column.
+        validMoves.append(RIGHT)
+
+    return validMoves
+
+
+def getNewPuzzle():
+    """Get a new puzzle by making random slides from the solved state."""
+    board = getNewBoard()
+    for i in range(DIFFICULTY):
+        validMoves = getValidMoves(board)
+        makeMove(board, random.choice(validMoves))
+    return board
+
+
+def solve(board, maxMoves):
+    """Attempt to solve the puzzle in `board` in at most `maxMoves`
+    moves. Returns True if solved, otherwise False."""
+    print('Attempting to solve in at most', maxMoves, 'moves...')
+    solutionMoves = [] # A list of UP, DOWN, LEFT, RIGHT values.
+    solved = attemptMove(board, solutionMoves, maxMoves, None)
+
+    if solved:
+        displayBoard(board)
+        for move in solutionMoves:
+            print('Move', move)
+            makeMove(board, move)
+            print() # Print a newline.
+            displayBoard(board)
+            print() # Print a newline.
+
+        print('Solved in', len(solutionMoves), 'moves:')
+        print(', '.join(solutionMoves))
+        return True # Puzzle was solved.
+    else:
+        return False # Unable to solve in maxMoves moves.
+
+
+def attemptMove(board, movesMade, movesRemaining, prevMove):
+    """A recursive function that attempts all possible moves on `board`
+    until it finds a solution or reaches the `maxMoves` limit.
+    Returns True if a solution was found, in which case `movesMade`
+    contains the series of moves to solve the puzzle. Returns False
+    if `movesRemaining` is less than 0."""
+
+    if movesRemaining &lt; 0:
+        # BASE CASE - Ran out of moves.
+        return False
+
+    if board == SOLVED_BOARD:
+        # BASE CASE - Solved the puzzle.
+        return True
+
+    # RECURSIVE CASE - Attempt each of the valid moves:
+<span type="pagebreak" title="237" id="calibre_link-553" class="calibre17"></span>    for move in getValidMoves(board, prevMove):
+        # Make the move:
+        makeMove(board, move)
+        movesMade.append(move)
+
+        if attemptMove(board, movesMade, movesRemaining - 1, move):
+            # If the puzzle is solved, return True:
+            undoMove(board, move) # Reset to the original puzzle.
+            return True
+
+        # Undo the move to set up for the next move:
+        undoMove(board, move)
+        movesMade.pop() # Remove the last move since it was undone.
+    return False # BASE CASE - Unable to find a solution.
+
+
+# Start the program:
+SOLVED_BOARD = getNewBoard()
+puzzleBoard = getNewPuzzle()
+displayBoard(puzzleBoard)
+startTime = time.time()
+
+maxMoves = 10
+while True:
+    if solve(puzzleBoard, maxMoves):
+        break # Break out of the loop when a solution is found.
+    maxMoves += 1
+print('Run in', round(time.time() - startTime, 3), 'seconds.')</code></pre>
+<p class="calibre22">Copy the JavaScript version of the code to a file named <em class="calibre10">slidingTileSolver.html</em>:</p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+const DIFFICULTY = 40; // How many random slides a puzzle starts with.
+const SIZE = 4; // The board is SIZE x SIZE spaces.
+
+const BLANK = 0;
+const UP = "up";
+const DOWN = "down";
+const LEFT = "left";
+const RIGHT = "right";
+
+
+function displayBoard(board) {
+    // Display the tiles stored in `board` on the screen.
+    document.write("&lt;pre&gt;");
+    for (let y = 0; y &lt; SIZE; y++) { // Iterate over each row.
+        for (let x = 0; x &lt; SIZE; x++) { // Iterate over each column.
+            if (board[y * SIZE + x] == BLANK) {
+                document.write('__ '); // Display blank tile.
+            } else {
+                document.write(board[y * SIZE + x].toString().padStart(2) + " ");
+            }
+        }
+<span type="pagebreak" title="238" id="calibre_link-554" class="calibre17"></span>        document.write("&lt;br /&gt;"); // Print a newline at the end of the row.
+    }
+    document.write("&lt;/pre&gt;");
+}
+
+
+function getNewBoard() {
+    // Return a list that represents a new tile puzzle.
+    let board = [];
+    for (let i = 1; i &lt; SIZE * SIZE; i++) {
+        board.push(i);
+    }
+    board.push(BLANK);
+    return board;
+}
+
+
+function findBlankSpace(board) {
+    // Return an [x, y] array of the blank space's location.
+    for (let x = 0; x &lt; SIZE; x++) {
+        for (let y = 0; y &lt; SIZE; y++) {
+            if (board[y * SIZE + x] === BLANK) {
+                return [x, y];
+            }
+        }
+    }
+}
+
+
+function makeMove(board, move) {
+    // Modify `board` in place to carry out the slide in `move`.
+    let bx, by;
+    [bx, by] = findBlankSpace(board);
+    let blankIndex = by * SIZE + bx;
+
+    let tileIndex;
+    if (move === UP) {
+        tileIndex = (by + 1) * SIZE + bx;
+    } else if (move === LEFT) {
+        tileIndex = by * SIZE + (bx + 1);
+    } else if (move === DOWN) {
+        tileIndex = (by - 1) * SIZE + bx;
+    } else if (move === RIGHT) {
+        tileIndex = by * SIZE + (bx - 1);
+    }
+
+    // Swap the tiles at blankIndex and tileIndex:
+    [board[blankIndex], board[tileIndex]] = [board[tileIndex], board[blankIndex]];
+}
+
+
+function undoMove(board, move) {
+    // Do the opposite move of `move` to undo it on `board`.
+<span type="pagebreak" title="239" id="calibre_link-555" class="calibre17"></span>    if (move === UP) {
+        makeMove(board, DOWN);
+    } else if (move === DOWN) {
+        makeMove(board, UP);
+    } else if (move === LEFT) {
+        makeMove(board, RIGHT);
+    } else if (move === RIGHT) {
+        makeMove(board, LEFT);
+    }
+}
+
+
+function getValidMoves(board, prevMove) {
+    // Returns a list of the valid moves to make on this board. If
+    // prevMove is provided, do not include the move that would undo it.
+
+    let blankx, blanky;
+    [blankx, blanky] = findBlankSpace(board);
+
+    let validMoves = [];
+    if (blanky != SIZE - 1 &amp;&amp; prevMove != DOWN) {
+        // Blank space is not on the bottom row.
+        validMoves.push(UP);
+    }
+    if (blankx != SIZE - 1 &amp;&amp; prevMove != RIGHT) {
+        // Blank space is not on the right column.
+        validMoves.push(LEFT);
+    }
+    if (blanky != 0 &amp;&amp; prevMove != UP) {
+        // Blank space is not on the top row.
+        validMoves.push(DOWN);
+    }
+    if (blankx != 0 &amp;&amp; prevMove != LEFT) {
+        // Blank space is not on the left column.
+        validMoves.push(RIGHT);
+    }
+    return validMoves;
+}
+
+
+function getNewPuzzle() {
+    // Get a new puzzle by making random slides from the solved state.
+    let board = getNewBoard();
+    for (let i = 0; i &lt; DIFFICULTY; i++) {
+        let validMoves = getValidMoves(board);
+        makeMove(board, validMoves[Math.floor(Math.random() * validMoves.length)]);
+    }
+    return board;
+}
+
+function solve(board, maxMoves) {
+    // Attempt to solve the puzzle in `board` in at most `maxMoves`
+    // moves. Returns true if solved, otherwise false.
+    document.write("Attempting to solve in at most " + maxMoves + " moves...&lt;br /&gt;");
+    let solutionMoves = []; // A list of UP, DOWN, LEFT, RIGHT values.
+<span type="pagebreak" title="240" id="calibre_link-556" class="calibre17"></span>    let solved = attemptMove(board, solutionMoves, maxMoves, null);
+
+    if (solved) {
+        displayBoard(board);
+        for (let move of solutionMoves) {
+            document.write("Move " + move + "&lt;br /&gt;");
+            makeMove(board, move);
+            document.write("&lt;br /&gt;"); // Print a newline.
+            displayBoard(board);
+            document.write("&lt;br /&gt;"); // Print a newline.
+        }
+        document.write("Solved in " + solutionMoves.length + " moves:&lt;br /&gt;");
+        document.write(solutionMoves.join(", ") + "&lt;br /&gt;");
+        return true; // Puzzle was solved.
+    } else {
+        return false; // Unable to solve in maxMoves moves.
+    }
+}
+
+
+function attemptMove(board, movesMade, movesRemaining, prevMove) {
+    // A recursive function that attempts all possible moves on `board`
+    // until it finds a solution or reaches the `maxMoves` limit.
+    // Returns true if a solution was found, in which case `movesMade`
+    // contains the series of moves to solve the puzzle. Returns false
+    // if `movesRemaining` is less than 0.
+
+    if (movesRemaining &lt; 0) {
+        // BASE CASE - Ran out of moves.
+        return false;
+    }
+
+    if (JSON.stringify(board) == SOLVED_BOARD) {
+        // BASE CASE - Solved the puzzle.
+        return true;
+    }
+
+    // RECURSIVE CASE - Attempt each of the valid moves:
+    for (let move of getValidMoves(board, prevMove)) {
+        // Make the move:
+        makeMove(board, move);
+        movesMade.push(move);
+
+        if (attemptMove(board, movesMade, movesRemaining - 1, move)) {
+            // If the puzzle is solved, return true:
+            undoMove(board, move); // Reset to the original puzzle.
+            return true;
+        }
+
+        // Undo the move to set up for the next move:
+        undoMove(board, move);
+        movesMade.pop(); // Remove the last move since it was undone.
+    }
+    return false; // BASE CASE - Unable to find a solution.
+}
+<span type="pagebreak" title="241" id="calibre_link-557" class="calibre17"></span>
+
+// Start the program:
+const SOLVED_BOARD = JSON.stringify(getNewBoard());
+let puzzleBoard = getNewPuzzle();
+displayBoard(puzzleBoard);
+let startTime = Date.now();
+
+let maxMoves = 10;
+while (true) {
+    if (solve(puzzleBoard, maxMoves)) {
+        break; // Break out of the loop when a solution is found.
+    }
+    maxMoves += 1;
+}
+document.write("Run in " + Math.round((Date.now() - startTime) / 100) / 10 + " seconds.&lt;br /&gt;");
+&lt;/script&gt;</code></pre>
+<p class="calibre22">The program’s output looks like the following:</p>
+<pre class="calibre23"><code class="calibre11"> 7  1  3  4
+ 2  5 10  8
+__  6  9 11
+13 14 15 12
+Attempting to solve in at most 10 moves...
+Attempting to solve in at most 11 moves...
+Attempting to solve in at most 12 moves...
+<var class="calibre48">--snip--</var>
+ 1  2  3  4
+ 5  6  7  8
+ 9 10 11 __
+13 14 15 12
+
+Move up
+
+ 1  2  3  4
+ 5  6  7  8
+ 9 10 11 12
+13 14 15 __
+
+Solved in 18 moves:
+left, down, right, down, left, up, right, up, left, left, down,
+right, right, up, left, left, left, up
+Run in 39.519 seconds.</code></pre>
+<p class="calibre22">Note that when JavaScript runs in a browser, the code must complete before it displays any output. Until then, it may appear to have frozen, and your browser might ask if you’d like to prematurely stop it. You can ignore this warning and let the program keep working until it has solved the puzzle.</p>
+<p class="calibre22"><span type="pagebreak" title="242" id="calibre_link-558" class="calibre17"></span>The program’s recursive <code class="calibre11">attemptMove()</code> function solves sliding-tile puzzles by trying every possible combination of slides. The function is given a move to try. If this solves the puzzle, the function returns a Boolean <code class="calibre11">True</code> value. Otherwise, it calls <code class="calibre11">attemptMove()</code> with all the other possible moves it can make and returns a Boolean <code class="calibre11">False</code> value if none of them find a solution before exceeding the maximum number of moves. We’ll explore this function in more detail later.</p>
+<p class="calibre22">The data structure we use to represent a sliding-tile board is a list (in Python) or array (in JavaScript) of integers, with <code class="calibre11">0</code> representing the blank space. In our program, this data structure is often stored in a variable named <code class="calibre11">board</code>. The values at <code class="calibre11">board[y * SIZE + x]</code> match the tile at the x, y coordinates on the board, as depicted in <a href="#calibre_link-463" id="calibre_link-695" class="linkurl">Figure 12-5</a>. For example, if the <code class="calibre11">SIZE</code> constant is <code class="calibre11">4</code>, the value at the x, y coordinates 3, 1 can be found at <code class="calibre11">board[1 * 4 + 3]</code>. </p>
+<p class="calibre22">This small calculation enables us to use a 1D array or list to store the values of a 2D tile board. This programming technique is useful not just in our project but for any 2D data structure that must be stored in an array or list, such as a 2D image stored as a stream of bytes.</p>
+<figure class="calibre25">
+<img src="images/000035.webp" class="calibre16" alt="Two sliding-tile puzzles. In the first, each tile and the blank space are represented by their x, y coordinates. In the second, the tiles and blank space are numbered from 0 to 15. The coordinates correspond to the following numbered tiles: 0,0 corresponds to 0; 1,0 corresponds to 1; 2,0 corresponds to 2; 3,0 corresponds to 3; 0,1 corresponds to 4; 1,1 corresponds to 5; 2,1 corresponds to 6; 3,1 corresponds to 7; 0,2 corresponds to 8; 1,2 corresponds to 9; 2,2 corresponds to 10; 3,2 corresponds to 11; 0,3 corresponds to 12; 1,3 corresponds to 13; 2,3 corresponds to 14; 3,3 (the blank space) corresponds to 15." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-463" class="linkurl">Figure 12-5</a>: The x, y coordinates for each space on the board (left) and the corresponding data structure index (right)</p></figcaption>
+</figure>
+<p class="calibre22">Let’s look at some example data structures. The board with mixed-up tiles shown previously on the left side of <a href="#calibre_link-459" class="linkurl">Figure 12-1</a> would be represented by the following: </p>
+<ol class="none">
+<li class="calibre9"><code class="calibre11">[15, 2, 1, 12, 8, 5, 6, 11, 4, 9, 10, 7, 3, 14, 13, 0]</code> </li>
+</ol>
+<p class="calibre22">The solved, ordered puzzle on the right side of <a href="#calibre_link-459" class="linkurl">Figure 12-1</a> would be represented by this:</p>
+<ol class="none">
+<li class="calibre9"><code class="calibre11">[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0]</code></li>
+</ol>
+<p class="calibre22">All the functions in our program will expect board data structures that follow this format.</p>
+<p class="calibre22">Unfortunately, the 4 × 4 version of the sliding-tile puzzle has so many possible moves that it would take a normal laptop weeks to solve. You can change the <code class="calibre11">SIZE</code> constant from <code class="calibre11">4</code> to <code class="calibre11">3</code> to solve a simpler 3 × 3 version of the puzzle. The finished, ordered 3 × 3 puzzle’s data structure would look like this: </p>
+<ol class="none">
+<li class="calibre9"><code class="calibre11">[1, 2, 3, 4, 5, 6, 7, 8, 0]</code>.</li>
+</ol>
+<h2 id="calibre_link-381" class="calibre6"><span type="pagebreak" title="243" id="calibre_link-187" class="calibre20"></span>Setting Up the Program’s Constants</h2>
+<p class="bodyfirst">At the beginning of the source code, the program uses a few constants to make the code more readable. The Python code is as follows:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">import random, time
+
+DIFFICULTY = 40 # How many random slides a puzzle starts with.
+SIZE = 4 # The board is SIZE x SIZE spaces.
+random.seed(1) # Select which puzzle to solve.
+
+BLANK = 0
+UP = 'up'
+DOWN = 'down'
+LEFT = 'left'
+RIGHT = 'right'</code></pre>
+<p class="calibre22">The JavaScript code is as follows:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+const DIFFICULTY = 40; // How many random slides a puzzle starts with.
+const SIZE = 4; // The board is SIZE x SIZE spaces.
+
+const BLANK = 0;
+const UP = "up";
+const DOWN = "down";
+const LEFT = "left";
+const RIGHT = "right";</code></pre>
+<p class="calibre22">To have reproducible random numbers, the Python program sets the random number seed to <code class="calibre11">1</code>. The same seed value will always reproduce the same random puzzle, which is useful for debugging. You can change the seed value to any other integer to create different puzzles. JavaScript has no way to set its random seed value, and <em class="calibre10">slidingtilesolver.html</em> doesn’t have an equivalent feature.</p>
+<p class="calibre22">The <code class="calibre11">SIZE</code> constant sets the size of the square board. You can change this size to anything, but 4 × 4 boards are standard, while 3 × 3 boards are useful for testing, because the program is quick to solve them. The <code class="calibre11">BLANK</code> constant is used in the puzzle data structure to represent the blank space and must be kept at <code class="calibre11">0</code>. The <code class="calibre11">UP</code>, <code class="calibre11">DOWN</code>, <code class="calibre11">LEFT</code>, and <code class="calibre11">RIGHT</code> constants are used to make the code readable, similar to the <code class="calibre11">NORTH</code>, <code class="calibre11">SOUTH</code>, <code class="calibre11">WEST</code>, and <code class="calibre11">EAST</code> constants in the maze-generator project in <span class="calibre" itemid="xref_target_Chapter 11">Chapter 11</span>.</p>
+<h2 id="calibre_link-382" class="calibre6">Representing the Sliding-Tile Puzzle as Data</h2>
+<p class="bodyfirst">The sliding-tile board’s data structure is just a list or array of integers. What makes it representative of an actual puzzle board is the way it’s used by the functions in the program. The <code class="calibre11">displayBoard()</code>, <code class="calibre11">getNewBoard()</code>, <code class="calibre11">findBlankSpace()</code>, and other functions in this program all deal with this data structure. </p>
+<h3 id="calibre_link-383" class="calibre33"><span type="pagebreak" title="244" id="calibre_link-559" class="calibre34"></span>Displaying the Board</h3>
+<p class="bodyfirst">The first function, <code class="calibre11">displayBoard()</code>, prints the board data structure on the screen. The Python code for the <code class="calibre11">displayBoard()</code> function is as follows:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">def displayBoard(board):
+    """Display the tiles stored in `board` on the screen."""
+    for y in range(SIZE): # Iterate over each row.
+        for x in range(SIZE): # Iterate over each column.
+            if board[y * SIZE + x] == BLANK:
+                print('__ ', end='') # Display blank tile.
+            else:
+                print(str(board[y * SIZE + x]).rjust(2) + ' ', end='')
+        print() # Print a newline at the end of the row.</code></pre>
+<p class="calibre22">The JavaScript code for the <code class="calibre11">displayBoard()</code> function is as follows:</p>
+<pre class="calibre23"><code class="calibre11">function displayBoard(board) {
+    // Display the tiles stored in `board` on the screen.
+    document.write("&lt;pre&gt;");
+    for (let y = 0; y &lt; SIZE; y++) { // Iterate over each row.
+        for (let x = 0; x &lt; SIZE; x++) { // Iterate over each column.
+            if (board[y * SIZE + x] == BLANK) {
+                document.write('__ '); // Display blank tile.
+            } else {
+                document.write(board[y * SIZE + x].toString().padStart(2) + " ");
+            }
+        }
+        document.write("&lt;br /&gt;");
+    }
+    document.write("&lt;/pre&gt;");
+}</code></pre>
+<p class="calibre22">The pair of nested <code class="calibre11">for</code> loops iterate over every row and column on the board. The first <code class="calibre11">for</code> loop loops over the y-coordinates, and the second <code class="calibre11">for</code> loop loops over the x-coordinates. This is because the program needs to print all the columns of a single row before printing a newline character to move on to the next row.</p>
+<p class="calibre22">The <code class="calibre11">if</code> statement checks whether the tile at the current x, y coordinates is the blank tile. If it is, the program prints two underscores with a trailing space. Otherwise, the code in the <code class="calibre11">else</code> block prints the tile number with a trailing space. The trailing space is what separates the tile numbers from one another on the screen. If the tile number is a single digit, the <code class="calibre11">rjust()</code> or <code class="calibre11">padStart()</code> method will insert an extra space so that the tile number is aligned with the two-digit numbers on the screen.</p>
+<p class="calibre22">For example, say the scrambled puzzle on the left side of <a href="#calibre_link-459" class="linkurl">Figure 12-1</a> is represented by this data structure: </p>
+<p class="calibre22"><code class="calibre11">[15, 2, 1, 12, 8, 5, 6, 11, 4, 9, 10, 7, 3, 14, 13, 0]</code> </p>
+<p class="calibre22"><span type="pagebreak" title="245" id="calibre_link-560" class="calibre17"></span>When the data structure is passed to <code class="calibre11">displayBoard()</code>, it prints the following text:</p>
+<pre class="calibre23"><code class="calibre11">15  2  1 12
+ 8  5  6 11
+ 4  9 10  7
+ 3 14 13 __</code></pre>
+<h3 id="calibre_link-384" class="calibre33">Creating a New Board Data Structure</h3>
+<p class="bodyfirst">Next, the <code class="calibre11">getNewBoard()</code> function returns a new board data structure with the tiles in their ordered, solved places. The Python code for the <code class="calibre11">getNewBoard()</code> function is as follows:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">def getNewBoard():
+    """Return a list that represents a new tile puzzle."""
+    board = []
+    for i in range(1, SIZE * SIZE):
+        board.append(i)
+    board.append(BLANK)
+    return board</code></pre>
+<p class="calibre22">The JavaScript code for the <code class="calibre11">getNewBoard()</code> function is as follows:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">function getNewBoard() {
+    // Return a list that represents a new tile puzzle.
+    let board = [];
+    for (let i = 1; i &lt; SIZE * SIZE; i++) {
+        board.push(i);
+    }
+    board.push(BLANK);
+    return board;
+}</code></pre>
+<p class="calibre22">The <code class="calibre11">getNewBoard()</code> function returns a board data structure appropriate to the integer in the <code class="calibre11">SIZE</code> constant (either 3 × 3 or 4 × 4). The <code class="calibre11">for</code> loop generates this list or array with the integers from <code class="calibre11">1</code> up to, but not including, <code class="calibre11">SIZE</code> squared, with a <code class="calibre11">0</code> (the value stored in the <code class="calibre11">BLANK</code> constant) at the end to represent the blank space in the lower-right corner.</p>
+<h3 id="calibre_link-385" class="calibre33">Finding the Coordinates of the Blank Space</h3>
+<p class="bodyfirst">Our program uses the <code class="calibre11">findBlankSpace()</code> function to find the x, y coordinates of the blank space on the board. The Python code is as follows:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">def findBlankSpace(board):
+    """Return an [x, y] list of the blank space's location."""
+    for x in range(SIZE):
+        for y in range(SIZE):
+            if board[y * SIZE + x] == BLANK:
+                return [x, y]</code></pre>
+<p class="calibre22"><span type="pagebreak" title="246" id="calibre_link-561" class="calibre17"></span>The JavaScript code is as follows:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">function findBlankSpace(board) {
+    // Return an [x, y] array of the blank space's location.
+    for (let x = 0; x &lt; SIZE; x++) {
+        for (let y = 0; y &lt; SIZE; y++) {
+            if (board[y * SIZE + x] === BLANK) {
+                return [x, y];
+            }
+        }
+    }
+}</code></pre>
+<p class="calibre22">Like the <code class="calibre11">displayBoard()</code> function, the <code class="calibre11">findBlankSpace()</code> function has a pair of nested <code class="calibre11">for</code> loops. These <code class="calibre11">for</code> loops will loop over every position in the board data structure. When the <code class="calibre11">board[y * SIZE + x]</code> code finds the blank space, it returns the x- and y-coordinates as two integers in a Python list or JavaScript array.</p>
+<h3 id="calibre_link-386" class="calibre33">Making a Move</h3>
+<p class="bodyfirst">Next, the <code class="calibre11">makeMove()</code> function accepts two arguments: a board data structure and an <code class="calibre11">UP</code>, <code class="calibre11">DOWN</code>, <code class="calibre11">LEFT</code>, or <code class="calibre11">RIGHT</code> direction to slide a tile on that board. This code is fairly repetitive, so the short variable names <code class="calibre11">bx</code> and <code class="calibre11">by</code> are used to represent the x- and y-coordinates of the blank space.</p>
+<p class="calibre22">To make a move, the board data structure swaps the value of the moved tile with the <code class="calibre11">0</code> of the blank tile. The Python code for the <code class="calibre11">makeMove()</code> function is as follows:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">def makeMove(board, move):
+    """Modify `board` in place to carry out the slide in `move`."""
+    bx, by = findBlankSpace(board)
+    blankIndex = by * SIZE + bx
+
+    if move == UP:
+        tileIndex = (by + 1) * SIZE + bx
+    elif move == LEFT:
+        tileIndex = by * SIZE + (bx + 1)
+    elif move == DOWN:
+        tileIndex = (by - 1) * SIZE + bx
+    elif move == RIGHT:
+        tileIndex = by * SIZE + (bx - 1)
+
+    # Swap the tiles at blankIndex and tileIndex:
+    board[blankIndex], board[tileIndex] = board[tileIndex], board[blankIndex]</code></pre>
+<p class="calibre22">The JavaScript code for the <code class="calibre11">makeMove()</code> function is as follows:</p>
+<pre class="calibre23"><code class="calibre11">function makeMove(board, move) {
+    // Modify `board` in place to carry out the slide in `move`.
+    let bx, by;
+    [bx, by] = findBlankSpace(board);
+    let blankIndex = by * SIZE + bx;
+
+<span type="pagebreak" title="247" id="calibre_link-562" class="calibre17"></span>    let tileIndex;
+    if (move === UP) {
+        tileIndex = (by + 1) * SIZE + bx;
+    } else if (move === LEFT) {
+        tileIndex = by * SIZE + (bx + 1);
+    } else if (move === DOWN) {
+        tileIndex = (by - 1) * SIZE + bx;
+    } else if (move === RIGHT) {
+        tileIndex = by * SIZE + (bx - 1);
+    }
+
+    // Swap the tiles at blankIndex and tileIndex:
+    [board[blankIndex], board[tileIndex]] = [board[tileIndex], board[blankIndex]];
+}</code></pre>
+<p class="calibre22">The <code class="calibre11">if</code> statements determine the index of the tile to move based on the <code class="calibre11">move</code> parameter. The function then “slides” a tile by swapping the <code class="calibre11">BLANK</code> value at <code class="calibre11">board[blankindex]</code> with the numbered tile at <code class="calibre11">board[tileIndex]</code>. The <code class="calibre11">makeMove()</code> function doesn’t return anything. Instead, it modifies the <code class="calibre11">board</code> data structure in place.</p>
+<p class="calibre22">Python has the <code class="calibre11">a, b = b, a</code> syntax to swap the value of two variables. For JavaScript, we need to envelop them in an array, such as <code class="calibre11">[a, b] = [b, a]</code> to perform the swap. We use this syntax at the end of the function to swap the values in <code class="calibre11">board[blankIndex]</code> and <code class="calibre11">board[tileIndex]</code> with each other.</p>
+<h3 id="calibre_link-387" class="calibre33">Undoing a Move</h3>
+<p class="bodyfirst">Next, as part of the backtracking in the recursive algorithm, our program needs to undo moves. This is as simple as making a move in the opposite direction as the initial move. The Python code for the <code class="calibre11">undoMove()</code> function is as follows:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">def undoMove(board, move):
+    """Do the opposite move of `move` to undo it on `board`."""
+    if move == UP:
+        makeMove(board, DOWN)
+    elif move == DOWN:
+        makeMove(board, UP)
+    elif move == LEFT:
+        makeMove(board, RIGHT)
+    elif move == RIGHT:
+        makeMove(board, LEFT)</code></pre>
+<p class="calibre22">The JavaScript code for the <code class="calibre11">undoMove()</code> function is as follows:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">function undoMove(board, move) {
+    // Do the opposite move of `move` to undo it on `board`.
+    if (move === UP) {
+        makeMove(board, DOWN);
+    } else if (move === DOWN) {
+        makeMove(board, UP);
+    } else if (move === LEFT) {
+        makeMove(board, RIGHT);
+<span type="pagebreak" title="248" id="calibre_link-563" class="calibre17"></span>    } else if (move === RIGHT) {
+        makeMove(board, LEFT);
+    }
+}</code></pre>
+<p class="calibre22">We’ve already programmed the swapping logic into the <code class="calibre11">makeMove()</code> function, so <code class="calibre11">undoMove()</code> can just call that function for the direction opposite of the <code class="calibre11">move</code> argument. This way, a hypothetical <code class="calibre11">someMove</code> move made on a hypothetical <code class="calibre11">someBoard</code> data structure by the <code class="calibre11">makeMove(someBoard, someMove)</code> function call can be undone by calling <code class="calibre11">undoMove(someBoard, someMove)</code>.</p>
+<h2 id="calibre_link-388" class="calibre6">Setting Up a New Puzzle</h2>
+<p class="bodyfirst">To create a new, scrambled puzzle, we cannot simply put the tiles in random places, because some configurations of tiles produce invalid, unsolvable puzzles. Instead, we need to start from a solved puzzle and make many random moves. Solving the puzzle becomes a matter of figuring out which slides will undo these random slides to get back to the original, ordered configuration.</p>
+<p class="calibre22">But it’s not always possible to make moves in each of the four directions. For example, if the blank space is in the bottom-right corner, as in <a href="#calibre_link-464" id="calibre_link-696" class="linkurl">Figure 12-6</a>, tiles can slide only down or right because no tiles can slide left or up. Furthermore, if sliding the 7 tile in <a href="#calibre_link-464" class="linkurl">Figure 12-6</a> up was the previous move, then sliding it down is removed as a valid move because it would undo the previous move.</p>
+<figure class="calibre25">
+<img src="images/000062.webp" class="calibre16" alt="Sliding-tile puzzle with a blank space in the lower-right corner. Arrows indicate the two possible moves: sliding the 7 tile down, and sliding the 13 tile to the right." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-464" class="linkurl">Figure 12-6</a>: If the blank space is in the bottom-right corner, down and right are the only valid slide directions.</p></figcaption>
+</figure>
+<p class="calibre22">To help us, we need a <code class="calibre11">getValidMoves()</code> function that can tell us which slide directions are possible on a given board data structure:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">def getValidMoves(board, prevMove=None):
+    """Returns a list of the valid moves to make on this board. If
+    prevMove is provided, do not include the move that would undo it."""
+
+    blankx, blanky = findBlankSpace(board)
+
+    validMoves = []
+<span type="pagebreak" title="249" id="calibre_link-564" class="calibre17"></span>    if blanky != SIZE - 1 and prevMove != DOWN:
+        # Blank space is not on the bottom row.
+        validMoves.append(UP)
+
+    if blankx != SIZE - 1 and prevMove != RIGHT:
+        # Blank space is not on the right column.
+        validMoves.append(LEFT)
+
+    if blanky != 0 and prevMove != UP:
+        # Blank space is not on the top row.
+        validMoves.append(DOWN)
+
+    if blankx != 0 and prevMove != LEFT:
+        # Blank space is not on the left column.
+        validMoves.append(RIGHT)
+
+    return validMoves</code></pre>
+<p class="calibre22">The JavaScript code for this function is as follows:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">function getValidMoves(board, prevMove) {
+    // Returns a list of the valid moves to make on this board. If
+    // prevMove is provided, do not include the move that would undo it.
+
+    let blankx, blanky;
+    [blankx, blanky] = findBlankSpace(board);
+
+    let validMoves = [];
+    if (blanky != SIZE - 1 &amp;&amp; prevMove != DOWN) {
+        // Blank space is not on the bottom row.
+        validMoves.push(UP);
+    }
+    if (blankx != SIZE - 1 &amp;&amp; prevMove != RIGHT) {
+        // Blank space is not on the right column.
+        validMoves.push(LEFT);
+    }
+    if (blanky != 0 &amp;&amp; prevMove != UP) {
+        // Blank space is not on the top row.
+        validMoves.push(DOWN);
+    }
+    if (blankx != 0 &amp;&amp; prevMove != LEFT) {
+        // Blank space is not on the left column.
+        validMoves.push(RIGHT);
+    }
+    return validMoves;
+}</code></pre>
+<p class="calibre22">The first thing the <code class="calibre11">getValidMoves()</code> function does is call <code class="calibre11">findBlankSpace()</code> and store the x, y coordinates of the blank space in the variables <code class="calibre11">blankx</code> and <code class="calibre11">blanky</code>. Next, the function sets up the <code class="calibre11">validMoves</code> variable with an empty Python list or empty JavaScript array to hold all the valid directions for a slide.</p>
+<p class="calibre22"><span type="pagebreak" title="250" id="calibre_link-565" class="calibre17"></span>Looking back at <a href="#calibre_link-463" class="linkurl">Figure 12-5</a>, a y-coordinate of <code class="calibre11">0</code> represents the top edge of the board. If <code class="calibre11">blanky</code>, the blank space’s y-coordinate, is not <code class="calibre11">0</code>, then we know the blank space is not on the top edge. If the previous move was also not <code class="calibre11">DOWN</code>, then <em class="calibre10">up</em> is a valid move, and the code adds <code class="calibre11">UP</code> to <code class="calibre11">validMoves</code>.</p>
+<p class="calibre22">Similarly, the left edge has an x-coordinate of <code class="calibre11">0</code>, the bottom edge has a y-coordinate of <code class="calibre11">SIZE - 1</code>, and the right edge has an x-coordinate of <code class="calibre11">SIZE - 1</code>. Using the expression <code class="calibre11">SIZE - 1</code> ensures that this code works no matter whether the board is 3 × 3, 4 × 4, or any other size. The <code class="calibre11">getValidMoves()</code> function does these checks for all four directions and then returns <code class="calibre11">validMoves</code>.</p>
+<p class="calibre22">Next, the <code class="calibre11">getNewPuzzle()</code> function returns the data structure of a scrambled board for the program to solve. Tiles can’t simply be randomly placed on the board, because some configurations of tiles produce puzzles that are impossible to solve. To avoid this, the <code class="calibre11">getNewPuzzle()</code> function starts with an ordered, solved board and then applies a large number of random slides to it. Solving this puzzle is, in effect, figuring out the moves that undo these slides. The Python code for the <code class="calibre11">getNewPuzzle()</code> function is as follows:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">def getNewPuzzle():
+    """Get a new puzzle by making random slides from the solved state."""
+    board = getNewBoard()
+    for i in range(DIFFICULTY):
+        validMoves = getValidMoves(board)
+        makeMove(board, random.choice(validMoves))
+    return board</code></pre>
+<p class="calibre22">The JavaScript code is as follows:</p>
+<pre class="calibre23"><code class="calibre11">function getNewPuzzle() {
+    // Get a new puzzle by making random slides from the solved state.
+    let board = getNewBoard();
+    for (let i = 0; i &lt; DIFFICULTY; i++) {
+        let validMoves = getValidMoves(board);
+        makeMove(board, validMoves[Math.floor(Math.random() * validMoves.length)]);
+    }
+    return board;
+}</code></pre>
+<p class="calibre22">The call to <code class="calibre11">getNewBoard()</code> obtains a board data structure in the ordered, solved state. The <code class="calibre11">for</code> loop calls <code class="calibre11">getValidMoves()</code> to obtain a list of valid moves, given the current state of the board, and then calls <code class="calibre11">makeMove()</code> with a randomly selected move from the list. The <code class="calibre11">random.choice()</code> function in Python and the <code class="calibre11">Math.floor()</code> and <code class="calibre11">Math.random()</code> functions in JavaScript will handle the random selection from the <code class="calibre11">validMoves</code> list or array, no matter what combination of <code class="calibre11">UP</code>, <code class="calibre11">DOWN</code>, <code class="calibre11">LEFT</code>, and <code class="calibre11">RIGHT</code> values it contains. </p>
+<p class="calibre22">The <code class="calibre11">DIFFICULTY</code> constant determines how many random slides from <code class="calibre11">makeMove()</code> the <code class="calibre11">for</code> loop applies. The higher the integer in <code class="calibre11">DIFFICULTY</code>, the more scrambled the puzzle becomes. Even though this results in some moves that undo earlier moves by pure chance, such as sliding left and then <span type="pagebreak" title="251" id="calibre_link-566" class="calibre17"></span>immediately sliding right, with enough slides the function produces a thoroughly scrambled board. For testing purposes, <code class="calibre11">DIFFICULTY</code> is set to <code class="calibre11">40</code>, allowing the program to produce a solution in about a minute. For a more realistic 15-puzzle, you should change <code class="calibre11">DIFFICULTY</code> to <code class="calibre11">200</code>.</p>
+<p class="calibre22">After the board data structure in <code class="calibre11">board</code> is created and scrambled, the <code class="calibre11">getNewPuzzle()</code> function returns it.</p>
+<h2 id="calibre_link-389" class="calibre6">Recursively Solving the Sliding-Tile Puzzle</h2>
+<p class="bodyfirst">Now that we have the functions for creating and manipulating the puzzle data structure, let’s create the functions that solve the puzzle by recursively sliding the tiles in each possible direction and checking whether this produces a finished, ordered board.</p>
+<p class="calibre22">The <code class="calibre11">attemptMove()</code> function performs a single slide on a board data structure, then recursively calls itself once for each of the valid moves the board can make. Multiple base cases exist. If the board data structure is in a solved state, the function returns a Boolean <code class="calibre11">True</code> value; if the maximum number of moves has been reached, it returns a Boolean <code class="calibre11">False</code> value. Also, if a recursive call has returned <code class="calibre11">True</code>, then <code class="calibre11">attemptMove()</code> should return <code class="calibre11">True</code>, and if recursive calls for all the valid moves have returned <code class="calibre11">False</code>, then <code class="calibre11">attemptMove()</code> should return <code class="calibre11">False</code>.</p>
+<h3 id="calibre_link-390" class="calibre33">The solve() Function</h3>
+<p class="bodyfirst">The <code class="calibre11">solve()</code> function takes a board data structure and maximum number of moves the algorithm should attempt before backtracking. Then it performs the first call to <code class="calibre11">attemptMove()</code>. If this first call to <code class="calibre11">attemptMove()</code> returns <code class="calibre11">True</code>, the code in <code class="calibre11">solve()</code> displays the series of steps that solves the puzzle. If it returns <code class="calibre11">False</code>, the code in <code class="calibre11">solve()</code> tells the user no solution was found with this maximum number of moves.</p>
+<p class="calibre22">The Python code for <code class="calibre11">solve()</code> begins as follows:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">def solve(board, maxMoves):
+    """Attempt to solve the puzzle in `board` in at most `maxMoves`
+    moves. Returns True if solved, otherwise False."""
+    print('Attempting to solve in at most', maxMoves, 'moves...')
+    solutionMoves = [] # A list of UP, DOWN, LEFT, RIGHT values.
+    solved = attemptMove(board, solutionMoves, maxMoves, None)</code></pre>
+<p class="calibre22">The JavaScript code for <code class="calibre11">solve()</code> begins as follows:</p>
+<pre class="calibre23"><code class="calibre11">function solve(board, maxMoves) {
+    // Attempt to solve the puzzle in `board` in at most `maxMoves`
+    // moves. Returns true if solved, otherwise false.
+    document.write("Attempting to solve in at most " + maxMoves + " moves...&lt;br /&gt;");
+    let solutionMoves = []; // A list of UP, DOWN, LEFT, RIGHT values.
+    let solved = attemptMove(board, solutionMoves, maxMoves, null);</code></pre>
+<p class="calibre22"><span type="pagebreak" title="252" id="calibre_link-567" class="calibre17"></span>The <code class="calibre11">solve()</code> function has two parameters: <code class="calibre11">board</code> contains the data structure of the puzzle to solve, and <code class="calibre11">maxMoves</code> is the maximum number of moves the function should make to try to solve the puzzle. The <code class="calibre11">solutionMoves</code> list or array contains the sequence of <code class="calibre11">UP</code>, <code class="calibre11">DOWN</code>, <code class="calibre11">LEFT</code>, and <code class="calibre11">RIGHT</code> values that produce the solved state. The <code class="calibre11">attemptMove()</code> function modifies this list or array in place as it makes recursive calls. If the initial <code class="calibre11">attemptMove()</code> function finds a solution and returns <code class="calibre11">True</code>, <code class="calibre11">solutionMoves</code> contains the sequence of moves for the solution.</p>
+<p class="calibre22">The <code class="calibre11">solve()</code> function then makes the initial call to <code class="calibre11">attemptMove()</code>, and stores the <code class="calibre11">True</code> or <code class="calibre11">False</code> it returns in the solved variable. The rest of the <code class="calibre11">solve()</code> function handles these two cases:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">    if solved:
+        displayBoard(board)
+        for move in solutionMoves:
+            print('Move', move)
+            makeMove(board, move)
+            print() # Print a newline.
+            displayBoard(board)
+            print() # Print a newline.
+
+        print('Solved in', len(solutionMoves), 'moves:')
+        print(', '.join(solutionMoves))
+        return True # Puzzle was solved.
+    else:
+        return False # Unable to solve in maxMoves moves.</code></pre>
+<p class="calibre22">The JavaScript code is as follows:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">    if (solved) {
+        displayBoard(board);
+        for (let move of solutionMoves) {
+            document.write("Move " + move + "&lt;br /&gt;");
+            makeMove(board, move);
+            document.write("&lt;br /&gt;"); // Print a newline.
+            displayBoard(board);
+            document.write("&lt;br /&gt;"); // Print a newline.
+        }
+        document.write("Solved in " + solutionMoves.length + " moves:&lt;br /&gt;");
+        document.write(solutionMoves.join(", ") + "&lt;br /&gt;");
+        return true; // Puzzle was solved.
+    } else {
+        return false; // Unable to solve in maxMoves moves.
+    }
+}</code></pre>
+<p class="calibre22">If <code class="calibre11">attemptMove()</code> finds a solution, the program runs through all the moves gathered in the <code class="calibre11">solutionMoves</code> list or array and displays the board after each slide. This proves to the user that the moves collected by <code class="calibre11">attemptMove()</code> are the real solution to the puzzle. Finally, the <code class="calibre11">solve()</code> function itself returns <code class="calibre11">True</code>. If <code class="calibre11">attemptMove()</code> is unable to find a solution, the <code class="calibre11">solve()</code> function simply returns <code class="calibre11">False</code>.</p>
+<h3 id="calibre_link-391" class="calibre33"><span type="pagebreak" title="253" id="calibre_link-568" class="calibre34"></span>The attemptMove() Function</h3>
+<p class="bodyfirst">Let’s take a look at <code class="calibre11">attemptMove()</code>, the core recursive function behind our tile-solving algorithm. Remember the tree graph that a sliding-tile puzzle produces; calling <code class="calibre11">attemptMove()</code> for a certain direction is like traveling down that edge of this graph to the next node. A recursive <code class="calibre11">attemptMove()</code> call moves further down the tree. When this recursive <code class="calibre11">attemptMove()</code> call returns, it backtracks to a previous node. When <code class="calibre11">attemptMove()</code> has backtracked all the way to the root node, the program execution has returned to the <code class="calibre11">solve()</code> function.</p>
+<p class="calibre22">The Python code for <code class="calibre11">attemptMove()</code> begins as follows:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">def attemptMove(board, movesMade, movesRemaining, prevMove):
+    """A recursive function that attempts all possible moves on `board`
+    until it finds a solution or reaches the `maxMoves` limit.
+    Returns True if a solution was found, in which case `movesMade`
+    contains the series of moves to solve the puzzle. Returns False
+    if `movesRemaining` is less than 0."""
+
+    if movesRemaining &lt; 0:
+        # BASE CASE - Ran out of moves.
+        return False
+
+    if board == SOLVED_BOARD:
+        # BASE CASE - Solved the puzzle.
+        return True</code></pre>
+<p class="calibre22">The JavaScript code for <code class="calibre11">attemptMove()</code> begins as follows:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">function attemptMove(board, movesMade, movesRemaining, prevMove) {
+    // A recursive function that attempts all possible moves on `board`
+    // until it finds a solution or reaches the `maxMoves` limit.
+    // Returns true if a solution was found, in which case `movesMade`
+    // contains the series of moves to solve the puzzle. Returns false
+    // if `movesRemaining` is less than 0.
+
+    if (movesRemaining &lt; 0) {
+        // BASE CASE - Ran out of moves.
+        return false;
+    }
+
+    if (JSON.stringify(board) == SOLVED_BOARD) {
+        // BASE CASE - Solved the puzzle.
+        return true;
+    }</code></pre>
+<p class="calibre22">The <code class="calibre11">attemptMove()</code> function has four parameters. The <code class="calibre11">board</code> parameter contains a tile puzzle board data structure to solve. The <code class="calibre11">movesMade</code> parameter contains a list or array that <code class="calibre11">attemptMove()</code> modifies in place, adding the <code class="calibre11">UP</code>, <code class="calibre11">DOWN</code>, <code class="calibre11">LEFT</code>, and <code class="calibre11">RIGHT</code> values that the recursive algorithm has made. If <code class="calibre11">attemptMove()</code> solves the puzzle, <code class="calibre11">movesMade</code> will contain the moves that led to the solution. This list or array is also what the <code class="calibre11">solutionMoves</code> variable in the <code class="calibre11">solve()</code> function refers to.</p>
+<p class="calibre22"><span type="pagebreak" title="254" id="calibre_link-569" class="calibre17"></span>The <code class="calibre11">solve()</code> function uses its <code class="calibre11">maxMoves</code> variable as the <code class="calibre11">movesRemaining</code> parameter in the initial call to <code class="calibre11">attemptMove()</code>. Each recursive call passes <code class="calibre11">maxMoves - 1</code> for the next value of <code class="calibre11">maxMoves</code>, causing it to decrease as more recursive calls are made. When it becomes less than <code class="calibre11">0</code>, the <code class="calibre11">attemptMove()</code> function stops making additional recursive calls and returns <code class="calibre11">False</code>.</p>
+<p class="calibre22">Finally, the <code class="calibre11">prevMove</code> parameter contains the <code class="calibre11">UP</code>, <code class="calibre11">DOWN</code>, <code class="calibre11">LEFT</code>, or <code class="calibre11">RIGHT</code> value that the previous call to <code class="calibre11">attemptMove()</code> made so that it doesn’t undo that move. For the initial call to <code class="calibre11">attemptMove()</code>, the <code class="calibre11">solve()</code> function passes Python’s <code class="calibre11">None</code> or JavaScript’s <code class="calibre11">null</code> value for this parameter, since no previous move exists.</p>
+<p class="calibre22">The beginning of the <code class="calibre11">attemptMove()</code> code checks for two base cases, returning <code class="calibre11">False</code> if <code class="calibre11">movesRemaining</code> has become less than <code class="calibre11">0</code>, and returning <code class="calibre11">True</code> if <code class="calibre11">board</code> is in the solved state. The <code class="calibre11">SOLVED_BOARD</code> constant contains a board in the solved state that we can compare to the data structure in <code class="calibre11">board</code>.</p>
+<p class="calibre22">The next part of <code class="calibre11">attemptMove()</code> performs each of the valid moves it can do on this board. The Python code is as follows:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">    # RECURSIVE CASE - Attempt each of the valid moves:
+    for move in getValidMoves(board, prevMove):
+        # Make the move:
+        makeMove(board, move)
+        movesMade.append(move)
+
+        if attemptMove(board, movesMade, movesRemaining - 1, move):
+            # If the puzzle is solved, return True:
+            undoMove(board, move) # Reset to the original puzzle.
+            return True</code></pre>
+<p class="calibre22">The JavaScript code is as follows:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">    // RECURSIVE CASE - Attempt each of the valid moves:
+    for (let move of getValidMoves(board, prevMove)) {
+        // Make the move:
+        makeMove(board, move);
+        movesMade.push(move);
+
+        if (attemptMove(board, movesMade, movesRemaining - 1, move)) {
+            // If the puzzle is solved, return True:
+            undoMove(board, move); // Reset to the original puzzle.
+            return true;
+        }</code></pre>
+<p class="calibre22">The <code class="calibre11">for</code> loop sets the move variable to each of the directions returned by <code class="calibre11">getValidMoves()</code>. For each move, we call <code class="calibre11">makeMove()</code> to modify the board data structure with the move and to add the move to the list or array in <code class="calibre11">movesMade</code>. </p>
+<p class="calibre22">Next, the code recursively calls <code class="calibre11">attemptMove()</code> to explore the range of all possible future moves within the depth set by <code class="calibre11">movesRemaining</code>. The board and <code class="calibre11">movesMade</code> variables are forwarded to this recursive call. The code sets the recursive call’s <code class="calibre11">movesRemaining</code> parameter to <code class="calibre11">movesRemaining - 1</code> so that it decreases by one. It also sets the <code class="calibre11">prevMode</code> parameter to <code class="calibre11">move</code> so that it doesn’t immediately undo the move just made.</p>
+<p class="calibre22"><span type="pagebreak" title="255" id="calibre_link-570" class="calibre17"></span>If the recursive call returns <code class="calibre11">True</code>, a solution exists and is recorded in the <code class="calibre11">movesMade</code> list or array. We call the <code class="calibre11">undoMove()</code> function so that <code class="calibre11">board</code> will contain the original puzzle after the execution returns to <code class="calibre11">solve()</code> and then return <code class="calibre11">True</code> to indicate a solution has been found.</p>
+<p class="calibre22">The Python code for <code class="calibre11">attemptMove()</code> continues as follows:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">        # Undo the move to set up for the next move:
+        undoMove(board, move)
+        movesMade.pop() # Remove the last move since it was undone.
+    return False # BASE CASE - Unable to find a solution.</code></pre>
+<p class="calibre22">The JavaScript code is as follows:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">        // Undo the move to set up for the next move:
+        undoMove(board, move);
+        movesMade.pop(); // Remove the last move since it was undone.
+    }
+    return false; // BASE CASE - Unable to find a solution.
+}</code></pre>
+<p class="calibre22">If <code class="calibre11">attemptMove()</code> returns <code class="calibre11">False</code>, no solution is found. In that case, we call <code class="calibre11">undoMove()</code> and remove the latest move from the <code class="calibre11">movesMade</code> list or array.</p>
+<p class="calibre22">All of this is done for each of the valid directions. If none of the calls to <code class="calibre11">attemptMove()</code> for these directions finds a solution before reaching the maximum number of moves, the <code class="calibre11">attemptMove()</code> function returns <code class="calibre11">False</code>.</p>
+<h2 id="calibre_link-392" class="calibre6">Starting the Solver</h2>
+<p class="bodyfirst">The <code class="calibre11">solve()</code> function is useful for kicking off the initial call to <code class="calibre11">attemptMove()</code>, but the program still needs to do some setup. The Python code for this is as follows:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11"># Start the program:
+SOLVED_BOARD = getNewBoard()
+puzzleBoard = getNewPuzzle()
+displayBoard(puzzleBoard)
+startTime = time.time()</code></pre>
+<p class="calibre22">The JavaScript code for this setup is as follows:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">// Start the program:
+const SOLVED_BOARD = JSON.stringify(getNewBoard());
+let puzzleBoard = getNewPuzzle();
+displayBoard(puzzleBoard);
+let startTime = Date.now();</code></pre>
+<p class="calibre22">First, the <code class="calibre11">SOLVED_BOARD</code> constant is set to an ordered, solved board as returned by <code class="calibre11">getNewBoard()</code>. This constant isn’t set at the top of the source code because the <code class="calibre11">getNewBoard()</code> function needs to be defined before it can be called.</p>
+<p class="calibre22"><span type="pagebreak" title="256" id="calibre_link-571" class="calibre17"></span>Next, a random puzzle is returned from <code class="calibre11">getNewPuzzle()</code> and stored in the <code class="calibre11">puzzleBoard</code> variable. This variable contains the puzzle board data structure that will be solved. If you want to solve a specific 15-puzzle instead of a random one, you can replace the call to <code class="calibre11">getNewPuzzle()</code> with a list or array containing the puzzle you do want to solve.</p>
+<p class="calibre22">The board in <code class="calibre11">puzzleBoard</code> is displayed to the user, and the current time is stored in <code class="calibre11">startTime</code> so that the program can calculate the runtime of the algorithm. The Python code continues as follows:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">maxMoves = 10
+while True:
+    if solve(puzzleBoard, maxMoves):
+        break # Break out of the loop when a solution is found.
+    maxMoves += 1
+print('Run in', round(time.time() - startTime, 3), 'seconds.')</code></pre>
+<p class="calibre22">The JavaScript code is as follows:</p>
+<pre class="calibre23"><code class="calibre11">let maxMoves = 10;
+while (true) {
+    if (solve(puzzleBoard, maxMoves)) {
+        break; // Break out of the loop when a solution is found.
+    }
+    maxMoves += 1;
+}
+document.write("Run in " + Math.round((Date.now() - startTime) / 100) / 10 + " seconds.&lt;br /&gt;");
+&lt;/script&gt;</code></pre>
+<p class="calibre22">The program begins trying to solve the puzzle in <code class="calibre11">puzzleBoard</code> in a maximum of 10 moves. The infinite <code class="calibre11">while</code> loop calls <code class="calibre11">solve()</code>. If a solution is found, <code class="calibre11">solve()</code> prints the solution on the screen and returns <code class="calibre11">True</code>. In that case, the code here can break out of the infinite <code class="calibre11">while</code> loop and print the total runtime of the algorithm. </p>
+<p class="calibre22">Otherwise, if <code class="calibre11">solve()</code> returns <code class="calibre11">False</code>, <code class="calibre11">maxMoves</code> is incremented by <code class="calibre11">1</code> and the loop calls <code class="calibre11">solve()</code> again. This lets the program try progressively longer combinations of moves to solve the puzzle. This pattern continues until <code class="calibre11">solve()</code> finally returns <code class="calibre11">True</code>.</p>
+<h2 id="calibre_link-393" class="calibre6">Summary</h2>
+<p class="bodyfirst">A 15-puzzle is a good example of adapting the principles of recursion to a real-world problem. Recursion can perform a depth-first search on the tree graph of states that a 15-puzzle produces to find the path to a solution state. However, a purely recursive algorithm won’t work, which was why we had to make certain adjustments.</p>
+<p class="calibre22">The problem arises because a 15-puzzle has a massive number of possible states and doesn’t form a DAG. The edges in this graph are undirected, and the graph contains loops, or cycles. Our solving algorithm needs to ensure that it doesn’t make moves that immediately undo the previous <span type="pagebreak" title="257" id="calibre_link-572" class="calibre17"></span>move, so that it traverses the graph in one direction. It also needs to have a maximum number of moves the algorithm is willing to make before it begins to backtrack; otherwise, the loops guarantee that the algorithm will eventually recurse too much and cause a stack overflow.</p>
+<p class="calibre22">Recursion isn’t necessarily the best approach for solving sliding-tile puzzles. All but the easiest puzzles simply have too many combinations for a typical laptop to solve within a reasonable amount of time. However, I like the 15-puzzle as an exercise in recursion because it connects the theoretical ideas of DAGs and DFS into a real-world problem. While 15-puzzles were invented over a century ago, the advent of computers provides a rich tool for exploring techniques to solve these amusing toys.</p>
+<h2 id="calibre_link-394" class="calibre6">Further Reading</h2>
+<p class="bodyfirst">The Wikipedia entry for 15-puzzles at <a href="https://en.wikipedia.org/wiki/15_puzzle" class="linkurl">https://en.wikipedia.org/wiki/15_puzzle</a> details their history and mathematical background.</p>
+<p class="calibre22">You can find the Python source code for a playable version of the sliding-tile puzzle game in my book <em class="calibre10">The Big Book of Small Python Projects</em> (No Starch Press, 2021) and online at <a href="https://inventwithpython.com/bigbookpython/project68.html" class="linkurl">https://inventwithpython.com/bigbookpython/project68.html</a>.</p>
+</section>
+</div>
+
+
+
+
+<div><a href="chapter11.html">Prev: Chapter 11 - Maze Generator</a> | <a href="chapter13.html">Next: Chapter 13 - Fractal Art Maker</a></div></body></html>

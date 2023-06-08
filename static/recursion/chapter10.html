@@ -1,0 +1,333 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="recursion-style.css" rel="stylesheet" type="text/css" /><title>Chapter 10 - File Finder</title></head><body>
+
+
+
+<div style="background-color: #eeeddd; float: right; height: 310px; font-family: sans-serif;" id="otherbooks">
+  <a href="#" onclick="document.getElementById('otherbooks').outerHTML='';" style="vertical-align: top;">(close)</a><br />
+
+  <a target="_blank" href="https://nostarch.com/automatestuff2" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_automate.link');"><img src="/images/cover_automate2_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/big-book-small-python-projects" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_bigbookpython.link');"><img src="/images/cover_bigbookpython_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/beyond-basic-stuff-python" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_beyond.link');"><img src="/images/cover_beyond_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/inventwithpython" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_invent.link');"><img src="/images/cover_invent4th_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://www.amazon.com/Making-Games-Python-Pygame-Sweigart/dp/1469901730?ie=UTF8&amp;tag=playwithpyth-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1469901730" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_pygame.link');"><img src="/images/cover_makinggames_thumb.webp" style="height: 200px; border: solid black 1px; /"></a>
+  <a target="_blank" href="https://nostarch.com/crackingcodes" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_hacking.link');"><img src="/images/cover_crackingcodes_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/scratchplayground"><img src="/images/cover_scratchprogrammingplayground_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/codingwithminecraft"><img src="/images/cover_codingwithminecraft_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <br />
+  <a href="https://inventwithpython.com/automateudemy">Use this link to get a discount on the Automate the Boring Stuff online video course.</a><br />
+  <a href="https://www.patreon.com/AlSweigart">Support me on Patreon</a>
+</div>
+
+<div><a href="chapter9.html">Prev: Chapter 9 - Drawing Fractals</a> | <a href="chapter11.html">Next: Chapter 11 - Maze Generator</a></div>
+
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-356">
+<section class="toclist">
+<header class="calibre14">
+<h1 class="chapter">
+<span class="partnumber"><span type="pagebreak" title="203" id="calibre_link-107" class="calibre36"></span>10</span><br class="calibre18" />
+<span class="parttitle">File Finder</span></h1>
+</header>
+<figure class="opener">
+<img src="images/000060.webp" alt="" class="calibre16" />
+</figure>
+<p class="chapterintro">In this chapter, you’ll write your own recursive program to search for files according to custom needs. Your computer already has some file-searching commands and apps, but often they’re limited to retrieving files based on a partial filename. What if you need to make esoteric, highly specific searches? For example, what if you need to find all files that have an even number of bytes, or files with names that contain every vowel? </p>
+<p class="calibre24">You likely will never need to do these searches specifically, but you’ll probably have odd search criteria someday. You’ll be out of luck if you can’t code this search yourself.</p>
+<p class="calibre22">As you’ve learned, recursion is especially suited to problems that have a tree-like structure. The filesystem on your computer is like a tree, as you saw back in <span class="calibre" itemid="xref_target_Figure 2-6">Figure 2-6</span>. Each folder branches into subfolders, which in turn can <span type="pagebreak" title="204" id="calibre_link-106" class="calibre17"></span>branch into other subfolders. We’ll write a recursive function to navigate this tree.</p>
+<aside type="sidebar" class="authors">
+<div class="top"><hr class="calibre29" /></div>
+<section class="note">
+<h2 class="calibre30"><span class="notehead">note</span></h2>
+<p class="calibre31"> Since browser-based JavaScript has no way to access the folders on your computer, the program for this chapter’s project is written in Python only. </p>
+<div class="top"><hr class="calibre29" /></div>
+</section>
+</aside>
+<h2 id="calibre_link-357" class="calibre6">The Complete File-Search Program</h2>
+<p class="bodyfirst">Let’s begin by taking a look at the complete source code for the recursive file-search program. The rest of this chapter explains each section of code individually. Copy the source code for the file-search program to a file named <em class="calibre10">fileFinder.py</em>: </p>
+<pre class="calibre23"><code class="calibre11">import os
+
+def hasEvenByteSize(fullFilePath):
+    """Returns True if fullFilePath has an even size in bytes,
+    otherwise returns False."""
+    fileSize = os.path.getsize(fullFilePath)
+    return fileSize % 2 == 0
+
+
+def hasEveryVowel(fullFilePath):
+    """Returns True if the fullFilePath has a, e, i, o, and u,
+    otherwise returns False."""
+    name = os.path.basename(fullFilePath).lower()
+    return ('a' in name) and ('e' in name) and ('i' in name) and ('o' in name) and ('u' in name)
+
+
+def walk(folder, matchFunc):
+    """Calls the match function with every file in the folder and its
+    subfolders. Returns a list of files that the match function
+    returned True for."""
+    matchedFiles = [] # This list holds all the matches.
+    folder = os.path.abspath(folder) # Use the folder's absolute path.
+
+    # Loop over every file and subfolder in the folder:
+    for name in os.listdir(folder):
+        filepath = os.path.join(folder, name)
+        if os.path.isfile(filepath):
+            # Call the match function for each file:
+            if matchFunc(filepath):
+                matchedFiles.append(filepath)
+        elif os.path.isdir(filepath):
+            # Recursively call walk for each subfolder, extending
+            # the matchedFiles with their matches:
+            matchedFiles.extend(walk(filepath, matchFunc))
+    return matchedFiles
+
+
+<span type="pagebreak" title="205" id="calibre_link-539" class="calibre17"></span>print('All files with even byte sizes:')
+print(walk('.', hasEvenByteSize))
+print('All files with every vowel in their name:')
+print(walk('.', hasEveryVowel))</code></pre>
+<p class="calibre22">The file-search program’s main function is <code class="calibre11">walk()</code>, which “walks” across the entire span of files in a base folder and its subfolders. It calls one of two other functions that implement the custom search criteria it’s looking for. In the context of this program, we’ll call these <em class="calibre10">match functions</em>. A match function call returns <code class="calibre11">True</code> if the file matches the search criteria; otherwise, it returns <code class="calibre11">False</code>. </p>
+<p class="calibre22">The job of the <code class="calibre11">walk()</code> function is to call the match function once for each file in the folders it walks across. Let’s take a look at the code in more detail.</p>
+<h2 id="calibre_link-358" class="calibre6">The Match Functions</h2>
+<p class="bodyfirst">In Python, you can pass functions themselves as arguments to a function call. In the following example, a <code class="calibre11">callTwice()</code> function calls its function argument twice, whether it’s <code class="calibre11">sayHello()</code> or <code class="calibre11">sayGoodbye()</code>:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">&gt;&gt;&gt; <b class="calibre7">def callTwice(func):</b>
+...     <b class="calibre7">func()</b>
+...     <b class="calibre7">func()</b>
+...
+&gt;&gt;&gt; <b class="calibre7">def sayHello():</b>
+...     <b class="calibre7">print('Hello!')</b>
+...
+&gt;&gt;&gt; <b class="calibre7">def sayGoodbye():</b>
+...     <b class="calibre7">print('Goodbye!')</b>
+...
+&gt;&gt;&gt; <b class="calibre7">callTwice(sayHello)</b>
+Hello!
+Hello!
+&gt;&gt;&gt; <b class="calibre7">callTwice(sayGoodbye)</b>
+Goodbye!
+Goodbye!</code></pre>
+<p class="calibre22">The <code class="calibre11">callTwice()</code> function calls whichever function was passed to it as the <code class="calibre11">func</code> parameter. Notice that we leave out the parentheses from the function argument, writing <code class="calibre11">callTwice(sayHello)</code> instead of <code class="calibre11">callTwice(sayHello())</code>. This is because we are passing the <code class="calibre11">sayHello()</code> function itself, and not calling <code class="calibre11">sayHello()</code> and passing its return value.</p>
+<p class="calibre22">The <code class="calibre11">walk()</code> function accepts a match function argument for its search criteria. This lets us customize the behavior of the file search without modifying the code of the <code class="calibre11">walk()</code> function itself. We’ll take a look at <code class="calibre11">walk()</code> later. First, let’s look at the two sample match functions in the program. </p>
+<h3 id="calibre_link-359" class="calibre33"><span type="pagebreak" title="206" id="calibre_link-165" class="calibre34"></span>Finding the Files with an Even Number of Bytes</h3>
+<p class="bodyfirst">The first matching function finds files with an even byte size:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">import os
+
+def hasEvenByteSize(fullFilePath):
+    """Returns True if fullFilePath has an even size in bytes,
+    otherwise returns False."""
+    fileSize = os.path.getsize(fullFilePath)
+    return fileSize % 2 == 0</code></pre>
+<p class="calibre22">We import the <code class="calibre11">os</code> module, which is used throughout the program to get information about the files on your computer through functions such as <code class="calibre11">getsize()</code>, <code class="calibre11">basename()</code>, and others. Then we create a match function named <code class="calibre11">hasEvenByteSize()</code>. All match functions take a single string argument named <code class="calibre11">fullFilePath</code>, and return either <code class="calibre11">True</code> or <code class="calibre11">False</code> to signify a match or miss.</p>
+<p class="calibre22">The <code class="calibre11">os.path.getsize()</code> function determines the size of the file in <code class="calibre11">fullFilePath</code> in bytes. Then we use the <code class="calibre11">%</code> modulus operator to determine whether this number is even. If it’s even, the <code class="calibre11">return</code> statement returns <code class="calibre11">True</code>; if it’s odd, it returns <code class="calibre11">False</code>. For example, let’s consider the size of the Notepad application that comes with the Windows operating system (on macOS or Linux, try running this function on the <em class="calibre10">/bin/ls</em> program):</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">&gt;&gt;&gt; <b class="calibre7">import os</b>
+&gt;&gt;&gt; <b class="calibre7">os.path.getsize('C:/Windows/system32/notepad.exe')</b>
+211968
+&gt;&gt;&gt; <b class="calibre7">211968 % 2 == 0</b>
+True</code></pre>
+<p class="calibre22">The <code class="calibre11">hasEvenByteSize()</code> match function can use any Python function to find more information about the <code class="calibre11">fullFilePath</code> file. This gives you the powerful capability to write code for any search criteria you want. As <code class="calibre11">walk()</code> calls the match function for each file in the folder and subfolders it walks across, the match function returns <code class="calibre11">True</code> or <code class="calibre11">False</code> for each one. This tells <code class="calibre11">walk()</code> whether the file is a match.</p>
+<h3 id="calibre_link-360" class="calibre33">Finding the Filenames That Contain Every Vowel</h3>
+<p class="bodyfirst">Let’s take a look at the next match function:</p>
+<pre class="calibre23"><code class="calibre11">def hasEveryVowel(fullFilePath):
+    """Returns True if the fullFilePath has a, e, i, o, and u,
+    otherwise returns False."""
+    name = os.path.basename(fullFilePath).lower()
+    return ('a' in name) and ('e' in name) and ('i' in name) and ('o' in name) and ('u' in name)</code></pre>
+<p class="calibre22">We call <code class="calibre11">os.path.basename()</code> to remove the folder names from the filepath. Python does case-sensitive string comparisons, which ensures that <code class="calibre11">hasEveryVowel()</code> doesn’t miss any vowels in the filename because they are uppercase. For example, calling <code class="calibre11">os.path.basename('C:/Windows/system32/notepad.exe')</code> <span type="pagebreak" title="207" id="calibre_link-540" class="calibre17"></span>returns the string <code class="calibre11">notepad.exe</code>. This string’s <code class="calibre11">lower()</code> method call returns a lowercase form of the string so that we have to check for only lowercase vowels in it. <span class="calibre" itemid="xref_target_“Useful Python Standard Library Functions for Working with Files”">“Useful Python Standard Library Functions for Working with Files”</span> later in this chapter explores some more functions for finding out information about files.</p>
+<p class="calibre22">We use a <code class="calibre11">return</code> statement with a lengthy expression that evaluates to <code class="calibre11">True</code> if <code class="calibre11">name</code> contains <code class="calibre11">a</code>, <code class="calibre11">e</code>, <code class="calibre11">i</code>, <code class="calibre11">o</code>, or <code class="calibre11">u</code>, indicating the file matches the search criteria. Otherwise, the <code class="calibre11">return</code> statement returns <code class="calibre11">False</code>.</p>
+<h2 id="calibre_link-361" class="calibre6">The Recursive walk() Function</h2>
+<p class="bodyfirst">While the match functions check whether a file matches the search criteria, the <code class="calibre11">walk()</code> function finds all the files to check. The recursive <code class="calibre11">walk()</code> function is passed the name of a base folder to search along with a match function to call for each file in the folder. </p>
+<p class="calibre22">The <code class="calibre11">walk()</code> function also recursively calls itself for each subfolder in the base folder it’s searching. These subfolders become the base folder in the recursive call. Let’s ask the three questions about this recursive function:</p>
+<ol class="none">
+<li class="calibre9"><span class="runinhead">What is the base case?</span>  When the function has finished processing each file and subfolder in its given base folder.</li>
+<li class="calibre9"><span class="runinhead">What argument is passed to the recursive function call?</span>  The base folder to search and the match function to use for finding matched files. For each subfolder in this folder, a recursive call is made with the subfolder as the new folder argument.</li>
+<li class="calibre9"><span class="runinhead">How does this argument become closer to the base case?</span>  Eventually, the function either recursively calls itself on all the subfolders or encounters base folders that don’t have any subfolders.</li>
+</ol>
+<p class="calibre22"><a href="#calibre_link-455" id="calibre_link-687" class="linkurl">Figure 10-1</a> shows an example filesystem along with the recursive calls to <code class="calibre11">walk()</code>, which it makes with a base folder of <code class="calibre11">C:\</code>.</p>
+<figure class="calibre25">
+<img src="images/000029.webp" class="calibre16" alt="Graphic depicting each folder in a filesystem and the corresponding calls to the walk() function. The base folder, C:\, corresponds to “walk(‘C:\\’, hasEvenByteSize).” The folder “spam” corresponds to “walk(‘C:\\spam’, hasEvenByteSize).” Within “spam,” the folder “eggs” corresponds to “walk(‘C:\\eggs’, hasEvenByteSize),” and the folder “ham” corresponds “walk(‘C:\\spam\\ham’, hasEvenByteSize).” Within “eggs,” the folder “bacon” corresponds to “walk(‘C\\spam\\eggs\\bacon’, hasEvenByteSize).”" />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-455" class="linkurl">Figure 10-1</a>: An example filesystem and the recursive <span class="calibre"><code class="calibre39">walk()</code></span> function calls over it</p></figcaption>
+</figure>
+<p class="calibre22">Let’s take a look at the <code class="calibre11">walk()</code> function’s code:</p>
+<pre class="calibre23"><code class="calibre11">def walk(folder, matchFunc):
+    """Calls the match function with every file in the folder and its
+    subfolders. Returns a list of files that the match function
+    returned True for."""
+    matchedFiles = [] # This list holds all the matches.
+    folder = os.path.abspath(folder) # Use the folder's absolute path.</code></pre>
+<p class="calibre22"><span type="pagebreak" title="208" id="calibre_link-167" class="calibre17"></span>The <code class="calibre11">walk()</code> function has two parameters: <code class="calibre11">folder</code> is a string of the base folder to search (we can pass <code class="calibre11">'.'</code> to refer to the current folder the Python program is run from), and <code class="calibre11">matchFunc</code> is a Python function that is passed a filename and returns <code class="calibre11">True</code> if the function says it is a search match. Otherwise, the function returns <code class="calibre11">False</code>.</p>
+<p class="calibre22">The next part of the function examines the contents of <code class="calibre11">folder</code>:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">    # Loop over every file and subfolder in the folder:
+    for name in os.listdir(folder):
+        filepath = os.path.join(folder, name)
+        if os.path.isfile(filepath):</code></pre>
+<p class="calibre22">The <code class="calibre11">for</code> loop calls <code class="calibre11">os.listdir()</code> to return a list of the contents of the <code class="calibre11">folder</code> folder. This list includes all files and subfolders. For each file, we create the full, absolute path by joining the folder with the name of the file or folder. If the name refers to a file, the <code class="calibre11">os.path.isfile()</code> function call returns <code class="calibre11">True</code>, and we’ll check to see if the file is a search match:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">            # Call the match function for each file:
+            if matchFunc(filepath):
+                matchedFiles.append(filepath)</code></pre>
+<p class="calibre22">We call the match function, passing it the full absolute filepath of the <code class="calibre11">for</code> loop’s current file. Note that <code class="calibre11">matchFunc</code> is the name of one of <code class="calibre11">walk()</code>’s parameters. If <code class="calibre11">hasEvenByteSize()</code>, <code class="calibre11">hasEveryVowel()</code>, or another function is passed as the argument for the <code class="calibre11">matchFunc</code> parameter, then that is the function <code class="calibre11">walk()</code> calls. If <code class="calibre11">filepath</code> contains a file that is a match according to the matching algorithm, it’s added to the <code class="calibre11">matches</code> list:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">        elif os.path.isdir(filepath):
+            # Recursively call walk for each subfolder, extending
+            # the matchedFiles with their matches:
+            matchedFiles.extend(walk(filepath, matchFunc))</code></pre>
+<p class="calibre22">Otherwise, if the <code class="calibre11">for</code> loop’s file is a subfolder, the <code class="calibre11">os.path.isdir()</code> function call returns <code class="calibre11">True</code>. We then pass the subfolder to a recursive function call. The recursive call returns a list of all matching files in the subfolder (and its subfolders), which are then added to the <code class="calibre11">matches</code> list:</p>
+<pre class="calibre23"><code class="calibre11">    return matchedFiles</code></pre>
+<p class="calibre22">After the <code class="calibre11">for</code> loop finishes, the <code class="calibre11">matches</code> list contains all the matching files in this folder (and in all its subfolders). This list becomes the return value for the <code class="calibre11">walk()</code> function.</p>
+<h2 id="calibre_link-362" class="calibre6">Calling the walk() Function</h2>
+<p class="bodyfirst">Now that we’ve implemented the <code class="calibre11">walk()</code> function and some match functions, we can run our custom file search. We pass the <code class="calibre11">'.'</code> string, a special directory <span type="pagebreak" title="209" id="calibre_link-72" class="calibre17"></span>name meaning <em class="calibre10">the current directory</em>, for the first argument to <code class="calibre11">walk()</code> so that it uses the folder the program was run from as the base folder to search:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">print('All files with even byte sizes:')
+print(walk('.', hasEvenByteSize))
+print('All files with every vowel in their name:')
+print(walk('.', hasEveryVowel))</code></pre>
+<p class="calibre22">The output of this program depends on what files are on your computer, but this demonstrates how you can write code for any search criteria you have. For example, the output could look like the following:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">All files with even byte sizes:
+['C:\\Path\\accesschk.exe', 'C:\\Path\\accesschk64.exe',
+'C:\\Path\\AccessEnum.exe', 'C:\\Path\\ADExplorer.exe',
+'C:\\Path\\Bginfo.exe', 'C:\\Path\\Bginfo64.exe',
+'C:\\Path\\diskext.exe', 'C:\\Path\\diskext64.exe',
+'C:\\Path\\Diskmon.exe', 'C:\\Path\\DiskView.exe',
+'C:\\Path\\hex2dec64.exe', 'C:\\Path\\jpegtran.exe',
+'C:\\Path\\Tcpview.exe', 'C:\\Path\\Testlimit.exe',
+'C:\\Path\\wget.exe', 'C:\\Path\\whois.exe']
+All files with every vowel in their name:
+['C:\\Path\\recursionbook.bat']</code></pre>
+<h2 id="calibre_link-363" class="calibre6">Useful Python Standard Library Functions for Working with Files</h2>
+<p class="bodyfirst">Let’s take a look at some functions that could help you as you write your own match functions. The standard library of modules that comes with Python features several useful functions for getting information about files. Many of these are in the <code class="calibre11">os</code> and <code class="calibre11">shutil</code> modules, so your program must run <code class="calibre11">import os</code> or <code class="calibre11">import shutil</code> before it can call these functions.</p>
+<h3 id="calibre_link-364" class="calibre33">Finding Information About the File’s Name</h3>
+<p class="bodyfirst">The full filepath passed to the match functions can be broken into the base name and directory name with the <code class="calibre11">os.path.basename()</code> and <code class="calibre11">os.path.dirname()</code> functions. You can also call <code class="calibre11">os.path.split()</code> to obtain these names as a tuple. Enter the following into Python’s interactive shell. On macOS or Linux, try using <code class="calibre11">/bin/ls</code> as the filename:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">&gt;&gt;&gt; <b class="calibre7">import os</b>
+&gt;&gt;&gt; <b class="calibre7">filename = 'C:/Windows/system32/notepad.exe'</b>
+&gt;&gt;&gt; <b class="calibre7">os.path.basename(filename)</b>
+'notepad.exe'
+&gt;&gt;&gt; <b class="calibre7">os.path.dirname(filename)</b>
+'C:/Windows/system32'
+&gt;&gt;&gt; <b class="calibre7">os.path.split(filename)</b>
+('C:/Windows/system32', 'notepad.exe')
+&gt;&gt;&gt; <b class="calibre7">folder, file = os.path.split(filename)</b>
+<span type="pagebreak" title="210" id="calibre_link-166" class="calibre17"></span>&gt;&gt;&gt; <b class="calibre7">folder</b>
+'C:/Windows/system32'
+&gt;&gt;&gt; <b class="calibre7">file</b>
+'notepad.exe'</code></pre>
+<p class="calibre22">You can use any of Python’s string methods on these string values to help evaluate the file against your search criteria, such as <code class="calibre11">lower()</code> in the <code class="calibre11">hasEveryVowel()</code> match function.</p>
+<h3 id="calibre_link-365" class="calibre33">Finding Information About the File’s Timestamps</h3>
+<p class="bodyfirst">Files have timestamps indicating when they were created, last modified, and last accessed. Python’s <code class="calibre11">os.path.getctime()</code>, <code class="calibre11">os.path.getmtime()</code>, and <code class="calibre11">os.path.getatime()</code>, respectively, return these timestamps as floating-point values indicating the number of seconds since the <em class="calibre10">Unix epoch</em>, midnight on January 1, 1970, in the Coordinated Universal Time (UTC) time zone. Enter the following into the interactive shell:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">&gt; <b class="calibre7">import os</b>
+&gt; <b class="calibre7">filename = 'C:/Windows/system32/notepad.exe'</b>
+&gt; <b class="calibre7">os.path.getctime(filename)</b>
+1625705942.1165037
+&gt; <b class="calibre7">os.path.getmtime(filename)</b>
+1625705942.1205275
+&gt; <b class="calibre7">os.path.getatime(filename)</b>
+1631217101.8869188</code></pre>
+<p class="calibre22">These float values are easy for programs to use since they’re just single numbers, but you’ll need functions from Python’s <code class="calibre11">time</code> module to make them simpler for humans to read. The <code class="calibre11">time.localtime()</code> function converts a Unix epoch timestamp into a <code class="calibre11">struct_time</code> object in the computer’s time zone. A <code class="calibre11">struct_time</code> object has several attributes whose names begin with <code class="calibre11">tm_</code> for obtaining date and time information. Enter the following into the interactive shell:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">&gt;&gt;&gt; <b class="calibre7">import os</b>
+&gt;&gt;&gt; <b class="calibre7">filename = 'C:/Windows/system32/notepad.exe'</b>
+&gt;&gt;&gt; <b class="calibre7">ctimestamp = os.path.getctime(filename)</b>
+&gt;&gt;&gt; <b class="calibre7">import time</b>
+&gt;&gt;&gt; <b class="calibre7">time.localtime(ctimestamp)</b>
+time.struct_time(tm_year=2021, tm_mon=7, tm_mday=7, tm_hour=19,
+tm_min=59, tm_sec=2, tm_wday=2, tm_yday=188, tm_isdst=1)
+&gt;&gt;&gt; <b class="calibre7">st = time.localtime(ctimestamp)</b>
+&gt;&gt;&gt; <b class="calibre7">st.tm_year</b>
+2021
+&gt;&gt;&gt; <b class="calibre7">st.tm_mon</b>
+7
+&gt;&gt;&gt; <b class="calibre7">st.tm_mday</b>
+7
+&gt;&gt;&gt; <b class="calibre7">st.tm_wday</b>
+2
+&gt;&gt;&gt; <b class="calibre7">st.tm_hour</b>
+<span type="pagebreak" title="211" id="calibre_link-195" class="calibre17"></span>19
+&gt;&gt;&gt; <b class="calibre7">st.tm_min</b>
+59
+&gt;&gt;&gt; <b class="calibre7">st.tm_sec</b>
+2</code></pre>
+<p class="calibre22">Note that the <code class="calibre11">tm_mday</code> attribute is the day of the month, ranging from <code class="calibre11">1</code> to <code class="calibre11">31</code>. The <code class="calibre11">tm_wday</code> attribute is the day of the week, starting at <code class="calibre11">0</code> for Monday, <code class="calibre11">1</code> for Tuesday, and so on, up to <code class="calibre11">6</code> for Sunday.</p>
+<p class="calibre22">If you need a brief, human-readable string of the <code class="calibre11">time_struct</code> object, pass it to the <code class="calibre11">time.asctime()</code> function:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">&gt;&gt;&gt; <b class="calibre7">import os</b>
+&gt;&gt;&gt; <b class="calibre7">filename = 'C:/Windows/system32/notepad.exe'</b>
+&gt;&gt;&gt; <b class="calibre7">ctimestamp = os.path.getctime(filename)</b>
+&gt;&gt;&gt; <b class="calibre7">import time</b>
+&gt;&gt;&gt; <b class="calibre7">st = time.localtime(ctimestamp)</b>
+&gt;&gt;&gt; <b class="calibre7">time.asctime(st)</b>
+'Wed Jul  7 19:59:02 2021'</code></pre>
+<p class="calibre22">While the <code class="calibre11">time.localtime()</code> function returns a <code class="calibre11">struct_time</code> object in the local time zone, the <code class="calibre11">time.gmtime()</code> function returns a <code class="calibre11">struct_time</code> object in the UTC or Greenwich Mean time zone. Enter the following into the interactive shell:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">&gt;&gt;&gt; <b class="calibre7">import os</b>
+&gt;&gt;&gt; <b class="calibre7">filename = 'C:/Windows/system32/notepad.exe'</b>
+&gt;&gt;&gt; <b class="calibre7">ctimestamp = os.path.getctime(filename)</b>
+&gt;&gt;&gt; <b class="calibre7">import time</b>
+&gt;&gt;&gt; <b class="calibre7">ctimestamp = os.path.getctime(filename)</b>
+&gt;&gt;&gt; <b class="calibre7">time.localtime(ctimestamp)</b>
+time.struct_time(tm_year=2021, tm_mon=7, tm_mday=7, tm_hour=19,
+tm_min=59, tm_sec=2, tm_wday=2, tm_yday=188, tm_isdst=1)
+&gt;&gt;&gt; <b class="calibre7">time.gmtime(ctimestamp)</b>
+time.struct_time(tm_year=2021, tm_mon=7, tm_mday=8, tm_hour=0,
+tm_min=59, tm_sec=2, tm_wday=3, tm_yday=189, tm_isdst=0)</code></pre>
+<p class="calibre22">The interaction between these <code class="calibre11">os.path</code> functions (which return Unix epoch timestamps) and <code class="calibre11">time</code> functions (which return <code class="calibre11">struct_time</code> objects) can be confusing. <a href="#calibre_link-456" id="calibre_link-688" class="linkurl">Figure 10-2</a> shows the chain of code starting from the filename string and ending with obtaining the individual parts of the timestamp.</p>
+<figure class="calibre25">
+<img src="images/000037.webp" class="calibre16" alt="Flowchart. Arrow points from “filename” to “os.path.getctime(), os.path.getmtime(), os.path.getatime()” to “time.localtime(), time.gmtime()” to “time.asctime(), .tm_year, .tm_mon, .tm_mday, .tm_wday, .tm_hour, .tm_min, .tm_sec.”" />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-456" class="linkurl">Figure 10-2</a>: Going from the filename to the individual attributes of a timestamp</p></figcaption>
+</figure>
+<p class="calibre22"><span type="pagebreak" title="212" id="calibre_link-168" class="calibre17"></span>Finally, the <code class="calibre11">time.time()</code> function returns the number of seconds since the Unix epoch to the current time.</p>
+<h3 id="calibre_link-366" class="calibre33">Modifying Your Files</h3>
+<p class="bodyfirst">After the <code class="calibre11">walk()</code> function returns a list of files matching your search criteria, you may want to rename, delete, or perform another operation on them. The <code class="calibre11">shutil</code> and <code class="calibre11">os</code> modules in the Python standard library have functions to do this. Further, the <code class="calibre11">send2trash</code> third-party module can also send files to your operating system’s Recycle Bin, rather than permanently deleting them.</p>
+<p class="calibre22">To move a file, call the <code class="calibre11">shutil.move()</code> function with two arguments. The first argument is the file to move, and the second is the folder to move it to. For example, you could call the following:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">&gt;&gt;&gt; <b class="calibre7">import shutil</b>
+&gt;&gt;&gt; <b class="calibre7">shutil.move('spam.txt', 'someFolder')</b>
+'someFolder\\spam.txt'</code></pre>
+<p class="calibre22">The <code class="calibre11">shutil.move()</code> function returns the string of the new filepath of the file. You can also specify a filename to move and rename the file at the same time:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">&gt;&gt;&gt; <b class="calibre7">import shutil</b>
+&gt;&gt;&gt; <b class="calibre7">shutil.move('spam.txt', 'someFolder\\newName.txt')</b>
+'someFolder\\newName.txt'</code></pre>
+<p class="calibre22">If the second argument lacks a folder, you can just specify a new name for the file to rename it in its current folder:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">&gt;&gt;&gt; <b class="calibre7">import shutil</b>
+&gt;&gt;&gt; <b class="calibre7">shutil.move('spam.txt', 'newName.txt')</b>
+'newName.txt'</code></pre>
+<p class="calibre22">Note that the <code class="calibre11">shutil.move()</code> function both moves and renames files, similar to the way the Unix and macOS <code class="calibre11">mv</code> command both moves and renames files. There is no separate <code class="calibre11">shutil.rename()</code> function.</p>
+<p class="calibre22">To copy a file, call the <code class="calibre11">shutil.copy()</code> function with two arguments. The first argument is the filename of the file to copy, and the second argument is the new name of the copy. For example, you could call the following:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">&gt;&gt;&gt; <b class="calibre7">import shutil</b>
+&gt;&gt;&gt; <b class="calibre7">shutil.copy('spam.txt', 'spam-copy.txt')</b>
+'spam-copy.txt'</code></pre>
+<p class="calibre22">The <code class="calibre11">shutil.copy()</code> function returns the name of the copy. To delete a file, call the <code class="calibre11">os.unlink()</code> function and pass it the name of the file to delete:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">&gt;&gt;&gt; <b class="calibre7">import os</b>
+&gt;&gt;&gt; <b class="calibre7">os.unlink('spam.txt')</b>
+&gt;&gt;&gt;</code></pre>
+<p class="calibre22"><span type="pagebreak" title="213" id="calibre_link-192" class="calibre17"></span>The name <em class="calibre10">unlink</em> is used instead of <em class="calibre10">delete</em> because of the technical detail that it removes the filename linked to the file. But since most files have only one linked filename, this unlinking also deletes the file. It’s all right if you don’t understand these filesystem concepts; just know that <code class="calibre11">os.unlink()</code> deletes a file.</p>
+<p class="calibre22">Calling <code class="calibre11">os.unlink()</code> permanently deletes the file, which can be dangerous if a bug in your program causes the function to delete the wrong file. Instead, you can use the <code class="calibre11">send2trash</code> module’s <code class="calibre11">send2trash()</code> function to put the file in your operating system’s Recycle Bin. To install this module, run <code class="bold">run python -m pip install --user send2trash</code> from the command prompt on Windows or run <code class="bold">run python3 -m pip install</code> from the terminal on macOS or Linux. Once the module is installed, you’ll be able to import it with <code class="calibre11">import send2trash</code>.</p>
+<p class="calibre22">Enter the following into the interactive shell:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">&gt;&gt;&gt; <b class="calibre7">open('deleteme.txt', 'w').close()</b> # Create a blank file.
+&gt;&gt;&gt; <b class="calibre7">import send2trash</b>
+&gt;&gt;&gt; <b class="calibre7">send2trash.send2trash('deleteme.txt')</b></code></pre>
+<p class="calibre22">This example creates a blank file named <em class="calibre10">deleteme.txt</em>. After calling <code class="calibre11">send2trash.send2trash()</code> (the module and function share the same name), this file is removed to the Recycle Bin.</p>
+<h2 id="calibre_link-367" class="calibre6">Summary</h2>
+<p class="bodyfirst">This chapter’s file-search project uses recursion to “walk” across the contents of a folder and all its subfolders. The file-finder program’s <code class="calibre11">walk()</code> function navigates these folders recursively, applying custom search criteria to every file in every subfolder. The search criteria are implemented as match functions, which are passed to the <code class="calibre11">walk()</code> function. This allows us to change the search criteria by writing new functions instead of modifying the code in <code class="calibre11">walk()</code>.</p>
+<p class="calibre22">Our project had two match functions, for finding files with an even byte file size or containing every vowel in its name, but you can write your own functions to pass to <code class="calibre11">walk()</code>. This is the power behind programming; you can create features for your own needs that are not available in commercial apps.</p>
+<h2 id="calibre_link-368" class="calibre6">Further Reading</h2>
+<p class="bodyfirst">The documentation for Python’s built-in <code class="calibre11">os.walk()</code> function (similar to the <code class="calibre11">walk()</code> function in the file-finder project) is at <a href="https://docs.python.org/3/library/os.html#os.walk" class="linkurl">https://docs.python.org/3/library/os.html#os.walk</a>. You can also learn more about your computer’s filesystem and Python’s file functions in Chapter 9 of my book <em class="calibre10">Automate the Boring Stuff with Python</em>, 2nd edition (No Starch Press, 2019) at <a href="https://automatetheboringstuff.com/2e/chapter9" class="linkurl">https://automatetheboringstuff.com/2e/chapter9</a>.</p>
+<p class="calibre22"><span type="pagebreak" title="214" id="calibre_link-541" class="calibre17"></span>The <code class="calibre11">datetime</code> module in the Python standard library also has more ways to interact with timestamp data. You can learn more about it in Chapter 17 of <em class="calibre10">Automate the Boring Stuff with Python</em>, 2nd edition at <a href="https://automatetheboringstuff.com/2e/chapter17" class="linkurl">https://automatetheboringstuff.com/2e/chapter17</a>.</p>
+</section>
+</div>
+
+
+
+
+<div><a href="chapter9.html">Prev: Chapter 9 - Drawing Fractals</a> | <a href="chapter11.html">Next: Chapter 11 - Maze Generator</a></div></body></html>

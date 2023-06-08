@@ -1,0 +1,865 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="recursion-style.css" rel="stylesheet" type="text/css" /><title>Chapter 5 - Divide-and-Conquer Algorithms</title></head><body>
+
+
+
+<div style="background-color: #eeeddd; float: right; height: 310px; font-family: sans-serif;" id="otherbooks">
+  <a href="#" onclick="document.getElementById('otherbooks').outerHTML='';" style="vertical-align: top;">(close)</a><br />
+
+  <a target="_blank" href="https://nostarch.com/automatestuff2" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_automate.link');"><img src="/images/cover_automate2_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/big-book-small-python-projects" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_bigbookpython.link');"><img src="/images/cover_bigbookpython_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/beyond-basic-stuff-python" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_beyond.link');"><img src="/images/cover_beyond_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/inventwithpython" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_invent.link');"><img src="/images/cover_invent4th_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://www.amazon.com/Making-Games-Python-Pygame-Sweigart/dp/1469901730?ie=UTF8&amp;tag=playwithpyth-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1469901730" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_pygame.link');"><img src="/images/cover_makinggames_thumb.webp" style="height: 200px; border: solid black 1px; /"></a>
+  <a target="_blank" href="https://nostarch.com/crackingcodes" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_hacking.link');"><img src="/images/cover_crackingcodes_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/scratchplayground"><img src="/images/cover_scratchprogrammingplayground_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/codingwithminecraft"><img src="/images/cover_codingwithminecraft_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <br />
+  <a href="https://inventwithpython.com/automateudemy">Use this link to get a discount on the Automate the Boring Stuff online video course.</a><br />
+  <a href="https://www.patreon.com/AlSweigart">Support me on Patreon</a>
+</div>
+
+<div><a href="chapter4.html">Prev: Chapter 4 - Backtracking and Tree Traversal Algorithms</a> | <a href="chapter6.html">Next: Chapter 6 - Permutations and Combinations</a></div>
+
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-14">
+<section class="toclist">
+<header class="calibre14">
+<h1 class="chapter">
+<span class="partnumber"><span type="pagebreak" title="93" id="calibre_link-60" class="calibre36"></span>5</span><br class="calibre18" />
+<span class="parttitle">Divide-and-Conquer Algorithms</span></h1>
+</header>
+<figure class="opener">
+<img src="images/000060.webp" alt="" class="calibre16" />
+</figure>
+<p class="chapterintro"><em class="calibre10">Divide-and-conquer algorithms</em><em class="calibre10"> </em>are those that split large problems into smaller subproblems, then divide those subproblems into ones that are smaller yet, until they become trivial to conquer. This approach makes recursion an ideal technique to use: the recursive case divides the problem into self-similar subproblems, and the base case occurs when the subproblem has been reduced to a trivial size. One benefit of this approach is that these problems can be worked on in parallel, allowing multiple central processing unit (CPU) cores or computers to work on them.</p>
+<p class="calibre24">In this chapter, we’ll look at some common algorithms that use recursion to divide and conquer, such as binary search, quicksort, and merge sort. We’ll also reexamine summing an array of integers, this time with a divide-and-conquer approach. Finally, we’ll take a look at the more esoteric <span type="pagebreak" title="94" id="calibre_link-50" class="calibre17"></span>Karatsuba multiplication algorithm, developed in 1960, that laid the basis for computer hardware’s fast integer multiplication.</p>
+<div class="calibre28"></div><h2 id="calibre_link-303" class="calibre6">Binary Search: Finding a Book in an Alphabetized Bookshelf</h2>
+<p class="bodyfirst">Let’s say you have a bookshelf of 100 books. You can’t remember which books you have or their exact locations on the shelf, but you do know that they are sorted alphabetically by title. To find your book <em class="calibre10">Zebras: The Complete Guide</em>, you wouldn’t start at the beginning of the bookshelf, where <em class="calibre10">Aaron Burr Biography</em> is, but rather toward the end of the bookshelf. Your zebra book wouldn’t be the very last book on the shelf if you also had books on zephyrs, zoos, and zygotes, but it would be close. Thus, you can use the facts that the books are in alphabetical order and that <em class="calibre10">Z</em> is the last letter of the alphabet as <em class="calibre10">heuristics</em>, or approximate clues, to look toward the end of the shelf rather than the beginning.</p>
+<p class="calibre22"><em class="calibre10">Binary search</em> is a technique for locating a target item in a sorted list by repeatedly determining which half of the list the item is in. The most impartial way to search the bookshelf is to start with a book in the middle, and then ascertain if the target book you’re looking for is in the left half or the right half.</p>
+<p class="calibre22">You can then repeat this process, as shown in <a href="#calibre_link-15" id="calibre_link-643" class="linkurl">Figure 5-1</a>: look at the book in the middle of your chosen half and then determine whether your target book is in the left-side quarter or the right-side quarter. You can do this until you either find the book, or find the place where the book should be but isn’t and declare that the book doesn’t exist on the shelf.</p>
+<figure class="calibre25">
+<img src="images/000041.webp" class="calibre16" alt="Drawing of a bookshelf with labels separating the books into two sections, one of which is highlighted. In a second bookshelf drawing, that highlighted portion is further split in half. In a third bookshelf drawing, only one book of the previously selected portion is highlighted." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-15" class="linkurl">Figure 5-1</a>: A binary search repeatedly determines which half of a range contains your target item in a sorted array of items.</p></figcaption>
+</figure>
+<p class="calibre22"><span type="pagebreak" title="95" id="calibre_link-51" class="calibre17"></span>This process scales efficiently; doubling the number of books to search adds only one step to the search process. A linear search of a shelf with 50 books takes 50 steps, and a linear search of a shelf with 100 books takes 100 steps. But a binary search of a shelf with 50 books takes only 6 steps, and a shelf with 100 books takes only 7 steps. </p>
+<p class="calibre22">Let’s ask the three recursion questions about our binary search implementation:</p>
+<ol class="none">
+<li class="calibre9"><span class="runinhead">What is the base case?</span>  Searching a range of items that is only one item in length.</li>
+<li class="calibre9"><span class="runinhead">What argument is passed to the recursive function call?</span>  The indices of the left and right ends of the range in the list we are searching.</li>
+<li class="calibre9"><span class="runinhead">How does this argument become closer to the base case?</span>  The range halves in size for each recursive call, so it eventually becomes one item long.</li>
+</ol>
+<p class="calibre22">Examine the following <code class="calibre11">binarySearch()</code> function in our <em class="calibre10">binarySearch.py</em> program, which locates a value, <code class="calibre11">needle</code>, in a sorted list of values, <code class="calibre11">haystack</code>:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">def binarySearch(needle, haystack, left=None, right=None):
+    # By default, `left` and `right` are all of `haystack`:
+    if left is None:
+        left = 0 # `left` defaults to the 0 index.
+    if right is None:
+        right = len(haystack) - 1 # `right` defaults to the last index.
+
+    print('Searching:', haystack[left:right + 1])
+
+    if left &gt; right: # BASE CASE
+         return None # The `needle` is not in `haystack`.
+
+    mid = (left + right) // 2
+    if needle == haystack[mid]: # BASE CASE
+         return mid # The `needle` has been found in `haystack`
+    elif needle &lt; haystack[mid]: # RECURSIVE CASE
+         return binarySearch(needle, haystack, left, mid - 1)
+    elif needle &gt; haystack[mid]: # RECURSIVE CASE
+         return binarySearch(needle, haystack, mid + 1, right)
+
+print(binarySearch(13, [1, 4, 8, 11, 13, 16, 19, 19]))</code></pre>
+<p class="calibre22">The <em class="calibre10">binarySearch.html</em> program has this JavaScript equivalent:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+function binarySearch(needle, haystack, left, right) {
+    // By default, `left` and `right` are all of `haystack`:
+    if (left === undefined) {
+        left = 0; // `left` defaults to the 0 index.
+    }
+    if (right === undefined) {
+        right = haystack.length - 1; // `right` defaults to the last index.
+    }
+
+<span type="pagebreak" title="96" id="calibre_link-506" class="calibre17"></span>    document.write("Searching: [" +
+    haystack.slice(left, right + 1).join(", ") + "]&lt;br /&gt;");
+
+    if (left &gt; right) { // BASE CASE
+         return null; // The `needle` is not in `haystack`.
+    }
+
+    let mid = Math.floor((left + right) / 2);
+    if (needle == haystack[mid]) { // BASE CASE
+         return mid; // The `needle` has been found in `haystack`.
+    } else if (needle &lt; haystack[mid]) { // RECURSIVE CASE
+         return binarySearch(needle, haystack, left, mid - 1);
+    } else if (needle &gt; haystack[mid]) { // RECURSIVE CASE
+         return binarySearch(needle, haystack, mid + 1, right);
+    }
+}
+
+document.write(binarySearch(13, [1, 4, 8, 11, 13, 16, 19, 19]));
+&lt;/script&gt;</code></pre>
+<p class="calibre22">When you run these programs, the list <code class="calibre11">[1, 4, 8, 11, 13, 16, 19, 19]</code> is searched for <code class="calibre11">13</code>, and the output looks like this:</p>
+<pre class="calibre23"><code class="calibre11">Searching: [1, 4, 8, 11, 13, 16, 19, 19]
+Searching: [13, 16, 19, 19]
+Searching: [13]
+4</code></pre>
+<p class="calibre22">The target value <code class="calibre11">13</code> is indeed at index <code class="calibre11">4</code> in that list.</p>
+<p class="calibre22">The code calculates the middle index (stored in <code class="calibre11">mid</code>) of the range defined by the <code class="calibre11">left</code> and <code class="calibre11">right</code> indices. At first, this range is the entire length of the items list. If the value at the <code class="calibre11">mid</code> index is the same as <code class="calibre11">needle</code>, then <code class="calibre11">mid</code> is returned. Otherwise, we need to figure out whether our target value is in the left half of the range (in which case, the new range to search is <code class="calibre11">left</code> to <code class="calibre11">mid - 1</code>) or in the right half (in which case, the new range to search is <code class="calibre11">mid + 1</code> to <code class="calibre11">end</code>).</p>
+<p class="calibre22">We already have a function that can search this new range: <code class="calibre11">binarySearch()</code> itself! A recursive call is made on the new range. If we ever get to the point where the right end of the search range comes before the left, we know that our search range has shrunk down to zero and our target value isn’t to be found.</p>
+<p class="calibre22">Notice that the code performs no actions after the recursive call returns; it immediately returns the return value of the recursive function call. This feature means that we could implement tail call optimization for this recursive algorithm, a practice we explain in <span class="calibre" itemid="xref_target_Chapter 8">Chapter 8</span>. But also, it means that binary search can easily be implemented as an iterative algorithm that doesn’t use recursive function calls. This book’s downloadable resources at <a href="https://nostarch.com/recursive-book-recursion" class="linkurl">https://nostarch.com/recursive-book-recursion</a> include the source code for an iterative binary search for you to compare with the recursive binary search.</p>
+<aside type="sidebar" class="authors">
+<div class="top"><hr class="calibre29" /></div>
+<section class="box">
+<h2 class="calibre50"><span type="pagebreak" title="97" id="calibre_link-49" class="calibre51"></span>Big O Algorithm Analysis</h2>
+<p class="boxbodyfirst">If your data is already in sorted order, performing a binary search is much faster than a <em class="calibre10">linear search</em>, which starts from one end of an array and checks each value in a brute-force manner. We can compare the efficiency of these two algorithms with <em class="calibre10">big O algorithm analysis</em>. <span class="calibre" itemid="xref_target_“Further Reading”">“Further Reading”</span> at the end of this chapter has links to more information on this topic.</p>
+<p class="calibre52">If your data isn’t in sorted order, sorting it first (using an algorithm such as quicksort or merge sort) and then performing a binary search would be slower than just performing a linear search. However, if you need to perform repeat searches on the data, the performance gain of binary search pays for the sorting. It’s like spending an hour to sharpen an axe before cutting down trees; the increased speed of chopping with a sharp axe makes up for the hour spent sharpening it.</p>
+<div class="top"><hr class="calibre29" /></div>
+</section>
+</aside>
+<h2 id="calibre_link-304" class="calibre6">Quicksort: Splitting an Unsorted Pile of Books into Sorted Piles</h2>
+<p class="bodyfirst">Remember that <code class="calibre11">binarySearch()</code>’s speed advantage comes from the fact that the values in items are sorted. If the values are out of order, the algorithm won’t work. Enter <em class="calibre10">quicksort</em>, a recursive sorting algorithm developed by computer scientist Tony Hoare in 1959.</p>
+<p class="calibre22">Quicksort uses a divide-and-conquer technique called <em class="calibre10">partitioning</em>. Think of partitioning this way: imagine you have a large pile of unalphabetized books. Grabbing one book and placing it in the right spot on the shelf means you’ll spend a lot of time rearranging the bookshelf as it gets full. It would help if you first turned the pile of books into two piles: an <em class="calibre10">A</em> to <em class="calibre10">M</em> pile and an <em class="calibre10">N</em> to <em class="calibre10">Z</em> pile. (In this example, <em class="calibre10">M</em> would be our <em class="calibre10">pivot</em>.)</p>
+<p class="calibre22">You haven’t sorted the pile, but you have <em class="calibre10">partitioned</em> it. And partitioning is easy: the book doesn’t have to go into the correct place in one of the two piles, it just has to go into the correct pile. Then you can further partition these two piles into four piles: <em class="calibre10">A</em> to <em class="calibre10">G</em>, <em class="calibre10">H</em> to <em class="calibre10">M</em>, <em class="calibre10">N</em> to <em class="calibre10">T</em>, and <em class="calibre10">U</em> to <em class="calibre10">Z</em>. This is shown in <a href="#calibre_link-16" id="calibre_link-644" class="linkurl">Figure 5-2</a>. If you keep partitioning, you end up with piles that contain one book each (the base case), and the piles are now in sorted order. This means the books are now in sorted order as well. This repeated partitioning is how quicksort works. </p>
+<p class="calibre22">For the first partitioning of <em class="calibre10">A</em> to <em class="calibre10">Z</em>, we select <em class="calibre10">M</em> as the pivot value because it’s the middle letter between <em class="calibre10">A</em> and <em class="calibre10">Z</em>. However, if our collection of books consisted of one book about Aaron Burr and 99 books about zebras, zephyrs, zoos, zygotes, and other <em class="calibre10">Z</em> topics, our two partitioned piles would be heavily unbalanced. We would have the single Aaron Burr book in the <em class="calibre10">A</em> to <em class="calibre10">M</em> pile and every other book in the <em class="calibre10">M</em> to <em class="calibre10">Z</em> pile. The quicksort algorithm works fastest when the partitions are evenly balanced, so selecting a good pivot value at each partition step is important.</p>
+<span type="pagebreak" title="98" id="calibre_link-186" class="calibre17"></span><figure class="calibre25">
+<img src="images/000067.webp" class="calibre16" alt="Drawing of several piles of books in a tree-like structure. Shows one pile of books, A–Z, split into two piles, A–M and N–Z. A–M is further split into A–G and H–M. N–Z is further split into N–T and U–Z." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-16" class="linkurl">Figure 5-2</a>: Quicksort works by repeatedly partitioning items into two sets.</p></figcaption>
+</figure>
+<p class="calibre22">However, if you don’t know anything about the data you’re sorting, it’s impossible to select an ideal pivot. This is why the generic quicksort algorithm simply uses the last value in the range for the pivot value.</p>
+<p class="calibre22">In our implementation, each call to <code class="calibre11">quicksort()</code> is given an array of items to sort. It is also given <code class="calibre11">left</code> and <code class="calibre11">right</code> arguments specifying the range of indices in that array to sort, similar to <code class="calibre11">binarySearch()</code>’s left and right arguments. The algorithm selects a pivot value to compare with the other values in the range, then places the values to either the left side of the range (if they’re less than the pivot value) or the right side (if they’re greater than the pivot value). This is the partition step. Next, the <code class="calibre11">quicksort()</code> function is recursively called on these two, smaller ranges until a range has been reduced to zero. The list becomes more and more sorted as the recursive calls are made, until finally the entire list is in the correct order.</p>
+<p class="calibre22">Note that the algorithm modifies the array in place. See <span class="calibre" itemid="xref_target_“Modifying a List or Array in Place” in Chapter 4">“Modifying a List or Array in Place” in Chapter 4</span> for details. Thus, the <code class="calibre11">quicksort()</code> function doesn’t return a sorted array. The base case merely returns to stop producing more recursive calls.</p>
+<p class="calibre22">Let’s ask the three recursion questions about our binary search implementation:</p>
+<ol class="none">
+<li class="calibre9"><span class="runinhead">What is the base case?</span>  Being given a range to sort that contains zero or one item and that is already in sorted order.</li>
+<li class="calibre9"><span class="runinhead">What argument is passed to the recursive function call?</span>  The indices of the left and right ends of the range in the list we are sorting.</li>
+<li class="calibre9"><span class="runinhead">How does this argument become closer to the base case?</span>  The range halves in size for each recursive call, so it eventually becomes empty.</li>
+</ol>
+<p class="calibre22">The following <code class="calibre11">quicksort()</code> function in the <em class="calibre10">quicksort.py</em> Python program sorts the values in the items list into ascending order:</p>
+<pre class="calibre23"><code class="calibre11">def quicksort(items, left=None, right=None):
+    # By default, `left` and `right` span the entire range of `items`:
+    if left is None:
+        left = 0 # `left` defaults to the 0 index.
+    if right is None:
+        right = len(items) - 1 # `right` defaults to the last index.
+
+<span type="pagebreak" title="99" id="calibre_link-185" class="calibre17"></span>    print('\nquicksort() called on this range:', items[left:right + 1])
+    print('................The full list is:', items)
+
+    if right &lt;= left: <span class="codeannotationcode" aria-label="annotation1">❶</span>
+        # With only zero or one item, `items` is already sorted.
+        return  # BASE CASE
+
+    # START OF THE PARTITIONING
+    i = left # i starts at the left end of the range. <span class="codeannotationcode" aria-label="annotation2">❷</span>
+    pivotValue = items[right] # Select the last value for the pivot.
+
+    print('....................The pivot is:', pivotValue)
+
+    # Iterate up to, but not including, the pivot:
+    for j in range(left, right):
+        # If a value is less than the pivot, swap it so that it's on the
+        # left side of `items`:
+        if items[j] &lt;= pivotValue:
+            # Swap these two values:
+            items[i], items[j] = items[j], items[i] <span class="codeannotationcode" aria-label="annotation3">❸</span>
+            i += 1
+
+    # Put the pivot on the left side of `items`:
+    items[i], items[right] = items[right], items[i]
+    # END OF THE PARTITIONING
+
+    print('....After swapping, the range is:', items[left:right + 1])
+    print('Recursively calling quicksort on:', items[left:i], 'and', items[i + 1:right + 1])
+
+    # Call quicksort() on the two partitions:
+    quicksort(items, left, i - 1)   # RECURSIVE CASE
+    quicksort(items, i + 1, right)  # RECURSIVE CASE
+
+myList = [0, 7, 6, 3, 1, 2, 5, 4]
+quicksort(myList)
+print(myList)</code></pre>
+<p class="calibre22">The <em class="calibre10">quicksort.html</em> program contains the JavaScript equivalent:</p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+function quicksort(items, left, right) {
+    // By default, `left` and `right` span the entire range of `items`:
+    if (left === undefined) {
+        left = 0; // `left` defaults to the 0 index.
+    }
+    if (right === undefined) {
+        right = items.length - 1; // `right` defaults to the last index.
+    }
+
+    document.write("&lt;br /&gt;&lt;pre&gt;quicksort() called on this range: [" +
+    items.slice(left, right + 1).join(", ") + "]&lt;/pre&gt;");
+    document.write("&lt;pre&gt;................The full list is: [" + items.join(", ") + "]&lt;/pre&gt;");
+
+    if (right &lt;= left) { <span class="codeannotationcode" aria-label="annotation1">❶</span>
+        // With only zero or one item, `items` is already sorted.
+<span type="pagebreak" title="100" id="calibre_link-507" class="calibre17"></span>        return; // BASE CASE
+    }
+
+    // START OF THE PARTITIONING
+    let i = left; <span class="codeannotationcode" aria-label="annotation2">❷</span> // i starts at the left end of the range.
+    let pivotValue = items[right]; // Select the last value for the pivot.
+
+    document.write("&lt;pre&gt;....................The pivot is: " + pivotValue.toString() +
+"&lt;/pre&gt;");
+
+    // Iterate up to, but not including, the pivot:
+    for (let j = left; j &lt; right; j++) {
+        // If a value is less than the pivot, swap it so that it's on the
+        // left side of `items`:
+        if (items[j] &lt;= pivotValue) {
+            // Swap these two values:
+            [items[i], items[j]] = [items[j], items[i]]; <span class="codeannotationcode" aria-label="annotation3">❸</span>
+            i++;
+        }
+    }
+
+    // Put the pivot on the left side of `items`:
+    [items[i], items[right]] = [items[right], items[i]];
+    // END OF THE PARTITIONING
+
+    document.write("&lt;pre&gt;....After swapping, the range is: [" + items.slice(left, right + 1).join(", ") + "]&lt;/pre&gt;");
+    document.write("&lt;pre&gt;Recursively calling quicksort on: [" + items.slice(left, i).join(", ") + "] and [" + items.slice(i + 1, right + 1).join(", ") + "]&lt;/pre&gt;");
+
+    // Call quicksort() on the two partitions:
+    quicksort(items, left, i - 1); // RECURSIVE CASE
+    quicksort(items, i + 1, right); // RECURSIVE CASE
+}
+
+let myList = [0, 7, 6, 3, 1, 2, 5, 4];
+quicksort(myList);
+document.write("&lt;pre&gt;[" + myList.join(", ") + "]&lt;/pre&gt;");
+&lt;/script&gt;</code></pre>
+<p class="calibre22">This code is similar to the code in the binary search algorithm. As defaults, we set the <code class="calibre11">left</code> and <code class="calibre11">right</code> ends of the range within the <code class="calibre11">items</code> array to the beginning and end of the entire array. If the algorithm reaches the base case of the <code class="calibre11">right</code> end at or before the <code class="calibre11">left</code> end (a range of one or zero items), the sorting is finished <span class="codeannotation" aria-label="annotation1">❶</span>. </p>
+<p class="calibre22">In each call to <code class="calibre11">quicksort()</code>, we partition the items in the current range (defined by the indices in <code class="calibre11">left</code> and <code class="calibre11">right</code>), and then swap them around so that the items less than the pivot value end up on the left side of the range and the items greater than the pivot value end up on the right side of the range. For example, if <code class="calibre11">42</code> is the pivot value in the array <code class="calibre11">[81, 48, 94, 87, 83, 14, 6, 42]</code>, a partitioned array would be <code class="calibre11">[14, 6, 42, 81, 48, 94, 87, 83]</code>. <span type="pagebreak" title="101" id="calibre_link-508" class="calibre17"></span>Note that a partitioned array is not the same thing as a sorted one: although the two items to the left of <code class="calibre11">42</code> are less than <code class="calibre11">42</code>, and the five items to the right of <code class="calibre11">42</code> are greater than <code class="calibre11">42</code>, the items are not in sorted order.</p>
+<p class="calibre22">The bulk of the <code class="calibre11">quicksort()</code> function is the partitioning step. To get an idea of how partitioning works, imagine an index <code class="calibre11">j</code> that begins at the left end of the range and moves to the right end <span class="codeannotation" aria-label="annotation2">❷</span>. We compare the item at index <code class="calibre11">j</code> with the pivot value and then move right to compare the next item. The pivot value can be arbitrarily chosen from any value in the range, but we’ll always use the value at the right end of the range.</p>
+<p class="calibre22">Imagine a second index <code class="calibre11">i</code> that also begins at the left end. If the item at index <code class="calibre11">j</code> is less than or equal to the pivot, the items at indices <code class="calibre11">i</code> and <code class="calibre11">j</code> are swapped <span class="codeannotation" aria-label="annotation3">❸</span> and <code class="calibre11">i</code> is increased to the next index. So while <code class="calibre11">j</code> always increases (that is, moves right) after each comparison with the pivot value, <code class="calibre11">i</code> increases only if the item at index <code class="calibre11">j</code> is less than or equal to the pivot.</p>
+<p class="calibre22">The names <code class="calibre11">i</code> and <code class="calibre11">j</code> are commonly used for variables that hold array indices. Someone else’s <code class="calibre11">quicksort()</code> implementation may instead use <code class="calibre11">j</code> and <code class="calibre11">i</code>, or even completely different variables. The important thing to remember is that two variables store indices and behave as shown here.</p>
+<p class="calibre22">As an example, let’s work through the first partitioning of the array <code class="calibre11">[0, 7, 6, 3, 1, 2, 5, 4]</code>, and the range defined by <code class="calibre11">left</code> of <code class="calibre11">0</code> and <code class="calibre11">right</code> of <code class="calibre11">7</code> to cover the full size of the array. The <code class="calibre11">pivot</code> will be the value at the <code class="calibre11">right</code> end, <code class="calibre11">4</code>. The <code class="calibre11">i</code> and <code class="calibre11">j</code> index begin at index <code class="calibre11">0</code>, the left end of the range. At each step, index <code class="calibre11">j</code> always moves to the right. Index <code class="calibre11">i</code> moves only if the value at index <code class="calibre11">j</code> is less than or equal to the pivot value. The <code class="calibre11">items</code> array, the <code class="calibre11">i</code> index, and the <code class="calibre11">j</code> index begin as follows:</p>
+<pre class="calibre23"><code class="calibre11">items:   [0, 7, 6, 3, 1, 2, 5, 4]
+indices:  0  1  2  3  4  5  6  7
+          ^
+i = 0     i
+j = 0     j</code></pre>
+<p class="calibre22">The value at index <code class="calibre11">j</code> (which is <code class="calibre11">0</code>) is less than or equal to the pivot value (which is <code class="calibre11">4</code>), so swap the values at <code class="calibre11">i</code> and <code class="calibre11">j</code>. This results in no actual change since <code class="calibre11">i</code> and <code class="calibre11">j</code> are the same index. Also, increase <code class="calibre11">i</code> so that it moves to the right. The <code class="calibre11">j</code> index increases for every comparison with the pivot value. The state of the variables now looks like this:</p>
+<pre class="calibre23"><code class="calibre11">items:   [0, 7, 6, 3, 1, 2, 5, 4]
+indices:  0  1  2  3  4  5  6  7
+             ^
+i = 1        i
+j = 1        j</code></pre>
+<p class="calibre22"><span type="pagebreak" title="102" id="calibre_link-509" class="calibre17"></span>The value at index <code class="calibre11">j</code> (which is <code class="calibre11">7</code>) is not less than or equal to the pivot value (which is <code class="calibre11">4</code>), so don’t swap the values. Remember, <code class="calibre11">j</code> always increases, but <code class="calibre11">i</code> increases only after a swap is performed&mdash;so <code class="calibre11">i</code> is always either at or to the left of <code class="calibre11">j</code>. The state of the variables now looks like this:</p>
+<pre class="calibre23"><code class="calibre11">items:   [0, 7, 6, 3, 1, 2, 5, 4]
+indices:  0  1  2  3  4  5  6  7
+             ^
+i = 1        i  ^
+j = 2           j</code></pre>
+<p class="calibre22">The value at index <code class="calibre11">j</code> (which is <code class="calibre11">6</code>) is not less than or equal to the pivot value (which is <code class="calibre11">4</code>), so don’t swap the values. The state of the variables now looks like this:</p>
+<pre class="calibre23"><code class="calibre11">items:   [0, 7, 6, 3, 1, 2, 5, 4]
+indices:  0  1  2  3  4  5  6  7
+             ^
+i = 1        i     ^
+j = 3              j</code></pre>
+<p class="calibre22">The value at index <code class="calibre11">j</code> (which is <code class="calibre11">3</code>) is less than or equal to the pivot value (which is <code class="calibre11">4</code>), so swap the values at <code class="calibre11">i</code> and <code class="calibre11">j</code>. The <code class="calibre11">7</code> and <code class="calibre11">3</code> swap positions. Also, increase <code class="calibre11">i</code> so that it moves to the right. The state of the variables now looks like this:</p>
+<pre class="calibre23"><code class="calibre11">items:   [0, 3, 6, 7, 1, 2, 5, 4]
+indices:  0  1  2  3  4  5  6  7
+                ^
+i = 2           i     ^
+j = 4                 j</code></pre>
+<p class="calibre22">The value at index <code class="calibre11">j</code> (which is <code class="calibre11">1</code>) is less than or equal to the pivot value (which is <code class="calibre11">4</code>), so swap the values at <code class="calibre11">i</code> and <code class="calibre11">j</code>. The <code class="calibre11">6</code> and <code class="calibre11">1</code> swap positions. Also, increase <code class="calibre11">i</code> so that it moves to the right. The state of the variables now looks like this:</p>
+<pre class="calibre23"><code class="calibre11">items:   [0, 3, 1, 7, 6, 2, 5, 4]
+indices:  0  1  2  3  4  5  6  7
+                   ^
+i = 3              i     ^
+j = 5                    j</code></pre>
+<p class="calibre22">The value at index <code class="calibre11">j</code> (which is <code class="calibre11">2</code>) is less than or equal to the pivot value (which is <code class="calibre11">4</code>), so swap the values at <code class="calibre11">i</code> and <code class="calibre11">j</code>. The <code class="calibre11">7</code> and <code class="calibre11">2</code> swap positions. Also, increase <code class="calibre11">i</code> so that it moves to the right. The state of the variables now looks like this:</p>
+<pre class="calibre23"><code class="calibre11"><span type="pagebreak" title="103" id="calibre_link-510" class="calibre17"></span>items:   [0, 3, 1, 2, 6, 7, 5, 4]
+indices:  0  1  2  3  4  5  6  7
+                      ^
+i = 4                 i     ^
+j = 6                       j</code></pre>
+<p class="calibre22">The value at index <code class="calibre11">j</code> (which is <code class="calibre11">6</code>) is not less than or equal to the pivot value (which is <code class="calibre11">4</code>), so don’t swap the values. The state of the variables now looks like this:</p>
+<pre class="calibre23"><code class="calibre11">items:   [0, 3, 1, 2, 6, 7, 5, 4]
+indices:  0  1  2  3  4  5  6  7
+                      ^
+i = 4                 i        ^
+j = 7                          j</code></pre>
+<p class="calibre22">We’ve reached the end of the partitioning. The index <code class="calibre11">j</code> is at the pivot value (which is always the rightmost value in the range), so let’s swap <code class="calibre11">i</code> and <code class="calibre11">j</code> one last time to make sure the pivot is not on the right half of the partition. The <code class="calibre11">6</code> and <code class="calibre11">4</code> swap positions. The state of the variables now looks like this:</p>
+<pre class="calibre23"><code class="calibre11">items:   [0, 3, 1, 2, 4, 7, 5, 6]
+indices:  0  1  2  3  4  5  6  7
+                      ^
+i = 4                 i        ^
+j = 7                          j</code></pre>
+<p class="calibre22">Notice what is happening with the <code class="calibre11">i</code> index: this index will always receive the values smaller than the pivot value as a result of swapping; then the <code class="calibre11">i</code> index moves right to receive future smaller-than-the-pivot values. As a result, everything to the left of the <code class="calibre11">i</code> index is smaller than or equal to the pivot, and everything to the right of the <code class="calibre11">i</code> index is greater than the pivot.</p>
+<p class="calibre22">The entire process repeats as we recursively call <code class="calibre11">quicksort()</code> on the left and right partitions. When we partition these two halves (and then partition the four halves of these two halves with more recursive <code class="calibre11">quicksort()</code> calls, and so on), the entire array ends up sorted.</p>
+<p class="calibre22">When we run these programs, the output shows the process of sorting the <code class="calibre11">[0, 7, 6, 3, 1, 2, 5, 4]</code> list. The rows of periods are meant to help you line up the output when writing the code:</p>
+<pre class="calibre23"><code class="calibre11">quicksort() called on this range: [0, 7, 6, 3, 1, 2, 5, 4]
+................The full list is: [0, 7, 6, 3, 1, 2, 5, 4]
+....................The pivot is: 4
+....After swapping, the range is: [0, 3, 1, 2, 4, 7, 5, 6]
+Recursively calling quicksort on: [0, 3, 1, 2] and [7, 5, 6]
+
+quicksort() called on this range: [0, 3, 1, 2]
+................The full list is: [0, 3, 1, 2, 4, 7, 5, 6]
+....................The pivot is: 2
+....After swapping, the range is: [0, 1, 2, 3]
+Recursively calling quicksort on: [0, 1] and [3]
+
+<span type="pagebreak" title="104" id="calibre_link-159" class="calibre17"></span>quicksort() called on this range: [0, 1]
+................The full list is: [0, 1, 2, 3, 4, 7, 5, 6]
+....................The pivot is: 1
+....After swapping, the range is: [0, 1]
+Recursively calling quicksort on: [0] and []
+
+quicksort() called on this range: [0]
+................The full list is: [0, 1, 2, 3, 4, 7, 5, 6]
+
+quicksort() called on this range: []
+................The full list is: [0, 1, 2, 3, 4, 7, 5, 6]
+
+quicksort() called on this range: [3]
+................The full list is: [0, 1, 2, 3, 4, 7, 5, 6]
+
+quicksort() called on this range: [7, 5, 6]
+................The full list is: [0, 1, 2, 3, 4, 7, 5, 6]
+....................The pivot is: 6
+....After swapping, the range is: [5, 6, 7]
+Recursively calling quicksort on: [5] and [7]
+
+quicksort() called on this range: [5]
+................The full list is: [0, 1, 2, 3, 4, 5, 6, 7]
+
+quicksort() called on this range: [7]
+................The full list is: [0, 1, 2, 3, 4, 5, 6, 7]
+
+Sorted: [0, 1, 2, 3, 4, 5, 6, 7]</code></pre>
+<p class="calibre22">Quicksort is a commonly used sorting algorithm because it is straightforward to implement and, well, quick. The other commonly used sorting algorithm, merge sort, is also fast and uses recursion. We cover it next.</p>
+<h2 id="calibre_link-305" class="calibre6">Merge Sort: Merging Small Piles of Playing Cards into Larger Sorted Piles</h2>
+<p class="bodyfirst">Computer scientist John von Neumann developed <em class="calibre10">merge sort</em> in 1945. It uses a divide-merge approach: each recursive call to <code class="calibre11">mergeSort()</code> divides the unsorted list into halves until they’ve been whittled down into lists of lengths of zero or one. Then, as the recursive calls return, these smaller lists are merged together into sorted order. When the last recursive call has returned, the entire list will have been sorted.</p>
+<p class="calibre22">For example, the divide step takes a list, such as <code class="calibre11">[2, 9, 8, 5, 3, 4, 7, 6]</code>, and splits it into two lists, like <code class="calibre11">[2, 9, 8, 5]</code> and <code class="calibre11">[3, 4, 7, 6]</code>, to pass to two recursive function calls. At the base case, the lists have been divided into lists of zero or one item. A list with nothing or one item is naturally sorted. After the recursive calls return, the code merges these small, sorted lists together into larger sorted lists until finally the entire list is sorted. <a href="#calibre_link-17" id="calibre_link-645" class="linkurl">Figure 5-3</a> shows an example using merge sort on playing cards.</p>
+<span type="pagebreak" title="105" id="calibre_link-511" class="calibre17"></span><figure class="calibre25">
+<img src="images/000059.webp" class="calibre16" alt="Diagram of playing cards being arranged according to a series of steps. The first set of steps divides the playing cards into smaller groups, and the second set of steps merges these groups until the cards are all together once more." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-17" class="linkurl">Figure 5-3</a>: The divide and merge phases of merge sort</p></figcaption>
+</figure>
+<p class="calibre22"><span type="pagebreak" title="106" id="calibre_link-512" class="calibre17"></span>For example, at the end of the division phase, we have eight separate lists of single numbers: <code class="calibre11">[2]</code>, <code class="calibre11">[9]</code>, <code class="calibre11">[8]</code>, <code class="calibre11">[5]</code>, <code class="calibre11">[3]</code>, <code class="calibre11">[4]</code>, <code class="calibre11">[7]</code>, <code class="calibre11">[6]</code>. A list of just one number is naturally in sorted order. Merging two sorted lists into a larger sorted list involves looking at the start of both smaller lists and appending the smaller value to the larger list. <a href="#calibre_link-18" id="calibre_link-646" class="linkurl">Figure 5-4</a> shows an example of merging <code class="calibre11">[2, 9]</code> and <code class="calibre11">[5, 8]</code>. This is repeatedly done in the merge phase until the end result is that the original <code class="calibre11">mergeSort()</code> call returns the full list in sorted order.</p>
+<figure class="calibre25">
+<img src="images/000050.webp" class="calibre16" alt="Diagram representing a series of steps applied to two pairs of playing cards, the 2 and 9 of spades and the 5 and 8 of spades. In the first step, because 2 is smaller than 5, the 2 of spades is selected. In the second step, because 5 is smaller than 9, the 5 of spades is placed on top of the 2 of spades. In the third step, because 8 is smaller than 9, the 8 of spades is placed on top of the 5 of spades. In the fourth step, the 9 of spades is placed on top of the 8 of spades." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-18" class="linkurl">Figure 5-4</a>: The merge step compares the two values at the start of the smaller sorted lists and moves them to the larger sorted list. Merging four cards requires only four steps.</p></figcaption>
+</figure>
+<p class="calibre22">Let’s ask our three recursive algorithm questions about the merge sort algorithm:</p>
+<ol class="none">
+<li class="calibre9"><span class="runinhead">What is the base case?</span>  Being given a list to sort that has zero or one item in it, which is already in sorted order.</li>
+<li class="calibre9"><span class="runinhead">What argument is passed to the recursive function call?</span>  Lists made from the left and right halves of the original list to sort.</li>
+<li class="calibre9"><span class="runinhead">How does this argument become closer to the base case?</span>  The lists passed to the recursive call are half the size of the original list, so they eventually become a list of zero or one item.</li>
+</ol>
+<p class="calibre22"><span type="pagebreak" title="107" id="calibre_link-161" class="calibre17"></span>The following <code class="calibre11">mergeSort()</code> function in the <em class="calibre10">mergeSort.py</em> Python program sorts the values in the items list into ascending order:</p>
+<pre class="calibre23"><code class="calibre11">import math
+
+def mergeSort(items):
+    print('.....mergeSort() called on:', items)
+
+    # BASE CASE - Zero or one item is naturally sorted:
+    if len(items) == 0 or len(items) == 1:
+        return items <span class="codeannotationcode" aria-label="annotation1">❶</span>
+
+    # RECURSIVE CASE - Pass the left and right halves to mergeSort():
+    # Round down if items doesn't divide in half evenly:
+    iMiddle = math.floor(len(items) / 2) <span class="codeannotationcode" aria-label="annotation2">❷</span>
+
+    print('................Split into:', items[:iMiddle], 'and', items[iMiddle:])
+
+    left = mergeSort(items[:iMiddle]) <span class="codeannotationcode" aria-label="annotation3">❸</span>
+    right = mergeSort(items[iMiddle:])
+
+    # BASE CASE - Returned merged, sorted data:
+    # At this point, left should be sorted and right should be
+    # sorted. We can merge them into a single sorted list.
+    sortedResult = []
+    iLeft = 0
+    iRight = 0
+    while (len(sortedResult) &lt; len(items)):
+        # Append the smaller value to sortedResult.
+        if left[iLeft] &lt; right[iRight]: <span class="codeannotationcode" aria-label="annotation4">❹</span>
+            sortedResult.append(left[iLeft])
+            iLeft += 1
+        else:
+            sortedResult.append(right[iRight])
+            iRight += 1
+
+        # If one of the pointers has reached the end of its list,
+        # put the rest of the other list into sortedResult.
+        if iLeft == len(left):
+            sortedResult.extend(right[iRight:])
+            break
+        elif iRight == len(right):
+            sortedResult.extend(left[iLeft:])
+            break
+
+    print('The two halves merged into:', sortedResult)
+
+    return sortedResult # Returns a sorted version of items.
+
+myList = [2, 9, 8, 5, 3, 4, 7, 6]
+myList = mergeSort(myList)
+print(myList)</code></pre>
+<p class="calibre22"><span type="pagebreak" title="108" id="calibre_link-160" class="calibre17"></span>The <em class="calibre10">mergeSort.html</em> program contains the equivalent JavaScript program:</p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+function mergeSort(items) {
+    document.write("&lt;pre&gt;" + ".....mergeSort() called on: [" +
+    items.join(", ") + "]&lt;/pre&gt;");
+
+    // BASE CASE - Zero or one item is naturally sorted:
+    if (items.length === 0 || items.length === 1) { // BASE CASE
+        return items; <span class="codeannotationcode" aria-label="annotation1">❶</span>
+    }
+
+    // RECURSIVE CASE - Pass the left and right halves to mergeSort():
+    // Round down if items doesn't divide in half evenly:
+    let iMiddle = Math.floor(items.length / 2); <span class="codeannotationcode" aria-label="annotation2">❷</span>
+
+    document.write("&lt;pre&gt;................Split into: [" + items.slice(0, iMiddle).join(", ") +
+    "] and [" + items.slice(iMiddle).join(", ") + "]&lt;/pre&gt;");
+
+    let left = mergeSort(items.slice(0, iMiddle)); <span class="codeannotationcode" aria-label="annotation3">❸</span>
+    let right = mergeSort(items.slice(iMiddle));
+
+    // BASE CASE - Returned merged, sorted data:
+    // At this point, left should be sorted and right should be
+    // sorted. We can merge them into a single sorted list.
+    let sortedResult = [];
+    let iLeft = 0;
+    let iRight = 0;
+    while (sortedResult.length &lt; items.length) {
+        // Append the smaller value to sortedResult.
+        if (left[iLeft] &lt; right[iRight]) { <span class="codeannotationcode" aria-label="annotation4">❹</span>
+            sortedResult.push(left[iLeft]);
+            iLeft++;
+        } else {
+            sortedResult.push(right[iRight]);
+            iRight++;
+        }
+
+        // If one of the pointers has reached the end of its list,
+        // put the rest of the other list into sortedResult.
+        if (iLeft == left.length) {
+            Array.prototype.push.apply(sortedResult, right.slice(iRight));
+            break;
+        } else if (iRight == right.length) {
+            Array.prototype.push.apply(sortedResult, left.slice(iLeft));
+            break;
+        }
+    }
+
+    document.write("&lt;pre&gt;The two halves merged into: [" + sortedResult.join(", ") +
+    "]&lt;/pre&gt;");
+
+    return sortedResult; // Returns a sorted version of items.
+}
+
+<span type="pagebreak" title="109" id="calibre_link-513" class="calibre17"></span>let myList = [2, 9, 8, 5, 3, 4, 7, 6];
+myList = mergeSort(myList);
+document.write("&lt;pre&gt;[" + myList.join(", ") + "]&lt;/pre&gt;");
+&lt;/script&gt;</code></pre>
+<p class="calibre22">The <code class="calibre11">mergeSort()</code> function (and all the recursive calls to the <code class="calibre11">mergeSort()</code> function) takes an unsorted list and returns a sorted list. The first step in this function is to check for the base case of a list containing only zero or one item <span class="codeannotation" aria-label="annotation1">❶</span>. This list is already sorted, so the function returns the list as is.</p>
+<p class="calibre22">Otherwise, the function determines the middle index of the list <span class="codeannotation" aria-label="annotation2">❷</span> so that we know where to split it into the left- and right-half lists to pass to two recursive function calls <span class="codeannotation" aria-label="annotation3">❸</span>. The recursive function calls return sorted lists, which we store in the left and right variables.</p>
+<p class="calibre22">The next step is to merge these two sorted half lists into one sorted full list named <code class="calibre11">sortedResult</code>. We’ll maintain two indices for the <code class="calibre11">left</code> and <code class="calibre11">right</code> lists named <code class="calibre11">iLeft</code> and <code class="calibre11">iRight</code>. Inside a loop, the smaller of the two values <span class="codeannotation" aria-label="annotation4">❹</span> is appended to <code class="calibre11">sortedResult</code>, and its respective index variable (either <code class="calibre11">iLeft</code> or <code class="calibre11">iRight</code>) is incremented. If either <code class="calibre11">iLeft</code> or <code class="calibre11">iRight</code> reaches the end of its list, the remaining items in the other half’s list are appended to <code class="calibre11">sortedResult</code>.</p>
+<p class="calibre22">Let’s follow an example of the merging step if the recursive calls have returned <code class="calibre11">[2, 9]</code> for <code class="calibre11">left</code> and <code class="calibre11">[5, 8]</code> for <code class="calibre11">right</code>. Since these lists were returned from <code class="calibre11">mergeSort()</code> calls, we can always assume they are sorted. We must merge them into a single sorted list in <code class="calibre11">sortedResult</code> for the current <code class="calibre11">mergeSort()</code> call to return to its caller.</p>
+<p class="calibre22">The <code class="calibre11">iLeft</code> and <code class="calibre11">iRight</code> indices begin at <code class="calibre11">0</code>. We compare the value at <code class="calibre11">left[iLeft]</code> (which is <code class="calibre11">2</code>) and <code class="calibre11">right[iRight]</code> (which is <code class="calibre11">5</code>) to find the smaller one:</p>
+<pre class="calibre23"><code class="calibre11">sortedResult = []
+      left: [2, 9]    right: [5, 8]
+   indices:  0  1             0  1
+ iLeft = 0   ^
+iRight = 0                    ^</code></pre>
+<p class="calibre22">Since <code class="calibre11">left[iLeft]</code>’s value, <code class="calibre11">2</code>, is the smaller of the values, we append it to <code class="calibre11">sortedResult</code> and increase <code class="calibre11">iLeft</code> from <code class="calibre11">0</code> to <code class="calibre11">1</code>. The state of the variables is now as follows:</p>
+<pre class="calibre23"><code class="calibre11">sortedResult = [2]
+      left: [2, 9]    right: [5, 8]
+   indices:  0  1             0  1
+ iLeft = 1      ^
+iRight = 0                    ^</code></pre>
+<p class="calibre22">Comparing <code class="calibre11">left[iLeft]</code> and <code class="calibre11">right[iRight]</code> again, we find that of <code class="calibre11">9</code> and <code class="calibre11">5</code>, <code class="calibre11">right[iRight]</code>’s <code class="calibre11">5</code> is smaller. The code appends the <code class="calibre11">5</code> to <code class="calibre11">sortedResult</code> and increases <code class="calibre11">iRight</code> from <code class="calibre11">0</code> to <code class="calibre11">1</code>. The state of the variables is now the following:</p>
+<pre class="calibre23"><code class="calibre11">sortedResult = [2, 5]
+      left: [2, 9]    right: [5, 8]
+<span type="pagebreak" title="110" id="calibre_link-514" class="calibre17"></span>   indices:  0  1             0  1
+ iLeft = 1      ^
+iRight = 1                       ^</code></pre>
+<p class="calibre22">Comparing <code class="calibre11">left[iLeft]</code> and <code class="calibre11">right[iRight]</code> again, we find that, of <code class="calibre11">9</code> and <code class="calibre11">8</code>, <code class="calibre11">right[iRight]</code>’s <code class="calibre11">8</code> is smaller. The code appends the <code class="calibre11">8</code> to <code class="calibre11">sortedResult</code> and increases <code class="calibre11">iRight</code> from <code class="calibre11">0</code> to <code class="calibre11">1</code>. Here’s the state of the variables now:</p>
+<pre class="calibre23"><code class="calibre11">sortedResult = [2, 5, 8]
+      left: [2, 9]    right: [5, 8]
+   indices:  0  1             0  1
+ iLeft = 1      ^
+iRight = 2                         ^</code></pre>
+<p class="calibre22">Because <code class="calibre11">iRight</code> is now <code class="calibre11">2</code> and equal to the length of the <code class="calibre11">right</code> list, the remaining items in <code class="calibre11">left</code> from the <code class="calibre11">iLeft</code> index to the end are appended to <code class="calibre11">sortedResult</code>, as no more items remain in <code class="calibre11">right</code> to compare them to. This leaves <code class="calibre11">sortedResult</code> as <code class="calibre11">[2, 5, 8, 9]</code>, the sorted list it needs to return. This merging step is performed for every call to <code class="calibre11">mergeSort()</code> to produce the final sorted list.</p>
+<p class="calibre22">When we run the <em class="calibre10">mergeSort.py</em> and <em class="calibre10">mergeSort.html</em> programs, the output shows the process of sorting the <code class="calibre11">[2, 9, 8, 5, 3, 4, 7, 6]</code> list:</p>
+<pre class="calibre23"><code class="calibre11">.....mergeSort() called on: [2, 9, 8, 5, 3, 4, 7, 6]
+................Split into: [2, 9, 8, 5] and [3, 4, 7, 6]
+.....mergeSort() called on: [2, 9, 8, 5]
+................Split into: [2, 9] and [8, 5]
+.....mergeSort() called on: [2, 9]
+................Split into: [2] and [9]
+.....mergeSort() called on: [2]
+.....mergeSort() called on: [9]
+The two halves merged into: [2, 9]
+.....mergeSort() called on: [8, 5]
+................Split into: [8] and [5]
+.....mergeSort() called on: [8]
+.....mergeSort() called on: [5]
+The two halves merged into: [5, 8]
+The two halves merged into: [2, 5, 8, 9]
+.....mergeSort() called on: [3, 4, 7, 6]
+................Split into: [3, 4] and [7, 6]
+.....mergeSort() called on: [3, 4]
+................Split into: [3] and [4]
+.....mergeSort() called on: [3]
+.....mergeSort() called on: [4]
+The two halves merged into: [3, 4]
+.....mergeSort() called on: [7, 6]
+................Split into: [7] and [6]
+.....mergeSort() called on: [7]
+.....mergeSort() called on: [6]
+The two halves merged into: [6, 7]
+The two halves merged into: [3, 4, 6, 7]
+The two halves merged into: [2, 3, 4, 5, 6, 7, 8, 9]
+[2, 3, 4, 5, 6, 7, 8, 9]</code></pre>
+<p class="calibre22"><span type="pagebreak" title="111" id="calibre_link-170" class="calibre17"></span>As you can see from the output, the function divides the <code class="calibre11">[2, 9, 8, 5, 3, 4, 7, 6]</code> list into <code class="calibre11">[2, 9, 8, 5]</code> and <code class="calibre11">[3, 4, 7, 6]</code> and passes these to recursive <code class="calibre11">mergeSort()</code> calls. The first list is further split into <code class="calibre11">[2, 9]</code> and <code class="calibre11">[8, 5]</code>. That <code class="calibre11">[2, 9]</code> list is split into <code class="calibre11">[2]</code> and <code class="calibre11">[9]</code>. These single-value lists cannot be divided anymore, so we have reached our base case. These lists are merged back into sorted order as <code class="calibre11">[2, 9]</code>. The function divides the <code class="calibre11">[8, 5]</code> list into <code class="calibre11">[8]</code> and <code class="calibre11">[5]</code>, reaches the base case, and then merges back into <code class="calibre11">[5, 8]</code>.</p>
+<p class="calibre22">The <code class="calibre11">[2, 9]</code> and <code class="calibre11">[5, 8]</code> lists are individually in sorted order. Remember, <code class="calibre11">mergeSort()</code> doesn’t simply <em class="calibre10">concatenate</em> the lists into <code class="calibre11">[2, 9, 5, 8]</code>, which would not be in sorted order. Rather, the function <em class="calibre10">merges</em> them into the sorted list <code class="calibre11">[2, 5, 8, 9]</code>. By the time the original <code class="calibre11">mergeSort()</code> call returns, the full list it returns is completely sorted.</p>
+<h2 id="calibre_link-306" class="calibre6">Summing an Array of Integers</h2>
+<p class="bodyfirst">We already covered summing an array of integers in <span class="calibre" itemid="xref_target_Chapter 3 ">Chapter 3 </span>with the head-tail technique. In this chapter, we’ll use a divide-and-conquer strategy. Since the associative property of addition means that adding 1 + 2 + 3 + 4 is the same as adding the sums of 1 + 2 and 3 + 4, we can divide a large array of numbers to sum into two smaller arrays of numbers to sum. </p>
+<p class="calibre22">The benefit is that for larger sets of data to process, we could farm out the subproblems to different computers and have them all work together in parallel. There’s no need to wait for the first half of the array to be summed before another computer can start summing the second half. This is a large advantage of the divide-and-conquer technique, as CPUs aren’t getting much faster but we can have multiple CPUs work simultaneously.</p>
+<p class="calibre22">Let’s ask the three questions about recursive algorithms for our summation function:</p>
+<ol class="none">
+<li class="calibre9"><span class="runinhead">What is the base case?</span>  Either an array containing zero numbers (where we return <code class="calibre11">0</code>) or an array containing one number (where we return the number).</li>
+<li class="calibre9"><span class="runinhead">What argument is passed to the recursive function call?</span>  Either the left half or the right half of the array of numbers.</li>
+<li class="calibre9"><span class="runinhead">How does this argument become closer to the base case?</span>  The size of the array of numbers is halved each time, eventually becoming an array containing zero or one number.</li>
+</ol>
+<p class="calibre22">The <em class="calibre10">sumDivConq.py</em> Python program implements the divide-and-conquer strategy for adding numbers in the <code class="calibre11">sumDivConq()</code> function:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">def sumDivConq(numbers):
+    if len(numbers) == 0: # BASE CASE
+      <span class="codeannotationcode" aria-label="annotation1">❶</span> return 0
+    elif len(numbers) == 1: # BASE CASE
+      <span class="codeannotationcode" aria-label="annotation2">❷</span> return numbers[0]
+    else: # RECURSIVE CASE
+      <span class="codeannotationcode" aria-label="annotation3">❸</span> mid = len(numbers) // 2
+        leftHalfSum = sumDivConq(numbers[0:mid])
+<span type="pagebreak" title="112" id="calibre_link-515" class="calibre17"></span>        rightHalfSum = sumDivConq(numbers[mid:len(numbers) + 1])
+      <span class="codeannotationcode" aria-label="annotation4">❹</span> return leftHalfSum + rightHalfSum
+
+nums = [1, 2, 3, 4, 5]
+print('The sum of', nums, 'is', sumDivConq(nums))
+nums = [5, 2, 4, 8]
+print('The sum of', nums, 'is', sumDivConq(nums))
+nums = [1, 10, 100, 1000]
+print('The sum of', nums, 'is', sumDivConq(nums))</code></pre>
+<p class="calibre22">The <em class="calibre10">sumDivConq.html</em> program contains the JavaScript equivalent:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+function sumDivConq(numbers) {
+    if (numbers.length === 0) { // BASE CASE
+      <span class="codeannotationcode" aria-label="annotation1">❶</span> return 0;
+    } else if (numbers.length === 1) { // BASE CASE
+      <span class="codeannotationcode" aria-label="annotation2">❷</span> return numbers[0];
+    } else { // RECURSIVE CASE
+      <span class="codeannotationcode" aria-label="annotation3">❸</span> let mid = Math.floor(numbers.length / 2);
+        let leftHalfSum = sumDivConq(numbers.slice(0, mid));
+        let rightHalfSum = sumDivConq(numbers.slice(mid, numbers.length + 1));
+      <span class="codeannotationcode" aria-label="annotation4">❹</span> return leftHalfSum + rightHalfSum;
+    }
+}
+
+let nums = [1, 2, 3, 4, 5];
+document.write('The sum of ' + nums + ' is ' + sumDivConq(nums) + "&lt;br /&gt;");
+nums = [5, 2, 4, 8];
+document.write('The sum of ' + nums + ' is ' + sumDivConq(nums) + "&lt;br /&gt;");
+nums = [1, 10, 100, 1000];
+document.write('The sum of ' + nums + ' is ' + sumDivConq(nums) + "&lt;br /&gt;");
+&lt;/script&gt;</code></pre>
+<p class="calibre22">The output of this program is:</p>
+<pre class="calibre23"><code class="calibre11">The sum of [1, 2, 3, 4, 5] is 15
+The sum of [5, 2, 4, 8] is 19
+The sum of [1, 10, 100, 1000] is 1111</code></pre>
+<p class="calibre22">The <code class="calibre11">sumDivConq()</code> function first checks the <code class="calibre11">numbers</code> array for having either zero or one number in it. These trivial base cases are easy to sum since they require no addition: return either <code class="calibre11">0</code> <span class="codeannotation" aria-label="annotation1">❶</span> or the lone number in the array <span class="codeannotation" aria-label="annotation2">❷</span>. Everything else is a recursive case; the middle index of the array is calculated <span class="codeannotation" aria-label="annotation3">❸</span> so that separate recursive calls with the left half and right half of the numbers array are made. The sum of these two return values becomes the return value for the current <code class="calibre11">sumDivConq()</code> call <span class="codeannotation" aria-label="annotation4">❹</span>.</p>
+<p class="calibre22">Because of the associative nature of addition, there’s no reason an array of numbers must be added sequentially by a single computer. Our program carries out all operations on the same computer, but for large arrays or calculations more complicated than addition, our program could send the halves to other computers to complete. The problem can be divided into similar subproblems, which is a huge hint that a recursive approach can be taken.</p>
+<h2 id="calibre_link-307" class="calibre6"><span type="pagebreak" title="113" id="calibre_link-138" class="calibre20"></span>Karatsuba Multiplication</h2>
+<p class="bodyfirst">The <code class="calibre11">*</code> operator makes multiplication easy to do in high-level programming languages such as Python and JavaScript. But low-level hardware needs a way to perform multiplication using more primitive operations. We could multiply two integers using only addition with a loop, such as in the following Python code to multiply <code class="calibre11">5678 * 1234</code>:</p>
+<pre class="calibre23"><code class="calibre11">&gt;&gt;&gt; <b class="calibre7">x = 5678</b>
+&gt;&gt;&gt; <b class="calibre7">y = 1234</b>
+&gt;&gt;&gt; <b class="calibre7">product = 0</b>
+&gt;&gt;&gt; <b class="calibre7">for i in range(x):</b>
+...     <b class="calibre7">product += y</b>
+...
+&gt;&gt;&gt; <b class="calibre7">product</b>
+7006652</code></pre>
+<p class="calibre22">However, this code doesn’t scale efficiently for large integers. <em class="calibre10">Karatsuba multiplication</em> is a fast, recursive algorithm discovered in 1960 by Anatoly Karatsuba that can multiply integers using addition, subtraction, and a precomputed multiplication table of all products from single-digit numbers. This multiplication table, shown in <a href="#calibre_link-19" id="calibre_link-647" class="linkurl">Figure 5-5</a>, is called a <em class="calibre10">lookup table</em>. </p>
+<p class="calibre22">Our algorithm won’t need to multiply single-digit numbers because it can just look them up in the table. By using memory to store precomputed values, we increase memory usage to decrease CPU runtime.</p>
+<figure class="calibre25">
+<img src="images/000024.webp" class="calibre16" alt="A multiplication table of the digits 0 through 9." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-19" class="linkurl">Figure 5-5</a>: A lookup table, such as this table of products of all single-digit numbers, saves our program from repeat calculations as the computer stores the precomputed values in memory for later retrieval.</p></figcaption>
+</figure>
+<p class="calibre22">We’ll implement Karatsuba multiplication in a high-level language like Python or JavaScript as though the <code class="calibre11">*</code> operator didn’t already exist. Our <code class="calibre11">karatsuba()</code> function accepts two integer arguments, <code class="calibre11">x</code> and <code class="calibre11">y</code>, to multiply. The Karatsuba algorithm has five steps, and the first three involve making recursive calls to <code class="calibre11">karatsuba()</code> with arguments that are smaller, broken-down <span type="pagebreak" title="114" id="calibre_link-140" class="calibre17"></span>integers derived from <code class="calibre11">x</code> and <code class="calibre11">y</code>. The base case occurs when the <code class="calibre11">x</code> and <code class="calibre11">y</code> arguments are both single-digit numbers, in which case the product can be found in the precomputed lookup table.</p>
+<p class="calibre22">We also define four more variables: <code class="calibre11">a</code> and <code class="calibre11">b</code> are each half of the digits of <code class="calibre11">x</code>, and <code class="calibre11">c</code> and <code class="calibre11">d</code> are each half of the digits of <code class="calibre11">y</code>, as shown in <a href="#calibre_link-20" id="calibre_link-648" class="linkurl">Figure 5-6</a>. For example, if <code class="calibre11">x</code> and <code class="calibre11">y</code> are <code class="calibre11">5678</code> and <code class="calibre11">1234</code>, respectively, then <code class="calibre11">a</code> is <code class="calibre11">56</code>, <code class="calibre11">b</code> is <code class="calibre11">78</code>, <code class="calibre11">c</code> is <code class="calibre11">12</code>, and <code class="calibre11">d</code> is <code class="calibre11">34</code>.</p>
+<figure class="calibre25">
+<img src="images/000011.webp" class="calibre16" alt="Diagram showing x = 5678, with arrows leading to a = 56 and b = 78, and y = 1234, with arrows leading to c = 12 and d = 34." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-20" class="linkurl">Figure 5-6</a>: The integers to multiply, <span class="calibre"><code class="calibre39">x</code></span> and <span class="calibre"><code class="calibre39">y</code></span>, are divided into halves <span class="calibre"><code class="calibre39">a</code></span>, <span class="calibre"><code class="calibre39">b</code></span>, <span class="calibre"><code class="calibre39">c</code></span>, and <span class="calibre"><code class="calibre39">d</code></span>.</p></figcaption>
+</figure>
+<p class="calibre22">Here are the five steps of the Karatsuba algorithm:</p>
+<ol class="decimal">
+<li value="1" class="calibre9">Multiply <code class="calibre11">a</code> and <code class="calibre11">c</code> either from the multiplication lookup table or from a recursive call to <code class="calibre11">karatsuba()</code>.</li>
+<li value="2" class="calibre9">Multiply <code class="calibre11">b</code> and <code class="calibre11">d</code> either from the multiplication lookup table or from a recursive call to <code class="calibre11">karatsuba()</code>.</li>
+<li value="3" class="calibre9">Multiply <code class="calibre11">a + c</code> and <code class="calibre11">b + d</code> either from the multiplication lookup table or from a recursive call to <code class="calibre11">karatsuba()</code>.</li>
+<li value="4" class="calibre9">Calculate step 3 &ndash; step 2 &ndash; step 1.</li>
+<li value="5" class="calibre9">Pad the step 1 and step 4 results with zeros; then add them to step 2.</li>
+</ol>
+<p class="calibre22">The result of step 5 is the product of <code class="calibre11">x</code> and <code class="calibre11">y</code>. The specifics of how to pad the step 1 and step 4 results with zeros are explained later in this section.</p>
+<p class="calibre22">Let’s ask our three recursive algorithm questions about the <code class="calibre11">karatsuba()</code> function:</p>
+<ol class="none">
+<li class="calibre9"><span class="runinhead">What is the base case?</span>  Multiplying single-digit numbers, which can be done with a precomputed lookup table.</li>
+<li class="calibre9"><span class="runinhead">What argument is passed to the recursive function call?</span>  The <code class="calibre11">a</code>, <code class="calibre11">b</code>, <code class="calibre11">c</code>, and <code class="calibre11">d</code> values derived from the <code class="calibre11">x</code> and <code class="calibre11">y</code> arguments.</li>
+<li class="calibre9"><span class="runinhead">How does this argument become closer to the base case?</span>  Since <code class="calibre11">a</code>, <code class="calibre11">b</code>, <code class="calibre11">c</code>, and <code class="calibre11">d</code> are each half of the digits of <code class="calibre11">x</code> and <code class="calibre11">y</code> and themselves are used for the next recursive call’s <code class="calibre11">x</code> and <code class="calibre11">y</code> arguments, the recursive call’s arguments become closer and closer to the single-digit numbers the base case requires.</li>
+</ol>
+<p class="calibre22">Our Python implementation for Karatsuba multiplication is in the <em class="calibre10">karatsubaMultiplication.py</em> program:</p>
+<pre class="calibre23"><code class="calibre11">import math
+
+# Create a lookup table of all single-digit multiplication products:
+MULT_TABLE = {} <span class="codeannotationcode" aria-label="annotation1">❶</span>
+for i in range(10):
+    for j in range(10):
+<span type="pagebreak" title="115" id="calibre_link-516" class="calibre17"></span>        MULT_TABLE[(i, j)] = i * j
+
+def padZeros(numberString, numZeros, insertSide):
+    """Return a string padded with zeros on the left or right side."""
+    if insertSide == 'left':
+        return '0' * numZeros + numberString
+    elif insertSide == 'right':
+        return numberString + '0' * numZeros
+
+def karatsuba(x, y):
+    """Multiply two integers with the Karatsuba algorithm. Note that
+    the * operator isn't used anywhere in this function."""
+    assert isinstance(x, int), 'x must be an integer'
+    assert isinstance(y, int), 'y must be an integer'
+    x = str(x)
+    y = str(y)
+
+    # At single digits, look up the products in the multiplication table:
+    if len(x) == 1 and len(y) == 1: # BASE CASE
+        print('Lookup', x, '*', y, '=', MULT_TABLE[(int(x), int(y))])
+        return MULT_TABLE[(int(x), int(y))]
+
+    # RECURSIVE CASE
+    print('Multiplying', x, '*', y)
+
+    # Pad with prepended zeros so that x and y are the same length:
+    if len(x) &lt; len(y): <span class="codeannotationcode" aria-label="annotation2">❷</span>
+        # If x is shorter than y, pad x with zeros:
+        x = padZeros(x, len(y) - len(x), 'left')
+    elif len(y) &lt; len(x):
+        # If y is shorter than x, pad y with zeros:
+        y = padZeros(y, len(x) - len(y), 'left')
+    # At this point, x and y have the same length.
+
+    halfOfDigits = math.floor(len(x) / 2) <span class="codeannotationcode" aria-label="annotation3">❸</span>
+
+    # Split x into halves a &amp; b, split y into halves c &amp; d:
+    a = int(x[:halfOfDigits])
+    b = int(x[halfOfDigits:])
+    c = int(y[:halfOfDigits])
+    d = int(y[halfOfDigits:])
+
+    # Make the recursive calls with these halves:
+    step1Result = karatsuba(a, c) <span class="codeannotationcode" aria-label="annotation4">❹</span> # Step 1: Multiply a &amp; c.
+    step2Result = karatsuba(b, d) # Step 2: Multiply b &amp; d.
+    step3Result = karatsuba(a + b, c + d) # Step 3: Multiply a + b &amp; c + d.
+
+    # Step 4: Calculate Step 3 - Step 2 - Step 1:
+    step4Result = step3Result - step2Result - step1Result <span class="codeannotationcode" aria-label="annotation5">❺</span>
+
+    # Step 5: Pad these numbers, then add them for the return value:
+    step1Padding = (len(x) - halfOfDigits) + (len(x) - halfOfDigits)
+    step1PaddedNum = int(padZeros(str(step1Result), step1Padding, 'right'))
+
+    step4Padding = (len(x) - halfOfDigits)
+<span type="pagebreak" title="116" id="calibre_link-139" class="calibre17"></span>    step4PaddedNum = int(padZeros(str(step4Result), step4Padding, 'right'))
+
+    print('Solved', x, 'x', y, '=', step1PaddedNum + step2Result + step4PaddedNum)
+
+    return step1PaddedNum + step2Result + step4PaddedNum <span class="codeannotationcode" aria-label="annotation6">❻</span>
+
+# Example: 1357 x 2468 = 3349076
+print('1357 * 2468 =', karatsuba(1357, 2468))</code></pre>
+<p class="calibre22">The JavaScript equivalent is in <em class="calibre10">karatsubaMultiplication.html</em>:</p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+
+// Create a lookup table of all single-digit multiplication products:
+let MULT_TABLE = {}; <span class="codeannotationcode" aria-label="annotation1">❶</span>
+for (let i = 0; i &lt; 10; i++) {
+    for (let j = 0; j &lt; 10; j++) {
+        MULT_TABLE[[i, j]] = i * j;
+    }
+}
+
+function padZeros(numberString, numZeros, insertSide) {
+    // Return a string padded with zeros on the left or right side.
+    if (insertSide === "left") {
+        return "0".repeat(numZeros) + numberString;
+    } else if (insertSide === "right") {
+        return numberString + "0".repeat(numZeros);
+    }
+}
+
+function karatsuba(x, y) {
+    // Multiply two integers with the Karatsuba algorithm. Note that
+    // the * operator isn't used anywhere in this function.
+    console.assert(Number.isInteger(x), "x must be an integer");
+    console.assert(Number.isInteger(y), "y must be an integer");
+    x = x.toString();
+    y = y.toString();
+
+    // At single digits, look up the products in the multiplication table:
+    if ((x.length === 1) &amp;&amp; (y.length === 1)) { // BASE CASE
+        document.write("Lookup " + x.toString() + " * " + y.toString() + " = " +
+        MULT_TABLE[[parseInt(x), parseInt(y)]] + "&lt;br /&gt;");
+        return MULT_TABLE[[parseInt(x), parseInt(y)]];
+    }
+
+    // RECURSIVE CASE
+    document.write("Multiplying " + x.toString() + " * " + y.toString() +
+    "&lt;br /&gt;");
+
+    // Pad with prepended zeros so that x and y are the same length:
+    if (x.length &lt; y.length) { <span class="codeannotationcode" aria-label="annotation2">❷</span>
+        // If x is shorter than y, pad x with zeros:
+        x = padZeros(x, y.length - x.length, "left");
+    } else if (y.length &lt; x.length) {
+        // If y is shorter than x, pad y with zeros:
+<span type="pagebreak" title="117" id="calibre_link-517" class="calibre17"></span>        y = padZeros(y, x.length - y.length, "left");
+    }
+    // At this point, x and y have the same length.
+
+    let halfOfDigits = Math.floor(x.length / 2); <span class="codeannotationcode" aria-label="annotation3">❸</span>
+
+    // Split x into halves a &amp; b, split y into halves c &amp; d:
+    let a = parseInt(x.substring(0, halfOfDigits));
+    let b = parseInt(x.substring(halfOfDigits));
+    let c = parseInt(y.substring(0, halfOfDigits));
+    let d = parseInt(y.substring(halfOfDigits));
+
+    // Make the recursive calls with these halves:
+    let step1Result = karatsuba(a, c); <span class="codeannotationcode" aria-label="annotation4">❹</span> // Step 1: Multiply a &amp; c.
+    let step2Result = karatsuba(b, d); // Step 2: Multiply b &amp; d.
+    let step3Result = karatsuba(a + b, c + d); // Step 3: Multiply a + b &amp; c + d.
+
+    // Step 4: Calculate Step 3 - Step 2 - Step 1:
+    let step4Result = step3Result - step2Result - step1Result; <span class="codeannotationcode" aria-label="annotation5">❺</span>
+
+    // Step 5: Pad these numbers, then add them for the return value:
+    let step1Padding = (x.length - halfOfDigits) + (x.length - halfOfDigits);
+    let step1PaddedNum = parseInt(padZeros(step1Result.toString(), step1Padding, "right"));
+
+    let step4Padding = (x.length - halfOfDigits);
+    let step4PaddedNum = parseInt(padZeros((step4Result).toString(), step4Padding, "right"));
+
+    document.write("Solved " + x + " x " + y + " = " +
+    (step1PaddedNum + step2Result + step4PaddedNum).toString() + "&lt;br /&gt;");
+
+    return step1PaddedNum + step2Result + step4PaddedNum; <span class="codeannotationcode" aria-label="annotation6">❻</span>
+}
+
+// Example: 1357 x 2468 = 3349076
+document.write("1357 * 2468 = " + karatsuba(1357, 2468).toString() + "&lt;br /&gt;");
+&lt;/script&gt;</code></pre>
+<p class="calibre22">When you run this code, the output looks like this:</p>
+<pre class="calibre23"><code class="calibre11">Multiplying 1357 * 2468
+Multiplying 13 * 24
+Lookup 1 * 2 = 2
+Lookup 3 * 4 = 12
+Lookup 4 * 6 = 24
+Solved 13 * 24 = 312
+Multiplying 57 * 68
+Lookup 5 * 6 = 30
+Lookup 7 * 8 = 56
+Multiplying 12 * 14
+Lookup 1 * 1 = 1
+Lookup 2 * 4 = 8
+Lookup 3 * 5 = 15
+Solved 12 * 14 = 168
+Solved 57 * 68 = 3876
+Multiplying 70 * 92
+<span type="pagebreak" title="118" id="calibre_link-518" class="calibre17"></span>Lookup 7 * 9 = 63
+Lookup 0 * 2 = 0
+Multiplying 7 * 11
+Lookup 0 * 1 = 0
+Lookup 7 * 1 = 7
+Lookup 7 * 2 = 14
+Solved 07 * 11 = 77
+Solved 70 * 92 = 6440
+Solved 1357 * 2468 = 3349076
+1357 * 2468 = 3349076</code></pre>
+<p class="calibre22">The first part of this program happens before <code class="calibre11">karatsuba()</code> is called. Our program needs to create the multiplication lookup table in the <code class="calibre11">MULT_TABLE</code> variable <span class="codeannotation" aria-label="annotation1">❶</span>. Normally, lookup tables are hardcoded directly in the source code, from <code class="calibre11">MULT_TABLE[[0, 0]] = 0</code> to <code class="calibre11">MULT_TABLE[[9, 9]] = 81</code>. But to reduce the amount of typing, we’ll use nested <code class="calibre11">for</code> loops to generate each product. Accessing <code class="calibre11">MULT_TABLE[[m, n]]</code> gives us the product of integers <code class="calibre11">m</code> and <code class="calibre11">n</code>.</p>
+<p class="calibre22">Our <code class="calibre11">karatsuba()</code> function also relies on a helper function named <code class="calibre11">padZeros()</code>, which pads a string of digits with additional zeros on the left or right side of the string. This padding is done in the fifth step of the Karatsuba algorithm. For example, <code class="calibre11">padZeros("42", 3, "left")</code> returns the string <code class="calibre11">00042</code>, while <code class="calibre11">padZeros("99", 1, "right")</code> returns the string <code class="calibre11">990</code>.</p>
+<p class="calibre22">The <code class="calibre11">karatsuba()</code> function itself first checks for the base case, where <code class="calibre11">x</code> and <code class="calibre11">y</code> are single-digit numbers. These can be multiplied using the lookup table, and their product is immediately returned. Everything else is a recursive case.</p>
+<p class="calibre22">We need to convert the <code class="calibre11">x</code> and <code class="calibre11">y</code> integers into strings and adjust them so that they contain the same number of digits. If one of these numbers is shorter than the other, zeros are padded to the left side. For example, if <code class="calibre11">x</code> is <code class="calibre11">13</code> and <code class="calibre11">y</code> is <code class="calibre11">2468</code>, our function calls <code class="calibre11">padZeros()</code> so that <code class="calibre11">x</code> can be replaced with <code class="calibre11">0013</code>. This is required because we then create the <code class="calibre11">a</code>, <code class="calibre11">b</code>, <code class="calibre11">c</code>, and <code class="calibre11">d</code> variables to each contain one-half of the digits of <code class="calibre11">x</code> and <code class="calibre11">y</code> <span class="codeannotation" aria-label="annotation2">❷</span>. The <code class="calibre11">a</code> and <code class="calibre11">c</code> variables must have the same number of digits for the Karatsuba algorithm to work, as do the <code class="calibre11">b</code> and <code class="calibre11">d</code> variables.</p>
+<p class="calibre22">Note that we use division and rounding down to calculate how much is half of the digits of <code class="calibre11">x</code> <span class="codeannotation" aria-label="annotation3">❸</span>. These mathematical operations are as complicated as multiplication and might not be available to the low-level hardware we are programming the Karatsuba algorithm for. In a real implementation, we could use another lookup table for these values: <code class="calibre11">HALF_TABLE = [0, 0, 1, 1, 2, 2, 3, 3...]</code>, and so on. Looking up <code class="calibre11">HALF_TABLE[n]</code> would evaluate to half of <code class="calibre11">n</code>, rounded down. An array of a mere 100 items would be sufficient for all but the most astronomical numbers and save our program from division and rounding. But our programs are for demonstration, so we’ll just use the <code class="calibre11">/</code> operator and built-in rounding functions.</p>
+<p class="calibre22">Once these variables are set up correctly, we can begin making the recursive function calls <span class="codeannotation" aria-label="annotation4">❹</span>. The first three steps involve recursive calls with arguments <code class="calibre11">a</code> and <code class="calibre11">b</code>, <code class="calibre11">c</code> and <code class="calibre11">d</code>, and finally <code class="calibre11">a + b</code> and <code class="calibre11">c + d</code>. The fourth step subtracts the results of the first three steps from each other <span class="codeannotation" aria-label="annotation5">❺</span>. The fifth step pads the results of the first and fourth steps with zeros on the right side, then adds them to the results of the second step <span class="codeannotation" aria-label="annotation6">❻</span>.</p>
+<h2 id="calibre_link-308" class="calibre6"><span type="pagebreak" title="119" id="calibre_link-33" class="calibre20"></span>The Algebra Behind the Karatsuba Algorithm</h2>
+<p class="bodyfirst">These steps may seem like magic, so let’s dive into the algebra that shows why they work. Let’s use 1,357 for <em class="calibre10">x</em> and 2,468 for <em class="calibre10">y</em> as the integers we want to multiply. Let’s also consider a new variable, <em class="calibre10">n</em>, for the number of digits in <em class="calibre10">x</em> or <em class="calibre10">y</em>. Since <em class="calibre10">a</em> is 13 and <em class="calibre10">b</em> is 57, we can calculate the original <em class="calibre10">x</em> as 10<sup class="calibre12"><em class="calibre10">n</em></sup><sup class="calibre12">/2</sup> × <em class="calibre10">a</em> + <em class="calibre10">b</em>, which is 10<sup class="calibre12">2</sup> × 13 + 57 or 1,300 + 57, or 1,357. Similarly, <em class="calibre10">y</em> is the same as 10<sup class="calibre12"><em class="calibre10">n</em></sup><sup class="calibre12">/2</sup> × <em class="calibre10">c</em> + <em class="calibre10">d</em>.</p>
+<p class="calibre22">This means that the product of <em class="calibre10">x</em> × <em class="calibre10">y</em> = (10<sup class="calibre12"><em class="calibre10">n</em></sup><sup class="calibre12">/2</sup> × <em class="calibre10">a</em> + <em class="calibre10">b</em>) × (10<sup class="calibre12"><em class="calibre10">n</em></sup><sup class="calibre12">/2</sup> × <em class="calibre10">c</em> + <em class="calibre10">d</em>). Doing a bit of algebra, we can rewrite this equation as <em class="calibre10">x</em> × <em class="calibre10">y</em> = 10<em class="calibre10">n</em> × <em class="calibre10">ac</em> + 10<sup class="calibre12"><em class="calibre10">n</em></sup><sup class="calibre12">/2</sup> × (<em class="calibre10">ad</em> + <em class="calibre10">bc</em>) + <em class="calibre10">bd</em>. With our example numbers, this means 1,357 × 2,468 = 10,000 × (13 × 24) + 100 × (13 × 68 + 57 × 24) + (57 × 68). Both sides of this equation evaluate to 3,349,076.</p>
+<p class="calibre22">We’ve broken the multiplication of <em class="calibre10">xy</em> into the multiplications of <em class="calibre10">ac</em>, <em class="calibre10">ad</em>, <em class="calibre10">bc</em>, and <em class="calibre10">bd</em>. This forms the basis of our recursive function: we’ve defined the multiplication of <em class="calibre10">x</em> and <em class="calibre10">y</em> by using multiplication of smaller numbers (remember, <em class="calibre10">a</em>, <em class="calibre10">b</em>, <em class="calibre10">c</em>, and <em class="calibre10">d</em> are half the digits of <em class="calibre10">x</em> or <em class="calibre10">y</em>) that approach the base case of multiplying single-digit numbers. And we can perform single-digit multiplication with a lookup table rather than multiplying.</p>
+<p class="calibre22">So we need to recursively compute <em class="calibre10">ac</em> (the first step of the Karatsuba algorithm) and <em class="calibre10">bd</em> (the second step). We also need to calculate (<em class="calibre10">a</em> + <em class="calibre10">b</em>)(<em class="calibre10">c</em> + <em class="calibre10">d</em>) for the third step, which we can rewrite as <em class="calibre10">ac</em> + <em class="calibre10">ad</em> + <em class="calibre10">bc</em> + <em class="calibre10">bd</em>. We already have <em class="calibre10">ac</em> and <em class="calibre10">bd</em> from the first two steps, so subtracting those gives us <em class="calibre10">ad</em> + <em class="calibre10">bc</em>. This means we need only one multiplication (and one recursive call) to calculate (<em class="calibre10">a</em> + <em class="calibre10">b</em>)(<em class="calibre10">c</em> + <em class="calibre10">d</em>) instead of two to calculate <em class="calibre10">ad</em> + <em class="calibre10">bc</em>. And <em class="calibre10">ad</em> + <em class="calibre10">bc</em> is needed for the 10<em class="calibre10">n</em><sup class="calibre12">/2</sup> × (<em class="calibre10">ad</em> + <em class="calibre10">bc</em>) part of our original equation.</p>
+<p class="calibre22">Multiplying by the 10<em class="calibre10">n</em> and 10<sup class="calibre12"><em class="calibre10">n</em></sup><sup class="calibre12">/2</sup> powers of 10 can be done by padding zero digits: for example, 10,000 × 123 is 1,230,000. So, there’s no need to make recursive calls for those multiplications. In the end, multiplying <em class="calibre10">x</em> × <em class="calibre10">y</em> can be broken into multiplying three smaller products with three recursive calls: <code class="calibre11">karatsuba(a, c)</code>, <code class="calibre11">karatsuba(b, d)</code>, and <code class="calibre11">karatsuba((a + b), (c + d))</code>.</p>
+<p class="calibre22">With some careful study of this section, you can understand the algebra behind the Karatsuba algorithm. What I can’t understand is how Anatoly Karatsuba was clever enough to devise this algorithm in less than a week as a 23-year-old student in the first place.</p>
+<h2 id="calibre_link-309" class="calibre6">Summary</h2>
+<p class="bodyfirst">Dividing problems into smaller, self-similar problems is at the heart of recursion, making these divide-and-conquer algorithms especially suited for recursive techniques. In this chapter, we created a divide-and-conquer version of <span class="calibre" itemid="xref_target_Chapter 3">Chapter 3</span>’s program for summing numbers in an array. One benefit of this version is that upon dividing a problem into multiple subproblems, the subproblems can be farmed out to other computers to work on in parallel.</p>
+<p class="calibre22">A binary search algorithm searches a sorted array by repeatedly narrowing the range to search in half. While a linear search starts searching at the <span type="pagebreak" title="120" id="calibre_link-48" class="calibre17"></span>beginning and searches the entire array, a binary search takes advantage of the array’s sorted order to home in on the item it is looking for. The performance improvement is so great that it may be worthwhile to sort an unsorted array in order to enable a binary search on its items.</p>
+<p class="calibre22">We covered two popular sorting algorithms in this chapter: quicksort and merge sort. Quicksort divides an array into two partitions based on a pivot value. The algorithm then recursively partitions these two partitions, repeating the process until the partitions are the size of a single item. At this point, the partitions, and the items in them, are in sorted order. Merge sort takes an opposite approach. The algorithm splits the array into smaller arrays first, and then merges the smaller arrays into sorted order afterward.</p>
+<p class="calibre22">Finally, we covered Karatsuba multiplication, a recursive algorithm for performing integer multiplication when the <code class="calibre11">*</code> multiplication operator isn’t available. This comes up in low-level hardware programming that doesn’t offer a built-in multiplication instruction. The Karatsuba algorithm breaks down multiplying two integers into three multiplications of smaller integers. To multiply single-digit numbers for the base case, the algorithm stores every product from 0 × 0 to 9 × 9 in a lookup table.</p>
+<p class="calibre22">The algorithms in this chapter are part of many data structure and algorithm courses that freshman computer science students take. In the next chapter, we’ll continue to look at other algorithms at the heart of computing with algorithms that calculate permutations and combinations.</p>
+<h2 id="calibre_link-310" class="calibre6">Further Reading</h2>
+<p class="bodyfirst">The Computerphile channel on YouTube has videos on quicksort at <a href="https://youtu.be/XE4VP_8Y0BU" class="linkurl">https://youtu.be/XE4VP_8Y0BU</a> and merge sort at <a href="https://youtu.be/kgBjXUE_Nwc" class="linkurl">https://youtu.be/kgBjXUE_Nwc</a>. If you want a more comprehensive tutorial, the free “Algorithmic Toolbox” online course covers many of the same topics that a freshman data structures and algorithms course would cover, including binary search, quicksort, and merge sort. You can sign up for this Coursera course at <a href="https://www.coursera.org/learn/algorithmic-toolbox" class="linkurl">https://www.coursera.org/learn/algorithmic-toolbox</a>.</p>
+<p class="calibre22">Sorting algorithms are often compared to each other in lessons on big O algorithm analysis, which you can read about in Chapter 13 of my book <em class="calibre10">Beyond the Basic Stuff with Python</em> (No Starch Press, 2020). You can read this chapter online at <a href="https://inventwithpython.com/beyond" class="linkurl">https://inventwithpython.com/beyond</a>. Python developer Ned Batchelder describes big O and “how code slows as your data grows” in his 2018 PyCon talk of the same name at <a href="https://youtu.be/duvZ-2UK0fc" class="linkurl">https://youtu.be/duvZ-2UK0fc</a>.</p>
+<p class="calibre22">Divide-and-conquer algorithms are useful because they often can be run on multiple computers in parallel. Guy Steele Jr. gives a Google TechTalk titled “Four Solutions to a Trivial Problem” on this topic at <a href="https://youtu.be/ftcIcn8AmSY" class="linkurl">https://youtu.be/ftcIcn8AmSY</a>.</p>
+<p class="calibre22"><span type="pagebreak" title="121" id="calibre_link-519" class="calibre17"></span>Professor Tim Roughgarden produced a video lecture for Stanford University on Karatsuba multiplication at <a href="https://youtu.be/JCbZayFr9RE" class="linkurl">https://youtu.be/JCbZayFr9RE</a>.</p>
+<p class="calibre22">To help your understanding of quicksort and merge sort, obtain a pack of playing cards or simply write numbers on index cards and practice sorting them by hand according to the rules of these two algorithms. This offline approach can help you remember the pivot-and-partition of quicksort and the divide-merge of merge sort.</p>
+<h2 id="calibre_link-311" class="calibre6">Practice Questions</h2>
+<p class="bodyfirst">Test your comprehension by answering the following questions:</p>
+<ol class="decimal">
+<li value="1" class="calibre9">What is a benefit of the divide-and-conquer summing algorithm in this chapter compared to the head-tail summing algorithm in <span class="calibre" itemid="xref_target_Chapter 3">Chapter 3</span>?</li>
+<li value="2" class="calibre9">If a binary search of 50 books on a shelf takes six steps, how many steps would it take to search twice as many books?</li>
+<li value="3" class="calibre9">Can a binary search algorithm search an unsorted array?</li>
+<li value="4" class="calibre9">Is partitioning the same thing as sorting?</li>
+<li value="5" class="calibre9">What happens in quicksort’s partition step?</li>
+<li value="6" class="calibre9">What is the pivot value in quicksort?</li>
+<li value="7" class="calibre9">What is the base case of quicksort?</li>
+<li value="8" class="calibre9">How many recursive calls does the <code class="calibre11">quicksort()</code> function have?</li>
+<li value="9" class="calibre9">How is the array <code class="calibre11">[0, 3, 1, 2, 5, 4, 7, 6]</code> not properly partitioned with a pivot value of <code class="calibre11">4</code>?</li>
+<li value="10" class="calibre9">What is the base case of merge sort?</li>
+<li value="11" class="calibre9">How many recursive calls does the <code class="calibre11">mergeSort()</code> function have?</li>
+<li value="12" class="calibre9">What is the resultant array when the merge sort algorithm sorts the arrays <code class="calibre11">[12, 37, 38, 41, 99]</code> and <code class="calibre11">[2, 4, 14, 42]</code>?</li>
+<li value="13" class="calibre9">What is a lookup table?</li>
+<li value="14" class="calibre9">In the Karatsuba algorithm that multiplies integers <em class="calibre10">x</em> and <em class="calibre10">y</em>, what do the <em class="calibre10">a</em>, <em class="calibre10">b</em>, <em class="calibre10">c</em>, and <em class="calibre10">d</em> variables store?</li>
+<li value="15" class="calibre9">Answer the three questions about recursive solutions for each of the recursive algorithms presented in this chapter:
+<ol class="lower-alpha">
+<li value="1" class="calibre9">What is the base case? </li>
+<li value="2" class="calibre9">What argument is passed to the recursive function call? </li>
+<li value="3" class="calibre9">How does this argument become closer to the base case? </li>
+</ol>
+<p class="bodyfirst">Then re-create the recursive algorithms from this chapter without looking at the original code.</p></li>
+</ol>
+<h2 id="calibre_link-312" class="calibre6"><span type="pagebreak" title="122" id="calibre_link-520" class="calibre20"></span>Practice Projects</h2>
+<p class="bodyfirst">For practice, write a function for each of the following tasks:</p>
+<ol class="decimal">
+<li value="1" class="calibre9">Create a version of the <code class="calibre11">karatsuba()</code> function that has a multiplication lookup table of products from 0 × 0 to 999 × 999 rather than 0 × 0 to 9 × 9. Get a rough estimate of how long it takes to calculate <code class="calibre11">karatsuba(12345678, 87654321)</code> 10,000 times in a loop with this larger lookup table compared to the original lookup table. If this still runs too quickly to measure, increase the number of iterations to 100,000 or 1,000,000 or more. (Hint: you should delete or comment out the <code class="calibre11">print()</code> and <code class="calibre11">document.write()</code> calls inside the <code class="calibre11">karatsuba()</code> function for this timing test.) </li>
+<li value="2" class="calibre9">Create a function that performs a linear search on a large array of integers 10,000 times. Get a rough estimate of how long this takes, increasing the number of iterations to 100,000 or 1,000,000 if the program executes too quickly. Compare this with how long a second function takes to sort the array once before performing the same number of binary searches.</li>
+</ol>
+</section>
+</div>
+
+
+
+<div><a href="chapter4.html">Prev: Chapter 4 - Backtracking and Tree Traversal Algorithms</a> | <a href="chapter6.html">Next: Chapter 6 - Permutations and Combinations</a></div></body></html>

@@ -1,0 +1,710 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="recursion-style.css" rel="stylesheet" type="text/css" /><title>Chapter 2 - Recursion vs. Iteration</title></head><body>
+
+
+
+<div style="background-color: #eeeddd; float: right; height: 310px; font-family: sans-serif;" id="otherbooks">
+  <a href="#" onclick="document.getElementById('otherbooks').outerHTML='';" style="vertical-align: top;">(close)</a><br />
+
+  <a target="_blank" href="https://nostarch.com/automatestuff2" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_automate.link');"><img src="/images/cover_automate2_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/big-book-small-python-projects" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_bigbookpython.link');"><img src="/images/cover_bigbookpython_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/beyond-basic-stuff-python" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_beyond.link');"><img src="/images/cover_beyond_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/inventwithpython" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_invent.link');"><img src="/images/cover_invent4th_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://www.amazon.com/Making-Games-Python-Pygame-Sweigart/dp/1469901730?ie=UTF8&amp;tag=playwithpyth-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1469901730" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_pygame.link');"><img src="/images/cover_makinggames_thumb.webp" style="height: 200px; border: solid black 1px; /"></a>
+  <a target="_blank" href="https://nostarch.com/crackingcodes" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_hacking.link');"><img src="/images/cover_crackingcodes_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/scratchplayground"><img src="/images/cover_scratchprogrammingplayground_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/codingwithminecraft"><img src="/images/cover_codingwithminecraft_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <br />
+  <a href="https://inventwithpython.com/automateudemy">Use this link to get a discount on the Automate the Boring Stuff online video course.</a><br />
+  <a href="https://www.patreon.com/AlSweigart">Support me on Patreon</a>
+</div>
+
+<div><a href="chapter1.html">Prev: Chapter 1 - What Is Recursion?</a> | <a href="chapter3.html">Next: Chapter 3 - Classic Recursion Algorithms</a></div>
+
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-259">
+<section class="toclist">
+<header class="calibre14">
+<h1 class="chapter">
+<span class="partnumber"><span type="pagebreak" title="21" id="calibre_link-137" class="calibre36"></span>2</span><br class="calibre18" />
+<span class="parttitle">Recursion vs. Iteration</span></h1>
+</header>
+<figure class="opener">
+<img src="images/000060.webp" alt="" class="calibre16" />
+</figure>
+<p class="chapterintro">Neither recursion nor iteration is a superior technique in general. In fact, any recursive code can be written as iterative code with a loop and a stack. Recursion doesn’t have some special power enabling it to perform calculations that an iterative algorithm cannot. And any iterative loop can be rewritten as a recursive function. </p>
+<p class="calibre24">This chapter compares and contrasts recursion and iteration. We’ll look at the classic Fibonacci and factorial functions and see why their recursive algorithms have critical weaknesses. We’ll also explore the insights a recursive approach can yield by considering an exponent algorithm. Altogether this chapter shines light on the supposed elegance of recursive algorithms and shows when a recursive solution is useful and when it is not.</p>
+<h2 id="calibre_link-260" class="calibre6"><span type="pagebreak" title="22" id="calibre_link-92" class="calibre20"></span>Calculating Factorials</h2>
+<p class="bodyfirst">Many computer science courses use factorial calculation as a classic example of a recursive function. The factorial of an integer (let’s call it <em class="calibre10">n</em>) is the product of all integers from 1 to <em class="calibre10">n</em>. For example, the factorial of 4 is 4 × 3 × 2 × 1, or 24. An exclamation mark is the math notation for factorials, as in 4!, which means <em class="calibre10">the factorial of 4</em>. <a href="#calibre_link-430" id="calibre_link-623" class="linkurl">Table 2-1</a> shows the first few factorials.</p>
+<figure class="calibre25">
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-430" class="calibre40">Table 2-1</a>: Factorials of the First Few Integers</p></figcaption>
+<table id="calibre_link-624" border="1" class="calibre41">
+<thead class="calibre42">
+<tr class="calibre43">
+<td class="calibre44"><b class="calibre7"><em class="calibre10">n</em>!</b></td>
+<td class="calibre44"></td>
+<td class="calibre44"><b class="calibre7">Expanded form</b></td>
+<td class="calibre44"></td>
+<td class="calibre44"><b class="calibre7">Product</b></td>
+</tr>
+</thead>
+<tbody class="calibre45">
+<tr class="calibre46">
+<td class="calibre44">1!</td>
+<td class="calibre44">=</td>
+<td class="calibre44">1</td>
+<td class="calibre44">=</td>
+<td class="calibre44">1</td>
+</tr>
+<tr class="calibre47">
+<td class="calibre44">2!</td>
+<td class="calibre44">=</td>
+<td class="calibre44">1 × 2</td>
+<td class="calibre44">=</td>
+<td class="calibre44">2</td>
+</tr>
+<tr class="calibre46">
+<td class="calibre44">3!</td>
+<td class="calibre44">=</td>
+<td class="calibre44">1 × 2 × 3</td>
+<td class="calibre44">=</td>
+<td class="calibre44">6</td>
+</tr>
+<tr class="calibre47">
+<td class="calibre44">4!</td>
+<td class="calibre44">=</td>
+<td class="calibre44">1 × 2 × 3 × 4</td>
+<td class="calibre44">=</td>
+<td class="calibre44">24</td>
+</tr>
+<tr class="calibre46">
+<td class="calibre44">5!</td>
+<td class="calibre44">=</td>
+<td class="calibre44">1 × 2 × 3 × 4 × 5</td>
+<td class="calibre44">=</td>
+<td class="calibre44">120</td>
+</tr>
+<tr class="calibre47">
+<td class="calibre44">6!</td>
+<td class="calibre44">=</td>
+<td class="calibre44">1 × 2 × 3 × 4 × 5 × 6</td>
+<td class="calibre44">=</td>
+<td class="calibre44">720</td>
+</tr>
+<tr class="calibre46">
+<td class="calibre44">7!</td>
+<td class="calibre44">=</td>
+<td class="calibre44">1 × 2 × 3 × 4 × 5 × 6 × 7</td>
+<td class="calibre44">=</td>
+<td class="calibre44">5,040</td>
+</tr>
+<tr class="calibre47">
+<td class="calibre44">8!</td>
+<td class="calibre44">=</td>
+<td class="calibre44">1 × 2 × 3 × 4 × 5 × 6 × 7 × 8</td>
+<td class="calibre44">=</td>
+<td class="calibre44">40,320</td>
+</tr>
+</tbody>
+</table>
+</figure>
+<p class="calibre22">Factorials are used in all sorts of calculations&mdash;for example, finding the number of permutations for something. If you want to know the number of ways that exist to order four people&mdash;Alice, Bob, Carol, and David&mdash;in a line, the answer is the factorial of 4. Four possible people can be first in line (4); then for each of those four options, three remaining people can be second in line (4 × 3); then two people can be third in line (4 × 3 × 2); and the last person left will be fourth in line (4 × 3 × 2 × 1). The number of ways people can be ordered in line&mdash;that is, the number of permutations&mdash;is the factorial of the number of people.</p>
+<p class="calibre22">Now let’s examine both an iterative and a recursive approach to calculating factorials.</p>
+<h3 id="calibre_link-261" class="calibre33">The Iterative Factorial Algorithm</h3>
+<p class="bodyfirst">Calculating factorials iteratively is fairly straightforward: multiply the integers 1 up to and including <em class="calibre10">n</em> in a loop. <em class="calibre10">Iterative</em> algorithms always use a loop. A <em class="calibre10">factorialByIteration.py</em> program looks like this:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">def factorial(number):
+    product = 1
+    for i in range(1, number + 1):
+        product = product * i
+    return product
+print(factorial(5))</code></pre>
+<p class="calibre22"><span type="pagebreak" title="23" id="calibre_link-93" class="calibre17"></span>And a <em class="calibre10">factorialByIteration.html</em> program looks like this:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+function factorial(number) {
+    let product = 1;
+    for (let i = 1; i &lt;= number; i++) {
+        product = product * i;
+    }
+    return product;
+}
+document.write(factorial(5));
+&lt;/script&gt;</code></pre>
+<p class="calibre22">When you run this code, the output displays the calculation for 5! like this:</p>
+<pre class="calibre23"><code class="calibre11">120</code></pre>
+<p class="calibre22">There’s nothing wrong with the iterative solution for calculating factorials; it’s straightforward and gets the job done. But let’s also take a look at the recursive algorithm for insights into the nature of factorials and recursion itself.</p>
+<h3 id="calibre_link-262" class="calibre33">The Recursive Factorial Algorithm</h3>
+<p class="bodyfirst">Notice that the factorial of 4 is 4 × 3 × 2 × 1, and the factorial of 5 is 5 × 4 × 3 × 2 × 1. So you could say that 5! = 5 × 4!. This is <em class="calibre10">recursive</em> because the definition of the factorial of 5 (or any number <em class="calibre10">n</em>) includes the definition of the factorial of 4 (the number <em class="calibre10">n</em> &ndash; 1). In turn, 4! = 4 × 3!, and so on, until you must calculate 1!, the base case, which is simply 1.</p>
+<p class="calibre22">The <em class="calibre10">factorialByRecursion.py</em> Python program uses a recursive factorial algorithm:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">def factorial(number):
+    if number == 1:
+        # BASE CASE
+        return 1
+    else:
+        # RECURSIVE CASE
+      <span class="codeannotationcode" aria-label="annotation1">❶</span> return number * factorial(number - 1)
+print(factorial(5))</code></pre>
+<p class="calibre22">And the <em class="calibre10">factorialByRecursion.html</em> JavaScript program with equivalent code looks like this:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+function factorial(number) {
+    if (number == 1) {
+        // BASE CASE
+        return 1;
+<span type="pagebreak" title="24" id="calibre_link-94" class="calibre17"></span>    } else {
+        // RECURSIVE CASE
+      <span class="codeannotationcode" aria-label="annotation1">❶</span> return number * factorial(number - 1);
+    }
+}
+document.write(factorial(5));
+&lt;/script&gt;</code></pre>
+<p class="calibre22">When you run this code to calculate 5! recursively, the output matches the iterative program’s output:</p>
+<pre class="calibre23"><code class="calibre11">120</code></pre>
+<p class="calibre22">To many programmers, this recursive code looks strange. You know that <code class="calibre11">factorial(5)</code> must compute 5 × 4 × 3 × 2 × 1, but it’s hard to point to the line of code where this multiplication is taking place.</p>
+<p class="calibre22">The confusion arises because the recursive case has one line <span class="codeannotation" aria-label="annotation1">❶</span>, half of which is executed before the recursive call and half of which takes place after the recursive call returns. We aren’t used to the idea of only half of a line of code executing at a time. </p>
+<p class="calibre22">The first half is <code class="calibre11">factorial(number - 1)</code>. This involves calculating <code class="calibre11">number - 1</code> and making a recursive function call, causing a new frame object to be pushed to the call stack. This happens before the recursive call is made.</p>
+<p class="calibre22">The next time the code runs with the old frame object is after <code class="calibre11">factorial(number - 1)</code> has returned. When <code class="calibre11">factorial(5)</code> is called, <code class="calibre11">factorial(number - 1)</code> will be <code class="calibre11">factorial(4)</code>, which returns <code class="calibre11">24</code>. This is when the second half of the line runs. The <code class="calibre11">return number * factorial(number - 1)</code> now looks like <code class="calibre11">return</code> <code class="calibre11">5 * 24</code>, which is why <code class="calibre11">factorial(5)</code> returns <code class="calibre11">120</code>.</p>
+<p class="calibre22"><a href="#calibre_link-441" id="calibre_link-625" class="linkurl">Figure 2-1</a> tracks the state of the call stack as frame objects are pushed (which happens as recursive function calls are made) and frame objects are popped (as recursive function calls return). Notice that the multiplication happens after the recursive calls are made, not before.</p>
+<p class="calibre22">When the original function call to <code class="calibre11">factorial()</code> returns, it returns the calculated factorial.</p>
+<h3 id="calibre_link-263" class="calibre33">Why the Recursive Factorial Algorithm Is Terrible</h3>
+<p class="bodyfirst">The recursive implementation for calculating factorials has a critical weakness. Calculating the factorial of 5 requires five recursive function calls. This means five frame objects are placed on the call stack before the base case is reached. This doesn’t scale. </p>
+<p class="calibre22">If you want to calculate the factorial of 1,001, the recursive <code class="calibre11">factorial()</code> function must make 1,001 recursive function calls. However, your program is likely to cause a stack overflow before it can finish, because making so many function calls without returning would exceed the maximum call stack size of the interpreter. This is terrible; you would never want to use a recursive factorial function in real-world code. </p>
+<span type="pagebreak" title="25" id="calibre_link-100" class="calibre17"></span><figure class="calibre25">
+<img src="images/000092.webp" class="calibre16" alt="Timeline of the call stack after each call to the factorial function. We begin with the number variable equal to 5 and a return value of 5 times the result of the factorial function when called with the argument 4. Next, number equals 4, and the return value is 4 times the result of the factorial function when called with the argument 3. Then, number equals 3, and the return value is 3 times the return value of the factorial function when called with the argument 2. Next, number equals 2, and the return value is 2 times the return value of the factorial function when called with the argument 1. After that, number equals 1, and the return value is 1. Then, number equals 2, and the return value is 2 times 1. Next, number equals 3, and the return value is 3 times 2. Then, number equals 4, and the return value is 4 times 6. Next, number equals 5, and the return value is 5 times 24. Finally, the call stack is empty." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-441" class="linkurl">Figure 2-1</a>: The state of the call stack as the recursive calls to <span class="calibre"><code class="calibre39">factorial()</code></span> are called and then return</p></figcaption>
+</figure>
+<p class="calibre22">The iterative factorial algorithm, on the other hand, will complete the calculation quickly and efficiently. The stack overflow can be avoided using a technique available in some programming languages called <em class="calibre10">tail call optimization</em>. <span class="calibre" itemid="xref_target_Chapter 8 ">Chapter 8 </span>covers this topic. However, this technique further complicates the implementation of the recursive function. For calculating factorials, the iterative approach is the simplest and most direct.</p>
+<h2 id="calibre_link-264" class="calibre6">Calculating the Fibonacci Sequence</h2>
+<p class="bodyfirst">The <em class="calibre10">Fibonacci sequence</em> is another classic example for introducing recursion. Mathematically, the Fibonacci sequence of integers begins with the numbers 1 and 1 (or sometimes, 0 and 1). The next number in the sequence is <span type="pagebreak" title="26" id="calibre_link-97" class="calibre17"></span>the sum of the previous two numbers. This creates the sequence 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, and so on, forever.</p>
+<p class="calibre22">If we call the latest two numbers in the sequence <em class="calibre10">a</em> and <em class="calibre10">b</em>, you can see in <a href="#calibre_link-442" id="calibre_link-626" class="linkurl">Figure 2-2</a> how the sequence grows.</p>
+<figure class="calibre25">
+<img src="images/000015.webp" class="calibre16" alt="Diagram showing the values of two variables, a and b, and their sum as the Fibonacci sequence progresses. We begin with a and b both equal to 1 and their sum equal to 2. Next, a is equal to 1, b is equal to 2, and their sum is equal to 3. Then a is equal to 2, b is equal to 3, and their sum is equal to 5. Each progression of the Fibonacci sequence occurs on a new line, and each new line is one number longer than the previous line, forming a pyramid-like shape." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-442" class="linkurl">Figure 2-2</a>: Each number of the Fibonacci sequence is the sum of the previous two numbers.</p></figcaption>
+</figure>
+<p class="calibre22">Let’s explore some code examples of both the iterative and recursive solutions for generating Fibonacci numbers.</p>
+<h3 id="calibre_link-265" class="calibre33">The Iterative Fibonacci Algorithm</h3>
+<p class="bodyfirst">The iterative Fibonacci example is straightforward, consisting of a simple <code class="calibre11">for</code> loop and two variables, <code class="calibre11">a</code> and <code class="calibre11">b</code>. This <em class="calibre10">fibonacciByIteration.py</em> Python program implements the iterative Fibonacci algorithm:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">def fibonacci(nthNumber):
+  <span class="codeannotationcode" aria-label="annotation1">❶</span> a, b = 1, 1
+    print('a = %s, b = %s' % (a, b))
+    for i in range(1, nthNumber):
+      <span class="codeannotationcode" aria-label="annotation2">❷</span> a, b = b, a + b # Get the next Fibonacci number.
+        print('a = %s, b = %s' % (a, b))
+    return a
+
+print(fibonacci(10))</code></pre>
+<p class="calibre22">This <em class="calibre10">fibonacciByIteration.html</em> program has the equivalent JavaScript code:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+function fibonacci(nthNumber) {
+  <span class="codeannotationcode" aria-label="annotation1">❶</span> let a = 1, b = 1;
+    let nextNum;
+    document.write('a = ' + a + ', b = ' + b + '&lt;br /&gt;');
+    for (let i = 1; i &lt; nthNumber; i++) {
+      <span class="codeannotationcode" aria-label="annotation2">❷</span> nextNum = a + b; // Get the next Fibonacci number.
+        a = b;
+        b = nextNum;
+<span type="pagebreak" title="27" id="calibre_link-99" class="calibre17"></span>        document.write('a = ' + a + ', b = ' + b + '&lt;br /&gt;');
+    }
+    return a;
+};
+
+document.write(fibonacci(10));
+&lt;/script&gt;</code></pre>
+<p class="calibre22">When you run this code to calculate the 10th Fibonacci number, the output looks like this:</p>
+<pre class="calibre23"><code class="calibre11">a = 1, b = 1
+a = 1, b = 2
+a = 2, b = 3
+<var class="calibre48">--snip--</var>
+a = 34, b = 55
+55</code></pre>
+<p class="calibre22">The program needs to track only the latest two numbers of the sequence at a time. Since the first two numbers in the Fibonacci sequence are defined as 1, we store <code class="calibre11">1</code> in variables <code class="calibre11">a</code> and <code class="calibre11">b</code> <span class="codeannotation" aria-label="annotation1">❶</span>. Inside the <code class="calibre11">for</code> loop, the next number in the sequence is calculated by adding <code class="calibre11">a</code> and <code class="calibre11">b</code> <span class="codeannotation" aria-label="annotation2">❷</span>, which becomes the next value of <code class="calibre11">b</code>, while <code class="calibre11">a</code> obtains the previous value of <code class="calibre11">b</code>. By the time the loop is finished, <code class="calibre11">b</code> contains the <em class="calibre10">n</em>th Fibonacci number, so it is returned.</p>
+<h3 id="calibre_link-266" class="calibre33">The Recursive Fibonacci Algorithm</h3>
+<p class="bodyfirst">Calculating Fibonacci numbers involves a recursive property. For example, if you want to calculate the 10th Fibonacci number, you add the ninth and eighth Fibonacci numbers together. To calculate those Fibonacci numbers, you add the eighth and seventh, then the seventh and sixth Fibonacci numbers. A lot of repeat calculations occur: notice that adding the ninth and eighth Fibonacci numbers involves calculating the eighth Fibonacci number again. You continue this recursion until you reach the base case of the first or second Fibonacci number, which is always 1.</p>
+<p class="calibre22">The recursive Fibonacci function is in this <em class="calibre10">fibonacciByRecursion.py</em> Python program:</p>
+<pre class="calibre23"><code class="calibre11">def fibonacci(nthNumber):
+    print('fibonacci(%s) called.' % (nthNumber))
+    if nthNumber == 1 or nthNumber == 2: <span class="codeannotationcode" aria-label="annotation1">❶</span>
+        # BASE CASE
+        print('Call to fibonacci(%s) returning 1.' % (nthNumber))
+        return 1
+    else:
+        # RECURSIVE CASE
+        print('Calling fibonacci(%s) and fibonacci(%s).' % (nthNumber - 1, nthNumber - 2))
+        result = fibonacci(nthNumber - 1) + fibonacci(nthNumber - 2)
+        print('Call to fibonacci(%s) returning %s.' % (nthNumber, result))
+        return result
+
+print(fibonacci(10))</code></pre>
+<p class="calibre22"><span type="pagebreak" title="28" id="calibre_link-102" class="calibre17"></span>This <em class="calibre10">fibonacciByRecursion.html</em> file has the equivalent JavaScript program:</p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+function fibonacci(nthNumber) {
+    document.write('fibonacci(' + nthNumber + ') called.&lt;br /&gt;');
+    if (nthNumber === 1 || nthNumber === 2) { <span class="codeannotationcode" aria-label="annotation1">❶</span>
+        // BASE CASE
+        document.write('Call to fibonacci(' + nthNumber + ') returning 1.&lt;br /&gt;');
+        return 1;
+    }
+    else {
+        // RECURSIVE CASE
+        document.write('Calling fibonacci(' + (nthNumber - 1) + ') and fibonacci(' + (nthNumber - 2) + ').&lt;br /&gt;');
+        let result = fibonacci(nthNumber - 1) + fibonacci(nthNumber - 2);
+        document.write('Call to fibonacci(' + nthNumber + ') returning ' + result + '.&lt;br /&gt;');
+        return result;
+    }
+}
+
+document.write(fibonacci(10) + '&lt;br /&gt;');
+&lt;/script&gt;</code></pre>
+<p class="calibre22">When you run this code to calculate the 10th Fibonacci number, the output looks like this:</p>
+<pre class="calibre23"><code class="calibre11">fibonacci(10) called.
+Calling fibonacci(9) and fibonacci(8).
+fibonacci(9) called.
+Calling fibonacci(8) and fibonacci(7).
+fibonacci(8) called.
+Calling fibonacci(7) and fibonacci(6).
+fibonacci(7) called.
+<var class="calibre48">--snip--</var>
+Call to fibonacci(6) returning 8.
+Call to fibonacci(8) returning 21.
+Call to fibonacci(10) returning 55.
+55</code></pre>
+<p class="calibre22">Much of the code is for displaying this output, but the <code class="calibre11">fibonacci()</code> function itself is simple. The base case&mdash;the circumstances where recursive calls are no longer made&mdash;occurs when <code class="calibre11">nthNumber</code> is <code class="calibre11">1</code> or <code class="calibre11">2</code> <span class="codeannotation" aria-label="annotation1">❶</span>. In this case, the function returns <code class="calibre11">1</code> since the first and second Fibonacci numbers are always 1. Any other case is a recursive case, so the value that is returned is the sum of <code class="calibre11">fibonacci(nthNumber - 1)</code> and <code class="calibre11">fibonacci(nthNumber - 2)</code>. As long as the original <code class="calibre11">nthNumber</code> argument is an integer greater than <code class="calibre11">0</code>, these recursive calls will eventually reach the base case and stop making more recursive calls.</p>
+<p class="calibre22">Remember how the recursive factorial example had a “before the recursive call” and “after the recursive call” part? Because the recursive Fibonacci algorithm makes two recursive calls in its recursive case, you should keep in mind that it has three parts: “before the first recursive call,” “after the first <span type="pagebreak" title="29" id="calibre_link-101" class="calibre17"></span>recursive call but before the second recursive call,” and “after the second recursive call.” But the same principles apply. And don’t think that because a base case is reached, no more code remains to run after either recursive call. The recursive algorithm is finished only after the original function call has returned.</p>
+<p class="calibre22">You might ask, “Isn’t the iterative Fibonacci solution simpler than the recursive Fibonacci solution?” The answer is “Yes.” Even worse, the recursive solution has a critical inefficiency that is explained in the next section.</p>
+<h3 id="calibre_link-267" class="calibre33">Why the Recursive Fibonacci Algorithm Is Terrible</h3>
+<p class="bodyfirst">Like the recursive factorial algorithm, the recursive Fibonacci algorithm also suffers from a critical weakness: it repeats the same calculations over and over. <a href="#calibre_link-443" id="calibre_link-627" class="linkurl">Figure 2-3</a> shows how calling <code class="calibre11">fibonacci(6)</code>, marked in the tree diagram as <code class="calibre11">fib(6)</code> for brevity, calls <code class="calibre11">fibonacci(5)</code> and <code class="calibre11">fibonacci(4)</code>.</p>
+<figure class="calibre25">
+<img src="images/000006.webp" class="calibre16" alt="Tree diagram beginning with the Fibonacci function called with an argument of 6. Two subsequent branches show the next calls to the Fibonacci function, with arguments of 5 and 4, respectively. The tree continues to branch until each branch ends with a value of 1. Several of the branches are grayed out, indicating that the Fibonacci function was called with the same argument as a previous branch." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-443" class="linkurl">Figure 2-3</a>: A tree diagram of the recursive function calls made starting with <span class="calibre"><code class="calibre39">fibonacci(6)</code></span>. The redundant function calls are in gray.</p></figcaption>
+</figure>
+<p class="calibre22">This causes a cascade of other function calls until they reach the base cases of <code class="calibre11">fibonacci(2)</code> and <code class="calibre11">fibonacci(1)</code>, which return <code class="calibre11">1</code>. But notice that <code class="calibre11">fibonacci(4)</code> is called twice, and <code class="calibre11">fibonacci(3)</code> is called three times, and so on. This slows the overall algorithm with unnecessarily repeated calculations. This inefficiency gets worse as the Fibonacci number you want to calculate gets larger. While the iterative Fibonacci algorithm can complete <code class="calibre11">fibonacci(100)</code> in less than a second, the recursive algorithm would take over a million years to complete.</p>
+<h2 id="calibre_link-268" class="calibre6">Converting a Recursive Algorithm into an Iterative Algorithm</h2>
+<p class="bodyfirst">Converting a recursive algorithm into an iterative algorithm is always possible. While recursive functions repeat a calculation by calling themselves, this repetition can be performed instead by a loop. Recursive functions also make use of the call stack; however, an iterative algorithm can replace this with a stack data structure. Thus, any recursive algorithm can be performed iteratively by using a loop and a stack.</p>
+<p class="calibre22"><span type="pagebreak" title="30" id="calibre_link-95" class="calibre17"></span>To demonstrate this, here is <em class="calibre10">factorialEmulateRecursion.py</em>, a Python program that implements an iterative algorithm to emulate a recursive algorithm: </p>
+<pre class="calibre23"><code class="calibre11">callStack = [] # The explicit call stack, which holds "frame objects". <span class="codeannotationcode" aria-label="annotation1">❶</span>
+callStack.append({'returnAddr': 'start', 'number': 5}) # "Call" the "factorial() function". <span class="codeannotationcode" aria-label="annotation2">❷</span>
+returnValue = None
+
+while len(callStack) &gt; 0:
+    # The body of the "factorial() function":
+
+    number = callStack[-1]['number'] # Set number parameter.
+    returnAddr = callStack[-1]['returnAddr']
+
+    if returnAddr == 'start':
+        if number == 1:
+            # BASE CASE
+            returnValue = 1
+            callStack.pop() # "Return" from "function call". <span class="codeannotationcode" aria-label="annotation3">❸</span>
+            continue
+        else:
+            # RECURSIVE CASE
+            callStack[-1]['returnAddr'] = 'after recursive call'
+            # "Call" the "factorial() function":
+            callStack.append({'returnAddr': 'start', 'number': number - 1}) <span class="codeannotationcode" aria-label="annotation4">❹</span>
+            continue
+    elif returnAddr == 'after recursive call':
+        returnValue = number * returnValue
+        callStack.pop() # "Return from function call". <span class="codeannotationcode" aria-label="annotation5">❺</span>
+        continue
+
+print(returnValue)</code></pre>
+<p class="calibre22">The <em class="calibre10">factorialEmulateRecursion.html</em> program holds the equivalent JavaScript:</p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+let callStack = []; // The explicit call stack, which holds "frame objects". <span class="codeannotationcode" aria-label="annotation1">❶</span>
+callStack.push({"returnAddr": "start", "number": 5}); // "Call" the "factorial() function". <span class="codeannotationcode" aria-label="annotation2">❷</span>
+let returnValue;
+
+while (callStack.length &gt; 0) {
+// The body of the "factorial() function":
+    let number = callStack[callStack.length - 1]["number"]; // Set number parameter.
+    let returnAddr = callStack[callStack.length - 1]["returnAddr"];
+
+    if (returnAddr == "start") {
+        if (number === 1) {
+            // BASE CASE
+            returnValue = 1;
+            callStack.pop(); // "Return" from "function call". <span class="codeannotationcode" aria-label="annotation3">❸</span>
+            continue;
+        } else {
+            // RECURSIVE CASE
+<span type="pagebreak" title="31" id="calibre_link-68" class="calibre17"></span>            callStack[callStack.length - 1]["returnAddr"] = "after recursive call";
+            // "Call" the "factorial() function":
+            callStack.push({"returnAddr": "start", "number": number - 1}); <span class="codeannotationcode" aria-label="annotation4">❹</span>
+            continue;
+        }
+    } else if (returnAddr == "after recursive call") {
+        returnValue = number * returnValue;
+        callStack.pop(); // "Return from function call". <span class="codeannotationcode" aria-label="annotation5">❺</span>
+        continue;
+    }
+}
+
+document.write(returnValue + "&lt;br /&gt;");
+&lt;/script&gt; </code></pre>
+<p class="calibre22">Notice that this program doesn’t have a recursive function; it doesn’t have any functions at all! The program emulates recursive function calls by using a list as a stack data structure (stored in the <code class="calibre11">callStack</code> variable <span class="codeannotation" aria-label="annotation1">❶</span>) to mimic the call stack. A dictionary storing the return address information and <code class="calibre11">nthNumber</code> local variable emulates a frame object <span class="codeannotation" aria-label="annotation2">❷</span>. The program emulates function calls by pushing these frame objects onto the call stack <span class="codeannotation" aria-label="annotation4">❹</span>, and it emulates returning from a function call by popping frame objects off the call stack <span class="codeannotation" aria-label="annotation35"><span class="codeannotation">35</span></span>.</p>
+<p class="calibre22">Any recursive function can be written iteratively this way. Although this code is incredibly difficult to understand and you’d never write a real-world factorial algorithm this way, it does demonstrate that recursion has no innate capability that iterative code does not have.</p>
+<h2 id="calibre_link-269" class="calibre6">Converting an Iterative Algorithm into a Recursive Algorithm</h2>
+<p class="bodyfirst">Likewise, converting an iterative algorithm into a recursive algorithm is always possible. An iterative algorithm is simply code that uses a loop. The code that is repeatedly executed (the loop’s body) can be placed in a recursive function’s body. And just as the code in the loop’s body is executed repeatedly, we need to repeatedly call the function to execute its code. We can do this by calling the function from the function itself, creating a recursive function.</p>
+<p class="calibre22">The Python code in <em class="calibre10">hello.py</em> demonstrates printing <code class="calibre11">Hello, world!</code> five times by using a loop and then also using a recursive function:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">print('Code in a loop:')
+i = 0
+while i &lt; 5:
+    print(i, 'Hello, world!')
+    i = i + 1
+
+print('Code in a function:')
+def hello(i=0):
+    print(i, 'Hello, world!')
+    i = i + 1
+    if i &lt; 5:
+        hello(i) # RECURSIVE CASE
+<span type="pagebreak" title="32" id="calibre_link-128" class="calibre17"></span>    else:
+        return # BASE CASE
+hello()</code></pre>
+<p class="calibre22">The equivalent JavaScript code is in <em class="calibre10">hello.html</em>:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+document.write("Code in a loop:&lt;br /&gt;");
+let i = 0;
+while (i &lt; 5) {
+    document.write(i + " Hello, world!&lt;br /&gt;");
+    i = i + 1;
+}
+
+document.write("Code in a function:&lt;br /&gt;");
+function hello(i) {
+    if (i === undefined) {
+        i = 0; // i defaults to 0 if unspecified.
+    }
+
+    document.write(i + " Hello, world!&lt;br /&gt;");
+    i = i + 1;
+    if (i &lt; 5) {
+        hello(i); // RECURSIVE CASE
+    }
+    else {
+        return; // BASE CASE
+    }
+}
+hello();
+&lt;/script&gt;</code></pre>
+<p class="calibre22">The output of these programs looks like this:</p>
+<pre class="calibre23"><code class="calibre11">Code in a loop:
+0 Hello, world!
+1 Hello, world!
+2 Hello, world!
+3 Hello, world!
+4 Hello, world!
+Code in a function:
+0 Hello, world!
+1 Hello, world!
+2 Hello, world!
+3 Hello, world!
+4 Hello, world!</code></pre>
+<p class="calibre22">The <code class="calibre11">while</code> loop has a condition, <code class="calibre11">i &lt; 5</code>, that determines whether the program keeps looping. Similarly, the recursive function uses this condition for its recursive case, which causes the function to call itself and execute the <code class="calibre11">Hello, world!</code> to display its code again.</p>
+<p class="calibre22">For a more real-world example, the following are iterative and recursive functions that return the index of a substring, <code class="calibre11">needle</code>, in a string, <code class="calibre11"></code><span type="pagebreak" title="33" id="calibre_link-108" class="calibre17"></span>haystack. The functions return <code class="calibre11">-1</code> if the substring isn’t found. This is similar to Python’s <code class="calibre11">find()</code> string method and JavaScript’s <code class="calibre11">indexOf()</code> string method. This <em class="calibre10">findSubstring.py</em> program has a Python version:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">def findSubstringIterative(needle, haystack):
+    i = 0
+    while i &lt; len(haystack):
+        if haystack[i:i + len(needle)] == needle:
+            return i # Needle found.
+        i = i + 1
+    return -1 # Needle not found.
+
+def findSubstringRecursive(needle, haystack, i=0):
+    if i &gt;= len(haystack):
+        return -1 # BASE CASE (Needle not found.)
+
+    if haystack[i:i + len(needle)] == needle:
+        return i # BASE CASE (Needle found.)
+    else:
+        # RECURSIVE CASE
+        return findSubstringRecursive(needle, haystack, i + 1)
+
+print(findSubstringIterative('cat', 'My cat Zophie'))
+print(findSubstringRecursive('cat', 'My cat Zophie'))</code></pre>
+<p class="calibre22">This <em class="calibre10">findSubstring.html</em> program has the equivalent JavaScript version:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+function findSubstringIterative(needle, haystack) {
+    let i = 0;
+    while (i &lt; haystack.length) {
+        if (haystack.substring(i, i + needle.length) == needle) {
+            return i; // Needle found.
+        }
+        i = i + 1
+    }
+    return -1; // Needle not found.
+}
+
+function findSubstringRecursive(needle, haystack, i) {
+    if (i === undefined) {
+        i = 0;
+    }
+
+    if (i &gt;= haystack.length) {
+        return -1; // # BASE CASE (Needle not found.)
+    }
+
+    if (haystack.substring(i, i + needle.length) == needle) {
+        return i; // # BASE CASE (Needle found.)
+    } else {
+        // RECURSIVE CASE
+        return findSubstringRecursive(needle, haystack, i + 1);
+    }
+<span type="pagebreak" title="34" id="calibre_link-87" class="calibre17"></span>}
+
+document.write(findSubstringIterative("cat", "My cat Zophie") + "&lt;br /&gt;");
+document.write(findSubstringRecursive("cat", "My cat Zophie") + "&lt;br /&gt;");
+&lt;/script&gt;</code></pre>
+<p class="calibre22">These programs make a call to <code class="calibre11">findSubstringIterative()</code> and <code class="calibre11">findSubstringRecursive()</code>, which return <code class="calibre11">3</code> because that is the index where <code class="calibre11">cat</code> is found in <code class="calibre11">My cat Zophie</code>:</p>
+<pre class="calibre23"><code class="calibre11">3
+3</code></pre>
+<p class="calibre22">The programs in this section demonstrate that it is always possible to turn any loop into an equivalent recursive function. While replacing a loop with recursion is possible, I advise against it. This is doing recursion for recursion’s sake, and since recursion is often harder to understand than iterative code, code readability deteriorates.</p>
+<h2 id="calibre_link-270" class="calibre6">Case Study: Calculating Exponents</h2>
+<p class="bodyfirst">Although recursion doesn’t necessarily produce better code, taking a recursive approach can give you new insights into your programming problem. As a case study, let’s examine how to calculate exponents.</p>
+<p class="calibre22"><em class="calibre10">Exponents</em> are calculated by multiplying a number by itself. For example, the exponent “three raised to the sixth power,” or 3<sup class="calibre12">6</sup>, is equal to multiplying 3 by itself six times: 3 × 3 × 3 × 3 × 3 × 3 = 729. This is such a common operation that Python has the <code class="calibre11">**</code> operator and JavaScript has the built-in <code class="calibre11">Math.pow()</code> function to perform exponentiation. We can calculate 3<sup class="calibre12">6</sup> with the Python code <code class="calibre11">3 ** 6</code> and with the JavaScript code <code class="calibre11">Math.pow(3, 6)</code>. </p>
+<p class="calibre22">But let’s write our own exponent-calculating code. The solution is straightforward: create a loop that repeatedly multiplies a number by itself and returns the final product. Here is an iterative <em class="calibre10">exponentByIteration.py</em> Python program:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">def exponentByIteration(a, n):
+    result = 1
+    for i in range(n):
+        result *= a
+    return result
+
+print(exponentByIteration(3, 6))
+print(exponentByIteration(10, 3))
+print(exponentByIteration(17, 10))</code></pre>
+<p class="calibre22">And here is an equivalent JavaScript <em class="calibre10">exponentByIteration.html</em> program:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+function exponentByIteration(a, n) {
+    let result = 1;
+    for (let i = 0; i &lt; n; i++) {
+<span type="pagebreak" title="35" id="calibre_link-91" class="calibre17"></span>        result *= a;
+    }
+    return result;
+}
+
+document.write(exponentByIteration(3, 6) + "&lt;br /&gt;");
+document.write(exponentByIteration(10, 3) + "&lt;br /&gt;");
+document.write(exponentByIteration(17, 10) + "&lt;br /&gt;");
+&lt;/script&gt;</code></pre>
+<p class="calibre22">When you run these programs, the output looks like this:</p>
+<pre class="calibre23"><code class="calibre11">729
+1000
+2015993900449</code></pre>
+<p class="calibre22">This is a straightforward calculation that we can easily write with a loop. The downside to using a loop is that the function slows as the exponents get larger: calculating 3<sup class="calibre12">12</sup> takes twice as long as 3<sup class="calibre12">6</sup>, and 3<sup class="calibre12">600</sup> takes one hundred times as long as 3<sup class="calibre12">6</sup>. In the next section, we address this by thinking recursively.</p>
+<h3 id="calibre_link-271" class="calibre33">Creating a Recursive Exponents Function</h3>
+<p class="bodyfirst">Let’s think of what a recursive solution for the exponentiation of, say, 3<sup class="calibre12">6</sup> would be. Because of the associative property of multiplication, 3 × 3 × 3 × 3 × 3 × 3 is the same as (3 × 3 × 3) × (3 × 3 × 3), which is the same as (3 × 3 × 3)<sup class="calibre12">2</sup>. And since (3 × 3 × 3) is the same as 3<sup class="calibre12">3</sup>, we can determine that 3<sup class="calibre12">6</sup> is the same as (3<sup class="calibre12">3</sup>)<sup class="calibre12">2</sup>. This is an example of what mathematics calls the <em class="calibre10">power rule</em>: (<em class="calibre10">a</em><sup class="calibre12"><em class="calibre10">m</em></sup>)<sup class="calibre12"><em class="calibre10">n</em></sup> = <em class="calibre10">a</em><sup class="calibre12"><em class="calibre10">mn</em></sup>. Mathematics also gives us the <em class="calibre10">product rule</em>: <em class="calibre10">a</em><sup class="calibre12"><em class="calibre10">n</em></sup> × <em class="calibre10">a</em><sup class="calibre12"><em class="calibre10">m</em></sup> = <em class="calibre10">a</em><sup class="calibre12"><em class="calibre10">n</em></sup> <sup class="calibre12">+ m</sup>, including <em class="calibre10">a</em><sup class="calibre12"><em class="calibre10">n</em></sup> × <em class="calibre10">a</em> = <em class="calibre10">a</em><sup class="calibre12"><em class="calibre10">n</em></sup> <sup class="calibre12">+ 1</sup>.</p>
+<p class="calibre22">We can use these mathematical rules to make an <code class="calibre11">exponentByRecursion()</code> function. If <code class="calibre11">exponentByRecursion(3, 6)</code> is called, it’s the same as <code class="calibre11">exponentByRecursion(3, 3) * exponentByRecursion(3, 3)</code>. Of course, we don’t actually have to make both <code class="calibre11">exponentByRecursion(3, 3)</code> calls: we could just save the return value to a variable and multiply it by itself.</p>
+<p class="calibre22">That works for even-numbered exponents, but what about for odd-numbered exponents? If we had to calculate 3<sup class="calibre12">7</sup>, or 3 × 3 × 3 × 3 × 3 × 3 × 3, this is the same as (3 × 3 × 3 × 3 × 3 × 3) × 3, or (3<sup class="calibre12">6</sup>) × 3. Then we can make the same recursive call to calculate 3<sup class="calibre12">6</sup>. </p>
+<aside type="sidebar" class="authors">
+<div class="top"><hr class="calibre29" /></div>
+<section class="note">
+<h2 class="calibre30"><span class="notehead">Note</span></h2>
+<p class="calibre31"> A simple programming trick for determining whether an integer is odd or even uses the modulus operator (<code class="calibre13">%</code>). Any even integer mod 2 results in 0, and any odd integer mod 2 results in 1.</p>
+<div class="top"><hr class="calibre29" /></div>
+</section>
+</aside>
+<p class="calibre22">Those are the recursive cases, but what are the base cases? Mathematically speaking, any number to the zeroth power is defined as 1, while any number to the first power is the number itself. So for any function call <code class="calibre11">exponentByRecursion(a, n)</code>, if <code class="calibre11">n</code> is <code class="calibre11">0</code> or <code class="calibre11">1</code>, we can simply return <code class="calibre11">1</code> or <code class="calibre11">a</code>, respectively, because <code class="calibre11">a</code><code class="calibre11">0</code> is always <code class="calibre11">1</code> and <code class="calibre11">a</code><code class="calibre11">1</code> is always <code class="calibre11">a</code>.</p>
+<p class="calibre22"><span type="pagebreak" title="36" id="calibre_link-88" class="calibre17"></span>Using all this information, we can write code for the <code class="calibre11">exponentByRecursion()</code> function. Here is an <em class="calibre10">exponentByRecursion.py</em> file with the Python code:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">def exponentByRecursion(a, n):
+    if n == 1:
+        # BASE CASE
+        return a
+    elif n % 2 == 0:
+        # RECURSIVE CASE (When n is even.)
+        result = exponentByRecursion(a, n // 2)
+        return result * result
+    elif n % 2 == 1:
+        # RECURSIVE CASE (When n is odd.)
+        result = exponentByRecursion(a, n // 2)
+        return result * result * a
+
+print(exponentByRecursion(3, 6))
+print(exponentByRecursion(10, 3))
+print(exponentByRecursion(17, 10))</code></pre>
+<p class="calibre22">And here is the equivalent JavaScript code in <em class="calibre10">exponentByRecursion.html</em>:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+function exponentByRecursion(a, n) {
+    if (n === 1) {
+        // BASE CASE
+        return a;
+    } else if (n % 2 === 0) {
+        // RECURSIVE CASE (When n is even.)
+        result = exponentByRecursion(a, n / 2);
+        return result * result;
+    } else if (n % 2 === 1) {
+        // RECURSIVE CASE (When n is odd.)
+        result = exponentByRecursion(a, Math.floor(n / 2));
+        return result * result * a;
+    }
+}
+
+document.write(exponentByRecursion(3, 6));
+document.write(exponentByRecursion(10, 3));
+document.write(exponentByRecursion(17, 10));
+&lt;/script&gt;</code></pre>
+<p class="calibre22">When you run this code, the output is identical to the iterative version:</p>
+<pre class="calibre23"><code class="calibre11">729
+1000
+2015993900449</code></pre>
+<p class="calibre22">Each recursive call effectively cuts the problem size in half. This is what makes our recursive exponent algorithm faster than the iterative version; calculating 3<sup class="calibre12">1000</sup> iteratively entails 1,000 multiplication operations, while <span type="pagebreak" title="37" id="calibre_link-90" class="calibre17"></span>doing it recursively requires only 23 multiplications and divisions. When running the Python code under a performance profiler, calculating 3<sup class="calibre12">1000</sup> iteratively 100,000 times takes 10.633 seconds, but the recursive calculation takes only 0.406 seconds. That is a huge improvement!</p>
+<h3 id="calibre_link-272" class="calibre33">Creating an Iterative Exponents Function Based on Recursive Insights</h3>
+<p class="bodyfirst">Our original iterative exponents function took a straightforward approach: loop the same number of times as the exponent power. However, this doesn’t scale well for larger powers. Our recursive implementation forced us to think about how to break this problem into smaller subproblems. This approach turns out to be much more efficient.</p>
+<p class="calibre22">Because every recursive algorithm has an equivalent iterative algorithm, we could make a new iterative exponents function based on the power rule that the recursive algorithm uses. The following <em class="calibre10">exponentWithPowerRule.py</em> program has such a function:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">def exponentWithPowerRule(a, n):
+    # Step 1: Determine the operations to be performed.
+    opStack = []
+    while n &gt; 1:
+        if n % 2 == 0:
+            # n is even.
+            opStack.append('square')
+            n = n // 2
+        elif n % 2 == 1:
+            # n is odd.
+            n -= 1
+            opStack.append('multiply')
+
+    # Step 2: Perform the operations in reverse order.
+    result = a # Start result at `a`.
+    while opStack:
+        op = opStack.pop()
+
+        if op == 'multiply':
+            result *= a
+        elif op == 'square':
+            result *= result
+
+    return result
+
+print(exponentWithPowerRule(3, 6))
+print(exponentWithPowerRule(10, 3))
+print(exponentWithPowerRule(17, 10))</code></pre>
+<p class="calibre22">Here is the equivalent JavaScript program in <em class="calibre10">exponentWithPowerRule.html</em>:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+function exponentWithPowerRule(a, n) {
+    // Step 1: Determine the operations to be performed.
+    let opStack = [];
+    while (n &gt; 1) {
+<span type="pagebreak" title="38" id="calibre_link-194" class="calibre17"></span>        if (n % 2 === 0) {
+            // n is even.
+            opStack.push("square");
+            n = Math.floor(n / 2);
+        } else if (n % 2 === 1) {
+            // n is odd.
+            n -= 1;
+            opStack.push("multiply");
+        }
+    }
+
+    // Step 2: Perform the operations in reverse order.
+    let result = a; // Start result at `a`.
+    while (opStack.length &gt; 0) {
+        let op = opStack.pop();
+
+        if (op === "multiply") {
+            result = result * a;
+        } else if (op === "square") {
+            result = result * result;
+        }
+    }
+
+    return result;
+}
+
+document.write(exponentWithPowerRule(3, 6) + "&lt;br /&gt;");
+document.write(exponentWithPowerRule(10, 3) + "&lt;br /&gt;");
+document.write(exponentWithPowerRule(17, 10) + "&lt;br /&gt;");
+&lt;/script&gt;</code></pre>
+<p class="calibre22">Our algorithm keeps reducing <code class="calibre11">n</code> by dividing it in half (if it’s even) or subtracting 1 (if it’s odd) until it is <code class="calibre11">1</code>. This gives us the squaring or multiply-by-<code class="calibre11">a</code> operations we have to perform. After finishing this step, we perform these operations in reverse order. A generic stack data structure (separate from the call stack) is useful for reversing the order of these operations since it’s a first-in, last-out data structure. The first step pushes squaring or multiply-by-<code class="calibre11">a</code> operations to a stack in the <code class="calibre11">opStack</code> variable. In the second step, it performs these operations as it pops them off the stack.</p>
+<p class="calibre22">For example, calling <code class="calibre11">exponentWithPowerRule(6, 5)</code> to calculate 6<sup class="calibre12">5</sup> sets <code class="calibre11">a</code> as <code class="calibre11">6</code> and <code class="calibre11">n</code> as <code class="calibre11">5</code>. The function notes that <code class="calibre11">n</code> is odd. This means we should subtract <code class="calibre11">1</code> from <code class="calibre11">n</code> to get <code class="calibre11">4</code> and push a multiply-by-<code class="calibre11">a</code> operation to <code class="calibre11">opStack</code>. Now that <code class="calibre11">n</code> is <code class="calibre11">4</code> (even), we divide it by <code class="calibre11">2</code> to get <code class="calibre11">2</code> and push a squaring operation to <code class="calibre11">opStack</code>. Since <code class="calibre11">n</code> is now <code class="calibre11">2</code> and even again, we divide it by <code class="calibre11">2</code> to get <code class="calibre11">1</code> and push another squaring operation to <code class="calibre11">opStack</code>. Now that <code class="calibre11">n</code> is <code class="calibre11">1</code>, we are finished with this first step.</p>
+<p class="calibre22">To perform the second step, we start the <code class="calibre11">result</code> as <code class="calibre11">a</code> (which is <code class="calibre11">6</code>). We pop the <code class="calibre11">opStack</code> stack to get a squaring operation, telling the program to set <code class="calibre11">result</code> to <code class="calibre11">result * result</code> (that is, <code class="calibre11">result</code><code class="calibre11">2</code>) or <code class="calibre11">36</code>. We pop the next operation off <code class="calibre11">opStack</code>, and it is another squaring operation, so the program changes the <code class="calibre11">36</code> in <code class="calibre11">result</code> to <code class="calibre11">36 * 36</code>, or <code class="calibre11">1296</code>. We pop the last operation off <code class="calibre11">opStack</code>, and it is a multiply-by-<code class="calibre11">a</code> operation, so we multiply the <code class="calibre11">1296</code> in <code class="calibre11">result</code> by <code class="calibre11">a</code> (which <span type="pagebreak" title="39" id="calibre_link-191" class="calibre17"></span>is <code class="calibre11">6</code>) to get <code class="calibre11">7776</code>. There are no more operations on <code class="calibre11">opStack</code>, so the function is now finished. When we double-check our math, we find that 6<sup class="calibre12">5</sup> is indeed 7,776.</p>
+<p class="calibre22">The stack in <code class="calibre11">opStack</code> looks like <a href="#calibre_link-444" id="calibre_link-628" class="linkurl">Figure 2-4</a> as the function call <code class="calibre11">exponentWithPowerRule(6, 5)</code> executes.</p>
+<figure class="calibre25">
+<img src="images/000083.webp" class="calibre16" alt="Timeline showing the state of the opStack stack over time. In the first step, it begins empty; then Multiply is pushed to the stack, Square is pushed to the stack, and, finally, a second Square operation is pushed to the top of the stack. In the second step, the most recent Square operation is popped off the stack, the first Square operation is popped off the stack, and then the Multiply operation is popped off the stack, which is now empty." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-444" class="linkurl">Figure 2-4</a>: The stack in <span class="calibre"><code class="calibre39">opStack</code></span> during the <span class="calibre"><code class="calibre39">exponentWithPowerRule(6, 5)</code></span> function call</p></figcaption>
+</figure>
+<p class="calibre22">When you run this code, the output is identical to the other exponent programs:</p>
+<pre class="calibre23"><code class="calibre11">729
+1000
+2015993900449</code></pre>
+<p class="calibre22">The iterative exponents function that uses the power rule has the improved performance of the recursive algorithm, while not suffering from the risk of a stack overflow. We might not have thought of this new, improved iterative algorithm without the insights of recursive thinking.</p>
+<h2 id="calibre_link-273" class="calibre6">When Do You Need to Use Recursion?</h2>
+<p class="bodyfirst">You never <em class="calibre10">need</em> to use recursion. No programming problem <em class="calibre10">requires</em> recursion. This chapter has shown that recursion has no magical power to do things that iterative code in a loop with a stack data structure cannot do. In fact, a recursive function might be an overcomplicated solution for what you’re trying to achieve.</p>
+<p class="calibre22">However, as the exponent functions we created in the previous section show, recursion can provide new insights into how to think about our programming problem. Three features of a programming problem, when present, make it especially suitable to a recursive approach:</p>
+<ul class="calibre38">
+<li class="calibre9">It involves a tree-like structure.</li>
+<li class="calibre9">It involves backtracking.</li>
+<li class="calibre9">It isn’t so deeply recursive as to potentially cause a stack overflow.</li>
+</ul>
+<p class="calibre22">A tree has a <em class="calibre10">self-similar</em> structure: the branching points look similar to the root of a smaller subtree. Recursion often deals with self-similarity and problems that can be divided into smaller, similar subproblems. The root of <span type="pagebreak" title="40" id="calibre_link-38" class="calibre17"></span>the tree is analogous to the first call to a recursive function, the branching points are analogous to recursive cases, and the leaves are analogous to the base cases where no more recursive calls are made.</p>
+<p class="calibre22">A maze is also a good example of a problem that has a tree-like structure and requires backtracking. In a maze, the branching points occur wherever you must pick one of many paths to follow. If you reach a dead end, you’ve encountered the base case. You must then backtrack to a previous branching point to select a different path to follow. </p>
+<p class="calibre22"><a href="#calibre_link-445" id="calibre_link-629" class="linkurl">Figure 2-5</a> shows a maze’s path visually morphed to look like a biological tree. Despite the visual difference between the maze paths and the tree-shaped paths, their branching points are related to each other in the same way. Mathematically, these graphs are equivalent. </p>
+<figure class="calibre25">
+<img src="images/000073.webp" class="calibre16" alt="Three images: the first is a classic maze with branching paths, the second shows lines tracing through every path of the maze with a circle at every branch, and the third is this line-and-circle drawing distorted to look like the branches of a tree." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-445" class="linkurl">Figure 2-5</a>: A maze (left) along with its interior paths (center) morphed to match a biological tree’s shape (right)</p></figcaption>
+</figure>
+<p class="calibre22">Many programming problems have this tree-like structure at their core. For example, a filesystem has a tree-like structure; the subfolders look like the root folders of a smaller filesystem. <a href="#calibre_link-446" id="calibre_link-630" class="linkurl">Figure 2-6</a> compares a filesystem to a tree.</p>
+<figure class="calibre25">
+<img src="images/000064.webp" class="calibre16" alt="Two images, one of a tree and the other of a filesystem, with arrows pointing out the equivalent of leaves, branching points, and the root on each." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-446" class="linkurl">Figure 2-6</a>: A filesystem is similar to a tree structure.</p></figcaption>
+</figure>
+<p class="calibre22"><span type="pagebreak" title="41" id="calibre_link-46" class="calibre17"></span>Searching for a specific filename in a folder is a recursive problem: you search the folder and then recursively search the folder’s subfolders. Folders with no subfolders are the base cases that cause the recursive searching to stop. If your recursive algorithm doesn’t find the filename it’s looking for, it backtracks to a previous parent folder and continues searching from there.</p>
+<p class="calibre22">The third point is a matter of practicality. If your tree structure has so many levels of branches that a recursive function would cause a stack overflow before it can reach the leaves, then recursion isn’t a suitable solution.</p>
+<p class="calibre22">On the other hand, recursion is the best approach for creating programming language compilers. Compiler design is its own expansive subject and beyond the scope of this book. But programming languages have a set of grammar rules that can break source code into a tree structure similar to the way grammar rules can break English sentences into a tree diagram. Recursion is an ideal technique to apply to compilers.</p>
+<p class="calibre22">We’ll identify many recursive algorithms in this book, and they often have the tree-like structure or backtracking features that lend themselves to recursion well.</p>
+<h2 id="calibre_link-274" class="calibre6">Coming Up with Recursive Algorithms</h2>
+<p class="bodyfirst">Hopefully, this chapter has given you a firm idea of how recursive functions compare to the iterative algorithms you’re likely more familiar with. The rest of this book dives into the details of various recursive algorithms. But how should you go about writing your own recursive functions?</p>
+<p class="calibre22">The first step is always to identify the recursive case and the base case. You can take a top-down approach by breaking the problem into subproblems that are similar to the original problem but smaller; this is your <em class="calibre10">recursive case</em>. Then consider when the subproblems are small enough to have a trivial answer; this is your <em class="calibre10">base case</em>. Your recursive function may have more than one recursive case or base case, but all recursive functions will always have at least one recursive case and at least one base case.</p>
+<p class="calibre22">The recursive Fibonacci algorithm is an example. A Fibonacci number is the sum of the previous two Fibonacci numbers. We can break the problem of finding a Fibonacci number into the subproblems of finding two smaller Fibonacci numbers. We know the first two Fibonacci numbers are both 1, so that provides the base case answer once the subproblems are small enough.</p>
+<p class="calibre22">Sometimes it helps to take a bottom-up approach and consider the base case first, and then see how larger and larger problems are constructed and solved from there. The recursive factorial problem is an example. The factorial of 1! is 1. This forms the base case. The next factorial is 2!, and you create it by multiplying 1! by 2. The factorial after that, 3!, is created by multiplying 2! by 3, and so on. From this general pattern, we can figure out what the recursive case for our algorithm will be.</p>
+<h2 id="calibre_link-275" class="calibre6"><span type="pagebreak" title="42" id="calibre_link-66" class="calibre20"></span>Summary</h2>
+<p class="bodyfirst">In this chapter, we covered calculating factorials and the Fibonacci sequence, two classic recursive programming problems. This chapter featured both iterative and recursive implementations for these algorithms. Despite being classic examples of recursion, their recursive algorithms suffer from critical flaws. The recursive factorial function can cause stack overflows, while the recursive Fibonacci function performs so many redundant calculations that it’s far too slow to be effective in the real world.</p>
+<p class="calibre22">We explored how to create recursive algorithms from iterative algorithms and how to create iterative algorithms from recursive algorithms. Iterative algorithms use a loop, and any recursive algorithm can be performed iteratively by using a loop and a stack data structure. Recursion is often an overly complicated solution, but programming problems that involve a tree-like structure and backtracking are particularly suitable for recursive implementations.</p>
+<p class="calibre22">Writing recursive functions is a skill that improves with practice and experience. The rest of this book covers several well-known recursion examples and explores their strengths and limitations.</p>
+<h2 id="calibre_link-276" class="calibre6">Further Reading</h2>
+<p class="bodyfirst">You can find more information about comparing iteration and recursion in the Computerphile YouTube channel’s video “Programming Loops vs. Recursion” at <a href="https://youtu.be/HXNhEYqFo0o" class="linkurl">https://youtu.be/HXNhEYqFo0o</a>. If you want to compare the performance of iterative and recursive functions, you need to learn how to use a profiler. Python profilers are explained in Chapter 13 of my book <em class="calibre10">Beyond the Basic Stuff with Python</em> (No Starch Press, 2020), which can be read at <a href="https://inventwithpython.com/beyond/chapter13.html" class="linkurl">https://inventwithpython.com/beyond/chapter13.html</a>. The official Python documentation also covers profilers at <a href="https://docs.python.org/3/library/profile.html" class="linkurl">https://docs.python.org/3/library/profile.html</a>. The Firefox profiler for JavaScript is explained on Mozilla’s website at <a href="https://developer.mozilla.org/en-US/docs/Tools/Performance" class="linkurl">https://developer.mozilla.org/en-US/docs/Tools/Performance</a>. Other browsers have profilers similar to Firefox’s.</p>
+<h2 id="calibre_link-277" class="calibre6">Practice Questions</h2>
+<p class="bodyfirst">Test your comprehension by answering the following questions:</p>
+<ol class="decimal">
+<li value="1" class="calibre9">What is 4! (that is, the factorial of 4)?</li>
+<li value="2" class="calibre9">How can you use the factorial of (<em class="calibre10">n</em> &ndash; 1) to calculate the factorial of <em class="calibre10">n</em>?</li>
+<li value="3" class="calibre9">What is the critical weakness of the recursive factorial function?</li>
+<li value="4" class="calibre9">What are the first five numbers of the Fibonacci sequence?</li>
+<li value="5" class="calibre9">What two numbers do you add to get the <em class="calibre10">n</em>th Fibonacci number?</li>
+<li value="6" class="calibre9">What is the critical weakness of the recursive Fibonacci function?</li>
+<li value="7" class="calibre9">What does an iterative algorithm always use?</li>
+<li value="8" class="calibre9">Is it always possible to convert an iterative algorithm into a recursive one?</li>
+<li value="9" class="calibre9"><span type="pagebreak" title="43" id="calibre_link-493" class="calibre17"></span>Is it always possible to convert a recursive algorithm into an iterative one?</li>
+<li value="10" class="calibre9">Any recursive algorithm can be performed iteratively by using what two things? </li>
+<li value="11" class="calibre9">What three features do programming problems that are suitable to recursive solutions have?</li>
+<li value="12" class="calibre9">When is recursion required to solve a programming problem?</li>
+</ol>
+<h2 id="calibre_link-278" class="calibre6">Practice Projects</h2>
+<p class="bodyfirst">For practice, write a function for each of the following tasks:</p>
+<ol class="decimal">
+<li value="1" class="calibre9">Iteratively calculate the sum of the integer series from <code class="calibre11">1</code> to <code class="calibre11">n</code>. This is similar to the <code class="calibre11">factorial()</code> function, except it performs addition instead of multiplication. For example, <code class="calibre11">sumSeries(1)</code> returns <code class="calibre11">1</code>, <code class="calibre11">sumSeries(2)</code> returns <code class="calibre11">3</code> (that is, <code class="calibre11">1 + 2</code>), <code class="calibre11">sumSeries(3)</code> returns <code class="calibre11">6</code> (that is, <code class="calibre11">1 + 2 + 3</code>), and so on. This function should use a loop instead of recursion. Take a look at the <em class="calibre10">factorialByIteration.py</em> program in this chapter for guidance.</li>
+<li value="2" class="calibre9">Write the recursive form of <code class="calibre11">sumSeries()</code>. This function should use recursive function calls instead of a loop. Look at the <em class="calibre10">factorialByRecursion.py</em> program in this chapter for guidance.</li>
+<li value="3" class="calibre9">Iteratively calculate the sum of the first <code class="calibre11">n</code> powers of 2 in a function named <code class="calibre11">sumPowersOf2()</code>. The powers of 2 are 2, 4, 8, 16, 32, and so on. In Python, these are calculated with <code class="calibre11">2 ** 1</code>, <code class="calibre11">2 ** 2</code>, <code class="calibre11">2 ** 3</code>, <code class="calibre11">2 ** 4</code>, <code class="calibre11">2 ** 5</code>, and so on, respectively. In JavaScript, these are calculated with <code class="calibre11">Math.pow(2, 1)</code>, <code class="calibre11">Math.pow(2, 2)</code>, and so on. For example, <code class="calibre11">sumPowersOf2(1)</code> returns <code class="calibre11">2</code>, <code class="calibre11">sumPowersOf2(2)</code> returns <code class="calibre11">6</code> (that is, <code class="calibre11">2 + 4</code>), <code class="calibre11">sumPowersOf2(3)</code> returns <code class="calibre11">14</code> (that is, <code class="calibre11">2 + 4 + 8</code>), and so on.</li>
+<li value="4" class="calibre9">Write the recursive form of <code class="calibre11">sumPowersOf2()</code>. This function should use recursive function calls instead of a loop.</li>
+</ol>
+</section>
+</div>
+
+
+
+<div><a href="chapter1.html">Prev: Chapter 1 - What Is Recursion?</a> | <a href="chapter3.html">Next: Chapter 3 - Classic Recursion Algorithms</a></div></body></html>

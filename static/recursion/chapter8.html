@@ -1,0 +1,247 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="recursion-style.css" rel="stylesheet" type="text/css" /><title>Chapter 8 - Tail Call Optimization</title></head><body>
+
+
+
+<div style="background-color: #eeeddd; float: right; height: 310px; font-family: sans-serif;" id="otherbooks">
+  <a href="#" onclick="document.getElementById('otherbooks').outerHTML='';" style="vertical-align: top;">(close)</a><br />
+
+  <a target="_blank" href="https://nostarch.com/automatestuff2" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_automate.link');"><img src="/images/cover_automate2_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/big-book-small-python-projects" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_bigbookpython.link');"><img src="/images/cover_bigbookpython_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/beyond-basic-stuff-python" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_beyond.link');"><img src="/images/cover_beyond_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/inventwithpython" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_invent.link');"><img src="/images/cover_invent4th_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://www.amazon.com/Making-Games-Python-Pygame-Sweigart/dp/1469901730?ie=UTF8&amp;tag=playwithpyth-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1469901730" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_pygame.link');"><img src="/images/cover_makinggames_thumb.webp" style="height: 200px; border: solid black 1px; /"></a>
+  <a target="_blank" href="https://nostarch.com/crackingcodes" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_hacking.link');"><img src="/images/cover_crackingcodes_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/scratchplayground"><img src="/images/cover_scratchprogrammingplayground_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/codingwithminecraft"><img src="/images/cover_codingwithminecraft_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <br />
+  <a href="https://inventwithpython.com/automateudemy">Use this link to get a discount on the Automate the Boring Stuff online video course.</a><br />
+  <a href="https://www.patreon.com/AlSweigart">Support me on Patreon</a>
+</div>
+
+<div><a href="chapter7.html">Prev: Chapter 7 - Memoization and Dynamic Programming</a> | <a href="chapter9.html">Next: Chapter 9 - Drawing Fractals</a></div>
+
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-212">
+<section class="toclist">
+<header class="calibre14">
+<h1 class="chapter">
+<span class="partnumber"><span type="pagebreak" title="163" id="calibre_link-65" class="calibre36"></span>8</span><br class="calibre18" />
+<span class="parttitle">Tail Call Optimization</span></h1>
+</header>
+<figure class="opener">
+<img src="images/000060.webp" alt="" class="calibre16" />
+</figure>
+<p class="chapterintro">In the previous chapter, we covered using memoization to optimize recursive functions. This chapter explores a technique called<em class="calibre10"> tail call optimization</em>, which is a feature provided by a compiler or interpreter to avoid stack overflows. Tail call optimization is also called <em class="calibre10">tail call elimination</em>, or <em class="calibre10">tail recursion elimination</em>.</p>
+<p class="calibre24">This chapter is meant to explain tail call optimization, not to endorse it. I would go so far as to recommend <em class="calibre10">never</em> using tail call optimization. As you’ll see, rearranging your function’s code to use tail call optimization often makes it far less understandable. You should consider tail call optimization to be more of a hack or workaround to make recursion work when you shouldn’t be using a recursive algorithm in the first place. Remember, a complex recursive solution is not automatically an elegant solution; simple coding problems should be solved with simple non-recursive methods.</p>
+<p class="calibre22">Many implementations of popular programming languages don’t even offer tail call optimization as a feature. These include interpreters and <span type="pagebreak" title="164" id="calibre_link-96" class="calibre17"></span>compilers for Python, JavaScript, and Java. However, tail call optimization is a technique you should become familiar with in case you come across it in the code projects you work on.</p>
+<h2 id="calibre_link-333" class="calibre6">How Tail Recursion and Tail Call Optimization Work</h2>
+<p class="bodyfirst">To make use of tail call optimization, a function must use <em class="calibre10">tail recursion</em><em class="calibre10">.</em> In tail recursion, the recursive function call is the last action of a recursive function. In code, this looks like a <code class="calibre11">return</code> statement returning the results of a recursive call. </p>
+<p class="calibre22">To see this in action, recall the <em class="calibre10">factorialByRecursion.py</em> and <em class="calibre10">factorialByRecursion.html</em> programs in <span class="calibre" itemid="xref_target_Chapter 2">Chapter 2</span>. These programs calculated the factorial of an integer; for instance, 5! is equivalent to 5 × 4 × 3 × 2 × 1, or 120. These calculations can be performed recursively because <code class="calibre11">factorial(n)</code> is equivalent to <code class="calibre11">n * factorial(n - 1)</code>, with the base case of <code class="calibre11">n == 1</code> returning <code class="calibre11">1</code>. </p>
+<p class="calibre22">Let’s rewrite these programs to use tail recursion. The following <em class="calibre10">factorialTailCall.py</em> program has a <code class="calibre11">factorial()</code> function that uses tail recursion:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">def factorial(number, accum=1):
+    if number == 1:
+        # BASE CASE
+        return accum
+    else:
+        # RECURSIVE CASE
+        return factorial(number - 1, accum * number)
+
+print(factorial(5))</code></pre>
+<p class="calibre22">The <em class="calibre10">factorialTailCall.html</em> program has the equivalent JavaScript code:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+function factorial(number, accum=1) {
+    if (number === 1) {
+        // BASE CASE
+        return accum;
+    } else {
+        // RECURSIVE CASE
+        return factorial(number - 1, accum * number);
+    }
+}
+
+document.write(factorial(5));
+&lt;/script&gt;</code></pre>
+<p class="calibre22">Notice that the <code class="calibre11">factorial()</code> function’s recursive case ends with a <code class="calibre11">return</code> statement returning the results of a recursive call to <code class="calibre11">factorial()</code>. To allow the interpreter or compiler to implement tail call optimization, the last action a recursive function makes must be to return the results of the recursive call. No instructions can occur between making the recursive call and the <code class="calibre11">return</code> statement. The base case returns the <code class="calibre11">accum</code> parameter. This is the accumulator, explained in the next section.</p>
+<p class="calibre22"><span type="pagebreak" title="165" id="calibre_link-27" class="calibre17"></span>To understand how tail call optimization works, remember from <span class="calibre" itemid="xref_target_Chapter 1 ">Chapter 1 </span>what happens when a function is called. First, a frame object is created and stored on the call stack. If the function call calls another function, another frame object is created and placed on top of the first frame object on the call stack. When a function returns, your program automatically deletes the frame object from the top of the stack.</p>
+<p class="calibre22">A stack overflow happens when too many function calls are made without returning, causing the number of frame objects to exceed the capacity of the call stack. This capacity is 1,000 function calls for Python and about 10,000 for JavaScript programs. While these amounts are more than enough for typical programs, recursive algorithms could exceed this limit and cause a stack overflow that crashes your program.</p>
+<p class="calibre22">Recall from <span class="calibre" itemid="xref_target_Chapter 2 ">Chapter 2 </span>that a frame object stores the local variables in the function call as well as the return address of the instruction to return to when the function finishes. However, if the last action in the recursive case of a function is to return the results of a recursive function call, there’s no need to retain the local variables. The function does nothing involving the local variables after the recursive call, so the current frame object can be deleted immediately. The next frame object’s return address information can be the same as the old deleted frame object’s return address.</p>
+<p class="calibre22">Since the current frame object is deleted instead of retained on the call stack, the call stack never grows in size and can never cause a stack overflow!</p>
+<p class="calibre22">Recall from <span class="calibre" itemid="xref_target_Chapter 1 ">Chapter 1 </span>that all recursive algorithms can be implemented with a stack and a loop. Since tail call optimization removes the need for a call stack, we are effectively using recursion to simulate a loop’s iterative code. However, earlier in this book I stated that the problems suitable for recursive solutions involve a tree-like data structure and backtracking. Without a call stack, no tail recursive function could possibly do any backtracking work. In my view, every algorithm that can be implemented with tail recursion would be easier and more readable to implement with a loop instead. There’s nothing automatically more elegant about using recursion for recursion’s sake.</p>
+<h2 id="calibre_link-334" class="calibre6">Accumulators in Tail Recursion</h2>
+<p class="bodyfirst">The disadvantage of tail recursion is that it requires rearranging your recursive function so that the last action is returning the recursive call’s return value. This can make our recursive code even more unreadable. Indeed, the <code class="calibre11">factorial()</code> function in this chapter’s <em class="calibre10">factorialTailCall.py</em> and <em class="calibre10">factorialTailCall.html</em> programs is a bit harder to comprehend than the version in <span class="calibre" itemid="xref_target_Chapter 2">Chapter 2</span>’s <em class="calibre10">factorialByRecursion.py</em> and <em class="calibre10">factorialByRecursion.html</em> programs.</p>
+<p class="calibre22">In the case of our tail call <code class="calibre11">factorial()</code> function, a new parameter named <code class="calibre11">accum</code> follows the calculated product as recursive function calls are made. This is known as an <em class="calibre10">accumulator</em> parameter, and it keeps track of a partial result of a calculation that would otherwise have been stored in a local <span type="pagebreak" title="166" id="calibre_link-71" class="calibre17"></span>variable. Not all tail recursive functions use accumulators, but they act as a workaround for tail recursion’s inability to use local variables after the final recursive call. Notice that in <em class="calibre10">factorialByRecursion.py</em>’s <code class="calibre11">factorial()</code> function, the recursive case was <code class="calibre11">return number * factorial(number - 1)</code>. The multiplication happens after the <code class="calibre11">factorial(number - 1)</code> recursive call. The <code class="calibre11">accum</code> accumulator takes the place of the <code class="calibre11">number</code> local variable.</p>
+<p class="calibre22">Also notice that the base case for <code class="calibre11">factorial()</code> no longer returns <code class="calibre11">1</code>; rather, it returns the <code class="calibre11">accum</code> accumulator. By the time <code class="calibre11">factorial()</code> is called with <code class="calibre11">number == 1</code> and the base case is reached, <code class="calibre11">accum</code> stores the final result to return. Adjusting your code to use tail call optimization often involves changing the base case to return the accumulator’s value.</p>
+<p class="calibre22">You can think of the <code class="calibre11">factorial(5)</code> function call as transforming into the following <code class="calibre11">return</code>, as shown in <a href="#calibre_link-213" id="calibre_link-662" class="linkurl">Figure 8-1</a>.</p>
+<figure class="calibre25">
+<img src="images/000081.webp" class="calibre16" alt="Diagram showing the return statements produced by the factorial function called with an argument of 5, in order: “return factorial(5 - 1, 1* 5),” “return factorial(4 -1, 5 * 4),” “return factorial(3 - 1, 20 * 3),” “return factorial(2 - 1, 60 * 2),” “return 120.”" />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-213" class="linkurl">Figure 8-1</a>: The process of transformations that <span class="calibre"><code class="calibre39">factorial(5)</code></span> makes to the integer 120</p></figcaption>
+</figure>
+<p class="calibre22">Rearranging your recursive calls as the last action in the function and adding accumulators can make your code even harder to understand than typical recursive code. But that’s not the only downside of tail recursion, as we’ll see in the next section.</p>
+<h2 id="calibre_link-335" class="calibre6">Limitations of Tail Recursion</h2>
+<p class="bodyfirst">Tail recursive functions require rearranging their code to make them suitable for the tail call optimization feature of the compiler or interpreter. However, not all compilers and interpreters offer tail call optimization as a feature. Notably, CPython (the Python interpreter downloaded from <a href="https://python.org" class="linkurl">https://python.org</a>) does not implement tail call optimization. Even if you write your recursive functions with the recursive call as the last action, it will still cause stack overflows after enough function calls are made.</p>
+<p class="calibre22">Not only that, but CPython will likely never have tail call optimization as a feature. Guido van Rossum, the creator of the Python programming <span type="pagebreak" title="167" id="calibre_link-57" class="calibre17"></span>language, has explained that tail call optimization can make programs harder to debug. Tail call optimization removes frame objects from the call stack, which in turn removes the debugging information that frame objects can provide. He also points out that once tail call optimization is implemented, Python programmers will begin to write code that depends on the feature, and their code won’t run on non-CPython interpreters that don’t implement tail call optimization. </p>
+<p class="calibre22">Finally, and I concur, van Rossum disagrees with the idea that recursion is a fundamentally important part of day-to-day programming. Computer scientists and mathematicians tend to place recursion on a pedestal. But tail call optimization is simply a workaround hack to make some recursive algorithms actually workable, rather than simply crashing with a stack overflow.</p>
+<p class="calibre22">While CPython doesn’t feature tail call optimization, this doesn’t mean another compiler or interpreter that implements the Python language couldn’t have tail call optimization. Unless tail call optimization is explicitly a part of a programming language specification, it is not a feature of a programming language, but rather of individual compilers or interpreters of a programming language.</p>
+<p class="calibre22">The lack of tail call optimization is not unique to Python. The Java compiler since version 8 also doesn’t support tail call optimization. Tail call optimization is a part of the ECMAScript 6 version of JavaScript; however, as of 2022, only the Safari web browser’s implementation of JavaScript actually supports it. One way to determine whether your programming language’s compiler or interpreter implements this feature is to write a tail recursive factorial function and try to calculate the factorial of 100,000. If the program crashes, tail call optimization is not implemented.</p>
+<p class="calibre22">Personally, I take the stance that the tail recursion technique should never be used. As stated in <span class="calibre" itemid="xref_target_Chapter 2">Chapter 2</span>, any recursive algorithm can be implemented with a loop and a stack. Tail call optimization prevents stack overflows by effectively removing the use of the call stack. Therefore, all tail recursive algorithms can be implemented with a loop alone. Since the code for loops is much simpler than a recursive function, a loop should be used wherever tail call optimization could be employed.</p>
+<p class="calibre22">Additionally, potential problems exist even if tail call optimization is implemented. Since tail recursion is possible only when the last action of a function is returning the recursive call’s return value, it’s impossible to do tail recursion for algorithms that require two or more recursive calls. For example, take the Fibonacci sequence algorithm calls <code class="calibre11">fibonacci(n - 1)</code> and <code class="calibre11">fibonacci(n - 2)</code>. While tail call optimization can be performed for the latter recursive call, the first recursive call will cause a stack overflow for large-enough arguments.</p>
+<h2 id="calibre_link-336" class="calibre6">Tail Recursion Case Studies</h2>
+<p class="bodyfirst">Let’s examine some of the recursive functions demonstrated earlier in this book to see if they are good candidates for tail recursion. Keep in mind <span type="pagebreak" title="168" id="calibre_link-28" class="calibre17"></span>that because Python and JavaScript do not actually implement tail call optimization, these tail recursive functions will still result in a stack overflow error. These case studies are for demonstration purposes only.</p>
+<h3 id="calibre_link-337" class="calibre33">Tail Recursive Reverse String</h3>
+<p class="bodyfirst">The first example is the program to reverse a string that we made in <span class="calibre" itemid="xref_target_Chapter 3">Chapter 3</span>. The Python code for this tail recursive function is in <em class="calibre10">reverseStringTailCall.py</em>:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11"><span class="codeannotationhang" aria-label="annotation1">❶</span> def rev(theString, accum=''):
+    if len(theString) == 0:
+        # BASE CASE
+      <span class="codeannotationcode" aria-label="annotation2">❷</span> return accum
+    else:
+        # RECURSIVE CASE
+        head = theString[0]
+        tail = theString[1:]
+      <span class="codeannotationcode" aria-label="annotation3">❸</span> return rev(tail, head + accum)
+
+text = 'abcdef'
+print('The reverse of ' + text + ' is ' + rev(text))</code></pre>
+<p class="calibre22">The JavaScript equivalent is in <em class="calibre10">reverseStringTailCall.html</em>:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+<span class="codeannotationhang" aria-label="annotation1">❶</span> function rev(theString, accum='') {
+    if (theString.length === 0) {
+        // BASE CASE
+      <span class="codeannotationcode" aria-label="annotation2">❷</span> return accum;
+    } else {
+        // RECURSIVE CASE
+        let head = theString[0];
+        let tail = theString.substring(1, theString.length);
+      <span class="codeannotationcode" aria-label="annotation3">❸</span> return rev(tail, head + accum);
+    }
+}
+
+let text = "abcdef";
+document.write("The reverse of " + text + " is " + rev(text) + "&lt;br /&gt;");
+&lt;/script&gt;</code></pre>
+<p class="calibre22">The conversion of the original recursive functions in <em class="calibre10">reverseString.py</em> and <em class="calibre10">reverseString.html</em> involves adding an accumulator parameter. The accumulator, named <code class="calibre11">accum</code>, is set to the blank string by default if no argument is passed for it <span class="codeannotation" aria-label="annotation1">❶</span>. We also change the base case from <code class="calibre11">return ''</code> to <code class="calibre11">return accum</code> <span class="codeannotation" aria-label="annotation2">❷</span>, and the recursive case from <code class="calibre11">return rev(tail) + head</code> (which performs a string concatenation after the recursive call returns) to <code class="calibre11">return rev(tail, head + accum)</code> <span class="codeannotation" aria-label="annotation3">❸</span>. You can think of the <code class="calibre11">rev('abcdef')</code> function call as transforming into the following <code class="calibre11">return</code>, as shown in <a href="#calibre_link-214" id="calibre_link-663" class="linkurl">Figure 8-2</a>.</p>
+<p class="calibre22">By effectively using the accumulator as a local variable shared across function calls, we can make the <code class="calibre11">rev()</code> function tail recursive.</p>
+<span type="pagebreak" title="169" id="calibre_link-89" class="calibre17"></span><figure class="calibre25">
+<img src="images/000053.webp" class="calibre16" alt="Diagram showing the return statements produced by the rev() function called with an argument of abcdef, in order: “return rev(‘bcdef’, ‘a’, + ‘’),” “return rev(‘cdef’, ‘b’ + ‘a’),” “return rev(‘def’, ‘c’ + ‘ba’),” “return rev(‘ef’, ‘d’ + ‘cba’),” “return rev(‘f’, ‘e’ + ‘dcba’),” “return rev(‘’, ‘f’, ‘edcba’),” “return ‘fedcba’.”" />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-214" class="linkurl">Figure 8-2</a>: The process of transformations that <span class="calibre"><code class="calibre39">rev('abcdef')</code></span> makes to the string <span class="calibre"><code class="calibre39">fedcba</code></span></p></figcaption>
+</figure>
+<h3 id="calibre_link-338" class="calibre33">Tail Recursive Find Substring</h3>
+<p class="bodyfirst">Some recursive functions naturally end up using the tail recursion pattern. If you look at the <code class="calibre11">findSubstringRecursive()</code> function in the <em class="calibre10">findSubstring.py</em> and <em class="calibre10">findSubstring.html</em> programs in <span class="calibre" itemid="xref_target_Chapter 2">Chapter 2</span>, you’ll notice that the last action for the recursive case is to return the value of the recursive function call. No adjustments are needed to make this function tail recursive.</p>
+<h3 id="calibre_link-339" class="calibre33">Tail Recursive Exponents</h3>
+<p class="bodyfirst">The <em class="calibre10">exponentByRecursion.py</em> and <em class="calibre10">exponentByRecursion.html</em> programs, also from <span class="calibre" itemid="xref_target_Chapter 2">Chapter 2</span>, are not good candidates for tail recursion. These programs have two recursive cases for when the <code class="calibre11">n</code> parameter is even or odd. This is fine: as long as all the recursive cases return the return value of the recursive function call as their last action, the function can use tail call optimization.</p>
+<p class="calibre22">However, notice the Python code for the <code class="calibre11">n is even</code> recursive case:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11"><var class="calibre48">--snip--</var>
+    elif n % 2 == 0:
+        # RECURSIVE CASE (when n is even)
+        result = exponentByRecursion(a, n / 2)
+        return result * result
+<var class="calibre48">--snip--</var></code></pre>
+<p class="calibre22"><span type="pagebreak" title="170" id="calibre_link-26" class="calibre17"></span>And notice the equivalent JavaScript recursive case:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11"><var class="calibre48">--snip--  </var>
+  } else if (n % 2 === 0) {
+        // RECURSIVE CASE (when n is even)
+        result = exponentByRecursion(a, n / 2);
+        return result * result;
+<var class="calibre48">--snip--</var></code></pre>
+<p class="calibre22">This recursive case does not have the recursive call as its last action. We could get rid of the <code class="calibre11">result</code> local variable, and instead call the recursive function twice. This would reduce the recursive case to the following:</p>
+<pre class="calibre23"><code class="calibre11"><var class="calibre48">--snip--</var>
+return exponentByRecursion(a, n / 2) * exponentByRecursion(a, n / 2)
+<var class="calibre48">--snip--</var></code></pre>
+<p class="calibre22">However, now we have two recursive calls to <code class="calibre11">exponentByRecursion()</code>. Not only does this needlessly double the amount of computation the algorithm performs, but the last action performed by the function is to multiply the two return values. This is the same problem the recursive Fibonacci algorithm has: if the recursive function has multiple recursive calls, at least one of those recursive calls can’t be the last action of the function.</p>
+<h3 id="calibre_link-340" class="calibre33">Tail Recursive Odd-Even</h3>
+<p class="bodyfirst">To determine whether an integer is odd or even, you can use the <code class="calibre11">%</code> modulus operator. The expression <code class="calibre11">number % 2 == 0</code> will be <code class="calibre11">True</code> if <code class="calibre11">number</code> is even, and <code class="calibre11">False</code> if <code class="calibre11">number</code> is odd. However, if you’d prefer to overengineer a more “elegant” recursive algorithm, you can implement the following <code class="calibre11">isOdd()</code> function in <em class="calibre10">isOdd.py</em> (the rest of <em class="calibre10">isOdd.py</em> is presented later in this section):</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">def isOdd(number):
+    if number == 0:
+        # BASE CASE
+        return False
+    else:
+        # RECURSIVE CASE
+        return not isOdd(number - 1)
+print(isOdd(42))
+print(isOdd(99))
+<var class="calibre48">--snip--</var></code></pre>
+<p class="calibre22">The JavaScript equivalent is in <em class="calibre10">isOdd.html</em>:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+
+function isOdd(number) {
+    if (number === 0) {
+        // BASE CASE
+        return false;
+<span type="pagebreak" title="171" id="calibre_link-531" class="calibre17"></span>    } else {
+        // RECURSIVE CASE
+        return !isOdd(number - 1);
+    }
+}
+document.write(isOdd(42) + "&lt;br /&gt;");
+document.write(isOdd(99) + "&lt;br /&gt;");
+<var class="calibre48">--snip--</var></code></pre>
+<p class="calibre22">We have two base cases for <code class="calibre11">isOdd()</code>. When the <code class="calibre11">number</code> argument is <code class="calibre11">0</code>, the function returns <code class="calibre11">False</code> to indicate <em class="calibre10">even</em>. For simplicity, our implementation of <code class="calibre11">isOdd()</code> works for only positive integers. The recursive case returns the opposite of <code class="calibre11">isOdd(number - 1)</code>. </p>
+<p class="calibre22">You can see why this works with an example: when <code class="calibre11">isOdd(42)</code> is called, the function can’t determine if <code class="calibre11">42</code> is even or odd but does know that the answer is the opposite of whether <code class="calibre11">41</code> is odd or even. The function will return <code class="calibre11">not isOdd(41)</code>. This function call, in turn, returns the opposite Boolean value of <code class="calibre11">isOdd(40)</code>, and so on, until <code class="calibre11">isOdd(0)</code> returns <code class="calibre11">False</code>. The number of recursive function calls determines the number of <code class="calibre11">not</code> operators that act on return values before the final return value is returned.</p>
+<p class="calibre22">However, this recursive function results in stack overflows for large-number arguments. Calling <code class="calibre11">isOdd(100000)</code> results in 100,001 function calls without returning&mdash;which far exceeds the capacity of any call stack. We can rearrange the code in the function so that the last action of the recursive case is returning the results of the recursive function call, making the function tail recursive. We do this in <code class="calibre11">isOddTailCall()</code> in <em class="calibre10">isOdd.py</em>. Here is the rest of the <em class="calibre10">isOdd.py</em> program:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11"><var class="calibre48">--snip--</var>
+def isOddTailCall(number, inversionAccum=False):
+    if number == 0:
+        # BASE CASE
+        return inversionAccum
+    else:
+        # RECURSIVE CASE
+        return isOddTailCall(number - 1, not inversionAccum)
+
+print(isOddTailCall(42))
+print(isOddTailCall(99))</code></pre>
+<p class="calibre22">The JavaScript equivalent is in the rest of <em class="calibre10">isOdd.html</em>:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11"><var class="calibre48">--snip--</var>
+function isOddTailCall(number, inversionAccum) {
+    if (inversionAccum === undefined) {
+        inversionAccum = false;
+    }
+
+    if (number === 0) {
+        // BASE CASE
+        return inversionAccum;
+    } else {
+<span type="pagebreak" title="172" id="calibre_link-189" class="calibre17"></span>        // RECURSIVE CASE
+        return isOddTailCall(number - 1, !inversionAccum);
+    }
+}
+
+document.write(isOdd(42) + "&lt;br /&gt;");
+document.write(isOdd(99) + "&lt;br /&gt;");
+&lt;/script&gt;</code></pre>
+<p class="calibre22">If this Python and JavaScript code is run by an interpreter that supports tail call optimization, calling <code class="calibre11">isOddTailCall(100000)</code> won’t result in a stack overflow. However, tail call optimization is still much slower than simply using the <code class="calibre11">%</code> modulus operator to determine oddness or evenness.</p>
+<p class="calibre22">If you think recursion, with or without tail recursion, is an incredibly inefficient way to determine whether a positive integer is odd, you are absolutely correct. Unlike iterative solutions, recursion can fail from stack overflows. Adding tail call optimization to prevent stack overflows doesn’t fix the efficiency flaws of using recursion inappropriately. As a technique, recursion is not automatically better or more sophisticated than iterative solutions. And tail recursion is never a better approach than a loop or other simple solution.</p>
+<h2 id="calibre_link-341" class="calibre6">Summary</h2>
+<p class="bodyfirst">Tail call optimization is a feature of a programming language’s compiler or interpreter that can be employed on recursive functions specifically written to be tail recursive. Tail recursive functions return the return value of the recursive function call as the last action in the recursive case. This allows the function to delete the current frame object and prevent the call stack from growing as new recursive function calls are made. If the call stack doesn’t grow, the recursive function can’t possibly cause a stack overflow.</p>
+<p class="calibre22">Tail recursion is a workaround that allows some recursive algorithms to work with large arguments without crashing. However, this approach requires rearranging your code and possibly adding an accumulator parameter. This could make your code harder to understand. You may likely find that sacrificing code readability is not worth using a recursive algorithm over an iterative one.</p>
+<h2 id="calibre_link-342" class="calibre6">Further Reading</h2>
+<p class="bodyfirst">Stack Overflow (the website, not the programming error) has a detailed discussion about the basics of tail recursion at <a href="https://stackoverflow.com/questions/33923/what-is-tail-recursion" class="linkurl">https://stackoverflow.com/questions/33923/what-is-tail-recursion</a>.</p>
+<p class="calibre22">Van Rossum wrote about his decision not to use tail recursion in two blog posts at <a href="https://neopythonic.blogspot.com.au/2009/04/tail-recursion-elimination.html" class="linkurl">https://neopythonic.blogspot.com.au/2009/04/tail-recursion-elimination.html</a> and <a href="https://neopythonic.blogspot.com.au/2009/04/final-words-on-tail-calls.html" class="linkurl">https://neopythonic.blogspot.com.au/2009/04/final-words-on-tail-calls.html</a>.</p>
+<p class="calibre22"><span type="pagebreak" title="173" id="calibre_link-127" class="calibre17"></span>Python’s standard library includes a module called <code class="calibre11">inspect</code> that allows you to view the frame objects on the call stack as a Python program is running. The official documentation for the <code class="calibre11">inspect</code> module is at <a href="https://docs.python.org/3/library/inspect.html" class="linkurl">https://docs.python.org/3/library/inspect.html</a>, and a tutorial on Doug Hellmann’s Python 3 Module of the Week blog is at <a href="https://pymotw.com/3/inspect" class="linkurl">https://pymotw.com/3/inspect</a>.</p>
+<h2 id="calibre_link-343" class="calibre6">Practice Questions</h2>
+<p class="bodyfirst">Test your comprehension by answering the following questions:</p>
+<ol class="decimal">
+<li value="1" class="calibre9">What does tail call optimization prevent?</li>
+<li value="2" class="calibre9">What does the last action of a recursive function have to do so that the function can be tail recursive?</li>
+<li value="3" class="calibre9">Do all compilers and interpreters implement tail call optimization?</li>
+<li value="4" class="calibre9">What is an accumulator?</li>
+<li value="5" class="calibre9">What is the disadvantage of tail recursion?</li>
+<li value="6" class="calibre9">Can the quicksort algorithm (covered in <span class="calibre" itemid="xref_target_Chapter 5">Chapter 5</span>) be rewritten to use tail call optimization?</li>
+</ol>
+</section>
+</div>
+
+
+
+
+<div><a href="chapter7.html">Prev: Chapter 7 - Memoization and Dynamic Programming</a> | <a href="chapter9.html">Next: Chapter 9 - Drawing Fractals</a></div></body></html>

@@ -1,0 +1,853 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="recursion-style.css" rel="stylesheet" type="text/css" /><title>Chapter 6 - Permutations and Combinations</title></head><body>
+
+
+
+<div style="background-color: #eeeddd; float: right; height: 310px; font-family: sans-serif;" id="otherbooks">
+  <a href="#" onclick="document.getElementById('otherbooks').outerHTML='';" style="vertical-align: top;">(close)</a><br />
+
+  <a target="_blank" href="https://nostarch.com/automatestuff2" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_automate.link');"><img src="/images/cover_automate2_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/big-book-small-python-projects" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_bigbookpython.link');"><img src="/images/cover_bigbookpython_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/beyond-basic-stuff-python" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_beyond.link');"><img src="/images/cover_beyond_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/inventwithpython" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_invent.link');"><img src="/images/cover_invent4th_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://www.amazon.com/Making-Games-Python-Pygame-Sweigart/dp/1469901730?ie=UTF8&amp;tag=playwithpyth-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1469901730" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_pygame.link');"><img src="/images/cover_makinggames_thumb.webp" style="height: 200px; border: solid black 1px; /"></a>
+  <a target="_blank" href="https://nostarch.com/crackingcodes" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_hacking.link');"><img src="/images/cover_crackingcodes_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/scratchplayground"><img src="/images/cover_scratchprogrammingplayground_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/codingwithminecraft"><img src="/images/cover_codingwithminecraft_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <br />
+  <a href="https://inventwithpython.com/automateudemy">Use this link to get a discount on the Automate the Boring Stuff online video course.</a><br />
+  <a href="https://www.patreon.com/AlSweigart">Support me on Patreon</a>
+</div>
+
+<div><a href="chapter5.html">Prev: Chapter 5 - Divide-and-Conquer Algorithms</a> | <a href="chapter7.html">Next: Chapter 7 - Memoization and Dynamic Programming</a></div>
+
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-198">
+<section class="toclist">
+<header class="calibre14">
+<h1 class="chapter">
+<span class="partnumber"><span type="pagebreak" title="123" id="calibre_link-171" class="calibre36"></span>6</span><br class="calibre18" />
+<span class="parttitle">Permutations and Combinations</span></h1>
+</header>
+<figure class="opener">
+<img src="images/000060.webp" alt="" class="calibre16" />
+</figure>
+<p class="chapterintro">Problems involving permutations and combinations are especially suited to recursion. These are common in <em class="calibre10">set theory</em>, a branch of mathematical logic that deals with the selection, arrangement, and manipulation of collections of objects. </p>
+<p class="calibre24">Dealing with small sets in our short-term memory is simple. We can easily come up with every possible order (that is, <em class="calibre10">permutation</em>) or combination of a set of three or four objects. Ordering and combining items in a larger set requires the same process but quickly turns into an impossible task for our human brains. At that point, it becomes practical to bring in computers to handle the combinatorial explosion that occurs as we add more objects to a set. </p>
+<p class="calibre22">At its heart, calculating permutations and combinations of large groups involves calculating permutations and combinations of smaller groups. This makes these calculations suitable for recursion. In this chapter, we’ll look at recursive algorithms for generating all possible permutations and combinations of characters in a string. We’ll expand on this to generate all possible combinations of balanced parentheses (orderings of open parentheses <span type="pagebreak" title="124" id="calibre_link-85" class="calibre17"></span>correctly matched to closing parentheses). And finally, we will calculate the power set of a set&mdash;that is, the set of all possible subsets of a set.</p>
+<p class="calibre22">Many of the recursive functions in this chapter have an argument named <code class="calibre11">indent</code>. This isn’t used by the actual recursive algorithms; rather, it is used by their debugging output so that you can see which level of recursion produced the output. The indentation is increased by one space for each recursive call and rendered in the debugging output as periods so that it’s easy to count the level of indentation.</p>
+<h2 id="calibre_link-313" class="calibre6">The Terminology of Set Theory</h2>
+<p class="bodyfirst">This chapter doesn’t cover set theory as completely as a math or computer science textbook would. But it covers enough to justify starting with an explanation of the discipline’s basic terminology, as doing so will make the rest of this chapter easier to understand. A <em class="calibre10">set</em> is a collection of unique objects, called <em class="calibre10">elements</em>, or <em class="calibre10">members</em>. For example, the letters <em class="calibre10">A</em>, <em class="calibre10">B</em>, and <em class="calibre10">C</em> form a set of three letters. In mathematics (and in Python code syntax), sets are written inside curly braces, with the objects separated by commas: {A, B, C}. </p>
+<p class="calibre22">Order doesn’t matter for a set; the set {A, B, C} is the same set as {C, B, A}. Sets have distinct elements, meaning there are no duplicates: {A, C, A, B} has repeat <em class="calibre10">A</em>s and so is not a set.</p>
+<p class="calibre22">A set is a <em class="calibre10">subset</em> of another set if it has only members of the other set. For example, {A, C} and {B, C} are both subsets of {A, B, C}, but {A, C, D} is not a subset of it. Conversely, {A, B, C} is a <em class="calibre10">superset</em> to {A, C} and also to {B, C} because it contains all their elements. The <em class="calibre10">empty set</em> { } is a set that contains no members at all. Empty sets are considered subsets of every possible set.</p>
+<p class="calibre22">A subset can also include all the elements of the other set. For example, {A, B, C} is a subset of {A, B, C}. But a <em class="calibre10">proper subset</em>, or <em class="calibre10">strict subset</em>, is a subset that does not have all the set’s elements. No set is a proper subset of itself: so {A, B, C} is a subset but not a proper subset of {A, B, C}. All other subsets are proper subsets. <a href="#calibre_link-199" id="calibre_link-649" class="linkurl">Figure 6-1</a> shows a graphical representation of the set {A, B, C} and some of its subsets.</p>
+<figure class="calibre25">
+<img src="images/000090.webp" class="calibre16" alt="Drawing of nested circles: an outer, dashed-line circle; a circle within the dashed circle, containing B; a circle within that circle, containing A and C; and a circle within that circle, containing no letters." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-199" class="linkurl">Figure 6-1</a>: The set {A, B, C} within the dashed lines and some of its subsets {A, B, C}, {A, C}, and { } within the solid lines. The circles represent sets, and the letters represent elements.</p></figcaption>
+</figure>
+<p class="calibre22">A <em class="calibre10">permutation</em> of a set is a specific ordering of all elements in the set. For example, the set {A, B, C} has six permutations: ABC, ACB, BAC, BCA, CAB, and CBA. We call these <em class="calibre10">permutations</em> <em class="calibre10">without</em> <em class="calibre10">repetition</em>, or <em class="calibre10">permutations</em> <em class="calibre10"></em><span type="pagebreak" title="125" id="calibre_link-63" class="calibre17"></span>without <em class="calibre10">replacement</em>, because each element doesn’t appear in the permutation more than once. </p>
+<p class="calibre22">A <em class="calibre10">combination</em> is a selection of elements of a set. More formally, a <em class="calibre10">k-combination</em> is a subset of <em class="calibre10">k</em> elements from a set. Unlike permutations, combinations don’t have an ordering. For example, the 2-combinations of the set {A, B, C} are {A, B}, {A, C}, and {B, C}. The 3-combination of the set {A, B, C} is {A, B, C}.</p>
+<p class="calibre22">The term <em class="calibre10">n choose k</em> refers to the number of possible combinations (without repetition) of <em class="calibre10">k</em> elements that can be selected from a set of <em class="calibre10">n</em> elements. (Some mathematicians use the term <em class="calibre10">n choose r</em>.) This concept has nothing to do with the elements themselves, just the number of them. For example, 4 choose 2 is 6, because there are six ways to choose two elements from a set of four elements like {A, B, C, D}: {A, B}, {A, C}, {A, D}, {B, C}, {B, D}, and {C, D}. Meanwhile, 3 choose 3 is 1, because there’s only one 3-combination from a set of three elements like {A, B, C}; that is, {A, B, C} itself. The formula for calculating <em class="calibre10">n</em> choose <em class="calibre10">k</em> is (<em class="calibre10">n!</em>) / (<em class="calibre10">k</em>! × (<em class="calibre10">n</em> &ndash; <em class="calibre10">k</em>)!). Recall that <em class="calibre10">n</em>! is the notation for factorials: 5! is 5 × 4 × 3 × 2 × 1.</p>
+<p class="calibre22">The term <em class="calibre10">n multichoose k</em> refers to the number of possible combinations <em class="calibre10">with repetition</em> of <em class="calibre10">k</em> elements that can be selected from a set of <em class="calibre10">n</em> elements. Because <em class="calibre10">k</em>-combinations are sets and sets do not have duplicate elements, a <em class="calibre10">k</em>-combination does not have repetition. When we use <em class="calibre10">k</em>-combinations with duplicate elements, we specifically call them <em class="calibre10">k-combinations with repetition</em>. </p>
+<p class="calibre22">Keep in mind that, both with and without repetition, you can think of permutation as a certain arrangement of all elements in a set, while a combination is an orderless selection of certain elements from a set. Permutations have an ordering and use all the elements from a set, while combinations don’t have an ordering and use any number of elements from a set. To get a better idea of these terms, <a href="#calibre_link-200" id="calibre_link-650" class="linkurl">Table 6-1</a> shows the difference between permutations and combinations, with and without repetition, of the set {A, B, C}.</p>
+<figure class="calibre25">
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-200" class="calibre40">Table 6-1</a>: All Possible Permutations and Combinations, with and without Repetition, of the Set {A, B, C}</p></figcaption>
+<table id="calibre_link-651" border="1" class="calibre41">
+<thead class="calibre42">
+<tr class="calibre43">
+<td class="calibre44"></td>
+<td class="calibre44"><b class="calibre7">Permutations</b></td>
+<td class="calibre44"><b class="calibre7">Combinations</b></td>
+</tr>
+</thead>
+<tbody class="calibre45">
+<tr class="calibre46">
+<td class="calibre44"><b class="calibre7">Without repetition</b></td>
+<td class="calibre44">ABC, ACB, BAC, BCA, CAB</td>
+<td class="calibre44">(None), A, B, C, AB, AC, BC, ABC</td>
+</tr>
+<tr class="calibre47">
+<td class="calibre44"><b class="calibre7">With repetition</b></td>
+<td class="calibre44">AAA, AAB, AAC, ABA, ABB, ABC, ACA, ACB, ACC, BAA, BAB, BAC, BBA, BBB, BBC, BCA, BCB, BCC, CAA, CAB, CAC, CBA, CBB, CBC, CCA, CCB, CCC</td>
+<td class="calibre44">(None), A, B, C, AA, AB, AC, BB, BC, CC, AAA, AAB, AAC, ABB, ABC, ACC, BBB, BBC, BCC, CCC</td>
+</tr>
+</tbody>
+</table>
+</figure>
+<p class="calibre22">It’s surprising how quickly the number of permutations and combinations grows as we add elements to a set. This <em class="calibre10">combinatorial explosion</em> is captured by the formulas in <a href="#calibre_link-201" id="calibre_link-652" class="linkurl">Table 6-2</a>. For example, a set of 10 elements has 10!, or 3,628,800, possible permutations, but a set of twice as many elements has 20!, or 2,432,902,008,176,640,000, permutations.</p>
+<figure class="calibre25">
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-201" class="calibre40">Table 6-2</a>: Calculating the Number of Possible Permutations and Combinations, with and without Repetition, of a Set of <em class="calibre37">n</em> Elements<span type="pagebreak" title="126" id="calibre_link-125" class="calibre17"></span></p></figcaption>
+<table id="calibre_link-653" border="1" class="calibre41"><tbody class="calibre45">
+<tr class="calibre46">
+<td class="calibre44"></td>
+<td class="calibre44"><b class="calibre7">Permutations</b></td>
+<td class="calibre44"><b class="calibre7">Combinations</b></td>
+</tr>
+<tr class="calibre47">
+<td class="calibre44"><b class="calibre7">Without repetition</b></td>
+<td class="calibre44"><em class="calibre10">n</em>!</td>
+<td class="calibre44">2<em class="calibre10">n</em></td>
+</tr>
+</tbody><tbody class="calibre45">
+<tr class="calibre46">
+<td class="calibre44"><b class="calibre7">With repetition</b></td>
+<td class="calibre44"><em class="calibre10">n</em><sup class="calibre12"><em class="calibre10">n</em></sup></td>
+<td class="calibre44">2<em class="calibre10">n</em> choose <em class="calibre10">n</em>, or<br class="calibre18" />
+(2<em class="calibre10">n</em>)! / (<em class="calibre10">n</em>!)<sup class="calibre12">2</sup></td>
+</tr>
+</tbody>
+</table>
+</figure>
+<p class="calibre22">Note that permutations without repetition are always the same size as the set. For example, the permutations of {A, B, C} are always three letters long: ABC, ACB, BAC, and so forth. However, permutations with repetition can be of any length. <a href="#calibre_link-200" class="linkurl">Table 6-1</a> shows the three-letter permutations of {A, B, C} ranging from AAA to CCC, but you could also, for example, have five-letter permutations with repetition ranging from AAAAA to CCCCC. The number of permutations with repetition of <em class="calibre10">n</em> elements that are <em class="calibre10">k</em> elements long is <em class="calibre10">n</em><sup class="calibre12"><em class="calibre10">k</em></sup>. <a href="#calibre_link-201" class="linkurl">Table 6-2</a> lists it as <em class="calibre10">n</em><sup class="calibre12"><em class="calibre10">n</em></sup> for permutations with repetition that are also <em class="calibre10">n</em> elements long.</p>
+<p class="calibre22">Ordering matters for permutations, but not for combinations. While AAB, ABA, and BAA are considered the same combination with repetition, they are considered three separate permutations with repetition.</p>
+<h2 id="calibre_link-314" class="calibre6">Finding All Permutations Without Repetition: A Wedding Seating Chart</h2>
+<p class="bodyfirst">Imagine you must arrange the seating chart for a wedding reception with delicate social requirements. Some of the guests hate each other, while others demand to sit near an influential guest. The seats at the rectangular table form one long, straight row, rather than a circle. It’d be helpful for your planning to see every possible ordering of guests&mdash;that is, every permutation without repetition of the set of guests. No repetition occurs, because each guest appears in the seating chart only once. </p>
+<p class="calibre22">Let’s use a simple example of Alice, Bob, and Carol, or {A, B, C}. <a href="#calibre_link-202" id="calibre_link-654" class="linkurl">Figure 6-2</a> shows all six possible permutations of these three wedding guests.</p>
+<p class="calibre22">One way we can determine the number of permutations without repetition is with a head-tail recursive strategy. We select one element from the set as the head. We then get every permutation of the rest of the elements (which constitute the tail), and for each permutation we place the head in every possible location in the permutation. </p>
+<p class="calibre22">In our ABC example, we’ll start with Alice (A) as the head and Bob and Carol (BC) as the tail. The permutations of {B, C} are BC and CB. (How we got BC and CB is explained in the next paragraph, so just put that question aside for now.) We’ll put A in every possible location in BC. That is, we put Alice before Bob (ABC), in between Bob and Carol (BAC), and after Carol (BCA). This creates the permutations ABC, BAC, and BCA. We also put A in every possible position in CB, creating ACB, CAB, and CBA. This creates all six permutations of Alice, Bob, and Carol sitting at the reception table. Now we can pick the arrangement that results in the fewest fights (or the most fights, if you want a memorable wedding reception).</p>
+<span type="pagebreak" title="127" id="calibre_link-173" class="calibre17"></span><figure class="calibre25">
+<img src="images/000004.webp" class="calibre16" alt="Drawing of six dinner tables seating the same three people arranged in different orders." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-202" class="linkurl">Figure 6-2</a>: All six possible permutations of three wedding guests at a table</p></figcaption>
+</figure>
+<p class="calibre22">Of course, to get every permutation of {B, C}, we’d recursively repeat the process with B as the head and C as the tail. The permutation of a single character is the character itself; this is our base case. By putting the head B in every possible location in C, we get the BC and CB permutations we used in the previous paragraph. Remember that, while order doesn’t matter with sets (as {B, C} is the same as {C, B}), it does matter with permutations (BC is not a duplicate of CB).</p>
+<p class="calibre22">Our recursive permutation function accepts as an argument a string of characters and returns an array of strings of every possible permutation of those characters. Let’s ask the three questions about our recursive algorithms for this function:</p>
+<ol class="none">
+<li class="calibre9"><span class="runinhead">What is the base case?</span>  An argument of a single character string or empty string, which returns an array of just that string.</li>
+<li class="calibre9"><span class="runinhead">What argument is passed to the recursive function call?</span>  The string argument missing one character. A separate recursive call is made for each character missing.</li>
+<li class="calibre9"><span class="runinhead">How does this argument become closer to the base case?</span>  The size of the string shrinks and eventually becomes a single-character string.</li>
+</ol>
+<p class="calibre22">The recursive permutations algorithm is implemented in <em class="calibre10">permutations.py</em>:</p>
+<pre class="calibre23"><code class="calibre11">def getPerms(chars, indent=0):
+    print('.' * indent + 'Start of getPerms("' + chars + '")')
+    if len(chars) == 1: <span class="codeannotationcode" aria-label="annotation1">❶</span>
+        # BASE CASE
+        print('.' * indent + 'When chars = "' + chars + '" base case returns', chars)
+        return [chars]
+
+    # RECURSIVE CASE
+    permutations = []
+    head = chars[0] <span class="codeannotationcode" aria-label="annotation2">❷</span>
+    tail = chars[1:]
+<span type="pagebreak" title="128" id="calibre_link-172" class="calibre17"></span>    tailPermutations = getPerms(tail, indent + 1)
+    for tailPerm in tailPermutations: <span class="codeannotationcode" aria-label="annotation3">❸</span>
+        print('.' * indent + 'When chars =', chars, 'putting head', head, 'in all places in', tailPerm)
+        for i in range(len(tailPerm) + 1): <span class="codeannotationcode" aria-label="annotation4">❹</span>
+            newPerm = tailPerm[0:i] + head + tailPerm[i:]
+            print('.' * indent + 'New permutation:', newPerm)
+            permutations.append(newPerm)
+    print('.' * indent + 'When chars =', chars, 'results are', permutations)
+    return permutations
+
+print('Permutations of "ABCD":')
+print('Results:', ','.join(getPerms('ABCD')))</code></pre>
+<p class="calibre22">The equivalent JavaScript program is in <em class="calibre10">permutations.html</em>:</p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+function getPerms(chars, indent) {
+    if (indent === undefined) {
+        indent = 0;
+    }
+    document.write('.'.repeat(indent) + 'Start of getPerms("' + chars + '")&lt;br /&gt;');
+    if (chars.length === 1) { <span class="codeannotationcode" aria-label="annotation1">❶</span>
+        // BASE CASE
+        document.write('.'.repeat(indent) + "When chars = \"" + chars +
+        "\" base case returns " + chars + "&lt;br /&gt;");
+        return [chars];
+    }
+    // RECURSIVE CASE
+    let permutations = [];
+    let head = chars[0]; <span class="codeannotationcode" aria-label="annotation2">❷</span>
+    let tail = chars.substring(1);
+    let tailPermutations = getPerms(tail, indent + 1);
+    for (tailPerm of tailPermutations) { <span class="codeannotationcode" aria-label="annotation3">❸</span>
+        document.write('.'.repeat(indent) + "When chars = " + chars +
+        " putting head " + head + " in all places in " + tailPerm + "&lt;br /&gt;");
+        for (let i = 0; i &lt; tailPerm.length + 1; i++) { <span class="codeannotationcode" aria-label="annotation4">❹</span>
+            let newPerm = tailPerm.slice(0, i) + head + tailPerm.slice(i);
+            document.write('.'.repeat(indent) + "New permutation: " + newPerm + "&lt;br /&gt;");
+            permutations.push(newPerm);
+        }
+    }
+    document.write('.'.repeat(indent) + "When chars = " + chars +
+    " results are " + permutations + "&lt;br /&gt;");
+    return permutations;
+}
+
+document.write("&lt;pre&gt;Permutations of \"ABCD\":&lt;br /&gt;");
+document.write("Results: " + getPerms("ABCD") + "&lt;/pre&gt;");
+&lt;/script&gt;</code></pre>
+<p class="calibre22"><span type="pagebreak" title="129" id="calibre_link-521" class="calibre17"></span>The output of these programs is the following:</p>
+<pre class="calibre23"><code class="calibre11">Permutations of "ABCD":
+Start of getPerms("ABCD")
+.Start of getPerms("BCD")
+..Start of getPerms("CD")
+...Start of getPerms("D")
+...When chars = "D" base case returns D
+..When chars = CD putting head C in all places in D
+..New permutation: CD
+..New permutation: DC
+..When chars = CD results are ['CD', 'DC']
+.When chars = BCD putting head B in all places in CD
+.New permutation: BCD
+.New permutation: CBD
+.New permutation: CDB
+.When chars = BCD putting head B in all places in DC
+.New permutation: BDC
+.New permutation: DBC
+.New permutation: DCB
+.When chars = BCD results are ['BCD', 'CBD', 'CDB', 'BDC', 'DBC', 'DCB']
+<var class="calibre48">--snip--</var>
+When chars = ABCD putting head A in all places in DCB
+New permutation: ADCB
+New permutation: DACB
+New permutation: DCAB
+New permutation: DCBA
+When chars = ABCD results are ['ABCD', 'BACD', 'BCAD', 'BCDA', 'ACBD', 'CABD', 'CBAD', 'CBDA', 'ACDB','CADB', 'CDAB', 'CDBA', 'ABDC', 'BADC', 'BDAC', 'BDCA', 'ADBC', 'DABC', 'DBAC', 'DBCA', 'ADCB', 'DACB', 'DCAB', 'DCBA']
+Results: ABCD,BACD,BCAD,BCDA,ACBD,CABD,CBAD,CBDA,ACDB,CADB,CDAB,CDBA,ABDC,
+BADC,BDAC,BDCA,ADBC,DABC,DBAC,DBCA,ADCB,DACB,DCAB,DCBA</code></pre>
+<p class="calibre22">When <code class="calibre11">getPerms()</code> is called, it first checks for the base case <span class="codeannotation" aria-label="annotation1">❶</span>. If the <code class="calibre11">chars</code> string is only one character long, it can have only one permutation: the <code class="calibre11">chars</code> string itself. The function returns this string in an array.</p>
+<p class="calibre22">Otherwise, in the recursive case, the function splits the <code class="calibre11">chars</code> argument’s first character into the <code class="calibre11">head</code> variable and the rest into the <code class="calibre11">tail</code> variable <span class="codeannotation" aria-label="annotation2">❷</span>. The function makes a recursive call to <code class="calibre11">getPerms()</code> to get all the permutations of the string in <code class="calibre11">tail</code>. A first <code class="calibre11">for</code> loop <span class="codeannotation" aria-label="annotation3">❸</span> iterates over each of these permutations, and a second <code class="calibre11">for</code> loop <span class="codeannotation" aria-label="annotation4">❹</span> creates a new permutation by placing the <code class="calibre11">head</code> character in every possible place in the string.</p>
+<p class="calibre22">For example, if <code class="calibre11">getPerms()</code> is called with <code class="calibre11">ABCD</code> for the <code class="calibre11">chars</code> argument, <code class="calibre11">head</code> is <code class="calibre11">A</code> and <code class="calibre11">tail</code> is <code class="calibre11">BCD</code>. The <code class="calibre11">getPerms('BCD')</code> call returns an array of the tail permutations, <code class="calibre11">['BCD', 'CBD', 'CDB', 'BDC', 'DBC', 'DCB']</code>. The first <code class="calibre11">for</code> loop starts with the <code class="calibre11">BCD</code> permutation, and the second <code class="calibre11">for</code> loop places the <code class="calibre11">A</code> string in <code class="calibre11">head</code> in each possible place, producing <code class="calibre11">ABCD</code>, <code class="calibre11">BACD</code>, <code class="calibre11">BCAD</code>, <code class="calibre11">BCDA</code>. This is repeated with the remaining tail permutations, and the entire list is then returned by the <code class="calibre11">getPerms()</code> function.</p>
+<h2 id="calibre_link-315" class="calibre6"><span type="pagebreak" title="130" id="calibre_link-164" class="calibre20"></span>Getting Permutations with Nested Loops: A Less-Than-Ideal Approach</h2>
+<p class="bodyfirst">Let’s say we have a simple bicycle lock, as in <a href="#calibre_link-203" id="calibre_link-655" class="linkurl">Figure 6-3</a>, with a four-digit combination. The combination has 10,000 possible permutations of digits (0000 to 9999), but only one will unlock it. (They are called <em class="calibre10">combination locks</em>; however, in this context it’d be more accurate to call them <em class="calibre10">permutations with repetition locks</em>, since the order matters.) </p>
+<p class="calibre22">Now let’s say we have a much simpler lock with only the five letters A to E. We can calculate the number of possible combinations as 5<sup class="calibre12">4</sup>, or 5 × 5 × 5 × 5, or 625. A combination lock of <em class="calibre10">k</em> characters, each character selected from a set of <em class="calibre10">n</em> possibilities, is <em class="calibre10">n</em><sup class="calibre12"><em class="calibre10">k</em></sup>. But getting a list of the combinations themselves is a bit more involved.</p>
+<figure class="calibre25">
+<img src="images/000013.webp" class="calibre16" alt="Photo of a bicycle lock with a four-digit combination." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-203" class="linkurl">Figure 6-3</a>: A four-digit combination bicycle lock has 10<sup class="calibre12">4</sup>, or 10,000, possible permutations with repetition (photo courtesy of Shaun Fisher, CC BY 2.0 license).</p></figcaption>
+</figure>
+<p class="calibre22">One way to get permutations with repetition is with <em class="calibre10">nested loops</em>&mdash;that is, a loop within another loop. The inner loop goes through every element in a set, whereas the outer loop does the same while repeating the inner loop. Creating all possible <em class="calibre10">k</em>-character permutations, each character selected from a set of <em class="calibre10">n</em> possibilities, requires <em class="calibre10">k</em> nested loops.</p>
+<p class="calibre22">For example, <em class="calibre10">nestedLoopPermutations.py</em> contains code that generates all 3-combinations of {A, B, C, D, E}:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">for a in ['A', 'B', 'C', 'D', 'E']:
+    for b in ['A', 'B', 'C', 'D', 'E']:
+        for c in ['A', 'B', 'C', 'D', 'E']:
+            for d in ['A', 'B', 'C', 'D', 'E']:
+                print(a, b, c, d)</code></pre>
+<p class="calibre22"><span type="pagebreak" title="131" id="calibre_link-163" class="calibre17"></span>And <em class="calibre10">nestedLoopPermutations.html</em> contains the equivalent JavaScript program:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">&lt;script&gt;
+for (a of ['A', 'B', 'C', 'D', 'E']) {
+    for (b of ['A', 'B', 'C', 'D', 'E']) {
+        for (c of ['A', 'B', 'C', 'D', 'E']) {
+            for (d of ['A', 'B', 'C', 'D', 'E']) {
+                document.write(a + b + c + d + "&lt;br /&gt;")
+            }
+        }
+    }
+}
+&lt;/script&gt;</code></pre>
+<p class="calibre22">The output of these programs looks like this:</p>
+<pre class="calibre23"><code class="calibre11">A A A A
+A A A B
+A A A C
+A A A D
+A A A E
+A A B A
+A A B B
+<var class="calibre48">--snip--</var>
+E E E C
+E E E D
+E E E E</code></pre>
+<p class="calibre22">The problem with generating permutations with four nested loops is that it works only for permutations that are exactly four characters. Nested loops cannot generate permutations for arbitrary lengths. Instead, we can use a recursive function, as described in the next section.</p>
+<p class="calibre22">You can remember the difference between permutations with and without repetition with the examples in this chapter. Permutations <em class="calibre10">without</em> repetition go through all possible orderings of the elements in a set, like our wedding guest seating chart example. Permutations <em class="calibre10">with</em> repetition go through all the possible combinations of a combination lock; the order matters, and the same element can appear more than once.</p>
+<h2 id="calibre_link-316" class="calibre6">Permutations with Repetition: A Password Cracker</h2>
+<p class="bodyfirst">Imagine you have received a sensitive encrypted file from a recently deceased journalist. In their final message, the journalist told you the file contains records of tax evasion by a nefarious trillionaire. They didn’t have the password to decrypt the file, but they did know that it is exactly four characters long; also, the possible characters are the numbers 2, 4, and 8 and the letters J, P, and B. These characters can appear more than once. For example, possible passwords are JPB2, JJJJ, and 2442. </p>
+<p class="calibre22">To generate a list of all possible four-character passwords based on this information, you want to obtain all possible four-element permutations <span type="pagebreak" title="132" id="calibre_link-175" class="calibre17"></span>with repetition of the set {J, P, B, 2, 4, 8}. Each of the four characters in the password can be one of the six possible characters, making 6 × 6 × 6 × 6, or 6<sup class="calibre12">4</sup>, or 1,296 possible permutations. We want to generate the permutations of {J, P, B, 2, 4, 8}, and not the combinations, because the ordering matters; JPB2 is a different password from B2JP.</p>
+<p class="calibre22">Let’s ask the three recursive algorithm questions about our permutations function. Instead of <em class="calibre10">k</em>, we’ll use the more descriptive name <code class="calibre11">permLength</code>:</p>
+<ol class="none">
+<li class="calibre9"><span class="runinhead">What is the base case?</span>  A <code class="calibre11">permLength</code> argument of <code class="calibre11">0</code>, meaning a permutation zero characters long, signals that the <code class="calibre11">prefix</code> argument now contains the complete permutation and so <code class="calibre11">prefix</code> should be returned in an array.</li>
+<li class="calibre9"><span class="runinhead">What argument is passed to the recursive function call?</span>  The <code class="calibre11">chars</code> string of the characters to get permutations of, a <code class="calibre11">permLength</code> argument that begins as the length of <code class="calibre11">chars</code>, and a <code class="calibre11">prefix</code> argument that begins as the blank string. Recursive calls decrement the <code class="calibre11">permLength</code> argument while appending a character from <code class="calibre11">chars</code> to the <code class="calibre11">prefix</code> argument.</li>
+<li class="calibre9"><span class="runinhead">How does this argument become closer to the base case?</span>  Eventually, the <code class="calibre11">permLength</code> argument decrements to <code class="calibre11">0</code>.</li>
+</ol>
+<p class="calibre22">The algorithm for recursive permutations with repetition is implemented in <em class="calibre10">permutationsWithRepetition.py</em>:</p>
+<pre class="calibre23"><code class="calibre11">def getPermsWithRep(chars, permLength=None, prefix=''):
+    indent = '.' * len(prefix)
+    print(indent + 'Start, args=("' + chars + '", ' + str(permLength) + ', "' + prefix + '")')
+    if permLength is None:
+        permLength = len(chars)
+
+    # BASE CASE
+    if (permLength == 0): <span class="codeannotationcode" aria-label="annotation1">❶</span>
+        print(indent + 'Base case reached, returning', [prefix])
+        return [prefix]
+
+    # RECURSIVE CASE
+    # Create a new prefix by adding each character to the current prefix.
+    results = []
+    print(indent + 'Adding each char to prefix "' + prefix + '".')
+    for char in chars:
+        newPrefix = prefix + char <span class="codeannotationcode" aria-label="annotation2">❷</span>
+
+        # Decrease permLength by one because we added one character to the prefix.
+        results.extend(getPermsWithRep (chars, permLength - 1, newPrefix)) <span class="codeannotationcode" aria-label="annotation3">❸</span>
+    print(indent + 'Returning', results)
+    return results
+
+
+print('All permutations with repetition of JPB123:')
+print(getPermsWithRep('JPB123', 4))</code></pre>
+<p class="calibre22"><span type="pagebreak" title="133" id="calibre_link-174" class="calibre17"></span>The equivalent JavaScript program is in <em class="calibre10">permutationsWithRepetition.html</em>:</p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+function getPermsWithRep(chars, permLength, prefix) {
+    if (permLength === undefined) {
+        permLength = chars.length;
+    }
+    if (prefix === undefined) {
+        prefix = "";
+    }
+    let indent = ".".repeat(prefix.length);
+    document.write(indent + "Start, args=(\"" + chars + "\", " + permLength +
+    ", \"" + prefix + "\")&lt;br /&gt;");
+
+    // BASE CASE
+    if (permLength === 0) { <span class="codeannotationcode" aria-label="annotation1">❶</span>
+        document.write(indent + "Base case reached, returning " + [prefix] + "&lt;br /&gt;");
+        return [prefix];
+    }
+
+    // RECURSIVE CASE
+    // Create a new prefix by adding each character to the current prefix.
+    let results = [];
+    document.write(indent + "Adding each char to prefix \"" + prefix + "\".&lt;br /&gt;");
+    for (char of chars) {
+        let newPrefix = prefix + char; <span class="codeannotationcode" aria-label="annotation2">❷</span>
+
+        // Decrease permLength by one because we added one character to the prefix.
+        results = results.concat(getPermsWithRep(chars, permLength - 1, newPrefix)); <span class="codeannotationcode" aria-label="annotation3">❸</span>
+    }
+    document.write(indent + "Returning " + results + "&lt;br /&gt;");
+    return results;
+}
+
+document.write("&lt;pre&gt;All permutations with repetition of JPB123:&lt;br /&gt;");
+document.write(getPermsWithRep('JPB123', 4) + "&lt;/pre&gt;");
+&lt;/script&gt;</code></pre>
+<p class="calibre22">The output of these programs is shown here:</p>
+<pre class="calibre23"><code class="calibre11">All permutations with repetition of JPB123:
+Start, args=("JPB123", 4, "")
+Adding each char to prefix "".
+.Start, args=("JPB123", 3, "J")
+.Adding each char to prefix "J".
+..Start, args=("JPB123", 2, "JJ")
+..Adding each char to prefix "JJ".
+...Start, args=("JPB123", 1, "JJJ")
+...Adding each char to prefix "JJJ".
+....Start, args=("JPB123", 0, "JJJJ")
+....Base case reached, returning ['JJJJ']
+....Start, args=("JPB123", 0, "JJJP")
+....Base case reached, returning ['JJJP']
+<span type="pagebreak" title="134" id="calibre_link-141" class="calibre17"></span><var class="calibre48">--snip--</var>
+Returning ['JJJJ', 'JJJP', 'JJJB', 'JJJ1', 'JJJ2', 'JJJ3',
+'JJPJ', 'JJPP', 'JJPB', 'JJP1', 'JJP2', 'JJP3', 'JJBJ', 'JJBP',
+'JJBB', 'JJB1', 'JJB2', 'JJB3', 'JJ1J', 'JJ1P', 'JJ1B', 'JJ11',
+'JJ12', 'JJ13', 'JJ2J', 'JJ2P', 'JJ2B', 'JJ21', 'JJ22', 'JJ23',
+'JJ3J', 'JJ3P', 'JJ3B', 'JJ31', 'JJ32', 'JJ33', 'JPJJ',
+<var class="calibre48">--snip--</var></code></pre>
+<p class="calibre22">The <code class="calibre11">getPermsWithRep()</code> function has a <code class="calibre11">prefix</code> string argument that begins as a blank string by default. When the function is called, it first checks for the base case <span class="codeannotation" aria-label="annotation1">❶</span>. If <code class="calibre11">permLength</code>, the length of the permutations, is <code class="calibre11">0</code>, an array with <code class="calibre11">prefix</code> is returned.</p>
+<p class="calibre22">Otherwise, in the recursive case, for each character in the <code class="calibre11">chars</code> argument the function creates a new prefix <span class="codeannotation" aria-label="annotation2">❷</span> to pass to the recursive <code class="calibre11">getPermsWithRep()</code> call. This recursive call passes <code class="calibre11">permLength - 1</code> for the <code class="calibre11">permLength</code> argument.</p>
+<p class="calibre22">The <code class="calibre11">permLength</code> argument starts at the length of the permutations and decreases by one for each recursive call <span class="codeannotation" aria-label="annotation3">❸</span>. And the <code class="calibre11">prefix</code> argument starts as the blank string and increases by one character for each recursive call. So by the time the base case of <code class="calibre11">k == 0</code> is reached, the <code class="calibre11">prefix</code> string is the full permutation length of <code class="calibre11">k</code>.</p>
+<p class="calibre22">For example, let’s consider the case of calling <code class="calibre11">getPermsWithRep('ABC', 2)</code>. The <code class="calibre11">prefix</code> argument defaults to the blank string. The function makes a recursive call with each character of <code class="calibre11">ABC</code> concatenated to the blank prefix string as the new prefix. Calling <code class="calibre11">getPermsWithRep('ABC', 2)</code> makes these three recursive calls:</p>
+<ul class="calibre38">
+<li class="calibre9"><code class="calibre11">getPermsWithRep('ABC', 1, 'A')</code></li>
+<li class="calibre9"><code class="calibre11">getPermsWithRep('ABC', 1, 'B')</code></li>
+<li class="calibre9"><code class="calibre11">getPermsWithRep('ABC', 1, 'C')</code></li>
+</ul>
+<p class="calibre22">Each of these three calls will make its own three recursive calls, but will pass <code class="calibre11">0</code> for <code class="calibre11">permLength</code> instead of <code class="calibre11">1</code>. The base case occurs when <code class="calibre11">permLength == 0</code>, so these return their prefixes. This is how all nine of the permutations are generated. The <code class="calibre11">getPermsWithRep()</code> function generates permutations of larger sets the same way.</p>
+<h2 id="calibre_link-317" class="calibre6">Getting K-Combinations with Recursion</h2>
+<p class="bodyfirst">Recall that order is not significant for combinations in the way it is for permutations. Yet generating all <em class="calibre10">k</em>-combinations of a set is a bit tricky because you don’t want your algorithm to generate duplicates: if you create the AB 2-combination from the set {A, B, C}, you don’t want to also create BA, because it’s the same 2-combination as AB.</p>
+<p class="calibre22">To figure out how we can write recursive code to solve this problem, let’s see how a tree can visually describe generating all the <em class="calibre10">k</em>-combinations of a set. <a href="#calibre_link-204" id="calibre_link-656" class="linkurl">Figure 6-4</a> shows a tree with all the combinations from the set {A, B, C, D}.</p>
+<span type="pagebreak" title="135" id="calibre_link-522" class="calibre17"></span><figure class="calibre25">
+<img src="images/000031.webp" class="calibre16" alt="Tree diagram with each level of depth classified as either 0-combinations, 1-combinations, 2-combinations, 3-combinations, or 4-combinations." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-204" class="linkurl">Figure 6-4</a>: Tree showing every possible <em class="calibre37">k</em>-combination (from 0 to 4) from the set {A, B, C, D}</p></figcaption>
+</figure>
+<p class="calibre22">To gather, for example, 3-combinations from this tree, start at the root node at the top and do a depth-first tree traversal to the 3-combinations level, while memorizing each node’s letter on the way to the bottom. (Depth-first searches are discussed in <span class="calibre" itemid="xref_target_Chapter 4">Chapter 4</span>.) Our first 3-combination would be going from the root to A in the 1-combination level, then down to B in the 2-combination level, then to C in the 3-combination level, where we stop with our complete 3-combination: ABC. For the next combination, we traverse from the root to A to B to D, giving us the combination ABD. We continue doing this for ACD and BCD. Our tree has four nodes in the 3-combination level, and four 3-combinations from {A, B, C, D}: ABC, ABD, ACD, and BCD.</p>
+<p class="calibre22">Notice that we create the tree in <a href="#calibre_link-204" class="linkurl">Figure 6-4</a> by starting with a blank string for the root node. This is the 0-combination level, and it applies to all combinations of zero selections from the set; it’s simply an empty string. The child nodes of the root are all elements from the set. In our case, that is all four elements from {A, B, C, D}. While sets don’t have an order, we need to be consistent in using the ABCD order of the set while generating this tree. This is because every node’s children consist of the letters after it in the ABCD string: all A nodes have children B, C, and D; all B nodes have children C and D; all C nodes have one D child; and all D nodes have no child nodes.</p>
+<p class="calibre22">While it’s not directly related to the recursive combination function, also notice the pattern in the number of <em class="calibre10">k</em>-combinations at each level:</p>
+<ul class="calibre38">
+<li class="calibre9">The 0-combination and 4-combination levels both have one combination: the empty string and ABCD, respectively. </li>
+<li class="calibre9">The 1-combination and 3-combination levels both have four combinations: A, B, C, D and ABC, ABD, ACD, BCD, respectively. </li>
+<li class="calibre9">The 2-combination level in the middle has the most combinations at six: AB, AC, AD, BC, BD, and CD. </li>
+</ul>
+<p class="calibre22"><span type="pagebreak" title="136" id="calibre_link-126" class="calibre17"></span>The reason the number of combinations increases, peaks in the middle, and then decreases is that the <em class="calibre10">k</em>-combinations are mirrors of each other. For example, the 1-combinations are made from the elements not selected for the 3-combinations: </p>
+<ul class="calibre38">
+<li class="calibre9">The 1-combination A is the mirror of the 3-combination BCD.</li>
+<li class="calibre9">The 1-combination B is the mirror of the 3-combination ACD.</li>
+<li class="calibre9">The 1-combination C is the mirror of the 3-combination ABD.</li>
+<li class="calibre9">The 1-combination D is the mirror of the 3-combination ABC.</li>
+</ul>
+<p class="calibre22">We’ll create a function called <code class="calibre11">getCombos()</code> that takes two arguments: a <code class="calibre11">chars</code> string with the letters to get combinations from, and the size of the combinations <code class="calibre11">k</code>. The return value is an array of strings of combinations from the string <code class="calibre11">chars</code>, each of length <code class="calibre11">k</code>.</p>
+<p class="calibre22">We’ll use a head-tail technique with the <code class="calibre11">chars</code> argument. For example, say we call <code class="calibre11">getCombos('ABC', 2)</code> to get all the 2-combinations from {A, B, C}. The function will set <code class="calibre11">A</code> as the head and <code class="calibre11">BC</code> as the tail. <a href="#calibre_link-205" id="calibre_link-657" class="linkurl">Figure 6-5</a> shows the tree for selecting 2-combinations from {A, B, C}.</p>
+<figure class="calibre25">
+<img src="images/000022.webp" class="calibre16" alt="Tree diagram classifying each depth level as 0-combinations, 1-combinations, 2-combinations, or 3-combinations." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-205" class="linkurl">Figure 6-5</a>: Tree showing every possible 2-combination from the set {A, B, C}</p></figcaption>
+</figure>
+<p class="calibre22">Let’s ask our three recursive algorithm questions:</p>
+<ol class="none">
+<li class="calibre9"><span class="runinhead">What is the base case?</span>  The first base case is a <code class="calibre11">k</code> argument of <code class="calibre11">0</code>, meaning that a 0-combination is requested, which is always an array of the blank string no matter what <code class="calibre11">chars</code> is. The second case occurs if <code class="calibre11">chars</code> is the blank string, which is an empty array since no possible combinations can be made from a blank string.</li>
+<li class="calibre9"><span class="runinhead">What argument is passed to the recursive function call?</span>  For the first recursive call, the tail of <code class="calibre11">chars</code> and <code class="calibre11">k - 1</code> are passed. For the second recursive call, the tail of <code class="calibre11">chars</code> and <code class="calibre11">k</code> are passed.</li>
+<li class="calibre9"><span class="runinhead">How does this argument become closer to the base case?</span>  Since the recursive calls decrement <code class="calibre11">k</code> and remove the heads from the <code class="calibre11">chars</code> arguments, eventually the <code class="calibre11">k</code> argument decrements to <code class="calibre11">0</code> or the <code class="calibre11">chars</code> argument becomes the blank string.</li>
+</ol>
+<p class="calibre22"><span type="pagebreak" title="137" id="calibre_link-64" class="calibre17"></span>The Python code for generating combinations is in <em class="calibre10">combinations.py</em>:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">def getCombos(chars, k, indent=0):
+    debugMsg = '.' * indent + "In getCombos('" + chars + "', " + str(k) + ")"
+    print(debugMsg + ', start.')
+    if k == 0:
+        # BASE CASE
+        print(debugMsg + " base case returns ['']")
+        # If k asks for 0-combinations, return '' as the selection of
+        # zero letters from chars.
+        return ['']
+    elif chars == '':
+        # BASE CASE
+        print(debugMsg + ' base case returns []')
+        return [] # A blank chars has no combinations, no matter what k is.
+
+    # RECURSIVE CASE
+    combinations = []
+  <span class="codeannotationcode" aria-label="annotation1">❶</span> # First part, get the combos that include the head:
+    head = chars[:1]
+    tail = chars[1:]
+    print(debugMsg + " part 1, get combos with head '" + head + "'")
+  <span class="codeannotationcode" aria-label="annotation2">❷</span> tailCombos = getCombos(tail, k - 1, indent + 1)
+    print('.' * indent + "Adding head '" + head + "' to tail combos:")
+    for tailCombo in tailCombos:
+        print('.' * indent + 'New combination', head + tailCombo)
+        combinations.append(head + tailCombo)
+
+  <span class="codeannotationcode" aria-label="annotation3">❸</span> # Second part, get the combos that don't include the head:
+    print(debugMsg + " part 2, get combos without head '" + head + "')")
+  <span class="codeannotationcode" aria-label="annotation4">❹</span> combinations.extend(getCombos(tail, k, indent + 1))
+
+    print(debugMsg + ' results are', combinations)
+    return combinations
+
+print('2-combinations of "ABC":')
+print('Results:', getCombos('ABC', 2))</code></pre>
+<p class="calibre22">The equivalent JavaScript program is in <em class="calibre10">combinations.html</em>:</p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+function getCombos(chars, k, indent) {
+    if (indent === undefined) {
+        indent = 0;
+    }
+    let debugMsg = ".".repeat(indent) + "In getCombos('" + chars + "', " + k + ")";
+    document.write(debugMsg + ", start.&lt;br /&gt;");
+    if (k == 0) {
+        // BASE CASE
+        document.write(debugMsg + " base case returns ['']&lt;br /&gt;");
+        // If k asks for 0-combinations, return '' as the selection of zero letters from chars.
+        return [""];
+    } else if (chars == "") {
+        // BASE CASE
+        document.write(debugMsg + " base case returns []&lt;br /&gt;");
+<span type="pagebreak" title="138" id="calibre_link-523" class="calibre17"></span>        return []; // A blank chars has no combinations, no matter what k is.
+    }
+
+    // RECURSIVE CASE
+    let combinations = [];
+    // First part, get the combos that include the head: <span class="codeannotationcode" aria-label="annotation1">❶</span>
+    let head = chars.slice(0, 1);
+    let tail = chars.slice(1, chars.length);
+    document.write(debugMsg + " part 1, get combos with head '" + head + "'&lt;br /&gt;");
+    let tailCombos = getCombos(tail, k - 1, indent + 1); <span class="codeannotationcode" aria-label="annotation2">❷</span>
+    document.write(".".repeat(indent) + "Adding head '" + head + "' to tail combos:&lt;br /&gt;");
+    for (tailCombo of tailCombos) {
+        document.write(".".repeat(indent) + "New combination " + head + tailCombo + "&lt;br /&gt;");
+        combinations.push(head + tailCombo);
+    }
+    // Second part, get the combos that don't include the head: <span class="codeannotationcode" aria-label="annotation3">❸</span>
+    document.write(debugMsg + " part 2, get combos without head '" + head + "')&lt;br /&gt;");
+    combinations = combinations.concat(getCombos(tail, k, indent + 1)); <span class="codeannotationcode" aria-label="annotation4">❹</span>
+
+    document.write(debugMsg + " results are " + combinations + "&lt;br /&gt;");
+    return combinations;
+}
+
+document.write('&lt;pre&gt;2-combinations of "ABC":&lt;br /&gt;');
+document.write("Results: " + getCombos("ABC", 2) + "&lt;br /&gt;&lt;/pre&gt;");
+&lt;/script&gt;</code></pre>
+<p class="calibre22">The output of these programs is the following:</p>
+<pre class="calibre23"><code class="calibre11">2-combinations of "ABC":
+In getCombos('ABC', 2), start.
+In getCombos('ABC', 2) part 1, get combos with head 'A'
+.In getCombos('BC', 1), start.
+.In getCombos('BC', 1) part 1, get combos with head 'B'
+..In getCombos('C', 0), start.
+..In getCombos('C', 0) base case returns ['']
+.Adding head 'B' to tail combos:
+.New combination B
+.In getCombos('BC', 1) part 2, get combos without head 'B')
+..In getCombos('C', 1), start.
+..In getCombos('C', 1) part 1, get combos with head 'C'
+...In getCombos('', 0), start.
+...In getCombos('', 0) base case returns ['']
+..Adding head 'C' to tail combos:
+..New combination C
+..In getCombos('C', 1) part 2, get combos without head 'C')
+...In getCombos('', 1), start.
+...In getCombos('', 1) base case returns []
+..In getCombos('C', 1) results are ['C']
+.In getCombos('BC', 1) results are ['B', 'C']
+Adding head 'A' to tail combos:
+New combination AB
+New combination AC
+In getCombos('ABC', 2) part 2, get combos without head 'A')
+.In getCombos('BC', 2), start.
+<span type="pagebreak" title="139" id="calibre_link-43" class="calibre17"></span>.In getCombos('BC', 2) part 1, get combos with head 'B'
+..In getCombos('C', 1), start.
+..In getCombos('C', 1) part 1, get combos with head 'C'
+...In getCombos('', 0), start.
+...In getCombos('', 0) base case returns ['']
+..Adding head 'C' to tail combos:
+..New combination C
+..In getCombos('C', 1) part 2, get combos without head 'C')
+...In getCombos('', 1), start.
+...In getCombos('', 1) base case returns []
+..In getCombos('C', 1) results are ['C']
+.Adding head 'B' to tail combos:
+.New combination BC
+.In getCombos('BC', 2) part 2, get combos without head 'B')
+..In getCombos('C', 2), start.
+..In getCombos('C', 2) part 1, get combos with head 'C'
+...In getCombos('', 1), start.
+...In getCombos('', 1) base case returns []
+..Adding head 'C' to tail combos:
+..In getCombos('C', 2) part 2, get combos without head 'C')
+...In getCombos('', 2), start.
+...In getCombos('', 2) base case returns []
+..In getCombos('C', 2) results are []
+.In getCombos('BC', 2) results are ['BC']
+In getCombos('ABC', 2) results are ['AB', 'AC', 'BC']
+Results: ['AB', 'AC', 'BC']</code></pre>
+<p class="calibre22">Every <code class="calibre11">getCombos()</code> function call has two recursive calls for the two parts of the algorithm. For our <code class="calibre11">getCombos('ABC', 2)</code> example, the first part <span class="codeannotation" aria-label="annotation1">❶</span> is to get all the combinations that include the head <code class="calibre11">A</code>. In the tree, this generates all the combinations <em class="calibre10">under </em>the A node in the 1-combination level.</p>
+<p class="calibre22">We can do this by passing the tail and <code class="calibre11">k - 1</code> to the first recursive function call: <code class="calibre11">getCombos('BC', 1)</code> <span class="codeannotation" aria-label="annotation2">❷</span>. We add <code class="calibre11">A</code> to each combination that this recursive function call returns. Let’s use the leap-of-faith principle and just assume our <code class="calibre11">getCombos()</code> correctly returns a list of <em class="calibre10">k</em>-combinations, <code class="calibre11">['B', 'C']</code>, even though we haven’t finished writing it yet. We now have all the <em class="calibre10">k</em>-combinations that include the head <code class="calibre11">A</code> in an array to hold our results: <code class="calibre11">['AB', 'AC']</code>.</p>
+<p class="calibre22">The second part <span class="codeannotation" aria-label="annotation3">❸</span> gets all the combinations that don’t include the head <code class="calibre11">A</code>. In the tree, this generates all the combinations <em class="calibre10">to the right</em> of the A node in the 1-combination level. We can do this by passing the tail and <code class="calibre11">k</code> to the second recursive function call: <code class="calibre11">getCombos('BC', 2)</code>. This returns <code class="calibre11">['BC']</code>, since BC is the only 2-combination of BC.</p>
+<p class="calibre22">The results from <code class="calibre11">getCombos('ABC', 2)</code>’s two recursive calls, <code class="calibre11">['AB', 'AC']</code> and <code class="calibre11">['BC']</code>, are concatenated together and returned: <code class="calibre11">['AB', 'AC', 'BC']</code> <span class="codeannotation" aria-label="annotation4">❹</span>. The <code class="calibre11">getCombos()</code> function generates combinations of larger sets the same way.</p>
+<h2 id="calibre_link-318" class="calibre6">Get All Combinations of Balanced Parentheses</h2>
+<p class="bodyfirst">A string has <em class="calibre10">balanced parentheses</em> if every opening parenthesis is followed by exactly one closing parenthesis. For example, <code class="calibre11">′()()′</code> and <code class="calibre11">′(())′</code> are strings of <span type="pagebreak" title="140" id="calibre_link-82" class="calibre17"></span>two balanced parentheses pairs, but <code class="calibre11">′)(()′</code> and <code class="calibre11">′(()′</code> are not balanced. These strings are also called <em class="calibre10">Dyck words</em>, after mathematician Walther von Dyck.</p>
+<p class="calibre22">A common coding interview question is to write a recursive function that, given the number of pairs of parentheses, produces all possible combinations of balanced parentheses. For example, a <code class="calibre11">getBalancedParens(3)</code> call should return <code class="calibre11">['((()))', '(()())', '(())()', '()(())', '()()()']</code>. Note that calling <code class="calibre11">getBalancedParens(</code><var class="calibre13">n</var><code class="calibre11">)</code><code class="calibre11"></code> returns strings that are 2<em class="calibre10">n</em> characters in length, since each string consists of <em class="calibre10">n</em> pairs of parentheses.</p>
+<p class="calibre22">We could try to solve this problem by finding all permutations of the pairs of parenthesis characters, but that would result in both balanced and unbalanced parentheses strings. Even if we filtered out the invalid strings later, 2<em class="calibre10">n</em>! permutations exist for <em class="calibre10">n</em> pairs of parentheses. That algorithm is far too slow to be practical.</p>
+<p class="calibre22">Instead, we can implement a recursive function to generate all strings of balanced parentheses. Our <code class="calibre11">getBalancedParens()</code> function takes an integer of the number of pairs of parentheses and returns a list of balanced parentheses strings. The function builds these strings by adding either an opening or closing parenthesis. An opening parenthesis can be added only if opening parentheses remain to be used. A closing parenthesis can be added only if more opening parentheses have been added than closing parentheses so far. </p>
+<p class="calibre22">We’ll track the number of opening and closing parentheses remaining to be used with function parameters named <code class="calibre11">openRem</code> and <code class="calibre11">closeRem</code>. The string currently being built is another function parameter named <code class="calibre11">current</code>, which serves a similar purpose as the <code class="calibre11">prefix</code> parameter in the <em class="calibre10">permutationsWithRepetition</em> program. The first base case occurs when <code class="calibre11">openRem</code> and <code class="calibre11">closeRem</code> are both <code class="calibre11">0</code> and no more parentheses remain to be added to the <code class="calibre11">current</code> string. The second base case happens after the two recursive cases have received the lists of balanced parentheses strings after adding an opening and/or closing parenthesis (if possible).</p>
+<p class="calibre22">Let’s ask the three recursive algorithm questions about the <code class="calibre11">getBalancedParens()</code> function:</p>
+<ol class="none">
+<li class="calibre9"><span class="runinhead">What is the base case?</span>  When the number of opening and closing parentheses remaining to be added to the string being built has reached <code class="calibre11">0</code>. A second base case always occurs after the recursive cases have finished.</li>
+<li class="calibre9"><span class="runinhead">What argument is passed to the recursive function call?</span>  The total number of pairs of parentheses (<code class="calibre11">pairs</code>), the remaining number of opening and closing parentheses to add (<code class="calibre11">openRem</code> and <code class="calibre11">closeRem</code>), and the string currently being built (<code class="calibre11">current</code>).</li>
+<li class="calibre9"><span class="runinhead">How does this argument become closer to the base case?</span>  As we add more opening and closing parentheses to <code class="calibre11">current</code>, we decrement the <code class="calibre11">openRem</code> and <code class="calibre11">closeRem</code> arguments until they become 0.</li>
+</ol>
+<p class="calibre22"><span type="pagebreak" title="141" id="calibre_link-44" class="calibre17"></span>The <em class="calibre10">balancedParentheses.py</em> file contains the Python code for our balanced parentheses recursive function:</p>
+<pre class="calibre23"><code class="calibre11">def getBalancedParens(pairs, openRem=None, closeRem=None, current='', indent=0):
+    if openRem is None: <span class="codeannotationcode" aria-label="annotation1">❶</span>
+        openRem = pairs
+    if closeRem is None:
+        closeRem = pairs
+
+    print('.' * indent, end='')
+    print('Start of pairs=' + str(pairs) + ', openRem=' +
+    str(openRem) + ', closeRem=' + str(closeRem) + ', current="' + current + '"')
+    if openRem == 0 and closeRem == 0: <span class="codeannotationcode" aria-label="annotation2">❷</span>
+        # BASE CASE
+        print('.' * indent, end='')
+        print('1st base case. Returning ' + str([current]))
+        return [current] <span class="codeannotationcode" aria-label="annotation3">❸</span>
+
+    # RECURSIVE CASE
+    results = []
+    if openRem &gt; 0: <span class="codeannotationcode" aria-label="annotation4">❹</span>
+        print('.' * indent, end='')
+        print('Adding open parenthesis.')
+        results.extend(getBalancedParens(pairs, openRem - 1, closeRem,
+        current + '(', indent + 1))
+    if closeRem &gt; openRem: <span class="codeannotationcode" aria-label="annotation5">❺</span>
+        print('.' * indent, end='')
+        print('Adding close parenthesis.')
+        results.extend(getBalancedParens(pairs, openRem, closeRem - 1,
+        current + ')', indent + 1))
+
+    # BASE CASE
+    print('.' * indent, end='')
+    print('2nd base case. Returning ' + str(results))
+    return results <span class="codeannotationcode" aria-label="annotation6">❻</span>
+
+print('All combinations of 2 balanced parentheses:')
+print('Results:', getBalancedParens(2))</code></pre>
+<p class="calibre22">The <em class="calibre10">balancedParentheses.html</em> file contains the JavaScript equivalent of this program:</p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+function getBalancedParens(pairs, openRem, closeRem, current, indent) {
+    if (openRem === undefined) { <span class="codeannotationcode" aria-label="annotation1">❶</span>
+        openRem = pairs;
+    }
+    if (closeRem === undefined) {
+        closeRem = pairs;
+    }
+    if (current === undefined) {
+        current = "";
+    }
+<span type="pagebreak" title="142" id="calibre_link-524" class="calibre17"></span>    if (indent === undefined) {
+        indent = 0;
+    }
+
+    document.write(".".repeat(indent) + "Start of pairs=" +
+    pairs + ", openRem=" + openRem + ", closeRem=" +
+    closeRem + ", current=\"" + current + "\"&lt;br /&gt;");
+    if (openRem === 0 &amp;&amp; closeRem === 0) { <span class="codeannotationcode" aria-label="annotation2">❷</span>
+        // BASE CASE
+        document.write(".".repeat(indent) +
+        "1st base case. Returning " + [current] + "&lt;br /&gt;");
+        return [current]; <span class="codeannotationcode" aria-label="annotation3">❸</span>
+    }
+
+    // RECURSIVE CASE
+    let results = [];
+    if (openRem &gt; 0) { <span class="codeannotationcode" aria-label="annotation4">❹</span>
+        document.write(".".repeat(indent) + "Adding open parenthesis.&lt;br /&gt;");
+        Array.prototype.push.apply(results, getBalancedParens(
+        pairs, openRem - 1, closeRem, current + '(', indent + 1));
+    }
+    if (closeRem &gt; openRem) { <span class="codeannotationcode" aria-label="annotation5">❺</span>
+        document.write(".".repeat(indent) + "Adding close parenthesis.&lt;br /&gt;");
+        results = results.concat(getBalancedParens(
+        pairs, openRem, closeRem - 1, current + ')', indent + 1));
+    }
+
+    // BASE CASE
+    document.write(".".repeat(indent) + "2nd base case. Returning " + results + "&lt;br /&gt;");
+    return results; <span class="codeannotationcode" aria-label="annotation6">❻</span>
+}
+
+document.write(&lt;pre&gt;"All combinations of 2 balanced parentheses:&lt;br /&gt;");
+document.write("Results: ", getBalancedParens(2), "&lt;/pre&gt;");
+&lt;/script&gt;</code></pre>
+<p class="calibre22">The output of these programs looks like this:</p>
+<pre class="calibre23"><code class="calibre11">All combinations of 2 balanced parentheses:
+Start of pairs=2, openRem=2, closeRem=2, current=""
+Adding open parenthesis.
+.Start of pairs=2, openRem=1, closeRem=2, current="("
+.Adding open parenthesis.
+..Start of pairs=2, openRem=0, closeRem=2, current="(("
+..Adding close parenthesis.
+...Start of pairs=2, openRem=0, closeRem=1, current="(()"
+...Adding close parenthesis.
+....Start of pairs=2, openRem=0, closeRem=0, current="(())"
+....1st base case. Returning ['(())']
+...2nd base case. Returning ['(())']
+..2nd base case. Returning ['(())']
+.Adding close parenthesis.
+..Start of pairs=2, openRem=1, closeRem=1, current="()"
+..Adding open parenthesis.
+...Start of pairs=2, openRem=0, closeRem=1, current="()("
+<span type="pagebreak" title="143" id="calibre_link-177" class="calibre17"></span>...Adding close parenthesis.
+....Start of pairs=2, openRem=0, closeRem=0, current="()()"
+....1st base case. Returning ['()()']
+...2nd base case. Returning ['()()']
+..2nd base case. Returning ['()()']
+.2nd base case. Returning ['(())', '()()']
+2nd base case. Returning ['(())', '()()']
+Results: ['(())', '()()']</code></pre>
+<p class="calibre22">The <code class="calibre11">getBalancedParens()</code> function <span class="codeannotation" aria-label="annotation1">❶</span> requires one argument, the number of pairs of parentheses, when called by the user. However, it needs to pass additional information in the arguments to its recursive calls. These include the number of opening parentheses that remain to be added (<code class="calibre11">openRem</code>), the number of closing parentheses that remain to be added (<code class="calibre11">closeRem</code>), and the current balanced parentheses string being built (<code class="calibre11">current</code>). Both <code class="calibre11">openRem</code> and <code class="calibre11">closeRem</code> start as the same value as the <code class="calibre11">pairs</code> argument, and <code class="calibre11">current</code> starts as the blank string. An <code class="calibre11">indent</code> argument is used only for the debugging output to show the program’s level of recursive function call.</p>
+<p class="calibre22">The function first checks the number of opening and closing parentheses remaining to be added <span class="codeannotation" aria-label="annotation2">❷</span>. If both are <code class="calibre11">0</code>, we’ve reached the first base case, and the string in <code class="calibre11">current</code> is finished. Since the <code class="calibre11">getBalancedParens()</code> function returns a list of strings, we put <code class="calibre11">current</code> in a list and return it <span class="codeannotation" aria-label="annotation3">❸</span>.</p>
+<p class="calibre22">Otherwise, the function continues on to the recursive case. If possible opening parentheses remain <span class="codeannotation" aria-label="annotation4">❹</span>, the function calls <code class="calibre11">getBalancedParens()</code> with an opening parenthesis added to the current argument. If more closing parentheses are remaining than opening parentheses <span class="codeannotation" aria-label="annotation5">❺</span>, the function calls <code class="calibre11">getBalancedParens()</code> with a closing parenthesis added to the current argument. This check ensures that an unmatched closing parenthesis won’t be added, as this would make the string unbalanced, such as the second closing parenthesis in <code class="calibre11">())</code>.</p>
+<p class="calibre22">After these recursive cases is an unconditional base case that returns all the strings returned from the two recursive function calls (and, of course, the recursive function calls made by these recursive function calls, and so on) <span class="codeannotation" aria-label="annotation6">❻</span>.</p>
+<h2 id="calibre_link-319" class="calibre6">Power Set: Finding All Subsets of a Set</h2>
+<p class="bodyfirst">The <em class="calibre10">power set</em> of a set is the set of every possible subset of that set. For example, the power set of {A, B, C} is {{ }, {A}, {B}, {C}, {A, B}, {A, C}, {B, C}, {A, B, C}}. This is equivalent to the set of every possible <em class="calibre10">k</em>-combination of a set. After all, the power set of {A, B, C} contains all its 0-combinations, 1-combinations, 2-combinations, and 3-combinations. </p>
+<p class="calibre22">If you’re looking for a real-world example in which you would need to generate the power set of a set, imagine a job interviewer asked you to generate the power set of a set. It is astronomically unlikely you’ll need to generate the power set of a set for any other reason, including the job you are interviewing for.</p>
+<p class="calibre22"><span type="pagebreak" title="144" id="calibre_link-525" class="calibre17"></span>To find every power set of a set, we could reuse our existing <code class="calibre11">getCombos()</code> function, calling it repeatedly with each possible <em class="calibre10">k</em> argument. This approach is taken by the <em class="calibre10">powerSetCombinations.py</em> and <em class="calibre10">powerSetCombinations.html</em> programs in the downloadable resources file from <a href="https://nostarch.com/recursive-book-recursion" class="linkurl">https://nostarch.com/recursive-book-recursion</a>.</p>
+<p class="calibre22">However, we can use a more efficient way to generate power sets. Let’s consider the power set of {A, B}, which is {{A, B}, {A}, {B}, { }}. Now say we add one more element, C, to the set and want to generate the power set of {A, B, C}. We have the four sets in the power set of {A, B} we already generated; in addition, we have these same four sets but with the element C added to them: {{A, B, C}, {A, C}, {B, C}, {C}}. <a href="#calibre_link-206" id="calibre_link-658" class="linkurl">Table 6-3</a> shows the pattern of how adding more elements to a set adds more sets to its power set.</p>
+<figure class="calibre25">
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-206" class="calibre40">Table 6-3</a>: How Power Sets Grow as New Elements (in Bold) Are Added to the Set</p></figcaption>
+<table id="calibre_link-659" border="1" class="calibre41">
+<thead class="calibre42">
+<tr class="calibre43">
+<td class="calibre44"><b class="calibre7">Set with new element</b></td>
+<td class="calibre44"><b class="calibre7">New sets to the power set</b></td>
+<td class="calibre44"><b class="calibre7">Complete power set</b></td>
+</tr>
+</thead>
+<tbody class="calibre45">
+<tr class="calibre46">
+<td class="calibre44">{ }</td>
+<td class="calibre44">{ }</td>
+<td class="calibre44">{{ }}</td>
+</tr>
+<tr class="calibre47">
+<td class="calibre44">{A}</td>
+<td class="calibre44">{A}</td>
+<td class="calibre44">{{ }, <b class="calibre7">{A}</b>}</td>
+</tr>
+<tr class="calibre46">
+<td class="calibre44">{A, B}</td>
+<td class="calibre44">{B}, {A, B}</td>
+<td class="calibre44">{{ }, {A}, <b class="calibre7">{B}</b>, <b class="calibre7">{A, B}</b>}</td>
+</tr>
+<tr class="calibre47">
+<td class="calibre44">{A, B, C}</td>
+<td class="calibre44">{C}, {A, C}, {B, C}, {A, B, C}</td>
+<td class="calibre44">{{ }, {A}, {B}, <b class="calibre7">{C}</b>, {A, B}, <b class="calibre7">{A, C}</b>, <b class="calibre7">{B, C}</b>, <b class="calibre7">{A, B, C}</b>}</td>
+</tr>
+<tr class="calibre46">
+<td class="calibre44">{A, B, C, D}</td>
+<td class="calibre44">{D}, {A, D}, {B, D}, {C, D}, {A, B, D}, {A, C, D}, {B, C, D}, {A, B, C, D}</td>
+<td class="calibre44">{{ }, {A}, {B}, {C}, <b class="calibre7">{D}</b>, {A, B}, {A, C}, <b class="calibre7">{A, D}</b>, {B, C}, <b class="calibre7">{B, D}</b>, <b class="calibre7">{C, D}</b>, {A, B, C}, {A, B, D}, {A, C, D}, <b class="calibre7">{B, C, D}</b>, <b class="calibre7">{A, B, C, D}</b>}</td>
+</tr>
+</tbody>
+</table>
+</figure>
+<p class="calibre22">The power sets of larger sets are similar to the power sets of smaller sets, hinting that we can create a recursive function to generate them. The base case is an empty set, and its power set is a set of just the empty set. We can use a head-tail technique for this recursive function. For each new element we add, we want to get the power set of the tail to add to our full power set. We also add the head element to each set in the tail power set. Together, these form the full power set for the <code class="calibre11">chars</code> argument.</p>
+<p class="calibre22">Let’s ask the three recursive algorithm questions about our power set algorithm:</p>
+<ol class="none">
+<li class="calibre9"><span class="runinhead">What is the base case?</span>  If <code class="calibre11">chars</code> is the blank string (the empty set), the function returns an array with just a blank string, since the empty set is the only subset of the empty set.</li>
+<li class="calibre9"><span class="runinhead">What argument is passed to the recursive function call?</span>  The tail of <code class="calibre11">chars</code> is passed. </li>
+<li class="calibre9"><span class="runinhead">How does this argument become closer to the base case?</span>  Since the recursive calls remove the heads from the <code class="calibre11">chars</code> arguments, eventually the <code class="calibre11">chars</code> argument becomes the blank string.</li>
+</ol>
+<p class="calibre22"><span type="pagebreak" title="145" id="calibre_link-178" class="calibre17"></span>The <code class="calibre11">getPowerSet()</code> recursive function is implemented in <em class="calibre10">powerSet.py</em>:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">def getPowerSet(chars, indent=0):
+    debugMsg = '.' * indent + 'In getPowerSet("' + chars + '")'
+    print(debugMsg + ', start.')
+
+  <span class="codeannotationcode" aria-label="annotation1">❶</span> if chars == '':
+        # BASE CASE
+        print(debugMsg + " base case returns ['']")
+        return ['']
+
+    # RECURSIVE CASE
+    powerSet = []
+    head = chars[0]
+    tail = chars[1:]
+
+    # First part, get the sets that don't include the head:
+    print(debugMsg, "part 1, get sets without head '" + head + "'")
+  <span class="codeannotationcode" aria-label="annotation2">❷</span> tailPowerSet = getPowerSet(tail, indent + 1)
+
+    # Second part, get the sets that include the head:
+    print(debugMsg, "part 2, get sets with head '" + head + "'")
+    for tailSet in tailPowerSet:
+        print(debugMsg, 'New set', head + tailSet)
+      <span class="codeannotationcode" aria-label="annotation3">❸</span> powerSet.append(head + tailSet)
+
+    powerSet = powerSet + tailPowerSet
+    print(debugMsg, 'returning', powerSet)
+  <span class="codeannotationcode" aria-label="annotation4">❹</span> return powerSet
+
+print('The power set of ABC:')
+print(getPowerSet('ABC'))</code></pre>
+<p class="calibre22">The equivalent JavaScript code is in <em class="calibre10">powerSet.html</em>:</p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+function getPowerSet(chars, indent) {
+    if (indent === undefined) {
+        indent = 0;
+    }
+    let debugMsg = ".".repeat(indent) + 'In getPowerSet("' + chars + '")';
+    document.write(debugMsg + ", start.&lt;br /&gt;");
+
+    if (chars == "") { <span class="codeannotationcode" aria-label="annotation1">❶</span>
+        // BASE CASE
+        document.write(debugMsg + " base case returns ['']&lt;br /&gt;");
+        return [''];
+    }
+
+    // RECURSIVE CASE
+    let powerSet = [];
+    let head = chars[0];
+    let tail = chars.slice(1, chars.length);
+
+<span type="pagebreak" title="146" id="calibre_link-526" class="calibre17"></span>    // First part, get the sets that don't include the head:
+    document.write(debugMsg +
+    " part 1, get sets without head '" + head + "'&lt;br /&gt;");
+    let tailPowerSet = getPowerSet(tail, indent + 1); <span class="codeannotationcode" aria-label="annotation2">❷</span>
+
+    // Second part, get the sets that include the head:
+    document.write(debugMsg +
+    " part 2, get sets with head '" + head + "'&lt;br /&gt;");
+    for (tailSet of tailPowerSet) {
+        document.write(debugMsg + " New set " + head + tailSet + "&lt;br /&gt;");
+        powerSet.push(head + tailSet); <span class="codeannotationcode" aria-label="annotation3">❸</span>
+    }
+
+    powerSet = powerSet.concat(tailPowerSet);
+    document.write(debugMsg + " returning " + powerSet + "&lt;br /&gt;");
+    return powerSet; <span class="codeannotationcode" aria-label="annotation4">❹</span>
+}
+
+document.write("&lt;pre&gt;The power set of ABC:&lt;br /&gt;")
+document.write(getPowerSet("ABC") + "&lt;br /&gt;&lt;/pre&gt;");
+&lt;/script&gt;</code></pre>
+<p class="calibre22">The programs output the following:</p>
+<pre class="calibre23"><code class="calibre11">The power set of ABC:
+In getPowerSet("ABC"), start.
+In getPowerSet("ABC") part 1, get sets without head 'A'
+.In getPowerSet("BC"), start.
+.In getPowerSet("BC") part 1, get sets without head 'B'
+..In getPowerSet("C"), start.
+..In getPowerSet("C") part 1, get sets without head 'C'
+...In getPowerSet(""), start.
+...In getPowerSet("") base case returns ['']
+..In getPowerSet("C") part 2, get sets with head 'C'
+..In getPowerSet("C") New set C
+..In getPowerSet("C") returning ['C', '']
+.In getPowerSet("BC") part 2, get sets with head 'B'
+.In getPowerSet("BC") New set BC
+.In getPowerSet("BC") New set B
+.In getPowerSet("BC") returning ['BC', 'B', 'C', '']
+In getPowerSet("ABC") part 2, get sets with head 'A'
+In getPowerSet("ABC") New set ABC
+In getPowerSet("ABC") New set AB
+In getPowerSet("ABC") New set AC
+In getPowerSet("ABC") New set A
+In getPowerSet("ABC") returning ['ABC', 'AB', 'AC', 'A', 'BC', 'B', 'C', '']
+['ABC', 'AB', 'AC', 'A', 'BC', 'B', 'C', '']</code></pre>
+<p class="calibre22"><span type="pagebreak" title="147" id="calibre_link-148" class="calibre17"></span>The <code class="calibre11">getPowerSet()</code> function accepts a single argument: the string <code class="calibre11">chars</code>, which contains the characters of the original set. The base case occurs when <code class="calibre11">chars</code> is the blank string <span class="codeannotation" aria-label="annotation1">❶</span>, representing an empty set. Recall that the power set is the set of all subsets of the original set. Thus, the power set of the empty set is simply a set containing the empty set, since the empty set is the only subset of the empty set. This is why the base case returns <code class="calibre11">['']</code>.</p>
+<p class="calibre22">The recursive case is split into two parts. The first part is acquiring the power set of the tail of <code class="calibre11">chars</code>. We’ll use the leap-of-faith principle and just assume the call to <code class="calibre11">getPowerSet()</code> returns the power set of the tail correctly <span class="codeannotation" aria-label="annotation2">❷</span>, even though at this point we’d still be in the process of writing the code for <code class="calibre11">getPowerSet()</code>.</p>
+<p class="calibre22">To form the complete power set of <code class="calibre11">chars</code>, the second part of the recursive case forms new sets by adding the head to each of the tail power sets <span class="codeannotation" aria-label="annotation3">❸</span>. Together with the sets from the first part, this forms the power set of <code class="calibre11">chars</code> to return at the end of the function <span class="codeannotation" aria-label="annotation4">❹</span>.</p>
+<h2 id="calibre_link-320" class="calibre6">Summary</h2>
+<p class="bodyfirst">Permutations and combinations are two problem domains that many programmers don’t know how to even begin to approach. While recursion is often an overly complicated solution for common programming problems, it’s well suited for the complexity of the tasks in this chapter.</p>
+<p class="calibre22">The chapter began with a brief introduction to set theory. This lays the basis for the data structures that our recursive algorithms operate on. A set is a collection of distinct elements. A subset consists of none, some, or all the elements of a set. While sets have no ordering for their elements, a permutation is a specific ordering of the elements in a set. And a combination, which has no ordering, is a specific selection of none, some, or all the elements in a set. A <em class="calibre10">k</em>-combination of a set is a subset of <em class="calibre10">k</em> elements selected from the set.</p>
+<p class="calibre22">Permutations and combinations can include an element once or can repeat elements. We call these permutations or combinations without repetition and with repetition, respectively. These are implemented by different algorithms.</p>
+<p class="calibre22">This chapter also tackled the balanced parentheses problem that is commonly used in coding interviews. Our algorithm builds the strings of balanced parentheses by starting with a blank string and adding opening and closing parentheses. This approach involves backtracking to earlier strings, making recursion an ideal technique.</p>
+<p class="calibre22">Finally, this chapter featured a recursive function for generating power sets&mdash;that is, sets of all possible <em class="calibre10">k</em>-combinations of the elements of a set. The recursive function we create to do this is much more efficient than repeatedly calling our combinations function for each possible size of subset.</p>
+<h2 id="calibre_link-321" class="calibre6"><span type="pagebreak" title="148" id="calibre_link-142" class="calibre20"></span>Further Reading</h2>
+<p class="bodyfirst">Generating permutations and combinations only scratches the surface of what you can do with permutations and combinations, as well as the field of mathematical logic known as <em class="calibre10">set theory</em>. The following Wikipedia articles provide plenty of further details on these topics, as do the Wikipedia articles that each links to:</p>
+<ul class="calibre38">
+<li class="calibre9"><a href="https://en.wikipedia.org/wiki/Set_theory" class="linkurl">https://en.wikipedia.org/wiki/Set_theory</a></li>
+<li class="calibre9"><a href="https://en.wikipedia.org/wiki/Combination" class="linkurl">https://en.wikipedia.org/wiki/Combination</a></li>
+<li class="calibre9"><a href="https://en.wikipedia.org/wiki/Permutation" class="linkurl">https://en.wikipedia.org/wiki/Permutation</a></li>
+</ul>
+<p class="calibre22">The Python standard library comes with implementations of permutation, combination, and other algorithms in its <code class="calibre11">itertools</code> module. This module is documented at <a href="https://docs.python.org/3/library/itertools.html" class="linkurl">https://docs.python.org/3/library/itertools.html</a>.</p>
+<p class="calibre22">Permutations and combinations are also covered in statistics and probability math courses. Khan Academy’s unit on counting, permutations, and combinations can be found online at <a href="https://www.khanacademy.org/math/statistics-probability/counting-permutations-and-combinations" class="linkurl">https://www.khanacademy.org/math/statistics-probability/counting-permutations-and-combinations</a>.</p>
+<h2 id="calibre_link-322" class="calibre6">Practice Questions</h2>
+<p class="bodyfirst">Test your comprehension by answering the following questions:</p>
+<ol class="decimal">
+<li value="1" class="calibre9">Do sets have a specific order for their elements? Do permutations? Do combinations?</li>
+<li value="2" class="calibre9">How many permutations (without repetition) are there of a set of <em class="calibre10">n</em> elements?</li>
+<li value="3" class="calibre9">How many combinations (without repetition) are there of a set of <em class="calibre10">n</em> elements?</li>
+<li value="4" class="calibre9">Is {A, B, C} a subset of {A, B, C}?</li>
+<li value="5" class="calibre9">What is the formula for calculating <em class="calibre10">n choose k</em>, the number of possible combinations of <em class="calibre10">k</em> elements selected from a set of <em class="calibre10">n</em> elements?</li>
+<li value="6" class="calibre9">Identify which of the following are permutations or combinations, with or without repetition:
+<ol class="lower-alpha">
+<li value="1" class="calibre9">AAA, AAB, AAC, ABA, ABB, ABC, ACA, ACB, ACC, BAA, BAB, BAC, BBA, BBB, BBC, BCA, BCB, BCC, CAA, CAB, CAC, CBA, CBB, CBC, CCA, CCB, CCC</li>
+<li value="2" class="calibre9">ABC, ACB, BAC, BCA, CAB</li>
+<li value="3" class="calibre9">(None), A, B, C, AB, AC, BC, ABC</li>
+<li value="4" class="calibre9">(None), A, B, C, AA, AB, AC, BB, BC, CC, AAA, AAB, AAC, ABB, ABC, ACC, BBB, BBC, BCC, CCC</li>
+</ol></li>
+<li value="7" class="calibre9"><span type="pagebreak" title="149" id="calibre_link-527" class="calibre17"></span>Draw a tree graph that can be used to generate all possible combinations of the set {A, B, C, D}.</li>
+<li value="8" class="calibre9">Answer the three questions about recursive solutions for each of the recursive algorithms presented in this chapter:
+<ol class="lower-alpha">
+<li value="1" class="calibre9">What is the base case?</li>
+<li value="2" class="calibre9">What argument is passed to the recursive function call? </li>
+<li value="3" class="calibre9">How does this argument become closer to the base case? </li>
+</ol>
+<p class="bodyfirst">Then re-create the recursive algorithms from this chapter without looking at the original code.</p></li>
+</ol>
+<h2 id="calibre_link-323" class="calibre6">Practice Projects</h2>
+<p class="bodyfirst">For practice, write a function for the following task:</p>
+<ol class="decimal">
+<li value="1" class="calibre9">The permutation function in this chapter operates on characters in a string value. Modify it so that the sets are represented by lists (in Python) or arrays (in JavaScript) and the elements can be values of any data type. For example, your new function should be able to generate permutations of integer values, rather than strings.</li>
+<li value="2" class="calibre9">The combination function in this chapter operates on characters in a string value. Modify it so that the sets are represented by lists (in Python) or arrays (in JavaScript) and the elements can be values of any data type. For example, your new function should be able to generate combinations of integer values, rather than strings.</li>
+</ol>
+</section>
+</div>
+
+
+
+
+<div><a href="chapter5.html">Prev: Chapter 5 - Divide-and-Conquer Algorithms</a> | <a href="chapter7.html">Next: Chapter 7 - Memoization and Dynamic Programming</a></div></body></html>

@@ -1,0 +1,585 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="recursion-style.css" rel="stylesheet" type="text/css" /><title>Chapter 13 - Fractal Art Maker</title></head><body>
+
+
+
+<div style="background-color: #eeeddd; float: right; height: 310px; font-family: sans-serif;" id="otherbooks">
+  <a href="#" onclick="document.getElementById('otherbooks').outerHTML='';" style="vertical-align: top;">(close)</a><br />
+
+  <a target="_blank" href="https://nostarch.com/automatestuff2" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_automate.link');"><img src="/images/cover_automate2_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/big-book-small-python-projects" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_bigbookpython.link');"><img src="/images/cover_bigbookpython_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/beyond-basic-stuff-python" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_beyond.link');"><img src="/images/cover_beyond_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/inventwithpython" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_invent.link');"><img src="/images/cover_invent4th_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://www.amazon.com/Making-Games-Python-Pygame-Sweigart/dp/1469901730?ie=UTF8&amp;tag=playwithpyth-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1469901730" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_pygame.link');"><img src="/images/cover_makinggames_thumb.webp" style="height: 200px; border: solid black 1px; /"></a>
+  <a target="_blank" href="https://nostarch.com/crackingcodes" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_hacking.link');"><img src="/images/cover_crackingcodes_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/scratchplayground"><img src="/images/cover_scratchprogrammingplayground_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/codingwithminecraft"><img src="/images/cover_codingwithminecraft_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <br />
+  <a href="https://inventwithpython.com/automateudemy">Use this link to get a discount on the Automate the Boring Stuff online video course.</a><br />
+  <a href="https://www.patreon.com/AlSweigart">Support me on Patreon</a>
+</div>
+
+<div><a href="chapter12.html">Prev: Chapter 12 - Sliding-Tile Solver</a> | <a href="chapter14.html">Next: Chapter 14 - Droste Maker</a></div>
+
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-395">
+<section class="toclist">
+<header class="calibre14">
+<h1 class="chapter">
+<span class="partnumber"><span type="pagebreak" title="259" id="calibre_link-573" class="calibre36"></span>13</span><br class="calibre18" />
+<span class="parttitle">Fractal Art Maker</span></h1>
+</header>
+<figure class="opener">
+<img src="images/000060.webp" alt="" class="calibre16" />
+</figure>
+<p class="chapterintro"><span class="calibre" itemid="xref_target_Chapter 9 ">Chapter 9 </span>introduced you to programs that draw many well-known fractals with the <code class="calibre56">turtle</code> Python module, but you can also make your own fractal art with the project in this chapter. The Fractal Art Maker program uses Python’s <code class="calibre56">turtle</code> module to turn simple shapes into complex designs with minimal additional code. </p>
+<p class="calibre24">The project in this chapter comes with nine example fractals, although you can also write new functions to create fractals of your design. Modify the example fractals to produce radically different artwork or write code from scratch to implement your own creative vision.</p>
+<aside type="sidebar" class="authors">
+<div class="top"><hr class="calibre29" /></div>
+<section class="note">
+<h2 class="calibre30"><span class="notehead">Note</span></h2>
+<p class="calibre31"> For a thorough explanation of the functions in the <code class="calibre13">turtle</code> module, return to <span class="calibre" itemid="xref_target_Chapter 9">Chapter 9</span>.</p>
+<div class="top"><hr class="calibre29" /></div>
+</section>
+</aside>
+<h2 id="calibre_link-396" class="calibre6"><span type="pagebreak" title="260" id="calibre_link-115" class="calibre20"></span>The Built-in Fractals</h2>
+<p class="bodyfirst">You can direct your computer to create an unlimited number of fractals. <a href="#calibre_link-465" id="calibre_link-697" class="linkurl">Figure 13-1</a> shows the nine fractals that come with the Fractal Art Maker program that we’ll use in this chapter. These are produced from functions that draw a simple square or equilateral triangle as the base shape, then introduce slight differences in their recursive configuration to produce completely different images.</p>
+<figure class="calibre25">
+<img src="images/000056.webp" class="calibre16" alt="Nine labeled turtle graphics screenshots. Four Corners: a square containing an intricate hexagonal pattern. Spiral Squares: a spiral created by overlapping gray and white squares. Double Spiral Squares: a spiral created by overlapping multiple sets of white and gray squares. Triangle Spiral: a spiral created by overlapping the outlines of triangles. Conway’s Game of Life: a white square partially filled in by smaller gray squares. Those smaller squares are partially filled in by smaller white-and-dark-gray squares. Sierpinski Triangle: a Sierpinski triangle, as seen in Chapters 1 and 9. Wave: a wave created out of many smaller triangles and wave shapes. Horn: a gray-and-white-striped spiral horn shape. Snowflake: a snowflake shape." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-465" class="linkurl">Figure 13-1</a>: The nine example fractals that come with the Fractal Art Maker program</p></figcaption>
+</figure>
+<p class="calibre22">You can produce all of these fractals by setting the <code class="calibre11">DRAW_FRACTAL</code> constant at the top of the program to an integer from <code class="calibre11">1</code> to <code class="calibre11">9</code> and then running the Fractal Art Maker program. You can also set <code class="calibre11">DRAW_FRACTAL</code> to <code class="calibre11">10</code> or <code class="calibre11">11</code> to draw the basic square and triangle shapes, respectively, that compose these fractals, as shown in <a href="#calibre_link-466" id="calibre_link-698" class="linkurl">Figure 13-2</a>.</p>
+<span type="pagebreak" title="261" id="calibre_link-574" class="calibre17"></span><figure class="calibre25">
+<img src="images/000003.webp" class="calibre16" alt="Two turtle graphics screenshots, one showing a square and the other showing the outline of an equilateral triangle." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-466" class="linkurl">Figure 13-2</a>: The results of calling <span class="calibre"><code class="calibre39">drawFilledSquare()</code></span> (left) and <span class="calibre"><code class="calibre39">drawTriangleOutline()</code></span> (right) on their own</p></figcaption>
+</figure>
+<p class="calibre22">These shapes are fairly simple: a square filled with either white or gray, and a simple outline of a triangle. The <code class="calibre11">drawFractal()</code> function uses these basic shapes to create amazing fractals.</p>
+<h2 id="calibre_link-397" class="calibre6">The Fractal Art Maker Algorithm</h2>
+<p class="bodyfirst">The Fractal Art Maker’s algorithm has two major components: a shape-drawing function and the recursive <code class="calibre11">drawFractal()</code> function. </p>
+<p class="calibre22">The shape-drawing function draws a basic shape. The Fractal Art Maker program comes with the two shape-drawing functions shown previously in <a href="#calibre_link-466" class="linkurl">Figure 13-2</a>, <code class="calibre11">drawFilledSquare()</code> and <code class="calibre11">drawTriangleOutline()</code>, but you can also create your own. We pass a shape-drawing function to the <code class="calibre11">drawFractal()</code> function as an argument, just as we passed the match functions to the file finder’s <code class="calibre11">walk()</code> function in <span class="calibre" itemid="xref_target_Chapter 10">Chapter 10</span>.</p>
+<p class="calibre22">The <code class="calibre11">drawFractal()</code> function also has a parameter indicating changes to the size, position, and angle of the shapes between recursive calls to <code class="calibre11">drawFractal()</code>. We’ll cover these specific details later in this chapter, but let’s look at one example: fractal 7, which draws a wave-like image. </p>
+<p class="calibre22">The program produces the Wave fractal by calling the <code class="calibre11">drawTriangleOutline()</code> shape-drawing function, which creates a single triangle. The additional arguments to <code class="calibre11">drawFractal()</code> tell it to make three recursive calls to <code class="calibre11">drawFractal()</code>. <a href="#calibre_link-467" id="calibre_link-699" class="linkurl">Figure 13-3</a> shows the triangle produced by the original call to <code class="calibre11">drawFractal()</code> and the triangles produced by the three recursive calls.</p>
+<span type="pagebreak" title="262" id="calibre_link-575" class="calibre17"></span><figure class="calibre25">
+<img src="images/000074.webp" class="calibre16" alt="Two turtle graphics screenshots. The first shows the outline of an equilateral triangle. The second shows that same triangle outline, as well as three additional, smaller equilateral triangles: two above the first, and the third below it and rotated slightly to the left." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-467" class="linkurl">Figure 13-3</a>: The triangle produced by the first call to <span class="calibre"><code class="calibre39">drawFractal()</code></span> (left) and the first set of three recursive calls (right)</p></figcaption>
+</figure>
+<p class="calibre22">The first recursive call tells <code class="calibre11">drawFractal()</code> to call <code class="calibre11">drawTriangleOutline()</code> but with a triangle that is half the size and positioned to the top left of the previous triangle. The second recursive call produces a triangle to the top right of the previous triangle that is 30 percent of its size. The third recursive call produces a triangle below the previous triangle that is half its size and rotated 15 degrees compared to it. </p>
+<p class="calibre22">Each of these three recursive calls to <code class="calibre11">drawFractal()</code> makes three more recursive calls to <code class="calibre11">drawFractal()</code>, producing nine new triangles. The new triangles have the same changes to their size, position, and angle relative to their previous triangle. The top-left triangle is always half the size of the previous triangle, while the bottom triangle is always rotated 15 degrees more. <a href="#calibre_link-468" id="calibre_link-700" class="linkurl">Figure 13-4</a> shows the triangles produced by the first and second levels of recursion.</p>
+<figure class="calibre25">
+<img src="images/000068.webp" class="calibre16" alt="Two turtle graphics screenshots. The first shows the same four triangles shown in Figure 13-3. The second shows three smaller triangles clustered in the same pattern around each of the three new triangles." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-468" class="linkurl">Figure 13-4</a>: The first level of recursive calls to <span class="calibre"><code class="calibre39">drawFractal()</code></span> (left) and the nine new triangles of the second level of recursive calls (right)</p></figcaption>
+</figure>
+<p class="calibre22"><span type="pagebreak" title="263" id="calibre_link-576" class="calibre17"></span>The nine calls to <code class="calibre11">drawFractal()</code> that produce these nine new triangles each make three recursive calls to <code class="calibre11">drawFractal()</code>, producing 27 new triangles at the next level of recursion. As this pattern of recursion continues, eventually the triangles become so small that <code class="calibre11">drawFractal()</code> stops making new recursive calls. This is one of the base cases for the recursive <code class="calibre11">drawFractal()</code> function. The other occurs when the recursive depth reaches a specified level. Either way, these recursive calls produce the final Wave fractal in <a href="#calibre_link-469" id="calibre_link-701" class="linkurl">Figure 13-5</a>.</p>
+<figure class="calibre25">
+<img src="images/000071.webp" class="calibre16" alt="Turtle graphics screenshot of the Wave fractal." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-469" class="linkurl">Figure 13-5</a>: The final Wave fractal after each triangle recursively generates three more triangles</p></figcaption>
+</figure>
+<p class="calibre22">The nine example fractals in <a href="#calibre_link-465" class="linkurl">Figure 13-1</a> that come with the Fractal Art Maker are made with just two shape-drawing functions and a few changes to the arguments to <code class="calibre11">drawFractal()</code>. Let’s take a look at the Fractal Art Maker’s code to see how it accomplishes this.</p>
+<h2 id="calibre_link-398" class="calibre6">The Complete Fractal Art Maker Program</h2>
+<p class="bodyfirst">Enter the following code into a new file and save it as <a href="http://fractalArtMaker.py" class="linkurl">fractalArtMaker.py</a>. This program relies on Python’s built-in <code class="calibre11">turtle</code> module, so no JavaScript code is used for this chapter’s project:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">import turtle, math
+
+DRAW_FRACTAL = 1 # Set to 1 through 11 and run the program.
+
+<span type="pagebreak" title="264" id="calibre_link-577" class="calibre17"></span>turtle.tracer(5000, 0) # Increase the first argument to speed up the drawing.
+turtle.hideturtle()
+
+def drawFilledSquare(size, depth):
+    size = int(size)
+
+    # Move to the top-right corner before drawing:
+    turtle.penup()
+    turtle.forward(size // 2)
+    turtle.left(90)
+    turtle.forward(size // 2)
+    turtle.left(180)
+    turtle.pendown()
+
+    # Alternate between white and gray (with black border):
+    if depth % 2 == 0:
+        turtle.pencolor('black')
+        turtle.fillcolor('white')
+    else:
+        turtle.pencolor('black')
+        turtle.fillcolor('gray')
+
+    # Draw a square:
+    turtle.begin_fill()
+    for i in range(4): # Draw four lines.
+        turtle.forward(size)
+        turtle.right(90)
+    turtle.end_fill()
+
+
+def drawTriangleOutline(size, depth):
+    size = int(size)
+
+    # Move the turtle to the top of the equilateral triangle:
+    height = size * math.sqrt(3) / 2
+    turtle.penup()
+    turtle.left(90) # Turn to face upward.
+    turtle.forward(height * (2/3)) # Move to the top corner.
+    turtle.right(150) # Turn to face the bottom-right corner.
+    turtle.pendown()
+
+    # Draw the three sides of the triangle:
+    for i in range(3):
+        turtle.forward(size)
+        turtle.right(120)
+
+
+def drawFractal(shapeDrawFunction, size, specs, maxDepth=8, depth=0):
+    if depth &gt; maxDepth or size &lt; 1:
+        return # BASE CASE
+
+    # Save the position and heading at the start of this function call:
+    initialX = turtle.xcor()
+    initialY = turtle.ycor()
+    initialHeading = turtle.heading()
+
+<span type="pagebreak" title="265" id="calibre_link-578" class="calibre17"></span>    # Call the draw function to draw the shape:
+    turtle.pendown()
+    shapeDrawFunction(size, depth)
+    turtle.penup()
+
+    # RECURSIVE CASE
+    for spec in specs:
+        # Each dictionary in specs has keys 'sizeChange', 'xChange',
+        # 'yChange', and 'angleChange'. The size, x, and y changes
+        # are multiplied by the size parameter. The x change and y
+        # change are added to the turtle's current position. The angle
+        # change is added to the turtle's current heading.
+        sizeCh = spec.get('sizeChange', 1.0)
+        xCh = spec.get('xChange', 0.0)
+        yCh = spec.get('yChange', 0.0)
+        angleCh = spec.get('angleChange', 0.0)
+
+        # Reset the turtle to the shape's starting point:
+        turtle.goto(initialX, initialY)
+        turtle.setheading(initialHeading + angleCh)
+        turtle.forward(size * xCh)
+        turtle.left(90)
+        turtle.forward(size * yCh)
+        turtle.right(90)
+
+        # Make the recursive call:
+        drawFractal(shapeDrawFunction, size * sizeCh, specs, maxDepth,
+        depth + 1)
+
+
+if DRAW_FRACTAL == 1:
+    # Four Corners:
+    drawFractal(drawFilledSquare, 350,
+        [{'sizeChange': 0.5, 'xChange': -0.5, 'yChange': 0.5},
+         {'sizeChange': 0.5, 'xChange': 0.5, 'yChange': 0.5},
+         {'sizeChange': 0.5, 'xChange': -0.5, 'yChange': -0.5},
+         {'sizeChange': 0.5, 'xChange': 0.5, 'yChange': -0.5}], 5)
+elif DRAW_FRACTAL == 2:
+    # Spiral Squares:
+    drawFractal(drawFilledSquare, 600, [{'sizeChange': 0.95,
+        'angleChange': 7}], 50)
+elif DRAW_FRACTAL == 3:
+    # Double Spiral Squares:
+    drawFractal(drawFilledSquare, 600,
+        [{'sizeChange': 0.8, 'yChange': 0.1, 'angleChange': -10},
+         {'sizeChange': 0.8, 'yChange': -0.1, 'angleChange': 10}])
+elif DRAW_FRACTAL == 4:
+    # Triangle Spiral:
+    drawFractal(drawTriangleOutline, 20,
+        [{'sizeChange': 1.05, 'angleChange': 7}], 80)
+elif DRAW_FRACTAL == 5:
+    # Conway's Game of Life Glider:
+    third = 1 / 3
+    drawFractal(drawFilledSquare, 600,
+        [{'sizeChange': third, 'yChange': third},
+<span type="pagebreak" title="266" id="calibre_link-579" class="calibre17"></span>         {'sizeChange': third, 'xChange': third},
+         {'sizeChange': third, 'xChange': third, 'yChange': -third},
+         {'sizeChange': third, 'yChange': -third},
+         {'sizeChange': third, 'xChange': -third, 'yChange': -third}])
+elif DRAW_FRACTAL == 6:
+    # Sierpiński Triangle:
+    toMid = math.sqrt(3) / 6
+    drawFractal(drawTriangleOutline, 600,
+        [{'sizeChange': 0.5, 'yChange': toMid, 'angleChange': 0},
+         {'sizeChange': 0.5, 'yChange': toMid, 'angleChange': 120},
+         {'sizeChange': 0.5, 'yChange': toMid, 'angleChange': 240}])
+elif DRAW_FRACTAL == 7:
+    # Wave:
+    drawFractal(drawTriangleOutline, 280,
+        [{'sizeChange': 0.5, 'xChange': -0.5, 'yChange': 0.5},
+         {'sizeChange': 0.3, 'xChange': 0.5, 'yChange': 0.5},
+         {'sizeChange': 0.5, 'yChange': -0.7, 'angleChange': 15}])
+elif DRAW_FRACTAL == 8:
+    # Horn:
+    drawFractal(drawFilledSquare, 100,
+        [{'sizeChange': 0.96, 'yChange': 0.5, 'angleChange': 11}], 100)
+elif DRAW_FRACTAL == 9:
+    # Snowflake:
+    drawFractal(drawFilledSquare, 200,
+        [{'xChange': math.cos(0 * math.pi / 180),
+          'yChange': math.sin(0 * math.pi / 180), 'sizeChange': 0.4},
+         {'xChange': math.cos(72 * math.pi / 180),
+          'yChange': math.sin(72 * math.pi / 180), 'sizeChange': 0.4},
+         {'xChange': math.cos(144 * math.pi / 180),
+          'yChange': math.sin(144 * math.pi / 180), 'sizeChange': 0.4},
+         {'xChange': math.cos(216 * math.pi / 180),
+          'yChange': math.sin(216 * math.pi / 180), 'sizeChange': 0.4},
+         {'xChange': math.cos(288 * math.pi / 180),
+          'yChange': math.sin(288 * math.pi / 180), 'sizeChange': 0.4}])
+elif DRAW_FRACTAL == 10:
+    # The filled square shape:
+    turtle.tracer(1, 0)
+    drawFilledSquare(400, 0)
+elif DRAW_FRACTAL == 11:
+    # The triangle outline shape:
+    turtle.tracer(1, 0)
+    drawTriangleOutline(400, 0)
+else:
+    assert False, 'Set DRAW_FRACTAL to a number from 1 to 11.'
+
+turtle.exitonclick() # Click the window to exit.</code></pre>
+<p class="calibre22">When you run this program, it will show the first of nine fractal images from <a href="#calibre_link-465" class="linkurl">Figure 13-1</a>. You can change the <code class="calibre11">DRAW_FRACTAL</code> constant at the beginning of the source code to any integer from <code class="calibre11">1</code> to <code class="calibre11">9</code> and run the program again to see a new fractal. After learning how the program works, you’ll also be able to create your own shape-drawing functions and call <code class="calibre11">drawFractal()</code> to produce fractals of your own design.</p>
+<h2 id="calibre_link-399" class="calibre6"><span type="pagebreak" title="267" id="calibre_link-580" class="calibre20"></span>Setting Up Constants and the Turtle Configuration</h2>
+<p class="bodyfirst">The first lines of the program cover basic setup steps for our turtle-based program:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">import turtle, math
+
+DRAW_FRACTAL = 1 # Set to 1 through 11 and run the program.
+
+turtle.tracer(5000, 0) # Increase the first argument to speed up the drawing.
+turtle.hideturtle()</code></pre>
+<p class="calibre22">The program imports the <code class="calibre11">turtle</code> module for drawing. It also imports the <code class="calibre11">math</code> module for the <code class="calibre11">math.sqrt()</code> function, which the Sierpiński Triangle fractal will use, and the <code class="calibre11">math.cos()</code> and <code class="calibre11">math.sin()</code> functions, for the Snowflake fractal. </p>
+<p class="calibre22">The <code class="calibre11">DRAW_FRACTAL</code> constant can be set to any integer from <code class="calibre11">1</code> to <code class="calibre11">9</code> to draw one of the nine built-in fractals the program produces. You can also set it to <code class="calibre11">10</code> or <code class="calibre11">11</code> to show the output of the square or triangle shape-drawing function, respectively.</p>
+<p class="calibre22">We also call some turtle functions to prepare for drawing. The <code class="calibre11">turtle.tracer(5000, 0)</code> call speeds up the drawing of the fractal. The <code class="calibre11">5000</code> argument tells the <code class="calibre11">turtle</code> module to wait until 5,000 turtle drawing instructions have been processed before rendering the drawing on the screen, and the <code class="calibre11">0</code> argument tells it to pause for 0 milliseconds after each drawing instruction. Otherwise, the <code class="calibre11">turtle</code> module would render the image after each drawing instruction, which significantly slows the program if we want only the final image. </p>
+<p class="calibre22">You can change this call to <code class="calibre11">turtle.tracer(1, 10)</code> if you want to slow the drawing and watch the lines as they’re produced. This can be useful when making your own fractals to debug any problems with the drawing.</p>
+<p class="calibre22">The <code class="calibre11">turtle.hideturtle()</code> call hides the triangle shape on the screen that represents the turtle’s current position and heading. (<em class="calibre10">Heading</em> is another term for <em class="calibre10">direction</em>.) We call this function so that the marker doesn’t appear in the final image.</p>
+<h2 id="calibre_link-400" class="calibre6">Working with the Shape-Drawing Functions</h2>
+<p class="bodyfirst">The <code class="calibre11">drawFractal()</code> function uses a shape-drawing function passed to it to draw the individual parts of the fractal. This is usually a simple shape, such as a square or triangle. The beautiful complexity of the fractals emerges from <code class="calibre11">drawFractal()</code> recursively calling this function for each individual component of the whole fractal.</p>
+<p class="calibre22">The shape-drawing functions for the Fractal Art Maker have two parameters: <code class="calibre11">size</code> and <code class="calibre11">depth</code>. The <code class="calibre11">size</code> parameter is the length of the sides of the square or triangle it draws. The shape-drawing functions should always use arguments to <code class="calibre11">turtle.forward()</code> that are based on <code class="calibre11">size</code> so that the lengths will be proportionate to <code class="calibre11">size</code> at each level of recursion. Avoid code like <code class="calibre11">turtle.forward(100)</code> or <code class="calibre11">turtle.forward(200)</code>; instead, use code that is based <span type="pagebreak" title="268" id="calibre_link-581" class="calibre17"></span>on the <code class="calibre11">size</code> parameter, like <code class="calibre11">turtle.forward(size)</code> or <code class="calibre11">turtle.forward(size * 2)</code>. In Python’s <code class="calibre11">turtle</code> module, <code class="calibre11">turtle.forward(1)</code> moves the turtle by one <em class="calibre10">unit</em>, which is not necessarily the same as one pixel.</p>
+<p class="calibre22">The shape-drawing functions’ second parameter is the recursive depth of <code class="calibre11">drawFractal()</code>. The original call to <code class="calibre11">drawFractal()</code> has the <code class="calibre11">depth</code> parameter set to <code class="calibre11">0</code>. Recursive calls to <code class="calibre11">drawFractal()</code> use <code class="calibre11">depth + 1</code> as the <code class="calibre11">depth</code> parameter. In the Wave fractal, the first triangle in the center of the window has a depth argument of <code class="calibre11">0</code>. The three triangles created next have a depth of <code class="calibre11">1</code>. The nine triangles around those three triangles have a depth of <code class="calibre11">2</code>, and so on.</p>
+<p class="calibre22">Your shape-drawing function can ignore this argument, but using it can cause interesting variations to the basic shape. For example, the <code class="calibre11">drawFilledSquare()</code> shape-drawing function uses <code class="calibre11">depth</code> to alternate between drawing white squares and gray squares. Keep this in mind if you’d like to create your own shape-drawing functions for the Fractal Art Maker program, as they must accept a <code class="calibre11">size</code> and <code class="calibre11">depth</code> argument. </p>
+<h3 id="calibre_link-401" class="calibre33">The drawFilledSquare() Function</h3>
+<p class="bodyfirst">The <code class="calibre11">drawFilledSquare()</code> function draws a filled-in square with sides of length <code class="calibre11">size</code>. To color the square, we use the <code class="calibre11">turtle</code> module’s <code class="calibre11">turtle.begin_fill()</code> and <code class="calibre11">turtle.end_fill()</code> functions to make the square either white or gray, with a black border, depending on whether the <code class="calibre11">depth</code> argument is even or odd. Because these squares are filled in, any squares drawn on top of them later will cover them.</p>
+<p class="calibre22">Like all shape-drawing functions for the Fractal Art Maker program, <code class="calibre11">drawFilledSquare()</code> accepts a <code class="calibre11">size</code> and <code class="calibre11">depth</code> parameter:</p>
+<pre class="calibre23"><code class="calibre11">def drawFilledSquare(size, depth):
+    size = int(size)</code></pre>
+<p class="calibre22">The <code class="calibre11">size</code> argument could be a floating-point number with a fractional part, which sometimes causes the <code class="calibre11">turtle</code> module to make slightly asymmetrical and uneven drawings. To prevent this, the first line of the function rounds <code class="calibre11">size</code> down to an integer.</p>
+<p class="calibre22">When the function draws the square, it assumes the turtle is in the center of the square. Thus, the turtle must first move to the top-right corner of the square, relative to its initial heading:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">    # Move to the top-right corner before drawing:
+    turtle.penup()
+    turtle.forward(size // 2)
+    turtle.left(90)
+    turtle.forward(size // 2)
+    turtle.left(180)
+    turtle.pendown()</code></pre>
+<p class="calibre22">The <code class="calibre11">drawFractal()</code> function always has the pen down and ready to draw when the shape-drawing function is called, so <code class="calibre11">drawFilledSquare()</code> must call <code class="calibre11"></code><span type="pagebreak" title="269" id="calibre_link-582" class="calibre17"></span>turtle.penup() to avoid drawing a line as it moves to the starting position. To find the starting position relative to the middle of the square, the turtle must first move half of the square’s length (that is, <code class="calibre11">size // 2</code>) forward, to the future right edge of the square. Next the turtle turns 90 degrees to face up and then moves <code class="calibre11">size // 2 </code>units forward to the top-right corner. The turtle is now facing the wrong way, so it turns around 180 degrees and places the pen down so that it can begin drawing.</p>
+<p class="calibre22">Note that <em class="calibre10">top-right</em> and <em class="calibre10">up</em> are relative to the direction the turtle is originally facing. This code works just as well if the turtle begins facing to the right at 0 degrees or has a heading of 90, 42, or any other number of degrees. When you create your own shape-drawing functions, stick to the relative turtle movement functions like <code class="calibre11">turtle.forward()</code>, <code class="calibre11">turtle.left()</code>, and <code class="calibre11">turtle.right()</code> instead of absolute turtle movement functions like <code class="calibre11">turtle.goto()</code>.</p>
+<p class="calibre22">Next, the <code class="calibre11">depth</code> argument tells the function whether it should draw a white square or a gray one:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">    # Alternate between white and gray (with black border):
+    if depth % 2 == 0:
+        turtle.pencolor('black')
+        turtle.fillcolor('white')
+    else:
+        turtle.pencolor('black')
+        turtle.fillcolor('gray')</code></pre>
+<p class="calibre22">If <code class="calibre11">depth</code> is even, the <code class="calibre11">depth % 2 == 0</code> condition is <code class="calibre11">True</code>, and the square’s <em class="calibre10">fill color</em> is white. Otherwise, the code sets the fill color to gray. Either way, the border of the square, determined by the <em class="calibre10">pen color</em>, is set to black. To change either of these colors, use strings of common color names, like <code class="calibre11">red</code> or <code class="calibre11">yellow</code>, or an HTML color code comprising a hash mark and six hexadecimal digits, like <code class="calibre11">#24FF24</code> for lime green or <code class="calibre11">#AD7100</code> for brown. </p>
+<p class="calibre22">The website <a href="https://html-color.codes" class="linkurl">https://html-color.codes</a> has charts for many HTML color codes. The fractals in this black-and-white book lack color, but your computer can render your own fractals in a bright range of colors!</p>
+<p class="calibre22">With the colors set, we can finally draw the four lines of the actual square:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">    # Draw a square:
+    turtle.begin_fill()
+    for i in range(4): # Draw four lines.
+        turtle.forward(size)
+        turtle.right(90)
+    turtle.end_fill()</code></pre>
+<p class="calibre22">To tell the <code class="calibre11">turtle</code> module that we intend to draw a filled-in shape and not just the outline, we call the <code class="calibre11">turtle.begin_fill()</code> function. Next is a <code class="calibre11">for</code> loop that draws a line of length <code class="calibre11">size</code> and turns the turtle 90 degrees to the right. The <code class="calibre11">for</code> loop repeats this four times to create the square. When the function finally calls <code class="calibre11">turtle.end_fill()</code>, the filled-in square appears on the screen. </p>
+<h3 id="calibre_link-402" class="calibre33"><span type="pagebreak" title="270" id="calibre_link-583" class="calibre34"></span>The drawTriangleOutline() Function</h3>
+<p class="bodyfirst">The second shape-drawing function draws the outline of an equilateral triangle whose sides have a length of <code class="calibre11">size</code>. The function draws the triangle oriented with one corner at the top and two corners at the bottom. <a href="#calibre_link-470" id="calibre_link-702" class="linkurl">Figure 13-6</a> illustrates the various dimensions of an equilateral triangle.</p>
+<figure class="calibre25">
+<img src="images/000084.webp" class="calibre16" alt="Annotated diagram of an equilateral triangle showing the following properties. Size: the length of one side. Angle: 60 degrees. Height: size times math.sqrt(3) / 2. Also shows two-thirds of the height and one-third of the height." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-470" class="linkurl">Figure 13-6</a>: The measurements of an equilateral triangle with sides the length of <span class="calibre"><code class="calibre39">size</code></span></p></figcaption>
+</figure>
+<p class="calibre22">Before we begin drawing, we must determine the triangle’s height based on the length of its sides. Geometry tells us that, for equilateral triangles with sides of length <em class="calibre10">L</em>, the height <em class="calibre10">h</em> of the triangle is <em class="calibre10">L</em> times the square root of 3 divided by 2. In our function, <em class="calibre10">L</em> corresponds to the <code class="calibre11">size</code> parameter, so our code sets the height variable as follows:</p>
+<pre class="calibre23"><code class="calibre11"><code class="calibre57">height = size * math.sqrt(3) / 2</code></code></pre>
+<p class="calibre22">Geometry also tells us that the center of the triangle is one-third of the height from the bottom side and two-thirds of the height from the top point. This gives us the information we need to move the turtle to its starting position:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">def drawTriangleOutline(size, depth):
+    size = int(size)
+
+    # Move the turtle to the top of the equilateral triangle:
+    height = size * math.sqrt(3) / 2
+    turtle.penup()
+    turtle.left(90) # Turn to face upward.
+    turtle.forward(height * (2/3)) # Move to the top corner.
+    turtle.right(150) # Turn to face the bottom-right corner.
+    turtle.pendown()</code></pre>
+<p class="calibre22">To reach the top corner, we turn the turtle 90 degrees left to face up (relative to the turtle’s original heading right at 0 degrees) and then move forward a number of units equal to <code class="calibre11">height * (2/3)</code>. The turtle is still facing up, so to begin drawing the line on the right side, the turtle must turn 90 degrees right to face rightward, then an additional 60 degrees to face the bottom-right corner of the triangle. This is why we call <code class="calibre11">turtle.right(150)</code>.</p>
+<p class="calibre22"><span type="pagebreak" title="271" id="calibre_link-584" class="calibre17"></span>At this point, the turtle is ready to start drawing the triangle, so we lower the pen by calling <code class="calibre11">turtle.pendown()</code>. A <code class="calibre11">for</code> loop will handle drawing the three sides:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">    # Draw the three sides of the triangle:
+    for i in range(3):
+        turtle.forward(size)
+        turtle.right(120)</code></pre>
+<p class="calibre22">Drawing the actual triangle is a matter of moving forward by <code class="calibre11">size</code> units, and then turning 120 degrees to the right, three separate times. The third and final 120-degree turn leaves the turtle facing its original direction. You can see these movements and turns in <a href="#calibre_link-471" id="calibre_link-703" class="linkurl">Figure 13-7</a>.</p>
+<figure class="calibre25">
+<img src="images/000078.webp" class="calibre16" alt="Diagram of four equilateral triangles. Each triangle has one additional bolded line, representing the steps needed to draw the triangle and return the turtle to its original heading." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-471" class="linkurl">Figure 13-7</a>: Drawing an equilateral triangle involves three forward movements and three 120-degree turns.</p></figcaption>
+</figure>
+<p class="calibre22">The <code class="calibre11">drawTriangleOutline()</code> function draws only the outline and not a filled-in shape, so it doesn’t call <code class="calibre11">turtle.begin_fill()</code> and <code class="calibre11">turtle.end_fill()</code> as <code class="calibre11">drawFilledSquare()</code> does. </p>
+<h2 id="calibre_link-403" class="calibre6">Using the Fractal Drawing Function</h2>
+<p class="bodyfirst">Now that we have two sample drawing functions to work with, let’s examine the main function in the Fractal Art Maker project, <code class="calibre11">drawFractal()</code>. This function has three required parameters and one optional one: <code class="calibre11">shapeDrawFunction</code>, <code class="calibre11">size</code>, <code class="calibre11">specs</code>, and <code class="calibre11">maxDepth</code>.</p>
+<p class="calibre22">The <code class="calibre11">shapeDrawFunction</code> parameter expects a function, like <code class="calibre11">drawFilledSquare()</code> or <code class="calibre11">drawTriangleOutline()</code>. The <code class="calibre11">size</code> parameter expects the starting size passed to the drawing function. Often, a value between <code class="calibre11">100</code> and <code class="calibre11">500</code> is a good starting size, though this depends on the code in your shape-drawing function, and finding the right value may require experimentation. </p>
+<p class="calibre22">The <code class="calibre11">specs</code> parameter expects a list of dictionaries that specify how the recursive shapes should change their size, position, and angle as <code class="calibre11">drawFractal()</code> recursively calls itself. These specifications are described later in this section.</p>
+<p class="calibre22">To prevent <code class="calibre11">drawFractal()</code> from recursing until it causes a stack overflow, the <code class="calibre11">maxDepth</code> parameter holds the number of times <code class="calibre11">drawFractal()</code> should recursively call itself. By default, <code class="calibre11">maxDepth</code> has a value of <code class="calibre11">8</code>, but you can provide a different value if you want more or fewer recursive shapes. </p>
+<p class="calibre22">A fifth parameter, <code class="calibre11">depth</code>, is handled by <code class="calibre11">drawFractal()</code>’s recursive call to itself and defaults to <code class="calibre11">0</code>. You don’t need to specify it when you call <code class="calibre11">drawFractal()</code>.</p>
+<h3 id="calibre_link-404" class="calibre33"><span type="pagebreak" title="272" id="calibre_link-585" class="calibre34"></span>Setting Up the Function</h3>
+<p class="bodyfirst">The first thing the <code class="calibre11">drawFractal()</code> function does is check for its two base cases:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">def drawFractal(shapeDrawFunction, size, specs, maxDepth=8, depth=0):
+    if depth &gt; maxDepth or size &lt; 1:
+        return # BASE CASE</code></pre>
+<p class="calibre22">If <code class="calibre11">depth</code> is greater than <code class="calibre11">maxDepth</code>, the function will stop the recursion and return. The other base case occurs if <code class="calibre11">size</code> is less than <code class="calibre11">1</code>, at which point the shapes being drawn would be too small to be seen on the screen and so the function should simply return.</p>
+<p class="calibre22">We keep track of the turtle’s original position and heading in three variables: <code class="calibre11">initialX</code>, <code class="calibre11">initialY</code>, and <code class="calibre11">initialHeading</code>. This way, no matter where the shape-drawing function leaves the turtle positioned or what direction it is headed, <code class="calibre11">drawFractal()</code> can revert the turtle back to the original position and heading for the next recursive call:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">    # Save the position and heading at the start of this function call:
+    initialX = turtle.xcor()
+    initialY = turtle.ycor()
+    initialHeading = turtle.heading()</code></pre>
+<p class="calibre22">The <code class="calibre11">turtle.xcor()</code> and <code class="calibre11">turtle.ycor()</code> functions return the absolute x- and y-coordinates of the turtle on the screen. The <code class="calibre11">turtle.heading()</code> function returns the direction in which the turtle is pointed in degrees.</p>
+<p class="calibre22">The next few lines call the shape-drawing function passed to the <code class="calibre11">shapeDrawFunction</code> parameter:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">    # Call the draw function to draw the shape:
+    turtle.pendown()
+    shapeDrawFunction(size, depth)
+    turtle.penup()</code></pre>
+<p class="calibre22">Because the value passed as the argument for the <code class="calibre11">shapeDrawFunction</code> parameter is a function, the code <code class="calibre11">shapeDrawFunction(size, depth)</code> calls this function with the values in <code class="calibre11">size</code> and <code class="calibre11">depth</code>. The pen is lowered before and raised after the <code class="calibre11">shapeDrawFunction()</code> call to ensure that the shape-drawing function can consistently expect the pen to be down when the drawing begins.</p>
+<h3 id="calibre_link-405" class="calibre33">Using the Specifications Dictionary</h3>
+<p class="bodyfirst">After the call to <code class="calibre11">shapeDrawFunction()</code>, the rest of <code class="calibre11">drawFractal()</code>’s code is devoted to making recursive calls to <code class="calibre11">drawFractal()</code> based on the specification in the <code class="calibre11">specs</code> list’s dictionaries. For each dictionary, <code class="calibre11">drawFractal()</code> makes one recursive call to <code class="calibre11">drawFractal()</code>. If <code class="calibre11">specs</code> is a list with one dictionary, every call to <code class="calibre11"></code><span type="pagebreak" title="273" id="calibre_link-586" class="calibre17"></span>drawFractal() results in only one recursive call to <code class="calibre11">drawFractal()</code>. If <code class="calibre11">specs</code> is a list with three dictionaries, every call to <code class="calibre11">drawFractal()</code> results in three recursive calls to <code class="calibre11">drawFractal()</code>.</p>
+<p class="calibre22">The dictionaries in the <code class="calibre11">specs</code> parameter provide specifications for each recursive call. Each of these dictionaries has the keys <code class="calibre11">sizeChange</code>, <code class="calibre11">xChange</code>, <code class="calibre11">yChange</code>, and <code class="calibre11">angleChange</code>. These dictate how the size of the fractal, the position of the turtle, and the heading of the turtle change for a recursive <code class="calibre11">drawFractal()</code> call. <a href="#calibre_link-431" id="calibre_link-704" class="linkurl">Table 13-1</a> describes the four keys in a specification.</p>
+<figure class="calibre25">
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-431" class="calibre40">Table 13-1</a>: Keys in the Specification Dictionaries</p></figcaption>
+<table id="calibre_link-705" border="1" class="calibre41">
+<thead class="calibre42">
+<tr class="calibre43">
+<td class="calibre44"><b class="calibre7">Key</b></td>
+<td class="calibre44"><b class="calibre7">Default value</b></td>
+<td class="calibre44"><b class="calibre7">Description</b></td>
+</tr>
+</thead>
+<tbody class="calibre45">
+<tr class="calibre46">
+<td class="calibre44"><code class="calibre39">sizeChange</code></td>
+<td class="calibre44"><code class="calibre39">1.0</code></td>
+<td class="calibre44">The next recursive shape’s size value is the current size multiplied by this value.</td>
+</tr>
+<tr class="calibre47">
+<td class="calibre44"><code class="calibre39">xChange</code></td>
+<td class="calibre44"><code class="calibre39">0.0</code></td>
+<td class="calibre44">The next recursive shape’s x-coordinate is the current x-coordinate plus the current size multiplied by this value.</td>
+</tr>
+<tr class="calibre46">
+<td class="calibre44"><code class="calibre39">yChange</code></td>
+<td class="calibre44"><code class="calibre39">0.0</code></td>
+<td class="calibre44">The next recursive shape’s y-coordinate is the current y-coordinate plus the current size multiplied by this value.</td>
+</tr>
+<tr class="calibre47">
+<td class="calibre44"><code class="calibre39">angleChange</code></td>
+<td class="calibre44"><code class="calibre39">0.0</code></td>
+<td class="calibre44">The next recursive shape’s starting angle is the current starting angle plus this value.</td>
+</tr>
+</tbody>
+</table>
+</figure>
+<p class="calibre22">Let’s take a look at the specification dictionary for the Four Corners fractal, which produces the top-left image shown previously in <a href="#calibre_link-465" class="linkurl">Figure 13-1</a>. The call to <code class="calibre11">drawFractal()</code> for the Four Corners fractal passes the following list of dictionaries for the <code class="calibre11">specs</code> parameter:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">[{'sizeChange': 0.5, 'xChange': -0.5, 'yChange': 0.5},
+ {'sizeChange': 0.5, 'xChange': 0.5, 'yChange': 0.5},
+ {'sizeChange': 0.5, 'xChange': -0.5, 'yChange': -0.5},
+ {'sizeChange': 0.5, 'xChange': 0.5, 'yChange': -0.5}]</code></pre>
+<p class="calibre22">The <code class="calibre11">specs</code> list has four dictionaries, so each call to <code class="calibre11">drawFractal()</code> that draws a square will, in turn, recursively call <code class="calibre11">drawFractal()</code> four more times to draw four more squares. <a href="#calibre_link-472" id="calibre_link-706" class="linkurl">Figure 13-8</a> shows this progression of squares (which alternate between white and gray).</p>
+<p class="calibre22">To determine the size of the next square to be drawn, the value for the <code class="calibre11">sizeChange</code> key is multiplied by the current <code class="calibre11">size</code> parameter. The first dictionary in the <code class="calibre11">specs</code> list has a <code class="calibre11">sizeChange</code> value of <code class="calibre11">0.5</code>, which makes the next recursive call have a size argument of <code class="calibre11">350 * 0.5</code>, or <code class="calibre11">175</code> units. This makes the next square half the size of the previous square. A <code class="calibre11">sizeChange</code> value of <code class="calibre11">2.0</code> would, for example, double the size of the next square. If the dictionary has no <code class="calibre11">sizeChange</code> key, the value defaults to <code class="calibre11">1.0</code> for no change to the size.</p>
+<span type="pagebreak" title="274" id="calibre_link-587" class="calibre17"></span><figure class="calibre25">
+<img src="images/000038.webp" class="calibre16" alt="Six turtle graphics screenshots. The first shows a white square. The second shows four smaller gray squares covering each corner of the white square. The third shows four smaller white squares covering the corners of each of those smaller gray squares. This pattern continues in the subsequent three screenshots. As the squares begin to overlap, their outlines remain visible." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-472" class="linkurl">Figure 13-8</a>: Each step of the Four Corners example from left to right, top to bottom. Each square recursively produces four more squares at its corners, with colors alternating between white and gray.</p></figcaption>
+</figure>
+<p class="calibre22">To determine the x-coordinate of the next square, the first dictionary’s <code class="calibre11">xChange</code> value, <code class="calibre11">-0.5 </code>in this case, is multiplied by the size. When <code class="calibre11">size</code> is <code class="calibre11">350</code>, this means the next square has an x-coordinate of <code class="calibre11">-175</code> units relative to the turtle’s current position. This <code class="calibre11">xChange</code> value and the <code class="calibre11">yChange</code> key’s value of <code class="calibre11">0.5</code> places the next square’s position a distance of 50 percent of the current square’s size, to the left and above the current square’s position. This happens to center it on the top-left corner of the current square.</p>
+<p class="calibre22">If you look at the three other dictionaries in the <code class="calibre11">specs</code> list, you’ll notice they all have a <code class="calibre11">sizeChange</code> value of <code class="calibre11">0.5</code>. The difference between them is that their <code class="calibre11">xChange</code> and <code class="calibre11">yChange</code> values place them in the other three corners of the current square. As a result, the next four squares are drawn centered on the four corners of the current square.</p>
+<p class="calibre22">The dictionaries in the <code class="calibre11">specs</code> list for this example don’t have an <code class="calibre11">angleChange</code> value, so this value defaults to <code class="calibre11">0.0</code> degrees. A positive <code class="calibre11">angleChange</code> value indicates a counterclockwise rotation, while a negative value indicates a clockwise rotation.</p>
+<p class="calibre22">Each dictionary represents a separate square to be drawn each time the recursive function is called. If we were to remove the first dictionary from the <code class="calibre11">specs</code> list, each <code class="calibre11">drawFractal()</code> call would produce only three squares, as in <a href="#calibre_link-473" id="calibre_link-707" class="linkurl">Figure 13-9</a>.</p>
+<span type="pagebreak" title="275" id="calibre_link-588" class="calibre17"></span><figure class="calibre25">
+<img src="images/000047.webp" class="calibre16" alt="Six screenshots identical to those in Figure 13-8, except the pattern develops on only three corners of the original square." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-473" class="linkurl">Figure 13-9</a>: The Four Corners fractal with the first dictionary removed from the <span class="calibre"><code class="calibre39">specs</code></span> list</p></figcaption>
+</figure>
+<h3 id="calibre_link-406" class="calibre33">Applying the Specifications </h3>
+<p class="bodyfirst">Let’s look at how the code in <code class="calibre11">drawFractal()</code> actually does everything we’ve described:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">    # RECURSIVE CASE
+    for spec in specs:
+        # Each dictionary in specs has keys 'sizeChange', 'xChange',
+        # 'yChange', and 'angleChange'. The size, x, and y changes
+        # are multiplied by the size parameter. The x change and y
+        # change are added to the turtle's current position. The angle
+        # change is added to the turtle's current heading.
+        sizeCh = spec.get('sizeChange', 1.0)
+        xCh = spec.get('xChange', 0.0)
+        yCh = spec.get('yChange', 0.0)
+        angleCh = spec.get('angleChange', 0.0)</code></pre>
+<p class="calibre22">The <code class="calibre11">for</code> loop assigns an individual specification dictionary in the <code class="calibre11">specs</code> list to the loop variable <code class="calibre11">spec</code> on each iteration of the loop. The <code class="calibre11">get()</code> dictionary method calls pull the values for the <code class="calibre11">sizeChange</code>, <code class="calibre11">xChange</code>, <code class="calibre11">yChange</code>, and <code class="calibre11">angleChange</code> keys from this dictionary and assign them to the shorter-named <code class="calibre11">sizeCh</code>, <code class="calibre11">xCh</code>, <code class="calibre11">yCh</code>, and <code class="calibre11">angleCh</code> variables. The <code class="calibre11">get()</code> method substitutes a default value if the key doesn’t exist in the dictionary.</p>
+<p class="calibre22">Next, the turtle’s position and heading are reset to the values indicated when <code class="calibre11">drawFractal()</code> was first called. This ensures that the recursive calls <span type="pagebreak" title="276" id="calibre_link-589" class="calibre17"></span>from previous loop iterations don’t leave the turtle in some other place. Then the heading and position are changed according to the <code class="calibre11">angleCh</code>, <code class="calibre11">xCh</code>, and <code class="calibre11">yCh</code> variables:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">        # Reset the turtle to the shape's starting point:
+        turtle.goto(initialX, initialY)
+        turtle.setheading(initialHeading + angleCh)
+
+        turtle.forward(size * xCh)
+        turtle.left(90)
+        turtle.forward(size * yCh)
+        turtle.right(90)</code></pre>
+<p class="calibre22">The x-change and y-change positions are expressed relative to the turtle’s current heading. If the turtle’s heading is <code class="calibre11">0</code>, the turtle’s relative x-axis is the same as the actual x-axis on the screen. However, if the turtle’s heading is, say, <code class="calibre11">45</code>, the turtle’s relative x-axis is at a 45-degree tilt. Moving “right” along the turtle’s relative x-axis would then move at an up-right angle. </p>
+<p class="calibre22">This is why moving forward by <code class="calibre11">size * xCh</code> moves the turtle along its relative x-axis. If <code class="calibre11">xCh</code> is negative, <code class="calibre11">turtle.forward()</code> moves left along the turtle’s relative x-axis. The <code class="calibre11">turtle.left(90)</code> call points the turtle along the turtle’s relative y-axis, and <code class="calibre11">turtle.forward(size * yCh)</code> moves the turtle to the next shape’s starting position. However, the <code class="calibre11">turtle.left(90)</code> call changed the turtle’s heading, so <code class="calibre11">turtle.right(90)</code> is called to reset it back to its original direction.</p>
+<p class="calibre22"><a href="#calibre_link-474" id="calibre_link-708" class="linkurl">Figure 13-10</a> shows how these four lines of code move the turtle to the right along its relative x-axis and up along its relative y-axis and leave it in the correct heading, no matter what its initial heading was.</p>
+<figure class="calibre25">
+<img src="images/000018.webp" class="calibre16" alt="Four turtle graphics screenshots of the same two perpendicular lines, each time rotated a different way." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-474" class="linkurl">Figure 13-10</a>: In each of these four images, the turtle always moves 100 units “right” and “up” along the relative x-axis and y-axis of its initial heading.</p></figcaption>
+</figure>
+<p class="calibre22">Finally, with the turtle in the correct position and heading for the next shape, we make the recursive call to <code class="calibre11">drawFractal()</code>:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">        # Make the recursive call:
+        drawFractal(shapeDrawFunction, size * sizeCh, specs, maxDepth,
+        depth + 1)</code></pre>
+<p class="calibre22"><span type="pagebreak" title="277" id="calibre_link-590" class="calibre17"></span>The <code class="calibre11">shapeDrawFunction</code>, <code class="calibre11">specs</code>, and <code class="calibre11">maxDepth</code> arguments are passed to the recursive <code class="calibre11">drawFractal()</code> call unchanged. However, <code class="calibre11">size * sizeCh</code> is passed for the next <code class="calibre11">size</code> parameter to reflect the change in the <code class="calibre11">size</code> of the recursive shape, and <code class="calibre11">depth + 1</code> is passed for the <code class="calibre11">depth</code> parameter to increment it for the next shape-drawing function call.</p>
+<h2 id="calibre_link-407" class="calibre6">Creating the Example Fractals</h2>
+<p class="bodyfirst">Now that we’ve covered how the shape-drawing functions and recursive <code class="calibre11">drawFractal()</code> function work, let’s look at the nine example fractals that come with the Fractal Art Maker. You can see these examples in <a href="#calibre_link-465" class="linkurl">Figure 13-1</a>.</p>
+<h3 id="calibre_link-408" class="calibre33">Four Corners</h3>
+<p class="bodyfirst">The first fractal is <em class="calibre10">Four Corners</em>, which begins as a large square. As the function calls itself, the fractal’s specifications cause four smaller squares to be drawn in the four corners of the square:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">if DRAW_FRACTAL == 1:
+    # Four Corners:
+    drawFractal(drawFilledSquare, 350,
+        [{'sizeChange': 0.5, 'xChange': -0.5, 'yChange': 0.5},
+         {'sizeChange': 0.5, 'xChange': 0.5, 'yChange': 0.5},
+         {'sizeChange': 0.5, 'xChange': -0.5, 'yChange': -0.5},
+         {'sizeChange': 0.5, 'xChange': 0.5, 'yChange': -0.5}], 5)</code></pre>
+<p class="calibre22">The call to <code class="calibre11">drawFractal()</code> here limits the maximum depth to <code class="calibre11">5</code>, as any more tends to make the fractal so dense that the fine detail becomes hard to see. This fractal appears in <a href="#calibre_link-472" class="linkurl">Figure 13-8</a>.</p>
+<h3 id="calibre_link-409" class="calibre33">Spiral Squares</h3>
+<p class="bodyfirst">The <em class="calibre10">Spiral Squares fractal</em><em class="calibre10"> </em>also starts as a large square, but it creates just one new square on each recursive call:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">elif DRAW_FRACTAL == 2:
+    # Spiral Squares:
+    drawFractal(drawFilledSquare, 600, [{'sizeChange': 0.95,
+        'angleChange': 7}], 50)</code></pre>
+<p class="calibre22">This square is slightly smaller and rotated by <code class="calibre11">7</code> degrees. The centers of all the squares are unchanged, so there’s no need to add <code class="calibre11">xChange</code> and <code class="calibre11">yChange</code> keys to the specification. The default maximum depth of <code class="calibre11">8</code> is too small to get an interesting fractal, so we increase it to <code class="calibre11">50</code> to produce a hypnotic spiral pattern.</p>
+<h3 id="calibre_link-410" class="calibre33"><span type="pagebreak" title="278" id="calibre_link-591" class="calibre34"></span>Double Spiral Squares</h3>
+<p class="bodyfirst">The <em class="calibre10">Double Spiral Squares fractal</em> is similar to Spiral Squares, except each square creates two smaller squares. This creates an interesting fan effect, as the second square is drawn later and tends to cover up previously drawn squares:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">elif DRAW_FRACTAL == 3:
+    # Double Spiral Squares:
+    drawFractal(drawFilledSquare, 600,
+        [{'sizeChange': 0.8, 'yChange': 0.1, 'angleChange': -10},
+         {'sizeChange': 0.8, 'yChange': -0.1, 'angleChange': 10}])</code></pre>
+<p class="calibre22">The squares are created slightly higher or lower than their previous square and rotated either <code class="calibre11">10</code> or <code class="calibre11">-10</code> degrees. </p>
+<h3 id="calibre_link-411" class="calibre33">Triangle Spiral</h3>
+<p class="bodyfirst">The <em class="calibre10">Triangle Spiral</em> <em class="calibre10">fractal</em>, another variation of Spiral Squares, uses the <code class="calibre11">drawTriangleOutline()</code> shape-drawing function instead of <code class="calibre11">drawFilledSquare()</code>:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">elif DRAW_FRACTAL == 4:
+    # Triangle Spiral:
+    drawFractal(drawTriangleOutline, 20,
+        [{'sizeChange': 1.05, 'angleChange': 7}], 80)</code></pre>
+<p class="calibre22">Unlike the Spiral Squares fractal, the Triangle Spiral fractal begins at the small <code class="calibre11">size</code> of <code class="calibre11">20</code> units and slightly increases in size for each level of recursion. The <code class="calibre11">sizeChange</code> key is greater than <code class="calibre11">1.0</code>, so the shapes are always increasing in size. This means the base case occurs when the recursion reaches a depth of <code class="calibre11">80</code>, because the base case of <code class="calibre11">size</code> becoming less than <code class="calibre11">1</code> is never reached.</p>
+<h3 id="calibre_link-412" class="calibre33">Conway’s Game of Life Glider</h3>
+<p class="bodyfirst"><em class="calibre10">Conway’s Game of Life</em> is a famous example of cellular automata. The game’s simple rules cause interesting and wildly chaotic patterns to emerge on a 2D grid. One such pattern is a <em class="calibre10">Glider</em> consisting of five cells in a 3 × 3 space:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">elif DRAW_FRACTAL == 5:
+    # Conway's Game of Life Glider:
+    third = 1 / 3
+    drawFractal(drawFilledSquare, 600,
+        [{'sizeChange': third, 'yChange': third},
+         {'sizeChange': third, 'xChange': third},
+         {'sizeChange': third, 'xChange': third, 'yChange': -third},
+         {'sizeChange': third, 'yChange': -third},
+         {'sizeChange': third, 'xChange': -third, 'yChange': -third}])</code></pre>
+<p class="calibre22">The Glider fractal here has additional Gliders drawn inside each of its five cells. The <code class="calibre11">third</code> variable helps precisely set the position of the recursive shapes in the 3 × 3 space.</p>
+<p class="calibre22"><span type="pagebreak" title="279" id="calibre_link-592" class="calibre17"></span>You can find a Python implementation of Conway’s Game of Life in my book <em class="calibre10">The Big Book of Small Python Projects</em> (No Starch Press, 2021) and online at <a href="https://inventwithpython.com/bigbookpython/project13.html" class="linkurl">https://inventwithpython.com/bigbookpython/project13.html</a>. Tragically, John Conway, the mathematician and professor who developed Conway’s Game of Life, passed away of complications from COVID-19 in April 2020.</p>
+<h3 id="calibre_link-413" class="calibre33">Sierpiński Triangle</h3>
+<p class="bodyfirst">We created the <em class="calibre10">Sierpiński Triangle</em><em class="calibre10"> fractal</em> in <span class="calibre" itemid="xref_target_Chapter 9">Chapter 9</span>, but our Fractal Art Maker can re-create it as well by using the <code class="calibre11">drawTriangleOutline()</code> shape function. After all, a Sierpiński triangle is an equilateral triangle with three smaller equilateral triangles drawn in its interior:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">elif DRAW_FRACTAL == 6:
+    # Sierpiński Triangle:
+    toMid = math.sqrt(3) / 6
+    drawFractal(drawTriangleOutline, 600,
+        [{'sizeChange': 0.5, 'yChange': toMid, 'angleChange': 0},
+         {'sizeChange': 0.5, 'yChange': toMid, 'angleChange': 120},
+         {'sizeChange': 0.5, 'yChange': toMid, 'angleChange': 240}])</code></pre>
+<p class="calibre22">The center of these smaller triangles is <code class="calibre11">size * math.sqrt(3) / 6</code> units from the center of the previous triangle. The three calls adjust the heading of the turtle to <code class="calibre11">0</code>, <code class="calibre11">120</code>, and <code class="calibre11">240</code> degrees before moving up on the turtle’s relative y-axis.</p>
+<h3 id="calibre_link-414" class="calibre33">Wave</h3>
+<p class="bodyfirst">We discussed the <em class="calibre10">Wave fractal</em> at the start of this chapter, and you can see it in <a href="#calibre_link-469" class="linkurl">Figure 13-5</a>. This relatively simple fractal creates three smaller and distinct recursive triangles:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">elif DRAW_FRACTAL == 7:
+    # Wave:
+    drawFractal(drawTriangleOutline, 280,
+        [{'sizeChange': 0.5, 'xChange': -0.5, 'yChange': 0.5},
+         {'sizeChange': 0.3, 'xChange': 0.5, 'yChange': 0.5},
+         {'sizeChange': 0.5, 'yChange': -0.7, 'angleChange': 15}])</code></pre>
+<h3 id="calibre_link-415" class="calibre33">Horn</h3>
+<p class="bodyfirst">The <em class="calibre10">Horn fractal</em> resembles a ram’s horn:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">elif DRAW_FRACTAL == 8:
+    # Horn:
+    drawFractal(drawFilledSquare, 100,
+        [{'sizeChange': 0.96, 'yChange': 0.5, 'angleChange': 11}], 100)</code></pre>
+<p class="calibre22">This simple fractal is made up of squares, each of which is slightly smaller, moved up, and rotated <code class="calibre11">11</code> degrees from the previous square. We increase the maximum recursion depth to <code class="calibre11">100</code> to extend the horn into a tight spiral.</p>
+<h3 id="calibre_link-416" class="calibre33"><span type="pagebreak" title="280" id="calibre_link-593" class="calibre34"></span>Snowflake</h3>
+<p class="bodyfirst">The final fractal, <em class="calibre10">Snowflake</em>, is composed of squares laid out in a pentagon pattern. This is similar to the Four Corners fractal, but it uses five evenly spaced recursive squares instead of four:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">elif DRAW_FRACTAL == 9:
+    # Snowflake:
+    drawFractal(drawFilledSquare, 200,
+        [{'xChange': math.cos(0 * math.pi / 180),
+          'yChange': math.sin(0 * math.pi / 180), 'sizeChange': 0.4},
+         {'xChange': math.cos(72 * math.pi / 180),
+          'yChange': math.sin(72 * math.pi / 180), 'sizeChange': 0.4},
+         {'xChange': math.cos(144 * math.pi / 180),
+          'yChange': math.sin(144 * math.pi / 180), 'sizeChange': 0.4},
+         {'xChange': math.cos(216 * math.pi / 180),
+          'yChange': math.sin(216 * math.pi / 180), 'sizeChange': 0.4},
+         {'xChange': math.cos(288 * math.pi / 180),
+          'yChange': math.sin(288 * math.pi / 180), 'sizeChange': 0.4}])</code></pre>
+<p class="calibre22">This fractal uses the cosine and sine functions from trigonometry, implemented in Python’s <code class="calibre11">math.cos()</code> and <code class="calibre11">math.sin()</code> functions, to determine how to shift the squares along the x-axis and y-axis. A full circle has 360 degrees, so to evenly space out the five recursive squares in this circle, we place them at intervals of 0, 72, 144, 216, and 288 degrees. The <code class="calibre11">math.cos()</code> and <code class="calibre11">math.sin()</code> functions expect the angle argument to be in radians instead of degrees, so we must multiply these numbers by <code class="calibre11">math.pi / 180</code>.</p>
+<p class="calibre22">The end result is that each square is surrounded by five other squares, which are surrounded by five other squares, and so on, to form a crystal-like fractal that resembles a snowflake.</p>
+<h3 id="calibre_link-417" class="calibre33">Producing a Single Square or Triangle</h3>
+<p class="bodyfirst">For completion, you can also set <code class="calibre11">DRAW_FRACTAL</code> to <code class="calibre11">10</code> or <code class="calibre11">11</code> to view what a single call to <code class="calibre11">drawFilledSquare()</code> and <code class="calibre11">drawTriangleOutline()</code> produce in the turtle window. These shapes are drawn with a size of <code class="calibre11">600</code>:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">elif DRAW_FRACTAL == 10:
+    # The filled square shape:
+    turtle.tracer(1, 0)
+    drawFilledSquare(400, 0)
+elif DRAW_FRACTAL == 11:
+    # The triangle outline shape:
+    turtle.tracer(1, 0)
+    drawTriangleOutline(400, 0)
+turtle.exitonclick() # Click the window to exit.</code></pre>
+<p class="calibre22">After drawing the fractal or shape based on the value in <code class="calibre11">DRAW_FRACTAL</code>, the program calls <code class="calibre11">turtle.exitonclick()</code> so that the turtle window stays open until the user clicks it. Then the program terminates.</p>
+<h2 id="calibre_link-418" class="calibre6"><span type="pagebreak" title="281" id="calibre_link-594" class="calibre20"></span>Creating Your Own Fractals</h2>
+<p class="bodyfirst">You can create your own fractals by changing the specification passed to the <code class="calibre11">drawFractal()</code> function. Start by thinking about how many recursive calls you’d like each call to <code class="calibre11">drawFractal()</code> to generate, and how the size, position, and heading of the shapes should change. You can use the existing shape-drawing functions or create your own. </p>
+<p class="calibre22">For example, <a href="#calibre_link-475" id="calibre_link-709" class="linkurl">Figure 13-11</a> shows the nine built-in fractals, except the square and triangle functions have been swapped. Some of these produce bland shapes, but others can result in unexpected beauty.</p>
+<figure class="calibre25">
+<img src="images/000079.webp" class="calibre16" alt="The six fractals from Figure 13-1 with all the squares and triangles swapped." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-475" class="linkurl">Figure 13-11</a>: The nine fractals that come with Fractal Art Maker, with the shape-drawing functions swapped</p></figcaption>
+</figure>
+<h2 id="calibre_link-419" class="calibre6"><span type="pagebreak" title="282" id="calibre_link-595" class="calibre20"></span>Summary</h2>
+<p class="bodyfirst">The Fractal Art Maker projects demonstrate the endless possibilities of recursion. A simple recursive <code class="calibre11">drawFractal()</code> function, paired with a shape-drawing function, can create a large variety of detailed geometric art.</p>
+<p class="calibre22">At the core of Fractal Art Maker is the recursive <code class="calibre11">drawFractal()</code> function, which accepts another function as an argument. This second function draws a basic shape repeatedly by using the size, position, and heading given in the list of specification dictionaries. </p>
+<p class="calibre22">You can test an unlimited number of shape-drawing functions and specification settings. Let your creativity drive your fractal projects as you experiment with the code in this program.</p>
+<h2 id="calibre_link-420" class="calibre6">Further Reading</h2>
+<p class="bodyfirst">There are websites that allow you to create fractals. Interactive Fractal Tree at <a href="https://www.visnos.com/demos/fractal" class="linkurl">https://www.visnos.com/demos/fractal</a> has sliders to change a binary tree fractal’s angle and size parameters. Procedural Snowflake at <a href="https://procedural-snowflake.glitch.me" class="linkurl">https://procedural-snowflake.glitch.me</a> generates new snowflakes in your browser. Nico’s Fractal Machine at <a href="https://sciencevsmagic.net/fractal" class="linkurl">https://sciencevsmagic.net/fractal</a> creates animated drawings of fractals. You can find others by searching the web for <em class="calibre10">fractal maker</em> or <em class="calibre10">fractal generator online</em>.</p>
+</section>
+</div>
+
+
+
+
+<div><a href="chapter12.html">Prev: Chapter 12 - Sliding-Tile Solver</a> | <a href="chapter14.html">Next: Chapter 14 - Droste Maker</a></div></body></html>

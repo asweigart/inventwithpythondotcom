@@ -1,0 +1,265 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="recursion-style.css" rel="stylesheet" type="text/css" /><title>Chapter 14 - Droste Maker</title></head><body>
+
+
+
+<div style="background-color: #eeeddd; float: right; height: 310px; font-family: sans-serif;" id="otherbooks">
+  <a href="#" onclick="document.getElementById('otherbooks').outerHTML='';" style="vertical-align: top;">(close)</a><br />
+
+  <a target="_blank" href="https://nostarch.com/automatestuff2" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_automate.link');"><img src="/images/cover_automate2_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/big-book-small-python-projects" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_bigbookpython.link');"><img src="/images/cover_bigbookpython_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/beyond-basic-stuff-python" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_beyond.link');"><img src="/images/cover_beyond_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/inventwithpython" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_invent.link');"><img src="/images/cover_invent4th_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://www.amazon.com/Making-Games-Python-Pygame-Sweigart/dp/1469901730?ie=UTF8&amp;tag=playwithpyth-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1469901730" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_pygame.link');"><img src="/images/cover_makinggames_thumb.webp" style="height: 200px; border: solid black 1px; /"></a>
+  <a target="_blank" href="https://nostarch.com/crackingcodes" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_hacking.link');"><img src="/images/cover_crackingcodes_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/scratchplayground"><img src="/images/cover_scratchprogrammingplayground_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/codingwithminecraft"><img src="/images/cover_codingwithminecraft_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <br />
+  <a href="https://inventwithpython.com/automateudemy">Use this link to get a discount on the Automate the Boring Stuff online video course.</a><br />
+  <a href="https://www.patreon.com/AlSweigart">Support me on Patreon</a>
+</div>
+
+<div><a href="chapter13.html">Prev: Chapter 13 - Fractal Art Maker</a></div>
+
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-7">
+<section class="toclist">
+<header class="calibre14">
+<h1 class="chapter">
+<span class="partnumber"><span type="pagebreak" title="283" id="calibre_link-80" class="calibre36"></span>14</span><br class="calibre18" />
+<span class="parttitle">Droste Maker</span></h1>
+</header>
+<figure class="opener">
+<img src="images/000060.webp" alt="" class="calibre16" />
+</figure>
+<p class="chapterintro">The <em class="calibre10">Droste effect</em> is a recursive art technique named after a 1904 illustration on a tin of Droste’s Cacao, a Dutch brand of cocoa. Shown in <a href="#calibre_link-8" id="calibre_link-710" class="linkurl">Figure 14-1</a>, the tin features an image of a nurse holding a meal tray containing a tin of Droste cocoa, which itself bears the illustration. </p>
+<p class="calibre24">In this chapter we’ll create a Droste Maker program that can generate similar recursive images from any photograph or drawing you have, whether it be a museum patron looking at an exhibit of themself, a cat in front of a computer monitor of a cat in front of a computer monitor, or something else entirely.</p>
+<span type="pagebreak" title="284" id="calibre_link-120" class="calibre17"></span><figure class="calibre25">
+<img src="images/000089.webp" class="calibre16" alt="A tin of Droste cocoa from 1904. The illustration on the tin features a nurse holding a tray with a steaming mug and a tin of Droste cocoa. The recursive illustration on this tin is the same nurse holding a tray with a steaming mug and a tin of Droste cocoa." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-8" class="linkurl">Figure 14-1</a>: The recursive illustration on a tin of Droste’s Cacao</p></figcaption>
+</figure>
+<p class="calibre22">Using a graphics program such as Microsoft Paint or Adobe Photoshop, you’ll prepare the image by covering an area of it with a pure magenta color, indicating where to place the recursive image. The Python program uses the Pillow image library to read this image data and produce a recursive image.</p>
+<p class="calibre22">First, we’ll cover how to install the Pillow library and how the Droste Maker algorithm works. Next, we’ll present the Python source code for the program with accompanying explanation of the code.</p>
+<h2 id="calibre_link-421" class="calibre6">Installing the Pillow Python Library</h2>
+<p class="bodyfirst">This chapter’s project requires the Pillow image library. This library allows your Python programs to create and modify image files including PNGs, JPEGs, and GIFs. It has several functions to perform resizing, copying, cropping, and other common actions on images.</p>
+<p class="calibre22">To install this library on Windows, open a command prompt window and run <code class="bold">py -m pip install --user pillow</code>. To install this library on macOS <span type="pagebreak" title="285" id="calibre_link-55" class="calibre17"></span>or Linux, open a Terminal window and run python3 <code class="bold">-m pip install --user pillow</code>. This command makes Python use the pip installer program to download the module from the official Python Package Index at <a href="https://pypi.org" class="linkurl">https://pypi.org</a>.</p>
+<p class="calibre22">To verify that the installation worked, open a Python terminal and run <code class="bold">from PIL import Image</code>. (While the library’s name is Pillow, the Python module installed is named <code class="calibre11">PIL</code>, in capital letters.) If no error appears, the library was installed correctly.</p>
+<p class="calibre22">The official documentation for Pillow can be found at <a href="https://pillow.readthedocs.io" class="linkurl">https://pillow.readthedocs.io</a>. </p>
+<h2 id="calibre_link-422" class="calibre6">Painting Your Image</h2>
+<p class="bodyfirst">The next step is to prepare an image by setting a portion of it to the RGB (red, green, blue) color value (255, 0, 255). Computer graphics often use magenta to mark which pixels of an image should be rendered as transparent. Our program will treat these magenta pixels like a green screen in video production, replacing them with a resized version of the initial image. Of course, this resized image will have its own smaller magenta area, which the program will replace with another resized image. The base case occurs when the final image has no more magenta pixels, at which point the algorithm is done.</p>
+<p class="calibre22"><a href="#calibre_link-9" id="calibre_link-711" class="linkurl">Figure 14-2</a> shows the progression of images created as the resized image is recursively applied to the magenta pixels. In this example, a model stands in front of an art museum exhibit that has been replaced with magenta pixels, turning the photograph itself into the exhibit. You can download this base image from <a href="https://inventwithpython.com/museum.png" class="linkurl">https://inventwithpython.com/museum.png</a>.</p>
+<p class="calibre22">Be sure you use only the pure (255, 0, 255) magenta color for painting the magenta area in your image. Some tools may have a fading effect that produces a more natural look. For example, Photoshop’s Brush tool will produce faded magenta pixels on the outline of the painted area, so you will need to use the Pencil tool instead, which paints using only the precise pure magenta color you’ve selected. If your graphics program doesn’t allow you to specify the precise RGB color for drawing, you can copy and paste the colors from the PNG image at <a href="https://inventwithpython.com/magenta.png" class="linkurl">https://inventwithpython.com/magenta.png</a>.</p>
+<p class="calibre22">The magenta area in the image can be of any size or shape; it does not have to be an exact, contiguous rectangle. You can see that in <a href="#calibre_link-9" class="linkurl">Figure 14-2</a>, the museum visitor cuts into the magenta rectangle, placing them in front of the recursive image.</p>
+<p class="calibre22">If you make your own images with Droste Maker, you should use the PNG image file format instead of JPEG. JPEG images use <em class="calibre10">lossy</em> compression techniques to keep the file size small that introduce slight imperfections. These are usually imperceptible to the human eye and don’t affect overall image quality. However, this lossy compression will replace the pure (255, 0, 255) magenta pixels with slightly different shades of magenta. The <em class="calibre10">lossless</em> image compression of PNG images ensures this won’t happen.</p>
+<span type="pagebreak" title="286" id="calibre_link-180" class="calibre17"></span><figure class="calibre25">
+<img src="images/000002.webp" class="calibre16" alt="Four images of a girl, seen from behind, looking at a work of art. In the first image, the work of art is covered by a monochrome rectangle. In the second image, the monochrome rectangle has been replaced by a resized version of the original image of the girl. In the third and fourth images, the monochrome rectangles have once again been replaced, creating the effect that the girl is looking at herself looking at herself." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-9" class="linkurl">Figure 14-2</a>: Recursive applications of the image to the magenta pixels. If you are viewing the black-and-white image printed in this book, the magenta area is the rectangle in front of the museum visitor.</p></figcaption>
+</figure>
+<h2 id="calibre_link-423" class="calibre6">The Complete Droste Maker Program</h2>
+<p class="bodyfirst">The following is the source code for <em class="calibre10">drostemaker.py</em>; because this program relies on the Python-only Pillow library, there is no JavaScript equivalent for this project in this book:</p>
+<pre class="calibre23"><code class="calibre11"><span type="pagebreak" title="287" id="calibre_link-81" class="calibre17"></span>from PIL import Image
+
+
+def makeDroste(baseImage, stopAfter=10):
+    # If baseImage is a string of an image filename, load that image:
+    if isinstance(baseImage, str):
+        baseImage = Image.open(baseImage)
+
+    if stopAfter == 0:
+        # BASE CASE
+        return baseImage
+    # The magenta color has max red/blue/alpha, zero green:
+    if baseImage.mode == 'RGBA':
+        magentaColor = (255, 0, 255, 255)
+    elif baseImage.mode == 'RGB':
+        magentaColor = (255, 0, 255)
+
+    # Find the dimensions of the base image and its magenta area:
+    baseImageWidth, baseImageHeight = baseImage.size
+    magentaLeft = None
+    magentaRight = None
+    magentaTop = None
+    magentaBottom = None
+
+    for x in range(baseImageWidth):
+        for y in range(baseImageHeight):
+            if baseImage.getpixel((x, y)) == magentaColor:
+                if magentaLeft is None or x &lt; magentaLeft:
+                    magentaLeft = x
+                if magentaRight is None or x &gt; magentaRight:
+                    magentaRight = x
+                if magentaTop is None or y &lt; magentaTop:
+                    magentaTop = y
+                if magentaBottom is None or y &gt; magentaBottom:
+                    magentaBottom = y
+
+    if magentaLeft is None:
+        # BASE CASE - No magenta pixels are in the image.
+        return baseImage
+
+    # Get a resized version of the base image:
+    magentaWidth = magentaRight - magentaLeft + 1
+    magentaHeight = magentaBottom - magentaTop + 1
+    baseImageAspectRatio = baseImageWidth / baseImageHeight
+    magentaAspectRatio = magentaWidth / magentaHeight
+
+    if baseImageAspectRatio &lt; magentaAspectRatio:
+        # Make the resized width match the width of the magenta area:
+        widthRatio = magentaWidth / baseImageWidth
+        resizedImage = baseImage.resize((magentaWidth,
+        int(baseImageHeight * widthRatio) + 1), Image.NEAREST)
+    else:
+        # Make the resized height match the height of the magenta area:
+        heightRatio =  magentaHeight / baseImageHeight
+<span type="pagebreak" title="288" id="calibre_link-132" class="calibre17"></span>        resizedImage = baseImage.resize((int(baseImageWidth *
+        heightRatio) + 1, magentaHeight), Image.NEAREST)
+
+    # Replace the magenta pixels with the smaller, resized image:
+    for x in range(magentaLeft, magentaRight + 1):
+        for y in range(magentaTop, magentaBottom + 1):
+            if baseImage.getpixel((x, y)) == magentaColor:
+                pix = resizedImage.getpixel((x - magentaLeft, y - magentaTop))
+                baseImage.putpixel((x, y), pix)
+
+    # RECURSIVE CASE:
+    return makeDroste(baseImage, stopAfter=stopAfter - 1)
+
+
+recursiveImage = makeDroste('museum.png')
+recursiveImage.save('museum-recursive.png')
+recursiveImage.show()</code></pre>
+<p class="calibre22">Before you run this program, place your image file in the same folder as <em class="calibre10">drostemaker.py</em>. The program will save the recursive image as <em class="calibre10">museum-recursive.png</em> and then open an image viewer to display it. If you want to run the program on your own image that you’ve added a magenta area to, replace <code class="calibre11">makeDroste('museum.png')</code> at the end of the source code with the name of your image file and <code class="calibre11">save('museum-recursive.png')</code> with the name you’d like to use to save the recursive image.</p>
+<h2 id="calibre_link-424" class="calibre6">Setting Up</h2>
+<p class="bodyfirst">The Droste Maker program has only one function, <code class="calibre11">makeDroste()</code>, which accepts a Pillow <code class="calibre11">Image</code> object or a string of an image’s filename. The function returns a Pillow <code class="calibre11">Image</code> object with any magenta pixels recursively replaced by a version of the same image:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">from PIL import Image
+
+
+def makeDroste(baseImage, stopAfter=10):
+    # If baseImage is a string of an image filename, load that image:
+    if isinstance(baseImage, str):
+        baseImage = Image.open(baseImage)</code></pre>
+<p class="calibre22">The program begins by importing the <code class="calibre11">Image</code> class from the Pillow library (named <code class="calibre11">PIL</code> as a Python module). Within the <code class="calibre11">makeDroste()</code> function, we check whether the <code class="calibre11">baseImage</code> parameter is a string, and if so, we replace it with a Pillow <code class="calibre11">Image</code> object loaded from the corresponding image file. </p>
+<p class="calibre22">Next, we check whether the <code class="calibre11">stopAfter</code> parameter is <code class="calibre11">0</code>. If it is, we’ve reached one of the algorithm’s base cases and the function returns the Pillow <code class="calibre11">Image</code> object of the base image:</p>
+<p class="codelabel"><b class="calibre7"><span type="pagebreak" title="289" id="calibre_link-23" class="calibre17"></span>Python</b></p>
+<pre class="calibre23"><code class="calibre11">    if stopAfter == 0:
+        # BASE CASE
+        return baseImage</code></pre>
+<p class="calibre22">The <code class="calibre11">stopAfter</code> parameter is <code class="calibre11">10</code> by default if the function call doesn’t provide one. The recursive call to <code class="calibre11">makeDroste()</code> later in this function passes <code class="calibre11">stopAfter - 1</code> as the argument for this parameter so that it decreases with each recursive call and approaches the base case of <code class="calibre11">0</code>.</p>
+<p class="calibre22">For example, passing <code class="calibre11">0</code> for <code class="calibre11">stopAfter</code> results in the function immediately returning a recursive image identical to the base image. Passing <code class="calibre11">1</code> for <code class="calibre11">stopAfter</code> replaces the magenta area with a recursive image once, makes one recursive call, reaches the base case, and immediately returns. Passing <code class="calibre11">2</code> for<code class="calibre11"> stopAfter</code> causes two recursive calls, and so on.</p>
+<p class="calibre22">This parameter prevents the function from recursing until it causes a stack overflow in cases when the magenta area is particularly large. It also lets us pass a smaller argument than <code class="calibre11">10</code> to limit the number of recursive images placed in the base image. For example, the four images in <a href="#calibre_link-9" class="linkurl">Figure 14-2</a> were created by passing <code class="calibre11">0</code>, <code class="calibre11">1</code>, <code class="calibre11">2</code>, and <code class="calibre11">3</code> for the <code class="calibre11">stopAfter</code> parameter.</p>
+<p class="calibre22">Next, we check the color mode of the base image. This can be either <code class="calibre11">RGB</code> for an image with red-green-blue pixels or <code class="calibre11">RGBA</code> for an image that has an alpha channel for its pixels. The <em class="calibre10">alpha value</em> tells a pixel’s level of transparency. Here’s the code:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">    # The magenta color has max red/blue/alpha, zero green:
+    if baseImage.mode == 'RGBA':
+        magentaColor = (255, 0, 255, 255)
+    elif baseImage.mode == 'RGB':
+        magentaColor = (255, 0, 255)</code></pre>
+<p class="calibre22">The Droste Maker needs to know the color mode so that it can find magenta pixels. The values for each channel range from <code class="calibre11">0</code> to <code class="calibre11">255</code>, and magenta pixels have a maximum amount of red and blue but no green. Further, if an alpha channel exists, it would be set to <code class="calibre11">255</code> for a completely opaque color and <code class="calibre11">0</code> for a completely transparent one. The <code class="calibre11">magentaColor</code> variable is set to the correct tuple value for a magenta pixel depending on the image’s color mode given in <code class="calibre11">baseImage.mode</code>.</p>
+<h2 id="calibre_link-425" class="calibre6">Finding the Magenta Area</h2>
+<p class="bodyfirst">Before the program can recursively insert the image into the magenta area, it must find the boundaries of the magenta area in the image. This involves finding the leftmost, rightmost, topmost, and bottommost magenta pixels in the image.</p>
+<p class="calibre22"><span type="pagebreak" title="290" id="calibre_link-162" class="calibre17"></span>While the magenta area itself doesn’t need to be a perfect rectangle, the program needs to know the rectangular boundaries of the magenta in order to properly resize the image for insertion. For example, <a href="#calibre_link-10" id="calibre_link-712" class="linkurl">Figure 14-3</a> shows a base image of the <em class="calibre10">Mona Lisa</em> with the magenta area outlined in white. The magenta pixels are replaced to produce the recursive image.</p>
+<figure class="calibre25">
+<img src="images/000012.webp" class="calibre16" alt="Two images of the Mona Lisa. In the first, the woman’s face and torso have been replaced with a monochrome shape, and a white rectangle indicates the boundaries of that shape. In the second image, the monochrome area has been replaced by progressively smaller versions of the original image." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-10" class="linkurl">Figure 14-3</a>: The base image with a magenta area outlined in white (left) and the recursive image it produces (right)</p></figcaption>
+</figure>
+<p class="calibre22">To calculate the resizing and placement of the resized image, the program retrieves the width and height of the base image from the <code class="calibre11">size</code> attribute of the Pillow <code class="calibre11">Image</code> object in <code class="calibre11">baseImage</code>. The following lines initialize four variables for the four edges of the magenta area&mdash;<code class="calibre11">magentaLeft</code>, <code class="calibre11">magentaRight</code>, <code class="calibre11">magentaTop</code>, and <code class="calibre11">magentaBottom</code>&mdash;to the <code class="calibre11">None</code> value:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">    # Find the dimensions of the base image and its magenta area:
+    baseImageWidth, baseImageHeight = baseImage.size
+    magentaLeft = None
+    magentaRight = None
+    magentaTop = None
+    magentaBottom = None</code></pre>
+<p class="calibre22"><span type="pagebreak" title="291" id="calibre_link-596" class="calibre17"></span>These edge variable values are replaced by integer <code class="calibre11">x</code> and <code class="calibre11">y</code> coordinates in the code that comes next:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">    for x in range(baseImageWidth):
+        for y in range(baseImageHeight):
+            if baseImage.getpixel((x, y)) == magentaColor:
+                if magentaLeft is None or x &lt; magentaLeft:
+                    magentaLeft = x
+                if magentaRight is None or x &gt; magentaRight:
+                    magentaRight = x
+                if magentaTop is None or y &lt; magentaTop:
+                    magentaTop = y
+                if magentaBottom is None or y &gt; magentaBottom:
+                    magentaBottom = y</code></pre>
+<p class="calibre22">These nested <code class="calibre11">for</code> loops iterate the <code class="calibre11">x</code> and <code class="calibre11">y</code> variables over every possible x, y coordinate in the base image. We check whether the pixel at each coordinate is the pure magenta color stored in <code class="calibre11">magentaColor</code>, then update the <code class="calibre11">magentaLeft</code> variable if the coordinates of the magenta pixel are further left than currently recorded in <code class="calibre11">magentaLeft</code>, and so on for the other three directions.</p>
+<p class="calibre22">By the time the nested <code class="calibre11">for</code> loops are finished, <code class="calibre11">magentaLeft</code>, <code class="calibre11">magentaRight</code>, <code class="calibre11">magentaTop</code>, and <code class="calibre11">magentaBottom</code> will describe the boundaries of the magenta pixels in the base image. If the image has no magenta pixels, these variables will remain set to their initial <code class="calibre11">None</code> value:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">    if magentaLeft is None:
+        # BASE CASE - No magenta pixels are in the image.
+        return baseImage</code></pre>
+<p class="calibre22">If <code class="calibre11">magentaLeft</code> (or really, any of the four variables) is still set to <code class="calibre11">None</code> after the nested <code class="calibre11">for</code> loops complete, no magenta pixels are in the image. This is a base case for our recursive algorithm because the magenta area becomes smaller and smaller with each recursive call to <code class="calibre11">makeDroste()</code>. At this point, the function returns the Pillow <code class="calibre11">Image</code> object in <code class="calibre11">baseImage</code>.</p>
+<h2 id="calibre_link-426" class="calibre6">Resizing the Base Image</h2>
+<p class="bodyfirst">We need to resize the base image to cover the entire magenta area and no more. <a href="#calibre_link-11" id="calibre_link-713" class="linkurl">Figure 14-4</a> shows the complete resized image overlayed transparently on the original base image. This resized image is cropped so that only the parts over magenta pixels are copied over to the final image.</p>
+<span type="pagebreak" title="292" id="calibre_link-37" class="calibre17"></span><figure class="calibre25">
+<img src="images/000021.webp" class="calibre16" alt="Four images of a cat sitting in front of a computer monitor. In the first, the computer monitor’s screen is covered in a monochrome shade. In the second, the monochrome area has been replaced by a smaller version of the original image, but this version is transparent, making visible the places where it overlaps with the non-monochrome portions of the larger image. The third image is the completed recursive image." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-11" class="linkurl">Figure 14-4</a>: The base image with the magenta area in the monitor (top), the resized image over the base image (middle), and the final recursive image that replaces only the magenta pixels (bottom)</p></figcaption>
+</figure>
+<p class="calibre22">We cannot simply resize the base image to the dimensions of the magenta area because it’s unlikely the two share the same <em class="calibre10">aspect ratio</em>, or proportion of the width divided by the height. Doing so results in a recursive image that looks stretched or squished, like <a href="#calibre_link-12" id="calibre_link-714" class="linkurl">Figure 14-5</a>.</p>
+<p class="calibre22">Instead, we must make the resized image large enough to completely cover the magenta area but still retain the image’s original aspect ratio. This means either setting the width of the resized image to the width of the magenta area such that the height of the resized image is equal to or larger than the height of the magenta area, or setting the height of the resized image to the height of the magenta area such that the width of the resized image is equal to or larger than the width of the magenta area.</p>
+<span type="pagebreak" title="293" id="calibre_link-597" class="calibre17"></span><figure class="calibre25">
+<img src="images/000030.webp" class="calibre16" alt="Version of the recursive image of the girl looking at herself in which subsequent appearances of the girl appear distorted." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-12" class="linkurl">Figure 14-5</a>: Resizing the image to the dimensions of the magenta area can result in a different aspect ratio, causing it to look stretched or squished.</p></figcaption>
+</figure>
+<p class="calibre22">To calculate the correct resizing dimensions, the program needs to determine the aspect ratio of both the base image and the magenta area:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">    # Get a resized version of the base image:
+    magentaWidth = magentaRight - magentaLeft + 1
+    magentaHeight = magentaBottom - magentaTop + 1
+    baseImageAspectRatio = baseImageWidth / baseImageHeight
+    magentaAspectRatio = magentaWidth / magentaHeight</code></pre>
+<p class="calibre22">From <code class="calibre11">magentaRight</code> and <code class="calibre11">magentaLeft</code>, we can calculate the width of the magenta area. The <code class="calibre11">+ 1</code> accounts for a small, necessary adjustment: if the right side of the magenta area was the x-coordinate of 11 and the left side was 10, the width would be two pixels. This is correctly calculated by (<code class="calibre11">magentaRight - magentaLeft + 1</code>), not (<code class="calibre11">magentaRight - magentaLeft</code>).</p>
+<p class="calibre22">Because the aspect ratio is the width divided by the height, images with large aspect ratios are taller than they are wide, and those with small aspect ratios are wider than they are tall. An aspect ratio of 1.0 describes a perfect square. The next lines set the dimensions of the resized image after comparing the aspect ratios of the base image and the magenta area:</p>
+<pre class="calibre23"><code class="calibre11">    if baseImageAspectRatio &lt; magentaAspectRatio:
+        # Make the resized width match the width of the magenta area:
+        widthRatio = magentaWidth / baseImageWidth
+        resizedImage = baseImage.resize((magentaWidth,
+        int(baseImageHeight * widthRatio) + 1), Image.NEAREST)
+<span type="pagebreak" title="294" id="calibre_link-131" class="calibre17"></span>    else:
+        # Make the resized height match the height of the magenta area:
+        heightRatio =  magentaHeight / baseImageHeight
+        resizedImage = baseImage.resize((int(baseImageWidth *
+        heightRatio) + 1, magentaHeight), Image.NEAREST)</code></pre>
+<p class="calibre22">If the base image’s aspect ratio is less than the magenta area’s aspect ratio, the resized image’s width should match the width of the magenta area. If the base image’s aspect ratio is greater, the resized image’s height should match the height of the magenta area. We then determine the other dimension by multiplying the base image’s height by the width ratio, or the base image’s width by the height ratio. This ensures that the resized image both completely covers the magenta area and remains proportional to its original aspect ratio.</p>
+<p class="calibre22">We call the <code class="calibre11">resize()</code> method once to produce a new Pillow <code class="calibre11">Image</code> object resized to match either the width of the base image or the height of the base image. The first argument is a (width, height) tuple for the new image’s size. The second argument is the <code class="calibre11">Image.NEAREST</code> constant from the Pillow library that tells the <code class="calibre11">resize()</code> method to use the nearest neighbor algorithm when resizing the image. This prevents the <code class="calibre11">resize()</code> method from blending the colors of the pixels to produce a smooth image.</p>
+<p class="calibre22">We don’t want this, because it could blur the magenta pixels with neighboring non-magenta pixels in the resized image. Our <code class="calibre11">makeDroste()</code> function relies on detecting magenta pixels with the exact RGB color of (255, 0, 255) and would ignore these slightly off magenta pixels. The end result would be a pinkish outline around the magenta areas that would ruin our image. The nearest neighbor algorithm doesn’t do this blurring, leaving our magenta pixels exactly at the (255, 0, 255) magenta color.</p>
+<h2 id="calibre_link-427" class="calibre6">Recursively Placing the Image Within the Image</h2>
+<p class="bodyfirst">Once the base image has been resized, we can place the resized image over the base image. But the pixels from the resized image should be placed over only magenta pixels in the base image. The resized image will be placed such that the top-left corner of the resized image is at the top-left corner of the magenta area:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">    # Replace the magenta pixels with the smaller, resized image:
+    for x in range(magentaLeft, magentaRight + 1):
+        for y in range(magentaTop, magentaBottom + 1):
+            if baseImage.getpixel((x, y)) == magentaColor:
+                pix = resizedImage.getpixel((x - magentaLeft, y - magentaTop))
+                baseImage.putpixel((x, y), pix)</code></pre>
+<p class="calibre22">Two nested <code class="calibre11">for</code> loops iterate over every pixel in the magenta area. Remember that the magenta area does not have to be a perfect rectangle, so we check whether the pixel at the current coordinates is magenta. If so, we get the pixel color from the corresponding coordinates in the resized <span type="pagebreak" title="295" id="calibre_link-41" class="calibre17"></span>image and place it on the base image. After the two nested <code class="calibre11">for</code> loops have finished looping, the magenta pixels in the base image will have been replaced by pixels from the resized image. </p>
+<p class="calibre22">However, the resized image itself could have magenta pixels, and if so, these will now become part of the base image, as in the top-right image of <a href="#calibre_link-9" class="linkurl">Figure 14-2</a>. We’ll need to pass the modified base image to a recursive <code class="calibre11">makeDroste()</code> call:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">    # RECURSIVE CASE:
+    return makeDroste(baseImage, stopAfter - 1)</code></pre>
+<p class="calibre22">This line is the recursive call in our recursive algorithm, and it’s the last line of code in the <code class="calibre11">makeDroste()</code> function. This recursion handles the new magenta area copied from the resized image. Note that the value passed for the <code class="calibre11">stopAfter</code> parameter is <code class="calibre11">stopAfter - 1</code>, ensuring that it comes closer to the base case of <code class="calibre11">0</code>.</p>
+<p class="calibre22">Finally, the Droste Maker program begins by passing <code class="calibre11">′museum.png′</code> to <code class="calibre11">makeDroste()</code> to get the Pillow <code class="calibre11">Image</code> object of the recursive image. We save this as a new image file named <em class="calibre10">museum-recursive.png</em><em class="calibre10"> </em>and display the recursive image in a new window for the user to view:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">recursiveImage = makeDroste('museum.png')
+recursiveImage.save('museum-recursive.png')
+recursiveImage.show()</code></pre>
+<p class="calibre22">You can change these filenames to whichever image on your computer you’d like to use with the program.</p>
+<p class="calibre22">Does the <code class="calibre11">makeDroste()</code> function need to be implemented with recursion? Simply put, no. Notice that no tree-like structure is involved in the problem, and the algorithm does no backtracking, which is a sign that recursion may be an overengineered approach to this code. </p>
+<h2 id="calibre_link-428" class="calibre6">Summary</h2>
+<p class="bodyfirst">This chapter’s project was a program that produces recursive Droste effect images, just like the illustration on old tins of Droste’s Cacao. The program works by using pure magenta pixels with RGB values of (255, 0, 255) to mark the parts of the image that should be replaced by a smaller version. Since this smaller version will also have its own smaller magenta area, the replacements will repeat until the magenta area is gone to produce a recursive image.</p>
+<p class="calibre22">The base case for our recursive algorithm occurs when no more magenta pixels remain in the image to place the smaller recursive image in, or when the <code class="calibre11">stopAfter</code> counter reaches <code class="calibre11">0</code>. Otherwise, the recursive case passes the image to the <code class="calibre11">makeDroste()</code> function to continue to replace the magenta area with even smaller recursive images.</p>
+<p class="calibre22">You can modify your own photos to add magenta pixels and then run them through the Droste Maker. The museum patron looking at an exhibit <span type="pagebreak" title="296" id="calibre_link-598" class="calibre17"></span>of themself, the cat in front of a computer monitor of the cat in front of a computer monitor, and the faceless <em class="calibre10">Mona Lisa</em> images are just a few examples of the surreal possibilities you can create with this recursive program.</p>
+<h2 id="calibre_link-429" class="calibre6">Further Reading</h2>
+<p class="bodyfirst">The Wikipedia article for the Droste effect at <a href="https://en.wikipedia.org/wiki/Droste_effect" class="linkurl">https://en.wikipedia.org/wiki/Droste_effect</a> has examples of products other than Droste’s Cacao that use the Droste effect. Dutch artist M.C. Escher’s <em class="calibre10">Print Gallery</em> is a famous example of a scene that also contains itself, and you can learn more about it at <a href="https://en.wikipedia.org/wiki/Print_Gallery_(M._C._Escher)" class="linkurl">https://en.wikipedia.org/wiki/Print_Gallery_(M._C._Escher)</a>.</p>
+<p class="calibre22">In a video titled “The Neverending Story (and Droste Effect)” on the Numberphile YouTube channel, Dr. Clifford Stoll discusses recursion and the Droste’s Cacao box art at <a href="https://youtu.be/EeuLDnOupCI" class="linkurl">https://youtu.be/EeuLDnOupCI</a>.</p>
+<p class="calibre22">Chapter 19 of my book <em class="calibre10">Automate the Boring Stuff with Python</em>, 2nd edition (No Starch Press, 2019) provides a basic tutorial of the Pillow library at <a href="https://automatetheboringstuff.com/2e/chapter19" class="linkurl">https://automatetheboringstuff.com/2e/chapter19</a>.</p>
+</section>
+</div>
+
+
+
+
+<div><a href="chapter13.html">Prev: Chapter 13 - Fractal Art Maker</a></div></body></html>

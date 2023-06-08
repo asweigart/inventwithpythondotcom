@@ -1,0 +1,707 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="recursion-style.css" rel="stylesheet" type="text/css" /><title>Chapter 4 - Backtracking and Tree Traversal Algorithms</title></head><body>
+
+
+
+<div style="background-color: #eeeddd; float: right; height: 310px; font-family: sans-serif;" id="otherbooks">
+  <a href="#" onclick="document.getElementById('otherbooks').outerHTML='';" style="vertical-align: top;">(close)</a><br />
+
+  <a target="_blank" href="https://nostarch.com/automatestuff2" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_automate.link');"><img src="/images/cover_automate2_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/big-book-small-python-projects" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_bigbookpython.link');"><img src="/images/cover_bigbookpython_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/beyond-basic-stuff-python" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_beyond.link');"><img src="/images/cover_beyond_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/inventwithpython" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_invent.link');"><img src="/images/cover_invent4th_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://www.amazon.com/Making-Games-Python-Pygame-Sweigart/dp/1469901730?ie=UTF8&amp;tag=playwithpyth-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1469901730" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_pygame.link');"><img src="/images/cover_makinggames_thumb.webp" style="height: 200px; border: solid black 1px; /"></a>
+  <a target="_blank" href="https://nostarch.com/crackingcodes" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_hacking.link');"><img src="/images/cover_crackingcodes_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/scratchplayground"><img src="/images/cover_scratchprogrammingplayground_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/codingwithminecraft"><img src="/images/cover_codingwithminecraft_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <br />
+  <a href="https://inventwithpython.com/automateudemy">Use this link to get a discount on the Automate the Boring Stuff online video course.</a><br />
+  <a href="https://www.patreon.com/AlSweigart">Support me on Patreon</a>
+</div>
+
+<div><a href="chapter3.html">Prev: Chapter 3 - Classic Recursion Algorithms</a> | <a href="chapter5.html">Next: Chapter 5 - Divide-and-Conquer Algorithms</a></div>
+
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-0">
+<section class="toclist">
+<header class="calibre14">
+<h1 class="chapter">
+<span class="partnumber"><span type="pagebreak" title="71" id="calibre_link-500" class="calibre36"></span>4</span><br class="calibre18" />
+<span class="parttitle">Backtracking and Tree Traversal Algorithms</span></h1>
+</header>
+<figure class="opener">
+<img src="images/000060.webp" alt="" class="calibre16" />
+</figure>
+<p class="chapterintro">In previous chapters, you learned that recursion is especially suited for problems that involve a tree-like structure and backtracking, such as maze-solving algorithms. To see why, consider that a tree’s trunk splits off into multiple branches. Those branches themselves split off into other branches. In other words, a tree has a recursive, self-similar shape. </p>
+<p class="calibre24">A maze can be represented by a tree data structure, since mazes branch off into different paths, which in turn branch off into more paths. When you reach a dead end in a maze, you must backtrack to an earlier branching point. </p>
+<p class="calibre22">The task of traversing tree graphs is tightly linked with many recursive algorithms, such as the maze-solving algorithm in this chapter and the maze-generation program in <span class="calibre" itemid="xref_target_Chapter 11">Chapter 11</span>. We’ll take a look at tree traversal algorithms and employ them to find certain names in a tree data structure. We’ll also use tree traversal for an algorithm to obtain the deepest node in <span type="pagebreak" title="72" id="calibre_link-34" class="calibre17"></span>a tree. Finally, we’ll see how mazes can be represented as a tree data structure, and employ tree traversal and backtracking to find a path from the start of the maze to the exit.</p>
+<h2 id="calibre_link-290" class="calibre6">Using Tree Traversal</h2>
+<p class="bodyfirst">If you program in Python and JavaScript, you’re used to working with list, array, and dictionary data structures. You’ll encounter tree data structures only if you are dealing with low-level details of certain computer science algorithms such as abstract syntax trees, priority queues, Adelson-Velsky-Landis (AVL) trees, and other concepts beyond the scope of this book. However, trees themselves are simple enough concepts.</p>
+<p class="calibre22">A <em class="calibre10">tree</em><em class="calibre10"> data structure</em> is a data structure composed of nodes that are connected to other nodes by edges. The <em class="calibre10">nodes</em> contain data, while the <em class="calibre10">edges</em> represent a relationship with another node. Nodes are also called <em class="calibre10">vertices</em>. The starting node of a tree is called the <em class="calibre10">root</em>, and the nodes at the end are called <em class="calibre10">leaves</em>. Trees always have exactly one root.</p>
+<p class="calibre22"><em class="calibre10">Parent nodes</em> at the top have edges to zero or more <em class="calibre10">child nodes</em> beneath them. Therefore, leaves are the nodes that do not have children, parent nodes are the non-leaf nodes, and child nodes are all the non-root nodes. Nodes in a tree can have edges to multiple child nodes. The parent nodes that connect a child node to the root node are also called the child node’s <em class="calibre10">ancestors</em>. The child nodes between a parent node and a leaf node are called the parent node’s <em class="calibre10">descendants</em>. Parent nodes in a tree can have multiple child nodes. But every child node has exactly one parent, except for the root node, which has zero parents. In trees, only one path can exist between any two nodes.</p>
+<p class="calibre22"><a href="#calibre_link-1" id="calibre_link-637" class="linkurl">Figure 4-1</a> shows an example of a tree and three examples of structures that are not trees.</p>
+<figure class="calibre25">
+<img src="images/000026.webp" class="calibre16" alt="Four diagrams. The first, labeled “Tree,” has an A node with two child nodes, B and C; B has one child node, D; C has two child nodes, E and F; E has two child nodes, G and H. The second diagram, labeled “Not a Tree (Child node has multiple parents),” has an A node with two child nodes, B and C; B has two child nodes, D and E; C has two child nodes, E and F; E has two child nodes, G and H. The third diagram, labeled “Not a Tree (Child node loops back to an ancestor node),” has a node A with two child nodes, B and C; B has one child node, D; C has two child nodes, E and F; D has one child node, A; E has two child nodes, G and H. The fourth diagram, labeled “Not a Tree (Multiple root nodes),” has two root nodes, Z and A; Z has one child node, B; A has two child nodes, B and C; B has one child node, D; C has two child nodes, E and F; E has two child nodes, G and H." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-1" class="linkurl">Figure 4-1</a>: A tree (left) and three examples of non-trees</p></figcaption>
+</figure>
+<p class="calibre22">As you can see, child nodes must have one parent and not have an edge that creates a loop, or else the structure is no longer considered a tree. The recursive algorithms we cover in this chapter apply only to tree data structures.</p>
+<h3 id="calibre_link-291" class="calibre33"><span type="pagebreak" title="73" id="calibre_link-73" class="calibre34"></span>A Tree Data Structure in Python and JavaScript</h3>
+<p class="bodyfirst">Tree data structures are often drawn growing downward, with the root at the top. <a href="#calibre_link-2" id="calibre_link-638" class="linkurl">Figure 4-2</a> shows a tree<em class="calibre10"> </em>created with the following Python code (it’s also valid JavaScript code):</p>
+<pre class="calibre23"><code class="calibre11">root  = {'data': 'A', 'children': []}
+node2 = {'data': 'B', 'children': []}
+node3 = {'data': 'C', 'children': []}
+node4 = {'data': 'D', 'children': []}
+node5 = {'data': 'E', 'children': []}
+node6 = {'data': 'F', 'children': []}
+node7 = {'data': 'G', 'children': []}
+node8 = {'data': 'H', 'children': []}
+root['children'] = [node2, node3]
+node2['children'] = [node4]
+node3['children'] = [node5, node6]
+node5['children'] = [node7, node8]</code></pre>
+<figure class="calibre25">
+<img src="images/000008.webp" class="calibre16" alt="Tree diagram and the order in which the nodes would be traversed in preorder, postorder, and inorder tree traversal. The tree has the root note A, which has two child nodes, B and C. B has one child node, D. C has two child nodes, E and F, and E has two child nodes, G and H. Preorder tree traversal: A, B, D, C, E, G, H, F. Postorder tree traversal: D, B, G, H, E, F, C, A. Inorder tree traversal: D, B, A, G, E, H, C, F." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-2" class="linkurl">Figure 4-2</a>: A tree with root <span class="calibre"><code class="calibre39">A</code></span> and leaves <span class="calibre"><code class="calibre39">D</code></span>, <span class="calibre"><code class="calibre39">G</code></span>, <span class="calibre"><code class="calibre39">H</code></span>, and <span class="calibre"><code class="calibre39">F</code></span>, along with its traversal orders</p></figcaption>
+</figure>
+<p class="calibre22">Each node in the tree contains a piece of data (a string of a letter from <code class="calibre11">A</code> to <code class="calibre11">H</code>) and a list of its child nodes. The preorder, postorder, and inorder information in <a href="#calibre_link-2" class="linkurl">Figure 4-2</a> is explained in subsequent sections.</p>
+<p class="calibre22">In the code for this tree, each node is represented by a Python dictionary (or JavaScript object) with a key <code class="calibre11">data</code> that stores the node’s data, and a key <code class="calibre11">children</code> that has a list of other nodes. I use the <code class="calibre11">root</code> and <code class="calibre11">node2</code> to <code class="calibre11">node8</code> variables to store each node and make the code more readable, but they aren’t required. The following Python/JavaScript code is equivalent to the previous code listing, though harder for humans to read:</p>
+<pre class="calibre23"><code class="calibre11">root = {'data': 'A', 'children': [{'data': 'B', 'children':
+[{'data': 'D', 'children': []}]}, {'data': 'C', 'children':
+[{'data': 'E', 'children': [{'data': 'G', 'children': []},
+{'data': 'H', 'children': []}]}, {'data': 'F', 'children': []}]}]}</code></pre>
+<p class="calibre22">The tree in <a href="#calibre_link-2" class="linkurl">Figure 4-2</a> is a specific kind of data structure called a <em class="calibre10">directed acyclic graph</em> <em class="calibre10">(DAG)</em>. In mathematics and computer science, a <em class="calibre10">graph</em> is a collection of nodes and edges, and a tree is a kind of graph. The graph <span type="pagebreak" title="74" id="calibre_link-32" class="calibre17"></span>is <em class="calibre10">directed</em> because its edges have one direction: from parent to child node. Edges in a DAG are not undirected&mdash;that is, bidirectional. (Graphs in general do not have this restriction and can have edges in both directions, including from a child node back to its parent node.) The graph is <em class="calibre10">acyclic</em> because there are no loops, or <em class="calibre10">cycles</em>, from child nodes to their own ancestor nodes; the “branches” of the tree must keep growing in the same direction. </p>
+<p class="calibre22">You can think of lists, arrays, and strings as linear trees; the root is the first element, and the nodes have only one child node. This linear tree terminates at its one leaf node. These linear trees are called <em class="calibre10">linked lists</em>, as each node has only one “next” node until the end of the list. <a href="#calibre_link-3" id="calibre_link-639" class="linkurl">Figure 4-3</a> shows a linked list that stores the characters in the word <em class="calibre10">HELLO</em>.</p>
+<figure class="calibre25">
+<img src="images/000017.webp" class="calibre16" alt="Linear Tree Diagram with five nodes. The root node “H” has one child node, “E,” which has one child node, “L,” which has one child node, “L,” which has one child node, “O.”" />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-3" class="linkurl">Figure 4-3</a>: A linked list data structure storing <span class="calibre"><code class="calibre39">HELLO</code></span>. Linked lists can be considered a kind of tree data structure.</p></figcaption>
+</figure>
+<p class="calibre22">We’ll use the code for the tree in <a href="#calibre_link-2" class="linkurl">Figure 4-2</a> for this chapter’s examples. A tree traversal algorithm will visit each of the nodes in a tree by following the edges, starting from a root node.</p>
+<h3 id="calibre_link-292" class="calibre33">Traversing the Tree</h3>
+<p class="bodyfirst">We can write code to access data in any node by starting from the root node in <code class="calibre11">root</code>. For example, after entering the tree code into the Python or JavaScript interactive shell, run the following:</p>
+<pre class="calibre23"><code class="calibre11">&gt;&gt;&gt; <b class="calibre7">root['children'][1]['data']</b>
+'C'
+&gt;&gt;&gt; <b class="calibre7">root['children'][1]['children'][0]['data']</b>
+'E'</code></pre>
+<p class="calibre22">Our tree traversal code can be written as a recursive function because tree data structures have a self-similar structure: a parent node has child nodes, and each child node is the parent node of its own children. Tree traversal algorithms ensure that your programs can access or modify the data in every node in the tree no matter its shape or size.</p>
+<p class="calibre22">Let’s ask the three questions about recursive algorithms for our tree traversal code:</p>
+<ol class="none">
+<li class="calibre9"><span class="runinhead">What is the base case? </span>  A leaf node, which has no more children and requires no more recursive calls, causing the algorithm to backtrack to a previous parent node.</li>
+<li class="calibre9"><span class="runinhead">What argument is passed to the recursive function call? </span>  The node to traverse to, whose child nodes will be the next nodes to traverse.</li>
+<li class="calibre9"><span class="runinhead">How does this argument become closer to the base case?</span>  There are no cycles in a DAG, so following the descendant nodes will always eventually reach a leaf node.</li>
+</ol>
+<p class="calibre22"><span type="pagebreak" title="75" id="calibre_link-179" class="calibre17"></span>Keep in mind that tree data structures that are especially deep will cause a stack overflow as the algorithm traverses the deeper nodes. This happens because each level deeper into the tree requires yet another function call, and too many function calls without returning cause stack overflows. However, it’s unlikely for broad, well-balanced trees to be that deep. If every node in a 1,000 level deep tree has two children, the tree would have about 2<sup class="calibre12">1000</sup> nodes. That’s more atoms than there are in the universe, and it’s unlikely your tree data structure is that big.</p>
+<p class="calibre22">Trees have three kinds of tree traversal algorithms: preorder, postorder, and inorder. We’ll discuss each of these in the next three sections.</p>
+<h3 id="calibre_link-293" class="calibre33">Preorder Tree Traversal</h3>
+<p class="bodyfirst"><em class="calibre10">Preorder tree traversal</em> algorithms access a node’s data before traversing its child nodes. Use a preorder traversal if your algorithm needs to access the data in parent nodes before the data in their child nodes. For example, preorder traversals are used when you are creating a copy of the tree data structure, as you need to create the parent nodes before child nodes in the duplicate tree.</p>
+<p class="calibre22">The following <em class="calibre10">preorderTraversal.py</em> program has a <code class="calibre11">preorderTraverse()</code> function that traverses each child node first, before accessing the node’s data to print it to the screen:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">root = {'data': 'A', 'children': [{'data': 'B', 'children':
+[{'data': 'D', 'children': []}]}, {'data': 'C', 'children':
+[{'data': 'E', 'children': [{'data': 'G', 'children': []},
+{'data': 'H', 'children': []}]}, {'data': 'F', 'children': []}]}]}
+
+def preorderTraverse(node):
+    print(node['data'], end=' ') # Access this node's data.
+  <span class="codeannotationcode" aria-label="annotation1">❶</span> if len(node['children']) &gt; 0:
+        # RECURSIVE CASE
+        for child in node['children']:
+            preorderTraverse(child) # Traverse child nodes.
+    # BASE CASE
+  <span class="codeannotationcode" aria-label="annotation2">❷</span> return
+
+preorderTraverse(root)</code></pre>
+<p class="calibre22">The equivalent JavaScript program is in <em class="calibre10">preorderTraversal.html</em>:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+root = {"data": "A", "children": [{"data": "B", "children":
+[{"data": "D", "children": []}]}, {"data": "C", "children":
+[{"data": "E", "children": [{"data": "G", "children": []},
+{"data": "H", "children": []}]}, {"data": "F", "children": []}]}]};
+
+function preorderTraverse(node) {
+    document.write(node["data"] + " "); // Access this node's data.
+  <span class="codeannotationcode" aria-label="annotation1">❶</span> if (node["children"].length &gt; 0) {
+        // RECURSIVE CASE
+        for (let i = 0; i &lt; node["children"].length; i++) {
+
+<span type="pagebreak" title="76" id="calibre_link-61" class="calibre17"></span>            preorderTraverse(node["children"][i]); // Traverse child nodes.
+        }
+    }
+    // BASE CASE
+  <span class="codeannotationcode" aria-label="annotation2">❷</span> return;
+}
+
+preorderTraverse(root);
+&lt;/script&gt;</code></pre>
+<p class="calibre22">The output of these programs is the node data in preorder order:</p>
+<pre class="calibre23"><code class="calibre11">A B D C E G H F</code></pre>
+<p class="calibre22">When you look at the tree in <a href="#calibre_link-1" class="linkurl">Figure 4-1</a>, notice that preorder traversal order displays the data in left nodes before right nodes, and bottom nodes before top nodes.</p>
+<p class="calibre22">All tree traversals begin by passing the root node to the recursive function. The function makes a recursive call and passes each of the root node’s children as the argument. Since these child nodes have children of their own, the traversal continues until a leaf node with no children is reached. At this point, the function call simply returns.</p>
+<p class="calibre22">The recursive case occurs if the node has any child nodes <span class="codeannotation" aria-label="annotation1">❶</span>, in which case a recursive call is made with each of the children as the node argument. Whether or not the node has children, the base case always happens at the end of the function when it returns <span class="codeannotation" aria-label="annotation2">❷</span>.</p>
+<h3 id="calibre_link-294" class="calibre33">Postorder Tree Traversal</h3>
+<p class="bodyfirst"><em class="calibre10">Postorder tree traversal</em> traverses a node’s child nodes before accessing the node’s data. For example, this traversal is used when deleting a tree and ensuring that no child nodes are “orphaned” by deleting their parent nodes first, leaving the child node inaccessible to the root node. The code in the following <em class="calibre10">postorderTraversal.py</em> program is similar to the preorder traversal code in the previous section, except the recursive function call comes before the <code class="calibre11">print()</code> call:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">root = {'data': 'A', 'children': [{'data': 'B', 'children':
+[{'data': 'D', 'children': []}]}, {'data': 'C', 'children':
+[{'data': 'E', 'children': [{'data': 'G', 'children': []},
+{'data': 'H', 'children': []}]}, {'data': 'F', 'children': []}]}]}
+
+def postorderTraverse(node):
+    for child in node['children']:
+        # RECURSIVE CASE
+        postorderTraverse(child) # Traverse child nodes.
+    print(node['data'], end=' ') # Access this node's data.
+    # BASE CASE
+    return
+
+postorderTraverse(root)</code></pre>
+<p class="calibre22"><span type="pagebreak" title="77" id="calibre_link-52" class="calibre17"></span>The <em class="calibre10">postorderTraversal.html</em> program has the equivalent JavaScript code:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+root = {"data": "A", "children": [{"data": "B", "children":
+[{"data": "D", "children": []}]}, {"data": "C", "children":
+[{"data": "E", "children": [{"data": "G", "children": []},
+{"data": "H", "children": []}]}, {"data": "F", "children": []}]}]};
+
+function postorderTraverse(node) {
+    for (let i = 0; i &lt; node["children"].length; i++) {
+        // RECURSIVE CASE
+        postorderTraverse(node["children"][i]); // Traverse child nodes.
+    }
+    document.write(node["data"] + " "); // Access this node's data.
+    // BASE CASE
+    return;
+}
+
+postorderTraverse(root);
+&lt;/script&gt;</code></pre>
+<p class="calibre22">The output of these programs is the node data in postorder order:</p>
+<pre class="calibre23"><code class="calibre11">D B G H E F C A</code></pre>
+<p class="calibre22">The postorder traversal order of the nodes displays the data in left nodes before right nodes, and in bottom nodes before top nodes. When we compare the <code class="calibre11">postorderTraverse()</code> and <code class="calibre11">preorderTraverse()</code> functions, we find that the names are a bit of a misnomer: <em class="calibre10">pre</em> and <em class="calibre10">post</em> don’t refer to the order in which nodes are visited. The nodes are always traversed in the same order; we go down the child nodes first (called a <em class="calibre10">depth-first search</em>) as opposed to visiting the nodes in each level before going deeper (called a <em class="calibre10">breadth-first search</em>). The <em class="calibre10">pre</em> and <em class="calibre10">post</em> refer to <em class="calibre10">when</em> the node’s data is accessed: either before or after traversing the node’s children.</p>
+<h3 id="calibre_link-295" class="calibre33">Inorder Tree Traversal</h3>
+<p class="bodyfirst"><em class="calibre10">Binary trees</em> are tree data structures with at most two child nodes, often called the <em class="calibre10">left child</em> and <em class="calibre10">right child</em>. An <em class="calibre10">inorder tree traversal</em> traverses the left child node, then accesses the node’s data, and then traverses the right child node. This traversal is used in algorithms that deal with binary search trees (which are beyond the scope of this book). The <em class="calibre10">inorderTraversal.py</em> program contains Python code that performs this kind of traversal:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">root = {'data': 'A', 'children': [{'data': 'B', 'children':
+[{'data': 'D', 'children': []}]}, {'data': 'C', 'children':
+[{'data': 'E', 'children': [{'data': 'G', 'children': []},
+{'data': 'H', 'children': []}]}, {'data': 'F', 'children': []}]}]}
+
+def inorderTraverse(node):
+    if len(node['children']) &gt;= 1:
+        # RECURSIVE CASE
+<span type="pagebreak" title="78" id="calibre_link-75" class="calibre17"></span>        inorderTraverse(node['children'][0]) # Traverse the left child.
+    print(node['data'], end=' ') # Access this node's data.
+    if len(node['children']) &gt;= 2:
+        # RECURSIVE CASE
+        inorderTraverse(node['children'][1]) # Traverse the right child.
+    # BASE CASE
+    return
+
+inorderTraverse(root)</code></pre>
+<p class="calibre22">The <em class="calibre10">inorderTraversal.html</em> program contains the equivalent JavaScript code:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+root = {"data": "A", "children": [{"data": "B", "children":
+[{"data": "D", "children": []}]}, {"data": "C", "children":
+[{"data": "E", "children": [{"data": "G", "children": []},
+{"data": "H", "children": []}]}, {"data": "F", "children": []}]}]};
+
+function inorderTraverse(node) {
+    if (node["children"].length &gt;= 1) {
+        // RECURSIVE CASE
+        inorderTraverse(node["children"][0]); // Traverse the left child.
+    }
+    document.write(node["data"] + " "); // Access this node's data.
+    if (node["children"].length &gt;= 2) {
+        // RECURSIVE CASE
+        inorderTraverse(node["children"][1]); // Traverse the right child.
+    }
+    // BASE CASE
+    return;
+}
+
+inorderTraverse(root);
+&lt;/script&gt;</code></pre>
+<p class="calibre22">The output of these programs looks like this:</p>
+<pre class="calibre23"><code class="calibre11">D B A G E H C F</code></pre>
+<p class="calibre22">Inorder traversal typically refers to the traversal of binary trees, although processing a node’s data after traversing the first node and before traversing the last node would count as inorder traversal for trees of any size.</p>
+<h2 id="calibre_link-296" class="calibre6">Finding Eight-Letter Names in a Tree</h2>
+<p class="bodyfirst">Instead of printing out the data in each node as we traverse them, we can use a <em class="calibre10">depth-first search</em> to find specific data in a tree data structure. We’ll write an algorithm that searches the tree in <a href="#calibre_link-4" id="calibre_link-640" class="linkurl">Figure 4-4</a> for names that are exactly eight letters long. This is a rather contrived example, but it shows how an algorithm can use tree traversal to retrieve data out of a tree data structure.</p>
+<span type="pagebreak" title="79" id="calibre_link-77" class="calibre17"></span><figure class="calibre25">
+<img src="images/000077.webp" class="calibre16" alt="Tree diagram with the root node “Alice,” which has two child nodes, “Bob” and “Caroline.” “Bob” has one child node, “Darya.” “Caroline” has two child nodes, “Eve” and “Fred.” “Eve” has two child nodes, “Gonzalo” and “Hadassah.”" />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-4" class="linkurl">Figure 4-4</a>: The tree that stores names in our <em class="calibre37">depthFirstSearch.py</em> and <em class="calibre37">depthFirstSearch.html</em> programs</p></figcaption>
+</figure>
+<p class="calibre22">Let’s ask the three questions about recursive algorithms for our tree traversal code. Their answers are similar to the answers for the tree traversal algorithms:</p>
+<ol class="none">
+<li class="calibre9"><span class="runinhead">What is the base case?</span>  Either a leaf node causing the algorithm to backtrack, or a node containing an eight-letter name.</li>
+<li class="calibre9"><span class="runinhead">What argument is passed to the recursive function call?</span>  The node to traverse to, whose child nodes will be the next nodes to traverse.</li>
+<li class="calibre9"><span class="runinhead">How does this argument become closer to the base case?</span>  There are no cycles in a DAG, so following the descendant nodes will always eventually reach a leaf node.</li>
+</ol>
+<p class="calibre22">The <em class="calibre10">depthFirstSearch.py</em> program contains Python code that performs a depth-first search with a preorder traversal:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">root = {'name': 'Alice', 'children': [{'name': 'Bob', 'children':
+[{'name': 'Darya', 'children': []}]}, {'name': 'Caroline',
+'children': [{'name': 'Eve', 'children': [{'name': 'Gonzalo',
+'children': []}, {'name': 'Hadassah', 'children': []}]}, {'name': 'Fred', 'children': []}]}]}
+
+def find8LetterName(node):
+    print(' Visiting node ' + node['name'] + '...')
+
+    # Preorder depth-first search:
+    print('Checking if ' + node['name'] + ' is 8 letters...')
+  <span class="codeannotationcode" aria-label="annotation1">❶</span> if len(node['name']) == 8: return node['name'] # BASE CASE
+
+    if len(node['children']) &gt; 0:
+        # RECURSIVE CASE
+        for child in node['children']:
+            returnValue = find8LetterName(child)
+            if returnValue != None:
+                return returnValue
+
+<span type="pagebreak" title="80" id="calibre_link-76" class="calibre17"></span>    # Postorder depth-first search:
+    #print('Checking if ' + node['name'] + ' is 8 letters...')
+  <span class="codeannotationcode" aria-label="annotation2">❷</span> #if len(node['name']) == 8: return node['name'] # BASE CASE
+
+    # Value was not found or there are no children.
+    return None # BASE CASE
+
+print('Found an 8-letter name: ' + str(find8LetterName(root)))</code></pre>
+<p class="calibre22">The <em class="calibre10">depthFirstSearch.html</em> program contains the equivalent JavaScript program:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+root = {'name': 'Alice', 'children': [{'name': 'Bob', 'children':
+[{'name': 'Darya', 'children': []}]}, {'name': 'Caroline',
+'children': [{'name': 'Eve', 'children': [{'name': 'Gonzalo',
+'children': []}, {'name': 'Hadassah', 'children': []}]}, {'name': 'Fred', 'children': []}]}]};
+
+function find8LetterName(node, value) {
+    document.write("Visiting node " + node.name + "...&lt;br /&gt;");
+
+    // Preorder depth-first search:
+    document.write("Checking if " + node.name + " is 8 letters...&lt;br /&gt;");
+  <span class="codeannotationcode" aria-label="annotation1">❶</span> if (node.name.length === 8) return node.name; // BASE CASE
+
+    if (node.children.length &gt; 0) {
+        // RECURSIVE CASE
+        for (let child of node.children) {
+            let returnValue = find8LetterName(child);
+            if (returnValue != null) {
+                return returnValue;
+            }
+        }
+    }
+
+    // Postorder depth-first search:
+    document.write("Checking if " + node.name + " is 8 letters...&lt;br /&gt;");
+  <span class="codeannotationcode" aria-label="annotation2">❷</span> //if (node.name.length === 8) return node.name; // BASE CASE
+
+    // Value was not found or there are no children.
+    return null; // BASE CASE
+}
+
+document.write("Found an 8-letter name: " + find8LetterName(root));
+&lt;/script&gt;</code></pre>
+<p class="calibre22">The output of these programs looks like this:</p>
+<pre class="calibre23"><code class="calibre11">Visiting node Alice...
+Checking if Alice is 8 letters...
+Visiting node Bob...
+Checking if Bob is 8 letters...
+Visiting node Darya...
+<span type="pagebreak" title="81" id="calibre_link-74" class="calibre17"></span>Checking if Darya is 8 letters...
+Visiting node Caroline...
+Checking if Caroline is 8 letters...
+Found an 8-letter name: Caroline</code></pre>
+<p class="calibre22">The <code class="calibre11">find8LetterName()</code> function operates in the same way as our previous tree traversal functions, except instead of printing the node’s data, the function checks the name stored in the node and returns the first eight-letter name it finds. You can change the preorder traversal to a postorder traversal by commenting out the earlier name length comparison and the <code class="calibre11">Checking if</code> line <span class="codeannotation" aria-label="annotation1">❶</span> and uncommenting the later name length comparison and the <code class="calibre11">Checking if</code> line <span class="codeannotation" aria-label="annotation2">❷</span>. When you make this change, the first eight-letter name the function finds is <code class="calibre11">Hadassah</code>:</p>
+<pre class="calibre23"><code class="calibre11">Visiting node Alice...
+Visiting node Bob...
+Visiting node Darya...
+Checking if Darya is 8 letters...
+Checking if Bob is 8 letters...
+Visiting node Caroline...
+Visiting node Eve...
+Visiting node Gonzalo...
+Checking if Gonzalo is 8 letters...
+Visiting node Hadassah...
+Checking if Hadassah is 8 letters...
+Found an 8-letter name: Hadassah</code></pre>
+<p class="calibre22">While both traversal orders correctly find an eight-letter name, changing the order of a tree traversal can alter the behavior of your program. </p>
+<h2 id="calibre_link-297" class="calibre6">Getting the Maximum Tree Depth</h2>
+<p class="bodyfirst">An algorithm can determine the deepest branch in a tree by recursively asking its child nodes how deep they are. The <em class="calibre10">depth</em> of a node is the number of edges between it and the root node. The root node itself has a depth of 0, the immediate child of the root node has a depth of 1, and so on. You may need this information as part of a larger algorithm or to gather information about the general size of the tree data structure. </p>
+<p class="calibre22">We can have a function named <code class="calibre11">getDepth()</code> take a node for an argument and return the depth of its deepest child node. A leaf node (the base case) simply returns <code class="calibre11">0</code>.</p>
+<p class="calibre22">For example, given the root node of the tree in <a href="#calibre_link-1" class="linkurl">Figure 4-1</a>, we could call <code class="calibre11">getDepth()</code> and pass it the root node (the <code class="calibre11">A</code> node). This would return the depth of its children, the <code class="calibre11">B</code> and <code class="calibre11">C</code> nodes, plus one. The function must make a recursive call to <code class="calibre11">getDepth()</code> to find out this information. Eventually, the <code class="calibre11">A</code> node would call <code class="calibre11">getDepth()</code> on <code class="calibre11">C</code>, which would call it on <code class="calibre11">E</code>. When <code class="calibre11">E</code> calls <code class="calibre11">getDepth()</code> with its two children, <code class="calibre11">G</code> and <code class="calibre11">H</code>, they both return <code class="calibre11">0</code>, so <code class="calibre11">getDepth()</code> called on <code class="calibre11">E</code> returns <code class="calibre11">1</code>, making <code class="calibre11">getDepth()</code> called on <code class="calibre11">C</code> return <code class="calibre11">2</code>, and making <code class="calibre11">getDepth()</code> called on <code class="calibre11">A</code> (the root node) return <code class="calibre11">3</code>. Our tree’s greatest depth is three levels.</p>
+<p class="calibre22"><span type="pagebreak" title="82" id="calibre_link-119" class="calibre17"></span>Let’s ask our three recursive algorithm questions for the <code class="calibre11">getDepth()</code> function:</p>
+<ol class="none">
+<li class="calibre9"><span class="runinhead">What is the base case? </span>  A leaf node with no children, which by its nature has a depth of one level.</li>
+<li class="calibre9"><span class="runinhead">What argument is passed to the recursive function call? </span>  The node whose greatest depth we want to find.</li>
+<li class="calibre9"><span class="runinhead">How does this argument become closer to the base case? </span>  A DAG has no cycles, so following the descendant nodes will eventually reach a leaf node.</li>
+</ol>
+<p class="calibre22">The following <em class="calibre10">getDepth.py</em> program contains a recursive <code class="calibre11">getDepth()</code> function that returns the number of levels contained in the deepest node in the tree:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">root = {'data': 'A', 'children': [{'data': 'B', 'children':
+[{'data': 'D', 'children': []}]}, {'data': 'C', 'children':
+[{'data': 'E', 'children': [{'data': 'G', 'children': []},
+{'data': 'H', 'children': []}]}, {'data': 'F', 'children': []}]}]}
+
+def getDepth(node):
+    if len(node['children']) == 0:
+        # BASE CASE
+        return 0
+    else:
+        # RECURSIVE CASE
+        maxChildDepth = 0
+        for child in node['children']:
+            # Find the depth of each child node:
+            childDepth = getDepth(child)
+            if childDepth &gt; maxChildDepth:
+                # This child is deepest child node found so far:
+                maxChildDepth = childDepth
+        return maxChildDepth + 1
+
+print('Depth of tree is ' + str(getDepth(root)))</code></pre>
+<p class="calibre22">The <em class="calibre10">getDepth.html</em> program contains the JavaScript equivalent:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+root = {"data": "A", "children": [{"data": "B", "children":
+[{"data": "D", "children": []}]}, {"data": "C", "children":
+[{"data": "E", "children": [{"data": "G", "children": []},
+{"data": "H", "children": []}]}, {"data": "F", "children": []}]}]};
+
+function getDepth(node) {
+    if (node.children.length === 0) {
+        // BASE CASE
+        return 0;
+    } else {
+        // RECURSIVE CASE
+        let maxChildDepth = 0;
+        for (let child of node.children) {
+            // Find the depth of each child node:
+<span type="pagebreak" title="83" id="calibre_link-155" class="calibre17"></span>            let childDepth = getDepth(child);
+            if (childDepth &gt; maxChildDepth) {
+                // This child is deepest child node found so far:
+                maxChildDepth = childDepth;
+            }
+        }
+        return maxChildDepth + 1;
+    }
+}
+
+document.write("Depth of tree is " + getDepth(root) + "&lt;br /&gt;");
+&lt;/script&gt;</code></pre>
+<p class="calibre22">The output of these programs is as follows:</p>
+<pre class="calibre23"><code class="calibre11">Depth of tree is 3</code></pre>
+<p class="calibre22">This matches what we see in <a href="#calibre_link-2" class="linkurl">Figure 4-2</a>: the number of levels from the root node <code class="calibre11">A</code> down to the lowest nodes <code class="calibre11">G</code> and <code class="calibre11">H</code> is three levels.</p>
+<h2 id="calibre_link-298" class="calibre6">Solving Mazes</h2>
+<p class="bodyfirst">While mazes come in all shapes and sizes, <em class="calibre10">simply connected mazes</em>, also called <em class="calibre10">perfect mazes</em>, contain no loops. A perfect maze has exactly one path between any two points, such as the start and exit. These mazes can be represented by a DAG. </p>
+<p class="calibre22">For example, <a href="#calibre_link-5" id="calibre_link-641" class="linkurl">Figure 4-5</a> shows the maze that our maze program solves, and <a href="#calibre_link-6" id="calibre_link-642" class="linkurl">Figure 4-6</a> shows the DAG form of it. The capital <em class="calibre10">S</em> marks the start of the maze, and the capital <em class="calibre10">E</em> marks the exit. A few of the intersections that have been marked with lowercase letters in the maze correspond to nodes in the DAG.</p>
+<figure class="calibre25">
+<img src="images/000088.webp" class="calibre16" alt="Maze with certain intersections labeled with the letters s, d, b, a, c, f, e, g, i, j, h, k, n, m, l, and e." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-5" class="linkurl">Figure 4-5</a>: The maze solved by our maze program in this chapter. Some intersections have lowercase letters that correspond to nodes in <a href="#calibre_link-6" class="linkurl">Figure 4-6</a>.</p></figcaption>
+</figure>
+<span type="pagebreak" title="84" id="calibre_link-501" class="calibre17"></span><figure class="calibre25">
+<img src="images/000000.webp" class="calibre16" alt="Tree graph in which every intersection of the maze in Figure 4-5 is represented as a node." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-6" class="linkurl">Figure 4-6</a>: In this DAG representation of the maze, nodes represent intersections, and edges represent the north, south, east, or west path from the intersection. Some nodes have lowercase letters to correspond to intersections in <a href="#calibre_link-5" class="linkurl">Figure 4-5</a>.</p></figcaption>
+</figure>
+<p class="calibre22"><span type="pagebreak" title="85" id="calibre_link-157" class="calibre17"></span>Because of this similarity in structure, we can use a tree traversal algorithm to solve the maze. The nodes in this tree graph represent intersections where the maze solver could choose one of the north, south, east, or west paths to follow to the next intersection. The root node is the start of the maze, and the leaf nodes represent dead ends. </p>
+<p class="calibre22">The recursive case occurs when the tree traversal algorithm moves from one node to the next. If the tree traversal reaches a leaf node (a dead end in the maze), the algorithm has reached a base case and must backtrack to an earlier node and follow a different path. Once the algorithm reaches the exit node, the path it took from the root node represents the maze solution. Let’s ask our three recursive algorithm questions about the maze-solving algorithm:</p>
+<ol class="none">
+<li class="calibre9"><span class="runinhead">What is the base case?</span>  Reaching a dead end or the exit of the maze.</li>
+<li class="calibre9"><span class="runinhead">What argument is passed to the recursive function call?</span>  The x, y coordinates, along with the maze data and list of already visited x, y coordinates.</li>
+<li class="calibre9"><span class="runinhead">How does this argument become closer to the base case?</span>  Like the flood fill algorithm, the x, y coordinates keep moving to neighboring coordinates until they eventually reach dead ends or the final exit.</li>
+</ol>
+<p class="calibre22">This <em class="calibre10">mazeSolver.py</em> program contains the Python code for solving the maze stored in the <code class="calibre11">MAZE</code> variable:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11"># Create the maze data structure:
+# You can copy-paste this from inventwithpython.com/examplemaze.txt
+MAZE = """
+#######################################################################
+#S#                 #       # #   #     #         #     #   #         #
+# ##### ######### # ### ### # # # # ### # # ##### # ### # # ##### # ###
+# #   #     #     #     #   # # #   # #   # #       # # # #     # #   #
+# # # ##### # ########### ### # ##### ##### ######### # # ##### ### # #
+#   #     # # #     #   #   #   #         #       #   #   #   #   # # #
+######### # # # ##### # ### # ########### ####### # # ##### ##### ### #
+#       # # # #     # #     # #   #   #   #     # # #   #         #   #
+# # ##### # # ### # # ####### # # # # # # # ##### ### ### ######### # #
+# # #   # # #   # # #     #     #   #   #   #   #   #     #         # #
+### # # # # ### # # ##### ####### ########### # ### # ##### ##### ### #
+#   # #   # #   # #     #   #     #       #   #     # #     #     #   #
+# ### ####### ##### ### ### ####### ##### # ######### ### ### ##### ###
+#   #         #     #     #       #   # #   # #     #   # #   # #   # #
+### ########### # ####### ####### ### # ##### # # ##### # # ### # ### #
+#   #   #       # #     #   #   #     #       # # #     # # #   # #   #
+# ### # # ####### # ### ##### # ####### ### ### # # ####### # # # ### #
+#     #         #     #       #           #     #           # #      E#
+#######################################################################
+""".split('\n')
+
+# Constants used in this program:
+EMPTY = ' '
+START = 'S'
+EXIT = 'E'
+<span type="pagebreak" title="86" id="calibre_link-502" class="calibre17"></span>PATH = '.'
+
+# Get the height and width of the maze:
+HEIGHT = len(MAZE)
+WIDTH = 0
+for row in MAZE: # Set WIDTH to the widest row's width.
+    if len(row) &gt; WIDTH:
+        WIDTH = len(row)
+# Make each row in the maze a list as wide as the WIDTH:
+for i in range(len(MAZE)):
+    MAZE[i] = list(MAZE[i])
+    if len(MAZE[i]) != WIDTH:
+        MAZE[i] = [EMPTY] * WIDTH # Make this a blank row.
+
+def printMaze(maze):
+    for y in range(HEIGHT):
+        # Print each row.
+        for x in range(WIDTH):
+            # Print each column in this row.
+            print(maze[y][x], end='')
+        print() # Print a newline at the end of the row.
+    print()
+
+def findStart(maze):
+    for x in range(WIDTH):
+        for y in range(HEIGHT):
+            if maze[y][x] == START:
+                return (x, y) # Return the starting coordinates.
+
+def solveMaze(maze, x=None, y=None, visited=None):
+    if x == None or y == None:
+        x, y = findStart(maze)
+        maze[y][x] = EMPTY # Get rid of the 'S' from the maze.
+    if visited == None:
+      <span class="codeannotationcode" aria-label="annotation1">❶</span> visited = [] # Create a new list of visited points.
+
+    if maze[y][x] == EXIT:
+         return True # Found the exit, return True.
+
+    maze[y][x] = PATH # Mark the path in the maze.
+  <span class="codeannotationcode" aria-label="annotation2">❷</span> visited.append(str(x) + ',' + str(y))
+  <span class="codeannotationcode" aria-label="annotation3">❸</span> #printMaze(maze) # Uncomment to view each forward step.
+
+    # Explore the north neighboring point:
+    if y + 1 &lt; HEIGHT and maze[y + 1][x] in (EMPTY, EXIT) and \
+    str(x) + ',' + str(y + 1) not in visited:
+        # RECURSIVE CASE
+        if solveMaze(maze, x, y + 1, visited):
+            return True # BASE CASE
+    # Explore the south neighboring point:
+    if y - 1 &gt;= 0 and maze[y - 1][x] in (EMPTY, EXIT) and \
+    str(x) + ',' + str(y - 1) not in visited:
+        # RECURSIVE CASE
+        if solveMaze(maze, x, y - 1, visited):
+            return True # BASE CASE
+<span type="pagebreak" title="87" id="calibre_link-156" class="calibre17"></span>    # Explore the east neighboring point:
+    if x + 1 &lt; WIDTH and maze[y][x + 1] in (EMPTY, EXIT) and \
+    str(x + 1) + ',' + str(y) not in visited:
+        # RECURSIVE CASE
+        if solveMaze(maze, x + 1, y, visited):
+            return True # BASE CASE
+    # Explore the west neighboring point:
+    if x - 1 &gt;= 0 and maze[y][x - 1] in (EMPTY, EXIT) and \
+    str(x - 1) + ',' + str(y) not in visited:
+        # RECURSIVE CASE
+        if solveMaze(maze, x - 1, y, visited):
+            return True # BASE CASE
+
+    maze[y][x] = EMPTY # Reset the empty space.
+  <span class="codeannotationcode" aria-label="annotation4">❹</span> #printMaze(maze) # Uncomment to view each backtrack step.
+
+    return False # BASE CASE
+
+printMaze(MAZE)
+solveMaze(MAZE)
+printMaze(MAZE)</code></pre>
+<p class="calibre22">The <em class="calibre10">mazeSolver.html</em> program contains the JavaScript equivalent:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
+// Create the maze data structure:
+// You can copy-paste this from inventwithpython.com/examplemaze.txt
+let MAZE = `
+#######################################################################
+#S#                 #       # #   #     #         #     #   #         #
+# ##### ######### # ### ### # # # # ### # # ##### # ### # # ##### # ###
+# #   #     #     #     #   # # #   # #   # #       # # # #     # #   #
+# # # ##### # ########### ### # ##### ##### ######### # # ##### ### # #
+#   #     # # #     #   #   #   #         #       #   #   #   #   # # #
+######### # # # ##### # ### # ########### ####### # # ##### ##### ### #
+#       # # # #     # #     # #   #   #   #     # # #   #         #   #
+# # ##### # # ### # # ####### # # # # # # # ##### ### ### ######### # #
+# # #   # # #   # # #     #     #   #   #   #   #   #     #         # #
+### # # # # ### # # ##### ####### ########### # ### # ##### ##### ### #
+#   # #   # #   # #     #   #     #       #   #     # #     #     #   #
+# ### ####### ##### ### ### ####### ##### # ######### ### ### ##### ###
+#   #         #     #     #       #   # #   # #     #   # #   # #   # #
+### ########### # ####### ####### ### # ##### # # ##### # # ### # ### #
+#   #   #       # #     #   #   #     #       # # #     # # #   # #   #
+# ### # # ####### # ### ##### # ####### ### ### # # ####### # # # ### #
+#     #         #     #       #           #     #           # #      E#
+#######################################################################
+`.split("\n");
+
+// Constants used in this program:
+const EMPTY = " ";
+const START = "S";
+const EXIT = "E";
+const PATH = ".";
+
+<span type="pagebreak" title="88" id="calibre_link-503" class="calibre17"></span>// Get the height and width of the maze:
+const HEIGHT = MAZE.length;
+let maxWidthSoFar = MAZE[0].length;
+for (let row of MAZE) { // Set WIDTH to the widest row's width.
+    if (row.length &gt; maxWidthSoFar) {
+        maxWidthSoFar = row.length;
+    }
+}
+const WIDTH = maxWidthSoFar;
+// Make each row in the maze a list as wide as the WIDTH:
+for (let i = 0; i &lt; MAZE.length; i++) {
+    MAZE[i] = MAZE[i].split("");
+    if (MAZE[i].length !== WIDTH) {
+        MAZE[i] = EMPTY.repeat(WIDTH).split(""); // Make this a blank row.
+    }
+}
+
+function printMaze(maze) {
+    document.write("&lt;pre&gt;");
+    for (let y = 0; y &lt; HEIGHT; y++) {
+        // Print each row.
+        for (let x = 0; x &lt; WIDTH; x++) {
+            // Print each column in this row.
+            document.write(maze[y][x]);
+        }
+        document.write("\n"); // Print a newline at the end of the row.
+    }
+    document.write("\n&lt;/ pre&gt;");
+}
+
+function findStart(maze) {
+    for (let x = 0; x &lt; WIDTH; x++) {
+        for (let y = 0; y &lt; HEIGHT; y++) {
+            if (maze[y][x] === START) {
+                return [x, y]; // Return the starting coordinates.
+            }
+        }
+    }
+}
+
+function solveMaze(maze, x, y, visited) {
+    if (x === undefined || y === undefined) {
+        [x, y] = findStart(maze);
+        maze[y][x] = EMPTY; // Get rid of the 'S' from the maze.
+    }
+    if (visited === undefined) {
+      <span class="codeannotationcode" aria-label="annotation1">❶</span> visited = []; // Create a new list of visited points.
+    }
+
+    if (maze[y][x] == EXIT) {
+         return true; // Found the exit, return true.
+    }
+
+    maze[y][x] = PATH; // Mark the path in the maze.
+  <span class="codeannotationcode" aria-label="annotation2">❷</span> visited.push(String(x) + "," + String(y));
+<span type="pagebreak" title="89" id="calibre_link-504" class="calibre17"></span>  <span class="codeannotationcode" aria-label="annotation3">❸</span> //printMaze(maze) // Uncomment to view each forward step.
+
+    // Explore the north neighboring point:
+    if ((y + 1 &lt; HEIGHT) &amp;&amp; ((maze[y + 1][x] == EMPTY) ||
+    (maze[y + 1][x] == EXIT)) &amp;&amp;
+    (visited.indexOf(String(x) + "," + String(y + 1)) === -1)) {
+        // RECURSIVE CASE
+        if (solveMaze(maze, x, y + 1, visited)) {
+            return true; // BASE CASE
+        }
+    }
+    // Explore the south neighboring point:
+    if ((y - 1 &gt;= 0) &amp;&amp; ((maze[y - 1][x] == EMPTY) ||
+    (maze[y - 1][x] == EXIT)) &amp;&amp;
+    (visited.indexOf(String(x) + "," + String(y - 1)) === -1)) {
+        // RECURSIVE CASE
+        if (solveMaze(maze, x, y - 1, visited)) {
+            return true; // BASE CASE
+        }
+    }
+    // Explore the east neighboring point:
+    if ((x + 1 &lt; WIDTH) &amp;&amp; ((maze[y][x + 1] == EMPTY) ||
+    (maze[y][x + 1] == EXIT)) &amp;&amp;
+    (visited.indexOf(String(x + 1) + "," + String(y)) === -1)) {
+        // RECURSIVE CASE
+        if (solveMaze(maze, x + 1, y, visited)) {
+            return true; // BASE CASE
+        }
+    }
+    // Explore the west neighboring point:
+    if ((x - 1 &gt;= 0) &amp;&amp; ((maze[y][x - 1] == EMPTY) ||
+    (maze[y][x - 1] == EXIT)) &amp;&amp;
+    (visited.indexOf(String(x - 1) + "," + String(y)) === -1)) {
+        // RECURSIVE CASE
+        if (solveMaze(maze, x - 1, y, visited)) {
+            return true; // BASE CASE
+        }
+    }
+
+    maze[y][x] = EMPTY; // Reset the empty space.
+  <span class="codeannotationcode" aria-label="annotation4">❹</span> //printMaze(maze); // Uncomment to view each backtrack step.
+    return false; // BASE CASE
+}
+
+printMaze(MAZE);
+solveMaze(MAZE);
+printMaze(MAZE);
+&lt;/script&gt;</code></pre>
+<p class="calibre22">A lot of this code is not directly related to the recursive maze-solving algorithm. The <code class="calibre11">MAZE</code> variable stores the maze data as a multiline string with hashtags to represent walls, an <code class="calibre11">S</code> for the starting point, and an <code class="calibre11">E</code> for the exit. This string is converted into a list that contains lists of strings, with each <span type="pagebreak" title="90" id="calibre_link-134" class="calibre17"></span>string representing a single character in the maze. This allows us to access <code class="calibre11">MAZE[y][x]</code> (note that <code class="calibre11">y</code> comes first) to get the character at the x, y coordinate in the original <code class="calibre11">MAZE</code> string. The <code class="calibre11">printMaze()</code> function can accept this list-of-list data structure and display the maze on the screen. The <code class="calibre11">findStart()</code> function accepts this data structure and returns the x, y coordinates of the <code class="calibre11">S</code> starting point. Feel free to edit the maze string yourself&mdash;although remember that, in order for the solving algorithm to work, the maze cannot have any loops.</p>
+<p class="calibre22">The recursive algorithm is in the <code class="calibre11">solveMaze()</code> function. The arguments to this function are the maze data structure, the current x- and y-coordinates, and a <code class="calibre11">visited</code> list (which is created if none was supplied) <span class="codeannotation" aria-label="annotation1">❶</span>. The <code class="calibre11">visited</code> list contains all the coordinates that have previously been visited so that when the algorithm backtracks from a dead end to an earlier intersection, it knows which paths it has tried before and can try a different one. The path from the start to the exit is marked by replacing the spaces (matching the <code class="calibre11">EMPTY</code> constant) in the maze data structure with periods (from the <code class="calibre11">PATH</code> constant).</p>
+<p class="calibre22">The maze-solving algorithm is similar to our flood fill program in <span class="calibre" itemid="xref_target_Chapter 3">Chapter 3</span> in that it “spreads” to neighboring coordinates, though when it reaches a dead end, it backtracks to an earlier intersection. The <code class="calibre11">solveMaze()</code> function receives the x, y coordinates indicating the algorithm’s current location in the maze. If this is the exit, the function returns <code class="calibre11">True</code>, causing all the recursive calls to also return <code class="calibre11">True</code>. The maze data structure remains marked with the solution path.</p>
+<p class="calibre22">Otherwise, the algorithm marks the current x, y coordinates in the maze data structure with a period and adds the coordinates to the <code class="calibre11">visited</code> list <span class="codeannotation" aria-label="annotation2">❷</span>. Then it looks to the x, y coordinates north of the current coordinates to see if that point is not off the edge of the map, is either the empty or exit space, and has not been visited before. If these conditions are met, the algorithm makes a recursive call to <code class="calibre11">solveMaze()</code> with the northern coordinates. If these conditions aren’t met or the recursive call to <code class="calibre11">solveMaze()</code> returns <code class="calibre11">False</code>, the algorithm continues on to check the south, east, and west coordinates. Like the flood fill algorithm, recursive calls are made with the neighboring coordinates.</p>
+<aside type="sidebar" class="authors">
+<div class="top"><hr class="calibre29" /></div>
+<section class="box">
+<h2 class="calibre50">Modifying a List or Array In Place</h2>
+<p class="boxbodyfirst">Python doesn’t pass a copy of lists, and JavaScript doesn’t pass a copy of arrays, to function calls. Rather, they pass a reference to the list. Therefore, any changes made to a list or array (such as the ones in <code class="calibre39">maze</code> and <code class="calibre39">visited</code>) remain even after the function returns. This is called modifying the list <em class="calibre10">in place</em>. For recursive functions, you can think of the maze data structure and collection of visited coordinates as a single copy shared among all the recursive function calls, unlike the <code class="calibre39">x</code> and <code class="calibre39">y</code> arguments. This is why the data structure in <code class="calibre39">MAZE</code> is still modified after the first call to <code class="calibre39">solveMaze()</code> returns.</p>
+<div class="top"><hr class="calibre29" /></div>
+</section>
+</aside>
+<p class="calibre22"><span type="pagebreak" title="91" id="calibre_link-67" class="calibre17"></span>To get a better idea of how this algorithm works, uncomment the two <code class="calibre11">printMaze(MAZE)</code> calls <span class="codeannotation" aria-label="annotation3">❸</span> <span class="codeannotation" aria-label="annotation4">❹</span> inside the <code class="calibre11">solveMaze()</code> function. These will display the maze data structure as it attempts new paths, reaches dead ends, backtracks, and tries different paths.</p>
+<h2 id="calibre_link-299" class="calibre6">Summary</h2>
+<p class="bodyfirst">This chapter explored several algorithms that make use of tree data structures and backtracking, which are features of a problem that is suitable for solving with recursive algorithms. We covered tree data structures, which are composed of nodes that contain data and edges that relate nodes together in parent&ndash;child relationships. In particular, we examined a specific kind of tree called a directed acyclic graph (DAG) that is often used in recursive algorithms. A recursive function call is analogous to traversing to a child node in a tree, while returning from a recursive function call is analogous to backtracking to a previous parent node.</p>
+<p class="calibre22">While recursion is overused for simple programming problems, it is well matched for problems that involve tree-like structures and backtracking. Using these ideas of tree-like structures, we wrote several algorithms for traversing, searching, and determining the depth of tree structures. We also showed that a simply connected maze has a tree-like structure, and employed recursion and backtracking to solve a maze.</p>
+<h2 id="calibre_link-300" class="calibre6">Further Reading</h2>
+<p class="bodyfirst">There is far more to trees and tree traversal than the brief description of DAGs presented in this chapter. The Wikipedia articles at <a href="https://en.wikipedia.org/wiki/Tree_(data_structure)" class="linkurl">https://en.wikipedia.org/wiki/Tree_(data_structure)</a> and <a href="https://en.wikipedia.org/wiki/Tree_traversal" class="linkurl">https://en.wikipedia.org/wiki/Tree_traversal</a> provide additional context for these concepts, which are often used in computer science.</p>
+<p class="calibre22">The Computerphile YouTube channel also has a video titled “Maze Solving” at <a href="https://youtu.be/rop0W4QDOUI" class="linkurl">https://youtu.be/rop0W4QDOUI</a> that discusses these concepts. V. Anton Spraul, author of <em class="calibre10">Think Like a Programmer</em> (No Starch Press, 2012), also has a video on maze solving titled “Backtracking” at <a href="https://youtu.be/gBC_Fd8EE8A" class="linkurl">https://youtu.be/gBC_Fd8EE8A</a>. The freeCodeCamp organization (<a href="https://freeCodeCamp.org" class="linkurl">https://freeCodeCamp.org</a>) has a video series on backtracking algorithms at <a href="https://youtu.be/A80YzvNwqXA" class="linkurl">https://youtu.be/A80YzvNwqXA</a>.</p>
+<p class="calibre22">In addition to maze solving, the recursive backtracker algorithm uses recursion to generate mazes. You can find out more about this and other maze-generating algorithms at <a href="https://en.wikipedia.org/wiki/Maze_generation_algorithm#Recursive_backtracker" class="linkurl">https://en.wikipedia.org/wiki/Maze_generation_algorithm#Recursive_backtracker</a>.</p>
+<h2 id="calibre_link-301" class="calibre6"><span type="pagebreak" title="92" id="calibre_link-505" class="calibre20"></span>Practice Questions</h2>
+<p class="bodyfirst">Test your comprehension by answering the following questions:</p>
+<ol class="decimal">
+<li value="1" class="calibre9">What are nodes and edges?</li>
+<li value="2" class="calibre9">What are root and leaf nodes?</li>
+<li value="3" class="calibre9">What are the three tree traversal orders?</li>
+<li value="4" class="calibre9">What does <em class="calibre10">DAG</em> stand for?</li>
+<li value="5" class="calibre9">What is a cycle, and do DAGs have cycles?</li>
+<li value="6" class="calibre9">What is a binary tree?</li>
+<li value="7" class="calibre9">What are the child nodes in a binary tree called?</li>
+<li value="8" class="calibre9">If a parent node has an edge to a child node, and the child node has an edge back to the parent node, is this graph considered a DAG?</li>
+<li value="9" class="calibre9">What is backtracking in a tree traversal algorithm?
+<p class="bodyfirst">For the following tree traversal problems, you can use the Python/JavaScript code in “A Tree Data Structure in Python and JavaScript” in <span class="calibre" itemid="xref_target_Chapter 4">Chapter 4</span> for your tree and the multiline <code class="calibre11">MAZE</code> string from the <em class="calibre10">mazeSolver.py</em> and <em class="calibre10">mazeSolver.html</em> programs for the maze data.</p>
+</li>
+<li value="10" class="calibre9">Answer the three questions about recursive solutions for each of the recursive algorithms presented in this chapter:
+<ol class="lower-alpha">
+<li value="1" class="calibre9">What is the base case? </li>
+<li value="2" class="calibre9">What argument is passed to the recursive function call? </li>
+<li value="3" class="calibre9">How does this argument become closer to the base case? </li>
+</ol>
+<p class="bodyfirst">Then re-create the recursive algorithms from this chapter without looking at the original code.</p></li>
+</ol>
+<h2 id="calibre_link-302" class="calibre6">Practice Projects</h2>
+<p class="bodyfirst">For practice, write a function for each of the following tasks:</p>
+<ol class="decimal">
+<li value="1" class="calibre9">Create a reverse-inorder search, one that performs an inorder traversal but traverses the right child node before the left child node.</li>
+<li value="2" class="calibre9">Create a function that, given a root node as an argument, proceeds to make the tree one level deeper by adding one child node to each leaf node in the original tree. This function will need to perform a tree traversal, detect when it has reached a leaf node, and then add one and only one child node to the leaf node. Be sure not to go on and add a child node to this new leaf node, as that will eventually cause a stack overflow.</li>
+</ol>
+</section>
+</div>
+
+
+
+<div><a href="chapter3.html">Prev: Chapter 3 - Classic Recursion Algorithms</a> | <a href="chapter5.html">Next: Chapter 5 - Divide-and-Conquer Algorithms</a></div></body></html>

@@ -1,0 +1,711 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><link href="recursion-style.css" rel="stylesheet" type="text/css" /><title>Chapter 9 - Drawing Fractals</title></head><body>
+
+
+
+<div style="background-color: #eeeddd; float: right; height: 310px; font-family: sans-serif;" id="otherbooks">
+  <a href="#" onclick="document.getElementById('otherbooks').outerHTML='';" style="vertical-align: top;">(close)</a><br />
+
+  <a target="_blank" href="https://nostarch.com/automatestuff2" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_automate.link');"><img src="/images/cover_automate2_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/big-book-small-python-projects" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_bigbookpython.link');"><img src="/images/cover_bigbookpython_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/beyond-basic-stuff-python" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_beyond.link');"><img src="/images/cover_beyond_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/inventwithpython" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_invent.link');"><img src="/images/cover_invent4th_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://www.amazon.com/Making-Games-Python-Pygame-Sweigart/dp/1469901730?ie=UTF8&amp;tag=playwithpyth-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1469901730" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_pygame.link');"><img src="/images/cover_makinggames_thumb.webp" style="height: 200px; border: solid black 1px; /"></a>
+  <a target="_blank" href="https://nostarch.com/crackingcodes" onclick="javascript: pageTracker._trackPageview('/affiliate_chapters_hacking.link');"><img src="/images/cover_crackingcodes_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/scratchplayground"><img src="/images/cover_scratchprogrammingplayground_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <a target="_blank" href="https://nostarch.com/codingwithminecraft"><img src="/images/cover_codingwithminecraft_thumb.webp" style="height: 200px; border: solid black 1px;" /></a>
+  <br />
+  <a href="https://inventwithpython.com/automateudemy">Use this link to get a discount on the Automate the Boring Stuff online video course.</a><br />
+  <a href="https://www.patreon.com/AlSweigart">Support me on Patreon</a>
+</div>
+
+<div><a href="chapter8.html">Prev: Chapter 8 - Tail Call Optimization</a> | <a href="chapter10.html">Next: Chapter 10 - File Finder</a></div>
+
+
+
+
+<div type="bodymatter chapter" class="calibre1" id="calibre_link-216">
+<section class="toclist">
+<header class="calibre14">
+<h1 class="chapter">
+<span class="partnumber"><span type="pagebreak" title="175" id="calibre_link-114" class="calibre36"></span>9</span><br class="calibre18" />
+<span class="parttitle">Drawing Fractals</span></h1>
+</header>
+<figure class="opener">
+<img src="images/000060.webp" alt="" class="calibre16" />
+</figure>
+<p class="chapterintro">Certainly, the most fun application of recursion is drawing fractals. <em class="calibre10">Fractals</em> are shapes that repeat themselves, sometimes chaotically, at different scales. The term was coined by the founder of fractal geometry, Benoit B. Mandelbrot, in 1975 and is derived from the Latin <em class="calibre10">frāctus</em>, meaning broken or fractured, like shattered glass. Fractals include many natural and artificial shapes. In nature, you might see them in the shapes of trees, fern leaves, mountain ranges, lightning bolts, coastlines, river networks, and snowflakes. Mathematicians, programmers, and artists can create elaborate geometric shapes based on a few recursive rules.</p>
+<p class="calibre24">Recursion can produce elaborate fractal art using surprisingly few lines of code. This chapter covers Python’s built-in <code class="calibre11">turtle</code> module for generating several common fractals with code. To create turtle graphics with JavaScript, you can use Greg Reimer’s <code class="calibre11">jtg</code> library. For simplicity, this chapter presents only the Python fractal drawing programs and not the JavaScript equivalents. However, the <code class="calibre11">jtg</code> JavaScript library is covered in this chapter.</p>
+<h2 id="calibre_link-344" class="calibre6"><span type="pagebreak" title="176" id="calibre_link-151" class="calibre20"></span>Turtle Graphics</h2>
+<p class="bodyfirst"><em class="calibre10">Turtle graphics</em> were a feature of the Logo programming language designed to help kids learn coding concepts. The feature has since been reproduced in many languages and platforms. Its central idea is an object called a <em class="calibre10">turtle</em>. </p>
+<p class="calibre22">The turtle acts as a programmable pen that draws lines in a 2D window. Imagine an actual turtle holding a pen on the ground, drawing a line behind it as it moves around. The turtle can adjust the size and color of its pen, or “raise the pen” so that it does not draw as it moves. Turtle programs can produce intricate geometric drawings such as <a href="#calibre_link-217" id="calibre_link-664" class="linkurl">Figure 9-1</a>.</p>
+<p class="calibre22">When you put these instructions inside loops and functions, even small programs can create impressive geometric drawings. Consider the following <em class="calibre10">spiral.py</em> program:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">import turtle
+turtle.tracer(1, 0) # Makes the turtle draw faster.
+for i in range(360):
+    turtle.forward(i)
+    turtle.left(59)
+turtle.exitonclick() # Pause until user clicks in the window.</code></pre>
+<p class="calibre22">When you run this program, the turtle window opens. The turtle (represented by a triangle) will trace the spiral pattern in <a href="#calibre_link-217" class="linkurl">Figure 9-1</a>. While not a fractal, it is a beautiful drawing.</p>
+<figure class="calibre25">
+<img src="images/000032.webp" class="calibre16" alt="Screenshot of a small triangle icon tracing overlapping lines across the window. The lines create a spiral pattern." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-217" class="linkurl">Figure 9-1</a>: The spiral drawn by the program using Python’s <span class="calibre"><code class="calibre39">turtle</code></span> module</p></figcaption>
+</figure>
+<p class="calibre22"><span type="pagebreak" title="177" id="calibre_link-58" class="calibre17"></span>The window in a turtle graphics system uses Cartesian x- and y-coordinates. The number for the horizontal x-coordinate increases going right and decreases going left, while the number for the vertical y-coordinate increases going up and decreases going down. These two coordinates together can provide a unique address for any point in the window. By default, the <em class="calibre10">origin</em> (the x, y coordinate point at 0, 0) is in the center of the window. </p>
+<p class="calibre22">The turtle also has a <em class="calibre10">heading</em>, or direction, that is a number from 0 to 359 (a circle is split into 360 degrees). In Python’s <code class="calibre11">turtle</code> module, a heading of 0 faces east (toward the right edge of the screen) and increases counterclockwise; a heading of 90 faces north, a heading of 180 faces west, and a heading of 270 faces south. In the JavaScript <code class="calibre11">jtg</code> library, this orientation is rotated so that 0 degrees faces north and increases clockwise. <a href="#calibre_link-218" id="calibre_link-665" class="linkurl">Figure 9-2</a> demonstrates the headings for the Python <code class="calibre11">turtle</code> module and the JavaScript <code class="calibre11">jtg</code> library.</p>
+<figure class="calibre25">
+<img src="images/000076.webp" class="calibre16" alt="Two compass diagrams indicating the headings for the turtle module and jtg library. The turtle module headings, clockwise from top: 90, 45, 0, 315, 270, 225, 180, 135. The jtg library headings, clockwise from top: 0, 45, 90, 135, 180, 225, 270, 315." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-218" class="linkurl">Figure 9-2</a>: The headings in Python’s <span class="calibre"><code class="calibre39">turtle</code></span> module (left) and the JavaScript <span class="calibre"><code class="calibre39">jtg</code></span> library (right)</p></figcaption>
+</figure>
+<p class="calibre22">In the JavaScript <code class="calibre11">jtg</code> library at <a href="https://inventwithpython.com/jtg" class="linkurl">https://inventwithpython.com/jtg</a>, enter the following code into the text field at the bottom of the page:</p>
+<p class="codelabel"><b class="calibre7">JavaScript</b></p>
+<pre class="calibre23"><code class="calibre11"><b class="calibre7">for (let i = 0; i &lt; 360; i++) { t.fd(i); t.lt(59) }</b></code></pre>
+<p class="calibre22">This draws the same spiral shown in <a href="#calibre_link-217" class="linkurl">Figure 9-1</a> on the main area of the web page.</p>
+<h2 id="calibre_link-345" class="calibre6">Basic Turtle Functions</h2>
+<p class="bodyfirst">The most commonly used functions in turtle graphics cause the turtle to change heading and move forward or backward. The <code class="calibre11">turtle.left()</code> and <code class="calibre11">turtle.right()</code> functions rotate the turtle a certain number of degrees starting from its current heading, while the <code class="calibre11">turtle.forward()</code> and <code class="calibre11">turtle.backward()</code> functions move the turtle based on its current position.</p>
+<p class="calibre22"><a href="#calibre_link-219" id="calibre_link-666" class="linkurl">Table 9-1</a> lists some of the turtle’s functions. The first function (beginning with <code class="calibre11">turtle.</code>) is for Python, and the second (beginning with <code class="calibre11">t.</code>) is for JavaScript. The full Python documentation is available at <a href="https://docs.python.org/3/library/turtle.html" class="linkurl">https://docs.python.org/3/library/turtle.html</a>. In the JavaScript <code class="calibre11">jtg</code> software, you can press F1 to display the help screen.</p>
+<figure class="calibre25">
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-219" class="calibre40">Table 9-1</a>: Turtle Functions in Python’s <code class="calibre39">turtle</code> Module and JavaScript’s <code class="calibre39">jtg</code> Library<span type="pagebreak" title="178" id="calibre_link-42" class="calibre17"></span></p></figcaption>
+<table id="calibre_link-667" border="1" class="calibre41">
+<thead class="calibre42">
+<tr class="calibre43">
+<td class="calibre44"><b class="calibre7">Python</b></td>
+<td class="calibre44"><b class="calibre7">JavaScript</b></td>
+<td class="calibre44"><b class="calibre7">Description</b></td>
+</tr>
+</thead>
+<tbody class="calibre45">
+<tr class="calibre46">
+<td class="calibre44"><code class="calibre39">goto(</code><var class="calibre54">x</var><code class="calibre39">, </code><var class="calibre54">y</var><code class="calibre39">)</code></td>
+<td class="calibre44"><code class="calibre39">xy(</code><var class="calibre54">x</var><code class="calibre39">, </code><var class="calibre54">y</var><code class="calibre39">)</code></td>
+<td class="calibre44">Moves the turtle to the x, y coordinates.</td>
+</tr>
+<tr class="calibre47">
+<td class="calibre44"><code class="calibre39">setheading(</code><var class="calibre54">deg</var><code class="calibre39">)</code></td>
+<td class="calibre44"><code class="calibre39">heading(</code><var class="calibre54">deg</var><code class="calibre39">)</code></td>
+<td class="calibre44">Sets the turtle’s heading. In Python, 0 degrees is east (right). In JavaScript, 0 degrees is north (up).</td>
+</tr>
+<tr class="calibre46">
+<td class="calibre44"><code class="calibre39">forward(</code><var class="calibre54">steps</var><code class="calibre39">)</code></td>
+<td class="calibre44"><code class="calibre39">fd(</code><var class="calibre54">steps</var><code class="calibre39">)</code></td>
+<td class="calibre44">Moves the turtle a number of steps forward in the heading it is facing.</td>
+</tr>
+<tr class="calibre47">
+<td class="calibre44"><code class="calibre39">backward(</code><var class="calibre54">steps</var><code class="calibre39">)</code></td>
+<td class="calibre44"><code class="calibre39">bk(</code><var class="calibre54">steps</var><code class="calibre39">)</code></td>
+<td class="calibre44">Moves the turtle a number of steps in the heading opposite from the one it is facing.</td>
+</tr>
+<tr class="calibre46">
+<td class="calibre44"><code class="calibre39">left(</code><var class="calibre54">deg</var><code class="calibre39">)</code></td>
+<td class="calibre44"><code class="calibre39">lt(</code><var class="calibre54">deg</var><code class="calibre39">)</code></td>
+<td class="calibre44">Turns the turtle’s heading to the left.</td>
+</tr>
+<tr class="calibre47">
+<td class="calibre44"><code class="calibre39">right(</code><var class="calibre54">deg</var><code class="calibre39">)</code></td>
+<td class="calibre44"><code class="calibre39">rt(</code><var class="calibre54">deg</var><code class="calibre39">)</code></td>
+<td class="calibre44">Turns the turtle’s heading to the right.</td>
+</tr>
+<tr class="calibre46">
+<td class="calibre44"><code class="calibre39">penup()</code></td>
+<td class="calibre44"><code class="calibre39">pu()</code></td>
+<td class="calibre44">“Raises the pen” so that the turtle stops drawing as it moves.</td>
+</tr>
+<tr class="calibre47">
+<td class="calibre44"><code class="calibre39">pendown()</code></td>
+<td class="calibre44"><code class="calibre39">pd()</code></td>
+<td class="calibre44">“Lowers the pen” so that the turtle starts drawing as it moves.</td>
+</tr>
+<tr class="calibre46">
+<td class="calibre44"><code class="calibre39">pensize(</code><var class="calibre54">size</var><code class="calibre39">)</code></td>
+<td class="calibre44"><code class="calibre39">thickness(</code><var class="calibre54">size</var><code class="calibre39">)</code></td>
+<td class="calibre44">Changes the thickness of the lines the turtle draws. The default is <code class="calibre39">1</code>.</td>
+</tr>
+<tr class="calibre47">
+<td class="calibre44"><code class="calibre39">pencolor(</code><var class="calibre54">color</var><code class="calibre39">)</code></td>
+<td class="calibre44"><code class="calibre39">color(</code><var class="calibre54">color</var><code class="calibre39">)</code></td>
+<td class="calibre44">Changes the color of the lines the turtle draws. This can be a string of a common color such as <code class="calibre39">red</code> or <code class="calibre39">white</code>. The default is <code class="calibre39">black</code>.</td>
+</tr>
+<tr class="calibre46">
+<td class="calibre44"><code class="calibre39">xcor()</code></td>
+<td class="calibre44"><code class="calibre39">get.x()</code></td>
+<td class="calibre44">Returns the turtle’s current x position.</td>
+</tr>
+<tr class="calibre47">
+<td class="calibre44"><code class="calibre39">ycor()</code></td>
+<td class="calibre44"><code class="calibre39">get.y()</code></td>
+<td class="calibre44">Returns the turtle’s current y position.</td>
+</tr>
+<tr class="calibre46">
+<td class="calibre44"><code class="calibre39">heading()</code></td>
+<td class="calibre44"><code class="calibre39">get.heading()</code></td>
+<td class="calibre44">Returns the turtle’s current heading as a floating-point number from 0 to 359. In Python, 0 degrees is east (right). In JavaScript, 0 degrees is north (up).</td>
+</tr>
+<tr class="calibre47">
+<td class="calibre44"><code class="calibre39">reset()</code></td>
+<td class="calibre44"><code class="calibre39">reset()</code></td>
+<td class="calibre44">Clears any drawn lines, and moves the turtle back to the original position and heading.</td>
+</tr>
+<tr class="calibre46">
+<td class="calibre44"><code class="calibre39">clear()</code></td>
+<td class="calibre44"><code class="calibre39">clean()</code></td>
+<td class="calibre44">Clears any drawn lines but doesn’t move the turtle.</td>
+</tr>
+</tbody>
+</table>
+</figure>
+<p class="calibre22">The functions listed in <a href="#calibre_link-220" id="calibre_link-668" class="linkurl">Table 9-2</a> are available only in the Python <code class="calibre11">turtle</code> module.</p>
+<figure class="calibre25">
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-220" class="calibre40">Table 9-2</a>: Python-Only Turtle Functions</p></figcaption>
+<table id="calibre_link-669" border="1" class="calibre41">
+<thead class="calibre42">
+<tr class="calibre43">
+<td class="calibre44"><b class="calibre7">Python</b></td>
+<td class="calibre44"><b class="calibre7">Description</b></td>
+</tr>
+</thead>
+<tbody class="calibre45">
+<tr class="calibre46">
+<td class="calibre44"><code class="calibre39">begin_fill()</code></td>
+<td class="calibre44">Begins drawing a filled-in shape. The lines drawn after this call will specify the perimeter of the filled-in shape.</td>
+</tr>
+<tr class="calibre47">
+<td class="calibre44"><code class="calibre39">end_fill()</code></td>
+<td class="calibre44">Draws the filled-in shape that was started with the call to <code class="calibre39">turtle.begin_fill()</code>.</td>
+</tr>
+<tr class="calibre46">
+<td class="calibre44"><code class="calibre39">fillcolor(</code><var class="calibre54">color</var><code class="calibre39">)</code></td>
+<td class="calibre44">Sets the color used for filled-in shapes.</td>
+</tr>
+<tr class="calibre47">
+<td class="calibre44"><code class="calibre39">hideturtle()</code></td>
+<td class="calibre44">Hides the triangle that represents the turtle.</td>
+</tr>
+<tr class="calibre46">
+<td class="calibre44"><code class="calibre39"><span type="pagebreak" title="179" id="calibre_link-86" class="calibre55"></span>showturtle()</code></td>
+<td class="calibre44">Shows the triangle that represents the turtle.</td>
+</tr>
+<tr class="calibre47">
+<td class="calibre44"><code class="calibre39">tracer(</code><var class="calibre54">drawingUpdates</var><code class="calibre39">, </code><var class="calibre54">delay</var><code class="calibre39">)</code></td>
+<td class="calibre44">Adjusts the speed of drawing. Pass <code class="calibre39">0</code> for <var class="calibre54">delay</var> for a delay of 0 milliseconds after each line the turtle draws. The larger the number passed for <var class="calibre54">drawingUpdates</var>, the faster the turtle draws by increasing the number of drawings before the module updates the screen.</td>
+</tr>
+<tr class="calibre46">
+<td class="calibre44"><code class="calibre39">update()</code></td>
+<td class="calibre44">Draws any buffered lines (explained later in this section) to the screen. Call this after the turtle has completed drawing.</td>
+</tr>
+<tr class="calibre47">
+<td class="calibre44"><code class="calibre39">setworldcoordinates(</code><var class="calibre54">llx</var><code class="calibre39">, </code><var class="calibre54">lly</var><code class="calibre39">, </code><var class="calibre54">urx,</var><code class="calibre39"> </code><var class="calibre54">ury</var><code class="calibre39">)</code></td>
+<td class="calibre44">Readjusts which part of the coordinate plane the window shows. The first two arguments are the x, y coordinates for the lower-left corner of the window. The latter two arguments are the x, y coordinates for the upper-right corner of the window.</td>
+</tr>
+<tr class="calibre46">
+<td class="calibre44"><code class="calibre39">exitonclick()</code></td>
+<td class="calibre44">Pauses the program and closes the window when the user clicks anywhere. Without this at the end of your program, the turtle graphics window may close as soon as the program ends.</td>
+</tr>
+</tbody>
+</table>
+</figure>
+<p class="calibre22">In Python’s <code class="calibre11">turtle</code> module, lines are displayed on the screen immediately. However, this can slow programs that draw thousands of lines. It’s faster to <em class="calibre10">buffer</em>&mdash;that is, hold off displaying several lines and then display them all at once.</p>
+<p class="calibre22">By calling <code class="calibre11">turtle.tracer(1000, 0)</code>, you can instruct the <code class="calibre11">turtle</code> module to hold off displaying lines until 1,000 lines have been created by your program. After your program has finished calling line-drawing functions, make a final call to <code class="calibre11">turtle.update()</code> to display any remaining buffered lines to the screen. If your program is still taking too long to draw an image, pass a larger integer such as <code class="calibre11">2000</code> or <code class="calibre11">10000</code> as the first argument to <code class="calibre11">turtle.tracer()</code>.</p>
+<h2 id="calibre_link-346" class="calibre6">The Sierpiński Triangle</h2>
+<p class="bodyfirst">The easiest fractal to draw on paper is the <em class="calibre10">Sierpiński triangle</em>, introduced in <span class="calibre" itemid="xref_target_Chapter 1">Chapter 1</span>. This fractal was described by Polish mathematician Wacław Sierpiński in 1915 (predating even the term <em class="calibre10">fractal</em>). However, the pattern is at least hundreds of years older. </p>
+<p class="calibre22">To create a Sierpiński triangle, start by drawing an equilateral triangle&mdash;a triangle with equal-length sides, like the one on the left in <a href="#calibre_link-221" id="calibre_link-670" class="linkurl">Figure 9-3</a>. Then draw an upside-down equilateral triangle inside the first triangle, as on the right in <a href="#calibre_link-221" class="linkurl">Figure 9-3</a>. You’ll form a shape that, if you’re familiar with the <em class="calibre10">Legend of Zelda</em> video games, looks like the Triforce.</p>
+<span type="pagebreak" title="180" id="calibre_link-47" class="calibre17"></span><figure class="calibre25">
+<img src="images/000049.webp" class="calibre16" alt="Graphic depicting four equilateral triangles. The second triangle has a smaller triangle in the center that breaks the shape into four smaller triangles. In the third triangle, each of the three outer triangles is broken into smaller triangles. the fourth triangle shows those smaller triangles further broken into even smaller triangles." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-221" class="linkurl">Figure 9-3</a>: An equilateral triangle (left) with an upside-down triangle added to form a Sierpiński triangle, with additional triangles recursively added</p></figcaption>
+</figure>
+<p class="calibre22">An interesting thing happens when you draw the inner, upside-down triangle. You form three new, right-side-up equilateral triangles. Inside each of these three triangles, you can draw another upside-down triangle, which will create nine triangles. This recursion can continue forever mathematically, though in reality your pen won’t be able to keep drawing tinier triangles.</p>
+<p class="calibre22">This property, describing a full object that is similar to a part of itself, is called <em class="calibre10">self-similarity</em>. Recursive functions can produce these objects, since they “call” themselves again and again. Practically, this code must hit a base case eventually, but mathematically, these shapes have infinite resolution: you could theoretically zoom in on the shape forever.</p>
+<p class="calibre22">Let’s write a recursive program to create the Sierpiński triangle. The recursive <code class="calibre11">drawTriangle()</code> function will draw an equilateral triangle, and then recursively call this function three times to draw the inner equilateral triangles, as in <a href="#calibre_link-222" id="calibre_link-671" class="linkurl">Figure 9-4</a>. The <code class="calibre11">midpoint()</code> function finds the point equidistant from two points passed to the function. This will be important as the inner triangles use these equidistant points for their vertices.</p>
+<figure class="calibre25">
+<img src="images/000005.webp" class="calibre16" alt="Diagram of an equilateral triangle drawn three times using dotted lines. Solid lines isolate a different, smaller equilateral triangle in each of the larger triangles. These smaller triangles each share a different vertex with the larger triangle and have a side length of one-half the larger triangle’s." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-222" class="linkurl">Figure 9-4</a>:  The three inner triangles, with midpoints shown with large dots </p></figcaption>
+</figure>
+<p class="calibre22">Note that this program calls <code class="calibre11">turtle.setworldcoordinates(0, 0, 700, 700)</code>, which makes the 0, 0 origin at the lower-left corner of the window. The upper-right corner has the x, y coordinates 700, 700. The source code for <em class="calibre10">sierpinskiTriangle.py</em> is as follows:</p>
+<pre class="calibre23"><code class="calibre11">import turtle
+turtle.tracer(100, 0) # Increase the first argument to speed up the drawing.
+turtle.setworldcoordinates(0, 0, 700, 700)
+turtle.hideturtle()
+
+<span type="pagebreak" title="181" id="calibre_link-532" class="calibre17"></span>MIN_SIZE = 4 # Try changing this to decrease/increase the amount of recursion.
+
+def midpoint(startx, starty, endx, endy):
+    # Return the x, y coordinate in the middle of the four given parameters.
+    xDiff = abs(startx - endx)
+    yDiff = abs(starty - endy)
+    return (min(startx, endx) + (xDiff / 2.0), min(starty, endy) + (yDiff / 2.0))
+
+def isTooSmall(ax, ay, bx, by, cx, cy):
+    # Determine if the triangle is too small to draw.
+    width = max(ax, bx, cx) - min(ax, bx, cx)
+    height = max(ay, by, cy) - min(ay, by, cy)
+    return width &lt; MIN_SIZE or height &lt; MIN_SIZE
+
+def drawTriangle(ax, ay, bx, by, cx, cy):
+    if isTooSmall(ax, ay, bx, by, cx, cy):
+        # BASE CASE
+        return
+    else:
+        # RECURSIVE CASE
+        # Draw the triangle.
+        turtle.penup()
+        turtle.goto(ax, ay)
+        turtle.pendown()
+        turtle.goto(bx, by)
+        turtle.goto(cx, cy)
+        turtle.goto(ax, ay)
+        turtle.penup()
+
+        # Calculate midpoints between points A, B, and C.
+        mid_ab = midpoint(ax, ay, bx, by)
+        mid_bc = midpoint(bx, by, cx, cy)
+        mid_ca = midpoint(cx, cy, ax, ay)
+
+        # Draw the three inner triangles.
+        drawTriangle(ax, ay, mid_ab[0], mid_ab[1], mid_ca[0], mid_ca[1])
+        drawTriangle(mid_ab[0], mid_ab[1], bx, by, mid_bc[0], mid_bc[1])
+        drawTriangle(mid_ca[0], mid_ca[1], mid_bc[0], mid_bc[1], cx, cy)
+        return
+
+# Draw an equilateral Sierpinski triangle.
+drawTriangle(50, 50, 350, 650, 650, 50)
+
+# Draw a skewed Sierpinski triangle.
+#drawTriangle(30, 250, 680, 600, 500, 80)
+
+turtle.exitonclick()</code></pre>
+<p class="calibre22">When you run this code, the output looks like <a href="#calibre_link-223" id="calibre_link-672" class="linkurl">Figure 9-5</a>.</p>
+<span type="pagebreak" title="182" id="calibre_link-533" class="calibre17"></span><figure class="calibre25">
+<img src="images/000091.webp" class="calibre16" alt="Screenshot of a Sierpiński triangle drawn in the turtle module." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-223" class="linkurl">Figure 9-5</a>:  A standard Sierpiński triangle</p></figcaption>
+</figure>
+<p class="calibre22">Sierpiński triangles don’t have to be drawn with equilateral triangles. As long as you use the midpoints of the outer triangle to draw the inner triangles, you can use any kind of triangle. Comment out the first <code class="calibre11">drawTriangle()</code> call and uncomment the second one (under the <code class="calibre11"># Draw a skewed Sierpinski triangle.</code> comment) and run the program again. The output will look like <a href="#calibre_link-224" id="calibre_link-673" class="linkurl">Figure 9-6</a>.</p>
+<figure class="calibre25">
+<img src="images/000054.webp" class="calibre16" alt="Screenshot of a Sierpiński triangle drawn using irregular triangles with the turtle module. The image looks like an equilateral Sierpiński viewed at an angle." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-224" class="linkurl">Figure 9-6</a>: A skewed Sierpiński triangle</p></figcaption>
+</figure>
+<p class="calibre22"><span type="pagebreak" title="183" id="calibre_link-193" class="calibre17"></span>The <code class="calibre11">drawTriangle()</code> function takes six arguments corresponding to the x, y coordinates of the triangle’s three points. Try experimenting with different values to adjust the shape of the Sierpiński triangle. You can also change the <code class="calibre11">MIN_SIZE</code> constant to a larger value to make the program reach the base case sooner and reduce the number of triangles drawn.</p>
+<h2 id="calibre_link-347" class="calibre6">The Sierpiński Carpet</h2>
+<p class="bodyfirst">A fractal shape similar to the Sierpiński triangle can be drawn using rectangles instead. This pattern is known as the <em class="calibre10">Sierpiński carpet</em>. Imagine splitting a black rectangle into a 3 × 3 grid, then “cutting out” the center rectangle. Repeat this pattern in the surrounding eight rectangles of the grid. When this is done recursively, you end up with a pattern like <a href="#calibre_link-225" id="calibre_link-674" class="linkurl">Figure 9-7</a>.</p>
+<figure class="calibre25">
+<img src="images/000072.webp" class="calibre16" alt="Screenshot of a black rectangle containing a pattern of white rectangles of various sizes. Drawn with the turtle module." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-225" class="linkurl">Figure 9-7</a>: The Sierpiński carpet</p></figcaption>
+</figure>
+<p class="calibre22">The Python program that draws the carpet uses the <code class="calibre11">turtle.begin_fill()</code> and <code class="calibre11">turtle.end_fill()</code> functions to create solid, filled-in shapes. The lines that the turtle draws between these calls are used to draw the shape, as in <a href="#calibre_link-226" id="calibre_link-675" class="linkurl">Figure 9-8</a>.</p>
+<figure class="calibre25">
+<img src="images/000045.webp" class="calibre16" alt="Three diagrams representing the steps the turtle takes to draw a filled-in rectangle. The first shape shows the turtle traveling in a path that draws three sides of a rectangle. The second diagram shows the turtle completing the rectangle. The third diagram shows the rectangle filled in." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-226" class="linkurl">Figure 9-8</a>: Calling <span class="calibre"><code class="calibre39">turtle.begin_fill()</code></span>, drawing a path, and calling <span class="calibre"><code class="calibre39">turtle.end_fill()</code></span> creates a filled-in shape.</p></figcaption>
+</figure>
+<p class="calibre22"><span type="pagebreak" title="184" id="calibre_link-182" class="calibre17"></span>The base case is reached when the rectangles of the 3 × 3 become smaller than six steps on a side. You can change the <code class="calibre11">MIN_SIZE</code> constant to a larger value to make the program reach the base case sooner. The source code for <em class="calibre10">sierpinskiCarpet.py</em> is as follows:</p>
+<pre class="calibre23"><code class="calibre11">import turtle
+turtle.tracer(10, 0) # Increase the first argument to speed up the drawing.
+turtle.setworldcoordinates(0, 0, 700, 700)
+turtle.hideturtle()
+
+MIN_SIZE = 6 # Try changing this to decrease/increase the amount of recursion.
+DRAW_SOLID = True
+
+def isTooSmall(width, height):
+    # Determine if the rectangle is too small to draw.
+    return width &lt; MIN_SIZE or height &lt; MIN_SIZE
+
+def drawCarpet(x, y, width, height):
+    # The x and y are the lower-left corner of the carpet.
+
+    # Move the pen into position.
+    turtle.penup()
+    turtle.goto(x, y)
+
+    # Draw the outer rectangle.
+    turtle.pendown()
+    if DRAW_SOLID:
+        turtle.fillcolor('black')
+        turtle.begin_fill()
+    turtle.goto(x, y + height)
+    turtle.goto(x + width, y + height)
+    turtle.goto(x + width, y)
+    turtle.goto(x, y)
+    if DRAW_SOLID:
+        turtle.end_fill()
+    turtle.penup()
+
+    # Draw the inner rectangles.
+    drawInnerRectangle(x, y, width, height)
+
+def drawInnerRectangle(x, y, width, height):
+    if isTooSmall(width, height):
+        # BASE CASE
+        return
+    else:
+        # RECURSIVE CASE
+
+        oneThirdWidth = width / 3
+        oneThirdHeight = height / 3
+        twoThirdsWidth = 2 * (width / 3)
+        twoThirdsHeight = 2 * (height / 3)
+
+<span type="pagebreak" title="185" id="calibre_link-534" class="calibre17"></span>        # Move into position.
+        turtle.penup()
+        turtle.goto(x + oneThirdWidth, y + oneThirdHeight)
+
+        # Draw the inner rectangle.
+        if DRAW_SOLID:
+            turtle.fillcolor('white')
+            turtle.begin_fill()
+        turtle.pendown()
+        turtle.goto(x + oneThirdWidth, y + twoThirdsHeight)
+        turtle.goto(x + twoThirdsWidth, y + twoThirdsHeight)
+        turtle.goto(x + twoThirdsWidth, y + oneThirdHeight)
+        turtle.goto(x + oneThirdWidth, y + oneThirdHeight)
+        turtle.penup()
+        if DRAW_SOLID:
+            turtle.end_fill()
+
+        # Draw the inner rectangles across the top.
+        drawInnerRectangle(x, y + twoThirdsHeight, oneThirdWidth, oneThirdHeight)
+        drawInnerRectangle(x + oneThirdWidth, y + twoThirdsHeight, oneThirdWidth, oneThirdHeight)
+        drawInnerRectangle(x + twoThirdsWidth, y + twoThirdsHeight, oneThirdWidth, oneThirdHeight)
+
+        # Draw the inner rectangles across the middle.
+        drawInnerRectangle(x, y + oneThirdHeight, oneThirdWidth,
+        oneThirdHeight)
+        drawInnerRectangle(x + twoThirdsWidth, y + oneThirdHeight, oneThirdWidth,
+        oneThirdHeight)
+
+        # Draw the inner rectangles across the bottom.
+        drawInnerRectangle(x, y, oneThirdWidth, oneThirdHeight)
+        drawInnerRectangle(x + oneThirdWidth, y, oneThirdWidth, oneThirdHeight)
+        drawInnerRectangle(x + twoThirdsWidth, y, oneThirdWidth,
+        oneThirdHeight)
+
+drawCarpet(50, 50, 600, 600)
+turtle.exitonclick()</code></pre>
+<p class="calibre22">You can also set the <code class="calibre11">DRAW_SOLID</code> constant to <code class="calibre11">False</code> and run the program. This will skip the calls to <code class="calibre11">turtle.begin_fill()</code> and <code class="calibre11">turtle.end_fill()</code> so that only the outlines of the rectangles are drawn, as in <a href="#calibre_link-227" id="calibre_link-676" class="linkurl">Figure 9-9</a>.</p>
+<p class="calibre22">Try passing different arguments to <code class="calibre11">drawCarpet()</code>. The first two arguments are the x, y coordinates of the lower-left corner of the carpet, while the latter two arguments are the width and height. You can also change the <code class="calibre11">MIN_SIZE</code> constant to a larger value to make the program reach the base case sooner and reduce the number of rectangles drawn.</p>
+<span type="pagebreak" title="186" id="calibre_link-158" class="calibre17"></span><figure class="calibre25">
+<img src="images/000019.webp" class="calibre16" alt="Turtle graphics screenshot showing a version of the Sierpiński carpet in which none of the rectangles are filled in." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-227" class="linkurl">Figure 9-9</a>: The Sierpiński carpet, with only the outlines of the rectangles drawn</p></figcaption>
+</figure>
+<p class="calibre22">Another 3D Sierpiński carpet uses cubes instead of squares. In this form, it is called a <em class="calibre10">Sierpiński cube</em>, or <em class="calibre10">Menger sponge</em>. It was first described by mathematician Karl Menger in 1926. <a href="#calibre_link-228" id="calibre_link-677" class="linkurl">Figure 9-10</a> shows a Menger sponge created in the video game <em class="calibre10">Minecraft</em>.</p>
+<figure class="calibre25">
+<img src="images/000014.webp" class="calibre16" alt="Image of a cube viewed at an angle. The visible sides of the cube have squares cut out of them in the pattern of a Sierpiński carpet." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-228" class="linkurl">Figure 9-10</a>: A 3D Menger sponge fractal</p></figcaption>
+</figure>
+<h2 id="calibre_link-348" class="calibre6"><span type="pagebreak" title="187" id="calibre_link-117" class="calibre20"></span>Fractal Trees</h2>
+<p class="bodyfirst">While the artificial fractals such as the Sierpiński triangle and carpet are perfectly self-similar, fractals can include shapes that do not have perfect self-similarity. Fractal geometry, as envisioned by mathematician Benoit B. Mandelbrot (whose middle initial recursively stands for Benoit B. Mandelbrot) included natural shapes such as mountains, coastlines, plants, blood vessels, and the clustering of galaxies as fractals. Upon close examination, these shapes continued to consist of “rougher” shapes not easily contained by the smooth curves and straight lines of simplified geometry.</p>
+<p class="calibre22">As an example, we can use recursion to reproduce <em class="calibre10">fractal trees</em>, whether perfectly or imperfectly self-similar. Generating trees requires creating a branch with two child branches that issue from their parent at set angles and decrease at set lengths. The Y shape that they produce is recursively repeated to create a convincing drawing of a tree, as in Figures 9-11 and 9-12.</p>
+<figure class="calibre25">
+<img src="images/000082.webp" class="calibre16" alt="Turtle graphics screenshot showing a drawing that resembles a leafless tree. The branches of the tree lean toward the left and become progressively smaller, creating a rounded, asymmetrical shape." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-453" class="linkurl">Figure 9-11</a>: A perfectly self-similar fractal tree generated with the left and right branches using consistent angles and lengths</p></figcaption>
+</figure>
+<p class="calibre22">Movies and video games can use such recursive algorithms in <em class="calibre10">procedural generation</em>, the automatic (rather than manual) creation of 3D models such as trees, ferns, flowers, and other plants. Using algorithms, computers can quickly create entire forests consisting of millions of unique trees, saving an army of human 3D artists the painstaking effort.</p>
+<span type="pagebreak" title="188" id="calibre_link-116" class="calibre17"></span><figure class="calibre25">
+<img src="images/000063.webp" class="calibre16" alt="Turtle graphics screenshot showing a drawing that resembles a leafless tree. The tree’s branches vary in length and direction of branching, sometimes overlapping." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-454" class="linkurl">Figure 9-12</a>: A more realistic tree created using random changes to branch angle and lengths</p></figcaption>
+</figure>
+<p class="calibre22">Our fractal tree program displays a new, randomly generated tree every two seconds. The source code for <em class="calibre10">fractalTree.py</em> is as follows:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">import random
+import time
+import turtle
+turtle.tracer(1000, 0) # Increase the first argument to speed up the drawing.
+turtle.setworldcoordinates(0, 0, 700, 700)
+turtle.hideturtle()
+
+def drawBranch(startPosition, direction, branchLength):
+    if branchLength &lt; 5:
+        # BASE CASE
+        return
+
+    # Go to the starting point &amp; direction.
+    turtle.penup()
+    turtle.goto(startPosition)
+    turtle.setheading(direction)
+
+    # Draw the branch (thickness is 1/7 the length).
+    turtle.pendown()
+    turtle.pensize(max(branchLength / 7.0, 1))
+    turtle.forward(branchLength)
+
+    # Record the position of the branch's end.
+    endPosition = turtle.position()
+    leftDirection = direction + LEFT_ANGLE
+    leftBranchLength = branchLength - LEFT_DECREASE
+    rightDirection = direction - RIGHT_ANGLE
+    rightBranchLength = branchLength - RIGHT_DECREASE
+
+<span type="pagebreak" title="189" id="calibre_link-190" class="calibre17"></span>    # RECURSIVE CASE
+    drawBranch(endPosition, leftDirection, leftBranchLength)
+    drawBranch(endPosition, rightDirection, rightBranchLength)
+
+seed = 0
+while True:
+    # Get pseudorandom numbers for the branch properties.
+    random.seed(seed)
+    LEFT_ANGLE     = random.randint(10,  30)
+    LEFT_DECREASE  = random.randint( 8,  15)
+    RIGHT_ANGLE    = random.randint(10,  30)
+    RIGHT_DECREASE = random.randint( 8,  15)
+    START_LENGTH   = random.randint(80, 120)
+
+    # Write out the seed number.
+    turtle.clear()
+    turtle.penup()
+    turtle.goto(10, 10)
+    turtle.write('Seed: %s' % (seed))
+
+    # Draw the tree.
+    drawBranch((350, 10), 90, START_LENGTH)
+    turtle.update()
+    time.sleep(2)
+
+    seed = seed + 1</code></pre>
+<p class="calibre22">This program produces perfectly self-similar trees, as the <code class="calibre11">LEFT_ANGLE</code>, <code class="calibre11">LEFT_DECREASE</code>, <code class="calibre11">RIGHT_ANGLE</code>, and <code class="calibre11">RIGHT_DECREASE</code> variables are initially randomly chosen but stay constant for all the recursive calls. The <code class="calibre11">random.seed()</code> function sets a seed value for Python’s random functions. The <em class="calibre10">random number seed value</em> causes the program to produce random-seeming numbers, but it uses the same sequence of random numbers for each branch of the tree. In other words, the same <em class="calibre10">seed </em>value reproduces the same <em class="calibre10">tree </em>each time you run the program. (I never apologize for my puns.)</p>
+<p class="calibre22">To see this in action, enter the following into the Python interactive shell:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">&gt;&gt;&gt; <b class="calibre7">import random</b>
+&gt;&gt;&gt; <b class="calibre7">random.seed(42)</b>
+&gt;&gt;&gt; <b class="calibre7">[random.randint(0, 9) for i in range(20)]</b>
+ [1, 0, 4, 3, 3, 2, 1, 8, 1, 9, 6, 0, 0, 1, 3, 3, 8, 9, 0, 8]
+&gt;&gt;&gt; <b class="calibre7">[random.randint(0, 9) for i in range(20)]</b>
+ [3, 8, 6, 3, 7, 9, 4, 0, 2, 6, 5, 4, 2, 3, 5, 1, 1, 6, 1, 5]
+&gt;&gt;&gt; <b class="calibre7">random.seed(42)</b>
+&gt;&gt;&gt; <b class="calibre7">[random.randint(0, 9) for i in range(20)]</b>
+ [1, 0, 4, 3, 3, 2, 1, 8, 1, 9, 6, 0, 0, 1, 3, 3, 8, 9, 0, 8]</code></pre>
+<p class="calibre22">In this example, we set the random seed to 42. When we generate 20 random integers, we get <code class="calibre11">1</code>, <code class="calibre11">0</code>, <code class="calibre11">4</code>, <code class="calibre11">3</code>, and so on. We can generate another 20 integers and continue to receive random integers. However, if we reset the seed to <code class="calibre11">42</code> and generate 20 random integers again, they’ll be the same “random” integers as before.</p>
+<p class="calibre22"><span type="pagebreak" title="190" id="calibre_link-62" class="calibre17"></span>If you’d like to create a more natural, less self-similar tree, replace the lines after the <code class="calibre11"># Record the position of the branch's end.</code> comment with the following lines. This generates new random angles and branch lengths for <em class="calibre10">every</em> recursive call, which is closer to the way trees grow in nature:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">    # Record the position of the branch's end.
+    endPosition = turtle.position()
+    leftDirection = direction + random.randint(10, 30)
+    leftBranchLength = branchLength - random.randint(8, 15)
+    rightDirection = direction - random.randint(10, 30)
+    rightBranchLength = branchLength - random.randint(8, 15)</code></pre>
+<p class="calibre22">You can experiment with different ranges for the <code class="calibre11">random.randint()</code> call, or try adding more recursive calls instead of just the two for the two branches.</p>
+<h2 id="calibre_link-349" class="calibre6">How Long Is the Coast of Great Britain? The Koch Curve and Snowflake</h2>
+<p class="bodyfirst">Before I tell you about the Koch curve and snowflake, consider this question: how long is the coast of Great Britain? Look at <a href="#calibre_link-229" id="calibre_link-678" class="linkurl">Figure 9-13</a>. The map on the left has a rough measure, which puts the coast at about 2,000 miles. But the map on the right has a more precise measure, which includes more nooks and crannies of the coast and comes to about 2,800 miles.</p>
+<figure class="calibre25">
+<img src="images/000087.webp" class="calibre16" alt="Two screenshots of maps of Great Britain. In the first, the outline of the coast is approximated using straight-line segments to connect various points along the country’s outline. In the second, more points are added, increasing the number of line segments used." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-229" class="linkurl">Figure 9-13</a>: The island of Great Britain, with a rough measure (left) and more precise measure (right). Measuring the coast more precisely adds 800 miles to its length.</p></figcaption>
+</figure>
+<p class="calibre22"><span type="pagebreak" title="191" id="calibre_link-143" class="calibre17"></span>Mandelbrot’s key insight about fractals such as the coastline of Britain is that you can continue to look closer and closer, and there will continue to be “roughness” at every scale. So, as your measurement gets finer and finer, the length of the coastline will get longer and longer. The “coast” will follow the Thames upriver, deep into the landmass along one bank and back out to the English Channel on the other bank. Thus, the answer to our question of Great Britain’s coastline’s length is, “It depends.” </p>
+<p class="calibre22">The <em class="calibre10">Koch curve</em> fractal has a similar property pertaining to the length of its coastline, or rather, perimeter. First introduced in 1902 by Swedish mathematician Helge von Koch, the Koch curve is one of the earliest fractals to be described mathematically. To construct it, take a line of length <em class="calibre10">b</em> and divide it into three equal parts, each of length <em class="calibre10">b</em> / 3. Replace the middle section with a “bump” whose sides are also of length <em class="calibre10">b</em> / 3. This bump causes the Koch curve to be longer than the original line, since we now have four line segments of length <em class="calibre10">b</em> / 3. (We’ll exclude the original middle part of the line segment.) This bump creation can be repeated on the new four line segments. <a href="#calibre_link-230" id="calibre_link-679" class="linkurl">Figure 9-14</a> shows this construction.</p>
+<figure class="calibre25">
+<img src="images/000023.webp" class="calibre16" alt="Three diagrams. The first is a line divided into three segments, each of length b/3. The second diagram shows the middle segment replaced with two segments of length b/3 that angle upward, forming two sides of an equilateral triangle whose third side is the missing middle segment. The third diagram shows each of the segments of the second diagram altered according to the same pattern, creating an irregular, bumpy shape." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-230" class="linkurl">Figure 9-14</a>: After splitting the line segment into three equal parts (left), add a bump to the middle part (right). We now have four segments of length <em class="calibre37">b</em> / 3, to which bumps can be added again (bottom).</p></figcaption>
+</figure>
+<p class="calibre22">To create the <em class="calibre10">Koch snowflake</em>, we start with an equilateral triangle and construct three Koch curves from its three sides, as in <a href="#calibre_link-231" id="calibre_link-680" class="linkurl">Figure 9-15</a>.</p>
+<figure class="calibre25">
+<img src="images/000039.webp" class="calibre16" alt="Two diagrams: an equilateral triangle, and the same equilateral triangle whose sides have been replaced with Koch curves, forming a snowflake shape." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-231" class="linkurl">Figure 9-15</a>: Creating three Koch curves on the three sides of an equilateral triangle to form a Koch snowflake</p></figcaption>
+</figure>
+<p class="calibre22">Each time you create a new bump, you are increasing the curve’s length from three <em class="calibre10">b</em> / 3 lengths to four <em class="calibre10">b</em> / 3 lengths, or 4<em class="calibre10">b</em> / 3. If you continue to do this with the three sides of an equilateral triangle, you’ll create the Koch <span type="pagebreak" title="192" id="calibre_link-145" class="calibre17"></span>snowflake, as in <a href="#calibre_link-232" id="calibre_link-681" class="linkurl">Figure 9-16</a>. (The small dotted patterns are artifacts, because slight rounding errors cause the <code class="calibre11">turtle</code> module to be unable to completely erase the middle <em class="calibre10">b</em> / 3 segment.) You can continue to create new bumps forever, though our program stops when they get smaller than a few pixels.</p>
+<figure class="calibre25">
+<img src="images/000066.webp" class="calibre16" alt="Turtle graphic screenshot of a snowflake created using many Koch bumps." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-232" class="linkurl">Figure 9-16</a>: A Koch snowflake. Some of the interior lines remain because of small rounding errors.</p></figcaption>
+</figure>
+<p class="calibre22">The source code for <em class="calibre10">kochSnowflake.py</em> is as follows:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">import turtle
+turtle.tracer(10, 0) # Increase the first argument to speed up the drawing.
+turtle.setworldcoordinates(0, 0, 700, 700)
+turtle.hideturtle()
+turtle.pensize(2)
+
+def drawKochCurve(startPosition, heading, length):
+    if length &lt; 1:
+        # BASE CASE
+        return
+    else:
+        # RECURSIVE CASE
+        # Move to the start position.
+        recursiveArgs = []
+        turtle.penup()
+        turtle.goto(startPosition)
+        turtle.setheading(heading)
+        recursiveArgs.append({'position':turtle.position(),
+                              'heading':turtle.heading()})
+
+        # Erase the middle third.
+        turtle.forward(length / 3)
+        turtle.pencolor('white')
+        turtle.pendown()
+<span type="pagebreak" title="193" id="calibre_link-144" class="calibre17"></span>        turtle.forward(length / 3)
+
+        # Draw the bump.
+        turtle.backward(length / 3)
+        turtle.left(60)
+        recursiveArgs.append({'position':turtle.position(),
+                              'heading':turtle.heading()})
+        turtle.pencolor('black')
+        turtle.forward(length / 3)
+        turtle.right(120)
+        recursiveArgs.append({'position':turtle.position(),
+                              'heading':turtle.heading()})
+        turtle.forward(length / 3)
+        turtle.left(60)
+        recursiveArgs.append({'position':turtle.position(),
+                              'heading':turtle.heading()})
+
+        for i in range(4):
+            drawKochCurve(recursiveArgs[i]['position'],
+                     recursiveArgs[i]['heading'],
+                     length / 3)
+        return
+
+def drawKochSnowflake(startPosition, heading, length):
+    # A Koch snowflake is three Koch curves in a triangle.
+
+    # Move to the starting position.
+    turtle.penup()
+    turtle.goto(startPosition)
+    turtle.setheading(heading)
+
+    for i in range(3):
+        # Record the starting position and heading.
+        curveStartingPosition = turtle.position()
+        curveStartingHeading = turtle.heading()
+        drawKochCurve(curveStartingPosition,
+                      curveStartingHeading, length)
+
+        # Move back to the start position for this side.
+        turtle.penup()
+        turtle.goto(curveStartingPosition)
+        turtle.setheading(curveStartingHeading)
+
+        # Move to the start position of the next side.
+        turtle.forward(length)
+        turtle.right(120)
+
+drawKochSnowflake((100, 500), 0, 500)
+turtle.exitonclick()</code></pre>
+<p class="calibre22">The Koch snowflake is also sometimes called the <em class="calibre10">Koch island</em>. Its coastline would be literally infinitely long. While the Koch snowflake fits into the finite area of a page of this book, the length of its perimeter is infinite, proving that, while it seems counterintuitive, the finite can contain the infinite!</p>
+<h2 id="calibre_link-350" class="calibre6"><span type="pagebreak" title="194" id="calibre_link-129" class="calibre20"></span>The Hilbert Curve</h2>
+<p class="bodyfirst">A <em class="calibre10">space-filling curve</em> is a 1D line that curves around until it completely fills a 2D space without crossing over itself. German mathematician David Hilbert described his space-filling <em class="calibre10">Hilbert curve</em> in 1891. If you split a 2D area into a grid, the single, 1D line of the Hilbert curve can run through every cell in the grid. </p>
+<p class="calibre22"><a href="#calibre_link-233" id="calibre_link-682" class="linkurl">Figure 9-17</a> contains the first three recursions of the Hilbert curve. The next recursion contains four copies of the previous recursion, and the dashed line shows how the four copies connect to one another.</p>
+<figure class="calibre25">
+<img src="images/000058.webp" class="calibre16" alt="Three diagrams. The first is a grid with four square cells. Three lines are drawn to connect the center points of the cells, forming three sides of a square in the center of the grid. The second diagram shows each cell of the original grid subdivided into four cells and the same lines drawn across each of those cells. The fourth shows the cells further subdivided and populated by the same line pattern." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-233" class="linkurl">Figure 9-17</a>: The first three recursions of the Hilbert space-filling curve</p></figcaption>
+</figure>
+<p class="calibre22">As the cells become infinitesimal points, the 1D curve can fill the entire 2D space the same way a 2D square does. Counterintuitively, this creates a 2D shape from a strictly 1D line!</p>
+<p class="calibre22">The source code for <em class="calibre10">hilbertCurve.py</em> is as follows:</p>
+<p class="codelabel"><b class="calibre7">Python</b></p>
+<pre class="calibre23"><code class="calibre11">import turtle
+turtle.tracer(10, 0) # Increase the first argument to speed up the drawing.
+turtle.setworldcoordinates(0, 0, 700, 700)
+turtle.hideturtle()
+
+LINE_LENGTH  = 5 # Try changing the line length by a little.
+ANGLE = 90 # Try changing the turning angle by a few degrees.
+LEVELS = 6 # Try changing the recursive level by a little.
+DRAW_SOLID = False
+#turtle.setheading(20) # Uncomment this line to draw the curve at an angle.
+
+def hilbertCurveQuadrant(level, angle):
+    if level == 0:
+        # BASE CASE
+        return
+    else:
+        # RECURSIVE CASE
+        turtle.right(angle)
+        hilbertCurveQuadrant(level - 1, -angle)
+        turtle.forward(LINE_LENGTH)
+<span type="pagebreak" title="195" id="calibre_link-535" class="calibre17"></span>        turtle.left(angle)
+        hilbertCurveQuadrant(level - 1, angle)
+        turtle.forward(LINE_LENGTH)
+        hilbertCurveQuadrant(level - 1, angle)
+        turtle.left(angle)
+        turtle.forward(LINE_LENGTH)
+        hilbertCurveQuadrant(level - 1, -angle)
+        turtle.right(angle)
+        return
+
+def hilbertCurve(startingPosition):
+    # Move to starting position.
+    turtle.penup()
+    turtle.goto(startingPosition)
+    turtle.pendown()
+    if DRAW_SOLID:
+        turtle.begin_fill()
+
+    hilbertCurveQuadrant(LEVELS, ANGLE) # Draw lower-left quadrant.
+    turtle.forward(LINE_LENGTH)
+
+    hilbertCurveQuadrant(LEVELS, ANGLE) # Draw lower-right quadrant.
+    turtle.left(ANGLE)
+    turtle.forward(LINE_LENGTH)
+    turtle.left(ANGLE)
+
+    hilbertCurveQuadrant(LEVELS, ANGLE) # Draw upper-right quadrant.
+    turtle.forward(LINE_LENGTH)
+
+    hilbertCurveQuadrant(LEVELS, ANGLE) # Draw upper-left quadrant.
+
+    turtle.left(ANGLE)
+    turtle.forward(LINE_LENGTH)
+    turtle.left(ANGLE)
+    if DRAW_SOLID:
+        turtle.end_fill()
+
+hilbertCurve((30, 350))
+turtle.exitonclick()</code></pre>
+<p class="calibre22">Try experimenting with this code by decreasing <code class="calibre11">LINE_LENGTH</code> to shorten the line segments while increasing <code class="calibre11">LEVELS</code> to add more levels of recursion. Because this program uses only relative movements for the turtle, you can uncomment the <code class="calibre11">turtle.setheading(20)</code> line to draw the Hilbert curve at a 20-degree angle. <a href="#calibre_link-234" id="calibre_link-683" class="linkurl">Figure 9-18</a> shows the drawing produced with <code class="calibre11">LINE_LENGTH</code> of <code class="calibre11">10</code> and <code class="calibre11">LEVELS</code> of <code class="calibre11">5</code>.</p>
+<span type="pagebreak" title="196" id="calibre_link-130" class="calibre17"></span><figure class="calibre25">
+<img src="images/000001.webp" class="calibre16" alt="Turtle graphics screenshot. The entire window is covered in a Hilbert curve." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-234" class="linkurl">Figure 9-18</a>: Five levels of the Hilbert curve, with line length <var class="calibre53">10</var></p></figcaption>
+</figure>
+<p class="calibre22">The Hilbert curve makes 90-degree (right-angle) turns. But try adjusting the <code class="calibre11">ANGLE</code> variable by a few degrees to <code class="calibre11">89</code> or <code class="calibre11">86</code>, and run the program to view the changes. You can also set the <code class="calibre11">DRAW_SOLID</code> variable to <code class="calibre11">True</code> to produce a filled-in Hilbert curve, as in <a href="#calibre_link-235" id="calibre_link-684" class="linkurl">Figure 9-19</a>.</p>
+<figure class="calibre25">
+<img src="images/000010.webp" class="calibre16" alt="Turtle graphics screenshot of the same Hilbert curve drawing, this time with the black and white portions reversed." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-235" class="linkurl">Figure 9-19</a>: Six levels of the Hilbert curve, filled in, with line length <var class="calibre53">5</var></p></figcaption>
+</figure>
+<h2 id="calibre_link-351" class="calibre6"><span type="pagebreak" title="197" id="calibre_link-24" class="calibre20"></span>Summary</h2>
+<p class="bodyfirst">The incredibly wide field of fractals combines all the most interesting parts of programming and art, making this chapter the most fun to write. Mathematicians and computer scientists talk about the beauty and elegance that the advanced topics of their fields produce, but recursive fractals are able to turn this conceptual beauty into visual beauty that anyone can appreciate.</p>
+<p class="calibre22">This chapter covered several fractals and the programs that draw them: the Sierpiński triangle, the Sierpiński carpet, procedurally generated fractal trees, the Koch curve and snowflake, and the Hilbert curve. All of these were drawn with Python’s <code class="calibre11">turtle</code> module and functions that recursively call themselves.</p>
+<h2 id="calibre_link-352" class="calibre6">Further Reading</h2>
+<p class="bodyfirst">To learn more about drawing with Python’s <code class="calibre11">turtle</code> module, I’ve written a simple tutorial at <a href="https://github.com/asweigart/simple-turtle-tutorial-for-python" class="linkurl">https://github.com/asweigart/simple-turtle-tutorial-for-python</a>. I also have a personal collection of turtle programs at <a href="https://github.com/asweigart/art-of-turtle-programming" class="linkurl">https://github.com/asweigart/art-of-turtle-programming</a>.</p>
+<p class="calibre22">The question of Great Britain’s coastline’s length came from the title of a 1967 paper by Mandelbrot. The idea is summarized nicely on Wikipedia at <a href="https://en.wikipedia.org/wiki/Coastline_paradox" class="linkurl">https://en.wikipedia.org/wiki/Coastline_paradox</a>. Khan Academy has more on the geometry of the Koch snowflake at <a href="https://www.khanacademy.org/math/geometry-home/geometry-volume-surface-area/koch-snowflake/v/koch-snowflake-fractal" class="linkurl">https://www.khanacademy.org/math/geometry-home/geometry-volume-surface-area/koch-snowflake/v/koch-snowflake-fractal</a>.</p>
+<p class="calibre22">The 3Blue1Brown YouTube channel has excellent animations of fractals, particularly the “Fractals Are Typically Not Self-Similar” video at <a href="https://youtu.be/gB9n2gHsHN4" class="linkurl">https://youtu.be/gB9n2gHsHN4</a> and the “Fractal Charm: Space-Filling Curves” video at <a href="https://youtu.be/RU0wScIj36o" class="linkurl">https://youtu.be/RU0wScIj36o</a>.</p>
+<p class="calibre22">Other space-filling curves require recursion to draw, such as the Peano curve, Gosper curve, and dragon curve, and they’re worth researching on the web.</p>
+<h2 id="calibre_link-353" class="calibre6">Practice Questions</h2>
+<p class="bodyfirst">Test your comprehension by answering the following questions:</p>
+<ol class="decimal">
+<li value="1" class="calibre9">What are fractals?</li>
+<li value="2" class="calibre9">What do the x- and y-coordinates represent in a Cartesian coordinate system?</li>
+<li value="3" class="calibre9">What are the origin coordinates in a Cartesian coordinate system?</li>
+<li value="4" class="calibre9">What is procedural generation?</li>
+<li value="5" class="calibre9">What is a seed value?</li>
+<li value="6" class="calibre9">How long is the perimeter of a Koch snowflake?</li>
+<li value="7" class="calibre9">What is a space-filling curve?</li>
+</ol>
+<h2 id="calibre_link-354" class="calibre6"><span type="pagebreak" title="198" id="calibre_link-536" class="calibre20"></span>Practice Projects</h2>
+<p class="bodyfirst">For practice, write a program for each of the following tasks:</p>
+<ol class="decimal">
+<li value="1" class="calibre9">Create a turtle program that draws a box fractal as shown in <a href="#calibre_link-236" id="calibre_link-685" class="linkurl">Figure 9-20</a>. This program is similar to the Sierpiński carpet program introduced in this chapter. Use the <code class="calibre11">turtle.begin_fill()</code> and <code class="calibre11">turtle.end_fill()</code> functions to draw the first large, black square. Then split this square into nine equal sections, and draw white squares in the top, left, right, and bottom squares. Repeat this process for the four corner squares and the center square.
+<figure class="calibre25">
+<img src="images/000036.webp" class="calibre16" alt="Turtle graphics screenshot. Shows 25 black squares arranged so that they form five larger squares: one square in each corner and one square in the center. These five larger squares are arranged to form one even larger square." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-236" class="linkurl">Figure 9-20</a>: A box fractal, drawn to two levels</p></figcaption>
+</figure>
+</li>
+<li value="2" class="calibre9">Create a turtle program that draws a Peano space-filling curve. This is similar to the Hilbert curve program in this chapter. <a href="#calibre_link-237" id="calibre_link-686" class="linkurl">Figure 9-21</a> shows the first three iterations of the Peano curve. While each Hilbert curve iteration is split across a 2 × 2 section (which is, in turn, split into 2 × 2 sections), the Peano curve is split across 3 × 3 sections.
+<span type="pagebreak" title="199" id="calibre_link-537" class="calibre17"></span><figure class="calibre25">
+<img src="images/000028.webp" class="calibre16" alt="A straight line bent at right angles into a curve-like shape that travels through the center points of the square cells in a 3 × 3 grid. The other diagrams show similar curves traveling through the center points of increasingly larger grids." />
+<figcaption class="calibre26"><p class="calibre27"><a id="calibre_link-237" class="linkurl">Figure 9-21</a>: The first three iterations of the Peano curve, from left to right. The bottom row includes the 3 × 3 sections that each part of the curve is split across.</p></figcaption>
+</figure>
+</li>
+</ol>
+</section>
+</div>
+
+
+<div type="bodymatter part" class="calibre1" id="calibre_link-355">
+<section class="toclist">
+<header class="calibre14">
+<h1 class="part">
+<span class="partnumber"><span type="pagebreak" title="201" id="calibre_link-538" class="calibre35"></span>Part II</span><br class="calibre18" />
+<span class="parttitle">Projects</span></h1>
+</header>
+</section>
+</div>
+
+
+
+<div><a href="chapter8.html">Prev: Chapter 8 - Tail Call Optimization</a> | <a href="chapter10.html">Next: Chapter 10 - File Finder</a></div></body></html>
