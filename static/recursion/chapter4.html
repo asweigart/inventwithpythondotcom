@@ -94,7 +94,7 @@ node5['children'] = [node7, node8]</code></pre>
 <p class="calibre22">Trees have three kinds of tree traversal algorithms: preorder, postorder, and inorder. We’ll discuss each of these in the next three sections.</p>
 <h3 id="calibre_link-293" class="calibre33">Preorder Tree Traversal</h3>
 <p class="bodyfirst"><em class="calibre10">Preorder tree traversal</em> algorithms access a node’s data before traversing its child nodes. Use a preorder traversal if your algorithm needs to access the data in parent nodes before the data in their child nodes. For example, preorder traversals are used when you are creating a copy of the tree data structure, as you need to create the parent nodes before child nodes in the duplicate tree.</p>
-<p class="calibre22">The following <em class="calibre10">preorderTraversal.py</em> program has a <code class="calibre11">preorderTraverse()</code> function that traverses each child node first, before accessing the node’s data to print it to the screen:</p>
+<p class="calibre22">The following <em class="calibre10">preorderTraversal.py</em> program has a <code class="calibre11">preorderTraverse()</code> function that accesses the node’s data to print it to the screen first, before traversing each child node:</p>
 <p class="codelabel"><b class="calibre7">Python</b></p>
 <pre class="calibre23"><code class="calibre11">root = {'data': 'A', 'children': [{'data': 'B', 'children':
 [{'data': 'D', 'children': []}]}, {'data': 'C', 'children':
@@ -512,9 +512,9 @@ def solveMaze(maze, x=None, y=None, visited=None):
 
     return False # BASE CASE
 
-printMaze(MAZE)
+printMaze(MAZE)  # Display the original maze.
 solveMaze(MAZE)
-printMaze(MAZE)</code></pre>
+printMaze(MAZE)  # Display the solved maze.</code></pre>
 <p class="calibre22">The <em class="calibre10">mazeSolver.html</em> program contains the JavaScript equivalent:</p>
 <p class="codelabel"><b class="calibre7">JavaScript</b></p>
 <pre class="calibre23"><code class="calibre11">&lt;script type="text/javascript"&gt;
@@ -575,7 +575,7 @@ function printMaze(maze) {
         }
         document.write("\n"); // Print a newline at the end of the row.
     }
-    document.write("\n&lt;/ pre&gt;");
+    document.write("\n&lt;/pre&gt;");
 }
 
 function findStart(maze) {
@@ -647,9 +647,9 @@ function solveMaze(maze, x, y, visited) {
     return false; // BASE CASE
 }
 
-printMaze(MAZE);
+printMaze(MAZE);  // Display the original maze.
 solveMaze(MAZE);
-printMaze(MAZE);
+printMaze(MAZE);  // Display the solved maze.
 &lt;/script&gt;</code></pre>
 <p class="calibre22">A lot of this code is not directly related to the recursive maze-solving algorithm. The <code class="calibre11">MAZE</code> variable stores the maze data as a multiline string with hashtags to represent walls, an <code class="calibre11">S</code> for the starting point, and an <code class="calibre11">E</code> for the exit. This string is converted into a list that contains lists of strings, with each <span type="pagebreak" title="90" id="calibre_link-134" class="calibre17"></span>string representing a single character in the maze. This allows us to access <code class="calibre11">MAZE[y][x]</code> (note that <code class="calibre11">y</code> comes first) to get the character at the x, y coordinate in the original <code class="calibre11">MAZE</code> string. The <code class="calibre11">printMaze()</code> function can accept this list-of-list data structure and display the maze on the screen. The <code class="calibre11">findStart()</code> function accepts this data structure and returns the x, y coordinates of the <code class="calibre11">S</code> starting point. Feel free to edit the maze string yourself&mdash;although remember that, in order for the solving algorithm to work, the maze cannot have any loops.</p>
 <p class="calibre22">The recursive algorithm is in the <code class="calibre11">solveMaze()</code> function. The arguments to this function are the maze data structure, the current x- and y-coordinates, and a <code class="calibre11">visited</code> list (which is created if none was supplied) <span class="codeannotation" aria-label="annotation1">❶</span>. The <code class="calibre11">visited</code> list contains all the coordinates that have previously been visited so that when the algorithm backtracks from a dead end to an earlier intersection, it knows which paths it has tried before and can try a different one. The path from the start to the exit is marked by replacing the spaces (matching the <code class="calibre11">EMPTY</code> constant) in the maze data structure with periods (from the <code class="calibre11">PATH</code> constant).</p>

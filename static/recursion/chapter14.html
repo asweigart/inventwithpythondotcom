@@ -212,7 +212,7 @@ def makeDroste(baseImage, stopAfter=10):
     baseImageAspectRatio = baseImageWidth / baseImageHeight
     magentaAspectRatio = magentaWidth / magentaHeight</code></pre>
 <p class="calibre22">From <code class="calibre11">magentaRight</code> and <code class="calibre11">magentaLeft</code>, we can calculate the width of the magenta area. The <code class="calibre11">+ 1</code> accounts for a small, necessary adjustment: if the right side of the magenta area was the x-coordinate of 11 and the left side was 10, the width would be two pixels. This is correctly calculated by (<code class="calibre11">magentaRight - magentaLeft + 1</code>), not (<code class="calibre11">magentaRight - magentaLeft</code>).</p>
-<p class="calibre22">Because the aspect ratio is the width divided by the height, images with large aspect ratios are taller than they are wide, and those with small aspect ratios are wider than they are tall. An aspect ratio of 1.0 describes a perfect square. The next lines set the dimensions of the resized image after comparing the aspect ratios of the base image and the magenta area:</p>
+<p class="calibre22">Because the aspect ratio is the width divided by the height, images with small aspect ratios are taller than they are wide, and those with large aspect ratios are wider than they are tall. An aspect ratio of 1.0 describes a perfect square. The next lines set the dimensions of the resized image after comparing the aspect ratios of the base image and the magenta area:</p>
 <pre class="calibre23"><code class="calibre11">    if baseImageAspectRatio &lt; magentaAspectRatio:
         # Make the resized width match the width of the magenta area:
         widthRatio = magentaWidth / baseImageWidth

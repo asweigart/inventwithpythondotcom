@@ -46,9 +46,9 @@
 <p class="calibre22"><span type="pagebreak" title="95" id="calibre_link-51" class="calibre17"></span>This process scales efficiently; doubling the number of books to search adds only one step to the search process. A linear search of a shelf with 50 books takes 50 steps, and a linear search of a shelf with 100 books takes 100 steps. But a binary search of a shelf with 50 books takes only 6 steps, and a shelf with 100 books takes only 7 steps. </p>
 <p class="calibre22">Let’s ask the three recursion questions about our binary search implementation:</p>
 <ol class="none">
-<li class="calibre9"><span class="runinhead">What is the base case?</span>  Searching a range of items that is only one item in length.</li>
+<li class="calibre9"><span class="runinhead">What is the base case?</span>  Searching a range of items that is only one item in length or zero items (because <code class="calibre11">left &gt; right</code>.)</li>
 <li class="calibre9"><span class="runinhead">What argument is passed to the recursive function call?</span>  The indices of the left and right ends of the range in the list we are searching.</li>
-<li class="calibre9"><span class="runinhead">How does this argument become closer to the base case?</span>  The range halves in size for each recursive call, so it eventually becomes one item long.</li>
+<li class="calibre9"><span class="runinhead">How does this argument become closer to the base case?</span>  The range roughly halves in size for each recursive call, so it eventually becomes one item long.</li>
 </ol>
 <p class="calibre22">Examine the following <code class="calibre11">binarySearch()</code> function in our <em class="calibre10">binarySearch.py</em> program, which locates a value, <code class="calibre11">needle</code>, in a sorted list of values, <code class="calibre11">haystack</code>:</p>
 <p class="codelabel"><b class="calibre7">Python</b></p>
@@ -136,7 +136,7 @@ Searching: [13]
 <p class="calibre22">Note that the algorithm modifies the array in place. See <span class="calibre" itemid="xref_target_“Modifying a List or Array in Place” in Chapter 4">“Modifying a List or Array in Place” in Chapter 4</span> for details. Thus, the <code class="calibre11">quicksort()</code> function doesn’t return a sorted array. The base case merely returns to stop producing more recursive calls.</p>
 <p class="calibre22">Let’s ask the three recursion questions about our binary search implementation:</p>
 <ol class="none">
-<li class="calibre9"><span class="runinhead">What is the base case?</span>  Being given a range to sort that contains zero or one item and that is already in sorted order.</li>
+<li class="calibre9"><span class="runinhead">What is the base case?</span>  Being given a range to sort that contains zero or one item and thus is already in sorted order.</li>
 <li class="calibre9"><span class="runinhead">What argument is passed to the recursive function call?</span>  The indices of the left and right ends of the range in the list we are sorting.</li>
 <li class="calibre9"><span class="runinhead">How does this argument become closer to the base case?</span>  The range halves in size for each recursive call, so it eventually becomes empty.</li>
 </ol>
