@@ -1,0 +1,47 @@
+{% extends "index.html" %}
+{% block title %}Author:{{ author }} - {{ SITENAME }}{% endblock %}
+{% block metadesc %}{{ SITETAGALT }} Posts by author {{ author }}{% endblock %}
+
+{% block    custom_header %}
+{% if CUSTOM_HEADER_AUTHOR %}
+{% include "includes/" + CUSTOM_HEADER_AUTHOR %}
+{% endif %}
+{% endblock custom_header%}
+
+{% block    container_header %}
+{% if CUSTOM_CONTAINER_TOP_AUTHOR %}
+{% include "includes/" + CUSTOM_CONTAINER_TOP_AUTHOR %}
+{% endif %}
+{% endblock container_header %}
+
+{% block    content_header %}
+{% if CUSTOM_CONTENT_TOP_AUTHOR %}
+{% include "includes/" + CUSTOM_CONTENT_TOP_AUTHOR %}
+{% endif %}
+<ol class="breadcrumb">
+    <li><a href="{{ SITEURL }}/" title="Home" rel="home">
+		<i class="fas fa-home fa-fw fa-lg"></i> </a></li>
+{% if AUTHORS_URL %}
+    <li><a href="{{ SITEURL }}/{{ AUTHORS_URL }}">Authors </a></li>
+{% else %}
+    <li>Authors </li>
+{% endif %}
+    <li class="active">{{ author }}</li>
+</ol>
+{% endblock content_header %}
+
+{% block article %}
+{% include "includes/index_summaries.html" %}
+{% endblock article %}
+
+{% block    content_footer %}
+{% if CUSTOM_CONTENT_BOTTOM_AUTHOR %}
+{% include "includes/" + CUSTOM_CONTENT_BOTTOM_AUTHOR %}
+{% endif %}
+{% endblock content_footer %}
+
+{% block    container_footer %}
+{% if CUSTOM_CONTAINER_BOTTOM_AUTHOR %}
+{% include "includes/" + CUSTOM_CONTAINER_BOTTOM_AUTHOR %}
+{% endif %}
+{% endblock container_footer %}

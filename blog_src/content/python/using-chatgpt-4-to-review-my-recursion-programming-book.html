@@ -1,0 +1,1237 @@
+<head>
+<title>Using ChatGPT-4 to Review My Recursion Programming Book</title>
+<meta name="tags" content="" />
+<meta name="date" content="2023-06-15 12:00" />
+<meta name="summary" content="<p>My 2022 book, <i>The Recursive Book of Recursion</i> (<a href=&quot;https://inventwithpython.com/recursion/&quot;>read online for free</a>, <a href=&quot;https://nostarch.com/recursive-book-recursion&quot;>buy direct from the publisher</a>) covers recursive algorithms, a notoriously tricky subject for programmers and computer science students. I feel like I did a good job writing it (and my editors at No Starch Press did an incredible job editing it), but I wondered how well Large Language Models (LLMs) like ChatGPT could understand it. I ran the entire book through to see what mistakes or changes ChatGPT would make. The results were disappointing in some places but pleasantly surprising in others, so I wrote this blog post about the role AI could play in editing technical books.</p>" />
+<meta name="image" content="/blogstatic/chatgpt-review-recursion.webp" />
+</head>
+<body>
+
+<p>My 2022 book, <i>The Recursive Book of Recursion</i> (<a href="https://inventwithpython.com/recursion/">read online for free</a>, <a href="https://nostarch.com/recursive-book-recursion">buy direct from the publisher</a>) covers recursive algorithms, a notoriously tricky subject for programmers and computer science students. I feel like I did a good job writing it (and my editors at No Starch Press did an incredible job editing it), but I wondered how well Large Language Models (LLMs) like ChatGPT could understand it. I ran the entire book through to see what mistakes or changes ChatGPT would make. The results were disappointing in some places but pleasantly surprising in others, so I wrote this blog post about the role AI could play in editing technical books.</p>
+
+<p>Here's a summary of my findings:</p>
+
+<ul>
+  <li>ChatGPT absolutely cannot replace humans or reduce headcount. It's just a tool.</li>
+  <li>The majority of ChatGPT's feedback is useless, if not wrong.</li>
+  <li>ChatGPT is a tool for writers/technical reviewers more than editors because you need subject matter expertise to know when it gives you wrong "corrections."</li>
+  <li>But ChatGPT can uncover conceptual and logical mistakes beyond spelling and grammar, including finding bugs in source code. This is the benefit that makes it worth sifting through the garbage feedback.</li>
+  <li>ChatGPT-3.5 is not good enough to work with code. ChatGPT-4 is sometimes good enough to work with code.</li>
+  <li>I recommend making AI review a standard part of the production process. It won't make the process more efficient (if anything, it slows down the process by adding this extra step), but it will improve the quality of the final product. </li>
+</ul>
+
+<p>I got 185 items of feedback from ChatGPT, which I (very subjectively) categorized as:</p>
+
+<ul>
+  <li><i>"Novel and useful feedback!"</i> 28 items (15%) - These are actual mistakes that ChatGPT identified that require corrective action. This is the kind of feedback I want ChatGPT to give.</i></li>
+
+  <li><i>"Slightly helpful but disregarded edit suggestion."</i> 26 items (14%) - This feedback is correct, but not useful enough to actually follow. It may provide an interesting thought for a human writer/editor/reviewer, but ultimately isn't actionable.</i></li>
+
+  <li><i>"Unhelpful feedback."</i> 88 items (47%) - This feedback is not wrong but is meaningless or irrelevant, though it's easy to dismiss and wastes minimal time for a human editor.</i></li>
+
+  <li><i>"False positive!"</i> 43 items (23%) - This is factually incorrect feedback that will send you on a wild goose chase and wastes a human editor's time while they verify that it is indeed wrong.</i></li>
+</ul>
+
+<p>Further, I also have a <i>Formatting issue</i> category where ChatGPT's feedback was incorrect because of formatting errors introduced by copy/pasting the book text into ChatGPT. These are not ChatGPT's fault, and easy to dismiss with little wasted time. There were 54 items in this category.</p>
+
+
+<h2>Background Information and ChatGPT Transcripts</h2>
+
+<p><a href="https://inventwithpython.com/">All of my programming books</a> are available for free online under a <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons license</a>, so anyone can repeat this experiment by copy/pasting the text into ChatGPT. I've used ChatGPT-4 for this task (ChatGPT-3.5 produces mediocre results regarding code.) I'm not looking for spelling or grammar mistakes but rather conceptual errors. My paid OpenAI account (about $20 a month) lets me make 25 ChatGPT-4 queries every 3 hours and I can only enter about 15,000 characters before it complains about the input being too long.</p>
+
+<p>Before each input, I prepend the following text: "The following text is from a book on Python programming. Please point out any technical errors or inaccuracies, along with any significant grammatical mistakes. Skip on summarizing the content and just list the errors you find:" I later changed this to "The following text is from a book on programming, specifically recursive functions. The book intentionally has at times a casual or conversational tone instead of a formal, academic one. Please point out any technical errors or inaccuracies, along with any significant grammatical mistakes. Skip on summarizing the content and just list the errors you find:"</p>
+
+<p>The training data for ChatGPT used in this review was from September 2021.</p>
+
+<p>To get the text of the book, I converted the book's .epub file to a .txt text file using <a href="">Calibre</a>, and then started copy/pasting text roughly 15,000 characters at a time. I'd always copy complete paragraphs, however the conversion to text does ruin the indentation of the code. For a more complete review, I recommend pasting the code with the original formatting. (I skipped this due to time constraints.)</p>
+
+<p>Here are links to the actual conversations I've had with ChatGPT so you can see the input I gave it and the complete output it returned:</p>
+
+<ul>
+  <li><a href="https://chat.openai.com/share/77b748b3-2399-41de-b085-781feb23476b">https://chat.openai.com/share/77b748b3-2399-41de-b085-781feb23476b</a></li>
+  <li><a href="https://chat.openai.com/share/7346a091-70c1-4461-b69a-7abee6f6ad0d">https://chat.openai.com/share/7346a091-70c1-4461-b69a-7abee6f6ad0d</a></li>
+  <li><a href="https://chat.openai.com/share/aa945b1b-1548-4645-af28-cc49b2c6342d">https://chat.openai.com/share/aa945b1b-1548-4645-af28-cc49b2c6342d</a></li>
+  <li><a href="https://chat.openai.com/share/8765cb3b-9a9f-4914-b7f0-8b545e916ddd">https://chat.openai.com/share/8765cb3b-9a9f-4914-b7f0-8b545e916ddd</a></li>
+  <li><a href="https://chat.openai.com/share/291387df-101b-401a-982c-07d99236b57a">https://chat.openai.com/share/291387df-101b-401a-982c-07d99236b57a</a></li>
+  <li><a href="https://chat.openai.com/share/4e0728f7-2ea4-4ae2-8113-59a0c25370e3">https://chat.openai.com/share/4e0728f7-2ea4-4ae2-8113-59a0c25370e3</a></li>
+</ul>
+
+<p>The rest of this blog post are the 239 individual feedback items ChatGPT gave me, along with my assessment of them.</p>
+
+<h2>AI Feedback for Chapter 1 - What is Recursion?</h2>
+
+
+<blockquote><p>In this sentence: The Definition of Recursion Before we begin...</p></blockquote>
+
+<p><i>Formatting issue.</i> This was caused by the copy/pasting from the text to the ChatGPT website, which put "The Definition of Recursion" on the same line as the first line of the paragraph. I won't count this for or against ChatGPT as a review tool.</p>
+
+
+
+
+
+<blockquote>In the Python and JavaScript programs where functions a(), b(), and c() are defined, there is a slight indentation problem...</blockquote>
+
+<p><i>Formatting issue.</i> This was caused by the indentation of the code being lost when converting from the .epub ebook to a .txt text file.</p>
+
+<blockquote>In the paragraph explaining recursive functions and stack overflows, there's a small grammatical error: "Functions and stacks are both simple concepts, and we can use them together to understand how recursion works." It would be better to say: "Functions and stacks are simple concepts in themselves, and we can use them together to understand how recursion works."</blockquote>
+
+<p><i>Unhelpful feedback.</i> A lot of the edit suggestions from ChatGPT are neither better or worse than the original text, but these end up being a lot of noise when trying to find problems in the text.</p>
+
+<blockquote>The explanation of the recursive function in Python and JavaScript could be misleading to beginners. Although technically accurate, it's important to note that this recursive function will lead to a "stack overflow" error because there is no base case to stop the recursion. Adding this information would provide a more complete understanding of recursion and its potential pitfalls.</blockquote>
+
+<p><i>Formatting issue.</i> This suggestion was caused by the fact that I had to break up the book text into approximately 15,000 character chunks, so the previous explanation of stack overflows wasn't included in this chunk.</p>
+
+<blockquote>The phrase "Python uses the terms list and item, while JavaScript uses the terms array and element" could potentially be a source of confusion. While the terms 'list' and 'array' are used in Python and JavaScript respectively, the terms 'item' and 'element' are not language-specific and are often used interchangeably in both languages. A more accurate phrasing could be: "Python uses the term 'list' where JavaScript uses 'array' to refer to similar data structures".</blockquote>
+
+<p><i>Slightly helpful but disregarded edit suggestion.</i> Eh, you could make the argument that "item" and "element" are not <i>official</i> terms in these languages, but documentation and developers do use these terms. Ultimately, this suggestion isn't useful enough and I disregarded it.</p>
+
+<blockquote>"But this “turtles all the way down” theory doesn’t do a good job of explaining cosmology, nor recursive functions." This should be corrected to: "But this “turtles all the way down” theory doesn’t do a good job of explaining either cosmology or recursive functions."</blockquote>
+
+<p><i>Unhelpful feedback.</i> I get the feeling if I had used ChatGPT's phrasing, then ChatGPT could have easily suggestion my original phrasing.</p>
+
+<blockquote>"The constant function calls with no returns grow the call stack until all the computer’s memory allocated for the call stack is used up." This could be rephrased for better clarity: "Constant function calls with no returns cause the call stack to grow until all the computer’s memory allocated for the call stack is used up."</blockquote>
+
+<p><i>Unhelpful feedback.</i> Eh, either would be fine.</p>
+
+<blockquote>In the Python examples, the function calls "shortest()" and "shortestWithBaseCase(makeRecursiveCall)" would require the function definitions to be above these calls in the actual Python script. However, it's not explicitly mentioned in the text, which could potentially confuse a beginner programmer. This is not an error per se, but it's worth mentioning for clarity and completeness.</blockquote>
+
+<p><i>Slightly helpful but disregarded edit suggestion.</i> This advice isn't incorrect, but not relevant to this book as the book assumes you have a basic level of programming knowledge and would already know this. (Not knowing this isn't ChatGPT's fault though.)</p>
+
+
+<h2>AI Feedback for Chapter 2 - Recursion vs Iteration</h2>
+
+
+
+<blockquote>The factorial of 0 is 1, not undefined or any other number. However, the text doesn't include this case in the factorial implementation in both the iterative and recursive methods. This is technically incorrect, as calling factorial(0) in the given code would not return the correct result, 1.</blockquote>
+
+<p><i>Novel and useful feedback!</i> This was an oversight on my part as the author. I wrote the functions based on my explanation that 5! was 5 x 4 x 3 x 2 x 1, but this explanation doesn't note that mathematics defines 0! as 1. While this is no great sin for a book on recursion and I don't want to change the code, I should add a sentence describing this. I think it's interesting that while ChatGPT noticed this, ChatGPT did not complain about other kinds of invalid input such as negative, floating point, or string arguments.</p>
+
+<blockquote>Similarly, the Fibonacci sequence usually starts with 0 and 1, not 1 and 1. The definition used in this text (1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, etc.) is a variant of the sequence and should be clearly stated as such. Also, the text doesn't consider the case when nthNumber is 0 in the Fibonacci implementation.</blockquote>
+
+<p><i>Slightly helpful but disregarded edit suggestion.</i> Yes, yes, I know that mathematicians use 0 and 1, but it's also valid to use 1 and 1, which is what I chose here. Heck, apparently Fibonacci himself <a href="https://en.wikipedia.org/wiki/Fibonacci_sequence">used 1 and 2</a>.</p>
+
+<blockquote>In the explanation of the recursive Fibonacci function, the phrase "the fibonacci() function itself is simple" is a bit misleading. Recursive functions can often appear simple due to their mathematical elegance, but they can lead to complex behavior and performance issues, as is pointed out elsewhere in the text.</blockquote>
+
+<p><i>Slightly helpful but disregarded edit suggestion.</i> While I try to avoid the word "simply" when writing about technical subjects that a beginner may not find so simple, I think it's use her is fitting because I'm comparing it to the more complicated code nearby.</p>
+
+<blockquote>There's a small grammatical error in the sentence "This involves calculating number - 1 and making a recursive function, causing a new frame object to be pushed to the call stack." It should be "making a recursive function call", not "making a recursive function".</blockquote>
+
+<p><i>Novel and useful feedback!</i> The phrasing I used is absolutely wrong and ChatGPT is correct: I meant to refer to a recursive function call and not a recursive function.</p>
+
+<blockquote>The text refers to .html programs. However, HTML is not a programming language. It would be more accurate to refer to these as scripts written in JavaScript, which are then embedded within an HTML document.</blockquote>
+
+<p><i>Novel and useful feedback!</i> This is interesting. ChatGPT is wrong in that I'm not claiming HTML is a programming language. When I say "This code is equivalent to the following functionCalls.html program:" it's obvious that I'm referring to the JavaScript program in the functionCalls.html file. An annoying, obtuse nitpicker would point this out, but many human readers and reviewers are annoying, obtuse nitpickers. To deflect this (irrelevant) criticism, I should change the wording to "This code is equivalent to the JavaScript code in the following functionCalls.html file:". This phrasing occurs several times in the book, so I'll have to replace them all by doing a search for ".html program".</p>
+
+<blockquote>The Python and JavaScript code blocks are not consistently formatted. For example, comments are not consistently capitalized and sometimes end with a period and sometimes do not. While this doesn't affect the functionality of the code, consistency is generally good practice.</blockquote>
+
+<p><i>Formatting issue.</i></p>
+
+<blockquote>The last sentence is incomplete: "And don’t think that because a base case is reached, no more code remains to..." It should either be completed or removed.</blockquote>
+
+<p><i>Slightly helpful but disregarded edit suggestion.</i> Actually the sentence is fine: "And don’t think that because a base case is reached, no more code remains to run after either recursive call." Maybe you could make a nitpick about adding a "that there's" text in there.</p>
+
+
+<blockquote>The base cases for Fibonacci series mentioned in the first paragraph are wrong. The base case for Fibonacci is fibonacci(0) which returns 0, and fibonacci(1) which returns 1, not fibonacci(2) and fibonacci(1) which both return 1.</blockquote>
+
+<p><i>Slightly helpful but disregarded edit suggestion.</i> It's common in programming to use zero-based indexing. But that's specifically not what I'm doing here according to the description in the text.</p>
+
+<blockquote>In the Python code for the recursive factorial algorithm, it doesn't handle the case where the input is 0. The factorial of 0 is 1, but the current code doesn't have a base case for that.</blockquote>
+
+<p><i>Slightly helpful but disregarded edit suggestion.</i> This is the same issue as pointed out previously: Mathematics defines 0! as 1, though my program doesn't handle that case. But I don't do complete argument validation because that makes the code more complex while not helping the reader learn about recursion. Much of writing effective programming books is knowing what technically-correct-but-not-very-relevant information to skip.</p>
+
+<blockquote>In the Python and JavaScript code for the iterative factorial algorithm, if the input is 0, the code will result in an infinite loop. It doesn't have a condition to check for this base case.</blockquote>
+
+<p><i>Slightly helpful but disregarded edit suggestion.</i> This is the same issue as the previously described one.</p>
+
+<blockquote>In the Python and JavaScript code for the recursive and iterative 'findSubstring' functions, they will return incorrect results if the 'needle' string is empty. They should return 0 in this case, but currently, they return -1.</blockquote>
+
+<p><i>Slightly helpful but disregarded edit suggestion.</i> While it is a programming convention that searching for an empty string "finds" it at index 0, adding code here makes is a distraction that doesn't help the reader learn about recursion. I can see why ChatGPT made this recommendation, but it's not useful to the context of this book. I'm tempted to file this as a false positive, but it is slightly-slightly helpful.</p>
+
+<blockquote>In the Python and JavaScript code for the 'exponentByIteration' function, the code doesn't handle the case where the exponent 'n' is 0. The result of any number to the power of 0 is 1, but the current code will return the wrong result.</blockquote>
+
+<p><i>Novel and useful feedback!</i> Though this seems to be the same error the ChatGPT reported previously, it is in a new context with the exponentByIteration() function.</p>
+
+
+<blockquote>The note about the modulus operator (%) for determining whether an integer is odd or even is incorrect. Any even integer mod 2 results in 0, and any odd integer mod 2 results in 1, not the other way around.</blockquote>
+
+<p><i>False positive!</i> ChatGPT is correct here. However, this is exactly what the book says too. Fortunately, the wild goose chase this suggestion led me on wasn't too long.</p>
+
+<blockquote>The sentence "The programs in this section demonstrate that it is always possible to turn any loop into an equivalent recursive function." is not grammatically incorrect, but it could be more precise. It should be "The programs in this section demonstrate that it is always possible to convert any iterative algorithm into an equivalent recursive function."</blockquote>
+
+<p><i>Unhelpful feedback.</i> ChatGPT's suggestion here is correct, but I'm trying to avoid going too hard on technical jargon. I can use the term "loop" here instead of "iterative algorithm" and the phrasing would be just a little simpler to understand.</p>
+
+<blockquote>The sentence "The recursive Fibonacci algorithm also suffers from a critical weakness: it repeats the same calculations over and over." could be improved to "The recursive Fibonacci algorithm also has a critical weakness: it performs the same calculations repeatedly."</blockquote>
+
+<p><i>Unhelpful feedback.</i> Whatever. Skip the five dollar words.</p>
+
+<blockquote>The sentence "This slows the overall algorithm with unnecessarily repeated calculations." could be rewritten as "This slows down the overall algorithm due to unnecessary repeated calculations."</blockquote>
+
+<p><i>Unhelpful feedback.</i> Yeah, actually my phrasing is a bit better. Keep it simple.</p>
+
+<blockquote>The sentence "A dictionary storing the return address information and nthNumber local variable emulates a frame object ❷." is a bit unclear. It would be better phrased as "A dictionary, which stores the return address information and the nthNumber local variable, emulates a frame object ❷."</blockquote>
+
+<p><i>Unhelpful feedback.</i> ChatGPT's phrasing kind of makes it sound like the dictionary's sole purpose is to store this info, but I'm talking about dictionary usage in a specific context.</p>
+
+<blockquote>The sentence "This is doing recursion for recursion’s sake, and since recursion is often harder to understand than iterative code, code readability deteriorates." could be improved for clarity: "This amounts to using recursion for its own sake, and since recursion is often harder to understand than iterative code, it can result in reduced code readability."</blockquote>
+
+<p><i>Unhelpful feedback.</i> Yeah, I'm not saying my phrasing is simple, but it's simpler than ChatGPT's.</p>
+
+<blockquote>In the last sentence, "Those are the recursive cases, but what are the base cases?" the word "but" is not necessary. It can be rephrased as "Those are the recursive cases. What are the base cases?"</blockquote>
+
+<p><i>Unhelpful feedback.</i> Nah, I don't like ChatGPT's phrasing. On a side note, ChatGPT tends to produce the kind of wording leans more towards traditional technical and academic text (it is reviewing a programming book, after all) but that's exactly the kind of wording I'm trying to avoid. Perhaps I should change the prompt to make ChatGPT inclined to more casual phrasing?</p>
+
+<blockquote>In the Python and JavaScript functions exponentWithPowerRule(a, n), there is an issue when n is 0. The while loop while n > 1: doesn't take into account the situation where the exponent n is 0. In mathematics, any non-zero number raised to the power of 0 is 1. The function as it currently stands would return a instead, which is incorrect. The function should be adjusted to return 1 when n is 0.</blockquote>
+
+<p><i>Novel and useful feedback!</i> Yes, for completeness I probably should add code here. But then again, this exponent function doesn't work with (or claim to work with) negative exponents either.</p>
+
+
+<blockquote>"When we double-check our math, we find that 65 is indeed 7,776." There seems to be a typo in the representation of the operation. It should be "6^5" instead of "65".</blockquote>
+
+<p><i>Formatting issue.</i> Copying and pasting the input text didn't capture the superscript of the "5".</p>
+
+<blockquote>"The iterative exponents function that uses the power rule has the improved performance of the recursive algorithm, while not suffering from the risk of a stack overflow." This sentence is a bit awkward. It could be rewritten for clarity, such as: "The iterative exponents function, which uses the power rule, improves performance over the recursive algorithm and avoids the risk of a stack overflow."</blockquote>
+
+<p><i>Unhelpful feedback.</i> Actually, I like my phrasing a bit better.</p>
+
+<blockquote>"However, as the exponent functions we created in the previous section show, recursion can provide new insights into how to think about our programming problem." This sentence is also a bit awkward. It could be rewritten for clarity, such as: "However, as demonstrated by the exponent functions we created in the previous section, recursion can offer new insights into problem-solving in programming."</blockquote>
+
+<p><i>Unhelpful feedback.</i> I like my phrasing better.</p>
+
+<blockquote>"When Do You Need to Use Recursion?" This is a heading, not a sentence, but it's phrased as a question when it would be more standard as a statement. A better heading might be "Determining When to Use Recursion" or "The Appropriate Use of Recursion".</blockquote>
+
+<p><i>Unhelpful feedback.</i> Is using a question for a heading so bad?</p>
+
+<blockquote>The references to "Figure 2-4", "Figure 2-5", and "Figure 2-6" are not meaningful in this text-only format. If this is meant to be a text-only summary, these references should be removed or replaced with textual descriptions of the images.</blockquote>
+
+<p><i>Formatting issue.</i> The images weren't copy/pasted to the input.</p>
+
+<blockquote>There are instances of code being referred to as "Python" or "JavaScript" when it would be more accurate to refer to them as "Python code" or "JavaScript code". This is a minor issue, but improving this could make the text clearer and more accurate.</blockquote>
+
+<p><i>Unhelpful feedback.</i> Nah, less is more. 'Nuf said.</p>
+
+<blockquote>There are numerous instances where the language could be simplified for ease of reading. For example, "This chapter featured both iterative and recursive implementations for these algorithms" could be simplified to "This chapter showed both iterative and recursive versions of these algorithms."</blockquote>
+
+<p><i>Unhelpful feedback.</i> Eh, I think "implementations" is a better word (or at least, not worse) in this context.</p>
+
+<blockquote>There is a degree of repetition in the text, with recursion and its merits and drawbacks being discussed multiple times in similar ways. Consolidating these points could improve the flow of the text.</blockquote>
+
+<p><i>Unhelpful feedback.</i> Nope. Strategically repeating information helps with understanding. Also, this advice is vague.</p>
+
+<blockquote>The writing occasionally shifts between different perspectives (we, you), which can be confusing. Consistency in perspective can make the text clearer and more engaging.</blockquote>
+
+<p><i>Unhelpful feedback.</i> Eh.</p>
+
+
+
+
+
+<h2>AI Feedback for Chapter 3 - Classic Recursion Algorithms</h2>
+
+<blockquote>In the first paragraph, the phrase "Coding interviews (which, for lack of suitable ways to evaluate candidates, often crib notes from freshman computer science curricula) can touch upon them too." could be better written as, "Coding interviews, which often borrow from introductory computer science curriculum due to a lack of suitable ways to evaluate candidates, may also cover these topics."</blockquote>
+
+<p><i>Unhelpful feedback.</i> No, my phrasing is better.</p>
+
+<blockquote>In the section titled "Summing Numbers in an Array", the text says, "Still, summing numbers in an array (or some other calculation based on processing data in a linear data structure) is a common enough recursion problem in coding interviews that it deserves our attention." This could be written more clearly as, "Despite this, summing numbers in an array, or performing some other calculation based on processing data in a linear data structure, is a common enough problem in coding interviews to warrant our attention."</blockquote>
+
+<p><i>Unhelpful feedback.</i> Eh.</p>
+
+<blockquote>In the section "Reversing a String", there's an inconsistency in font formatting: ′CAT′, ′X′, ′Y′, ′A′, ′T′ use a different font compared to the rest of the text. The correct formatting should be 'CAT', 'X', 'Y', 'A', 'T'.</blockquote>
+
+<p><i>Novel and useful feedback!</i> Huh, I didn't notice this. A minor but real issue. Somehow "smart" single quotes got introduced here when I meant to use straight single quotes. it doesn't really matter to people reading the book, but copy/pasting this text would copy these incorrect quotes.</p>
+
+<blockquote>In the JavaScript code snippet for "Reversing a String", modern JavaScript conventions are not followed. Instead of using var, let or const should be used for variable declaration, since var is function-scoped and could lead to unexpected behavior.</blockquote>
+
+<p><i>Novel and useful feedback!</i> I did use "let" in most of the JS programs, but I did fall back on "var" for the reverse string, palindrome, Tower of Hanoi, and flood fill JS programs. I should probably also run the source code for these programs under a linter. Using "var" isn't wrong, but changing it to "let" will preemptively deflect any nitpickers.</p>
+
+<blockquote>In the phrase "Thinking about how to implement a recursive function like rev() can be difficult because it involves a chicken-and-egg problem," it would be more accurate to say "it presents a circular dependency problem" instead of "it involves a chicken-and-egg problem," which is more colloquial and may not be clear to all readers.</blockquote>
+
+<p><i>Unhelpful feedback.</i> I want the more colloquial phrasing.</p>
+
+<blockquote>The phrase "Taking a leap of faith in recursion is not a magical technique that guarantees your code works bug free" is a bit awkward. It would be clearer to say "Taking a leap of faith in recursion does not guarantee that your code will be bug-free."</blockquote>
+
+<p><i>Unhelpful feedback.</i> I like my phrasing better. "Leap of faith" is one of those terms that is often used in recursion lessons but is vague and magical-sounding.</p>
+
+<blockquote>In the section titled "Reversing a String", the author says, "You can’t simply pass the same argument that the recursive function received, like this:". This sentence could be clearer with some rewording, such as, "You cannot merely pass the same argument that the recursive function initially received, as shown here:"</blockquote>
+
+<p><i>Unhelpful feedback.</i> Eh.</p>
+
+<blockquote>In the phrase "The leap of faith requires you to have a firm understanding of your recursive function’s arguments and return value," the term "leap of faith" is a bit informal and could be confusing to some readers. It might be clearer to say, "This approach requires a firm understanding of the arguments and return value of your recursive function."</blockquote>
+
+<p><i>False positive!</i> No, "leap of faith" does have a particular meaning in the context of recursion.</p>
+
+<blockquote>The palindrome detection code won't handle spaces and capitalization properly. For example, 'race car' is a palindrome, but the code will report it as not being a palindrome because it doesn't handle spaces. Similarly, 'Racecar' is also a palindrome, but the code will report it as not being a palindrome because it doesn't handle capitalization. The same goes for the phrase 'A man, a plan, a canal . . . Panama'. In the real world, a string preprocessing step is required to handle spaces, punctuation, and capitalization.</blockquote>
+
+<p><i>Unhelpful feedback.</i> I purposefully made it not handle these cases so that the code can be simpler.</p>
+
+<blockquote>The JavaScript version of the Tower of Hanoi solution doesn't seem to print the initial state of the towers before the solving process starts. This could be a potential oversight.</blockquote>
+
+<p><i>False positive!</i> The JS code does in fact print the initial state.</p>
+
+<blockquote>In the sentence "The return statement in the recursive case ❹ makes use of Boolean short-circuiting, a feature of almost every programming language." it would be more accurate to say "many programming languages" instead of "almost every programming language".</blockquote>
+
+<p><i>Unhelpful feedback.</i> No.</p>
+
+<blockquote>In the sentence "For n disks, it takes a minimum of 2n – 1 moves to solve." it should be written as "For n disks, it takes a minimum of 2^n – 1 moves to solve." to correctly express the exponential notation.</blockquote>
+
+<p><i>Formatting issue.</i> Copy/pasting the text removed the superscript of "n".</p>
+
+<blockquote>In the sentence "The series of operations for solving a four-disk Tower of Hanoi", the figure number following the sentence is "Figure 3-5". However, in the previous paragraph, the text refers to a Figure 3-6 which isn't mentioned again. This could be a numbering error.</blockquote>
+
+<p><i>Formatting issue.</i> Copy/pasting the text doesn't copy the images.</p>
+
+<blockquote>The phrase "This towerOfHanoiSolver.html program contains the equivalent JavaScript code" might be misleading as the .html extension is for HTML files, not JavaScript. It should be clarified that this is an HTML file that contains JavaScript code.</blockquote>
+
+<p>This has been addressed previously.</p>
+
+<blockquote>In the sentence "When you run this code, the output shows each move of the disks until...", it seems like an incomplete sentence. The rest of the sentence is missing.</blockquote>
+
+<p><i>False positive!</i> What? The sentence is fine. This isn't even a formatting issue.</p>
+
+<p>ChatGPT had this to say about the flood fill source code in Python and JavaScript:</p>
+
+<blockquote><p>In Python code:</p>
+
+<p>In line ❶, the comment says "Create the image (make sure it's rectangular!)" but it's actually creating a list of strings, not an image.</p>
+<p>In line ❷, there's an unnecessary indentation before the variable assignment.</p>
+<p>In lines ❸, ❹, ❺, and ❻, the comments say "RECURSIVE CASE" but they should say "BASE CASE" since they are the conditions for the base case.</p>
+<p>In line ❼, there's an extra indentation that shouldn't be there.</p>
+
+<p>In JavaScript code:</p>
+
+<p>In line ❶, the comment says "Create the image (make sure it's rectangular!)" but it's actually creating an array of arrays, not an image.</p>
+<p>In lines ❷, ❸, ❹, ❺, and ❻, the comments say "RECURSIVE CASE" but they should say "BASE CASE" since they are the conditions for the base case.</p>
+<p>In line ❼, there's a space before the semicolon that shouldn't be there.</p>
+<p>In line ❽, there's a space before the closing &lt;/ pre&gt; tag that shouldn't be there.</p>
+</blockquote>
+
+<p><i>Unhelpful feedback.</i> Yes, it's made up of strings but this forms and ASCII-art image. This feedback is irrelevant.</p>
+
+<p><i>Formatting issue.</i> The "unnecessary indentation" was caused by copy/pasting the text to ChatGPT.</p>
+
+<p><i>False positive!</i> ChatGPT is wrong. The recursive and base cases are correctly marked.</p>
+
+<p><i>Formatting issue.</i> The "extra indentation" was caused by copy/pasting the text to ChatGPT.</p>
+
+<p><i>False positive!</i> I double-checked that this wasn't a formatting issue. There is no "space before the semicolon".</p>
+
+<p><i>Novel and useful feedback!</i> There was an extra space in the &lt;/ pre&gt; tag.</p>
+
+<blockquote>In the sentence "The following output shows the before and after images:", it should be "The following output shows the images before and after:" to correct the word order.</blockquote>
+
+<p><i>Unhelpful feedback.</i> Eh.</p>
+
+<blockquote>In the sentence "If you want to see every step of the flood fill algorithm as it fills in the new character, uncomment the printImage(image) line ❶ in the floodFill() function and run the program again," the reference to line ❶ should be changed to line ❷.</blockquote>
+
+<p>Both <i>Novel and useful feedback!</i> and <i>False positive!</i>: The reference to 1 is wrong, but it should be removed entirely rather than changed to 2.</p>
+
+<blockquote>In the sentence "This means we could equally effectively use a set data structure that removes elements randomly," it should be "This means we could equally effectively use a data structure like a set that removes elements randomly."</blockquote>
+
+<p><i>Unhelpful feedback.</i> No.</p>
+
+
+
+
+<h2>AI Feedback for Chapter 4 - Backtracking and Tree Traversal Algorithms</h2>
+
+<blockquote>"A maze can be represented by a tree data structure, since mazes branch off into different paths, which in turn branch off into more paths." It might be worth clarifying that this representation applies to perfect mazes, where there is a single path between any two points without loops. Other types of mazes, which can include loops or cycles, may not be perfectly represented by a tree.</blockquote>
+
+<p><i>Formatting issue.</i> The information here is correct, but I do go into the definition of perfect mazes later in the chapter. But this wasn't included in the 15,000 character chunk I sent to ChatGPT. This was a bit of a time waste to resolve.</p>
+
+<blockquote>"In mathematics and computer science, a graph is a collection of nodes and edges, and a tree is a kind of graph. The graph is directed because its edges have one direction: from parent to child node." This sentence might be confusing because it seems to imply that all graphs are directed. It would be better to specify that the graph we're talking about in this context (a tree) is directed.</blockquote>
+
+<p><i>Formatting issue.</i> The "directed" was italicized but this was lost in the copy/paste, but I feel like this italicizing made it more obvious that it was not implying all graphs are directed. This was a bit of a time waste to resolve.</p>
+
+<blockquote>"Trees in general do not have this restriction and can have edges in both directions, including from a child node back to its parent node." This statement can be misunderstood, as trees are usually described as directed acyclic graphs, meaning they don't have edges going in both directions (from child to parent and vice versa). While it's true that trees can be represented with bidirectional edges for some algorithms, it might be worth noting that this is not the typical definition.</blockquote>
+
+<p><i>False positive!</i> I have this sentence specifically in contrast with the previous sentence that says DAGs are directed. It was a waste of time to investigate this feedback.</p>
+
+<blockquote>"You can think of lists, arrays, and strings as linear trees; the root is the first element, and the nodes have only one child node. This linear tree terminates at its one leaf node." This might be confusing as well. Lists, arrays, and strings are linear structures, but calling them "linear trees" might be misleading because they don't have the hierarchical structure typically associated with trees.</blockquote>
+
+<p><i>False positive!</i> Yeah, that's why I'm explaining how you can think of them as linear trees. That's the point of these sentences. It was a waste of time to investigate this feedback.</p>
+
+<blockquote>"The following preorderTraversal.py program has a preorderTraverse() function that traverses each child node first, before accessing the node’s data to print it to the screen:" The description of the preorderTraverse() function is incorrect. In a preorder traversal, the node's data is accessed first, then its child nodes are traversed, not the other way around. The actual code provided correctly implements a preorder traversal, so this seems to be a minor error in the accompanying text.</blockquote>
+
+<p><i>Novel and useful feedback!</i> Yes, while the code is correct, I think there was a typo in the description that swapped these.</p>
+
+<blockquote>"When you look at the tree in Figure 4-1, notice that preorder traversal order displays the data in left nodes before right nodes, and bottom nodes before top nodes." This sentence may cause confusion, as there is no Figure 4-1 presented in the given text.</blockquote>
+
+
+<blockquote>Inorder Tree Traversal:
+    The text and code provided are misleading as they suggest that inorder traversal can be used for general trees. Inorder traversal is specific to binary trees. The code provided treats the first child as a left node and the second child as a right node. However, this is not accurate for general trees where a node can have more than two children. In general trees, there is no concept of left and right children. The code and explanation should be corrected to reflect this.</blockquote>
+
+<p><i>False positive!</i> No, you can still do an inorder traversal with trees with more than two child nodes. If you access the data after traversing the first child and before traversing the last child, that's an inorder traversal.</p>
+
+<blockquote>Finding Eight-Letter Names in a Tree: The JavaScript function find8LetterName() has an extra parameter value that is not used within the function. This is a minor error and the value parameter should be removed.</blockquote>
+
+<p><i>Novel and useful feedback!</i> Yep. That "value" parameter somehow got left in and should be removed.</p>
+
+<blockquote>Getting the Maximum Tree Depth: The text does not have any errors, but it ends abruptly without concluding the topic or providing any code examples. It might be useful to include an example here to properly illustrate this concept.</blockquote>
+
+<p><i>Formatting issue.</i></p>
+
+<blockquote>Regarding the description of the getDepth() function, there's a discrepancy in the definition of the depth of a leaf node. It's stated that "A leaf node (the base case) simply returns 0," but later it's said that a leaf node "by its nature has a depth of one level." The first definition is in line with the code examples provided, where a leaf node indeed returns 0. So, the second statement is technically incorrect.</blockquote>
+
+<p><i>Novel and useful feedback!</i> and <i>False positive!</i> Yes. There is a mistake, but it should be TODO</p>
+
+<blockquote>In the Python code example for the getDepth() function, the final print statement should follow Python 3's f-string formatting or the format method for clarity and consistency. Here's the suggested revision:
+
+print(f'Depth of tree is {getDepth(root)}')
+
+Instead of:
+
+print('Depth of tree is ' + str(getDepth(root)))</blockquote>
+
+<p><i>Slightly helpful but disregarded edit suggestion.</i> I don't use f-strings in my Python code in order for it to be runnable on pre-3.6 versions.</p>
+
+<blockquote>The JavaScript example for getDepth(), the HTML element "script" has an incorrect closing tag. It should be &lt;/script&gt; but instead it is written as &lt;/ script&gt;.</blockquote>
+
+<p><i>False positive!</i> There was no space. I wasted quite a bit of time verifying this.</p>
+
+<blockquote>In the maze-solving section, the term "tree graph" is used, which could be confusing. The maze isn't strictly a tree because, unlike trees, mazes can have nodes with more than one parent. The term "graph" would be more accurate here.</blockquote>
+
+<p><i>Unhelpful feedback.</i> I've already explained in this chapter that the mazes are perfect mazes.</p>
+
+<blockquote>The last print statement printMaze(MAZE) needs an explanation or context, as it might confuse the reader. Is it meant to print the solved maze or the original one?</blockquote>
+
+<p><i>Novel and useful feedback!</i> This is actually really good feedback, because looking at the code this is a perfect spot where just a couple simple comments will really improve the readability of the code.</p>
+
+<blockquote>There's an incorrect Unicode character in comments marked as ❶, ❷, ❸, and ❹. They should be replaced with proper numbering or bullets if they are meant to denote specific steps or points in the code.</blockquote>
+
+<p><i>False positive!</i> It's weird that ChatGPT hasn't complained about the use of the circle-numbers until now. These are fine.</p>
+
+<blockquote>In the JavaScript mazeSolver.html program, there's an incorrect closing tag &lt;/ pre&gt; for the "pre" element. It should be &lt;/pre&gt;.</blockquote>
+
+<p><i>Novel and useful feedback!</i> Nice catch.</p>
+
+<blockquote>Grammatically, there are some long sentences that could be broken up for clarity. For example, "The nodes in this tree graph represent intersections where the maze solver could choose one of the north, south, east, or west paths to follow to the next intersection." could be restructured as "The nodes in this tree graph represent intersections. At each intersection, the maze solver could choose to follow one of the north, south, east, or west paths to reach the next intersection."</blockquote>
+
+<p><i>Novel and useful feedback!</i> Yeah, actually this edit would be better.</p>
+
+<blockquote>The term "DAG" (Directed Acyclic Graph) is used without a proper introduction or definition. If it's the first time the term appears in the book, it should be introduced and defined.</blockquote>
+
+<p><i>Formatting issue.</i></p>
+
+
+<blockquote>In the paragraph discussing the "base case" in binary search, it might be helpful to clarify that the base case isn't only when the range of items is one item in length, but also when the search range is empty (left > right).</blockquote>
+
+<p><i>Novel and useful feedback!</i> Yes, I should also add this bit of text.</p>
+
+<blockquote>For better understanding, it might be useful to clarify what the maze and visited variables are referring to in the context of the programming explanation. The paragraph seems to assume that the reader is familiar with these from a previous section or code sample.</blockquote>
+
+<p><i>Formatting issue.</i> This is expained elsewhere.</p>
+
+<blockquote>The description of how recursion is used in backtracking algorithms could be explained more thoroughly. It is mentioned that "a recursive function call is analogous to traversing to a child node in a tree, while returning from a recursive function call is analogous to backtracking to a previous parent node," but it could be helpful to give a specific example of this for readers who are less familiar with these concepts.</blockquote>
+
+<p><i>Formatting issue.</i> This is expained elsewhere.</p>
+
+<blockquote>In the explanation of binary search, it would be beneficial to note that binary search only works on sorted lists or arrays. This is implicit in the explanation, but could be explicitly stated for clarity.</blockquote>
+
+<p><i>Formatting issue.</i> This is expained elsewhere.</p>
+
+<blockquote>In the JavaScript version of binarySearch, it uses "===" (strict equality operator) for comparison, which checks both the value and the type. This might lead to unintended results if the types are different. However, this depends on the expected types of the inputs in this specific application. In general, using "===" in JavaScript is considered good practice.</blockquote>
+
+<li><i>Unhelpful feedback.</i> Meh.</li>
+
+<blockquote>When talking about the Big O Algorithm Analysis, it would be beneficial to explain what the Big O notation represents for readers unfamiliar with the concept.</blockquote>
+
+<li><i>Unhelpful feedback.</i> This explanation is in a box precisely because Big O notation is too complex of a topic to go into in this book.</li>
+
+<blockquote>It is stated that a simply connected maze has a tree-like structure, but it might be helpful to explain what "simply connected" means in this context. In graph theory, a simply connected graph is a tree, i.e., a connected graph without simple cycles.</blockquote>
+
+<p><i>Formatting issue.</i> This is expained elsewhere.</p>
+
+<blockquote>The text is a little confusing when it discusses printMaze(MAZE) calls being uncommented to show how the maze data structure changes as it is processed. This might be clearer if there was a specific code sample provided that showed where these function calls were placed and how they could be uncommented.</blockquote>
+
+<p>ChatGPT already mentioned this issue.</p>
+
+<blockquote>The text could benefit from more concrete examples, particularly when discussing more abstract concepts like trees, DAGs, and recursion.</blockquote>
+
+<p><i>Formatting issue.</i></p>
+
+
+
+<h2>AI Feedback for Chapter 5 - Divide-and-Conquer Algorithms</h2>
+
+
+
+
+
+<blockquote>Technical Inaccuracy: The statement "The range halves in size for each recursive call, so it eventually becomes empty" is inaccurate. While the range does decrease in size after each recursive call, it doesn't necessarily halve. The partitioning is based on the pivot, so the size of the two resulting sub-ranges can vary.</blockquote>
+
+<p><i>Novel and useful feedback!</i> I should add a minor note that the range <i>roughly</i> halves in size.</p>
+
+<blockquote>Typographical Error: In the Python script, the comment at line 8 refers to 'left side of items' whereas it should be 'right side of items'. The corrected line should be '# Put the pivot on the right side of items: items[i], items[right] = items[right], items[i]'</blockquote>
+
+<p><i>False positive!</i> ChatGPT is completely wrong. The original text is correct in that it's the left side.</p>
+
+<blockquote>Consistency Issue: In the explanation of base case for the recursion, it's stated that "Being given a range to sort that contains zero or one item and that is already in sorted order." is the base case. However, quicksort doesn't check if a range of one item is already in sorted order because a single item is by definition sorted. This might lead to confusion and it would be better to say "Being given a range to sort that contains zero or one item."</blockquote>
+
+<p><i>Novel and useful feedback!</i> Yeah, I can slightly change this wording to "and thus is already in sorted order."</p>
+
+<blockquote>Grammatical Error: In the following statement - "Someone else’s quicksort() implementation may instead use j and i, or even completely different variables", it is not clear what "j and i" refers to. If the author means to say that the positions of i and j may be swapped, then the statement could be clarified to say - "Someone else’s quicksort() implementation may instead swap the positions of i and j, or use completely different variables".</blockquote>
+
+<p><i>Formatting issue.</i></p>
+
+<blockquote>Ambiguity: In the statement - "This results in no actual change since i and j are the same index", it's not clear why having i and j as the same index will result in no change. This can be rephrased for clarity - "This results in no actual change because swapping a value with itself does not alter the array, which is the case when i and j are at the same index."</blockquote>
+
+<p><i>Unhelpful feedback.</i> The other sentences clarify this, and ChatGPT's own wording is vague and unhelpful.</p>
+
+
+<blockquote>In the mergeSort() function, there is a bug that could cause an IndexError. The condition that checks whether an item should be appended from left or right doesn't ensure that iLeft and iRight are valid indices for their respective lists. This could lead to an IndexError if the left list is exhausted before the right list (or vice versa), but the exhausted list's index is still used to attempt to access an item. A condition to check whether iLeft or iRight have reached their list's length should be added before comparing left[iLeft] and right[iRight].</blockquote>
+
+<p><i>False positive!</i> Yeah, I've done a thorough check and I think ChatGPT is just throwing stuff at the wall to see what sticks. This code can't cause an index error. That was a wild goose chase.</p>
+
+<blockquote>In the sumDivConq() function, numbers[mid:len(numbers) + 1] should be replaced with numbers[mid:]. This is because slicing in Python does not include the stop index, so adding 1 to len(numbers) does not have any effect. Additionally, if you leave out the stop index in a slice, Python will automatically include all elements until the end of the list, which is what we want here.</blockquote>
+
+<p><i>Slightly helpful but disregarded edit suggestion.</i> In normal Python code this would be the conventional way to write it, but I'm trying to be more explicit so that it's in line with the equivalent JavaScript code I have. ChatGPT's suggestion is right, but isn't relevant to my particular case.</p>
+
+<blockquote>"Merging two sorted lists into a larger sorted list involves looking at the start of both smaller lists and appending the smaller value to the larger list." This sentence could be more accurately written as: "Merging two sorted lists into a larger sorted list involves looking at the start of both smaller lists and appending the smaller value to the new list."</blockquote>
+
+<p><i>Unhelpful feedback.</i> Eh.</p>
+
+<blockquote>"The function divides the [8, 5] list into [8] and [5], reaches the base case, and then merges back into [5, 8]." This sentence would be clearer written as: "The function divides the [8, 5] list into [8] and [5], each of which is already sorted because it contains only one item (the base case), and then merges these back into the sorted list [5, 8]."</blockquote>
+
+<p><i>Slightly helpful but disregarded edit suggestion.</i> I kind of like ChatGPT's wording, but I also kind of like how mine is shorter. Eh. I'm going to stick with mine.</p>
+
+<blockquote>"We already covered summing an array of integers in Chapter 3 with the head-tail technique." It's not an error, but this sentence would benefit from rephrasing for clarity: "In Chapter 3, we already covered the method of summing an array of integers using the head-tail technique."</blockquote>
+
+<p><i>Unhelpful feedback.</i> Eh, I really don't think this suggestion is an improvement, and might even be worse.</p>
+
+
+<blockquote><p>In the section "Here are the five steps of the Karatsuba algorithm:", the fourth step is described incorrectly. It should be:</p>
+
+<p>Calculate step 3 - step 2 - step 1 multiplied by 10^(n/2), where n is the number of digits.</p>
+
+<p>This ensures that the middle term in the final equation is properly accounted for. The resulting value is then used for padding in step 5.</p>
+
+<p>In the Python implementation, the padding in step 5 is incorrect. The lines:</p>
+
+<pre>step1Padding = (len(x) - halfOfDigits) + (len(x) - halfOfDigits)
+step4Padding = (len(x) - halfOfDigits)</pre>
+
+<p>Should be replaced with:</p>
+
+<pre>step1Padding = 2 * (len(x) - halfOfDigits)
+step4Padding = len(x) - halfOfDigits</pre>
+
+<p>Also, the 'left' padding in the 'padZeros' function is not necessary for the Karatsuba algorithm, as we only pad zeros to the right of the number in this case.</p>
+
+<p>In the JavaScript implementation, the same errors with padding exist. Replace:</p>
+
+<pre>let step1Padding = (x.length - halfOfDigits) + (x.length - halfOfDigits);
+let step4Padding = (x.length - halfOfDigits);</pre>
+
+<p>With:</p>
+
+<pre>let step1Padding = 2 * (x.length - halfOfDigits);
+let step4Padding = x.length - halfOfDigits;</pre></blockquote>
+
+<p><i>False positive!</i> I'm really annoyed with this one because it took me a long time to verify that my code is correct. From what I can tell, ChatGPT isn't looking at my program so much as it's thinking of standard implementations of the Karatsuba algorithm and pointing out how mine is not like that. I've written my code more for simplicity though, rather than as professional code. This was a big waste of time.</p>
+
+<blockquote><p>Also, the description of the multiplication table generation is slightly incorrect. The text says:</p>
+
+<p>"Normally, lookup tables are hardcoded directly in the source code, from MULT_TABLE[[0, 0]] = 0 to MULT_TABLE[[9, 9]] = 81."</p>
+
+<p>However, in Python, accessing dictionaries with lists as keys (e.g., MULT_TABLE[[0, 0]]) will raise a TypeError because lists are mutable and cannot be hashed. This will not work unless you use a tuple (e.g., MULT_TABLE[(0, 0)]), which is the correct way to do it in Python and was done correctly in the code.</p></blockquote>
+
+<p><i>False positive!</i> ChatGPT is looking at the JavaScript code and confusing it with Python code. Disregard its advice here.</p>
+
+<blockquote>The concept of padding zeros in the Karatsuba algorithm is somewhat misrepresented. In the Karatsuba algorithm, padding zeros means multiplying a number by 10^k where k is a certain number of digits. It's not adding zeros to a string.</blockquote>
+
+<p><i>False positive!</i> Yeah, I know my code isn't standard. That's because I'm writing it for readability by students. Nobody would write a Karatsuba implementation in Python anyway because they could just use the * operator. Again, ChatGPT is complaining about how my code doesn't compare to a standard Karatsuba implementation rather than considering my code in its own context.</p>
+
+<blockquote>Finally, the paragraph mentioning HALF_TABLE is not technically incorrect, but the justification for the lookup table is somewhat misleading. While it is true that division operations might not be available in some very low-level programming or hardware situations, the vast majority of modern computing environments, including virtually all that use Python or JavaScript, support division operations.</blockquote>
+
+<p><i>Unhelpful feedback.</i> Uhg.</p>
+
+
+<blockquote>Under "Practice Questions", the question "What is a benefit of the divide-and-conquer summing algorithm in this chapter compared to the head-tail summing algorithm in Chapter 3?" appears to refer to content that is not provided in the given text. It's not technically an error in this section, but the context is missing.</blockquote>
+
+<p><i>Formatting issue.</i></p>
+
+<blockquote>In the "Practice Projects" section, the text suggests creating a version of the Karatsuba multiplication algorithm with a lookup table for products from 0 x 0 to 999 x 999. While this is technically possible, it may not be practical due to the large amount of memory such a lookup table would consume.</blockquote>
+
+<p><i>Unhelpful feedback.</i> Yeah, it's not practical. It's meant to be an academic exercise. (I think at this point ChatGPT's advice is getting on my nerves.)</p>
+
+<blockquote>The question "How is the array [0, 3, 1, 2, 5, 4, 7, 6] not properly partitioned with a pivot value of 4?" suggests that there's a problem with an array partition, but no problem is evident from the given text.</blockquote>
+
+<p><i>False positive!</i> The answer is "there's a 5 before the 4, which should be to the right of the 4 if 4 was the pivot value."</p>
+
+<blockquote>The problem "Create a function that performs a linear search on a large array of integers 10,000 times." is more a computer science problem than specifically a Python problem.</blockquote>
+
+<p><i>Formatting issue.</i> This is unhelpful feedback, but it's caused from the prompt I gave it. I need to change the prompt to not call this book a Python book.</p>
+
+
+<h2>AI Feedback for Chapter 6 - Permutations and Combinations</h2>
+
+
+
+<blockquote>In "The Terminology of Set Theory", when explaining n multichoose k, the concept is somewhat unclear. It might be better to explain that it refers to the number of ways to select k elements from a set of n elements where repetition is allowed and order doesn't matter.</blockquote>
+
+<p><i>Unhelpful feedback.</i> Uh, I kind of do explain this?</p>
+
+<blockquote>In the sentence "This makes these calculations suitable for recursion." the word "these" is used twice in close proximity, which could be considered redundant. It could be rephrased as "This makes such calculations suitable for recursion."</blockquote>
+
+<p><i>Unhelpful feedback.</i> Meh.</p>
+
+<blockquote>"For example, 4 choose 2 is 6, because there are six ways to choose two elements from a set of four elements like {A, B, C, D}: {A, B}, {A, C}, {A, D}, {B, C}, {B, D}, and {C, D}." The phrasing is slightly awkward. A possible improvement would be: "For example, in '4 choose 2', there are six possible ways to select two elements from a four-element set such as {A, B, C, D}: {A, B}, {A, C}, {A, D}, {B, C}, {B, D}, and {C, D}."</blockquote>
+
+<p><i>Unhelpful feedback.</i> I like my phrasing better.</p>
+
+<blockquote>"It’s surprising how quickly the number of permutations and combinations grows as we add elements to a set." This sentence is more of a personal observation than a factual statement. A more formal way to phrase this could be: "The number of permutations and combinations increases exponentially with the addition of elements to a set."</blockquote>
+
+<p><i>Unhelpful feedback.</i> Wow, thanks. Any more advice on how to drain the last remnants of personality from the text?</p>
+
+
+<blockquote>The Python code has a lack of indentation which is crucial in Python. The if-else clauses, loops, and function definitions are not properly indented, making the code difficult to understand and likely to throw an error if run.</blockquote>
+
+<p><i>Formatting issue.</i></p>
+
+<blockquote>In the "Getting Permutations with Nested Loops: A Less-Than-Ideal Approach" section, it says "We can calculate the number of possible combinations as 54, or 5 × 5 × 5 × 5, or 625." But later in the text, it shows a nested loop generating permutations with only 3 characters ('A', 'B', 'C', 'D', 'E'), which contradicts the previous statement that the permutations should be four characters long.</blockquote>
+
+<p><i>False positive!</i> ChatGPT has brain worms here. I don't even want to bother going into why this is so off the mark.</p>
+
+<blockquote>The for loop for generating permutations in Python in the "Getting Permutations with Nested Loops: A Less-Than-Ideal Approach" section is also incorrect. It says, "for a in ['A', 'B', 'C', 'D', 'E']: for b in ['A', 'B', 'C', 'D', 'E']: for c in ['A', 'B', 'C', 'D', 'E']: for d in ['A', 'B', 'C', 'D', 'E']:", which is generating 4-character permutations, but it's stated above that they are generating 3-character permutations.</blockquote>
+
+<p><i>False positive!</i> Same as previous.</p>
+
+<blockquote>In the "Permutations with Repetition: A Password Cracker" section, it says, "making 6 × 6 × 6 × 6, or 64, or 1,296 possible permutations." This is inaccurate as 6 × 6 × 6 × 6 equals to 1,296, not 64.</blockquote>
+
+<p><i>Formatting issue.</i> The superscript for 4 didn't copy over.</p>
+
+<blockquote>In the JavaScript function getPermsWithRep(), when the base case is reached (permLength === 0), the function returns [prefix] which is an array. But prefix is a string. It's not clear what the purpose is of returning the string in an array.</blockquote>
+
+<p><i>False positive!</i> Brain worms response.</p>
+
+<blockquote>A minor grammatical error in "The function makes a recursive call to getPerms() to get all the permutations of the string in tail." It would be clearer if phrased as, "The function makes a recursive call to getPerms() to get all the permutations of the string from tail."</blockquote>
+
+<p><i>False positive!</i> No, my wording makes much more sense.</p>
+
+<blockquote>There is a contradiction in the phrase "Permutations with repetition go through all possible orderings of the elements in a set, like our wedding guest seating chart example." This should mention that repetition of elements is allowed in the set, unlike the wedding guest seating example where each guest can only be seated once (no repetition).</blockquote>
+
+<p><i>False positive!</i> Wow. I checked and the text with the wedding guests uses the word "without" and not "with". ChatGPT is outright misquoting what the book says. This is a flagrantly bad failure of the LLM.</p>
+
+<blockquote>It's mentioned that the function getPermsWithRep('JPB123', 4) is being called but the string 'JPB123' is of length 6, not 4. The explanation for the permLength argument says that it begins as the length of chars, which is not the case here.</blockquote>
+
+<p><i>False positive!</i> ChatGPT is misunderstanding what the function requires. 4 is the length of the generated permutations, not the pool of characters to draw from (JPB123).</p>
+
+<blockquote>The algorithm for recursive permutations with repetition in the Python code doesn't explicitly handle the case when the permLength argument is greater than the length of chars, which might lead to unexpected results.</blockquote>
+
+<p><i>Slightly helpful but disregarded edit suggestion.</i> Input validation isn't a priority in this context.</p>
+
+<blockquote>The algorithm for recursive permutations with repetition in the JavaScript code doesn't check if permLength is greater than the length of chars, leading to the same potential problem as in the Python code.</blockquote>
+
+<p>This is a repeat of the previous issue.</p>
+
+
+<blockquote>Technical error: It is mentioned, "While sets don’t have an order, we need to be consistent in using the ABCD order of the set while generating this tree." This is misleading. In Python, sets are unordered and the order of items is not maintained. Therefore, if you need to maintain order, you might have to use a different data structure like a list.</blockquote>
+
+<p><i>False positive!</i> ChatGPT has misunderstood context. I'm talking about sets as in set theory, not as in the Python data structure.</p>
+
+
+<blockquote>Grammar error: The sentence, "The return value is an array of strings of combinations from the string chars, each of length k," uses the term "array" which is less common in Python context. It is better to use "list" instead, as that's the term used for this data structure in Python.</blockquote>
+
+<p><i>Formatting issue.</i> In this book I'm using Python and JavaScript, and previously said I'd use "array" as a generic term.</p>
+
+<blockquote>Grammar error: "The second case occurs if chars is the blank string, which is an empty array since no possible combinations can be made from a blank string." Again, use the term "list" instead of "array".</blockquote>
+
+<p><i>Formatting issue.</i> Same as previous.</p>
+
+<blockquote>The explanation in the paragraph about "2-combinations of 'ABC'" is a bit confusing. The explanation about 1-combination and the recursive call might need further clarification.</blockquote>
+
+<p><i>Formatting issue.</i> I'll be generous and say this is because the accompanying figures aren't there, but I think ChatGPT is misreading this section.</p>
+
+<blockquote>In the Python code, 'getCombos' function is used, which uses recursion to find combinations. There's a point where it is mentioned that two arguments are passed to the recursive function call: the tail of chars and k-1 for the first call, and the tail of chars and k for the second call. This explanation may be confusing to some readers, as it's not immediately clear what 'tail' refers to. It might be helpful to explain that 'tail' refers to all characters in 'chars' except the first one (the 'head').</blockquote>
+
+<p><i>Formatting issue.</i> Head-tail was explained previously.</p>
+
+<blockquote>In the JavaScript code, you're using document.write(), which is generally considered a bad practice as it may lead to vulnerabilities such as Cross-Site Scripting (XSS) attacks. It is also not standard in modern web development where DOM manipulation is done using methods like innerHTML, textContent or better, via libraries like jQuery or frameworks like React, Angular, Vue.js, etc.</blockquote>
+
+<p><i>Unhelpful feedback.</i> Uhg. This is the kind of irrelevant nonsense that gets tiresome to repeatedly read.</p>
+
+<blockquote>The JavaScript code uses the method .slice() on a string. Although this is not incorrect (as slice works on strings in JavaScript), it could be a little confusing because in Python, slicing is typically used on lists, not strings. It might be worth noting this difference for readers who are new to JavaScript.</blockquote>
+
+<p><i>Unhelpful feedback.</i> The reader knows that JavaScript and Python are different languages.</p>
+
+<blockquote>Technical error: In the section discussing balanced parentheses, the claim "A string has balanced parentheses if every opening parenthesis is followed by exactly one closing parenthesis." is incorrect. A string has balanced parentheses not only if every opening parenthesis is followed by a closing parenthesis, but also if every closing parenthesis is preceded by an opening parenthesis and the order of parentheses is correct, i.e., no closing parenthesis appears before an opening parenthesis corresponding to it. A more accurate definition might be: "A string has balanced parentheses if for every opening parenthesis there exists a corresponding closing parenthesis that appears later in the string, and vice versa, such that no closing parenthesis appears before an opening parenthesis corresponding to it."</blockquote>
+
+<p><i>Unhelpful feedback.</i> My wording is simpler, and the word "exactly" covers this extended discussion.</p>
+
+<blockquote>The explanation about the getBalancedParens() function might be improved by providing a code snippet. This would make it easier to understand the implementation of the function.</blockquote>
+
+<p><i>Unhelpful feedback.</i> No it wouldn't. And anyway, I provide the full code of the function already.</p>
+
+<blockquote>It is mentioned in the text that the getBalancedParens() function builds strings by adding either an opening or closing parenthesis. But it doesn't clarify what the criteria for adding the opening or closing parenthesis are.</blockquote>
+
+<p><i>Unhelpful feedback.</i> Yes it does.</p>
+
+<blockquote>There's a small contradiction in the text. The author first writes that "the second base case happens after the two recursive cases have received the lists of balanced parentheses strings after adding an opening and/or</blockquote>
+
+<p>ChatGPT cut off it's own response here.</p>
+
+
+<blockquote>The document.write(&lt;pre&gt;"All combinations of 2 balanced parentheses:&lt;br /&gt;"); line in the JavaScript example is not syntactically correct. It should instead be document.write("&lt;pre&gt;All combinations of 2 balanced parentheses:&lt;br /&gt;");.</blockquote>
+
+<p><i>Novel and useful feedback!</i> Good catch. The &lt;pre&gt; tag got moved outside of the double quotes somehow.</p>
+
+<blockquote>The statement that "The getBalancedParens() function ❶ requires one argument, the number of pairs of parentheses, when called by the user" is not entirely accurate. This function has default parameter values for its arguments, so technically it could be called without any arguments, and would default to pairs=undefined, openRem=undefined, closeRem=undefined, current=undefined, and indent=0.</blockquote>
+
+<p><i>False positive!</i> This is completely untrue. The Python version requires the pairs argument, and the JavaScript version breaks at runtime if you don't supply it.</p>
+
+<blockquote>The JavaScript code uses the Array.prototype.push.apply() method, which is outdated and has been replaced with the spread operator (...). It would be more current to use results.push(...getBalancedParens( pairs, openRem - 1, closeRem, current + '(', indent + 1)); instead of Array.prototype.push.apply(results, getBalancedParens( pairs, openRem - 1, closeRem, current + '(', indent + 1));.</blockquote>
+
+<p><i>Unhelpful feedback.</i> I'd rather use the older but simpler syntax.</p>
+
+<blockquote>The power set section describes an example of how the power set grows when new elements are added, but it mislabels the elements in bold as "new" elements. However, these are actually the subsets that include the new element, not the new elements themselves.</blockquote>
+
+<p><i>Formatting issue.</i> The copied text doesn't retain the bold style.</p>
+
+<blockquote>In the Python code, powerSet = powerSet + tailPowerSet is inefficient. It would be better to use powerSet.extend(tailPowerSet) instead, to append the elements of tailPowerSet to powerSet directly, without creating a new list.</blockquote>
+
+<p><i>Unhelpful feedback.</i> Simplicity of code is more important for the context of this book than performance.</p>
+
+<blockquote>The phrase "Let’s ask the three recursive algorithm questions about our power set algorithm" is awkward. It could be rewritten as "Let's consider the three questions about recursion as they apply to our power set algorithm."</blockquote>
+
+<p><i>Unhelpful feedback.</i> Meh.</p>
+
+<blockquote>In "This is equivalent to the set of every possible k-combination of a set", it would be better to write "This is equivalent to the collection of all possible k-combinations of a set."</blockquote>
+
+<p><i>Unhelpful feedback.</i> Eh, my wording is actually better.</p>
+
+<blockquote>The phrase "It is astronomically unlikely you’ll need to generate the power set of a set for any other reason, including the job you are interviewing for" is written in a tone that might come off as sarcastic or unprofessional. It could be rephrased more neutrally as "While generating the power set of a set is not a commonly required task in most jobs, it can still be a useful concept to understand."</blockquote>
+
+<p><i>Unhelpful feedback.</i> Eh, my wording is actually better.</p>
+
+<blockquote>In the sentence "After these recursive cases is an unconditional base case that returns...", the grammar is off. It would be better to write "After these recursive cases, there is an unconditional base case that returns..."</blockquote>
+
+<p><i>Unhelpful feedback.</i> Eh.</p>
+
+<blockquote>The phrase "The power sets of larger sets are similar to the power sets of smaller sets, hinting that we can create a recursive function to generate them" is a bit misleading. The similarity between power sets of larger and smaller sets doesn't hint at the need for a recursive function. Instead, it might be more accurate to say that "The structure of power sets of larger sets, which include the power sets of their smaller subsets, suggests a recursive approach to generating them."</blockquote>
+
+<p><i>Unhelpful feedback.</i> Eh.</p>
+
+<blockquote>The phrase "Let’s ask the three recursive algorithm questions about our power set algorithm" is awkwardly worded and redundant. It could be rephrased as "Let's address the three key questions for our recursive power set algorithm."</blockquote>
+
+<p><i>Formatting issue.</i> The "three questions" thing is something I introduce in this book, but ChatGPT doesn't pick up on this since the input is split into 15,000 character chunks.</p>
+
+<blockquote>The last sentence in the paragraph starting with "The getPower</blockquote>
+
+<p>ChatGTP's response got cut off here again, for some reason.</p>
+
+
+
+<h2>AI Feedback for Chapter 7 - Memoization</h2>
+
+
+
+
+<blockquote>The passage suggests that memoization increases memory usage, which might be misleading. While it's true that memoization involves storing results for later reference, this does not always mean that overall memory usage increases significantly. Often, the increased memory usage due to memoization is offset by the savings in computational resources.</blockquote>
+
+<p><i>Unhelpful feedback.</i> This is an eye-rolling level of irrelevant nitpicking.</p>
+
+<blockquote>In the section "Memoization in Functional Programming", it's stated that a function is nondeterministic if it returns different values when passed the same arguments. While this is correct, it might be useful to specify that such behavior is due to the function relying on external or unpredictable factors, not because the function itself is inherently random or unpredictable.</blockquote>
+
+<p><i>Slightly helpful but disregarded edit suggestion.</i> I should probably add a sentence about this, but it doesn't strike me as too urgent.</p>
+
+<blockquote>The section "Python's functools Module" ends abruptly, not completing the explanation about @lru_cache().</blockquote>
+
+<p><i>Formatting issue.</i></p>
+
+<blockquote>Grammar: In the paragraph that begins with "Side effects are any changes...", the phrase "Any trace that a function call leaves behind after returning is a side effect" might be better stated as "Any change that a function call effects outside its own scope, which persists after the function has returned, is considered a side effect."</blockquote>
+
+<p><i>Unhelpful feedback.</i> Uhg, I hate this new wording.</p>
+
+<blockquote>In the example Python and JavaScript code provided, the argument 'indent' isn't explained. A reader who's not familiar with this code might find it confusing. Its purpose (which appears to be to control indentation in printed output for clarity) should be explained.</blockquote>
+
+<p><i>Formatting issue.</i> This was explained earlier in the book.</p>
+
+<blockquote>The python and JavaScript examples are a bit complicated for an introductory text and make the code look more complex than it needs to be, mostly due to the indent and indentation variables and the printing statements. These extra lines of code are unnecessary for the core function of calculating Fibonacci numbers and demonstrating memoization, and could be removed or separated out to focus on the memoization itself.</blockquote>
+
+<p><i>False positive!</i> Uhg. Actually these make the output so much easier to understand for a beginner, even though it's a departure from how most programming books present code like this. Then again, most programming books are kind of terrible. ChatGPT is trying to stamp out the unique things that make this book better than other sources.</p>
+
+<blockquote>The last line "The cache can have a memory size limit set" does not specify who or what sets the limit. The sentence could be clarified, for instance: "You can set a memory size limit for the cache."</blockquote>
+
+<p><i>Formatting issue.</i></p>
+
+<blockquote>In the JavaScript example code, the HTML 'pre' tags are used, which might be unfamiliar to some readers. The text could explain their purpose.</blockquote>
+
+<p><i>Unhelpful feedback.</i> Eh, this book isn't for people brand new to JavaScript.</p>
+
+<blockquote>It's said that "dynamic programming uses recursion with repeated recursive cases; these are the overlapping subproblems." This definition could be expanded to say that dynamic programming uses memoization to avoid recalculating the same subproblems, which is a key feature of the technique.</blockquote>
+
+<p><i>Unhelpful feedback.</i> Yes, the book eventually covers this as well.</p>
+
+<blockquote>The python script shows the indent variable being initialized as an argument of the fibonacci function with indent=0. In the JavaScript code, indent is checked for undefined inside the function body. While these are two ways of accomplishing the same goal in two different languages, it could confuse beginners who are trying to understand the differences between Python and JavaScript.</blockquote>
+
+<p><i>Unhelpful feedback.</i> This is irrelevant. But kudos to ChatGPT for recognizing that the code in two different languages does the same thing.</p>
+
+
+<blockquote>In the first Python code snippet, the @functools.lru_cache() decorator should be placed immediately above the function it is meant to decorate. There should not be any other code (such as import statements) between the decorator and the function.</blockquote>
+
+<p><i>Formatting issue.</i></p>
+
+<blockquote>The statement that "calculating fibonacci(99) with the recursive algorithm would take a few centuries" is an exaggeration. While calculating the 99th Fibonacci number without memoization would be very time-consuming due to the exponential number of function calls, it would not likely take centuries.</blockquote>
+
+<p><i>False positive!</i> No, it would literally take 600,000 years for my laptop to calculate fibonacci(99).</p>
+
+<blockquote>The printMessage() function in the second Python code snippet doesn't return a value. The lru_cache decorator won't have any effect on this function because it doesn't have a return value to cache.</blockquote>
+
+<p><i>False positive!</i> The entire point of this code example, as explained in the book, is that this is an inappropriate use of lru_cache.</p>
+
+<blockquote>The statement that "memoized functions must be pure" is not entirely accurate. While it's true that the results are most predictable when memoization is used with pure functions, it can be used with impure functions in some circumstances if the developer is aware of the potential side effects and considers them acceptable for their particular use case.</blockquote>
+
+<p><i>Unhelpful feedback.</i> Uh, sure. This is an obnoxious and vague nitpick.</p>
+
+<blockquote>In the sentence "The additions to the original fibonacciByRecursion.py program from Chapter 2 have been marked in bold:", the text doesn't show any content marked in bold.</blockquote>
+
+<p><i>Formatting issue.</i></p>
+
+<blockquote>The phrase "The doNotMemoize.py program demonstrates what happens when the @lru_cache function decorator (described in the previous section) memoizes these impure functions" is misleading because it is not the decorator that memoizes, but the decorator enables memoization. It could be rephrased as: "The doNotMemoize.py program demonstrates what happens when we use the @lru_cache decorator on these impure functions."</blockquote>
+
+<p><i>Unhelpful feedback.</i> This is such a nitpick that I'm pretty sure it's technically wrong.</p>
+
+<blockquote>The term "nondeterministic function" may confuse some readers. While technically accurate, the explanation might be clearer if it were phrased something like: "In functions whose output isn't predictable (such as a function that returns the current time)..."</blockquote>
+
+<p><i>Formatting issue.</i> The definition of nondeterministic function was in a previous chunk.</p>
+
+<blockquote>The term "impure functions" might also be a bit confusing. It could be better defined as "functions that are non-deterministic or that have side effects, meaning they change the state outside of the function."</blockquote>
+
+<p><i>Formatting issue.</i> The definition of impure function was in a previous chunk.</p>
+
+<blockquote>The phrase "Memoized functions must be pure—that is, they must be deterministic" may lead to some confusion. It could be more accurate to say, "For best results, functions to be memoized should ideally be pure—that is, they should be deterministic".</blockquote>
+
+<p><i>Formatting issue.</i></p>
+
+<blockquote>The phrase "a programming paradigm that makes heavy use of recursion" can be misleading. While functional programming does often make use of recursion, this is not its defining characteristic. It could be better defined as "a programming paradigm that avoids changing state and mutable data."</blockquote>
+
+<p><i>Unhelpful feedback.</i> This is a nitpick, and also the suggested wording would make the book worse.</p>
+
+
+<h2>AI Feedback for Chapter 8 - Tail Call Optiization</h2>
+
+
+
+<blockquote>This statement "Many implementations of popular programming languages don’t even offer tail call optimization as a feature. These include interpreters and compilers for Python, JavaScript, and Java." is somewhat inaccurate. It's true for Python and Java, but not completely for JavaScript. ES6 does include proper tail call (PTC) semantics. As of my knowledge cutoff in 2021, however, its support across different JavaScript environments is uneven.</blockquote>
+
+<p><i>Unhelpful feedback.</i> From my actual testing, mainstream browsers do not support TCO.</p>
+
+<blockquote>In the JavaScript code for the factorial function, the syntax function factorial(number, accum=1) is incorrect. JavaScript does not support default parameter values like Python does. Instead, the proper way to define a default value for a function parameter in JavaScript is to use an if statement inside the function to check if the parameter is undefined and if so, assign a default value.</blockquote>
+
+<p><i>False positive!</i> JavaScript literally does support default parameters.</p>
+
+<blockquote>"The Java compiler since version 8 also doesn’t support tail call optimization." This implies that earlier versions of Java did support tail call optimization, which is not true. Java, regardless of the version, does not natively support tail call optimization.</blockquote>
+
+<p><i>Novel and useful feedback!</i> Huh, I'm not sure where I heard that Java previosly supported TCO. But looking it up now, I think ChatGTP is right about this.</p>
+
+<blockquote>It would be useful to clarify the statement "The lack of tail call optimization is not unique to Python." While it is true that Python does not natively support tail call optimization, there are third-party libraries like recur.tco that provide support for this feature.</blockquote>
+
+<p><i>Slightly helpful but disregarded edit suggestion.</i> Sure, okay. But this isn't relevant to the discussion here.</p>
+
+<blockquote>The statement "Recall from Chapter 1 that all recursive algorithms can be implemented with a stack and a loop. Since tail call optimization removes the need for a call stack, we are effectively using recursion to simulate a loop’s iterative code." could be misleading for beginners. The statement seems to imply that tail call optimization is equivalent to iterative loops. However, it's not entirely accurate - tail call optimization allows a recursion to behave more like an iterative loop, but they are not equivalent.</blockquote>
+
+<p><i>Unhelpful feedback.</i> It's a metaphor.</p>
+
+
+
+
+
+
+<h2>AI Feedback for Chapter 9 - Drawing Fractals</h2>
+
+
+
+
+<blockquote><p>Code execution errors in the JavaScript sections of the book. The JavaScript code is meant to execute the isOddTailCall function, but it mistakenly calls the isOdd function instead. The correct JavaScript code should look like:</p>
+
+<pre>document.write(isOddTailCall(42) + "&lt;br /&gt;");
+document.write(isOddTailCall(99) + "&lt;br /&gt;");</pre></blockquote>
+
+<p><i>Novel and useful feedback!</i> Good catch here.</p>
+
+<blockquote>The function isOddTailCall in both Python and JavaScript versions does not handle negative inputs. While the text explicitly states that the functions are designed to handle only positive integers, it's typically good practice to include error handling for unexpected inputs.</blockquote>
+
+<p><i>Unhelpful feedback.</i> It's just an example.</p>
+
+<blockquote>The book describes the use of tail recursion to prevent stack overflows and then says that Python and JavaScript might optimize tail recursion to prevent stack overflows. As of my knowledge cutoff in September 2021, neither Python nor JavaScript optimizes tail recursion. The book should clarify that the availability of tail call optimization depends on the specific implementation of these languages and that the most common implementations (CPython for Python and V8 for JavaScript) do not support it.</blockquote>
+
+<p><i>Formatting issue.</i> The book says this elsewhere.</p>
+
+<blockquote>There's an incomplete sentence at the end of the text, it reads "You’ll form a shape that, if you’re familiar with...". The sentence should be completed or removed.</blockquote>
+
+<p><i>Formatting issue.</i></p>
+
+<blockquote>The book asserts that recursion can fail due to stack overflows while iterative solutions can't. This isn't always accurate. While it's true that recursion often presents a greater risk of stack overflows, iterative solutions can also cause stack overflows if they result in a call stack that exceeds its limits, such as with unbounded recursion.</blockquote>
+
+<p><i>Unhelpful feedback.</i> Oh my god, this is technically true but is SUCH a nitpick.</p>
+
+<blockquote>While more of a matter of style, the sentence "Recursion can produce elaborate fractal art using surprisingly few lines of code." could be rephrased to avoid the use of the term "surprisingly" which could be considered subjective.</blockquote>
+
+<p><i>Formatting issue.</i> I should update the prompt to tell ChatGPT that this book sometimes takes a casual conversational tone and that's fine.</p>
+
+<blockquote>There's a missing space in the sentence "As a technique, recursion is not automatically better or more sophisticated than iterative solutions." There should be a space between "iterative" and "solutions".</blockquote>
+
+<p><i>Formatting issue.</i></p>
+
+<blockquote>The explanation of recursion in the context of isOdd() and isOddTailCall() could be made clearer. It's possible for a reader to misinterpret the alternating true/false nature of the functions.</blockquote>
+
+<p><i>Unhelpful feedback.</i> How can it be made clearer? This seems like ChatGPT is throwing stuff at the wall.</p>
+
+
+
+<blockquote>In the code section where the Sierpiński Triangle is drawn, there is a mistake in the import statement. It is written as "import turtle turtle.tracer(100, 0)". However...</blockquote>
+
+<p><i>Formatting issue.</i></p>
+
+<blockquote>In the same code block, the comment "# Return the x, y coordinate in the middle of the four given parameters." in the midpoint() function is technically inaccurate. It's not in the middle of the four parameters, but the midpoint between the two points defined by these four parameters.</blockquote>
+
+<p><i>Slightly helpful but disregarded edit suggestion.</i> Eh, if I caught this earlier in the writing process I'd go with this suggestion.</p>
+
+<blockquote>The recursive drawing of the Sierpiński Triangle is done by calling drawTriangle() recursively inside the same function. However, these recursive calls are made after the drawing of the initial triangle. Since the turtle operations are synchronous, the output will not fully align with the described behavior. The smaller triangles will be drawn first because of the depth-first nature of the recursion. It's not incorrect, but it might cause confusion to learners.</blockquote>
+
+<p><i>Slightly helpful but disregarded edit suggestion.</i> I kind of see what ChatGPT is getting at, but it's really not a significant issue.</p>
+
+<blockquote>In the code snippet drawing the Sierpiński Carpet, the import statement is incorrect. It should be...</blockquote>
+
+<p><i>Formatting issue.</i></p>
+
+<blockquote>In the fractal tree section, the script calls variables LEFT_ANGLE, LEFT_DECREASE, RIGHT_ANGLE, RIGHT_DECREASE without defining them first, and later on, these variables are defined inside a while True loop, which is not recommended. They should be defined before calling drawBranch().</blockquote>
+
+<p><i>Unhelpful feedback.</i> Nah, this is a fake "best practice" but in ChatGPT's defense, is the same sort of bogus best practice an annoying human programmer would bring up in code review.</p>
+
+<blockquote>The random.seed(seed) call should be placed inside the while True loop, right before setting LEFT_ANGLE, LEFT_DECREASE, RIGHT_ANGLE, RIGHT_DECREASE. Otherwise, the random.seed(seed) call will only affect the random number generation once, instead of on each iteration of the loop.</blockquote>
+
+<p><i>False positive!</i> Uh, the random.seed(seed) call is, in fact, inside the while loop. ChatGPT's advice is right, but it misread the code.</p>
+
+<blockquote>In the line "You can also set the DRAW_SOLID constant to False and run the program.", it should be "You can also set the DRAW_SOLID constant to False and run the program." to properly highlight code syntax. This is not necessarily a grammatical error but improves readability for programmers.</blockquote>
+
+<p><i>Formatting issue.</i> Weird. I think ChatGPT's output had the DRAW_SOLID name in monospace but that was lost when I copy/pasted this to this HTML file for this blog post. Anyway, the initial code was in monospace.</p>
+
+
+
+
+<blockquote>The python source code for kochSnowflake.py is missing the typical python executable script directive or shebang at the top (#!/usr/bin/env python3). While it's not strictly necessary, especially if you're running the code directly in an interactive Python environment, it's a good practice to include it for scripts meant to be run at the command line.</blockquote>
+
+<p><i>Unhelpful feedback.</i> Weird that ChatGPT didn't complain about this for any of the other Python programs. It's not necessary and a distraction in this context.</p>
+
+<blockquote>The python code import turtle turtle.tracer(10, 0) in both kochSnowflake.py and hilbertCurve.py should be separated into two lines for correct syntax...</blockquote>
+
+<p><i>Formatting issue.</i></p>
+
+<blockquote>There is an incorrect statement in the book. It is mentioned, "Each time you create a new bump, you are increasing the curve’s length from three b / 3 lengths to four b / 3 lengths, or 4b / 3." This statement is technically incorrect because it implies that the length of the curve was initially 3 * b/3 which is b. After the transformation, it implies the length of the curve is 4b/3, but in reality, the length of the curve has increased to 4/3 * b.</blockquote>
+
+<p><i>False positive!</i> Uh, the initial length was 3 * b/3. And also, 4b/3 is the same as 4/3 * b. This advice was a waste of time.</p>
+
+<blockquote><p>In the code for the Koch Snowflake, the function drawKochSnowflake is called only once at the end of the script with hardcoded parameters. This makes the code less reusable. It would be better to place the function call inside a main function, and then call that main function in a standard Python idiom:</p>
+
+<pre>    if __name__ == "__main__":
+        main()</pre></blockquote>
+
+<p><i>Unhelpful feedback.</i> It's weird that ChatGPT didn't complain about this for any other Python program. Anyway, it's not really a necessary best practice to follow for the context of this book.</p>
+
+
+
+<blockquote>There's a minor grammatical error in the sentence "A space-filling curve is a 1D line that curves around until it completely fills a 2D space without crossing over itself." It should be "A space-filling curve is a 1D line that curves around to completely fill a 2D space without crossing over itself."</blockquote>
+
+<p><i>Slightly helpful but disregarded edit suggestion.</i> Meh.</p>
+
+<blockquote>The phrase "To learn more about drawing with Python’s turtle module, I’ve written a simple tutorial at https://github.com/asweigart/simple-turtle-tutorial-for-python." should be rephrased for clarity and correctness. It should say, "For more information on drawing with Python's turtle module, refer to the simple tutorial I've written at https://github.com/asweigart/simple-turtle-tutorial-for-python."</blockquote>
+
+<p><i>Slightly helpful but disregarded edit suggestion.</i> Meh.</p>
+
+<blockquote>The sentence "The 3Blue1Brown YouTube channel has excellent animations of fractals, particularly the “Fractals Are Typically Not Self-Similar” video at https://youtu.be/gB9n2gHsHN4 and the “Fractal Charm: Space-Filling Curves” video at https://youtu.be/RU0wScIj36o." could be more concise. It should say, "For excellent animations of fractals, see the “Fractals Are Typically Not Self-Similar” and “Fractal Charm: Space-Filling Curves” videos on the 3Blue1Brown YouTube channel, available at https://youtu.be/gB9n2gHsHN4 and https://youtu.be/RU0wScIj36o respectively."</blockquote>
+
+<p><i>Slightly helpful but disregarded edit suggestion.</i> Meh.</p>
+
+
+
+
+
+
+<h2>AI Feedback for Chapter 10 - File Finder</h2>
+
+
+
+
+
+
+<blockquote>Technical Error: The hasEveryVowel function checks if the file name contains all the vowels (a, e, i, o, u), but the text states at one point that "We use a return statement with a lengthy expression that evaluates to True if name contains a, e, i, o, or u, indicating the file matches the search criteria." This should instead be "a, e, i, o, and u". The use of 'or' is incorrect in this context.</blockquote>
+
+<p><i>Novel and useful feedback!</i> Actually, this is a good point.</p>
+
+<blockquote>Technical Suggestion: This is not necessarily an error, but the program could be improved for efficiency. Currently, the script is case insensitive only for vowel search (via the hasEveryVowel function) and not for even byte size search. Depending on the requirements, you might want to ensure case insensitivity across the board or at least mention this distinction in the text.</blockquote>
+
+<p><i>Slightly helpful but disregarded edit suggestion.</i> Yeah, but performance isn't a priority in the context of these teaching examples.</p>
+
+<blockquote>Grammar Error: In the section "Finding the Files with an Even Number of Bytes", there is an inconsistency in tense. The sentence "This gives you the powerful capability to write code for any search criteria you want." should be "This will give you the powerful capability to write code for any search criteria you want." to maintain future tense as in the preceding and following sentences.</blockquote>
+
+<p><i>Unhelpful feedback.</i> I'm not sure this is actually valid.</p>
+
+<blockquote>Grammar Error: In the section "The Recursive walk() Function", the text reads "The walk() function also recursively calls itself for each subfolder in the base folder it’s searching." This would read more clearly if it said "The walk() function also recursively calls itself for each subfolder in the base folder it is searching." This issue is about formality and readability, as "it's" can be less clear in formal writing.</blockquote>
+
+<p><i>Formatting issue.</i> I should change the prompt to tell ChatGPT that this book isn't strictly written in a formal academic style.</p>
+
+<blockquote>Grammar Error: In the section "Finding Information About the File’s Name", the sentence "Enter the following into Python’s interactive shell." should end with a colon (:) instead of a period since it introduces a block of code.</blockquote>
+
+<p><i>Slightly helpful but disregarded edit suggestion.</i> Yes, but there's a sentence that follows it, which is why there's a period there. Maybe I should have added the followup sentence as a parenthetical instead? Either way, it'd be wrong to follow ChatGPT's advice here.</p>
+
+<blockquote>Grammar Suggestion: While not technically wrong, the phrase "since browser-based JavaScript has no way to access the folders on your computer" might be better worded as "because browser-based JavaScript cannot access the folders on your computer" for clarity.</blockquote>
+
+<p><i>Slightly helpful but disregarded edit suggestion.</i> Eh, I disagree.</p>
+
+<blockquote>Clarity Suggestion: In the section "The Complete File-Search Program", the text is unclear about what Figure 2-6 is. It's a minor point but could confuse readers who haven't seen this figure.</blockquote>
+
+<p><i>Formatting issue.</i> The figures can't be included in the input to ChatGPT.</p>
+
+
+
+
+
+
+
+<blockquote>Python Code: In the 'visit' function, the 'hasVisited' variable is used, but it is not declared or passed as an argument. 'hasVisited' should be a global variable, or passed into 'visit' as an argument.</blockquote>
+
+<p><i>False positive!</i> hasVisited is, in fact, a global variable.</p>
+
+<blockquote>When adding the nextIntersection to hasVisited, it should be added after the visit(nextX, nextY) recursive call, to avoid marking locations as visited before actually visiting them.</blockquote>
+
+<p><i>False positive!</i> Making this change would introduce a bug in the program. ChatGPT is getting confused by the name of the variable.</p>
+
+<blockquote>JavaScript Code: The provided code snippet is incomplete, making it difficult to identify potential issues.</blockquote>
+
+<p><i>Formatting issue.</i></p>
+
+<blockquote>JavaScript traditionally uses camelCase for variable names and function names, not snake_case as is more common in Python.</blockquote>
+
+<p><i>False positive!</i> The JS code here does use camelCase.</p>
+
+<blockquote>"While the time.localtime() function returns a struct_time object in the local time zone, the time.gmtime() function returns a struct_time object in the UTC or Greenwich Mean time zone." Here, "Greenwich Mean time" should be "Greenwich Mean Time."</blockquote>
+
+
+
+<blockquote>In the sentence "The algorithm works by visiting a starting space in the maze and then recursively visiting a neighboring space." a comma is required after "maze".</blockquote>
+
+<p><i>Unhelpful feedback.</i> Good point. Counterpoint: no it doesn't.</p>
+
+<blockquote>"The interaction between these os.path functions (which return Unix epoch timestamps) and time functions (which return struct_time objects) can be confusing." The word "these" should be replaced with "the".</blockquote>
+
+<p><i>Unhelpful feedback.</i> No, "these" refers to the functions just used in the previous example.</p>
+
+<blockquote>In the sentence "After the walk() function returns a list of files matching your search criteria, you may want to rename, delete, or perform another operation on them." a comma is required after "criteria".</blockquote>
+
+<p><i>False positive!</i> There is literally a comma already there. ChatGPT even has the comma when it's quoting it.</p>
+
+<blockquote>"Calling os.unlink() permanently deletes the file, which can be dangerous if a bug in your program causes the function to delete the wrong file." This sentence is a bit awkward. It could be rephrased as "It can be dangerous to permanently delete a file using os.unlink() if a bug in your program causes the function to delete the wrong file."</blockquote>
+
+<p><i>Slightly helpful but disregarded edit suggestion.</i> Meh.</p>
+
+<blockquote>"To install this module, run run python -m pip install --user send2trash from the command prompt on Windows or run run python3 -m pip install from the terminal on macOS or Linux." The word "run" is unnecessarily repeated here.</blockquote>
+
+<p><i>Novel and useful feedback!</i> Good catch.</p>
+
+<blockquote>"The search criteria are implemented as match functions, which are passed to the walk() function." The phrase "are implemented as match functions" should be replaced with "is implemented as a match function" for better clarity.</blockquote>
+
+<p><i>Unhelpful feedback.</i> "Criteria" is plural.</p>
+
+<blockquote>"Chapter 4 described a recursive algorithm that solves mazes, but another recursive algorithm generates mazes." A comma is needed after "mazes".</blockquote>
+
+<p><i>False positive!</i> Again, ChatGPT says a comma is necessary where there is already a comma and ChatGPT is quoting that comma.</p>
+
+<blockquote>"Let’s begin by taking a look at the complete Python and JavaScript source code for the program, which uses the recursive backtracking algorithm for maze generation." The phrase "Let's begin by taking a look" could be rephrased as "Let's start by examining".</blockquote>
+
+<p><i>Unhelpful feedback.</i> Meh.</p>
+
+
+
+
+
+
+<blockquote>In JavaScript, to check if an array contains another array, the provided code is using JSON.stringify(hasVisited).includes(JSON.stringify([x, y - 2])) etc. This is not the most efficient or reliable way to do it because it depends on the serialization of the arrays, and the order of the elements matters. A better approach would be to use a suitable data structure or function to do this operation.</blockquote>
+
+<p><i>Unhelpful feedback.</i> In the context of professional JS code, yes, but not for this book.</p>
+
+<blockquote>The statement "Unfortunately, JavaScript doesn’t have a way to set the seed value explicitly and will generate different mazes each time we run the program" is not accurate. While it's true that JavaScript's Math.random() does not support seeding directly, you can implement a pseudorandom number generator (PRNG) with a seed.</blockquote>
+
+<p><i>Unhelpful feedback.</i> Cool. Yeah. Okay. I'll just reimplement my own PRNG. Thanks, ChatGPT. Great advice.</p>
+
+<blockquote>When explaining the maze data structure in JavaScript, the book mentioned that JavaScript objects are used as dictionaries. While this is generally correct, it's worth noting that JavaScript actually has a Map object that is more similar to Python's dictionaries, because it preserves the key insertion order.</blockquote>
+
+<p><i>Unhelpful feedback.</i> Correct but not relevant.</p>
+
+<blockquote>In the sentence "If all the neighboring spaces have already been visited, the algorithm is at a dead end and backtracks to an earlier visited space to visit its unvisited neighbors," the phrase "an earlier visited space to visit its unvisited neighbors" is awkward and can be simplified for clarity. A better phrase might be "an earlier visited space to explore any unvisited neighbors."</blockquote>
+
+<p><i>Novel and useful feedback!</i> Actually, yeah I like this phrasing.</p>
+
+<blockquote>In the sentence "The Python code continues by setting a few more constants," the word "constants" should be replaced with "variables" because in Python, there are no constants; the term "constant" is generally used for a variable whose value does not change. Although Python does not enforce this, it's just a naming convention in Python to have constants in all capital letters.</blockquote>
+
+<p><i>Unhelpful feedback.</i> Correct but not relevant. Really not relevant.</p>
+
+<blockquote>In the sentence "This string notes whether this space is a blocking wall or a passable empty space in the maze," the term "notes" can be replaced with "indicates" or "denotes" for clarity.</blockquote>
+
+<p><i>Unhelpful feedback.</i> Meh.</p>
+
+
+
+
+
+<blockquote>"After this, we add the x, y coordinates of nextX and nextY to the hasVisited list or array before making the recursive call for this neighboring space." - This sentence lacks context for the variables nextX and nextY. If this is part of a longer passage, it may be fine, but standalone, it's confusing. A code snippet or a description about how nextX and nextY are calculated would be useful.</blockquote>
+
+<p><i>Formatting issue.</i></p>
+
+<blockquote>"When no neighbors exist, the base case simply returns to an earlier location." - This sentence is slightly misleading. A base case in recursion refers to a condition that stops the recursion, not an action that's taken when a condition is met. It would be better to say something like "When no unvisited neighbors exist, the recursive function returns, which effectively moves the algorithm back to a previous location."</blockquote>
+
+<p><i>Formatting issue.</i> ChatGPT is correct in general, but is wrong here because this chunk of text didn't have the earlier context.</p>
+
+<blockquote>"We can represent a well-connected maze with no loops as a DAG—that is, a tree data structure." - This sentence is not technically correct. A DAG, or Directed Acyclic Graph, is not a tree. While all trees (where each node has at most one parent) are DAGs, not all DAGs are trees. A maze with no loops could be represented as a tree, but once you have multiple possible paths from the start to a specific point (which is common in many mazes), it is better represented as a DAG but not specifically a tree.</blockquote>
+
+<p><i>Novel and useful feedback!</i> Okay, so ChatGPT is misunderstanding here, but only because it turns out I'm using the term "well-connected maze" which isn't a real term. I need to replace it with "simply connected maze" which is a real term. And I also need to search the rest of the book for "well-connected maze" as well. So ChatGPT did help me find a mistake in the text.</p>
+
+<blockquote>"Incidentally, mathematicians have proven that even the hardest 15-puzzle can be solved in 80 moves." - While this statement is true, it would be better if it included a reference to support this fact.</blockquote>
+
+<p><i>Slightly helpful but disregarded edit suggestion.</i> Huh, I thought I saw this on Wikipedia but it isn't there. I did find it in the paper <a href="https://aaai.org/Papers/AAAI/2005/AAAI05-219.pdf">"Large-Scale Parallel Breadth-First Search" by Richard E. Korf and Peter Schultze</a>. I'm not going to add this here, but I should probably update Wikipedia.</p>
+
+<blockquote>"Just as you can turn a maze into a DAG, you can convert a 15-puzzle into a tree graph" - The phrasing "turn a maze into a DAG" and "convert a 15-puzzle into a tree graph" could be confusing, because it could be interpreted as saying that the maze or puzzle is being altered in some way, rather than just being represented or modeled as a DAG or tree.</blockquote>
+
+<p><i>Unhelpful feedback.</i> Meh.</p>
+
+<blockquote><p>In Python Code: The solve function contains the following code snippet:</p>
+
+<pre>if solved:
+    displayBoard(board)
+    for move in solutionMoves:
+        print('Move', move)
+        makeMove(board, move)
+        print() # Print a newline.
+        displayBoard(board)</pre>
+
+<p>The purpose of solving the puzzle is defeated here because we are making the moves again after we have already solved the puzzle. If we want to display the board after every move, we should maintain a list of board states and use that for printing. The list would contain the state of the board after every move made.</p></blockquote>
+
+<p><i>False positive!</i> Oh god, this is terrible advice. One: we don't want to display the board after move because that'd be a ton of useless output that would make hte program unworkably slow. It'd also eat up tons of memory for no reason required by this program.</p>
+
+<blockquote>"Clever algorithms are available for solving 15-puzzles, but we could also just recursively explore the entire tree graph until we find a path from the root node to the solution node." - The use of "just" here seems to downplay the complexity of the task. It might be better to say "alternatively" or "also".</blockquote>
+
+<p><i>Unhelpful feedback.</i> Meh.</p>
+
+<blockquote>"The root node is the starting state of the 15-puzzle. The solved-state node is the one in which the tiles are ordered correctly." - For clarity, it might be better to combine these two sentences: "The root node represents the starting state of the 15-puzzle, while the solved-state node corresponds to the correctly ordered tiles."</blockquote>
+
+<p><i>Unhelpful feedback.</i> Meh.</p>
+
+<blockquote>"Because it is possible to</blockquote>
+
+<p>ChatGPT cut off it's output here for some reason.</p>
+
+
+
+
+
+<h2>AI Feedback for Chapter 13 - Fractal Art Maker</h2>
+
+
+<blockquote>In the drawFractal() function, there's a base case that stops recursion when the size of the shape is less than 1. This could potentially be misleading or confusing to some readers as in many graphics systems, you can draw shapes that are less than a pixel in size and they will simply not be visible. The base case could perhaps be better described as stopping when the shapes are too small to be visible, rather than when their size is less than 1.</blockquote>
+
+<p><i>Unhelpful feedback.</i> Meh.</p>
+
+<blockquote>In the first Python code snippet of drawFilledSquare(size, depth): size = int(size), there's an error due to incorrect indentation. It should be...</blockquote>
+
+<p><i>Formatting issue.</i></p>
+
+
+<blockquote><p>The description of the turtle's movement to the top-right corner of the square is incorrect. The code provided does not move the turtle to the top-right corner but to the top-left corner of the square. Here's the correct version:</p>
+
+<pre># Move to the top-left corner before drawing: 
+turtle.penup() 
+turtle.backward(size // 2)  # Move to the left
+turtle.left(90) 
+turtle.forward(size // 2)  # Move upwards
+turtle.right(90)  # Now facing the right direction to start drawing
+turtle.pendown()</pre></blockquote>
+
+<p><i>False positive!</i> This is weird. Both the code and the text talk about the top-right corner, but ChatGPT just decided this was wrong and that the book actually wants to use the top-left corner. The suggested code does work to move the turtle to the top-left corner, but I do not want to move it to the top-left corner. I want to move it to the top-right corner. What a weird suggestion to make.</p>
+
+<blockquote><p>In the triangle drawing section, there's an incorrect statement that says "to begin drawing the line on the right side, the turtle must turn 90 degrees right to face rightward, then an additional 60 degrees to face the bottom-right corner of the triangle." This is wrong, as the turtle needs to turn 150 degrees right in total to face the bottom-left corner of the triangle, not the bottom-right corner. So, the corrected code and explanation should be:</p></blockquote>
+
+<pre># Move the turtle to the top of the equilateral triangle:
+height = size * math.sqrt(3) / 2
+turtle.penup()
+turtle.left(90) # Turn to face upward.
+turtle.forward(height * (2/3)) # Move to the top corner.
+turtle.right(150) # Turn to face the bottom-left corner.
+turtle.pendown()</pre>
+
+<p><i>False positive!</i> Again, this is completely wrong.</p>
+
+<blockquote>Also, when talking about the angleChange value in the context of the fractal generation, the text doesn't mention that this value is in degrees, which might lead to confusion. This clarification could be added for completeness.</blockquote>
+
+<p><i>Novel and useful feedback!</i> I mention degrees later, but yeah I should have added this sooner too.</p>
+
+<blockquote>"The for loop assigns an individual specification dictionary in the specs list to the loop variable spec on each iteration of the loop." The sentence can be a bit clearer. Suggested change: "On each iteration of the loop, the for loop assigns an individual specification dictionary from the specs list to the loop variable, spec."</blockquote>
+
+<p><i>Unhelpful feedback.</i> Meh.</p>
+
+<blockquote>"The get() dictionary method calls pull the values for the sizeChange, xChange, yChange, and angleChange keys from this dictionary..." The phrase "method calls pull" is a bit confusing. Suggested change: "The get() method calls extract the values for the sizeChange, xChange, yChange, and angleChange keys from this dictionary..."</blockquote>
+
+<p><i>Unhelpful feedback.</i> Meh.</p>
+
+<blockquote>"The shapeDrawFunction, specs, and maxDepth arguments are passed to the recursive drawFractal() call unchanged." This sentence is grammatically correct, but could use some rewording for clarity. Suggested change: "The arguments: shapeDrawFunction, specs, and maxDepth, are passed unchanged to the recursive drawFractal() call."</blockquote>
+
+<p><i>Unhelpful feedback.</i> Meh.</p>
+
+<blockquote>"Finally, with the turtle in the correct position and heading for the next shape, we make the recursive call to drawFractal():" The use of "we" in technical documents is often considered informal. Suggested change: "Finally, once the turtle is in the correct position and heading for the next shape, a recursive call to drawFractal() is made:"</blockquote>
+
+<p><i>False positive!</i> This is actually worse, since it changes the text to passive voice.</p>
+
+<blockquote>"The Glider fractal here has additional Gliders drawn inside each of its five cells." The capitalization of "gliders" seems inconsistent with the rest of the text. Suggested change: "The glider fractal here has additional gliders drawn inside each of its five cells."</blockquote>
+
+<p><i>Unhelpful feedback.</i> Meh.</p>
+
+<blockquote>"The squares are created slightly higher or lower than their previous square and rotated either 10 or -10 degrees." Suggested change for clarity: "The squares are created slightly higher or lower than the previous square and are rotated by either 10 or -10 degrees."</blockquote>
+
+<p><i>Unhelpful feedback.</i> Meh.</p>
+
+<blockquote>"The center of these smaller triangles is size * math.sqrt(3) / 6 units from the center of the previous triangle." The phrase "size * math.sqrt(3) / 6 units" may be clearer with parentheses to indicate the intended order of operations. Suggested change: "The center of these smaller triangles is (size * math.sqrt(3) / 6) units from the center of the previous triangle."</blockquote>
+
+<p><i>Unhelpful feedback.</i> Meh.</p>
+
+<blockquote>"These shapes are drawn with a size of 600:" This sentence is a bit confusing as the code below it shows shapes drawn with a size of 400, not 600. If 400 is the correct size, the sentence should read: "These shapes are drawn with a size of 400:"</blockquote>
+
+<p><i>Novel and useful feedback!</i> Good catch. This should be 400 instead of 600. I think this was a copy/paste mistake when I was editing the text.</p>
+
+
+
+<h2>AI Feedback for Chapter 14 - Droste Maker</h2>
+
+
+
+
+
+
+<blockquote>A potential area of confusion might be the term 'base case' in the context of recursion. This term is correctly used but it might be helpful to define or explain what a 'base case' is at the beginning of the chapter for those who are not familiar with the term. The 'base case' in a recursive function is a condition that stops the function from calling itself ad infinitum.</blockquote>
+
+<p><i>Formatting issue.</i> This was explained previously in the book.</p>
+
+<blockquote>As a minor point, you could consider clarifying that the magentaColor variable is a tuple, which is a type of collection in Python that is ordered and immutable. This could be a useful point of learning for readers who are less familiar with Python.</blockquote>
+
+<p><i>Slightly helpful but disregarded edit suggestion.</i> Meh.</p>
+
+
+<blockquote>Misunderstanding of aspect ratio: The book states, "Because the aspect ratio is the width divided by the height, images with large aspect ratios are taller than they are wide, and those with small aspect ratios are wider than they are tall." This is incorrect. The aspect ratio is indeed the width divided by the height, but images with a larger aspect ratio are wider, not taller.</blockquote>
+
+<p><i>Novel and useful feedback!</i> Good catch.</p>
+
+<blockquote>Code snippet about resizing the image: It seems you are resizing the image to be equal or larger in both dimensions (width and height) than the magenta area. This would potentially distort the image as you are not respecting the aspect ratio. You should keep the same aspect ratio while making sure that either the width or height is equal or larger than the magenta area, not both.</blockquote>
+
+<p><i>False positive!</i> The code snippet has an if-else statement, so it's doing one or the other, not both.</p>
+
+<blockquote>"We need to resize the base image to cover the entire magenta area and no more." – This sentence is awkward. "And no more" can be removed for clarity.</blockquote>
+
+<p><i>Unhelpful feedback.</i> Meh.</p>
+
+<blockquote>"We call the resize() method once to produce a new Pillow Image object resized to match either the width of the base image or the height of the base image." – This sentence could be rephrased for clarity. It currently implies that the resized image is the same width or height as the base image, which could lead to confusion.</blockquote>
+
+<p><i>Unhelpful feedback.</i> Meh.</p>
+
+<blockquote>"However, the resized image itself could have magenta pixels, and if so, these will now become part of the base image, as in the top-right image of Figure 14-2." – The reference to a figure (Figure 14-2) that hasn't been mentioned before could cause confusion. If this figure isn't relevant, the sentence can be rephrased to improve clarity.</blockquote>
+
+<p><i>Formatting issue.</i> The figure isn't included in ChatGPT's input.</p>
+
+
+</body>

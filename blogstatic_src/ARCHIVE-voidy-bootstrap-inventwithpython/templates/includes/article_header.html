@@ -1,0 +1,25 @@
+<h1>
+  <a href="{{ SITEURL }}/{{ article.url }}" rel="bookmark"
+     title="Permalink to {{ article.title|striptags|e }}">
+    {{ article.title }}
+  </a>
+</h1>
+
+<div class="article-header-info">
+  <p>
+    <abbr class="article-header-date">
+      {{ article.locale_date }}
+    </abbr> 
+    &nbsp;&nbsp;
+    {% if article.author %}
+      <a href="{{ SITEURL }}/{{ article.author.url }}">{{ article.author }}</a>
+    {% endif %}
+    {% if PDF_PROCESSOR %}
+    <span class="label">
+      <a href="{{ SITEURL }}/pdf/{{ article.slug }}.pdf">PDF</a>
+    </span>
+    &nbsp;&nbsp;
+    {% endif %}
+    {% include "includes/translations.html" %}
+  </p>
+</div> <!-- /.article-header-info -->

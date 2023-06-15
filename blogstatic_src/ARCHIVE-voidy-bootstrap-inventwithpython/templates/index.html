@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}{{ super() }}{% if articles_page and articles_page.number > 1 %} - Page {{ articles_page.number }}{% endif %}{% endblock %}
+{% block meta_other %}
+{% include "includes/" + CUSTOM_INDEX_META|default("index_meta.html") ignore missing %}
+{% endblock %}
+
+{% block custom_header %}
+{% if CUSTOM_HEADER_INDEX %}
+{% include "includes/" + CUSTOM_HEADER_INDEX %}
+{% endif %}
+{% endblock custom_header %}
+
+{% block container_header %}
+{% if CUSTOM_CONTAINER_TOP_INDEX %}
+{% include "includes/" + CUSTOM_CONTAINER_TOP_INDEX %}
+{% endif %}
+{% endblock container_header %}
+
+{% block    content_header %}
+{% if CUSTOM_CONTENT_TOP_INDEX %}
+{% include "includes/" + CUSTOM_CONTENT_TOP_INDEX %}
+{% endif %}
+{% endblock content_header %}
+
+{% block content_body %}
+{% block article %}
+{% if articles %}
+  {% for article in (articles_page.object_list if articles_page else articles) %}
+    <article>
+      {% for file in CUSTOM_INDEX_ARTICLE_HEADERS %}
+        {% include "includes/" + file %}
+      {% else %}
+        {% include "includes/article_header.html" %}
+      {% endfor %}
+  
+      {% if ARTICLE_FULL_FIRST is defined and loop.first and not articles_page.has_previous() %}
+	    <div class="content-body">
+        {% if article.standfirst %}
+          <p class="standfirst">{{ article.standfirst|e }}</p>
+        {% endif %}
+		{{ article.content }}
+		{% include "includes/comments.html" %}
+	  </div>
+	  {% else %}
+        {% include "includes/index_summary.html" %}
+	  {% endif %}
+    </article>
+
+    <hr />
+  {% endfor %}
+{% endif %}
+{% endblock article %}
+
+{% block pagination %}
+<nav class="index-pager">
+  {% if articles_page and articles_paginator.num_pages > 1 %}
+	<ul class="pagination">
+	{% if articles_page.has_previous() %}
+		<li class="prev">
+		  <a href="{{ SITEURL }}/{{ articles_previous_page.url }}">
+			<i class="fas fa-chevron-circle-left fa-fw fa-lg"></i> Previous
+		  </a>
+		</li>
+	{% else %}
+        <li class="prev disabled"><span>
+            <i class="fas fa-chevron-circle-left fa-fw fa-lg"></i> 
+            Previous</span>
+        </li>
+	{% endif %}
+
+    {% for num in articles_paginator.page_range %}
+      {% if num == articles_page.number %}
+        <li class="active"> <span>{{ num }}</span> </li>
+      {% else %}
+        <li>
+          <a href="{{ SITEURL }}/{{ articles_paginator.page(num).url }}">{{ num }}</a>
+        </li>
+      {% endif %}
+    {% endfor %}
+
+	{% if articles_page.has_next() %}
+		<li class="next">
+		  <a href="{{ SITEURL }}/{{ articles_next_page.url }}">
+			Next <i class="fas fa-chevron-circle-right fa-fw fa-lg"></i>
+		  </a>
+		</li>
+	{% else %}
+        <li class="next disabled">
+          <span><i class="fas fa-chevron-circle-right fa-fw fa-lg"></i> Next</span>
+        </li>
+	{% endif %}
+	</ul>
+  {% endif %}
+
+</nav> <!-- /index-pager -->
+{% endblock pagination %}
+{% endblock content_body %}
+
+{% block    content_footer %}
+{% if CUSTOM_CONTENT_BOTTOM_INDEX %}
+{% include "includes/" + CUSTOM_CONTENT_BOTTOM_INDEX %}
+{% endif %}
+{% endblock content_footer %}
+
+{% block    container_footer %}
+{% if CUSTOM_CONTAINER_BOTTOM_INDEX %}
+{% include "includes/" + CUSTOM_CONTAINER_BOTTOM_INDEX %}
+{% endif %}
+{% endblock container_footer %}

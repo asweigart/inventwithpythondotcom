@@ -1,0 +1,12 @@
+      <div class="summary">
+        {% if article.standfirst %}
+          <p class="standfirst">{{ article.standfirst|e }}</p>
+        {% endif %}
+    {% if article.image %}
+    <p><a href="{{ SITEURL }}/{{ article.url }}"><img src="{{article.image}}" class="article-image" /></a></p>
+    {% endif %}
+		{{ article.summary }}
+		<p class="content-emphasis"><a href="{{ SITEURL }}/{{ article.url }}">
+			Read more... <i class="fas fa-arrow-circle-right fa-fw fa-lg"></i>
+		</a></p>
+      </div>
