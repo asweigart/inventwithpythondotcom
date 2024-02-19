@@ -15,7 +15,7 @@ if len(sys.argv) > 1:
 
 BASE_HREF = 'http://localhost:8000/'
 
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logging.debug('Started.')
 
 #logging.disable(logging.CRITICAL)
@@ -40,7 +40,7 @@ for dirpath, dirnames, filenames in os.walk('content'):
 
         templateFilename = os.path.join(dirpath, filename).replace('\\', '/') # Jinja REQUIRES unix-style separators :P
         if not GENERATE_ALL and (templateFilename in timestampsShelf and timestampsShelf[templateFilename] >= os.path.getmtime(templateFilename)):
-            #logging.debug('%s is up to date. Skipping.' % (templateFilename))
+            #logging.debu('%s is up to date. Skipping.' % (templateFilename))
             continue # not new. skip it
 
         timestampsShelf[templateFilename] = os.path.getmtime(templateFilename)
@@ -48,7 +48,7 @@ for dirpath, dirnames, filenames in os.walk('content'):
         outputFolder = os.path.join('output', dirpath[len('content' + os.path.sep):])
         os.makedirs(outputFolder, exist_ok=True)
         outputFilename = os.path.join('output', dirpath[len('content' + os.path.sep):], filename)
-        logging.debug('Rendering and writing %s...' % (outputFilename))
+        logging.info('Rendering and writing %s...' % (outputFilename))
 
         # Render the template
         print(templateFilename)
@@ -61,10 +61,10 @@ for dirpath, dirnames, filenames in os.walk('content'):
 
         renderCount += 1
 
-logging.debug('%s templates rendered.' % (renderCount))
+logging.info('%s templates rendered.' % (renderCount))
 
 # Copy the static folder to the output folder
-logging.debug('Copying static files...')
+logging.info('Copying static files...')
 distutils.dir_util.copy_tree('static', 'output', update=True)
 
-logging.debug('Done.')
+logging.info('Done.')

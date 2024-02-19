@@ -402,7 +402,7 @@ will be helpful for converting from the mouse event's pixel coordinates
 to the PygcurseWindow object's cell coordinates. This program displays
 a red "@" character where the mouse is:</p>
 <pre>import pygcurse, pygame, sys<br>from pygame.locals import *<br>win = pygcurse.PygcurseWindow(20, 10)<br>win.colors = ('red', 'gray')<br>cellx = 0<br>celly = 0<br>while True:<br>&nbsp;&nbsp;&nbsp; win.setscreencolors(None, 'gray', clear=True)<br>&nbsp;&nbsp;&nbsp; for event in pygame.event.get():<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; pygame.quit()<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sys.exit()<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if event.type == MOUSEMOTION:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cellx, celly = win.getcoordinatesatpixel(event.pos)<br>&nbsp;&nbsp;&nbsp; win.putchar('@', x=cellx, y=celly)<br></pre>
-<p><img alt="" src="C:%5CUsers%5Casweigart%5CDesktop%5Cpygtut%5Cpygtut_mouse.png"><img alt="" src="C:%5CUsers%5Casweigart%5CDesktop%5Cpygtut%5Cpygtut_mouse.png"></p>
+
 <pre><img style="width: 276px; height: 168px;" alt="" src="pygtut_mouse.png"></pre>
 <h2>Controlling Flicker and autoupdate</h2>
 <p>You may have noticed that the mouse program flickers

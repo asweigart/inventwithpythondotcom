@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% set title = 'Errata - Cracking Codes with Python' %}
+
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <h1>Errata</h1>
+
+      <p>If you find any typos, please email them to <a href="mailto://al@inventwithpython.com">al@inventwithpython.com</a>. (Apologies in advance if I haven't posted your errata submission yet or failed to give credit. Please email me to correct this.)</p>
+
+      <p><a href="https://nostarch.com/crackingcodes#updates">Additional errata is available on the No Starch Press website.</a></p>
+
+      <h2>Chapter 16 - Programming the Simple Substitution Cipher</h2>
+
+      <p>On pages 209 and 212, line 14 of the simpleSubcipher.py program should change from <code>if keyIsValid(myKey):</code> to <code>if not keyIsValid(myKey):</code> (Thanks to Hamid R.)</p>
+
+
+      <h2>Chapter 22 - Finding and Generating Prime Numbers</h2>
+
+      <p>The <code>isPrime()</code> function in the primeNum.py file returns <code>False</code> if a prime number in <code>LOW_PRIMES</code> is passed to it. It can be fixed by setting lines 83 to 88 to the following: (Thanks to David K.)</p>
+
+      <ol start="83">
+        <li><pre>    # See if any of the low prime numbers can divide num:</pre></li>
+        <li><pre>    for prime in LOW_PRIMES:</pre></li>
+        <li><pre>        if (num == prime):</pre></li>
+        <li><pre>            return True</pre></li>
+        <li><pre>        if (num % prime == 0):</pre></li>
+        <li><pre>            return False</pre></li>
+      </ol>
+
+      <h2>Chapter 23 - Generating Keys for the Public Key Cipher</h2>
+
+      <p>I made a copy/paste mistake with the code in makePublicPrivateKeys.py and the two parts that say "publicKey" should be "privateKey". On page 341, this one line of code needs to be changed from this:</p>
+
+      <p><code>64.     print('The private key is a %s and a %s digit number.' % (len(str(publicKey[0])), len(str(publicKey[1]))))</code></p>
+
+      <p>to this:</p>
+
+      <p><code>64.     print('The private key is a %s and a %s digit number.' % (len(str(privateKey[0])), len(str(privateKey[1]))))</code></p>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}
