@@ -2153,9 +2153,9 @@ class PygcurseTextbox:
             # left/right side
             for iy in range(y+1, y + height-1):
                 if pygsurf.isonscreen(x, iy):
-                    pygsurf._screenchar[x][iy] = border
+                    pygsurf._screenchar[x][iy] = self.border
                 if pygsurf.isonscreen(x + width - 1, iy):
-                    pygsurf._screenchar[x + width - 1][iy] = border
+                    pygsurf._screenchar[x + width - 1][iy] = self.border
 
         # draw caption:
         if self.caption:
