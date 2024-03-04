@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Zigzag</title>
+</head>
+
+<body>
+<script src="bext.js"></script>
+<link rel="stylesheet" href="bext.css">
+
+<textarea id="bextOutput" readonly></textarea><br />
+
+<script>
+const bObj = new Bext("bextOutput");
+
+const DELAY = 50;
+const MAX_INDENT = 40;
+
+let indentSize = 0;
+let moveRight = true;
+let stepCount = 0;
+
+bObj.nextRow = async function() {
+  if (stepCount == 1000) {
+    stepCount = 0;
+    this.clear();
+  }
+  stepCount += 1;
+
+  this.print(" ".repeat(indentSize) + "********");
+
+  if (moveRight) {
+    indentSize += 1;
+    if (indentSize > MAX_INDENT) {
+      indentSize -= 2;
+      moveRight = false;
+    }
+  } else {
+    indentSize -= 1;
+    if (indentSize < 0) {
+      indentSize += 2;
+      moveRight = true;
+    }
+  }
+
+  setTimeout("bObj.nextRow()", DELAY);
+}
+bObj.nextRow();
+//setTimeout(this.nextRow, DELAY);
+
+
+
+</script>
+</body>
+</html>

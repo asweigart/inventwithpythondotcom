@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cube Wall</title>
+
+</head>
+
+<body>
+<script src="bext.js"></script>
+<link rel="stylesheet" href="bext.css">
+
+<textarea id="bextOutput" readonly></textarea><br />
+
+<script>
+const bObj = new Bext("bextOutput");
+
+const WIDTH = 150;
+const DELAY = 100;
+const DENSITY = 35;
+
+bObj.nextRow = async function() {
+  let segmentWidth = Math.floor(WIDTH / 21);
+  let row1 = [];
+  let row2 = [];
+  let row3 = [];
+  let row4 = [];
+  let row5 = [];
+  let row6 = [];
+
+  for (let i = 0; i < segmentWidth; i++) {
+      let top1Shading, top1ShadingBottom, top2Shading, top2ShadingBottom, bottom1Shading, bottom1ShadingBottom, bottom2Shading, bottom2ShadingBottom, side1Shading;
+      
+      if (Math.random() * 100 < DENSITY) {
+          top1Shading = '/////';
+          top1ShadingBottom = '_/_/_';
+      } else {
+          top1Shading = '     ';
+          top1ShadingBottom = '_____';
+      }
+
+      if (Math.random() * 100 < DENSITY) {
+          top2Shading = '/////';
+          top2ShadingBottom = '_/_/_';
+      } else {
+          top2Shading = '     ';
+          top2ShadingBottom = '_____';
+      }
+
+      if (Math.random() * 100 < DENSITY) {
+          bottom1Shading = '\\\\\\\\\\';
+          bottom1ShadingBottom = '_\\_\\_';
+      } else {
+          bottom1Shading = '     ';
+          bottom1ShadingBottom = '_____';
+      }
+
+      if (Math.random() * 100 < DENSITY) {
+          bottom2Shading = '\\\\\\\\\\';
+          bottom2ShadingBottom = '_\\_\\_';
+      } else {
+          bottom2Shading = '     ';
+          bottom2ShadingBottom = '_____';
+      }
+
+      if (Math.random() * 100 < DENSITY) {
+          if (Math.floor(Math.random() * 2)) {
+              side1Shading = '\\\\';
+          } else {
+              side1Shading = '//';
+          }
+      } else {
+          side1Shading = '  ';
+      }
+
+      row1.push('  /' + top1Shading + '/\\' + bottom2Shading + '\\  ');
+      row2.push(' /' + top1Shading + '/' + side1Shading + '\\' + bottom2Shading + '\\ ');
+      row3.push('/' + top1ShadingBottom + '/' + side1Shading.repeat(2) + '\\' + bottom2ShadingBottom + '\\');
+      row4.push('\\' + bottom1Shading + '\\' + side1Shading.repeat(2) + '/' + top2Shading + '/');
+      row5.push(' \\' + bottom1Shading + '\\' + side1Shading + '/' + top2Shading + '/ ');
+      row6.push('  \\' + bottom1ShadingBottom + '\\/' + top2ShadingBottom + '/  ');
+
+  }
+
+  this.print(row1.join(""));
+  await this.sleep(DELAY);
+  this.print(row2.join(""));
+  await this.sleep(DELAY);
+  this.print(row3.join(""));
+  await this.sleep(DELAY);
+  this.print(row4.join(""));
+  await this.sleep(DELAY);
+  this.print(row5.join(""));
+  await this.sleep(DELAY);
+  this.print(row6.join(""));
+
+  setTimeout("bObj.nextRow()", DELAY);
+}
+bObj.nextRow();
+
+</script>
+</body>
+</html>
