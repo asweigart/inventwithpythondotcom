@@ -1,0 +1,579 @@
+<head>
+<title>Make Lively Movement Animation with PyTweening's Tweening Functions</title>
+<meta name="tags" content="" />
+<meta name="date" content="2024-02-20 12:00" />
+<meta name="summary" content="<p>Tweening functions allow you to easily add many different styles of natural-seeming movement to the graphics in your program. In this blog post, you'll learn about how tweening functions can make more lively movement animations using Pygame and the PyTweening third-party library. Tweening functions apply to any programming language, but this tutorial has actual Python code for you to run and experiment with. Start by installing these libraries by running <code>pip install pygame</code> and <code>pip install pytweening</code> from the terminal. Then follow along with the code examples.</p>" />
+<meta name="image" content="/blogstatic/tweening/tweenAddition.webp" />
+</head>
+<body>
+
+<p>Tweening functions allow you to easily add many different styles of natural-seeming movement to the graphics in your program. In this blog post, you'll learn about how tweening functions can make more lively movement animations using Pygame and the PyTweening third-party library. Tweening functions apply to any programming language, but this tutorial has actual Python code for you to run and experiment with. Start by installing these libraries by running <code>pip install pygame</code> and <code>pip install pytweening</code> from the terminal. Then follow along with the code examples.</p>
+
+<p>We won't be looking at "spite animation" where, say, you have several frames of a walking animation that you play in a loop. Instead, we'll focus on making static images move around their window. (Though 2D images are often called "sprites" in a video game context, so that is what this tutorial will call them.) To do this, we move the sprite over a few seconds, draw the sprite to the window, pause for a few milliseconds, and then repeat. This gives the illusion that the sprite is moving around the application's window.</p>
+
+<h2>Moving a Sprite</h2>
+
+<p>Here's a Python program using the Pygame library named <a href="https://inventwithpython.com/blogstatic/tweening/tweening_demo_addition.py">tweening_demo_addition.py</a> that moves a cat image across the window to the right. The cat starts with its left side at X coordinate 50 and top side at Y coordinate 100. The program keeps adding 10 to it, moving the cat to the right by 10 pixels, until the left side is at 400. Download the <a href="https://inventwithpython.com/cat.png">cat.png</a> file from <a href="https://inventwithpython.com/cat.png">https://inventwithpython.com/cat.png</a> and save it to the same folder as the following program, <a href="https://inventwithpython.com/blogstatic/tweening/tweening_demo_addition.py">tweening_demo_addition.py</a>:</p>
+
+<textarea readonly rows="12" style="width: 100%; margin-bottom: 20px;">
+# Basic Pygame setup stuff:
+import pygame, sys, time
+from pygame.locals import QUIT, KEYUP, MOUSEBUTTONUP
+
+pygame.init()  # Initialize the Pygame library.
+BG_COLOR = (0, 255, 220)  # The RGB color for the background.
+DISPLAY_SURF = pygame.display.set_mode((600, 600))  # Create a 600x600 window.
+fps_clock = pygame.time.Clock()  # Frames-per-second timer.
+
+# Get the cat image and set its position:
+cat_surface = pygame.Surface((80, 80))
+cat_surface.fill((250, 0, 130))  # Use a pink 80x80 square for the "cat"
+# If you don't have a cat.png file, comment out this line:
+cat_surface = pygame.image.load('cat.png')  # Use a cat image for the cat sprite.
+cat_rect = cat_surface.get_rect()
+cat_rect.left = 50  # Set left edge of cat sprite at X coordinate 50.
+cat_rect.top = 100  # Set top edge of cat sprite at Y coordinate 100.
+
+# Draw the cat and pause for a couple seconds:
+DISPLAY_SURF.fill(BG_COLOR)  # Clear the window.
+DISPLAY_SURF.blit(cat_surface, cat_rect)  # Draw the cat.
+pygame.display.update()  # Render the screen.
+pygame.event.get()  # Required on macOS to display the window, for some reason.
+time.sleep(2)
+
+debug_output = True
+print('DEBUG\tLEFT\tTOP')  # DEBUG OUTPUT
+while True:
+    # Terminate when the user closes the window or presses a key.
+    for event in pygame.event.get():  # Event handling loop.
+        if event.type in (QUIT, KEYUP, MOUSEBUTTONUP):
+            pygame.quit()
+            sys.exit()
+
+    if cat_rect.left < 400:
+        # Move the cat to the right by 10 pixels:
+        cat_rect.left += 10
+        if debug_output:
+            print('DEBUG\t', cat_rect.left, '\t', cat_rect.top)  # DEBUG OUTPUT
+    else:
+        time.sleep(1)  # Pause for a second after the animation is done. (User can't quit during this second. No biggie though.)
+        cat_rect.left = 50  # Reset the cat to the start.
+        debug_output = False  # Only show debug output for the first movement, then disable it.
+
+    DISPLAY_SURF.fill(BG_COLOR)  # Clear the window.
+    DISPLAY_SURF.blit(cat_surface, cat_rect)  # Draw the cat.
+    pygame.display.update()  # Render the screen.
+    fps_clock.tick(30)  # Run at 30 frames per second.
+
+</textarea>
+
+<p><img src="tweenAddition.webp"></p>
+
+<p>(If you can't download the <a href="https://inventwithpython.com/cat.png">cat.png</a> image file and/or get the <code>FileNotFoundError: No file 'cat.png' found in working directory</code> error message, just add a <code>#</code> to the beginning of the <code>cat_surface = pygame.image.load('cat.png')</code> line to comment it out. The program will use a generic pink square instead.)</p>
+
+<p>When you run this program, the cat sprite starts at an X coordinate of 50 (in the 600-pixel wide window) and moves to the right by 10 pixels each frame until it reaches the X coordinate 400. (The animation then resets and repeats.) The debug output from the <code>print()</code> calls displays the <code>left</code> and <code>top</code> attributes of the sprite's position:</p>
+
+<textarea readonly rows="12" style="width: 100%; margin-bottom: 20px;">
+DEBUG   LEFT    TOP
+DEBUG    60      100
+DEBUG    70      100
+DEBUG    80      100
+DEBUG    90      100
+DEBUG    100     100
+DEBUG    110     100
+DEBUG    120     100
+DEBUG    130     100
+DEBUG    140     100
+DEBUG    150     100
+DEBUG    160     100
+DEBUG    170     100
+DEBUG    180     100
+DEBUG    190     100
+DEBUG    200     100
+DEBUG    210     100
+DEBUG    220     100
+DEBUG    230     100
+DEBUG    240     100
+DEBUG    250     100
+DEBUG    260     100
+DEBUG    270     100
+DEBUG    280     100
+DEBUG    290     100
+DEBUG    300     100
+DEBUG    310     100
+DEBUG    320     100
+DEBUG    330     100
+DEBUG    340     100
+DEBUG    350     100
+DEBUG    360     100
+DEBUG    370     100
+DEBUG    380     100
+DEBUG    390     100
+DEBUG    400     100
+</textarea>
+
+<p>You can see that the cat's X coordinate increases by 10 for each frame while the Y coordinate stays the same. This is a straightforward way to code movement. But first, it can become tedious to program all sprite movements this way (especially when not moving perfectly horizontally or vertically). Second, the movement looks boring: there's no realistic acceleration or slow down, but rather a machine-like instant start, a constant speed, and an instant stop. We can handle the first case with a linear tweening function.</p>
+
+<p>A <i>tweening function</i> (also called an <i>easing function</i>) is used to give XY coordinates "in between" a start and end point. Originally it was used in <a href="https://en.wikipedia.org/wiki/Inbetweening">traditional cartoon animation</a>, where an animator would draw <i>key frames</i> and pass them on to assistants who would draw the "in between" frames of animation. The tween function itself takes a floating-point number input between 0.0 (the start) and 1.0 (the end) called the <i>interpolation factor</i> and returns a number between 0.0 and 1.0. This can be used to provide a variety of movement animation effects.</p>
+
+<h2>Interpolation Between a Start and End Point</h2>
+
+<p>Let's imagine the movement from start to finish as a journey of the value in a variable named <code>i</code> (the interpolation factor) from <code>0.0</code> (the start) to <code>1.0</code> (the end). We can use a couple math equations to <a href="https://en.wikipedia.org/wiki/Linear_interpolation">interpolate</a> the X and Y coordinates between the start and end points:</p>
+
+<p>x = start_x + (i * (end_x - start_x))</p>
+
+<p>y = start_y + (i * (end_y - start_y))</p>
+
+<p>With these two equations, we can get the XY coordinate of the midpoint between the start and end XY coordinates by setting <code>i</code> to 0.5. These equations work no matter what the start and end XY coordinates are. If you set <code>i</code> to 0.1, then the XY coordinates they give you will be 10% from the starting XY coordinate towards the end XY coordinate. If <code>i</code> is <code>0.0</code>, the XY coordinates will be identical to the <code>start_x</code> and <code>start_y</code> coordinates. The same goes for setting <code>i</code> to <code>1.0</code>: you get the end XY coordinates.</p>
+
+<p>Now we don't have to worry about adding/subtracting the correct amount to the sprite's position. Instead, we can <i>calculate</i> each position along the path.</p>
+
+<p>The following <a href="https://inventwithpython.com/blogstatic/tweening/tweening_demo_interpolation.py">tweening_demo_interpolation.py</a> program is similar to the previous program, except now we use the two interpolation equations and only increase the <code>i</code> interpolation factor value:</p>
+
+<textarea readonly rows="12" style="width: 100%; margin-bottom: 20px;">
+# You can try changing the start/end positions:
+START_X, START_Y = 50, 100
+END_X, END_Y = 370, 250
+
+
+# Basic Pygame setup stuff:
+import pygame, sys, time, random
+from pygame.locals import QUIT, KEYUP, MOUSEBUTTONUP
+
+pygame.init()  # Initialize the Pygame library.
+BG_COLOR = (0, 255, 220)  # The RGB color for the background.
+DISPLAY_SURF = pygame.display.set_mode((600, 600))  # Create a 600x600 window.
+fps_clock = pygame.time.Clock()  # Frames-per-second timer.
+
+# Get the cat image and set its position:
+cat_surface = pygame.Surface((80, 80))
+cat_surface.fill((250, 0, 130))  # Use a pink 80x80 square for the "cat"
+# If you don't have a cat.png file, comment out this line:
+cat_surface = pygame.image.load('cat.png')
+cat_rect = cat_surface.get_rect()
+cat_rect.left = START_X
+cat_rect.top = START_Y
+i = 0.0  # The interpolation factor starts at 0.0.
+
+# Draw the cat and pause for a second:
+DISPLAY_SURF.fill(BG_COLOR)  # Clear the window.
+pygame.draw.rect(DISPLAY_SURF, (255, 255, 255), (START_X, START_Y, cat_rect.width, cat_rect.height))  # Draw white rectangle at start.
+pygame.draw.rect(DISPLAY_SURF, (0, 0, 0), (END_X, END_Y, cat_rect.width, cat_rect.height))  # Draw black rectangle at end.
+DISPLAY_SURF.blit(cat_surface, cat_rect)  # Draw the cat.
+pygame.display.update()  # Render the screen.
+pygame.event.get()  # Required on macOS to display the window, for some reason.
+time.sleep(1)  # Pause at the start before moving.
+
+debug_output = True
+print('DEBUG\ti\tLEFT\tTOP')  # DEBUG OUTPUT
+while True:
+    # Terminate when the user closes the window or presses a key.
+    for event in pygame.event.get():  # Event handling loop.
+        if event.type in (QUIT, KEYUP, MOUSEBUTTONUP):
+            pygame.quit()
+            sys.exit()
+
+    if round(i, 5) <= 1.0:  # round() here is necessary for a weird float rounding issue.
+        # Set cat position based on the interpolation factor.
+        cat_rect.left = START_X + (i * (END_X - START_X))
+        cat_rect.top = START_Y + (i * (END_Y - START_Y))
+        if debug_output:
+            print('DEBUG\t', round(i, 3), '\t', cat_rect.left, '\t', cat_rect.top)  # DEBUG OUTPUT
+
+        i += 0.02  # Increase the interpolation factor.
+    else:
+        time.sleep(1)  # Pause for a second after the animation is done. (User can't quit during this second. No biggie though.)
+        i = 0.0  # Reset the interpolation factor to 0.0.
+        debug_output = False
+
+        # Uncomment the following to randomly change the start & stop positions:
+        # START_X = random.randint(0, 600 - cat_rect.width)
+        # START_Y = random.randint(0, 600 - cat_rect.height)
+        # END_X = random.randint(0, 600 - cat_rect.width)
+        # END_Y = random.randint(0, 600 - cat_rect.height)
+
+    DISPLAY_SURF.fill(BG_COLOR)  # Clear the window.
+    pygame.draw.rect(DISPLAY_SURF, (255, 255, 255), (START_X, START_Y, cat_rect.width, cat_rect.height))  # Draw white rectangle at start.
+    pygame.draw.rect(DISPLAY_SURF, (0, 0, 0), (END_X, END_Y, cat_rect.width, cat_rect.height))  # Draw black rectangle at end.
+    DISPLAY_SURF.blit(cat_surface, cat_rect)  # Draw the cat.
+    pygame.display.update()  # Render the screen.
+    fps_clock.tick(30)  # Run at 30 frames per second.
+</textarea>
+
+<p><img src="tweenInterpolation.webp"></p>
+
+<p>When you run this program, you'll see the same smooth, constant movement of the cat (though this time at an angle instead of perfectly horizontal.) Try editing the values of the <code>START_X</code>, <code>START_Y</code>, <code>END_X</code>, and <code>END_Y</code> variables to change the start and end position of the sprite. You won't need to change any other code; the same code works for the path from any start to any end. The program can set up random start and end points if you uncomment the code after <code># Uncomment the following to randomly change the start & stop positions:</code>.</p>
+
+<p>When you run the program with the start point as 50, 100 and end point as 370, 250, the debugging output is:</p>
+
+<textarea readonly rows="12" style="width: 100%; margin-bottom: 20px;">
+DEBUG   i   LEFT    TOP
+DEBUG    0.0     50      100
+DEBUG    0.02    56      103
+DEBUG    0.04    63      106
+DEBUG    0.06    69      109
+DEBUG    0.08    76      112
+DEBUG    0.1     82      115
+DEBUG    0.12    88      118
+DEBUG    0.14    95      121
+DEBUG    0.16    101     124
+DEBUG    0.18    108     127
+DEBUG    0.2     114     130
+DEBUG    0.22    120     133
+DEBUG    0.24    127     136
+DEBUG    0.26    133     139
+DEBUG    0.28    140     142
+DEBUG    0.3     146     145
+DEBUG    0.32    152     148
+DEBUG    0.34    159     151
+DEBUG    0.36    165     154
+DEBUG    0.38    172     157
+DEBUG    0.4     178     160
+DEBUG    0.42    184     163
+DEBUG    0.44    191     166
+DEBUG    0.46    197     169
+DEBUG    0.48    204     172
+DEBUG    0.5     210     175
+DEBUG    0.52    216     178
+DEBUG    0.54    223     181
+DEBUG    0.56    229     184
+DEBUG    0.58    236     187
+DEBUG    0.6     242     190
+DEBUG    0.62    248     193
+DEBUG    0.64    255     196
+DEBUG    0.66    261     199
+DEBUG    0.68    268     202
+DEBUG    0.7     274     205
+DEBUG    0.72    280     208
+DEBUG    0.74    287     211
+DEBUG    0.76    293     214
+DEBUG    0.78    300     217
+DEBUG    0.8     306     220
+DEBUG    0.82    312     223
+DEBUG    0.84    319     226
+DEBUG    0.86    325     229
+DEBUG    0.88    332     232
+DEBUG    0.9     338     235
+DEBUG    0.92    344     238
+DEBUG    0.94    351     241
+DEBUG    0.96    357     244
+DEBUG    0.98    364     247
+DEBUG    1.0     370     250
+</textarea>
+
+<h2>Linear Tween</h2>
+
+<p>We can enhance the interpolation equations into something a bit more exciting with tweening functions. We'll start with a boring example of the linear tween function that produces the same behavior as our interpolation code. The <a href="https://pypi.org/project/pytweening/">PyTweening library</a> It's boring because the returned output is the same as the input: <code>pytweening.linear(0.0)</code> returns <code>0.0</code> and <code>pytweening.linear(1.0)</code> returns <code>1.0</code>. Run the following code to verify this:</p>
+
+<textarea readonly rows="12" style="width: 100%; margin-bottom: 20px;">
+import pytweening
+i = 0.0
+while i <= 1.0:
+    print(round(i, 2), '\t', round(pytweening.linear(i), 2))
+    i += 0.1
+</textarea>
+
+<p>The output of this is:</p>
+
+<textarea readonly rows="12" style="width: 100%; margin-bottom: 20px;">
+0.0      0.0
+0.1      0.1
+0.2      0.2
+0.3      0.3
+0.4      0.4
+0.5      0.5
+0.6      0.6
+0.7      0.7
+0.8      0.8
+0.9      0.9
+1.0      1.0
+</textarea>
+
+<p>As you can see, the output number is the same as the input. But this linear tweening function will make our animation program easy to understand at first. Later, all we need to do is swap out a different tweening function from PyTweening to get different effects.</p>
+
+<p>If you look at the <a href="https://github.com/asweigart/pytweening/blob/master/pytweening/__init__.py">source of the Pytweening library</a>, you'll notice the code for <code>pytweening.linear()</code> (minus the docstring) is just one line code:</p>
+
+<textarea readonly rows="12" style="width: 100%; margin-bottom: 20px;">
+def linear(n):  # type: (Union[int, float]) -> Union[int, float]
+    return n
+</textarea>
+
+<p>While the linear tween is the simplest of all tweening functions, the others aren't much more complicated:</p>
+
+<textarea readonly rows="12" style="width: 100%; margin-bottom: 20px;">
+def easeOutQuad(n):  # type: (Union[int, float]) -> Union[int, float]
+    return -n * (n - 2)
+</textarea>
+
+<p>They are very math-y, but we'll look at them in detail later. Run the following code with <code>pytweening.easeOutQuad()</code> instead of the previous example's <code>pytweening.linear()</code>:</p>
+
+<textarea readonly rows="12" style="width: 100%; margin-bottom: 20px;">
+import pytweening
+i = 0.0
+while i <= 1.0:
+    print(round(i, 2), '\t', round(pytweening.easeOutQuad(i), 2))
+    i += 0.1
+</textarea>
+
+<p>The output of this is:</p>
+
+<textarea readonly rows="12" style="width: 100%; margin-bottom: 20px;">
+0.0      0.0
+0.1      0.19
+0.2      0.36
+0.3      0.51
+0.4      0.64
+0.5      0.75
+0.6      0.84
+0.7      0.91
+0.8      0.96
+0.9      0.99
+1.0      1.0
+</textarea>
+
+<p>Notice that while <code>easeOutQuad()</code>'s numbers are different from <code>linear()</code>'s numbers, note that the outputs are both 0.0 when the interpolation factor (the input) is 0.0 and 1.0 when the interpolation factor is 1.0. This is common for almost every tweening function so that puts the sprite at the starting XY position at the start of the movement and the ending XY position at the end of the movement. It's the numbers in between that give different movement behavior.</p>
+
+<p>Let's swap out our interpolation code with code that uses PyTweening's tweening functions. The following is <a href="https://inventwithpython.com/blogstatic/tweening/tweening_demo_pytweening.py">tweening_demo_pytweening.py</a>, which has the same behavior as the previous <a href="https://inventwithpython.com/blogstatic/tweening/tweening_demo_interpolation.py">tweening_demo_interpolation.py</a> program but uses the PyTweening library instead:</p>
+
+<textarea readonly rows="12" style="width: 100%; margin-bottom: 20px;">
+# You can try changing the start/end positions:
+START_X, START_Y = 50, 100
+END_X, END_Y = 370, 250
+
+
+# Basic Pygame setup stuff:
+import pygame, sys, time, random, pytweening
+from pygame.locals import QUIT, KEYUP, MOUSEBUTTONUP
+
+pygame.init()  # Initialize the Pygame library.
+BG_COLOR = (0, 255, 220)  # The RGB color for the background.
+DISPLAY_SURF = pygame.display.set_mode((600, 600))  # Create a 600x600 window.
+fps_clock = pygame.time.Clock()  # Frames-per-second timer.
+
+# Get the cat image and set its position:
+cat_surface = pygame.Surface((80, 80))
+cat_surface.fill((250, 0, 130))  # Use a pink 80x80 square for the "cat"
+# If you don't have a cat.png file, comment out this line:
+cat_surface = pygame.image.load('cat.png')
+cat_rect = cat_surface.get_rect()  # Get the position & size rectangle of the cat.
+i = 0.0  # The interpolation factor starts at 0.0.
+cat_rect.left = START_X
+cat_rect.top = START_Y
+
+# Draw the cat for a couple seconds before starting the animation:
+DISPLAY_SURF.fill(BG_COLOR)  # Clear the window.
+pygame.draw.rect(DISPLAY_SURF, (255, 255, 255), (START_X, START_Y, cat_rect.width, cat_rect.height))  # Draw white rectangle at start.
+pygame.draw.rect(DISPLAY_SURF, (0, 0, 0), (END_X, END_Y, cat_rect.width, cat_rect.height))  # Draw black rectangle at end.
+DISPLAY_SURF.blit(cat_surface, cat_rect)  # Draw the cat.
+pygame.display.update()  # Render the screen.
+pygame.event.get()  # Needed on macOS to make the window appear for some reason.
+time.sleep(1)  # Pause at the start before moving.
+
+# Run the animation:
+debug_output = True
+print('DEBUG\ti\tti\tLEFT\tTOP')  # DEBUG OUTPUT
+while True:
+    # Terminate when the user closes the window, presses a key, or clicks the mouse:
+    for event in pygame.event.get():  # Event handling loop.
+        if event.type in (QUIT, KEYUP, MOUSEBUTTONUP):
+            pygame.quit()
+            sys.exit()
+
+    if round(i, 5) <= 1.0:  # round() here is necessary for a weird float rounding issue.
+        # i is the input, ti is the tween output.
+        # Uncomment one of these lines to select a different tweening function:
+        ti = pytweening.linear(i)  # Same speed throughout
+        # ti = pytweening.easeOutQuad(i)  # Starts fast, slows to stop
+        # ti = pytweening.easeInQuad(i)  # Starts slow, accelerates, then decelerates
+        # ti = pytweening.easeInOutQuad(i)  # Starts and ends slow
+        # ti = pytweening.easeOutBounce(i)  # Ends with a bounce
+        # ti = pytweening.easeInOutElastic(i)  # Start and end with a stretchy animation
+
+        # Set cat position based on the tweening interpolation factor.
+        cat_rect.left = START_X + (ti * (END_X - START_X))
+        cat_rect.top = START_Y + (ti * (END_Y - START_Y))
+        if debug_output:
+            print('DEBUG\t', round(i, 3), '\t', round(ti, 3), '\t', cat_rect.left, '\t', cat_rect.top)  # DEBUG OUTPUT
+
+        i += 0.02  # Increase the interpolation factor.
+    else:
+        time.sleep(1)  # Pause for a second after the animation is done. (User can't quit during this second. No biggie though.)
+        i = 0.0  # Reset the interpolation factor to 0.0.
+        debug_output = False  # Disable the debug output.
+        # Uncomment the following to randomly change the start & stop positions:
+        # START_X = random.randint(0, 600 - cat_rect.width)
+        # START_Y = random.randint(0, 600 - cat_rect.height)
+        # END_X = random.randint(0, 600 - cat_rect.width)
+        # END_Y = random.randint(0, 600 - cat_rect.height)
+
+    DISPLAY_SURF.fill(BG_COLOR)  # Clear the window.
+    pygame.draw.rect(DISPLAY_SURF, (255, 255, 255), (START_X, START_Y, cat_rect.width, cat_rect.height))  # Draw white rectangle at start.
+    pygame.draw.rect(DISPLAY_SURF, (0, 0, 0), (END_X, END_Y, cat_rect.width, cat_rect.height))  # Draw black rectangle at end.
+    DISPLAY_SURF.blit(cat_surface, cat_rect)  # Draw the cat.
+    pygame.display.update()  # Render the screen.
+    fps_clock.tick(30)  # Pause enough to run at 30 frames per second.
+</textarea>
+
+<p>The debug output from this program looks like this:</p>
+
+
+<textarea readonly rows="12" style="width: 100%; margin-bottom: 20px;">
+DEBUG   i   ti  LEFT    TOP
+DEBUG    0.0     0.0     50      100
+DEBUG    0.02    0.02    56      103
+DEBUG    0.04    0.04    63      106
+DEBUG    0.06    0.06    69      109
+DEBUG    0.08    0.08    76      112
+DEBUG    0.1     0.1     82      115
+DEBUG    0.12    0.12    88      118
+DEBUG    0.14    0.14    95      121
+DEBUG    0.16    0.16    101     124
+DEBUG    0.18    0.18    108     127
+DEBUG    0.2     0.2     114     130
+DEBUG    0.22    0.22    120     133
+DEBUG    0.24    0.24    127     136
+DEBUG    0.26    0.26    133     139
+DEBUG    0.28    0.28    140     142
+DEBUG    0.3     0.3     146     145
+DEBUG    0.32    0.32    152     148
+DEBUG    0.34    0.34    159     151
+DEBUG    0.36    0.36    165     154
+DEBUG    0.38    0.38    172     157
+DEBUG    0.4     0.4     178     160
+DEBUG    0.42    0.42    184     163
+DEBUG    0.44    0.44    191     166
+DEBUG    0.46    0.46    197     169
+DEBUG    0.48    0.48    204     172
+DEBUG    0.5     0.5     210     175
+DEBUG    0.52    0.52    216     178
+DEBUG    0.54    0.54    223     181
+DEBUG    0.56    0.56    229     184
+DEBUG    0.58    0.58    236     187
+DEBUG    0.6     0.6     242     190
+DEBUG    0.62    0.62    248     193
+DEBUG    0.64    0.64    255     196
+DEBUG    0.66    0.66    261     199
+DEBUG    0.68    0.68    268     202
+DEBUG    0.7     0.7     274     205
+DEBUG    0.72    0.72    280     208
+DEBUG    0.74    0.74    287     211
+DEBUG    0.76    0.76    293     214
+DEBUG    0.78    0.78    300     217
+DEBUG    0.8     0.8     306     220
+DEBUG    0.82    0.82    312     223
+DEBUG    0.84    0.84    319     226
+DEBUG    0.86    0.86    325     229
+DEBUG    0.88    0.88    332     232
+DEBUG    0.9     0.9     338     235
+DEBUG    0.92    0.92    344     238
+DEBUG    0.94    0.94    351     241
+DEBUG    0.96    0.96    357     244
+DEBUG    0.98    0.98    364     247
+DEBUG    1.0     1.0     370     250
+</textarea>
+
+<p>Instead of using the interpolation factor <code>i</code> variable directly in the interpolation code, this program passes <code>i</code> to <code>pytweening.linear()</code> to get the "tweened" interpolation factor for the <code>ti</code> variable. This <code>ti</code> variable is used in the familiar interpolation code instead of <code>i</code>.</p>
+
+<p>This doesn't make a difference for a linear tween because <code>ti</code> is always the same as <code>i</code>. But now we can swap out tweening functions in the PyTweening library to select what kind of movement behavior we want. For example, let's use the <code>pytweening.easeOutQuad()</code> function by commenting out the <code>ti = pytweening.linear(i)</code> and then uncommenting the <code># ti = pytweening.easeOutQuad(i)</code> line from this part of the <a href="https://inventwithpython.com/blogstatic/tweening/tweening_demo_pytweening.py">tweening_demo_pytweening.py</a> program:</p>
+
+<pre># Uncomment one of these lines to select a different tweening function:
+ti = pytweening.linear(i)  # Same speed throughout
+# ti = pytweening.easeOutQuad(i)  # Starts fast, slows to stop
+# ti = pytweening.easeInQuad(i)  # Starts slow, accelerates, then decelerates
+# ti = pytweening.easeInOutQuad(i)  # Starts and ends slow
+# ti = pytweening.easeOutBounce(i)  # Ends with a bounce
+# ti = pytweening.easeInOutElastic(i)  # Start and end with a stretchy animation</pre>
+
+<p>With this one-line code change, you've changed the machine-like constant speed movement to a more natural, starts-fast-then-slows-to-a-stop movement. It's small details like this that can give the sprite movement a much more polished presentation. This concept is sometimes called "juice", and there is <a href="https://www.youtube.com/watch?v=Fy0aCDmgnxg">a great talk by Martin Jonasson and Petri Purho from Nordic Game Jam called "Juice It or Lose It" that explains several simple ways (including tweening functions) to improve your video games and animation.</a></p>
+
+<p>These short videos also have great tips for adding polish to your games and animations:</p>
+
+<ul>
+    <li><a href="https://www.youtube.com/watch?v=cbZx2bSw4k4">Tips & Tricks for Juicy Games by Skinner Space</a></li>
+    <li><a href="https://www.youtube.com/watch?v=WO_kBYqAQwU">BETTER 2D visuals in 7 EASY TIPS by MrEliptik</a></li>
+    <li><a href="https://www.youtube.com/watch?v=Bsy8pknHc0M">5 tips for better platformer controls by The Shaggy Dev</a></li>
+    <li><a href="https://www.youtube.com/watch?v=WwOhDkjL8EU">The Secrets That Make Platformers Feel Good || Metroidvania Devlog by nextProgram</a></li>
+    <li><a href="https://www.youtube.com/watch?v=wC9iu7cuQjI">Creating SMART enemies from scratch! | Devlog by Challacade</a></li>
+</ul>
+
+<p>Try uncommenting other lines and re-running the program to see the effect of different tweens. Notice that the <code>easeOutBounce()</code> tween produces output that reverses direction to give a bouncy effect, while the <code>easeInOutElastic()</code> function produces output that is less than 0.0 and greater than 1.0 as the animation briefly shoots past the endpoint in an elastic rubber band effect.</p>
+
+<p>If you want to tightly control the value of the <code>i</code> interpolation factor, try the following <a href="https://inventwithpython.com/blogstatic/tweening/tweening_demo_all.py">tweening_demo_all.py</a> program, which displays six cats using six different tweening functions from the PyTweening library. As you move the mouse cursor from the left edge of the window to the right edge, the interpolation factor goes from 0.0 to 1.0:</p>
+
+
+<textarea readonly rows="12" style="width: 100%; margin-bottom: 20px;">
+import pytweening
+
+# Try changing the various tween functions here:
+TWEENS = [pytweening.linear, pytweening.easeOutQuad, pytweening.easeInQuad, pytweening.easeInOutQuad, pytweening.easeOutBounce, pytweening.easeInOutElastic]
+
+
+# Basic Pygame setup stuff:
+import pygame, sys, time, random
+from pygame.locals import QUIT, KEYUP, MOUSEBUTTONUP, MOUSEMOTION
+
+pygame.init()  # Initialize the Pygame library.
+BG_COLOR = (0, 255, 220)  # The RGB color for the background.
+DISPLAY_SURF = pygame.display.set_mode((600, 600))  # Create a 600x600 window.
+fps_clock = pygame.time.Clock()  # Frames-per-second timer.
+
+# Don't change these:
+START_X, START_Y = 50, 0
+END_X, END_Y = 400, 0
+
+# Get the cat image and set its position:
+cats = []
+for idx in range(6):  # There are six cats that will be animated:
+    cat = {}
+    cat['surface'] = pygame.Surface((80, 80))
+    cat['surface'].fill((250, 0, 130))  # Use a pink 80x80 square for the "cat"
+    # If you don't have a cat.png file, comment out this line:
+    cat['surface'] = pygame.image.load('cat.png')
+    cat['rect'] = cat['surface'].get_rect()  # Get the position & size rectangle of the cat.
+    cat['rect'].left = START_X
+    cat['rect'].top = START_Y + (idx * 100)
+    cat['tween'] = TWEENS[idx]
+    cats.append(cat)
+
+i = 0.0  # The interpolation factor starts at 0.0.
+
+font = pygame.font.Font('freesansbold.ttf', 28)
+
+# Run the animation:
+while True:
+    # Terminate when the user closes the window, presses a key, or clicks the mouse:
+    for event in pygame.event.get():  # Event handling loop.
+        if event.type == QUIT:
+            pygame.quit()
+            sys.exit()
+        elif event.type == MOUSEMOTION:
+            mouse_x, mouse_y = event.pos
+            i = mouse_x / 600  # Set i based on mouse cursor position in the window.
+
+    for idx in range(6):
+        ti = cats[idx]['tween'](i)  # i is the input, ti is the tween output.
+
+        # Set cat position based on the tweening interpolation factor.
+        cats[idx]['rect'].left = START_X + (ti * (END_X - START_X))
+
+    DISPLAY_SURF.fill(BG_COLOR)  # Clear the window.
+    for idx in range(6):  # Draw all six cats.
+        pygame.draw.rect(DISPLAY_SURF, (255, 255, 255), (START_X, START_Y + (idx * 100), cats[idx]['rect'].width, cats[idx]['rect'].height))  # Draw white rectangle at start.
+        pygame.draw.rect(DISPLAY_SURF, (0, 0, 0), (END_X, END_Y + (idx * 100), cats[idx]['rect'].width, cats[idx]['rect'].height))  # Draw black rectangle at end.
+        DISPLAY_SURF.blit(cats[idx]['surface'], cats[idx]['rect'])  # Draw the cat.
+
+    # Set window caption to the current i value:
+    pygame.display.set_caption('Move mouse to adjust: i = ' + str(round(i, 3)))
+
+    pygame.display.update()  # Render the screen.
+    fps_clock.tick(30)  # Pause enough to run at 30 frames per second.
+</textarea>
+
+<p><img src="tweenAll.webp"></p>
+
+<p>You can use the <a href="https://inventwithpython.com/blogstatic/tweening/tweening_demo_all.py">tweening_demo_all.py</a> program to explore the different tweening functions in a way that you can physically control by moving the mouse.</p>
+
+<p>For further information check out <a href="https://pypi.org/project/pytweening/">the PyPI page for PyTweening</a> (which contains graphs of each tweening function) and <a href="https://github.com/asweigart/pytweening/">the PyTweening source code on GitHub</a>.</p>
+
+
+</body></html>
