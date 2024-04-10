@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Fabric.js Drawing a Forest</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+</head>
+
+<body>
+  <!-- The HTML <canvas> element: -->
+  <canvas id="forestCanvasId" width="200" height="200" style="border: 1px solid black;"></canvas>
+</body>
+
+
+<script>
+let canvasObj = new fabric.Canvas('forestCanvasId');
+canvasObj.backgroundColor = '#F1DBC3';
+
+let ground = new fabric.Circle({radius: 350, left: -250, top: 125, fill: '#F8F4E8'});
+canvasObj.add(ground);
+
+let branches = new fabric.Triangle({left: 10, top: 100, width: 30, height: 50, fill: '#38755b'});
+let trunk = new fabric.Line([25, 140, 25, 160], {stroke: 'brown', strokeWidth: 6, originX: 'center'});
+let treeGroup = new fabric.Group([branches, trunk]);
+canvasObj.add(treeGroup);
+
+treeGroup.clone(function(clonedObj) { 
+  clonedObj.scale(0.8);
+  clonedObj.left = 100;
+  canvasObj.add(clonedObj);
+});
+
+treeGroup.clone(function(clonedObj) { 
+  clonedObj.scale(1.1);
+  clonedObj.left = 120;
+  clonedObj.top = 100;
+  canvasObj.add(clonedObj);
+});
+
+treeGroup.clone(function(clonedObj) { 
+  clonedObj.scale(0.6);
+  clonedObj.left = 170;
+  clonedObj.top = 110;
+  canvasObj.add(clonedObj);
+});
+</script>
+</html>
+

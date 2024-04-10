@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Fabric.js House</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+</head>
+
+<body>
+  <!-- The HTML <canvas> element: -->
+  <canvas id="houseCanvasId" width="200" height="200" style="border: 1px solid black;"></canvas>
+</body>
+
+<script>
+let canvasObj = new fabric.Canvas('path1CanvasId');
+let path = new fabric.Path(`
+  M -40 -40
+  L  40 -40 
+  M -40   0 
+  L  40   0 
+  M -40  40 
+  L  40  40`, {
+    stroke: '#333333', strokeWidth: 25, strokeLineCap: 'round', left: 40, top: 40
+  });
+
+canvasObj.add(path);
+</script>
+</html>

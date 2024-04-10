@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Fabric.js Pine Tree</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+</head>
+
+<body>
+  <!-- The HTML <canvas> element: -->
+  <canvas id="treeCanvasId" width="200" height="200" style="border: 1px solid black;"></canvas>
+</body>
+
+
+<script>
+// Create a Fabric.js "Canvas" object that is tied to the HTML <canvas> element:
+let canvasObj = new fabric.Canvas('treeCanvasId');
+
+let branches1 = new fabric.Triangle({
+  width: 80, height: 80, fill: '#234236', left: 100, top: 20
+});
+
+let branches2 = new fabric.Triangle({
+  width: 100, height: 60, fill: '#0C5C4C', left: 90, top: 70
+});
+
+let branches3 = new fabric.Triangle({
+  width: 110, height: 50, fill: '#38755B', left: 85, top: 110
+});
+
+let stump = new fabric.Rect({
+  width: 20, height: 30, fill: 'brown', left: 130, top: 150
+});
+
+canvasObj.add(branches3);
+canvasObj.add(branches2);
+canvasObj.add(branches1);
+canvasObj.add(stump);
+
+</script>
+</html>

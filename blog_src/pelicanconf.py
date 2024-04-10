@@ -10,22 +10,23 @@ TIMEZONE = 'America/Chicago'
 DEFAULT_LANG = 'en'
 DEFAULT_PAGINATION = 20
 
-FEED_ALL_ATOM = 'atom.xml'
-CATEGORY_FEED_ATOM = '{slug}.atom.xml'
-FEED_ALL_RSS = 'rss.xml'
-CATEGORY_FEED_RSS = '{slug}.rss.xml'
+# Only generate feeds for publishconf.py version:
+#FEED_ALL_ATOM = 'atom.xml'
+#CATEGORY_FEED_ATOM = '{slug}.atom.xml'
+#FEED_ALL_RSS = 'rss.xml'
+#CATEGORY_FEED_RSS = '{slug}.rss.xml'
 
 # Blogroll
 LINKS = ()
 
 # Social widget
 SOCIAL = (
-        ('Twitter', 'https://twitter.com/AlSweigart',
-         'fab fa-twitter-square fa-fw fa-lg'),
-        ('LinkedIn', 'https://www.linkedin.com/in/al-sweigart-aa41703/',
-         'fab fa-linkedin fa-fw fa-lg'),
-        ('GitHub', 'https://github.com/asweigart',
-         'fab fa-github-square fa-fw fa-lg'),
+        #('Twitter', 'https://twitter.com/AlSweigart',
+        # 'fab fa-twitter-square fa-fw fa-lg'),
+        #('LinkedIn', 'https://www.linkedin.com/in/al-sweigart-aa41703/',
+        # 'fab fa-linkedin fa-fw fa-lg'),
+        #('GitHub', 'https://github.com/asweigart',
+        # 'fab fa-github-square fa-fw fa-lg'),
         )
 
 
@@ -33,12 +34,12 @@ SOCIAL = (
 # C:\Users\Al\AppData\Local\Programs\Python\Python310\Lib\site-packages\pelican\themes\voidy-bootstrap-inventwithpython\static\css\voidybootstrap.css
 # and pelican doesn't seem to have a way to change this? Not any way
 # that actually works as far as I can tell.
-THEME = "voidy-bootstrap-inventwithpython"
+THEME = "themes/voidy-bootstrap-inventwithpython"
 #THEME_STATIC_DIR = '/blogstatic/theme'
 
 ARTICLE_URL = '{date:%Y}/{date:%m}/{date:%d}/{slug}/'
 ARTICLE_SAVE_AS = '{date:%Y}/{date:%m}/{date:%d}/{slug}/index.html'
-FILENAME_METADATA = '(?P<slug>.*?)\.html'
+FILENAME_METADATA = r'(?P<slug>.*?)\.html'
 OUTPUT_PATH = '../output/blog'
 FAVICON = '../favicon.ico'
 
@@ -62,6 +63,8 @@ STYLESHEET_FILES = ("pygment.css", "voidybootstrap.css",)
 # Default sidebar template. Omit this setting for single column mode without sidebar.
 #SIDEBAR = "sidebar.html"
 
+
+# This is where I'm putting the ads for my other books:
 CUSTOM_ARTICLE_FOOTERS = ('./inventblogfooter.html', )
 SKIP_COLOPHON = True
 
@@ -75,3 +78,6 @@ OPEN_GRAPH = True
 OPEN_GRAPH_IMAGE = ''
 
 TWITTER_USERNAME = "AlSweigart"
+
+
+RELATIVE_URLS = False

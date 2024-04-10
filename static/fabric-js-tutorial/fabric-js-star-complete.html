@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Fabric.js Complete Star</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+</head>
+
+<body>
+  <!-- The HTML <canvas> element: -->
+  <canvas id="starCanvasId" width="200" height="200" style="border: 1px solid black;"></canvas>
+</body>
+
+
+<script>
+let starCompleteCanvasObj = new fabric.Canvas('starCanvasId');
+
+// Create two polygons for a star shard:
+let shardHalf1 = new fabric.Polygon([
+  {x: 0, y: 0}, {x: 36, y: -50}, {x: 0, y: -100}], {
+  left: 100, top: 0, fill: "#EDD8B7"
+});
+
+let shardHalf2 = new fabric.Polygon([
+  {x: 0, y: 0}, {x: -36, y: -50}, {x: 0, y: -100}], {
+  left: 64, top: 0, fill: "#E5C39C"
+});
+
+// Create a group of the two shard halves:
+let shardGroup = new fabric.Group([shardHalf1, shardHalf2], {
+  centeredRotation: false, originX: 'center', originY: 'bottom'
+});
+starCompleteCanvasObj.add(shardGroup);
+
+// Create an array to hold the cloned groups:
+let clonedGroups = [];
+for (let rotAmount of [0, 72, -72, 144, -144]) {
+  shardGroup.rotate(rotAmount);
+
+  shardGroup.clone(function(clonedObj) { 
+    starCompleteCanvasObj.add(clonedObj);
+    clonedGroups.push(clonedObj);
+  });
+}
+starCompleteCanvasObj.remove(shardGroup);
+
+</script>
+</html>
+

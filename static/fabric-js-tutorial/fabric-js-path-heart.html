@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Fabric.js Path - Heart</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+</head>
+
+<body>
+  <!-- The HTML <canvas> element: -->
+  <canvas id="heartCanvasId" width="200" height="200" style="border: 1px solid black;"></canvas>
+</body>
+
+<script>
+let heartCanvasObj = new fabric.Canvas('heartCanvasId');
+let heartPath = new fabric.Path(`
+  M -30 -20 
+  L   0  10 
+  L  30 -20`, {
+    stroke: 'black', strokeWidth: 80, strokeLineCap: 'round', left: 30, top: 40
+  });
+
+heartCanvasObj.add(heartPath);
+</script>
+</html>

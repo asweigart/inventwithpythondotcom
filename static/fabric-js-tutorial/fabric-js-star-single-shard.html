@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Fabric.js Drawing a Single Shard of a Star</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+</head>
+
+<body>
+  <!-- The HTML <canvas> element: -->
+  <canvas id="singleShardCanvasId" width="200" height="200" style="border: 1px solid black;"></canvas>
+</body>
+
+
+<script>
+let singleShardCanvasObj = new fabric.Canvas('singleShardCanvasId');
+
+// Create two polygons for a star shard:
+let shardHalf1 = new fabric.Polygon([
+  {x: 0, y: 0}, {x: 36, y: -50}, {x: 0, y: -100}], {
+  left: 100, top: 0, fill: "#EDD8B7"
+});
+
+let shardHalf2 = new fabric.Polygon([
+  {x: 0, y: 0}, {x: -36, y: -50}, {x: 0, y: -100}], {
+  left: 64, top: 0, fill: "#E5C39C"
+});
+
+singleShardCanvasObj.add(shardHalf1);
+singleShardCanvasObj.add(shardHalf2);
+</script>
+</html>
+

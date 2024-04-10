@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Fabric.js Rects and Circle</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+</head>
+
+<body>
+  <!-- The HTML <canvas> element: -->
+  <canvas id="mainCanvasId" width="400" height="400" style="border: 1px solid black;"></canvas>
+</body>
+
+
+<script>
+// Create a Fabric.js "Canvas" object that is tied to the HTML <canvas> element:
+let canvasObj = new fabric.Canvas('mainCanvasId');
+
+// Create a Fabric.js "Rect" object that represents a rectangle:
+let rectObj = new fabric.Rect({
+  left: 100, top: 50, fill: 'red', stroke: 'blue', width: 80, height: 30
+});
+
+// The rectangle won't appear on the canvas until it is added:
+canvasObj.add(rectObj);
+
+// Create a second rectangle:
+let rectObj2 = new fabric.Rect({
+  left: 50, top: 100, fill: 'green', width: 50, height: 50
+});
+
+canvasObj.add(rectObj2);
+
+// Create a circle:
+let circleObj = new fabric.Circle({
+  // Note that the radius is half the width of the circle.
+  radius: 100, fill: '#FF00FF', left: 200, top: 200
+});
+
+canvasObj.add(circleObj);
+</script>
+</html>

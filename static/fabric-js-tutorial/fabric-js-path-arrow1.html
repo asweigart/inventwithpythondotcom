@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Fabric.js Path - Arrow 1</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+</head>
+
+<body>
+  <!-- The HTML <canvas> element: -->
+  <canvas id="arrow1CanvasId" width="200" height="200" style="border: 1px solid black;"></canvas>
+</body>
+
+
+<script>
+let arrow1CanvasObj = new fabric.Canvas('arrow1CanvasId');
+let arrow1Path = new fabric.Path(`
+  M -70 0 
+  L 70 0 
+  L 30 -50`, {
+    stroke: '#D1495B', strokeWidth: 25, strokeLineCap: 'round', strokeLineJoin: 'round', fill: 'transparent', left: 10, top: 40
+  });
+
+arrow1CanvasObj.add(arrow1Path);
+</script>
+</html>

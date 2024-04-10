@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Fabric.js Gingerbread Figure</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+</head>
+
+<body>
+  <!-- The HTML <canvas> element: -->
+  <canvas id="gingerbreadCanvasId" width="200" height="200" style="border: 1px solid black;"></canvas>
+</body>
+
+
+<script>
+// Create a Fabric.js "Canvas" object that is tied to the HTML <canvas> element:
+let canvasObj = new fabric.Canvas('gingerbreadCanvasId');
+
+const GINGERBREAD_COLOR = '#CD803D';
+
+let head = new fabric.Circle({
+  left: 100, top: 50, fill: GINGERBREAD_COLOR, radius: 40, originX: 'center', originY: 'center'
+})
+
+
+let arms = new fabric.Polyline(
+  [{x: 0, y: 0}, {x: 100, y:0}], {
+    stroke: GINGERBREAD_COLOR, strokeWidth: 40, strokeLineCap: 'round', fill: 'transparent', left: 100, top: 100, originX: 'center', originY: 'center'
+  });
+
+let legs = new fabric.Polyline(
+  [{x: 0, y: 60}, {x: 30, y: 0}, {x: 60, y: 60}], {
+    stroke: GINGERBREAD_COLOR, strokeWidth: 40, strokeLineCap: 'round', fill: 'transparent', left: 100, top: 140, originX: 'center', originY: 'center'
+  });
+
+let mouth = new fabric.Rect({
+  left: 100, top: 70, originX: 'center', originY: 'center', fill: 'transparent', stroke: 'white', strokeWidth: 6, width: 40, height: 10, rx: 5, ry: 5, angle: 15
+});
+
+let leftEye = new fabric.Circle({
+  left: 90, top: 40, fill: 'transparent', stroke: 'white', radius: 10, originX: 'center', originY: 'center'
+});
+
+let rightEye = new fabric.Circle({
+  left: 110, top: 40, fill: 'transparent', stroke: 'white', radius: 5, originX: 'center', originY: 'center'
+});
+
+let topButton = new fabric.Circle({
+  left: 100, top: 90, originX: 'center', originY: 'center', radius: 4
+});
+
+let bottomButton = new fabric.Circle({
+  left: 100, top: 110, originX: 'center', originY: 'center', radius: 4
+});
+
+canvasObj.add(head);
+canvasObj.add(arms);
+canvasObj.add(legs);
+canvasObj.add(leftEye);
+canvasObj.add(rightEye);
+canvasObj.add(mouth);
+canvasObj.add(topButton);
+canvasObj.add(bottomButton);
+</script>
+</html>
