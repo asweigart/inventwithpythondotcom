@@ -1,0 +1,1 @@
+powershell -command "$ccwdtemp=Get-Location;Set-Clipboard -Value $ccwdtemp"
