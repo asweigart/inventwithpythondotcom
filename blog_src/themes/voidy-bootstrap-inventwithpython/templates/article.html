@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block title %}{{ article.title|striptags|e }} - {{ SITENAME }}{% endblock %}
+{% block metadesc %}{{ article.summary|e }}{% endblock %}
+{% block open_graph %}
+{% if OPEN_GRAPH %}
+  <meta property="og:type" content="article"/>
+  <meta property="og:title" content="{{ article.title|striptags|e }}"/>
+  <meta property="og:url" content="{{ SITEURL }}/{{ article.url }}"/>
+  {% if article.summary %}
+    <meta property="og:description" content="{{ article.summary|striptags|e }}"/>
+  {% endif %}
+  {% if article.category %}
+    <meta property="article:section" content="{{ article.category }}"/>
+  {% endif %}
+  {% if article.tags %}
+    {% for tag in article.tags %}
+      <meta property="article:tag" content="{{ tag }}"/>
+    {% endfor %}
+  {% endif %}
+  {% if article.author %}
+    <meta property="article:author"
+          content="{{ article.author }}"/>
+  {% endif %}
+  {% if article.image %}
+    <meta property="og:image"
+          content="{{ article.image }}"/>
+  {% endif %}
+{% endif %}
+
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="{{ article.title|striptags|e }}">
+  <meta name="twitter:description" content="{{ article.summary|striptags|e }}">
+  <meta name="twitter:site" content="@{{ TWITTER_USERNAME }}">
+  <meta name="twitter:creator" content="@{{ TWITTER_USERNAME }}">
+  <meta name="twitter:domain" content="{{ SITEURL }}">
+  {% if article.image %}
+    <meta property="twitter:image"
+          content="{{ article.image }}"/>
+  {% endif %}
+
+
+{% endblock %}
+{% block custom_header %}
+{% if CUSTOM_HEADER_ARTICLE %}
+{% include "includes/" + CUSTOM_HEADER_ARTICLE %}
+{% endif %}
+{% endblock %}
+{% block container_header %}
+{% if CUSTOM_CONTAINER_TOP_ARTICLE %}
+{% include "includes/" + CUSTOM_CONTAINER_TOP_ARTICLE %}
+{% endif %}
+{% endblock container_header %}
+{% block content_header %}
+{% include "includes/" + CUSTOM_CONTENT_TOP_ARTICLE|default("article_top.html") ignore missing %}
+{% endblock content_header%}
+
+{% block    content_body %}
+<article itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
+  <header class="article-header">
+  {% if CUSTOM_ARTICLE_HEADERS %}
+    {% for file in CUSTOM_ARTICLE_HEADERS %}
+	  {% include "includes/" + file %}
+    {% endfor %}
+  {% else %}
+	{% include "includes/article_header.html" %}
+  {% endif %}
+  </header>
+  <div class="content-body" itemprop="text articleBody">
+    {% if article.standfirst %}
+      <p class="standfirst" itemprop="description">{{ article.standfirst|e }}</p>
+    {% endif %}
+    {% if article.image %}
+      <img class="article-image img-responsive" alt="article header image" itemprop="image"
+		   src="{{ article.image }}" />
+    {% endif %}
+    {% include "includes/" + CUSTOM_ARTICLE_PRECONTENT|default('article_precontent.html') ignore missing %}
+	{{ article.content }}
+  </div>
+
+  {% for file in CUSTOM_ARTICLE_FOOTERS %}
+    {% include "includes/" + file %}
+  {% endfor %}
+
+  {% if DISQUS_SITENAME and SITEURL and article.status != "draft" %}
+  <div class="comments">
+	<h2>Comments</h2>
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+				   (function() {
+						var dsq = document.createElement('script');
+						dsq.type = 'text/javascript'; dsq.async = true;
+						dsq.src = '//{{ DISQUS_SITENAME }}.disqus.com/embed.js';
+						(document.getElementsByTagName('head')[0] ||
+						 document.getElementsByTagName('body')[0]).appendChild(dsq);
+				  })();
+	</script>
+  </div>
+  {% endif %}
+</article>
+{% endblock content_body %}
+
+{% block    content_footer %}
+{% if CUSTOM_CONTENT_BOTTOM_ARTICLE %}
+{% include "includes/" + CUSTOM_CONTENT_BOTTOM_ARTICLE %}
+{% endif %}
+{% endblock content_footer %}
+
+{% block    container_footer %}
+{% if CUSTOM_CONTAINER_BOTTOM_ARTICLE %}
+{% include "includes/" + CUSTOM_CONTAINER_BOTTOM_ARTICLE %}
+{% endif %}
+{% endblock container_footer %}
+
+{% block scripts %}
+{% if CUSTOM_SCRIPTS_ARTICLE %}
+{% include "includes/" + CUSTOM_SCRIPTS_ARTICLE %}
+{% endif %}
+{% endblock %}

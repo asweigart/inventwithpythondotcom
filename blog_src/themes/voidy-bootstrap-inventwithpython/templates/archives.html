@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Archives - {{ SITENAME }}{% endblock %}
+{% block metadesc %}{{ SITETAGALT }} Archive of Posts{% endblock %}
+{% block archive_active %}active{% endblock %}
+
+{% block    custom_header %}
+{% if CUSTOM_HEADER_ARCHIVES %}
+{% include "includes/" + CUSTOM_HEADER_ARCHIVES %}
+{% endif %}
+{% endblock custom_header %}
+
+{% block    container_header %}
+{% if CUSTOM_CONTAINER_TOP_ARCHIVES %}
+{% include "includes/" + CUSTOM_CONTAINER_TOP_ARCHIVES %}
+{% endif %}
+{% endblock container_header %}
+
+{% block    content_header %}
+{% if CUSTOM_CONTENT_TOP_ARCHIVES %}
+{% include "includes/" + CUSTOM_CONTENT_TOP_ARCHIVES %}
+{% endif %}
+<ol class="breadcrumb">
+  <li><a href="{{ SITEURL }}/" title="Home">
+	  <i class="fas fa-home fa-fw fa-lg"></i> </a></li>
+  <li class="active">Archives</li>
+</ol>
+{% endblock content_header %}
+
+{% block content_body %}
+<h1>Archives</h1>
+<div id="archives-body">
+{% for year, year_dates in dates|groupby( 'date.year' )|reverse %}
+  <h2>{{ year }}</h2>
+  <dl>
+  {% for article in year_dates %}
+	<dt>{{ article.locale_date }}</dt>
+	<dd><a href='{{ SITEURL }}/{{ article.url }}'>{{ article.title }}</a></dd>
+  {% endfor %}
+  </dl>
+{% endfor %}
+</div> <!-- /#archives-body -->
+{% endblock content_body %}
+
+{% block    content_footer %}
+{% if CUSTOM_CONTENT_BOTTOM_ARCHIVES %}
+{% include "includes/" + CUSTOM_CONTENT_BOTTOM_ARCHIVES %}
+{% endif %}
+{% endblock content_footer %}
+
+{% block    container_footer %}
+{% if CUSTOM_CONTAINER_BOTTOM_ARCHIVES %}
+{% include "includes/" + CUSTOM_CONTAINER_BOTTOM_ARCHIVES %}
+{% endif %}
+{% endblock container_footer %}
+
+{% block scripts %}
+{% if CUSTOM_SCRIPTS_ARCHIVES %}
+{% include "includes/" + CUSTOM_SCRIPTS_ARCHIVES %}
+{% endif %}
+{% endblock %}
