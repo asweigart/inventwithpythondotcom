@@ -1,5 +1,5 @@
 Title: Fabric.js Tutorial Part 5
-Date: 2024-04-08 10:05
+Date: 2024-05-04 10:05
 Authors: Al Sweigart
 Summary: Part 5 of a tutorial series on the Fabric.js canvas/graphics library for JavaScript, where we learn about grouping, cloning, and rotating shapes.
 

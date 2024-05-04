@@ -1,5 +1,5 @@
 Title: Fabric.js Tutorial Part 1
-Date: 2024-04-08 10:01
+Date: 2024-05-04 10:01
 Authors: Al Sweigart
 Summary: Part 1 of a tutorial series on the Fabric.js canvas/graphics library for JavaScript, where we learn about drawing basic shapes.
 

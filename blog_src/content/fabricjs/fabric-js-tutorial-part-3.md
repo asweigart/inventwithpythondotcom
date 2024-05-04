@@ -1,5 +1,5 @@
 Title: Fabric.js Tutorial Part 3
-Date: 2024-04-08 10:03
+Date: 2024-05-04 10:03
 Authors: Al Sweigart
 Summary: Part 3 of a tutorial series on the Fabric.js canvas/graphics library for JavaScript, where we learn about Line shapes and drawing a house.
 

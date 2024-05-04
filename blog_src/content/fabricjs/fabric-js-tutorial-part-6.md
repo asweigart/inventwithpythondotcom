@@ -1,5 +1,5 @@
 Title: Fabric.js Tutorial Part 6
-Date: 2024-04-08 10:06
+Date: 2024-05-04 10:06
 Authors: Al Sweigart
 Summary: Part 6 of a tutorial series on the Fabric.js canvas/graphics library for JavaScript, where we get more practice by drawing a forest.
 

@@ -1,5 +1,5 @@
 Title: Fabric.js Tutorial Part 2
-Date: 2024-04-08 10:02
+Date: 2024-05-04 10:02
 Authors: Al Sweigart
 Summary: Part 2 of a tutorial series on the Fabric.js canvas/graphics library for JavaScript, where we learn about Polyline shapes and styling shapes by drawing a gingerbread figure.
 

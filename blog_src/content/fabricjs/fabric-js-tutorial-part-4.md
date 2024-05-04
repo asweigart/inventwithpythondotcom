@@ -1,5 +1,5 @@
 Title: Fabric.js Tutorial Part 4
-Date: 2024-04-08 10:04
+Date: 2024-05-04 10:04
 Authors: Al Sweigart
 Summary: Part 4 of a tutorial series on the Fabric.js canvas/graphics library for JavaScript, where we learn about drawing with paths.
 
