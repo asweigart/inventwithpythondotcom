@@ -7,6 +7,6 @@ REM Run this batch file to do that, by running generateSite.py.
 REM The template is in C:\Users\Al\AppData\Local\Programs\Python\Python310\Lib\site-packages\pelican\themes\voidy-bootstrap-inventwithpython
 
 cd C:\github\inventwithpythondotcom\blog_src
-C:\Users\Al\AppData\Local\Programs\Python\Python310\Scripts\pelican.exe -s publishconf.py
+C:\Users\Al\AppData\Local\Programs\Python\Python311\Scripts\pelican.exe -s publishconf.py
 cd ..
-py -3.10 generateSite.py
+py -3.11 generateSite.py
