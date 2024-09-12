@@ -25,7 +25,9 @@
 <input type="text" name="setnum" id="setnum" />
 <input type="button" value="Set" onclick="n = 0; myOdometerDec.set(parseInt(document.getElementById('setnum').value)); myOdometerBin.set(parseInt(document.getElementById('setnum').value)); myOdometerHex.set(parseInt(document.getElementById('setnum').value));" />
 
-</div></center>
+</div>
+
+<div>(The JavaScript code is included in this web page. You can save this web page to your device and it will still work.)</div></center>
 
 
 
@@ -752,31 +754,31 @@ function OdometerDec (parentDiv,opts) {
     ];
 
     this.setDigitValue = function (digit, val, frac) {
-	var di = digitInfo[digit];
-       	var px = Math.floor(this.digitHeight * frac);
-	px = px + di.offset;
-	if (val != di.last_val) {
-		var tmp = di.digitA;
-		di.digitA = di.digitB;
-		di.digitB = tmp;
-        	di.digitA.innerHTML = val;
-        	di.digitB.innerHTML = (Number(val)) % 10;
-		di.last_val = val;
-	}
-	if (px != di.last_px) {
-        	di.digitA.style.top = (0-px)+"px";
-        	di.digitB.style.top = (0-px+this.digitHeight)+"px";
-		di.last_px = px;
-	}
+    var di = digitInfo[digit];
+        var px = Math.floor(this.digitHeight * frac);
+    px = px + di.offset;
+    if (val != di.last_val) {
+        var tmp = di.digitA;
+        di.digitA = di.digitB;
+        di.digitB = tmp;
+            di.digitA.innerHTML = val;
+            di.digitB.innerHTML = (Number(val)) % 10;
+        di.last_val = val;
+    }
+    if (px != di.last_px) {
+            di.digitA.style.top = (0-px)+"px";
+            di.digitB.style.top = (0-px+this.digitHeight)+"px";
+        di.last_px = px;
+    }
     };
 
 
     this.set = function (inVal) {
         if (inVal < 0) throw "ERROR: Odometer value cannot be negative.";
-	this.value = inVal;
+    this.value = inVal;
         var numb = Math.floor(inVal);
         var frac = inVal - numb;
-	numb = String(numb);
+    numb = String(numb);
         for (var i=0; i < this.digits; i++) {
             var num = numb.substring(numb.length-i-1, numb.length-i) || 0;
             this.setDigitValue(this.digits-i-1, num, frac);
@@ -817,8 +819,8 @@ function OdometerDec (parentDiv,opts) {
             digitColDiv.appendChild(hdiv);
         }
         odometerDiv.appendChild(digitColDiv);
-	var offset = Math.floor(Math.random()*this.bustedness);
-	digitInfo.push({digitA:digitDivA, digitB:digitDivB, last_val:-1, last_px: -1, offset:offset});
+    var offset = Math.floor(Math.random()*this.bustedness);
+    digitInfo.push({digitA:digitDivA, digitB:digitDivB, last_val:-1, last_px: -1, offset:offset});
     };
 
 
