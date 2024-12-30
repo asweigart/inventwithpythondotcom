@@ -1,6 +1,10 @@
 <html>
 <head><title>Decimal, Binary, Hexadecimal Odometers</title></head>
 
+<script type="text/javascript">
+let setTimeoutSpeed = 250;
+</script>
+
 <center><div style="width: 440px; ">
 <p>Decimal (Base-10: 0123456789)</p>
 
@@ -16,9 +20,10 @@
 
 <input type="button" value="&#9658;" onclick="runodometers();" />
 <input type="button" value="&#x23F8;" onclick="stopodometers();" />
-<input type="button" value="&#x23f9;" onclick="stopodometers(); setTimeout('n = 0; myOdometerDec.set(0); myOdometerBin.set(0); myOdometerHex.set(0);', 250);" />
+<input type="button" value="&#x23f9;" onclick="stopodometers(); setTimeout('n = 0; myOdometerDec.set(0); myOdometerBin.set(0); myOdometerHex.set(0); document.getElementById(\'setnum\').value = 0;', setTimeoutSpeed);" />
 <input type="button" value="+" onclick="incrementOdometers();" />
 <input type="button" value="-" onclick="decrementOdometers();" />
+<input type="checkbox" id="fastModeCheckbox" onclick="setFastMode();"><label for="fastModeCheckbox">Fast Mode</label>
 
 <br /><br />
 
@@ -415,42 +420,6 @@ function OdometerDec (parentDiv,opts) {
 
 
 
-// originally in odometerdisplay.js:
-var n = 0;
-var myOdometerDec, myOdometerBin, myOdometerHex;
-var keeprunning = false;
-function runodometers () {
-    keeprunning = true;
-    update();
-}
-function startodometers() {
-    myOdometerDec = new OdometerDec(document.getElementById("odometerDecDiv"), {value: n, digits: 8});
-    myOdometerBin = new OdometerBin(document.getElementById("odometerBinDiv"), {value: n, digits: 8});
-    myOdometerHex = new OdometerHex(document.getElementById("odometerHexDiv"), {value: n, digits: 8});
-    runodometers();
-}
-function stopodometers() {
-    keeprunning = false;
-}
-function update () {
-    n=n+0.5
-    myOdometerDec.set(n);
-    myOdometerBin.set(n);
-    myOdometerHex.set(n);
-
-    if (myOdometerBin.get() > 255) {
-        n=0;
-        myOdometerDec.set(0);
-        myOdometerBin.set(0);
-        myOdometerHex.set(0);
-    }
-
-    if (keeprunning) {
-        setTimeout("update()", 250);
-    }
-}
-
-
 
 
 
@@ -595,6 +564,20 @@ function OdometerHex (parentDiv,opts) {
 
     if (this.value >= 0) this.set(this.value);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 function OdometerBin (parentDiv,opts) {
@@ -834,6 +817,10 @@ function OdometerDec (parentDiv,opts) {
 
 
 
+
+
+
+
 var n = 0;
 var myOdometerDec, myOdometerBin, myOdometerHex;
 var keeprunning = false;
@@ -856,19 +843,21 @@ function update () {
     myOdometerBin.set(n);
     myOdometerHex.set(n);
 
+    /*
     if (myOdometerBin.get() > 255) {
         n=0;
         myOdometerDec.set(0);
         myOdometerBin.set(0);
         myOdometerHex.set(0);
     }
+    */
 
     // Update the text in the setnum text field to the whole number version of decimal value:
     document.getElementById('setnum').value = Math.floor(n);
 
 
     if (keeprunning) {
-        setTimeout("update()", 250);
+        setTimeout("update()", setTimeoutSpeed);
     }
 }
 
@@ -881,7 +870,7 @@ function incrementOdometers() {
 
     if (n % 1 === 0.5) {
         // n has a 0.5 part, so animate it going up another 0.5:
-        setTimeout("n += 0.5; myOdometerDec.set(n); myOdometerBin.set(n); myOdometerHex.set(n);", 250);
+        setTimeout("n += 0.5; myOdometerDec.set(n); myOdometerBin.set(n); myOdometerHex.set(n);", setTimeoutSpeed);
     }
 
 
@@ -897,15 +886,22 @@ function decrementOdometers() {
 
     if (n % 1 === 0.5) {
         // n has a 0.5 part, so animate it going up another 0.5:
-        setTimeout("n -= 0.5; myOdometerDec.set(n); myOdometerBin.set(n); myOdometerHex.set(n);", 250);
+        setTimeout("n -= 0.5; myOdometerDec.set(n); myOdometerBin.set(n); myOdometerHex.set(n);", setTimeoutSpeed);
     }
 
     // Update the text in the setnum text field to the whole number version of decimal value:
     document.getElementById('setnum').value = Math.floor(n);
 }
 
+function setFastMode() {
+    if (document.getElementById('fastModeCheckbox').checked) {
+        setTimeoutSpeed = 1;
+    } else {
+        setTimeoutSpeed = 250;
+    }
+}
 
-
+setFastMode();
 startodometers();
 //--></script>
 
